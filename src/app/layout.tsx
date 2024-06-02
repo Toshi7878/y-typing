@@ -3,7 +3,7 @@ import Header from "@/components/header/Header";
 import { Providers } from "./providers";
 import { fonts } from "./fonts";
 import { metadata } from "./metadata";
-// export const runtime = "edge";
+export const runtime = "edge";
 export default function RootLayout({
   children,
 }: Readonly<{
