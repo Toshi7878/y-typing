@@ -4,7 +4,7 @@ import Google from "@auth/core/providers/google";
 import { PrismaClient } from "@prisma/client";
 import generateIdenticon from "./generateIdenticon";
 import { NextResponse } from "next/server";
-
+export const runtime = "edge";
 const prisma = new PrismaClient();
 
 export const config: NextAuthConfig = {
