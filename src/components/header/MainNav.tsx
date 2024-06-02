@@ -13,7 +13,7 @@ export default function MainNav({ items }: MainNavProps) {
       <span>
         <Link
           href={"/"}
-          className="md:flex items-center space-x-2 font-extrabold text-2xl"
+          className="md:flex items-center space-x-2 font-extrabold text-xl"
         >
           Y-Typing
         </Link>

@@ -9,7 +9,9 @@ const Header = () => {
   return (
     <SessionProvider>
       <header className="fixed w-full z-40 bg-background border-b-2">
-        <div className="container md:max-w-[50rem] h-10 py-6 flex items-center justify-between">
+        <div className="container md:max-w-[50rem] h-1 py-5 flex items-center justify-between">
+          {" "}
+          {/* h-1 py-6 から h-1 py-4 に変更 */}
           <MainNav items={marketingConfig.mainNav} />
           <Login />
         </div>

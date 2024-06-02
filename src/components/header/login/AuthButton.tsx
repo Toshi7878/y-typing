@@ -17,7 +17,7 @@ export function SignIn({
 
   return (
     <form action={handleSignIn}>
-      <Button type="submit" {...props}>
+      <Button type="submit" size="sm" {...props}>
         ログイン
       </Button>
     </form>

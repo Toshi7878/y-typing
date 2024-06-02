@@ -1,22 +1,55 @@
-// ts
 "use client";
-import React from "react";
-import YouTube, { YouTubeProps } from "react-youtube";
-// export const runtime = "edge";
+import React, { useRef, useState, useEffect } from "react";
 
+import TabContent from "./(tab-content)/TabContent";
+import TableContent from "./(table-content)/TableContent";
+import TimeRange from "./TimeRange";
+import ReactPlayer from "react-player";
+import YouTubeContent from "./(youtube-content)/YoutubeConent";
+import { Provider } from "react-redux";
+import store from "./(redux)/store";
 export default function Home() {
-  const onPlayerReady: YouTubeProps["onReady"] = (event) => {
-    // access to player in all event handlers via event.target
-    event.target.pauseVideo();
-  };
+  const playerRef = useRef<ReactPlayer>(null);
+  const [playing, setPlaying] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const opts: YouTubeProps["opts"] = {
-    height: "390",
-    width: "640",
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-    },
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  return <YouTube videoId="2g811Eo7K8U" opts={opts} onReady={onPlayerReady} />;
+  if (!isMounted) {
+    return null; // クライアントサイドでのみレンダリングする
+  }
+
+  return (
+    <Provider store={store}>
+      <main className="flex min-h-screen flex-col items-center p-14">
+        <section className="flex flex-col md:flex-row w-full ">
+          <YouTubeContent
+            className="mr-5"
+            playerRef={playerRef}
+            playing={playing}
+            setPlaying={setPlaying}
+          />
+          <TabContent className="w-full border-black" />
+        </section>
+        <section className="w-full mt-2">
+          <TimeRange
+            className=""
+            playerRef={playerRef}
+            playing={playing}
+            setPlaying={setPlaying}
+          />
+        </section>
+        <section className="w-full mt-3">
+          <TableContent
+            className="border-black"
+            playerRef={playerRef}
+            playing={playing}
+            setPlaying={setPlaying}
+          />
+        </section>
+      </main>
+    </Provider>
+  );
 }
