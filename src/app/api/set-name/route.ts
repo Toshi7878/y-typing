@@ -1,7 +1,7 @@
 import { auth } from "../../../lib/auth"; // updateSessionNameをインポート
 import { PrismaClient } from "@prisma/client/edge";
 import { NextRequest, NextResponse } from "next/server";
-export const runtime = 'edge';
+export const runtime = "edge";
 
 const prisma = new PrismaClient();
 
