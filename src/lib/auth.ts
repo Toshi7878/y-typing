@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaClient } from "@prisma/client/edge";
+import { PrismaClient } from "@prisma/client";
 import generateIdenticon from "./generateIdenticon";
 export const runtime = "edge";
 
@@ -34,6 +34,19 @@ export const config: NextAuthConfig = {
       }
 
       return true;
+    },
+    authorized({ request, auth }) {
+      try {
+        const url = new URL(request.url);
+        const pathname = url.pathname;
+        if (pathname === "/dashboard/register" && !auth?.user?.name) {
+          return false;
+        }
+
+        return true;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async jwt({ token, trigger, session, user }) {
       if (trigger === "update") {
