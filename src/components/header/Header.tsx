@@ -3,7 +3,7 @@ import MainNav from "./MainNav";
 import { marketingConfig } from "@/config/marketing";
 import Login from "./login/Login";
 import { SessionProvider } from "next-auth/react";
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const Header = () => {
   return (

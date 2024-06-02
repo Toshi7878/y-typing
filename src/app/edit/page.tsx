@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
-export const runtime = "edge";
+// export const runtime = "edge";
 
 export default function Home() {
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {

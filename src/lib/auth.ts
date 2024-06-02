@@ -6,12 +6,7 @@ import generateIdenticon from "./generateIdenticon";
 const prisma = new PrismaClient();
 
 export const config: NextAuthConfig = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
+  providers: [GoogleProvider],
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {

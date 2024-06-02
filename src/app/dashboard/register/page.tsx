@@ -1,6 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import NewNameDialog from "./NewNameDialog";
-export const runtime = "edge";
+// export const runtime = "edge";
 
 export default function Home() {
   return (
