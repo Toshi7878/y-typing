@@ -1,14 +1,12 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import TabContent from "./(tab-content)/TabContent";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
-import ReactPlayer from "react-player";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";
 import { Provider } from "react-redux";
 import store from "./(redux)/store";
 import { PlayerProvider } from "./(youtube-content)/playerContext";
-import { Play } from "next/font/google";
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
