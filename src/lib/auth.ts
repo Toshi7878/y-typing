@@ -40,7 +40,7 @@ export const config: NextAuthConfig = {
         const url = new URL(request.url);
         const pathname = url.pathname;
         if (pathname === "/dashboard/register" && !auth?.user?.name) {
-          return false;
+          return !!auth;
         }
 
         return true;
