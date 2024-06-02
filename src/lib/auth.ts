@@ -1,16 +1,18 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
-import Discord from "@auth/core/providers/discord";
-import Google from "@auth/core/providers/google";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import generateIdenticon from "./generateIdenticon";
-import { NextResponse } from "next/server";
-export const runtime = "edge";
+
 const prisma = new PrismaClient();
 
 export const config: NextAuthConfig = {
-  providers: [Google],
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
   secret: process.env.AUTH_SECRET,
-  basePath: "/api/auth",
   callbacks: {
     async signIn({ user, account, profile }) {
       const UserData = await prisma.user.findUnique({
@@ -19,7 +21,6 @@ export const config: NextAuthConfig = {
 
       if (!UserData) {
         try {
-          // 初めてログインしたユーザーに対する処理
           const identicon = generateIdenticon(user.email);
 
           await prisma.user.create({
@@ -37,18 +38,6 @@ export const config: NextAuthConfig = {
       }
 
       return true;
-    },
-    authorized({ request, auth }) {
-      try {
-        const { pathname } = request.nextUrl;
-        if (pathname === "/dashboard/register" && auth?.user?.name) {
-          return false;
-        }
-
-        return true;
-      } catch (err) {
-        console.log(err);
-      }
     },
     async jwt({ token, trigger, session, user }) {
       if (trigger === "update") {
