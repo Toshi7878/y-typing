@@ -11,13 +11,14 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { playerRefProps } from "../(youtube-content)/YoutubeConent";
+import { useSelector } from "react-redux";
+import { usePlayer } from "../(youtube-content)/playerContext";
 
-export default function TableContent({
-  className,
-  playerRef,
-  playing,
-}: playerRefProps) {
+export default function TableContent() {
+  const { playerRef } = usePlayer();
+  const playing: boolean = useSelector(
+    (state: { playing: { value: boolean } }) => state.playing.value
+  );
   const [mapData, setMapData] = useState([
     { time: 0, lyrics: "lyrics", word: "word" },
   ]);
@@ -30,7 +31,7 @@ export default function TableContent({
   }, [playerRef, playing, mapData]);
 
   return (
-    <TableContainer className={className} border="1px solid black">
+    <TableContainer border="1px solid black">
       <Table size="md" variant="simple">
         <Thead>
           <Tr>

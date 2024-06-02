@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Input, Box, Button, Textarea } from "@chakra-ui/react";
+import { timer } from "../(youtube-content)/timer";
 
 const Editor = () => {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const updateRangeValue = () => setTime(timer.currentTime);
+    timer.addListener(updateRangeValue);
+
+    return () => {
+      timer.removeListener(updateRangeValue);
+    };
+  }, []);
   return (
     <div>
       <div>
         <Box display="flex" alignItems="center">
-          <Input placeholder="Time" size="sm" width="90px" />
+          <Input placeholder="Time" size="sm" width="90px" value={time} />
           <Input placeholder="歌詞" size="sm" />
         </Box>
       </div>

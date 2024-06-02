@@ -13,10 +13,9 @@ export async function PATCH(req: NextRequest) {
   }
 
   const { name } = await req.json();
-  const id = session?.user?.id; // セッションからemailを取得
+  const id = session?.user?.id; // セッションからidを取得
 
   try {
-    // emailでユーザーを検索してnameを更新
     if (id) {
       await prisma.user.update({
         where: { id },

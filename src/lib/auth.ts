@@ -2,6 +2,8 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import generateIdenticon from "./generateIdenticon";
+import CryptoJS from "crypto-js";
+
 // export const runtime = "edge";
 
 const prisma = new PrismaClient();
@@ -11,8 +13,9 @@ export const config: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
+      const hash = CryptoJS.MD5(user.email!).toString();
       const UserData = await prisma.user.findUnique({
-        where: { email: user.email! },
+        where: { email: hash },
       });
 
       if (!UserData) {
@@ -22,7 +25,7 @@ export const config: NextAuthConfig = {
           await prisma.user.create({
             data: {
               id: user.id!,
-              email: user.email!,
+              email: hash!,
               name: null,
               image: identicon,
             },
@@ -57,8 +60,9 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
+        const hash = CryptoJS.MD5(user.email!).toString();
         const dbUser = await prisma.user.findUnique({
-          where: { email: user.email! },
+          where: { email: hash },
         });
         if (dbUser) {
           token.uid = dbUser.id;

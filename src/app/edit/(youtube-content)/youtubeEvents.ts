@@ -2,6 +2,8 @@ import { Dispatch, RefObject, SetStateAction } from "react";
 import ReactPlayer from "react-player";
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
+import { startPlaying, stopPlaying } from "../(redux)/playingSlice";
+import { setTabIndex } from "../(redux)/tabIndexSlice";
 
 const ticker = new Ticker();
 
@@ -12,10 +14,7 @@ class YTState {
     this.state = "ready";
   }
 
-  play(
-    playerRef: RefObject<ReactPlayer>,
-    setPlaying: Dispatch<SetStateAction<boolean>>
-  ) {
+  play(playerRef: RefObject<ReactPlayer>, dispatch: Dispatch<any>) {
     console.log("再生 1");
 
     if (this.state === "ready") {
@@ -23,7 +22,8 @@ class YTState {
     }
     ticker.start();
     this.state = "play";
-    setPlaying(true);
+    dispatch(startPlaying());
+    dispatch(setTabIndex(1));
 
     // if (ytState.state == "ready") {
     //   //ready時の動画時間取得処理は整数秒のみでしか取得できないので再生時にもういちど取得
@@ -34,27 +34,27 @@ class YTState {
     // line.updateBackgroundColor(line.count - 1);
   }
 
-  end(setPlaying: Dispatch<SetStateAction<boolean>>) {
+  end(dispatch: Dispatch<any>) {
     console.log("プレイ終了 0");
     this.state = "end";
     // ytState.state = YTState.LIST[event.data];
     ticker.stop();
-    setPlaying(false);
+    dispatch(stopPlaying());
   }
 
-  stop(setPlaying: Dispatch<SetStateAction<boolean>>) {
+  stop(dispatch: Dispatch<any>) {
     console.log("動画停止 5");
     this.state = "end";
-    setPlaying(false);
+    dispatch(stopPlaying());
   }
 
-  pause(setPlaying: Dispatch<SetStateAction<boolean>>) {
+  pause(dispatch: Dispatch<any>) {
     console.log("一時停止 2");
 
     // ytState.state = YTState.LIST[event.data];
     ticker.stop();
     this.state = "pause";
-    setPlaying(false);
+    dispatch(stopPlaying());
   }
 
   seek() {

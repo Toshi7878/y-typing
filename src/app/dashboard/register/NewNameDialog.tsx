@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react"; // adding import
-import { Button } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
 
 interface NameProps {
   name: string;
@@ -41,15 +41,18 @@ export default function NewNameDialog() {
     >
       <div className="grid gap-4 py-4">
         <label htmlFor="name">名前を入力してください</label>
-        <input
+        <Input
+          size="lg"
           id="name"
           name="new-name"
-          type="text"
           required
           className="input"
+          placeholder="名前を入力してね"
           onChange={(e) => setNewName(e.target.value)}
         />
-        <Button type="submit">保存</Button>
+        <Button colorScheme="blue" type="submit">
+          保存
+        </Button>
       </div>
     </form>
   );

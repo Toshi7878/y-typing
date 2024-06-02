@@ -1,28 +1,26 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { timer } from "./(youtube-content)/timer";
-import { playerRefProps } from "./(youtube-content)/YoutubeConent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { startPlaying } from "./(redux)/playingSlice";
+import { usePlayer } from "./(youtube-content)/playerContext";
 
-const TimeRange = ({
-  className,
-  playerRef,
-  playing,
-  setPlaying,
-}: playerRefProps) => {
-  const playingState: boolean = useSelector(
+const TimeRange = () => {
+  const dispatch = useDispatch();
+  const { playerRef } = usePlayer();
+  const playing: boolean = useSelector(
     (state: { playing: { value: boolean } }) => state.playing.value
   );
   const [isDisabled, setIsDisabled] = useState(true);
   const [rangeValue, setRangeValue] = useState(timer.currentTime);
-  const [rangeMaxValue, setRangeMaxValue] = useState(0);
+  const [rangeMaxValue, setRangeMaxValue] = useState("0");
 
   const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = Number(e.target.value);
-    setRangeValue(newValue);
+    setRangeValue(newValue.toFixed(3));
     if (playerRef.current) {
       playerRef.current.seekTo(newValue);
-      setPlaying(true); // 再生を開始
+      dispatch(startPlaying()); // 再生を開始
     }
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -32,7 +30,7 @@ const TimeRange = ({
   useEffect(() => {
     if (playing && isDisabled) {
       setIsDisabled(false);
-      const duration = playerRef.current?.getDuration();
+      const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
         setRangeMaxValue(duration);
       }
@@ -49,7 +47,7 @@ const TimeRange = ({
   }, []);
 
   return (
-    <div className={className}>
+    <div>
       <input
         min="0"
         max={rangeMaxValue}

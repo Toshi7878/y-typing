@@ -10,7 +10,7 @@ export default async function Login() {
   if (!session?.user) {
     return (
       <nav>
-        <SignIn provider="google" colorScheme="blue" />
+        <SignIn provider="google" />
       </nav>
     );
   } else {

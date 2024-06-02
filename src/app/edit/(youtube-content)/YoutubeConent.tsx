@@ -3,21 +3,17 @@
 import React from "react";
 import ReactPlayer from "react-player/lazy";
 import { ytState } from "./youtubeEvents";
+import { useDispatch, useSelector } from "react-redux";
+import { usePlayer } from "./playerContext";
 // export const runtime = "edge";
 
-export interface playerRefProps {
-  className: string;
-  playerRef: React.RefObject<ReactPlayer>;
-  playing: boolean;
-  setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export default function YouTubeContent({ className }: { className: string }) {
+  const { playerRef } = usePlayer();
+  const dispatch = useDispatch();
+  const playing: boolean = useSelector(
+    (state: { playing: { value: boolean } }) => state.playing.value
+  );
 
-export default function YouTubeContent({
-  className,
-  playerRef,
-  playing,
-  setPlaying,
-}: playerRefProps) {
   return (
     <ReactPlayer
       ref={playerRef}
@@ -32,10 +28,10 @@ export default function YouTubeContent({
         },
       }}
       onReady={ytState.ready.bind(ytState)}
-      onPlay={() => ytState.play(playerRef, setPlaying)}
-      onPause={() => ytState.pause(setPlaying)}
+      onPlay={() => ytState.play(playerRef, dispatch)}
+      onPause={() => ytState.pause(dispatch)}
       onSeek={ytState.seek.bind(ytState)}
-      onEnded={() => ytState.end(setPlaying)}
+      onEnded={() => ytState.end(dispatch)}
     />
   );
 }
