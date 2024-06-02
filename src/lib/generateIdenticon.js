@@ -1,12 +1,9 @@
 const Identicon = require("identicon.js");
-const crypto = require("crypto");
+const CryptoJS = require("crypto-js");
 
 const generateIdenticon = (input, size = 64) => {
-  const hash = crypto.createHash("md5").update(input).digest("hex");
-
-  // Identiconの生成
+  const hash = CryptoJS.MD5(input).toString();
   const data = new Identicon(hash, size).toString();
-
   return `data:image/png;base64,${data}`;
 };
 

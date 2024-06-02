@@ -18,6 +18,7 @@
     "autoprefixer": "^10.4.19",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^11.2.10",
     "identicon.js": "^2.3.3",
     "next": "14.2.3",
