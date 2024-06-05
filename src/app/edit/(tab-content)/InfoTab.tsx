@@ -14,7 +14,6 @@ const InfoTab = () => {
         if (videoData) {
           const { title, video_id } = videoData;
           const url = `https://www.youtube.com/watch?v=${video_id}`;
-          console.log(`Title: ${title}, URL: ${url}`);
           setValue("InfoTab.title", title);
           setValue("InfoTab.url", url);
         }

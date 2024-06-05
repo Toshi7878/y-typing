@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
@@ -6,17 +6,25 @@ import EditorTab from "./EditorTab";
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import InfoTab from "./InfoTab";
+import UploadTab from "./UploadTab";
 
 export default function TabContent({ className }: { className?: string }) {
+  console.log("Tab");
+
   const dispatch = useDispatch();
   const tabIndex: number = useSelector(
     (state: { tabIndex: { value: number } }) => state.tabIndex.value
   );
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const playing: boolean = useSelector(
+    (state: { playing: { value: boolean } }) => state.playing.value
+  );
   useEffect(() => {
-    // タブインデックスが変更されたときに自動的に対応するタブに切り替えます。
-    // ここでは、タブのインデックスが変更されたことをコンソールに出力しています。
-    console.log(`現在のタブインデックス: ${tabIndex}`);
-  }, [tabIndex]);
+    if (playing && isDisabled) {
+      setIsDisabled(false);
+    }
+  }, [playing, isDisabled]);
 
   return (
     <Tabs
@@ -30,12 +38,9 @@ export default function TabContent({ className }: { className?: string }) {
     >
       <TabList height="24px">
         <Tab>情報</Tab>
-
-        <Tab>エディター</Tab>
-
-        <Tab>保存</Tab>
+        <Tab isDisabled={isDisabled}>エディター</Tab>
+        <Tab isDisabled={isDisabled}>保存</Tab>
       </TabList>
-
       <TabPanels>
         <TabPanel>
           <InfoTab />
@@ -46,7 +51,7 @@ export default function TabContent({ className }: { className?: string }) {
         </TabPanel>
 
         <TabPanel>
-          <p>three!</p>
+          <UploadTab />
         </TabPanel>
       </TabPanels>
     </Tabs>

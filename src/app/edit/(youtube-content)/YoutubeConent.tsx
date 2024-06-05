@@ -8,7 +8,8 @@ import { usePlayer } from "./playerProvider";
 import { useFormContext } from "react-hook-form";
 // export const runtime = "edge";
 
-export default function YouTubeContent({ className }: { className: string }) {
+const YouTubeContent = React.memo(function YouTubeContent({ className }: { className: string }) {
+  console.log("YouTube");
   const { register, setValue } = useFormContext();
 
   const { playerRef } = usePlayer();
@@ -31,10 +32,12 @@ export default function YouTubeContent({ className }: { className: string }) {
         },
       }}
       onReady={() => ytState.ready(playerRef, setValue)}
-      onPlay={() => ytState.play(playerRef, dispatch)}
+      onPlay={() => ytState.play(playerRef, dispatch, setValue)}
       onPause={() => ytState.pause(dispatch)}
       onSeek={ytState.seek.bind(ytState)}
       onEnded={() => ytState.end(dispatch)}
     />
   );
-}
+});
+
+export default YouTubeContent;

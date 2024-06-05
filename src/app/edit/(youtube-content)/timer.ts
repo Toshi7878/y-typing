@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { UseFormSetValue } from "react-hook-form";
 import ReactPlayer from "react-player";
 
 class TimerEvent {
@@ -31,10 +32,16 @@ class Timer extends TimerEvent {
     this.constantTime = 0;
   }
 
-  update(playerRef: RefObject<ReactPlayer>) {
+  update(playerRef: RefObject<ReactPlayer>, setValue: UseFormSetValue<any>) {
     const currentTime = Number(playerRef?.current?.getCurrentTime()).toFixed(3);
     this.currentTime = currentTime;
-    this.notifyListeners();
+    // this.notifyListeners();
+    this.render(setValue);
+  }
+
+  render(setValue: UseFormSetValue<any>) {
+    // setValue("TimeRange.range", timer.currentTime);
+    // setValue("EditorTab.time", timer.currentTime);
   }
 }
 

@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction } from "react";
+import { Dispatch, RefObject } from "react";
 import ReactPlayer from "react-player";
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
@@ -15,11 +15,11 @@ class YTState {
     this.state = "ready";
   }
 
-  play(playerRef: RefObject<ReactPlayer>, dispatch: Dispatch<any>) {
+  play(playerRef: RefObject<ReactPlayer>, dispatch: Dispatch<any>, setValue: UseFormSetValue<any>) {
     console.log("再生 1");
 
     if (this.state === "ready") {
-      ticker.add(() => timer.update(playerRef));
+      ticker.add(() => timer.update(playerRef, setValue));
     }
     ticker.start();
     this.state = "play";
@@ -65,17 +65,12 @@ class YTState {
     // line.blurBackgroundColor();
   }
 
-  async ready(
-    playerRef: RefObject<ReactPlayer>,
-    setValue: UseFormSetValue<FieldValues>
-  ) {
+  async ready(playerRef: RefObject<ReactPlayer>, setValue: UseFormSetValue<FieldValues>) {
     console.log("ready");
-    console.log(playerRef?.current?.getInternalPlayer()?.getVideoData());
     const videoData = playerRef?.current?.getInternalPlayer()?.getVideoData();
     if (videoData) {
       const { title, video_id } = videoData;
       const url = `https://www.youtube.com/watch?v=${video_id}`;
-      console.log(`Title: ${title}, URL: ${url}`);
       setValue("InfoTab.title", title);
       setValue("InfoTab.url", url);
     }

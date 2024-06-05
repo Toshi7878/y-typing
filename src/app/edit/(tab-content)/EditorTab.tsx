@@ -1,41 +1,31 @@
-import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input, Box, Textarea } from "@chakra-ui/react";
-import { timer } from "../(youtube-content)/timer";
 import TabButton from "./(components)/TabButton";
 import { ButtonEvents } from "./(components)/buttonEvent";
 import { useDispatch } from "react-redux";
-import { TabFormSchema } from "./validationSchema";
+import { TextAreaEvents } from "./(components)/textAreaEvent";
+import React from "react";
 
 const EditorTab = () => {
+  console.log("Editor");
   const { register, setValue, watch } = useFormContext();
   const dispatch = useDispatch();
 
-  const time = watch("lineEditor.time");
-  const lyrics = watch("lineEditor.lyrics");
-  const word = watch("lineEditor.word");
-  const lineNumber = watch("lineEditor.lineNumber");
-
-  useEffect(() => {
-    const updateRangeValue = () => {
-      setValue("lineEditor.time", timer.currentTime);
-    };
-    timer.addListener(updateRangeValue);
-
-    return () => {
-      timer.removeListener(updateRangeValue);
-    };
-  }, [setValue]);
+  const time = watch("EditorTab.time");
+  const lyrics = watch("EditorTab.lyrics");
+  const word = watch("EditorTab.word");
+  const lineNumber = watch("EditorTab.lineNumber");
+  const addLyrics = watch("EditorTab.addLyrics");
 
   const lineInit = () => {
-    setValue("lineEditor.time", "");
-    setValue("lineEditor.lyrics", "");
-    setValue("lineEditor.word", "");
-    setValue("lineEditor.lineNumber", "");
+    setValue("EditorTab.time", "");
+    setValue("EditorTab.lyrics", "");
+    setValue("EditorTab.word", "");
+    setValue("EditorTab.lineNumber", "");
   };
 
   return (
-    <form>
+    <form className="flex flex-col gap-y-2">
       <div>
         <Box display="flex" alignItems="center">
           {/* 後で時間が入ってないときは追加されないようにする */}
@@ -44,12 +34,13 @@ const EditorTab = () => {
             size="sm"
             width="90px"
             type="number"
-            {...register("lineEditor.time")}
+            {...register("EditorTab.time")}
           />
           <Input
             placeholder="歌詞"
             size="sm"
-            {...register("lineEditor.lyrics")}
+            autoComplete="off"
+            {...register("EditorTab.lyrics")}
           />
         </Box>
       </div>
@@ -60,29 +51,29 @@ const EditorTab = () => {
             size="sm"
             width="90px"
             disabled
+            variant="filled"
             opacity={1}
             _disabled={{ opacity: 1 }}
-            {...register("lineEditor.lineNumber")}
+            {...register("EditorTab.lineNumber")}
           />
           <Input
             placeholder="ワード"
             size="sm"
-            {...register("lineEditor.word")}
+            autoComplete="off"
+            {...register("EditorTab.word")}
           />
         </Box>
       </div>
       <div>
-        <Box
-          display="flex"
-          className="flex justify-between"
-          alignItems="center"
-        >
+        <Box display="flex" className="flex justify-between" alignItems="center">
           <TabButton
             colorScheme="teal"
             _hover={{ bg: "#6ee278ac" }}
             onClick={() => {
+              const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
               ButtonEvents.addLine(dispatch, { time, lyrics, word });
               lineInit();
+              TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics);
             }}
             text="追加"
           />
@@ -104,8 +95,8 @@ const EditorTab = () => {
             colorScheme="blue"
             _hover={{ bg: "#acceebc3" }}
             text="読み変換"
-            onClick={() => {
-              return;
+            onClick={async () => {
+              const word = await ButtonEvents.lyricsConvert(lyrics, setValue);
             }}
           />
           <TabButton
@@ -121,11 +112,18 @@ const EditorTab = () => {
       </div>
       <div>
         <Box display="flex" alignItems="center">
-          <Textarea placeholder="ここから歌詞をまとめて追加できます" />
+          <Textarea
+            placeholder="ここから歌詞をまとめて追加できます"
+            style={{ height: "101px" }}
+            {...register("EditorTab.addLyrics")}
+            onPaste={() => {
+              TextAreaEvents.paste(setValue);
+            }}
+          />
         </Box>
       </div>
     </form>
   );
 };
 
-export default EditorTab;
+export default React.memo(EditorTab);

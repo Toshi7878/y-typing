@@ -8,7 +8,6 @@ export function CheckName({ name }: { name: string }) {
 
   useEffect(() => {
     if (name === "" && pathname !== "/dashboard/register") {
-      console.log("name null");
       redirect("/dashboard/register");
     }
   }, [name, pathname, router]);
