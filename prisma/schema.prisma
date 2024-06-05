@@ -9,10 +9,9 @@ datasource db {
 }
 
 model User {
-  id            String          @unique
-  name          String?
-  email         String          @unique
-  // emailVerified DateTime?
+  id            Int             @id @default(autoincrement())
+  name          String?         @unique
+  email_hash    String          @unique
   image         String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -22,7 +21,7 @@ model User {
 }
 
 model Account {
-  userId            String
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -42,24 +41,16 @@ model Account {
 
 model Session {
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
-}
-
 model Authenticator {
   credentialID         String  @unique
-  userId               String
+  userId               Int
   providerAccountId    String
   credentialPublicKey  String
   counter              Int

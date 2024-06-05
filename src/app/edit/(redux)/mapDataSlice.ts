@@ -16,8 +16,13 @@ export const mapDataSlice = createSlice({
       const { lineNumber, time, lyrics, word } = action.payload;
       state.value[Number(lineNumber)] = { time, lyrics, word };
     },
+
+    deleteLine: (state, action) => {
+      const lineNumber = action.payload;
+      state.value = state.value.filter((_, index) => index !== lineNumber);
+    },
   },
 });
-export const { addLine, updateLine } = mapDataSlice.actions;
 
+export const { addLine, updateLine, deleteLine } = mapDataSlice.actions;
 export default mapDataSlice.reducer;

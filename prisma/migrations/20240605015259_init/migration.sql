@@ -1,16 +1,18 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT,
-    "emailHash" TEXT NOT NULL,
+    "email_hash" TEXT NOT NULL,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Account" (
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
@@ -30,25 +32,16 @@ CREATE TABLE "Account" (
 -- CreateTable
 CREATE TABLE "Session" (
     "sessionToken" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "VerificationToken" (
-    "identifier" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("identifier","token")
-);
-
--- CreateTable
 CREATE TABLE "Authenticator" (
     "credentialID" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "providerAccountId" TEXT NOT NULL,
     "credentialPublicKey" TEXT NOT NULL,
     "counter" INTEGER NOT NULL,
@@ -60,10 +53,10 @@ CREATE TABLE "Authenticator" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_emailHash_key" ON "User"("emailHash");
+CREATE UNIQUE INDEX "User_email_hash_key" ON "User"("email_hash");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");

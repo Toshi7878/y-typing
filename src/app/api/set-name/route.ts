@@ -13,19 +13,19 @@ export async function PATCH(req: NextRequest) {
   }
 
   const { name } = await req.json();
-  const id = session?.user?.id; // セッションからidを取得
+  const email_hash = session?.user?.email; // セッションからidを取得
 
   try {
-    if (id) {
+    if (email_hash) {
       await prisma.user.update({
-        where: { id },
+        where: { email_hash },
         data: { name },
       });
 
       return NextResponse.json({ message: "名前が更新されました" });
     } else {
       return NextResponse.json(
-        { error: "メールアドレスが見つかりません" },
+        { error: "有効なメールハッシュがありません" },
         { status: 400 }
       );
     }

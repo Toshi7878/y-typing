@@ -15,7 +15,7 @@ export const config: NextAuthConfig = {
     async signIn({ user, account, profile }) {
       const hash = CryptoJS.MD5(user.email!).toString();
       const UserData = await prisma.user.findUnique({
-        where: { email: hash },
+        where: { email_hash: hash },
       });
 
       if (!UserData) {
@@ -24,8 +24,7 @@ export const config: NextAuthConfig = {
 
           await prisma.user.create({
             data: {
-              id: user.id!,
-              email: hash!,
+              email_hash: hash!,
               name: null,
               image: identicon,
             },
@@ -62,10 +61,11 @@ export const config: NextAuthConfig = {
       if (user) {
         const hash = CryptoJS.MD5(user.email!).toString();
         const dbUser = await prisma.user.findUnique({
-          where: { email: hash },
+          where: { email_hash: hash },
         });
         if (dbUser) {
           token.uid = dbUser.id;
+          token.email_hash = dbUser.email_hash;
           token.picture = dbUser.image;
         } else {
           const identicon = generateIdenticon(user.email);
@@ -79,8 +79,7 @@ export const config: NextAuthConfig = {
     async session({ session, token }) {
       if (token) {
         session.user.name = token.name;
-        session.user.email = "";
-        session.user.id = token.uid as string;
+        session.user.email = token.email_hash as string;
       }
       return session;
     },

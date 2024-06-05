@@ -6,7 +6,8 @@ import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";
 import { Provider } from "react-redux";
 import store from "./(redux)/store";
-import { PlayerProvider } from "./(youtube-content)/playerContext";
+import { PlayerProvider } from "./(youtube-content)/playerProvider";
+import TabFormProvider from "./(tab-content)/TabFormProvider";
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -22,18 +23,20 @@ export default function Home() {
   return (
     <Provider store={store}>
       <PlayerProvider>
-        <main className="flex min-h-screen flex-col items-center p-14">
-          <section className="flex flex-col md:flex-row w-full ">
-            <YouTubeContent className="mr-5" />
-            <TabContent className="w-full border-black" />
-          </section>
-          <section className="w-full mt-2">
-            <TimeRange />
-          </section>
-          <section className="w-full mt-3">
-            <TableContent />
-          </section>
-        </main>
+        <TabFormProvider>
+          <main className="flex min-h-screen flex-col items-center p-14">
+            <section className="flex flex-col md:flex-row w-full ">
+              <YouTubeContent className="mr-5" />
+              <TabContent className="w-full border-black" />
+            </section>
+            <section className="w-full mt-2">
+              <TimeRange />
+            </section>
+            <section className="w-full mt-3">
+              <TableContent />
+            </section>
+          </main>
+        </TabFormProvider>
       </PlayerProvider>
     </Provider>
   );

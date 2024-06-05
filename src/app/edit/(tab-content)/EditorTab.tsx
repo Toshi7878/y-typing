@@ -1,45 +1,55 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import { Input, Box, Textarea } from "@chakra-ui/react";
 import { timer } from "../(youtube-content)/timer";
 import TabButton from "./(components)/TabButton";
 import { ButtonEvents } from "./(components)/buttonEvent";
-import { useDispatch, useSelector } from "react-redux";
-import { setLyrics, setTime, setWord } from "../(redux)/selectLineSlice";
-import { RootState } from "../(redux)/store";
+import { useDispatch } from "react-redux";
+import { TabFormSchema } from "./validationSchema";
 
-const Editor = () => {
+const EditorTab = () => {
+  const { register, setValue, watch } = useFormContext();
   const dispatch = useDispatch();
-  const lineNumber = useSelector((state: RootState) => state.selectLine.number);
-  const time = useSelector((state: RootState) => state.selectLine.time);
-  const lyrics = useSelector((state: RootState) => state.selectLine.lyrics);
-  const word = useSelector((state: RootState) => state.selectLine.word);
+
+  const time = watch("lineEditor.time");
+  const lyrics = watch("lineEditor.lyrics");
+  const word = watch("lineEditor.word");
+  const lineNumber = watch("lineEditor.lineNumber");
 
   useEffect(() => {
-    const updateRangeValue = () => dispatch(setTime(timer.currentTime));
+    const updateRangeValue = () => {
+      setValue("lineEditor.time", timer.currentTime);
+    };
     timer.addListener(updateRangeValue);
 
     return () => {
       timer.removeListener(updateRangeValue);
     };
-  }, []);
+  }, [setValue]);
+
+  const lineInit = () => {
+    setValue("lineEditor.time", "");
+    setValue("lineEditor.lyrics", "");
+    setValue("lineEditor.word", "");
+    setValue("lineEditor.lineNumber", "");
+  };
+
   return (
-    <div>
+    <form>
       <div>
         <Box display="flex" alignItems="center">
+          {/* 後で時間が入ってないときは追加されないようにする */}
           <Input
             placeholder="Time"
             size="sm"
             width="90px"
-            value={time}
             type="number"
-            onChange={(e) => dispatch(setTime(e.target.value))}
+            {...register("lineEditor.time")}
           />
           <Input
             placeholder="歌詞"
             size="sm"
-            value={lyrics}
-            onChange={(e) => dispatch(setLyrics(e.target.value))}
+            {...register("lineEditor.lyrics")}
           />
         </Box>
       </div>
@@ -47,16 +57,17 @@ const Editor = () => {
         <Box display="flex" alignItems="center">
           <Input
             placeholder="No."
-            value={lineNumber}
             size="sm"
             width="90px"
             disabled
+            opacity={1}
+            _disabled={{ opacity: 1 }}
+            {...register("lineEditor.lineNumber")}
           />
           <Input
             placeholder="ワード"
             size="sm"
-            value={word}
-            onChange={(e) => dispatch(setWord(e.target.value))}
+            {...register("lineEditor.word")}
           />
         </Box>
       </div>
@@ -69,22 +80,25 @@ const Editor = () => {
           <TabButton
             colorScheme="teal"
             _hover={{ bg: "#6ee278ac" }}
-            onClick={() =>
-              ButtonEvents.addLine(dispatch, { time, lyrics, word })
-            }
+            onClick={() => {
+              ButtonEvents.addLine(dispatch, { time, lyrics, word });
+              lineInit();
+            }}
             text="追加"
           />
           <TabButton
             colorScheme="cyan"
             _hover={{ bg: "#80f2fbac" }}
             text="変更"
-            onClick={() =>
-              ButtonEvents.updateLine(
-                dispatch,
-                { time, lyrics, word },
-                lineNumber
-              )
-            }
+            onClick={() => {
+              ButtonEvents.updateLine(dispatch, {
+                time,
+                lyrics,
+                word,
+                lineNumber,
+              });
+              lineInit();
+            }}
           />
           <TabButton
             colorScheme="blue"
@@ -99,7 +113,8 @@ const Editor = () => {
             _hover={{ bg: "#e26e6eac" }}
             text="削除"
             onClick={() => {
-              return;
+              ButtonEvents.deleteLine(dispatch, lineNumber);
+              lineInit();
             }}
           />
         </Box>
@@ -109,8 +124,8 @@ const Editor = () => {
           <Textarea placeholder="ここから歌詞をまとめて追加できます" />
         </Box>
       </div>
-    </div>
+    </form>
   );
 };
 
-export default Editor;
+export default EditorTab;

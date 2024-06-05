@@ -2,9 +2,10 @@ import { useEffect } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
-import Editor from "./Editor";
+import EditorTab from "./EditorTab";
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
+import InfoTab from "./InfoTab";
 
 export default function TabContent({ className }: { className?: string }) {
   const dispatch = useDispatch();
@@ -37,11 +38,11 @@ export default function TabContent({ className }: { className?: string }) {
 
       <TabPanels>
         <TabPanel>
-          <p>one!</p>
+          <InfoTab />
         </TabPanel>
 
         <TabPanel>
-          <Editor />
+          <EditorTab />
         </TabPanel>
 
         <TabPanel>

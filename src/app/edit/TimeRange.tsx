@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { timer } from "./(youtube-content)/timer";
 import { useDispatch, useSelector } from "react-redux";
 import { startPlaying } from "./(redux)/playingSlice";
-import { usePlayer } from "./(youtube-content)/playerContext";
+import { usePlayer } from "./(youtube-content)/playerProvider";
 
 const TimeRange = () => {
   const dispatch = useDispatch();

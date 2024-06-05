@@ -4,7 +4,7 @@ import React from "react";
 import ReactPlayer from "react-player/lazy";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { usePlayer } from "./playerContext";
+import { usePlayer } from "./playerProvider";
 // export const runtime = "edge";
 
 export default function YouTubeContent({ className }: { className: string }) {

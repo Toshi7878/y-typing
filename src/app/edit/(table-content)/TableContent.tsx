@@ -3,32 +3,28 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { usePlayer } from "../(youtube-content)/playerContext";
+import { usePlayer } from "../(youtube-content)/playerProvider";
 import { RootState } from "../(redux)/store";
 import { addLine } from "../(redux)/mapDataSlice";
-import {
-  setLineNumber,
-  setLyrics,
-  setTime,
-  setWord,
-} from "../(redux)/selectLineSlice";
+import { useFormContext } from "react-hook-form";
+import { DefaultValues } from "../(tab-content)/TabFormProvider";
 
 export default function TableContent() {
+  const { setValue } = useFormContext();
   const { playerRef } = usePlayer();
   const dispatch = useDispatch();
   const playing: boolean = useSelector(
     (state: RootState) => state.playing.value
   );
   const mapData = useSelector((state: RootState) => state.mapData.value);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (playing && mapData.length === 1) {
@@ -37,11 +33,15 @@ export default function TableContent() {
     }
   }, [playerRef, playing, mapData, dispatch]);
 
-  const selectLine = (line, index) => {
-    dispatch(setTime(line.time));
-    dispatch(setLyrics(line.lyrics));
-    dispatch(setWord(line.word));
-    dispatch(setLineNumber(index));
+  const selectLine = (
+    line: DefaultValues["EditorTab"],
+    index: SetStateAction<number | null>
+  ) => {
+    setValue("lineEditor.time", line.time);
+    setValue("lineEditor.lyrics", line.lyrics);
+    setValue("lineEditor.word", line.word);
+    setValue("lineEditor.lineNumber", index);
+    setSelectedIndex(index);
   };
 
   return (
@@ -61,7 +61,11 @@ export default function TableContent() {
           {mapData.map((line, index) => (
             <Tr
               key={index}
-              className="cursor-pointer hover:bg-slate-400"
+              className={`cursor-pointer ${
+                selectedIndex === index
+                  ? "bg-cyan-400 outline outline-2 outline-black"
+                  : " hover:bg-cyan-400/35"
+              }`}
               onClick={() => selectLine(line, index)}
             >
               <Td borderRight="1px solid black">{line.time}</Td>
