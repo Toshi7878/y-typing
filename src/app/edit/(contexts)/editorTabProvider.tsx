@@ -3,17 +3,20 @@ import { useForm, FormProvider, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputFormSchema } from "./Schema";
 
-interface InfoTabProviderProps {
+interface EditorTabProviderProps {
   children: ReactNode;
 }
 
-const InfoTabContext = createContext<UseFormReturn<InputFormSchema["InfoTab"]> | null>(null);
+const EditorTabContext = createContext<UseFormReturn<InputFormSchema["EditorTab"]> | null>(null);
 
-export const InfoTabProvider: React.FC<InfoTabProviderProps> = ({ children }) => {
-  const methods = useForm<InputFormSchema["InfoTab"]>({
+export const EditorTabProvider: React.FC<EditorTabProviderProps> = ({ children }) => {
+  const methods = useForm<InputFormSchema["EditorTab"]>({
     defaultValues: {
-      url: "",
-      title: "",
+      time: "",
+      lyrics: "",
+      word: "",
+      lineNumber: "",
+      addLyrics: "",
     },
     // resolver: zodResolver(TabFormSchema),
   });
@@ -21,12 +24,12 @@ export const InfoTabProvider: React.FC<InfoTabProviderProps> = ({ children }) =>
   const value = useMemo(() => methods, [methods]);
 
   return (
-    <InfoTabContext.Provider value={value}>
+    <EditorTabContext.Provider value={value}>
       <FormProvider {...methods}>{children}</FormProvider>
-    </InfoTabContext.Provider>
+    </EditorTabContext.Provider>
   );
 };
 
-export const useInfoTabForm = () => useContext(InfoTabContext);
+export const useEditorTabForm = () => useContext(EditorTabContext);
 
-export default InfoTabProvider;
+export default EditorTabProvider;
