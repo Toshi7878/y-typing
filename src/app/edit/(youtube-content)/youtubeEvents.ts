@@ -4,6 +4,7 @@ import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
 import { startPlaying, stopPlaying } from "../(redux)/playingSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
+import { FieldValues, UseFormSetValue } from "react-hook-form";
 
 const ticker = new Ticker();
 
@@ -64,24 +65,21 @@ class YTState {
     // line.blurBackgroundColor();
   }
 
-  async ready() {
+  async ready(
+    playerRef: RefObject<ReactPlayer>,
+    setValue: UseFormSetValue<FieldValues>
+  ) {
     console.log("ready");
-    // document.getElementById("time-bar").value = 0;
-    // URL.value = `https://www.youtube.com/watch?v=${youtube.value.src}`;
-    // if (!TITLE.value) {
-    //   TITLE.value = youtube.value.player.g.title;
-    // }
-    // if (!lineData.value.length) {
-    //   lineData.value.splice(
-    //     0,
-    //     2,
-    //     { time: "0", lyrics: "", word: "" },
-    //     { time: Infinity, lyrics: "end", word: "" }
-    //   );
-    // }
-    // this.updateDuration();
-    // LineBlur.selectBlur();
-    // youtube.value.setVolume(volume.value);
+    console.log(playerRef?.current?.getInternalPlayer()?.getVideoData());
+    const videoData = playerRef?.current?.getInternalPlayer()?.getVideoData();
+    if (videoData) {
+      const { title, video_id } = videoData;
+      const url = `https://www.youtube.com/watch?v=${video_id}`;
+      console.log(`Title: ${title}, URL: ${url}`);
+      setValue("InfoTab.title", title);
+      setValue("InfoTab.url", url);
+    }
+    //youtube.value.setVolume(volume.value);
   }
 
   updateDuration() {

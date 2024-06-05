@@ -9,6 +9,10 @@ export interface DefaultValues {
     word: string;
     lineNumber?: string;
   };
+  InfoTab: {
+    url: string;
+    title: string;
+  };
 }
 
 const TabFormProvider = ({ children }) => {
@@ -19,6 +23,10 @@ const TabFormProvider = ({ children }) => {
         lyrics: "",
         word: "",
         lineNumber: "",
+      },
+      InfoTab: {
+        url: "",
+        title: "",
       },
     },
     resolver: zodResolver(TabFormSchema),

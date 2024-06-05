@@ -5,9 +5,12 @@ import ReactPlayer from "react-player/lazy";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayer } from "./playerProvider";
+import { useFormContext } from "react-hook-form";
 // export const runtime = "edge";
 
 export default function YouTubeContent({ className }: { className: string }) {
+  const { register, setValue } = useFormContext();
+
   const { playerRef } = usePlayer();
   const dispatch = useDispatch();
   const playing: boolean = useSelector(
@@ -27,7 +30,7 @@ export default function YouTubeContent({ className }: { className: string }) {
           playerVars: { showinfo: 1, enablejsapi: 1 },
         },
       }}
-      onReady={ytState.ready.bind(ytState)}
+      onReady={() => ytState.ready(playerRef, setValue)}
       onPlay={() => ytState.play(playerRef, dispatch)}
       onPause={() => ytState.pause(dispatch)}
       onSeek={ytState.seek.bind(ytState)}
