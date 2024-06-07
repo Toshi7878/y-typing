@@ -1,6 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { Input, Box } from "@chakra-ui/react";
-import TabButton from "./(components)/TabButton";
+import { Input, Box, Flex, Button } from "@chakra-ui/react";
 
 const UploadTab = () => {
   const { register } = useFormContext();
@@ -8,18 +7,23 @@ const UploadTab = () => {
   return (
     <form>
       <Box display="flex" flexDirection="column" gap="4">
-        <Input
-          placeholder="制作者コメント"
+        <Flex alignItems="center">
+          <Input placeholder="制作者コメント" size="sm" {...register("UploadTab.creatorComment")} />
+        </Flex>
+        <Button
+          variant="solid"
           size="sm"
-          {...register("UploadTab.creatorComment")}
-        />
+          width="120px"
+          height="35px"
+          colorScheme="blue"
+          border="1px"
+          borderColor="black"
+          _hover={{ bg: "#3a90f3" }}
+          onClick={() => {}}
+        >
+          保存
+        </Button>
       </Box>
-      <TabButton
-        colorScheme="teal"
-        _hover={{ bg: "#6ee278ac" }}
-        onClick={() => {}}
-        text="保存"
-      />
     </form>
   );
 };

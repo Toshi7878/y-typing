@@ -3,6 +3,7 @@ import playingReducer from "./playingSlice";
 import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
+import buttonLoadReducer from "./buttonLoadSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     tabIndex: tabIndexReducer,
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,
+    buttonLoad: buttonLoadReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

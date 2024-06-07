@@ -24,7 +24,7 @@ export default function Home() {
     <Provider store={store}>
       <PlayerProvider>
         <InputProvider>
-          <main className="flex min-h-screen flex-col items-center p-14">
+          <main className="flex min-h-screen flex-col items-center px-14 pt-14">
             <section className="flex flex-col md:flex-row w-full ">
               <YouTubeContent className="mr-5" />
               <TabContent className="w-full border-black" />

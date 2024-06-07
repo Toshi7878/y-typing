@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 
 import EditorTab from "./EditorTab";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,17 +30,22 @@ export default function TabContent({ className }: { className?: string }) {
     <Tabs
       index={tabIndex}
       onChange={(index) => dispatch(setTabIndex(index))}
-      border="1px solid black"
+      border="1px solid"
       className={className}
       isFitted
       size="sm"
-      variant="enclosed"
+      position="relative"
+      variant="unstyled"
     >
-      <TabList height="24px">
-        <Tab>情報</Tab>
-        <Tab isDisabled={isDisabled}>エディター</Tab>
+      <TabList height="24px" borderBottom="1px solid lightgray">
+        <Tab borderRight="1px solid lightgray">情報</Tab>
+        <Tab borderRight="1px solid lightgray" isDisabled={isDisabled}>
+          エディター
+        </Tab>
         <Tab isDisabled={isDisabled}>保存</Tab>
       </TabList>
+      {isDisabled ? "" : <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />}
+
       <TabPanels>
         <TabPanel>
           <InfoTab />

@@ -1,41 +1,63 @@
-// ts
 "use client";
-import React from "react";
-import ReactPlayer from "react-player/lazy";
+import React, { useCallback } from "react";
+import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayer } from "./playerProvider";
 import { useFormContext } from "react-hook-form";
-// export const runtime = "edge";
+import { RootState } from "../(redux)/store";
 
 const YouTubeContent = React.memo(function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
-  const { register, setValue } = useFormContext();
-
-  const { playerRef } = usePlayer();
+  const { setValue } = useFormContext();
+  const { playerRef, setPlayerRef } = usePlayer();
   const dispatch = useDispatch();
-  const playing: boolean = useSelector(
-    (state: { playing: { value: boolean } }) => state.playing.value
+  const mapData = useSelector((state: RootState) => state.mapData.value);
+
+  const handleReady = useCallback(
+    (event) => {
+      const player = event.target;
+      setPlayerRef(player); // setPlayerRefを使用して更新
+      ytState.ready(playerRef, setValue);
+    },
+    [playerRef, setPlayerRef, setValue]
+  );
+
+  const handlePlay = useCallback(() => {
+    ytState.play(playerRef, dispatch);
+  }, [dispatch, playerRef]);
+
+  const handlePause = useCallback(() => {
+    ytState.pause(dispatch);
+  }, [dispatch]);
+
+  const handleEnd = useCallback(() => {
+    ytState.end(dispatch);
+  }, [dispatch]);
+
+  const handleStateChange = useCallback(
+    (event) => {
+      if (event.data === 3) {
+        ytState.seek(playerRef, dispatch, mapData);
+      }
+    },
+    [dispatch, mapData, playerRef]
   );
 
   return (
-    <ReactPlayer
-      ref={playerRef}
-      playing={playing}
+    <YouTube
       className={className}
-      url="https://www.youtube.com/watch?v=8ZP5eqm4JqM"
-      width="400px"
-      height="197px"
-      config={{
-        youtube: {
-          playerVars: { showinfo: 1, enablejsapi: 1 },
-        },
+      videoId="8ZP5eqm4JqM"
+      opts={{
+        width: "384px",
+        height: "216px",
+        playerVars: { showinfo: 1, enablejsapi: 1 },
       }}
-      onReady={() => ytState.ready(playerRef, setValue)}
-      onPlay={() => ytState.play(playerRef, dispatch, setValue)}
-      onPause={() => ytState.pause(dispatch)}
-      onSeek={ytState.seek.bind(ytState)}
-      onEnded={() => ytState.end(dispatch)}
+      onReady={handleReady}
+      onPlay={handlePlay}
+      onPause={handlePause}
+      onEnd={handleEnd}
+      onStateChange={handleStateChange}
     />
   );
 });

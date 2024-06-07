@@ -1,9 +1,8 @@
 import { Dispatch } from "react";
 import { addLine, deleteLine, updateLine } from "../../(redux)/mapDataSlice";
-import { InputFormSchema } from "../../InputProvider";
-import { TextAreaEvents } from "./textAreaEvent";
 import { WordConvert } from "./wordConvert";
 import { UseFormSetValue } from "react-hook-form";
+import { InputFormSchema } from "../../(contexts)/Schema";
 
 export class ButtonEvents {
   static addLine(dispatch: Dispatch<any>, line: InputFormSchema["EditorTab"]) {

@@ -1,78 +1,71 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from "@chakra-ui/react";
 import { useMemo, SetStateAction, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayer } from "../(youtube-content)/playerProvider";
 import { RootState } from "../(redux)/store";
 import { addLine } from "../(redux)/mapDataSlice";
-import { useFormContext } from "react-hook-form";
 import { setSelectedIndex, setTimeIndex } from "../(redux)/lineIndexSlice";
-import { timer } from "../(youtube-content)/timer";
 import { InputFormSchema } from "../(contexts)/Schema";
+import { timer } from "../(youtube-content)/timer";
 
 export default function TableContent() {
   console.log("Table");
-
-  const { setValue } = useFormContext();
   const { playerRef } = usePlayer();
   const dispatch = useDispatch();
   const playing = useSelector((state: RootState) => state.playing.value);
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
-  const mapData = useSelector(
-    (state: RootState) => state.mapData.value,
-    (left, right) => left === right
-  );
+  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   useEffect(() => {
     if (playing && mapData.length === 1) {
-      const duration = Number(playerRef.current?.getDuration());
-      dispatch(addLine({ time: duration, lyrics: "end", word: "" }));
+      const duration = playerRef.current?.getDuration();
+      dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
     }
   }, [playerRef, playing, mapData, dispatch]);
+
   const selectLine = (line: InputFormSchema["EditorTab"], index: SetStateAction<number | null>) => {
-    setValue("EditorTab.time", line.time);
-    setValue("EditorTab.lyrics", line.lyrics);
-    setValue("EditorTab.word", line.word);
-    setValue("EditorTab.lineNumber", index);
+    // setValue("EditorTab.time", line.time);
+    // setValue("EditorTab.lyrics", line.lyrics);
+    // setValue("EditorTab.word", line.word);
+    // setValue("EditorTab.lineNumber", index);
     dispatch(setSelectedIndex(index));
   };
+  useEffect(() => {
+    const updateTimeBg = () => {
+      if (timeIndex !== null) {
+        console.log(timer.currentTime);
+        if (
+          mapData[timeIndex + 1] &&
+          Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
+        ) {
+          dispatch(setTimeIndex(timeIndex + 1));
+        }
+      } else {
+        dispatch(setTimeIndex(0));
+      }
+    };
 
-  // const updateRangeValue = () => {
-  //   if (currentTimeRef.current !== timer.currentTime) {
-  //     currentTimeRef.current = timer.currentTime;
+    timer.addListener(updateTimeBg);
+    return () => {
+      timer.removeListener(updateTimeBg);
+    };
+  }, [timeIndex, mapData, dispatch]);
 
-  //     if (timeIndex !== null) {
-  //       if (mapData[timeIndex + 1] && timer.currentTime >= mapData[timeIndex + 1]["time"]) {
-  //         dispatch(setTimeIndex(timeIndex + 1));
-  //       }
-  //     } else {
-  //       dispatch(setTimeIndex(0));
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   timer.addListener(updateRangeValue);
-  //   return () => {
-  //     timer.removeListener(updateRangeValue);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(timeIndex);
-  // }, [timeIndex]);
   return (
-    <TableContainer border="1px solid black">
-      <Table size="md" variant="simple">
+    <TableContainer border="1px solid black" maxHeight="calc(100vh - 400px)" overflowY="auto">
+      <Table size="sm" variant="simple">
         <Thead>
           <Tr>
             <Th width="10%" borderRight="1px solid black">
               Time
             </Th>
             <Th borderRight="1px solid black">歌詞</Th>
-            <Th>ワード</Th>
+            <Th borderRight="1px solid black">ワード</Th>
+            <Th width="3%" textAlign="center">
+              オプション
+            </Th>
           </Tr>
         </Thead>
 
@@ -89,7 +82,17 @@ export default function TableContent() {
             >
               <Td borderRight="1px solid black">{line.time}</Td>
               <Td borderRight="1px solid black">{line.lyrics}</Td>
-              <Td>{line.word}</Td>
+              <Td borderRight="1px solid black">{line.word}</Td>
+              <Td>
+                <Button
+                  disabled={mapData.length - 1 === index}
+                  variant="outline"
+                  colorScheme={`${selectedIndex === index ? "green" : "cyan"}`}
+                  size="sm"
+                >
+                  オプション
+                </Button>
+              </Td>
             </Tr>
           ))}
         </Tbody>

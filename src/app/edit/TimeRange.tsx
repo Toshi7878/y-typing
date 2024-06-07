@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { timer } from "./(youtube-content)/timer";
 import { useDispatch, useSelector } from "react-redux";
 import { startPlaying } from "./(redux)/playingSlice";
 import { usePlayer } from "./(youtube-content)/playerProvider";
 import { RootState } from "./(redux)/store";
-import { useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { setTimeIndex } from "./(redux)/lineIndexSlice";
 
 const TimeRange = () => {
   console.log("range");
 
   const dispatch = useDispatch();
-  const { register, setValue } = useFormContext();
+  const { register, setValue } = useForm();
 
   const { playerRef } = usePlayer();
   const playing = useSelector((state: RootState) => state.playing.value);
@@ -21,17 +21,20 @@ const TimeRange = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
 
-  const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = Number(e.target.value);
-    setValue("TimeRange.range", time.toFixed(3));
-    if (playerRef.current) {
-      playerRef.current.seekTo(time);
-      dispatch(startPlaying()); // 再生を開始
-    }
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-  };
+  const handleRangeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const time = Number(e.target.value);
+      setValue("TimeRange.range", time.toFixed(3));
+      if (playerRef.current) {
+        playerRef.current.seekTo(time);
+        dispatch(startPlaying()); // 再生を開始
+      }
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    },
+    [dispatch, playerRef, setValue]
+  );
 
   useEffect(() => {
     if (playing && isDisabled) {
@@ -43,6 +46,17 @@ const TimeRange = () => {
       }
     }
   }, [playerRef, playing, isDisabled]);
+
+  useEffect(() => {
+    const updateRangeValue = () => {
+      setValue("TimeRange.range", timer.currentTime);
+    };
+
+    timer.addListener(updateRangeValue);
+    return () => {
+      timer.removeListener(updateRangeValue);
+    };
+  }, []);
 
   return (
     <div>
