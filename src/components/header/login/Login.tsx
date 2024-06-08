@@ -20,18 +20,12 @@ export default async function Login() {
           <MenuButton as={Button}>
             <HStack spacing="3">
               <span>{session.user.name}</span>
-              <Avatar
-                size="sm"
-                name={session.user.name ?? ""}
-                src={session.user.image ?? ""}
-              >
-                {!session.user.image && (
-                  <AvatarBadge boxSize="1.25em" bg="gray.300" />
-                )}
+              <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
+                {!session.user.image && <AvatarBadge boxSize="1.25em" bg="gray.300" />}
               </Avatar>
             </HStack>
           </MenuButton>
-          <MenuList className=" p-0">
+          <MenuList className="p-0">
             <SignOut name={session.user.name ?? ""} />
             <CheckName name={session.user.name ?? ""} />
           </MenuList>

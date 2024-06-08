@@ -6,15 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePlayer } from "./playerProvider";
 import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
-import { startPlaying } from "../(redux)/playingSlice";
+import { useSearchParams } from "next/navigation";
 
-const YouTubeContent = React.memo(function YouTubeContent({ className }: { className: string }) {
+const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
   const { setValue } = useFormContext();
   const { playerRef, setPlayerRef } = usePlayer();
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-
+  const searchParams = useSearchParams();
+  const videoId = searchParams.get("new") || ""; // デフォルト値を設定
   const handleReady = useCallback(
     (event) => {
       const player = event.target;
@@ -48,7 +49,7 @@ const YouTubeContent = React.memo(function YouTubeContent({ className }: { class
   return (
     <YouTube
       className={className}
-      videoId="8ZP5eqm4JqM"
+      videoId={videoId}
       opts={{
         width: "384px",
         height: "216px",
@@ -61,6 +62,6 @@ const YouTubeContent = React.memo(function YouTubeContent({ className }: { class
       onStateChange={handleStateChange}
     />
   );
-});
+};
 
 export default YouTubeContent;

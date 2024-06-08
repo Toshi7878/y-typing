@@ -1,9 +1,8 @@
 import { signIn, signOut } from "@/lib/auth";
 import { Button } from "@chakra-ui/react";
 
-import { useRouter } from "next/navigation";
 
-import React, { useEffect } from "react";
+import React from "react";
 
 export function SignIn({
   provider,

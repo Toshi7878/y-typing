@@ -15,7 +15,7 @@ export type NavItem = {
   disabled?: boolean;
 };
 
-export type MarketingConfig = {
+export type LeftNavConfig = {
   mainNav: NavItem[];
 };
 

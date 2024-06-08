@@ -3,18 +3,15 @@
 import { NavItem } from "@/types";
 import { Link } from "@chakra-ui/next-js";
 
-interface MainNavProps {
+interface LeftNavProps {
   items: NavItem[];
 }
 
-export default function MainNav({ items }: MainNavProps) {
+export default function LeftNav({ items }: LeftNavProps) {
   return (
     <div className="flex items-center md:gap-10">
       <span>
-        <Link
-          href={"/"}
-          className="md:flex items-center space-x-2 font-extrabold text-xl"
-        >
+        <Link href={"/"} className="md:flex items-center space-x-2 font-extrabold text-xl">
           Y-Typing
         </Link>
       </span>
