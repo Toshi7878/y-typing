@@ -4,11 +4,16 @@ import { Box, Flex, Button, Stack, Badge } from "@chakra-ui/react";
 
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
-import { Tag } from "react-tag-input";
 import "../(style)/reactTags.scss";
 import { RootState } from "../(redux)/store";
 import { useSelector } from "react-redux";
 
+// Tag 型を自分で定義
+export interface Tag {
+  id: string;
+  className: string;
+  [key: string]: string;
+}
 const UploadTab = () => {
   const [genre, setGenre] = useState("");
   const ytTitle = useSelector((state: RootState) => state.ytTitle.title);
@@ -51,17 +56,24 @@ const UploadTab = () => {
 
       <Flex>
         <Stack direction="row" spacing={4} wrap="wrap">
-          {["J-POP", "ボーカロイド", "ゲーム", "アニメ", "Vtuber", "東方ボーカル", "洋楽", "その他"].map((label, index) => {
-            const colors = ["blue", "cyan", "purple", "orange", "green", "red", "pink", "gray"];
-
+          {[
+            { label: "J-POP", color: "blue" },
+            { label: "ボーカロイド", color: "cyan" },
+            { label: "ゲーム", color: "purple" },
+            { label: "アニメ", color: "orange" },
+            { label: "Vtuber", color: "green" },
+            { label: "東方ボーカル", color: "red" },
+            { label: "洋楽", color: "pink" },
+            { label: "その他", color: "gray" },
+          ].map(({ label, color }, index) => {
             const isSelected = genre.includes(label);
 
             return (
               <Badge
                 key={index}
                 variant="solid"
-                colorScheme={colors[index]}
-                bg={`${colors[index]}.400`}
+                colorScheme={color}
+                bg={`${color}.400`}
                 px="1"
                 border="1px"
                 borderColor="black"
