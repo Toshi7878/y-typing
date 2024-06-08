@@ -22,9 +22,7 @@ const schema = z.object({
   URL: z
     .string()
     .url()
-    .refine((url) => extractYouTubeVideoId(url), {
-      message: "有効なYouTube URLを入力してください",
-    }),
+    .refine((url) => extractYouTubeVideoId(url)),
 });
 
 export default function NewMap() {
