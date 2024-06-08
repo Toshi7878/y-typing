@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePlayer } from "./playerProvider";
 import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
+import { startPlaying } from "../(redux)/playingSlice";
 
 const YouTubeContent = React.memo(function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");

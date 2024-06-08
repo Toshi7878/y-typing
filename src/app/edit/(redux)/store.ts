@@ -4,6 +4,7 @@ import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
 import buttonLoadReducer from "./buttonLoadSlice";
+import editorButtonStateReducer from "./editorButtonStateSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,
     buttonLoad: buttonLoadReducer,
+    editorButtonState: editorButtonStateReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

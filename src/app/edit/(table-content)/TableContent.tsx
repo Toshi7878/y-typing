@@ -35,7 +35,6 @@ export default function TableContent() {
   useEffect(() => {
     const updateTimeBg = () => {
       if (timeIndex !== null) {
-        console.log(timer.currentTime);
         if (
           mapData[timeIndex + 1] &&
           Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
