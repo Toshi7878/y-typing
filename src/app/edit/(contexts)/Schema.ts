@@ -1,9 +1,5 @@
-export interface InputFormSchema {
-  InfoTab: {
-    url: string;
-    title: string;
-  };
-  UploadTab: {
-    creatorComment: string;
-  };
+export interface MovieInfoFormSchema {
+  url: string;
+  title: string;
+  creatorComment: string;
 }

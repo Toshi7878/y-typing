@@ -9,13 +9,13 @@ const InfoTab = () => {
 
   return (
     <form>
-      <Stack display="flex" flexDirection="column" gap="3">
+      <Stack display="flex" flexDirection="column" gap="6">
         {/* <Flex alignItems="center">
           <FormLabel mb="0" width="150px" fontWeight="bold">
             YouTube URL
           </FormLabel>
 
-          <Input placeholder="YouTube URL" size="sm" {...register("InfoTab.url")} fontWeight="bold" />
+          <Input placeholder="YouTube URL" size="sm" {...register("url")} fontWeight="bold" />
         </Flex> */}
 
         <Flex alignItems="center">
@@ -23,13 +23,13 @@ const InfoTab = () => {
             タイトル
           </FormLabel>
 
-          <Input placeholder="タイトル" size="sm" {...register("InfoTab.title")} fontWeight="bold" />
+          <Input placeholder="タイトル" size="sm" {...register("title")} fontWeight="bold" />
         </Flex>
         <Flex alignItems="center">
           <FormLabel mb="0" width="150px" fontWeight="bold">
             コメント
           </FormLabel>
-          <Input placeholder="" size="sm" {...register("UploadTab.creatorComment")} />
+          <Input placeholder="" size="sm" {...register("creatorComment")} />
         </Flex>
         <UploadTab />
       </Stack>

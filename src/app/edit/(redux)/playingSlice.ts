@@ -1,20 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const playingSlice = createSlice({
-  name: "playing",
+export const YTStateSlice = createSlice({
+  name: "YTState",
   initialState: {
-    value: false,
+    isPlaying: false,
+    isStarted: false,
   },
   reducers: {
-    startPlaying: (state) => {
-      state.value = true;
+    setIsPlaying: (state, action) => {
+      state.isPlaying = action.payload;
     },
-    stopPlaying: (state) => {
-      state.value = false;
+    setIsStarted: (state, action) => {
+      state.isStarted = action.payload;
     },
   },
 });
 
-export const { startPlaying, stopPlaying } = playingSlice.actions;
+export const { setIsPlaying, setIsStarted } = YTStateSlice.actions;
 
-export default playingSlice.reducer;
+export default YTStateSlice.reducer;

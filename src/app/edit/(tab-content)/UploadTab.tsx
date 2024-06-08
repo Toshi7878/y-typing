@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Input, Box, Flex, Button, Stack, Badge } from "@chakra-ui/react";
+import { Box, Flex, Button, Stack, Badge } from "@chakra-ui/react";
 
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
 import { Tag } from "react-tag-input";
-import "./(style)/reactTags.scss";
+import "../(style)/reactTags.scss";
 import { RootState } from "../(redux)/store";
 import { useSelector } from "react-redux";
 
@@ -44,7 +44,7 @@ const UploadTab = () => {
   const TAG_MAX_LEN = 10;
   return (
     <Box display="flex" flexDirection="column" gap="4">
-      <Box>
+      <Box fontWeight="bold">
         {tags.length}
         {tags.length <= 1 ? "/2" : `/${TAG_MAX_LEN}`} タグ, <span>{genre ? 1 : 0}/1 ジャンル</span>
       </Box>
@@ -66,7 +66,7 @@ const UploadTab = () => {
                 border="1px"
                 borderColor="black"
                 opacity={isSelected ? "1" : "0.6"}
-                transform={isSelected ? "scale(1.05)" : "scale(1)"}
+                transform={isSelected ? "scale(1.1)" : "scale(1)"}
                 className={`${isSelected ? "" : "cursor-pointer"} text-xl rounded-lg`}
                 _hover={{ opacity: "1" }}
                 onClick={() => toggleBadge(label)}
@@ -111,6 +111,7 @@ const UploadTab = () => {
               }
             }
           }}
+          inline={false}
         />
       </div>
 
@@ -132,6 +133,8 @@ const UploadTab = () => {
             "電波ソング",
             "簡単",
             "難しい",
+            "装飾譜面",
+            "ギミック譜面",
           ].map((label, index) => {
             const isSelected = tags.some((tag) => tag.id === label);
 

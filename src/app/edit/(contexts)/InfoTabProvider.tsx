@@ -1,26 +1,32 @@
-import React, { createContext, useContext, ReactNode, useMemo } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import { useForm, FormProvider, UseFormReturn } from "react-hook-form";
-import { InputFormSchema } from "./Schema";
-
+import { MovieInfoFormSchema } from "./Schema";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 interface InfoTabProviderProps {
   children: ReactNode;
 }
 
-const InfoTabContext = createContext<UseFormReturn<InputFormSchema["InfoTab"]> | null>(null);
+const schema = z.object({
+  title: z.string().min(1),
+});
+
+const InfoTabContext = createContext<UseFormReturn<MovieInfoFormSchema> | null>(null);
 
 export const InfoTabProvider: React.FC<InfoTabProviderProps> = ({ children }) => {
-  const methods = useForm<InputFormSchema["InfoTab"]>({
+  const methods = useForm<MovieInfoFormSchema>({
     defaultValues: {
       url: "",
       title: "",
+      creatorComment: "",
     },
-    // resolver: zodResolver(TabFormSchema),
+    mode: "all",
+    resolver: zodResolver(schema),
+    criteriaMode: "all",
   });
 
-  const value = useMemo(() => methods, [methods]);
-
   return (
-    <InfoTabContext.Provider value={value}>
+    <InfoTabContext.Provider value={methods}>
       <FormProvider {...methods}>{children}</FormProvider>
     </InfoTabContext.Provider>
   );

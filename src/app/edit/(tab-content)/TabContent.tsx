@@ -6,6 +6,7 @@ import EditorTab from "./EditorTab";
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import InfoTab from "./InfoTab";
+import { RootState } from "../(redux)/store";
 
 export default function TabContent({ className }: { className?: string }) {
   console.log("Tab");
@@ -14,12 +15,12 @@ export default function TabContent({ className }: { className?: string }) {
   const tabIndex: number = useSelector((state: { tabIndex: { value: number } }) => state.tabIndex.value);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const playing: boolean = useSelector((state: { playing: { value: boolean } }) => state.playing.value);
+  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   useEffect(() => {
-    if (playing && isDisabled) {
+    if (isStarted && isDisabled) {
       setIsDisabled(false);
     }
-  }, [playing, isDisabled]);
+  }, [isStarted]);
 
   return (
     <Tabs

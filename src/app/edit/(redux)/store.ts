@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import playingReducer from "./playingSlice";
+import YTStateReducer from "./playingSlice";
 import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
@@ -9,7 +9,7 @@ import ytTitleReducer from "./ytTitleSlice";
 
 const store = configureStore({
   reducer: {
-    playing: playingReducer,
+    ytState: YTStateReducer,
     tabIndex: tabIndexReducer,
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,

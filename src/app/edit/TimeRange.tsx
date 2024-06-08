@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { timer } from "./(youtube-content)/timer";
 import { useDispatch, useSelector } from "react-redux";
-import { startPlaying } from "./(redux)/playingSlice";
 import { usePlayer } from "./(youtube-content)/playerProvider";
 import { RootState } from "./(redux)/store";
 import { useForm } from "react-hook-form";
@@ -16,18 +15,16 @@ const TimeRange = () => {
   const { register, setValue } = useForm();
 
   const { playerRef } = usePlayer();
-  const playing = useSelector((state: RootState) => state.playing.value);
-
+  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   const [isDisabled, setIsDisabled] = useState(true);
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
 
   const handleRangeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const time = Number(e.target.value);
-      setValue("TimeRange.range", time.toFixed(3));
+      setValue("range", time.toFixed(3));
       if (playerRef.current) {
         playerRef.current.seekTo(time);
-        dispatch(startPlaying()); // 再生を開始
       }
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
@@ -37,7 +34,7 @@ const TimeRange = () => {
   );
 
   useEffect(() => {
-    if (playing && isDisabled) {
+    if (isStarted && isDisabled) {
       setIsDisabled(false);
       const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
@@ -45,11 +42,11 @@ const TimeRange = () => {
         dispatch(setTimeIndex(0));
       }
     }
-  }, [playerRef, playing, isDisabled]);
+  }, [isStarted]);
 
   useEffect(() => {
     const updateRangeValue = () => {
-      setValue("TimeRange.range", timer.currentTime);
+      setValue("range", timer.currentTime);
     };
 
     timer.addListener(updateRangeValue);
@@ -66,7 +63,7 @@ const TimeRange = () => {
         step="0.1"
         id="time-range"
         type="range"
-        {...register("TimeRange.range")}
+        {...register("range")}
         onChange={handleRangeChange}
         className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
         disabled={isDisabled}

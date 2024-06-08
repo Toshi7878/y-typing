@@ -14,6 +14,7 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
   const { playerRef, setPlayerRef } = usePlayer();
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
+  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
 
   const searchParams = useSearchParams();
   const videoId = searchParams.get("new") || ""; // デフォルト値を設定
@@ -27,7 +28,7 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(playerRef, dispatch);
+    ytState.play(playerRef, dispatch, isStarted);
   }, [dispatch, playerRef]);
 
   const handlePause = useCallback(() => {

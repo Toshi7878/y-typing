@@ -17,24 +17,19 @@ export class TextAreaEvents {
   static async setTopLyrics(setValue: UseFormSetValue<any>, addLyrics: string, dispatch: Dispatch) {
     const lines = addLyrics.split("\n");
     const lyrics = lines[0].replace(/\r$/, "");
-    setValue("EditorTab.lyrics", lyrics);
+    setValue("lyrics", lyrics);
     dispatch(setIsLoadingWordConvertBtn(true));
     await ButtonEvents.lyricsConvert(lyrics, setValue);
     dispatch(setIsLoadingWordConvertBtn(false));
   }
 
-  static deleteTopLyrics(
-    setValue: UseFormSetValue<any>,
-    lyrics: string,
-    addLyrics: string,
-    dispatch: Dispatch
-  ) {
+  static deleteTopLyrics(setValue: UseFormSetValue<any>, lyrics: string, addLyrics: string, dispatch: Dispatch) {
     const lines = addLyrics?.split("\n") || [];
     const topLine = lines[0];
 
     const newText = lines.slice(1).join("\n");
     if (lyrics === topLine) {
-      setValue("EditorTab.addLyrics", newText);
+      setValue("addLyrics", newText);
     }
     TextAreaEvents.setTopLyrics(setValue, newText, dispatch);
   }

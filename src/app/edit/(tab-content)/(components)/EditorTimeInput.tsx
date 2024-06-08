@@ -12,7 +12,7 @@ const schema = z.object({
   time: z.string().min(1),
 });
 
-const EditorTimeInput = ({ onFormStateChange }: any) => {
+const EditorTimeInput = ({ onFormStateChange, timeRef }) => {
   const methods = useForm({
     mode: "all",
     resolver: zodResolver(schema),
@@ -26,7 +26,7 @@ const EditorTimeInput = ({ onFormStateChange }: any) => {
   } = methods;
 
   const [maxTime, setMaxTime] = useState("0");
-  const playing = useSelector((state: RootState) => state.playing.value);
+  const isPlaying = useSelector((state: RootState) => state.ytState.isPlaying);
   const { playerRef } = usePlayer();
 
   useEffect(() => {
@@ -35,7 +35,10 @@ const EditorTimeInput = ({ onFormStateChange }: any) => {
 
   const updateTimeValue = useCallback(() => {
     setValue("time", timer.currentTime, { shouldValidate: true });
-  }, [setValue]);
+    if (timeRef) {
+      timeRef.current = timer.currentTime;
+    }
+  }, [setValue, timeRef]);
 
   useEffect(() => {
     timer.addListener(updateTimeValue);
@@ -46,13 +49,13 @@ const EditorTimeInput = ({ onFormStateChange }: any) => {
   }, [updateTimeValue]);
 
   useEffect(() => {
-    if (playing && maxTime === "0") {
+    if (isPlaying && maxTime === "0") {
       const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
         setMaxTime(duration);
       }
     }
-  }, [maxTime, playerRef, playing]);
+  }, [maxTime, playerRef, isPlaying]);
 
   return (
     <FormProvider {...methods}>
