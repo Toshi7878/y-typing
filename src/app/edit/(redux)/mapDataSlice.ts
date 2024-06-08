@@ -18,7 +18,7 @@ export const mapDataSlice = createSlice({
     },
 
     deleteLine: (state, action) => {
-      const lineNumber = action.payload;
+      const lineNumber = Number(action.payload);
       state.value = state.value.filter((_, index) => index !== lineNumber);
     },
   },

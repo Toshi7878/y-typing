@@ -41,8 +41,8 @@ const EditorTimeInput = () => {
       type="number"
       {...register("time")}
       onChange={(e) => {
-        console.log(maxTime);
-        if (Number(e.target.value) > Number(maxTime)) e.target.value = maxTime.toString();
+        if (Number(e.target.value) >= Number(maxTime))
+          e.target.value = (Number(maxTime) - 0.001).toFixed(3);
         trigger("time");
       }}
     />

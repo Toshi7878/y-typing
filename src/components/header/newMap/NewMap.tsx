@@ -38,7 +38,7 @@ export default function NewMap() {
 
   const newCreate = (data) => {
     const ID = extractYouTubeVideoId(data.URL);
-    if (ID && ID.length == 11) {
+    if (ID && ID.length == 11 && isValid) {
       window.location.href = `/edit?new=${ID}`;
     }
   };
@@ -55,7 +55,9 @@ export default function NewMap() {
           <ModalCloseButton />
           <ModalBody>
             譜面を作成したいYouTube動画のURLを入力
-            <Input placeholder="YouTube URLを入力" {...register("URL")} />
+            <form onSubmit={handleSubmit(newCreate)}>
+              <Input placeholder="YouTube URLを入力" {...register("URL")} />
+            </form>
           </ModalBody>
 
           <ModalFooter>

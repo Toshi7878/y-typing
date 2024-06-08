@@ -9,6 +9,7 @@ import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import EditorSettingModal from "./(components)/EditorSettingModal";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -51,9 +52,7 @@ const EditorTab = () => {
     }
   }, [selectedIndex, mapData, setValue]);
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  const lineNumber = Number(methods.getValues("EditorTab.lineNumber"));
 
   return (
     <FormProvider {...methods}>
@@ -118,6 +117,9 @@ const EditorTab = () => {
                 追加
               </Button>
               <Button
+                isDisabled={
+                  !isValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1
+                }
                 variant="outline"
                 size="sm"
                 width="25%"
@@ -142,6 +144,7 @@ const EditorTab = () => {
               </Button>
 
               <Button
+                isDisabled={lineNumber === 0 || lineNumber === mapData.length - 1}
                 isLoading={isLoadingWordConvertBtn}
                 variant="outline"
                 size="sm"
@@ -160,6 +163,9 @@ const EditorTab = () => {
                 読み変換
               </Button>
               <Button
+                isDisabled={
+                  !isValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1
+                }
                 variant="outline"
                 size="sm"
                 width="25%"
@@ -177,17 +183,7 @@ const EditorTab = () => {
               </Button>
             </Flex>
 
-            <Button
-              variant="outline"
-              size="sm"
-              width="60px"
-              height="35px"
-              colorScheme=""
-              _hover={{ bg: "#ebdf92bb" }}
-              onClick={() => {}}
-            >
-              設定
-            </Button>
+            <EditorSettingModal />
           </Box>
         </div>
         <div>
