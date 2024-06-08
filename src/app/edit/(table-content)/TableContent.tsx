@@ -6,7 +6,6 @@ import { usePlayer } from "../(youtube-content)/playerProvider";
 import { RootState } from "../(redux)/store";
 import { addLine } from "../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../(redux)/lineIndexSlice";
-import { InputFormSchema } from "../(contexts)/Schema";
 import { timer } from "../(youtube-content)/timer";
 
 export default function TableContent() {
@@ -25,20 +24,13 @@ export default function TableContent() {
     }
   }, [playerRef, playing, mapData, dispatch]);
 
-  const selectLine = (line: InputFormSchema["EditorTab"], index: SetStateAction<number | null>) => {
-    // setValue("EditorTab.time", line.time);
-    // setValue("EditorTab.lyrics", line.lyrics);
-    // setValue("EditorTab.word", line.word);
-    // setValue("EditorTab.lineNumber", index);
+  const selectLine = (index: SetStateAction<number | null>) => {
     dispatch(setSelectedIndex(index));
   };
   useEffect(() => {
     const updateTimeBg = () => {
       if (timeIndex !== null) {
-        if (
-          mapData[timeIndex + 1] &&
-          Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
-        ) {
+        if (mapData[timeIndex + 1] && Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])) {
           dispatch(setTimeIndex(timeIndex + 1));
         }
       } else {
@@ -72,12 +64,10 @@ export default function TableContent() {
           {mapData.map((line, index) => (
             <Tr
               key={index}
-              className={`cursor-pointer ${
-                selectedIndex === index
-                  ? "bg-cyan-400 outline outline-2 outline-black"
-                  : " hover:bg-cyan-400/35"
-              } ${timeIndex === index ? " bg-teal-400/35" : ""}`}
-              onClick={() => selectLine(line, index)}
+              className={`cursor-pointer ${selectedIndex === index ? "bg-cyan-400 outline outline-2 outline-black" : " hover:bg-cyan-400/35"} ${
+                timeIndex === index ? " bg-teal-400/35" : ""
+              }`}
+              onClick={() => selectLine(index)}
             >
               <Td borderRight="1px solid black">{line.time}</Td>
               <Td borderRight="1px solid black">{line.lyrics}</Td>

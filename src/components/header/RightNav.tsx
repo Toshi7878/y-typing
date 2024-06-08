@@ -1,5 +1,5 @@
 import Login from "./login/Login";
-import NewMap from "./newMap/NewMap";
+import NewMap from "./new-map/NewMap";
 
 export default function RightNav() {
   return (

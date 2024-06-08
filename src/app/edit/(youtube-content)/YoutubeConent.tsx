@@ -14,13 +14,14 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
   const { playerRef, setPlayerRef } = usePlayer();
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
+
   const searchParams = useSearchParams();
   const videoId = searchParams.get("new") || ""; // デフォルト値を設定
   const handleReady = useCallback(
     (event) => {
       const player = event.target;
       setPlayerRef(player); // setPlayerRefを使用して更新
-      ytState.ready(playerRef, setValue);
+      ytState.ready(playerRef, setValue, dispatch);
     },
     [playerRef, setPlayerRef, setValue]
   );

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, ReactNode, useMemo } from "react";
 import { useForm, FormProvider, UseFormReturn } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { InputFormSchema } from "./Schema";
 
 interface InfoTabProviderProps {

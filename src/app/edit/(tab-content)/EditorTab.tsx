@@ -7,8 +7,6 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../(redux)/store";
 import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import EditorSettingModal from "./(components)/EditorSettingModal";
 
 const EditorTab = () => {

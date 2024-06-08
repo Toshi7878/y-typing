@@ -5,6 +5,7 @@ import { startPlaying, stopPlaying } from "../(redux)/playingSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { setTimeIndex } from "../(redux)/lineIndexSlice";
+import { setYtTitle } from "../(redux)/ytTitleSlice";
 
 const ticker = new Ticker();
 
@@ -63,13 +64,14 @@ class YTState {
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  async ready(playerRef: RefObject<any>, setValue: UseFormSetValue<FieldValues>) {
+  async ready(playerRef: RefObject<any>, setValue: UseFormSetValue<FieldValues>, dispatch: Dispatch<any>) {
     console.log("ready");
     const videoData = playerRef.current.getVideoData();
 
     if (videoData) {
       const { title, video_id } = videoData;
       const url = `https://www.youtube.com/watch?v=${video_id}`;
+      dispatch(setYtTitle(title));
       setValue("InfoTab.title", title);
       setValue("InfoTab.url", url);
     }
