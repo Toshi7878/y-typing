@@ -33,7 +33,7 @@ export default function EditorSettingModal() {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>譜面新規作成ウィンドウ</ModalHeader>
+              <ModalHeader></ModalHeader>
               <ModalCloseButton />
               <ModalBody>譜面を作成したいYouTube動画のURLを入力</ModalBody>
 

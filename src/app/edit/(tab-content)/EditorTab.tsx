@@ -3,7 +3,7 @@ import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
 import { ButtonEvents } from "./(ts)/buttonEvent";
 import { useDispatch, useSelector } from "react-redux";
 import { TextAreaEvents } from "./(ts)/textAreaEvent";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RootState } from "../(redux)/store";
 import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
@@ -11,23 +11,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import EditorSettingModal from "./(components)/EditorSettingModal";
 
-const schema = z.object({
-  time: z.string().min(1),
-});
-
 const EditorTab = () => {
   // console.log("Editor");
-  const methods = useForm({
-    mode: "all",
-    resolver: zodResolver(schema),
-    criteriaMode: "all",
-  });
-  const {
-    register,
-    setValue,
-    formState: { isValid, errors },
-  } = methods;
+  const [isTimeInputValid, setIsTimeInputValid] = useState(false);
 
+  const methods = useForm();
+  const { register, setValue, watch } = methods;
+  const lineNumber = Number(watch("EditorTab.lineNumber"));
   const dispatch = useDispatch();
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -52,14 +42,12 @@ const EditorTab = () => {
     }
   }, [selectedIndex, mapData, setValue]);
 
-  const lineNumber = Number(methods.getValues("EditorTab.lineNumber"));
-
   return (
     <FormProvider {...methods}>
       <form className="flex flex-col gap-y-1">
         <div>
           <Box display="flex" alignItems="center">
-            <EditorTimeInput />
+            <EditorTimeInput onFormStateChange={setIsTimeInputValid} />
             <Input
               placeholder="歌詞"
               size="sm"
@@ -92,7 +80,7 @@ const EditorTab = () => {
           <Box display="flex" className="flex justify-between" alignItems="center">
             <Flex gap="5">
               <Button
-                isDisabled={!isValid}
+                isDisabled={!isTimeInputValid}
                 variant="outline"
                 size="sm"
                 width="25%"
@@ -118,7 +106,10 @@ const EditorTab = () => {
               </Button>
               <Button
                 isDisabled={
-                  !isValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1
+                  !isTimeInputValid ||
+                  !lineNumber ||
+                  lineNumber === 0 ||
+                  lineNumber === mapData.length - 1
                 }
                 variant="outline"
                 size="sm"
@@ -144,7 +135,6 @@ const EditorTab = () => {
               </Button>
 
               <Button
-                isDisabled={lineNumber === 0 || lineNumber === mapData.length - 1}
                 isLoading={isLoadingWordConvertBtn}
                 variant="outline"
                 size="sm"
@@ -164,7 +154,10 @@ const EditorTab = () => {
               </Button>
               <Button
                 isDisabled={
-                  !isValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1
+                  !isTimeInputValid ||
+                  !lineNumber ||
+                  lineNumber === 0 ||
+                  lineNumber === mapData.length - 1
                 }
                 variant="outline"
                 size="sm"
