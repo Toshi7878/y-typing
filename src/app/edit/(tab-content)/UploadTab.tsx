@@ -176,7 +176,9 @@ const UploadTab = () => {
             }
           })}
         </Stack>
-        <small>{ytTitle} ← ドラッグ用</small>
+        <small>
+          <span className="font-bold">{ytTitle}</span> ← ドラッグ用 (曲名・アーティスト・アニメ名などをタグに追加すると、見つけやすくなります)
+        </small>
       </Flex>
 
       <Button
