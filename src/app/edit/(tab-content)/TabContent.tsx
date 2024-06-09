@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
@@ -12,7 +13,9 @@ export default function TabContent({ className }: { className?: string }) {
   console.log("Tab");
 
   const dispatch = useDispatch();
-  const tabIndex: number = useSelector((state: { tabIndex: { value: number } }) => state.tabIndex.value);
+  const tabIndex: number = useSelector(
+    (state: { tabIndex: { value: number } }) => state.tabIndex.value
+  );
   const [isDisabled, setIsDisabled] = useState(true);
 
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
