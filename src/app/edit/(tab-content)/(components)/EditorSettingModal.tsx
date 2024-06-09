@@ -33,13 +33,9 @@ export default function EditorSettingModal() {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader></ModalHeader>
+              <ModalHeader>エディター設定</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>譜面を作成したいYouTube動画のURLを入力</ModalBody>
-
-              <ModalFooter>
-                <Button colorScheme="blue">新規作成</Button>
-              </ModalFooter>
+              <ModalBody>設定内容</ModalBody>
             </ModalContent>
           </Modal>
         </div>

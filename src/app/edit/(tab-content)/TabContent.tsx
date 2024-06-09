@@ -42,6 +42,8 @@ export default function TabContent({ className }: { className?: string }) {
           エディター
         </Tab>
       </TabList>
+
+      {/* ↓ウィンドウリサイズイベント時に再レンダリングしたほうが良さそう */}
       {isDisabled ? "" : <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />}
 
       <TabPanels>
