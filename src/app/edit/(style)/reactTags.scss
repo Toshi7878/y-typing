@@ -17,22 +17,18 @@
   display: inline-block;
 
   input.ReactTags__tagInputField {
-    height: 35px;
+    height: 32px;
     border: solid;
 
     margin: 0;
     padding: 5px;
-    font-size: 14px;
+    font-size: 10.5px;
     border: 1px solid #000000;
-    min-width: 180px;
+    min-width: 165px;
 
     &:focus {
       height: 32px;
-      margin: 0;
-      padding: 5px;
-      font-size: 14px;
       border: 1px solid #eee;
-      min-width: 180px;
     }
   }
 }
@@ -57,7 +53,7 @@
     border: 1px solid #ddd;
     background: #63bcfd;
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     margin: 2px 5px;
     border-radius: 2px;
     height: 33px;

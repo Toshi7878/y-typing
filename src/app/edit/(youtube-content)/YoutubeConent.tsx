@@ -18,18 +18,19 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
 
   const searchParams = useSearchParams();
   const videoId = searchParams.get("new") || ""; // デフォルト値を設定
+
   const handleReady = useCallback(
-    (event) => {
+    (event: { target: any }) => {
       const player = event.target;
       setPlayerRef(player); // setPlayerRefを使用して更新
       ytState.ready(playerRef, setValue, dispatch);
     },
-    [playerRef, setPlayerRef, setValue]
+    [dispatch, playerRef, setPlayerRef, setValue]
   );
 
   const handlePlay = useCallback(() => {
     ytState.play(playerRef, dispatch, isStarted);
-  }, [dispatch, playerRef]);
+  }, [dispatch, isStarted, playerRef]);
 
   const handlePause = useCallback(() => {
     ytState.pause(dispatch);
@@ -42,19 +43,30 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
   const handleStateChange = useCallback(
     (event) => {
       if (event.data === 3) {
+        // seek時の処理
         ytState.seek(playerRef, dispatch, mapData);
+      } else if (event.data === 1) {
+        //	未スタート、他の動画に切り替えた時など
+        if (!isStarted) {
+          playerRef.current.seekTo(0);
+        }
+        console.log("未スタート -1");
       }
     },
-    [dispatch, mapData, playerRef]
+    [dispatch, isStarted, mapData, playerRef]
   );
+
+  const HEIGHT = "384px";
+  const WEDTH = "216px";
 
   return (
     <YouTube
+      style={{ minWidth: HEIGHT, minHeight: WEDTH }}
       className={className}
       videoId={videoId}
       opts={{
-        width: "384px",
-        height: "216px",
+        width: HEIGHT,
+        height: WEDTH,
         playerVars: { showinfo: 1, enablejsapi: 1 },
       }}
       onReady={handleReady}

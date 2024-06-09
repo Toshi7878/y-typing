@@ -34,8 +34,8 @@ const UploadTab = () => {
   };
 
   const handleAddition = (tag: Tag) => {
-    tag.id = tag.id.replace(/\s/g, "");
-    tag.text = tag.text.replace(/\s/g, "");
+    tag.id = tag.id.replace(/^\s+/g, "");
+    tag.text = tag.text.replace(/\s+$/, "");
 
     const isTagAdded = tags.some((tags) => tags.id === tag.id);
 
@@ -47,11 +47,12 @@ const UploadTab = () => {
   };
 
   const TAG_MAX_LEN = 10;
+  const TAG_MIN_LEN = 2;
   return (
-    <Box display="flex" flexDirection="column" gap="4">
+    <Box display="flex" flexDirection="column" gap="5">
       <Box fontWeight="bold">
         {tags.length}
-        {tags.length <= 1 ? "/2" : `/${TAG_MAX_LEN}`} タグ, <span>{genre ? 1 : 0}/1 ジャンル</span>
+        {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`} タグ, <span>{genre ? 1 : 0}/1 ジャンル</span>
       </Box>
 
       <Flex>
@@ -75,9 +76,9 @@ const UploadTab = () => {
                 colorScheme={color}
                 bg={`${color}.400`}
                 px="1"
-                border="1px"
+                border={isSelected ? "2px" : "1px"}
                 borderColor="black"
-                opacity={isSelected ? "1" : "0.6"}
+                opacity={isSelected ? "1" : "0.5"}
                 transform={isSelected ? "scale(1.1)" : "scale(1)"}
                 className={`${isSelected ? "" : "cursor-pointer"} text-xl rounded-lg`}
                 _hover={{ opacity: "1" }}
@@ -107,7 +108,7 @@ const UploadTab = () => {
           tags={tags}
           suggestions={suggestions}
           separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
-          placeholder="タグを追加"
+          placeholder={`${tags.length <= 1 ? "タグを2つ以上追加してください" : `タグを追加`}`}
           handleDelete={handleDelete}
           handleAddition={handleAddition}
           allowUnique
@@ -135,7 +136,7 @@ const UploadTab = () => {
             "多言語",
             "ラップ",
             "同人音楽",
-            "インディー",
+            "セリフ読み",
             "Nightcore",
             "キッズ＆ファミリー",
             "映画",
@@ -159,7 +160,7 @@ const UploadTab = () => {
                   variant="solid"
                   colorScheme="teal"
                   bg={`teal.400`}
-                  opacity="0.8"
+                  opacity="0.7"
                   className={`cursor-pointer text-sm rounded-lg`}
                   _hover={{ opacity: "1" }}
                   textTransform="none" // 追加: UpperCaseを解除

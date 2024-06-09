@@ -23,13 +23,13 @@ const InfoTab = () => {
             タイトル
           </FormLabel>
 
-          <Input placeholder="タイトル" size="sm" {...register("title")} fontWeight="bold" />
+          <Input placeholder="曲名 / アーティスト【アニメ名OP】など (必須)" size="sm" {...register("title")} fontWeight="bold" />
         </Flex>
         <Flex alignItems="center">
           <FormLabel mb="0" width="150px" fontWeight="bold">
             コメント
           </FormLabel>
-          <Input placeholder="" size="sm" {...register("creatorComment")} />
+          <Input placeholder="譜面の情報や感想など、なんでもコメントOKです" size="sm" {...register("creatorComment")} />
         </Flex>
         <UploadTab />
       </Stack>
