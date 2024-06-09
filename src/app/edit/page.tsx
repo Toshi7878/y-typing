@@ -6,8 +6,8 @@ import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";
 import { Provider } from "react-redux";
 import store from "./(redux)/store";
-import { PlayerProvider } from "./(youtube-content)/playerProvider";
 import InfoTabProvider from "./(contexts)/InfoTabProvider";
+import { RefsProvider } from "./(contexts)/refsProvider";
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -22,8 +22,8 @@ export default function Home() {
 
   return (
     <Provider store={store}>
-      <PlayerProvider>
-        <InfoTabProvider>
+      <InfoTabProvider>
+        <RefsProvider>
           <main className="flex min-h-screen flex-col items-center px-14 pt-14">
             <section className="flex flex-col md:flex-row w-full ">
               <YouTubeContent className="mr-5" />
@@ -36,8 +36,8 @@ export default function Home() {
               <TableContent />
             </section>
           </main>
-        </InfoTabProvider>
-      </PlayerProvider>
+        </RefsProvider>
+      </InfoTabProvider>
     </Provider>
   );
 }

@@ -1,22 +1,17 @@
-import { Dispatch, RefObject } from "react";
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
-import { setIsPlaying, setIsStarted } from "../(redux)/playingSlice";
+import { setIsPlaying, setIsStarted } from "../(redux)/ytStateSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { setTimeIndex } from "../(redux)/lineIndexSlice";
 import { setYtTitle } from "../(redux)/ytTitleSlice";
-
+import { Action, Dispatch } from "@reduxjs/toolkit";
+import { RefsContextType } from "../(contexts)/refsProvider";
+import { Line } from "../(redux)/mapDataSlice";
 const ticker = new Ticker();
 
 class YTState {
-  state: string;
-
-  constructor() {
-    this.state = "ready";
-  }
-
-  play(playerRef: RefObject<any>, dispatch: Dispatch<any>, isStarted: boolean) {
+  play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
     console.log("再生 1");
 
     if (!isStarted) {
@@ -25,38 +20,41 @@ class YTState {
     ticker.start();
     dispatch(setIsPlaying(true));
     dispatch(setIsStarted(true));
-
     dispatch(setTabIndex(1));
   }
 
-  end(dispatch: Dispatch<any>) {
+  end(dispatch: Dispatch<Action>) {
     console.log("プレイ終了");
     ticker.stop();
     dispatch(setIsPlaying(false));
   }
 
-  stop(dispatch: Dispatch<any>) {
+  stop(dispatch: Dispatch<Action>) {
     console.log("動画停止");
     dispatch(setIsPlaying(false));
   }
 
-  pause(dispatch: Dispatch<any>) {
+  pause(dispatch: Dispatch<Action>) {
     console.log("一時停止");
 
     ticker.stop();
     dispatch(setIsPlaying(false));
   }
 
-  seek(playerRef: RefObject<any>, dispatch: Dispatch<any>, mapData: any) {
+  seek(event: any, dispatch: Dispatch<Action>, mapData: Line[]) {
     console.log("シーク");
 
-    const time: number = playerRef?.current?.getCurrentTime()!;
+    const time = event.target.getCurrentTime()!;
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  async ready(playerRef: RefObject<any>, setValue: UseFormSetValue<FieldValues>, dispatch: Dispatch<any>) {
+  ready(
+    playerRef: RefsContextType["playerRef"],
+    setValue: UseFormSetValue<FieldValues>,
+    dispatch: Dispatch<Action>
+  ) {
     console.log("ready");
-    const videoData = playerRef.current.getVideoData();
+    const videoData = playerRef!.current!.getVideoData();
 
     if (videoData) {
       const { title, video_id } = videoData;
@@ -69,11 +67,11 @@ class YTState {
   }
 }
 
-function seekTimeIndex(time: number, mapData: any) {
+function seekTimeIndex(time: number, mapData: Line[]) {
   let count = 0;
 
   for (let i = 0; i < mapData.length; i++) {
-    if (mapData[i]["time"] - time >= 0) {
+    if (Number(mapData[i]["time"]) - time >= 0) {
       count = i;
       break;
     }

@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface Line {
+  time: string;
+
+  lyrics: string;
+
+  word: string;
+}
+
 export const mapDataSlice = createSlice({
   name: "mapData",
   initialState: {
@@ -7,7 +15,9 @@ export const mapDataSlice = createSlice({
   },
   reducers: {
     addLine: (state, action) => {
-      const newValue = [...state.value, action.payload].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+      const newValue = [...state.value, action.payload].sort(
+        (a, b) => parseFloat(a.time) - parseFloat(b.time)
+      );
       state.value = newValue;
     },
     updateLine: (state, action) => {

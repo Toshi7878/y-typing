@@ -1,18 +1,24 @@
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Input } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRef } from "react";
 import { timer } from "../../(youtube-content)/timer";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
-import { usePlayer } from "../../(youtube-content)/playerProvider";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRefs } from "../../(contexts)/refsProvider";
 
 const schema = z.object({
   time: z.string().min(1),
 });
 
-const EditorTimeInput = ({ onFormStateChange, timeRef }) => {
+interface EditorTimeInputProps {
+  onFormStateChange: (isValid: boolean) => void;
+}
+const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function EditorTimeInput(
+  { onFormStateChange },
+  ref
+) {
   const methods = useForm({
     mode: "all",
     resolver: zodResolver(schema),
@@ -27,18 +33,18 @@ const EditorTimeInput = ({ onFormStateChange, timeRef }) => {
 
   const [maxTime, setMaxTime] = useState("0");
   const isPlaying = useSelector((state: RootState) => state.ytState.isPlaying);
-  const { playerRef } = usePlayer();
+  const { playerRef } = useRefs();
 
   useEffect(() => {
     onFormStateChange(isValid);
   }, [isValid, onFormStateChange]);
 
-  const updateTimeValue = useCallback(() => {
-    setValue("time", timer.currentTime, { shouldValidate: true });
-    if (timeRef) {
-      timeRef.current = timer.currentTime;
-    }
-  }, [setValue, timeRef]);
+  const updateTimeValue = useCallback(
+    (currentTime: string) => {
+      setValue("time", currentTime, { shouldValidate: true });
+    },
+    [setValue]
+  );
 
   useEffect(() => {
     timer.addListener(updateTimeValue);
@@ -57,6 +63,13 @@ const EditorTimeInput = ({ onFormStateChange, timeRef }) => {
     }
   }, [maxTime, playerRef, isPlaying]);
 
+  useImperativeHandle(ref, () => ({
+    clearTime: () => {
+      setValue("time", "", { shouldValidate: true });
+    },
+    getTime: () => methods.getValues("time"),
+  }));
+
   return (
     <FormProvider {...methods}>
       <Input
@@ -74,6 +87,6 @@ const EditorTimeInput = ({ onFormStateChange, timeRef }) => {
       />
     </FormProvider>
   );
-};
+});
 
 export default EditorTimeInput;

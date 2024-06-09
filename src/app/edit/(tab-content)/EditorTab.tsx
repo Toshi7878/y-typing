@@ -8,24 +8,34 @@ import { RootState } from "../(redux)/store";
 import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import EditorSettingModal from "./(components)/EditorSettingModal";
+import { useRefs } from "../(contexts)/refsProvider";
 
 const EditorTab = () => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
-  const timeRef = useRef("0");
-
+  const refs = useRefs();
+  const timeInputRef = useRef<{ clearTime: () => void; getTime: () => string } | null>(null);
   const methods = useForm();
-  const { register, setValue, watch, resetField } = methods;
+  const { register, setValue, watch } = methods;
   const lineNumber = Number(watch("lineNumber"));
   const dispatch = useDispatch();
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const isLoadingWordConvertBtn = useSelector((state: RootState) => state.buttonLoad.isLoadingWordConvertBtn);
+  const isLoadingWordConvertBtn = useSelector(
+    (state: RootState) => state.buttonLoad.isLoadingWordConvertBtn
+  );
+
+  const lineAddBtnRef = useRef(null);
+  const lineUpdateBtnRef = useRef(null);
+  const lineDeleteBtnRef = useRef(null);
 
   const lineInit = () => {
     setValue("lyrics", "");
     setValue("word", "");
     setValue("lineNumber", "");
+    if (timeInputRef.current) {
+      timeInputRef.current.clearTime(); // 実際のinputタグの数値も空にする
+    }
   };
 
   useEffect(() => {
@@ -37,12 +47,18 @@ const EditorTab = () => {
     }
   }, [selectedIndex, setValue]);
 
+  useEffect(() => {
+    refs.setRef("lineAddBtn", lineAddBtnRef.current);
+    refs.setRef("lineUpdateBtn", lineUpdateBtnRef.current);
+    refs.setRef("lineDeleteBtn", lineDeleteBtnRef.current);
+  }, [lineAddBtnRef, lineUpdateBtnRef, lineDeleteBtnRef]);
+
   return (
     <FormProvider {...methods}>
       <form className="flex flex-col gap-y-1">
         <div>
           <Box display="flex" alignItems="center">
-            <EditorTimeInput onFormStateChange={setIsTimeInputValid} timeRef={timeRef} />
+            <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
             <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
           </Box>
         </div>
@@ -65,6 +81,7 @@ const EditorTab = () => {
           <Box display="flex" className="flex justify-between" alignItems="center">
             <Flex gap="5">
               <Button
+                ref={lineAddBtnRef}
                 isDisabled={!isTimeInputValid}
                 variant="outline"
                 size="sm"
@@ -73,7 +90,7 @@ const EditorTab = () => {
                 colorScheme="teal"
                 _hover={{ bg: "#6ee278ac" }}
                 onClick={() => {
-                  const time = timeRef.current;
+                  const time = timeInputRef.current!.getTime();
                   const lyrics = methods.getValues("lyrics");
                   const word = methods.getValues("word");
                   const addLyrics = methods.getValues("addLyrics");
@@ -90,7 +107,13 @@ const EditorTab = () => {
                 追加
               </Button>
               <Button
-                isDisabled={!isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1}
+                ref={lineUpdateBtnRef}
+                isDisabled={
+                  !isTimeInputValid ||
+                  !lineNumber ||
+                  lineNumber === 0 ||
+                  lineNumber === mapData.length - 1
+                }
                 variant="outline"
                 size="sm"
                 width="30%"
@@ -98,10 +121,11 @@ const EditorTab = () => {
                 colorScheme="cyan"
                 _hover={{ bg: "#80f2fbac" }}
                 onClick={() => {
-                  const time = timeRef.current;
+                  const time = timeInputRef.current!.getTime();
                   const lyrics = methods.getValues("lyrics");
                   const word = methods.getValues("word");
                   const lineNumber = methods.getValues("lineNumber");
+
                   ButtonEvents.updateLine(dispatch, {
                     time,
                     lyrics,
@@ -115,6 +139,7 @@ const EditorTab = () => {
               </Button>
 
               <Button
+                ref={lineDeleteBtnRef}
                 isDisabled={lineNumber === mapData.length - 1}
                 isLoading={isLoadingWordConvertBtn}
                 variant="outline"
@@ -134,7 +159,12 @@ const EditorTab = () => {
                 読み変換
               </Button>
               <Button
-                isDisabled={!isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1}
+                isDisabled={
+                  !isTimeInputValid ||
+                  !lineNumber ||
+                  lineNumber === 0 ||
+                  lineNumber === mapData.length - 1
+                }
                 variant="outline"
                 size="sm"
                 width="30%"

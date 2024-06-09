@@ -1,22 +1,23 @@
 "use client";
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from "@chakra-ui/react";
-import { SetStateAction, useEffect, MouseEventHandler, useRef } from "react";
+import { SetStateAction, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { usePlayer } from "../(youtube-content)/playerProvider";
 import { RootState } from "../(redux)/store";
 import { addLine, updateLine } from "../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../(redux)/lineIndexSlice";
 import { timer } from "../(youtube-content)/timer";
+import { useRefs } from "../(contexts)/refsProvider"; // 追加
+
 import "../(style)/table.scss";
 export default function TableContent() {
   console.log("Table");
-  const { playerRef } = usePlayer();
   const dispatch = useDispatch();
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const tableRef = useRef(null);
+  const { playerRef } = useRefs();
 
   useEffect(() => {
     if (isStarted) {
@@ -25,9 +26,17 @@ export default function TableContent() {
       if (mapData[mapData.length - 1].lyrics !== "end") {
         dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
       } else {
-        dispatch(updateLine({ time: duration.toFixed(3), lyrics: "end", word: "", lineNumber: (mapData.length - 1).toString() }));
+        dispatch(
+          updateLine({
+            time: duration.toFixed(3),
+            lyrics: "end",
+            word: "",
+            lineNumber: (mapData.length - 1).toString(),
+          })
+        );
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStarted]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
@@ -36,7 +45,10 @@ export default function TableContent() {
   useEffect(() => {
     const updateTimeBg = () => {
       if (timeIndex !== null) {
-        if (mapData[timeIndex + 1] && Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])) {
+        if (
+          mapData[timeIndex + 1] &&
+          Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
+        ) {
           dispatch(setTimeIndex(timeIndex + 1));
         }
       } else {
@@ -76,11 +88,17 @@ export default function TableContent() {
               key={index}
               id={`line_${index}`}
               className={`cursor-pointer relative ${
-                selectedIndex === index ? "bg-cyan-400 outline outline-2 outline-black" : " hover:bg-cyan-400/35"
+                selectedIndex === index
+                  ? "bg-cyan-400 outline outline-2 outline-black"
+                  : " hover:bg-cyan-400/35"
               } ${timeIndex === index ? " bg-teal-400/35" : ""}`}
               onClick={() => selectLine(index)}
             >
-              <Td borderRight="1px solid black" className="time-cell hover:bg-cyan-700/35" onClick={clickTimeCell}>
+              <Td
+                borderRight="1px solid black"
+                className="time-cell hover:bg-cyan-700/35"
+                onClick={clickTimeCell}
+              >
                 {line.time}
               </Td>
               <Td borderRight="1px solid black">{line.lyrics}</Td>

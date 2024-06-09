@@ -3,34 +3,37 @@ import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { usePlayer } from "./playerProvider";
 import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
 import { useSearchParams } from "next/navigation";
+import { handleKeydown } from "../(ts)/windowKeyDown";
+import { useRefs } from "../(contexts)/refsProvider"; // 変更
 
 const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
   const { setValue } = useFormContext();
-  const { playerRef, setPlayerRef } = usePlayer();
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
-
+  const playerState = useSelector((state: RootState) => state.ytState);
+  const refs = useRefs();
   const searchParams = useSearchParams();
-  const videoId = searchParams.get("new") || ""; // デフォルト値を設定
+  const videoId = searchParams.get("new") || "";
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
-      setPlayerRef(player); // setPlayerRefを使用して更新
-      ytState.ready(playerRef, setValue, dispatch);
-    },
-    [dispatch, playerRef, setPlayerRef, setValue]
-  );
+      refs.setRef("playerRef", player);
+      ytState.ready(refs.playerRef, setValue, dispatch);
 
+      window.addEventListener("keydown", (event) =>
+        handleKeydown(event, refs, dispatch, playerState)
+      );
+    },
+    [dispatch, playerState, refs, setValue]
+  );
   const handlePlay = useCallback(() => {
-    ytState.play(playerRef, dispatch, isStarted);
-  }, [dispatch, isStarted, playerRef]);
+    ytState.play(refs.playerRef, dispatch, playerState.isStarted);
+  }, [dispatch, refs.playerRef, playerState.isStarted]);
 
   const handlePause = useCallback(() => {
     ytState.pause(dispatch);
@@ -44,16 +47,16 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
     (event) => {
       if (event.data === 3) {
         // seek時の処理
-        ytState.seek(playerRef, dispatch, mapData);
+        ytState.seek(event, dispatch, mapData);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
-        if (!isStarted) {
-          playerRef.current.seekTo(0);
+        if (!playerState.isStarted) {
+          event.target.seekTo(0);
         }
         console.log("未スタート -1");
       }
     },
-    [dispatch, isStarted, mapData, playerRef]
+    [dispatch, mapData, playerState.isStarted]
   );
 
   const HEIGHT = "384px";
@@ -67,7 +70,7 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
       opts={{
         width: HEIGHT,
         height: WEDTH,
-        playerVars: { showinfo: 1, enablejsapi: 1 },
+        playerVars: { enablejsapi: 1 },
       }}
       onReady={handleReady}
       onPlay={handlePlay}
