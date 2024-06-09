@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, FormProvider } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
 import { ButtonEvents } from "./(ts)/buttonEvent";
