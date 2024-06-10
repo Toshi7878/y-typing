@@ -22,19 +22,19 @@ export default function TableContent() {
   const playerState = useSelector((state: RootState) => state.ytState);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
-  const keydownHandler = useCallback(
-    (event: KeyboardEvent) => handleKeydown(event, refs, dispatch, playerState, undoredoState),
-    [dispatch, playerState, refs, undoredoState]
-  );
+  // const keydownHandler = useCallback(
+  //   (event: KeyboardEvent) => handleKeydown(event, refs, dispatch, playerState, undoredoState),
+  //   [dispatch, playerState, refs, undoredoState]
+  // );
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("keydown", keydownHandler);
-      return () => {
-        window.removeEventListener("keydown", keydownHandler);
-      };
-    }
-  }, [keydownHandler]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     window.addEventListener("keydown", keydownHandler);
+  //     return () => {
+  //       window.removeEventListener("keydown", keydownHandler);
+  //     };
+  //   }
+  // }, [keydownHandler]);
 
   useEffect(() => {
     if (isStarted) {
