@@ -3,7 +3,7 @@ import { ButtonEvents } from "./buttonEvent";
 import { Dispatch } from "@reduxjs/toolkit";
 import { setIsLoadingWordConvertBtn } from "../../(redux)/buttonLoadSlice";
 export class TextAreaEvents {
-  static async paste(setValue: UseFormSetValue<any>, dispatch: Dispatch) {
+  static async paste(setValue: UseFormSetValue<any>, dispatch: Dispatch, convertOption: string) {
     setTimeout(() => {
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.scrollTop = 0;
@@ -11,19 +11,30 @@ export class TextAreaEvents {
       }
     });
     const text = await navigator.clipboard.readText();
-    TextAreaEvents.setTopLyrics(setValue, text, dispatch);
+    TextAreaEvents.setTopLyrics(setValue, text, dispatch, convertOption);
   }
 
-  static async setTopLyrics(setValue: UseFormSetValue<any>, addLyrics: string, dispatch: Dispatch) {
+  static async setTopLyrics(
+    setValue: UseFormSetValue<any>,
+    addLyrics: string,
+    dispatch: Dispatch,
+    convertOption: string
+  ) {
     const lines = addLyrics.split("\n");
     const lyrics = lines[0].replace(/\r$/, "");
     setValue("lyrics", lyrics);
     dispatch(setIsLoadingWordConvertBtn(true));
-    await ButtonEvents.lyricsConvert(lyrics, setValue);
+    await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
     dispatch(setIsLoadingWordConvertBtn(false));
   }
 
-  static deleteTopLyrics(setValue: UseFormSetValue<any>, lyrics: string, addLyrics: string, dispatch: Dispatch) {
+  static deleteTopLyrics(
+    setValue: UseFormSetValue<any>,
+    lyrics: string,
+    addLyrics: string,
+    dispatch: Dispatch,
+    convertOption: string
+  ) {
     const lines = addLyrics?.split("\n") || [];
     const topLine = lines[0];
 
@@ -31,6 +42,6 @@ export class TextAreaEvents {
     if (lyrics === topLine) {
       setValue("addLyrics", newText);
     }
-    TextAreaEvents.setTopLyrics(setValue, newText, dispatch);
+    TextAreaEvents.setTopLyrics(setValue, newText, dispatch, convertOption);
   }
 }

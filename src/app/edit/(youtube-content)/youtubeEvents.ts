@@ -7,7 +7,7 @@ import { setTimeIndex } from "../(redux)/lineIndexSlice";
 import { setYtTitle } from "../(redux)/ytTitleSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
-import { Line } from "../(redux)/mapDataSlice";
+import { Line } from "../(tab-content)/(ts)/buttonEvent";
 const ticker = new Ticker();
 
 class YTState {
@@ -72,7 +72,7 @@ function seekTimeIndex(time: number, mapData: Line[]) {
 
   for (let i = 0; i < mapData.length; i++) {
     if (Number(mapData[i]["time"]) - time >= 0) {
-      count = i;
+      count = i - 1;
       break;
     }
   }

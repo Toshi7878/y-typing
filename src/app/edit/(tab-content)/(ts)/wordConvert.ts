@@ -1,15 +1,4 @@
-const nonSymbol: string[] = [
-  " ",
-  "ー",
-  "'",
-  "＇",
-  "%",
-  "％",
-  "&",
-  "＆",
-  "@",
-  "＠",
-];
+const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠"];
 const addSymbol: string[] = [
   ",",
   ".",
@@ -78,21 +67,20 @@ const addSymbolAll: string[] = [
 export class WordConvert {
   symbolList: string[];
   convertMode: string;
-  constructor() {
+  constructor(convertOption: string) {
     this.symbolList = [];
-    this.convertMode = "non_symbol";
+    this.convertMode = convertOption;
   }
 
-  async convert(lyrics: string, convertMode: string) {
+  async convert(lyrics: string) {
     lyrics = this.wordFormat(lyrics);
-    this.convertMode = convertMode;
     this.symbolList = this.createSymbolList();
     const WORD = await this.postMorphAPI(lyrics);
 
     return WORD;
   }
 
-  wordFormat(Lyric) {
+  wordFormat(Lyric: string) {
     const ruby_convert = Lyric.match(/<*ruby(?: .+?)?>.*?<*\/ruby*>/g);
 
     if (ruby_convert) {
@@ -132,8 +120,7 @@ export class WordConvert {
   }
 
   async postMorphAPI(SENTENCE: string) {
-    const APIKEY =
-      "48049f223f8d9169a08de4e3bba21f64e4c17a7771620c1b8bb20574b87ea813";
+    const APIKEY = "48049f223f8d9169a08de4e3bba21f64e4c17a7771620c1b8bb20574b87ea813";
     const BASE_URL = "https://labs.goo.ne.jp/api/morph";
 
     const requestOptions = {
@@ -157,9 +144,7 @@ export class WordConvert {
 
       const responseData = await response.json();
 
-      let LIST = responseData.word_list[0];
-      LIST.shift();
-      LIST.pop();
+      let LIST = responseData.word_list.flat().slice(1, -1);
 
       return this.createWord(LIST).join("");
     } catch (error: unknown) {
@@ -176,11 +161,8 @@ export class WordConvert {
 
     for (let i = 0; i < LIST.length; i++) {
       const IS_ZENKAKU = LIST[i][0].match(/^[^\x01-\x7E\xA1-\xDF]+$/);
-      const IS_ADD_SYMBOL = this.symbolList.includes(LIST[i][0]);
-      const IS_SYMBOL = nonSymbol
-        .concat(addSymbol)
-        .concat(addSymbolAll)
-        .includes(LIST[i][0]);
+      const IS_ADD_SYMBOL = this.symbolList.includes(LIST[i][0].slice(0, 1));
+      const IS_SYMBOL = nonSymbol.concat(addSymbol).concat(addSymbolAll).includes(LIST[i][0]);
       if (IS_ADD_SYMBOL) {
         //記号
         //半角の後にスペースがある場合はスペース挿入
@@ -197,8 +179,7 @@ export class WordConvert {
         result.push(this.kanaToHira(LIST[i][1]));
       } else {
         // 半角文字の時の処理を記述
-        const NON_ADD_SYMBOL =
-          LIST[i][0] == "\\" || (!IS_ADD_SYMBOL && IS_SYMBOL);
+        const NON_ADD_SYMBOL = LIST[i][0] == "\\" || (!IS_ADD_SYMBOL && IS_SYMBOL);
         if (NON_ADD_SYMBOL) {
           continue;
         }

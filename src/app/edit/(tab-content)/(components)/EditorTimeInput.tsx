@@ -67,7 +67,7 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
     clearTime: () => {
       setValue("time", "", { shouldValidate: true });
     },
-    getTime: () => methods.getValues("time"),
+    getTime: () => Number(methods.getValues("time")),
   }));
 
   return (

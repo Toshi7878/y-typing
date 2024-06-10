@@ -1,6 +1,6 @@
 "use client";
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from "@chakra-ui/react";
-import { SetStateAction, useEffect, useRef } from "react";
+import { SetStateAction, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(redux)/store";
 import { addLine, updateLine } from "../(redux)/mapDataSlice";
@@ -9,6 +9,7 @@ import { timer } from "../(youtube-content)/timer";
 import { useRefs } from "../(contexts)/refsProvider"; // 追加
 
 import "../(style)/table.scss";
+import { handleKeydown } from "../(ts)/windowKeyDown";
 export default function TableContent() {
   console.log("Table");
   const dispatch = useDispatch();
@@ -17,11 +18,25 @@ export default function TableContent() {
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const tableRef = useRef(null);
-  const { playerRef } = useRefs();
+
+  const playerState = useSelector((state: RootState) => state.ytState);
+  const undoredoState = useSelector((state: RootState) => state.undoRedo);
+  const refs = useRefs();
+  const keydownHandler = useCallback(
+    (event: KeyboardEvent) => handleKeydown(event, refs, dispatch, playerState, undoredoState),
+    [dispatch, playerState, refs, undoredoState]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", keydownHandler);
+    return () => {
+      window.removeEventListener("keydown", keydownHandler);
+    };
+  }, [keydownHandler]);
 
   useEffect(() => {
     if (isStarted) {
-      const duration = playerRef.current?.getDuration();
+      const duration = refs.playerRef.current?.getDuration();
 
       if (mapData[mapData.length - 1].lyrics !== "end") {
         dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
@@ -63,7 +78,7 @@ export default function TableContent() {
   }, [timeIndex, mapData, dispatch]);
   const clickTimeCell = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
     const time = Number(event.currentTarget.textContent);
-    playerRef.current.seekTo(time);
+    refs.playerRef.current.seekTo(time);
   };
 
   return (

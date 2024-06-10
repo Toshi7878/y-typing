@@ -51,8 +51,11 @@ const UploadTab = () => {
   return (
     <Box display="flex" flexDirection="column" gap="5">
       <Box fontWeight="bold">
-        {tags.length}
-        {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`} タグ, <span>{genre ? 1 : 0}/1 ジャンル</span>
+        <span>{genre ? 1 : 0}/1 ジャンル, </span>
+        <span>
+          {tags.length}
+          {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`} タグ
+        </span>
       </Box>
 
       <Flex>
@@ -177,7 +180,8 @@ const UploadTab = () => {
           })}
         </Stack>
         <small>
-          <span className="font-bold">{ytTitle}</span> ← ドラッグ用 (曲名・アーティスト・アニメ名などをタグに追加すると、見つけやすくなります)
+          <span className="font-bold">{ytTitle}</span> ← ドラッグ用
+          (曲名・アーティスト・アニメ名などをタグに追加すると、見つけやすくなります)
         </small>
       </Flex>
 

@@ -4,6 +4,8 @@ import { Action, Dispatch } from "@reduxjs/toolkit";
 import { YTSpeedController } from "../(youtube-content)/ytHandleEvents";
 import { RootState } from "../(redux)/store";
 import { RefsContextType } from "../(contexts)/refsProvider";
+import { mapDataUndoRedo } from "../(redux)/mapDataSlice";
+import { undo } from "../(redux)/undoredoSlice";
 // 	getKanaSearchLength(searchReg){
 
 // 		let lyricsKana = ""
@@ -136,7 +138,8 @@ export const handleKeydown = (
   event: KeyboardEvent,
   refs: RefsContextType,
   dispatch: Dispatch<Action>,
-  ytState: RootState["ytState"]
+  ytState: RootState["ytState"],
+  undoredoState: RootState["undoRedo"]
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -179,7 +182,6 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        console.log("KeyS");
         refs.lineAddBtn.current!.click();
         break;
 
@@ -190,6 +192,8 @@ export const handleKeydown = (
 
       case "KeyZ":
         if (event.ctrlKey) {
+          dispatch(mapDataUndoRedo(undoredoState.present));
+          dispatch(undo());
           event.preventDefault();
         }
 

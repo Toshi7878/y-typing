@@ -6,31 +6,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
 import { useSearchParams } from "next/navigation";
-import { handleKeydown } from "../(ts)/windowKeyDown";
 import { useRefs } from "../(contexts)/refsProvider"; // 変更
 
 const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
   const { setValue } = useFormContext();
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const videoId = searchParams.get("new") || "";
+
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const playerState = useSelector((state: RootState) => state.ytState);
   const refs = useRefs();
-  const searchParams = useSearchParams();
-  const videoId = searchParams.get("new") || "";
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
       ytState.ready(refs.playerRef, setValue, dispatch);
-
-      window.addEventListener("keydown", (event) =>
-        handleKeydown(event, refs, dispatch, playerState)
-      );
     },
-    [dispatch, playerState, refs, setValue]
+    [refs, setValue, dispatch]
   );
+
   const handlePlay = useCallback(() => {
     ytState.play(refs.playerRef, dispatch, playerState.isStarted);
   }, [dispatch, refs.playerRef, playerState.isStarted]);
@@ -44,7 +41,7 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
   }, [dispatch]);
 
   const handleStateChange = useCallback(
-    (event) => {
+    (event: any) => {
       if (event.data === 3) {
         // seek時の処理
         ytState.seek(event, dispatch, mapData);

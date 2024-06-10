@@ -10,12 +10,18 @@ import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import EditorSettingModal from "./(components)/EditorSettingModal";
 import { useRefs } from "../(contexts)/refsProvider";
+import { addHistory } from "../(redux)/undoredoSlice";
 
 const EditorTab = () => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
   const refs = useRefs();
-  const timeInputRef = useRef<{ clearTime: () => void; getTime: () => string } | null>(null);
+  const timeInputRef = useRef<{ clearTime: () => void; getTime: () => number } | null>(null);
+  const editorSettingRef = useRef<{
+    getTimeOffset: () => number;
+    getWordConvertOption: () => string;
+  } | null>(null);
+
   const methods = useForm();
   const { register, setValue, watch } = methods;
   const lineNumber = Number(watch("lineNumber"));
@@ -26,6 +32,7 @@ const EditorTab = () => {
     (state: RootState) => state.buttonLoad.isLoadingWordConvertBtn
   );
 
+  //editorTab自体を参照するようにする
   const lineAddBtnRef = useRef(null);
   const lineUpdateBtnRef = useRef(null);
   const lineDeleteBtnRef = useRef(null);
@@ -34,9 +41,7 @@ const EditorTab = () => {
     setValue("lyrics", "");
     setValue("word", "");
     setValue("lineNumber", "");
-    if (timeInputRef.current) {
-      timeInputRef.current.clearTime(); // 実際のinputタグの数値も空にする
-    }
+    timeInputRef.current!.clearTime();
   };
 
   useEffect(() => {
@@ -54,8 +59,21 @@ const EditorTab = () => {
     refs.setRef("lineDeleteBtn", lineDeleteBtnRef.current);
   }, [lineAddBtnRef, lineUpdateBtnRef, lineDeleteBtnRef]);
 
+  const timeValidate = (time: number) => {
+    const lastLineTime = Number(mapData[mapData.length - 1]["time"]);
+
+    if (0 >= time) {
+      return 0.001;
+    } else if (lastLineTime <= time) {
+      return lastLineTime - 0.001;
+    } else {
+      return time;
+    }
+  };
+
   const add = () => {
-    const time = timeInputRef.current!.getTime();
+    const timeOffset = editorSettingRef.current!.getTimeOffset();
+    const time = timeValidate(timeInputRef.current!.getTime() + timeOffset).toFixed(3);
     const lyrics = methods.getValues("lyrics");
     const word = methods.getValues("word");
     const addLyrics = methods.getValues("addLyrics");
@@ -67,15 +85,21 @@ const EditorTab = () => {
     lineInit();
 
     if (lyricsCopy) {
-      TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics, dispatch);
+      const convertOption = editorSettingRef.current!.getWordConvertOption();
+
+      TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics, dispatch, convertOption);
     }
   };
 
   const update = () => {
-    const time = timeInputRef.current!.getTime();
-    const lyrics = methods.getValues("lyrics");
-    const word = methods.getValues("word");
-    const lineNumber = methods.getValues("lineNumber");
+    const time = timeValidate(timeInputRef.current!.getTime()).toFixed(3);
+    const lyrics: string = methods.getValues("lyrics");
+    const word: string = methods.getValues("word");
+    const lineNumber: string = methods.getValues("lineNumber");
+
+    dispatch(
+      addHistory({ type: "update", data: { ...mapData[parseInt(lineNumber)], lineNumber } })
+    );
 
     ButtonEvents.updateLine(dispatch, {
       time,
@@ -88,16 +112,16 @@ const EditorTab = () => {
 
   const wordConvert = async () => {
     const lyrics = methods.getValues("lyrics");
+    const convertOption = editorSettingRef.current!.getWordConvertOption();
 
     dispatch(setIsLoadingWordConvertBtn(true));
-    await ButtonEvents.lyricsConvert(lyrics, setValue);
+    await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
     dispatch(setIsLoadingWordConvertBtn(false));
   };
 
   const deleteLine = () => {
-    const lineNumber = methods.getValues("lineNumber");
-
-    ButtonEvents.deleteLine(dispatch, lineNumber);
+    const lineNumber: string = methods.getValues("lineNumber");
+    ButtonEvents.deleteLine(dispatch, { ...mapData[parseInt(lineNumber)], lineNumber });
     lineInit();
   };
 
@@ -118,7 +142,6 @@ const EditorTab = () => {
       text: "変更",
     },
     {
-      ref: lineDeleteBtnRef,
       isDisabled: lineNumber === mapData.length - 1,
       isLoading: isLoadingWordConvertBtn,
       colorScheme: "blue",
@@ -126,6 +149,7 @@ const EditorTab = () => {
       text: "読み変換",
     },
     {
+      ref: lineDeleteBtnRef,
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "red",
@@ -180,7 +204,7 @@ const EditorTab = () => {
               ))}
             </Flex>
             <Box display="flex" justifyContent="flex-end">
-              <EditorSettingModal />
+              <EditorSettingModal ref={editorSettingRef} />
             </Box>
           </Box>
         </div>
@@ -191,7 +215,8 @@ const EditorTab = () => {
               style={{ height: "92px" }}
               {...register("addLyrics")}
               onPaste={() => {
-                TextAreaEvents.paste(setValue, dispatch);
+                const convertOption = editorSettingRef.current!.getWordConvertOption();
+                TextAreaEvents.paste(setValue, dispatch, convertOption);
               }}
               onChange={(e) => {
                 const lyrics = methods.getValues("lyrics");
@@ -199,7 +224,9 @@ const EditorTab = () => {
                 const lines = e.target.value.split("\n");
                 const topLyrics = lines[0].replace(/\r$/, "");
                 if (topLyrics !== lyrics) {
-                  TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch);
+                  const convertOption = editorSettingRef.current!.getWordConvertOption();
+
+                  TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
                 }
               }}
             />
