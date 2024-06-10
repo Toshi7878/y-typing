@@ -134,7 +134,8 @@ const UploadTab = () => {
       <Flex direction="column" wrap="wrap">
         <Stack direction="row" spacing={3} wrap="wrap">
           {[
-            "公式MV",
+            "公式動画",
+            "Cover",
             "英語",
             "多言語",
             "ラップ",
