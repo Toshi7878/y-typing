@@ -39,7 +39,9 @@ export default function NewMap() {
   const newCreate = (data) => {
     const ID = extractYouTubeVideoId(data.URL);
     if (ID && ID.length == 11 && isValid) {
-      window.location.href = `/edit?new=${ID}`;
+      if (typeof window !== "undefined") {
+        window.location.href = `/edit?new=${ID}`;
+      }
     }
   };
 
