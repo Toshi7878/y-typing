@@ -1,12 +1,22 @@
 "use client";
+import dynamic from "next/dynamic";
+
 import React, { useCallback } from "react";
-import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
+import type { YouTubeProps } from "react-youtube";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
 import { useSearchParams } from "next/navigation";
 import { useRefs } from "../(contexts)/refsProvider"; // 変更
+
+const YouTube = dynamic<YouTubeProps>(
+  () => import("react-youtube").then((mod) => mod.default as React.ComponentType<YouTubeProps>),
+  {
+    ssr: false,
+  }
+);
 
 const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
