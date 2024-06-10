@@ -42,6 +42,13 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
 
   const handleStateChange = useCallback(
     (event: any) => {
+      if (
+        document.activeElement instanceof HTMLIFrameElement &&
+        document.activeElement.tagName === "IFRAME"
+      ) {
+        document.activeElement.blur();
+      }
+
       if (event.data === 3) {
         // seek時の処理
         ytState.seek(event, dispatch, mapData);
