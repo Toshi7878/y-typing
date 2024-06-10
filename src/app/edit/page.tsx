@@ -16,7 +16,7 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) {
+  if (typeof window === "undefined" || !isMounted) {
     return null; // クライアントサイドでのみレンダリングする
   }
 
