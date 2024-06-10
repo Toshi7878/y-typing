@@ -9,8 +9,6 @@ import store from "./(redux)/store";
 import InfoTabProvider from "./(contexts)/InfoTabProvider";
 import { RefsProvider } from "./(contexts)/refsProvider";
 
-
-
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
 

@@ -42,17 +42,19 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
 
   useEffect(() => {
-    getAll().then((allData) => {
-      const formattedData = allData.reduce((acc, { optionName, value }) => {
-        acc[optionName] = value;
-        return acc;
-      }, {});
-      setOptionsData(formattedData);
-      setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
-      methods.reset({
-        time_offset: formattedData["time_offset"] ?? -1.6,
+    if (typeof window !== "undefined") {
+      getAll().then((allData) => {
+        const formattedData = allData.reduce((acc, { optionName, value }) => {
+          acc[optionName] = value;
+          return acc;
+        }, {});
+        setOptionsData(formattedData);
+        setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
+        methods.reset({
+          time_offset: formattedData["time_offset"] ?? -1.6,
+        });
       });
-    });
+    }
   }, []);
 
   const methods = useForm();
@@ -72,7 +74,9 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   }));
 
   const sendIndexedDB = (target: HTMLInputElement) => {
-    update({ optionName: target.name, value: target.value });
+    if (typeof window !== "undefined") {
+      update({ optionName: target.name, value: target.value });
+    }
   };
 
   const allTimeAdjust = () => {
