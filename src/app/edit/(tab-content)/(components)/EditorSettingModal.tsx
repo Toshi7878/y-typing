@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Modal,
@@ -28,6 +29,9 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { useDispatch } from "react-redux";
 import { allAdjustTime } from "../../(redux)/mapDataSlice";
+import { DBConfig } from "@/lib/DBConfig";
+import { initDB } from "react-indexed-db-hook";
+initDB(DBConfig);
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { getAll, update } = useIndexedDB("editorOption");
