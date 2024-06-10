@@ -11,12 +11,11 @@ import { RefsProvider } from "./(contexts)/refsProvider";
 import { DBConfig } from "@/lib/DBConfig";
 import { initDB } from "react-indexed-db-hook";
 
-initDB(DBConfig);
-
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    initDB(DBConfig);
     setIsMounted(true);
   }, []);
 
