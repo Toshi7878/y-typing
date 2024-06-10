@@ -28,10 +28,12 @@ export default function TableContent() {
   );
 
   useEffect(() => {
-    window.addEventListener("keydown", keydownHandler);
-    return () => {
-      window.removeEventListener("keydown", keydownHandler);
-    };
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", keydownHandler);
+      return () => {
+        window.removeEventListener("keydown", keydownHandler);
+      };
+    }
   }, [keydownHandler]);
 
   useEffect(() => {
