@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 
-import EditorTab from "./EditorTab";
+import TabEditor from "./TabEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import { RootState } from "../(redux)/store";
 import { useRefs } from "../(contexts)/refsProvider";
-import InfoUploadTab from "./InfoUploadTab";
+import TabInfoUpload from "./TabInfoUpload";
 
 export default function TabContent({ className }: { className?: string }) {
   console.log("Tab");
@@ -59,11 +59,11 @@ export default function TabContent({ className }: { className?: string }) {
 
       <TabPanels>
         <TabPanel>
-          <InfoUploadTab ref={infoUploadTabRef} />
+          <TabInfoUpload ref={infoUploadTabRef} />
         </TabPanel>
 
         <TabPanel>
-          <EditorTab ref={editorTabRef} />
+          <TabEditor ref={editorTabRef} />
         </TabPanel>
       </TabPanels>
     </Tabs>

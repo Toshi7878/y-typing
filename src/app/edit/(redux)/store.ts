@@ -6,6 +6,7 @@ import lineIndexReducer from "./lineIndexSlice";
 import buttonLoadReducer from "./buttonLoadSlice";
 import ytTitleReducer from "./ytTitleSlice";
 import undoRedoReducer from "./undoredoSlice"; // 追加
+import genreTagReducer from "./GenreTagSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,8 +17,10 @@ const store = configureStore({
     buttonLoad: buttonLoadReducer,
     ytTitle: ytTitleReducer,
     undoRedo: undoRedoReducer,
+    genreTag: genreTagReducer,
   },
 });
+
 export type RootState = ReturnType<typeof store.getState>;
 
 export default store;

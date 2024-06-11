@@ -30,8 +30,8 @@ export default function TableContent() {
             </Th>
           </Tr>
         </Thead>
-        <Tbody>
-          <LineRow ref={lineRowRef} />
+        <Tbody ref={lineRowRef}>
+          <LineRow />
         </Tbody>
       </Table>
     </TableContainer>

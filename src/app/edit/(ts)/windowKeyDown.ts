@@ -76,19 +76,6 @@ import { undo } from "../(redux)/undoredoSlice";
 // 		super()
 // 	}
 
-// 	undo(){
-
-// 		const LAST = undoSet[undoSet.length-1]
-
-// 		if(LAST.state == 'add'){
-// 			lineData.value.splice(LAST.number, 1);
-// 			lyricsBox.value = `${LAST.value.lyrics}\n${lyricsBox.value}`
-// 			undoSet.pop()
-// 			youtube.value.seekTo(LAST.value.time-3)
-// 			setLyrics()
-// 		}
-// 	}
-
 // 	lineSeek(num){
 // 		const seekLine = document.getElementsByClassName("line")[NUMBER.value + num]
 // 		seekLine.children[1].click()
@@ -132,7 +119,6 @@ import { undo } from "../(redux)/undoredoSlice";
 
 // 	}
 // }
-//KeyHandler
 
 export const handleKeydown = (
   event: KeyboardEvent,

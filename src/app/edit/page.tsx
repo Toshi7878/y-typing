@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import TabContent from "./(tab-content)/TabContent";
+import TabContent from "./(tab-content)/Tab";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";

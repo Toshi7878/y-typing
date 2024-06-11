@@ -12,7 +12,7 @@ import EditorSettingModal from "./(components)/EditorSettingModal";
 import { addHistory, UndoRedoStatus } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 
-const EditorTab = forwardRef((props, ref) => {
+const TabEditor = forwardRef((props, ref) => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
   const timeInputRef = useRef<{
@@ -124,7 +124,11 @@ const EditorTab = forwardRef((props, ref) => {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
       onClick: add,
-      text: "追加",
+      text: (
+        <>
+          追加<small className="hidden sm:inline">(S)</small>
+        </>
+      ),
       isLoading: false,
     },
     update: {
@@ -132,7 +136,7 @@ const EditorTab = forwardRef((props, ref) => {
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "cyan",
       onClick: update,
-      text: "変更",
+      text: <>読み変換</>,
       isLoading: false,
     },
     wordConvert: {
@@ -147,7 +151,11 @@ const EditorTab = forwardRef((props, ref) => {
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "red",
       onClick: deleteLine,
-      text: "削除",
+      text: (
+        <>
+          削除<small className="hidden sm:inline">(Del)</small>
+        </>
+      ),
       isLoading: false,
     },
   };
@@ -177,83 +185,71 @@ const EditorTab = forwardRef((props, ref) => {
   }));
 
   return (
-    <FormProvider {...methods}>
-      <form className="flex flex-col gap-y-1">
-        <div>
-          <Box display="flex" alignItems="center">
-            <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
-            <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
-          </Box>
-        </div>
-        <div>
-          <Box display="flex" alignItems="center">
-            <Input
-              placeholder="No."
+    <form className="flex flex-col gap-y-1">
+      <Box display="flex" alignItems="center">
+        <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
+        <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
+      </Box>
+      <Box display="flex" alignItems="center">
+        <Input
+          placeholder="No."
+          size="sm"
+          width="90px"
+          disabled
+          variant="filled"
+          opacity={1}
+          _disabled={{ opacity: 1 }}
+          {...register("lineNumber")}
+        />
+        <Input placeholder="ワード" size="sm" autoComplete="off" {...register("word")} />
+      </Box>
+      <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
+        <Flex gap="5">
+          {Object.values(buttonConfigs).map((config, index) => (
+            <Button
+              key={index}
+              isDisabled={config.isDisabled}
+              isLoading={config.isLoading}
+              variant="outline"
               size="sm"
-              width="90px"
-              disabled
-              variant="filled"
-              opacity={1}
-              _disabled={{ opacity: 1 }}
-              {...register("lineNumber")}
-            />
-            <Input placeholder="ワード" size="sm" autoComplete="off" {...register("word")} />
-          </Box>
-        </div>
-        <div>
-          <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
-            <Flex gap="5">
-              {Object.values(buttonConfigs).map((config, index) => (
-                <Button
-                  key={index}
-                  isDisabled={config.isDisabled}
-                  isLoading={config.isLoading}
-                  variant="outline"
-                  size="sm"
-                  height="35px"
-                  className="xl:w-[12%] lg:w-[19%]"
-                  colorScheme={config.colorScheme}
-                  _hover={{ bg: `${config.colorScheme}.100` }}
-                  onClick={config.onClick}
-                >
-                  {config.text}
-                </Button>
-              ))}
-            </Flex>
-            <Box display="flex" justifyContent="flex-end">
-              <EditorSettingModal ref={editorSettingRef} />
-            </Box>
-          </Box>
-        </div>
-        <div>
-          <Box display="flex" alignItems="center">
-            <Textarea
-              placeholder="ここから歌詞をまとめて追加できます"
-              style={{ height: "92px" }}
-              {...register("addLyrics")}
-              onPaste={() => {
-                const convertOption = editorSettingRef.current!.getWordConvertOption();
-                TextAreaEvents.paste(setValue, dispatch, convertOption);
-              }}
-              onChange={(e) => {
-                const lyrics = methods.getValues("lyrics");
+              height="35px"
+              className="w-[16%] xl:w-[12%] lg:w-[19%] md:w-[19%]"
+              colorScheme={config.colorScheme}
+              _hover={{ bg: `${config.colorScheme}.100` }}
+              onClick={config.onClick}
+            >
+              {config.text}
+            </Button>
+          ))}
+          <EditorSettingModal ref={editorSettingRef} />
+        </Flex>
+      </Box>
+      <Box display="flex" alignItems="center">
+        <Textarea
+          placeholder="ここから歌詞をまとめて追加できます"
+          style={{ height: "92px" }}
+          {...register("addLyrics")}
+          onPaste={() => {
+            const convertOption = editorSettingRef.current!.getWordConvertOption();
+            TextAreaEvents.paste(setValue, dispatch, convertOption);
+          }}
+          onChange={(e) => {
+            const lyrics = methods.getValues("lyrics");
 
-                const lines = e.target.value.split("\n");
-                const topLyrics = lines[0].replace(/\r$/, "");
-                if (topLyrics !== lyrics) {
-                  const convertOption = editorSettingRef.current!.getWordConvertOption();
+            const lines = e.target.value.split("\n");
+            const topLyrics = lines[0].replace(/\r$/, "");
+            if (topLyrics !== lyrics) {
+              const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-                  TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
-                }
-              }}
-            />
-          </Box>
-        </div>
-      </form>
-    </FormProvider>
+              TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
+            }
+          }}
+        />
+      </Box>
+    </form>
   );
 });
 
-EditorTab.displayName = "EditorTab";
+TabEditor.displayName = "EditorTab";
 
-export default EditorTab;
+export default TabEditor;

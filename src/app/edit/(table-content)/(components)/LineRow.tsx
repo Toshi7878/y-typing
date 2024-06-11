@@ -1,6 +1,6 @@
 "use client";
 import { Tr, Td, Button } from "@chakra-ui/react";
-import { forwardRef, SetStateAction, useCallback, useEffect } from "react";
+import { SetStateAction, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../(redux)/store";
@@ -10,7 +10,7 @@ import { addLine, updateLine } from "../../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../../(redux)/lineIndexSlice";
 import { timer } from "../../(youtube-content)/timer";
 
-export default forwardRef(function LineRow() {
+export default function LineRow() {
   console.log("Table");
   const dispatch = useDispatch();
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
@@ -116,4 +116,4 @@ export default forwardRef(function LineRow() {
       ))}
     </>
   );
-});
+}

@@ -5,8 +5,9 @@ import { Box, Flex, Stack, Badge } from "@chakra-ui/react";
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
 import "../../(style)/reactTags.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../(redux)/store";
+import { deleteTags, setGenre, setTags } from "../../(redux)/GenreTagSlice";
 
 // react-tag-input Tag 型は時前で定義しなければならない
 export interface Tag {
@@ -15,10 +16,10 @@ export interface Tag {
   [key: string]: string;
 }
 const InfoGenreTag = () => {
-  const [genre, setGenre] = useState("");
+  const { genre, tags } = useSelector((state: RootState) => state.genreTag);
+  const dispatch = useDispatch();
   const ytTitle = useSelector((state: RootState) => state.ytTitle.title);
 
-  const [tags, setTags] = useState<Array<Tag>>([]);
   const suggestions = [
     { id: "1", text: "公式MV", className: "" },
     { id: "2", text: "英語", className: "" },
@@ -26,11 +27,11 @@ const InfoGenreTag = () => {
   ];
 
   const toggleBadge = (label: string) => {
-    setGenre(label);
+    dispatch(setGenre(label));
   };
 
   const handleDelete = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
+    dispatch(deleteTags(tags.filter((_, i) => i !== index)));
   };
 
   const handleAddition = (tag: Tag) => {
@@ -40,9 +41,7 @@ const InfoGenreTag = () => {
     const isTagAdded = tags.some((tags) => tags.id === tag.id);
 
     if (!isTagAdded) {
-      setTags((prevTags) => {
-        return [...prevTags, tag];
-      });
+      dispatch(setTags(tag));
     }
   };
 
