@@ -136,7 +136,11 @@ const TabEditor = forwardRef((props, ref) => {
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "cyan",
       onClick: update,
-      text: <>読み変換</>,
+      text: (
+        <>
+          変更<small className="hidden sm:inline">(U)</small>
+        </>
+      ),
       isLoading: false,
     },
     wordConvert: {
