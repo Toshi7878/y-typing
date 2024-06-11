@@ -25,6 +25,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "dexie": "^4.0.7",
+    "dexie-react-hooks": "^1.1.7",
     "framer-motion": "^11.2.10",
     "identicon.js": "^2.3.3",
     "next": "14.2.3",

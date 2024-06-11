@@ -24,9 +24,9 @@ export default function Home() {
     <Provider store={store}>
       <InfoTabProvider>
         <RefsProvider>
-          <main className="flex min-h-screen flex-col items-center px-14 pt-14">
-            <section className="flex flex-col md:flex-row w-full ">
-              <YouTubeContent className="mr-5" />
+          <main className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14">
+            <section className="flex flex-col lg:flex-row w-full ">
+              <YouTubeContent className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" />
               <TabContent className="w-full border-black" />
             </section>
             <section className="w-full mt-2">

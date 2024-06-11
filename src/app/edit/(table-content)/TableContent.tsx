@@ -82,7 +82,12 @@ export default function TableContent() {
   };
 
   return (
-    <TableContainer border="1px solid black" maxHeight="calc(100vh - 400px)" overflowY="auto">
+    <TableContainer
+      border="1px solid black"
+      maxHeight="calc(100vh - 400px)"
+      minHeight="400px"
+      overflowY="auto"
+    >
       <Table size="sm" variant="simple">
         <Thead>
           <Tr>

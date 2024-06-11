@@ -28,34 +28,28 @@ import { useForm } from "react-hook-form";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useDispatch } from "react-redux";
 import { allAdjustTime } from "../../(redux)/mapDataSlice";
-// import { DBConfig } from "@/lib/DBConfig";
-// import { useIndexedDB } from "react-indexed-db-hook";
-// import { initDB } from "react-indexed-db-hook";
-// initDB(DBConfig);
+import { db, EditorOption } from "@/lib/db";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
-  // const { getAll, update } = useIndexedDB("editorOption");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
 
-  const [optionsData, setOptionsData] = useState<{ optionName: string; value: string }[]>([]);
+  const [optionsData, setOptionsData] = useState<EditorOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     getAll().then((allData) => {
-  //       const formattedData = allData.reduce((acc, { optionName, value }) => {
-  //         acc[optionName] = value;
-  //         return acc;
-  //       }, {});
-  //       setOptionsData(formattedData);
-  //       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
-  //       methods.reset({
-  //         time_offset: formattedData["time_offset"] ?? -1.6,
-  //       });
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    db.editorOption.toArray().then((allData) => {
+      const formattedData = allData.reduce((acc, { optionName, value }) => {
+        acc[optionName] = value;
+        return acc;
+      }, {} as EditorOption);
+      setOptionsData(formattedData);
+      setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
+      methods.reset({
+        time_offset: formattedData["time-offset"] ?? -1.6,
+      });
+    });
+  }, []);
 
   const methods = useForm();
   const { register } = methods;
@@ -73,11 +67,9 @@ export default forwardRef(function EditorSettingModal(props, ref) {
     getWordConvertOption: () => selectedConvertOption,
   }));
 
-  // const sendIndexedDB = (target: HTMLInputElement) => {
-  //   if (typeof window !== "undefined") {
-  //     update({ optionName: target.name, value: target.value });
-  //   }
-  // };
+  const sendIndexedDB = async (target: HTMLInputElement) => {
+    db.editorOption.put({ optionName: target.name, value: target.value });
+  };
 
   const allTimeAdjust = () => {
     const adjustTime = Number(methods.getValues("all_time_adjust"));
@@ -86,7 +78,6 @@ export default forwardRef(function EditorSettingModal(props, ref) {
       dispatch(allAdjustTime(adjustTime));
   };
 
-  // form onChange={(e) => sendIndexedDB(e.target as HTMLInputElement)}
   return (
     <>
       <Button
@@ -111,7 +102,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
               <ModalCloseButton />
 
               <ModalBody>
-                <form>
+                <form onChange={(e) => sendIndexedDB(e.target as HTMLInputElement)}>
                   <VStack align="start" spacing={4}>
                     <FormControl>
                       <HStack alignItems="baseline">
@@ -119,7 +110,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
 
                         <Input
                           {...register("time_offset", {
-                            value: optionsData["time_offset"] ?? -1.6,
+                            value: optionsData?.["time-offset"] ?? -1.6,
                           })}
                           name="time-offset"
                           placeholder=""
@@ -204,7 +195,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                                 value={option.value}
                                 onClick={(e) => {
                                   setSelectedConvertOption(option.value);
-                                  // sendIndexedDB(e.target as HTMLInputElement);
+                                  sendIndexedDB(e.target as HTMLInputElement);
                                 }}
                               >
                                 {option.label}

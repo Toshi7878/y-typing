@@ -64,17 +64,16 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
     [dispatch, mapData, playerState.isStarted]
   );
 
-  const HEIGHT = "384px";
-  const WEDTH = "216px";
+  const HEIGHT = "216px";
 
   return (
     <YouTube
-      style={{ minWidth: HEIGHT, minHeight: WEDTH }}
+      // style={{ minWidth: HEIGHT, minHeight: WEDTH }}
       className={className}
       videoId={videoId}
       opts={{
-        width: HEIGHT,
-        height: WEDTH,
+        width: "100%",
+        height: HEIGHT,
         playerVars: { enablejsapi: 1 },
       }}
       onReady={handleReady}
