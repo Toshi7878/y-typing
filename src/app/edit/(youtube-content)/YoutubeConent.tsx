@@ -4,14 +4,12 @@ import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormContext } from "react-hook-form";
 import { RootState } from "../(redux)/store";
 import { useSearchParams } from "next/navigation";
 import { useRefs } from "../(contexts)/refsProvider"; // 変更
 
 const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
   console.log("YouTube");
-  const { setValue } = useFormContext();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const videoId = searchParams.get("new") || "";
@@ -24,9 +22,9 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs.playerRef, setValue, dispatch);
+      ytState.ready(refs.playerRef, dispatch);
     },
-    [refs, setValue, dispatch]
+    [refs, dispatch]
   );
 
   const handlePlay = useCallback(() => {
@@ -68,7 +66,6 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
 
   return (
     <YouTube
-      // style={{ minWidth: HEIGHT, minHeight: WEDTH }}
       className={className}
       videoId={videoId}
       opts={{

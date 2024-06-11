@@ -4,7 +4,7 @@ import { setSpeed } from "../(redux)/ytStateSlice";
 
 interface UpdateProps {
   dispatch: Dispatch<Action>;
-  playerRef: RefObject<any>;
+  playerRef: any;
 }
 
 export class YTSpeedController {
@@ -17,7 +17,7 @@ export class YTSpeedController {
   }
 
   speedUp({ dispatch, playerRef }: UpdateProps) {
-    const currentSpeed = playerRef.current.getPlaybackRate();
+    const currentSpeed = playerRef.getPlaybackRate();
 
     if (currentSpeed < 2) {
       const NEW_SPEED = currentSpeed + 0.25;
@@ -26,7 +26,7 @@ export class YTSpeedController {
   }
 
   speedDown({ dispatch, playerRef }: UpdateProps) {
-    const currentSpeed = playerRef.current.getPlaybackRate();
+    const currentSpeed = playerRef.getPlaybackRate();
 
     if (currentSpeed > 0.25) {
       const NEW_SPEED = currentSpeed - 0.25;
@@ -35,6 +35,6 @@ export class YTSpeedController {
   }
   speedChange(NEW_SPEED: number, { dispatch, playerRef }: UpdateProps) {
     dispatch(setSpeed(NEW_SPEED));
-    playerRef.current.setPlaybackRate(NEW_SPEED);
+    playerRef.setPlaybackRate(NEW_SPEED);
   }
 }

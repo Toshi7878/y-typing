@@ -1,20 +1,20 @@
 import { useState } from "react";
 
-import { Box, Flex, Button, Stack, Badge } from "@chakra-ui/react";
+import { Box, Flex, Stack, Badge } from "@chakra-ui/react";
 
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
-import "../(style)/reactTags.scss";
-import { RootState } from "../(redux)/store";
+import "../../(style)/reactTags.scss";
 import { useSelector } from "react-redux";
+import { RootState } from "../../(redux)/store";
 
-// Tag 型を自分で定義
+// react-tag-input Tag 型は時前で定義しなければならない
 export interface Tag {
   id: string;
   className: string;
   [key: string]: string;
 }
-const UploadTab = () => {
+const InfoGenreTag = () => {
   const [genre, setGenre] = useState("");
   const ytTitle = useSelector((state: RootState) => state.ytTitle.title);
 
@@ -48,6 +48,7 @@ const UploadTab = () => {
 
   const TAG_MAX_LEN = 10;
   const TAG_MIN_LEN = 2;
+
   return (
     <Box display="flex" flexDirection="column" gap="5">
       <Box fontWeight="bold">
@@ -86,7 +87,7 @@ const UploadTab = () => {
                 className={`${isSelected ? "" : "cursor-pointer"} text-xl rounded-lg`}
                 _hover={{ opacity: "1" }}
                 onClick={() => toggleBadge(label)}
-                textTransform="none" // 追加: UpperCaseを解除
+                textTransform="none"
               >
                 {label}
               </Badge>
@@ -185,23 +186,8 @@ const UploadTab = () => {
           (曲名・アーティスト・アニメ名などをタグに追加すると、見つけやすくなります)
         </small>
       </Flex>
-
-      <Button
-        disabled={genre === "" || tags.length >= 2}
-        variant="solid"
-        size="lg"
-        colorScheme="blue"
-        width="200px"
-        border="1px"
-        borderColor="black"
-        _hover={{ bg: "#3a90f3" }}
-        opacity={genre === "" || tags.length <= 1 ? "0.6" : "1"}
-        onClick={() => {}}
-      >
-        保存
-      </Button>
     </Box>
   );
 };
 
-export default UploadTab;
+export default InfoGenreTag;

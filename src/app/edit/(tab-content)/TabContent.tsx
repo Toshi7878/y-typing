@@ -1,16 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 
 import EditorTab from "./EditorTab";
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
-import InfoTab from "./InfoTab";
 import { RootState } from "../(redux)/store";
+import { useRefs } from "../(contexts)/refsProvider";
+import InfoUploadTab from "./InfoUploadTab";
 
 export default function TabContent({ className }: { className?: string }) {
   console.log("Tab");
+
+  const editorTabRef = useRef(null);
+  const infoUploadTabRef = useRef(null);
+
+  const { setRef } = useRefs();
+
+  useEffect(() => {
+    setRef("editorTab", editorTabRef.current);
+    setRef("infoUploadTab", infoUploadTabRef.current);
+  }, [editorTabRef]);
 
   const dispatch = useDispatch();
   const tabIndex: number = useSelector(
@@ -48,11 +59,11 @@ export default function TabContent({ className }: { className?: string }) {
 
       <TabPanels>
         <TabPanel>
-          <InfoTab />
+          <InfoUploadTab ref={infoUploadTabRef} />
         </TabPanel>
 
         <TabPanel>
-          <EditorTab />
+          <EditorTab ref={editorTabRef} />
         </TabPanel>
       </TabPanels>
     </Tabs>

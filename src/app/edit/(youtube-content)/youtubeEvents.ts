@@ -48,20 +48,13 @@ class YTState {
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  ready(
-    playerRef: RefsContextType["playerRef"],
-    setValue: UseFormSetValue<FieldValues>,
-    dispatch: Dispatch<Action>
-  ) {
+  ready(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>) {
     console.log("ready");
     const videoData = playerRef!.current!.getVideoData();
 
     if (videoData) {
-      const { title, video_id } = videoData;
-      const url = `https://www.youtube.com/watch?v=${video_id}`;
+      const { title } = videoData;
       dispatch(setYtTitle(title));
-      setValue("title", title);
-      setValue("url", url);
     }
     playerRef.current.setVolume(10);
   }

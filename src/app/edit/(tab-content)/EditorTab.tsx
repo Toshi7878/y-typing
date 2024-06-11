@@ -1,22 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, FormProvider } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
-import { ButtonEvents } from "./(ts)/buttonEvent";
-import { useDispatch, useSelector } from "react-redux";
+import { ButtonEvents, Line } from "./(ts)/buttonEvent";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { TextAreaEvents } from "./(ts)/textAreaEvent";
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { RootState } from "../(redux)/store";
 import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import EditorSettingModal from "./(components)/EditorSettingModal";
-import { useRefs } from "../(contexts)/refsProvider";
-import { addHistory } from "../(redux)/undoredoSlice";
+import { addHistory, UndoRedoStatus } from "../(redux)/undoredoSlice";
+import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 
-const EditorTab = () => {
+const EditorTab = forwardRef((props, ref) => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
-  const refs = useRefs();
-  const timeInputRef = useRef<{ clearTime: () => void; getTime: () => number } | null>(null);
+  const timeInputRef = useRef<{
+    clearTime: () => void;
+    getTime: () => number;
+    selectedTime: () => void;
+    undoAdd: (time: Line["time"]) => void;
+  } | null>(null);
   const editorSettingRef = useRef<{
     getTimeOffset: () => number;
     getWordConvertOption: () => string;
@@ -32,16 +36,12 @@ const EditorTab = () => {
     (state: RootState) => state.buttonLoad.isLoadingWordConvertBtn
   );
 
-  //editorTab自体を参照するようにする
-  const lineAddBtnRef = useRef(null);
-  const lineUpdateBtnRef = useRef(null);
-  const lineDeleteBtnRef = useRef(null);
-
   const lineInit = () => {
     setValue("lyrics", "");
     setValue("word", "");
     setValue("lineNumber", "");
     timeInputRef.current!.clearTime();
+    dispatch(setSelectedIndex(null));
   };
 
   useEffect(() => {
@@ -50,14 +50,9 @@ const EditorTab = () => {
       setValue("lyrics", line.lyrics || "");
       setValue("word", line.word || "");
       setValue("lineNumber", selectedIndex.toString());
+      timeInputRef.current!.selectedTime();
     }
-  }, [selectedIndex, setValue]);
-
-  useEffect(() => {
-    refs.setRef("lineAddBtn", lineAddBtnRef.current);
-    refs.setRef("lineUpdateBtn", lineUpdateBtnRef.current);
-    refs.setRef("lineDeleteBtn", lineDeleteBtnRef.current);
-  }, [lineAddBtnRef, lineUpdateBtnRef, lineDeleteBtnRef]);
+  }, [selectedIndex, setValue, mapData]);
 
   const timeValidate = (time: number) => {
     const lastLineTime = Number(mapData[mapData.length - 1]["time"]);
@@ -81,7 +76,6 @@ const EditorTab = () => {
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
 
     ButtonEvents.addLine(dispatch, { time, lyrics, word });
-
     lineInit();
 
     if (lyricsCopy) {
@@ -125,38 +119,62 @@ const EditorTab = () => {
     lineInit();
   };
 
-  const buttonConfigs = [
-    {
-      ref: lineAddBtnRef,
+  const buttonConfigs = {
+    add: {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
       onClick: add,
       text: "追加",
+      isLoading: false,
     },
-    {
-      ref: lineUpdateBtnRef,
+    update: {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "cyan",
       onClick: update,
       text: "変更",
+      isLoading: false,
     },
-    {
+    wordConvert: {
       isDisabled: lineNumber === mapData.length - 1,
       isLoading: isLoadingWordConvertBtn,
       colorScheme: "blue",
       onClick: wordConvert,
       text: "読み変換",
     },
-    {
-      ref: lineDeleteBtnRef,
+    delete: {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "red",
       onClick: deleteLine,
       text: "削除",
+      isLoading: false,
     },
-  ];
+  };
+
+  useImperativeHandle(ref, () => ({
+    add: () => {
+      if (buttonConfigs.add.isDisabled) {
+        add();
+      }
+    },
+    update: () => {
+      if (buttonConfigs.update.isDisabled) {
+        update();
+      }
+    },
+    delete: () => {
+      if (buttonConfigs.delete.isDisabled) {
+        deleteLine();
+      }
+    },
+    undoAdd: (undoLine: Line) => {
+      const addLyrics = methods.getValues("addLyrics");
+
+      TextAreaEvents.undoTopLyrics(setValue, undoLine, addLyrics);
+      timeInputRef.current!.undoAdd(undoLine.time);
+    },
+  }));
 
   return (
     <FormProvider {...methods}>
@@ -185,10 +203,9 @@ const EditorTab = () => {
         <div>
           <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
             <Flex gap="5">
-              {buttonConfigs.map((config, index) => (
+              {Object.values(buttonConfigs).map((config, index) => (
                 <Button
                   key={index}
-                  ref={config.ref}
                   isDisabled={config.isDisabled}
                   isLoading={config.isLoading}
                   variant="outline"
@@ -235,6 +252,8 @@ const EditorTab = () => {
       </form>
     </FormProvider>
   );
-};
+});
+
+EditorTab.displayName = "EditorTab";
 
 export default EditorTab;

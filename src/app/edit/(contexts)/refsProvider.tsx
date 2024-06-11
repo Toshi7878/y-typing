@@ -1,56 +1,54 @@
 import React, { createContext, useContext, useRef } from "react";
+import { Line } from "../(tab-content)/(ts)/buttonEvent";
+
+export interface EditorTab {
+  add: () => void;
+  update: () => void;
+  delete: () => void;
+  undoAdd: (undoLine: Line) => void;
+}
 
 export interface RefsContextType {
-  lineAddBtn: React.RefObject<HTMLElement>;
-  lineUpdateBtn: React.RefObject<HTMLElement>;
-  lineDeleteBtn: React.RefObject<HTMLElement>;
-  tableRef: React.RefObject<HTMLElement>;
+  editorTabRef: React.RefObject<EditorTab>;
+  infoUploadTabRef: React.RefObject<EditorTab>;
+  lineRowRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
 // Start of Selection
 const RefsContext = createContext<RefsContextType>({
-  lineAddBtn: { current: null },
-  lineUpdateBtn: { current: null },
-  lineDeleteBtn: { current: null },
-  tableRef: { current: null },
+  editorTabRef: { current: null },
+  infoUploadTabRef: { current: null },
+  lineRowRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
-  const lineAddBtn = useRef(null);
-  const lineUpdateBtn = useRef(null);
-  const lineDeleteBtn = useRef(null);
-  const tableRef = useRef(null);
+  const editorTabRef = useRef(null);
+  const infoUploadTabRef = useRef(null);
+  const lineRowRef = useRef(null);
   const playerRef = useRef(null);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "lineAddBtn":
-        lineAddBtn.current = ref;
+      case "editorTab":
+        editorTabRef.current = ref;
         break;
-      case "lineUpdateBtn":
-        lineUpdateBtn.current = ref;
+      case "infoUploadTab":
+        infoUploadTabRef.current = ref;
         break;
-      case "lineDeleteBtn":
-        lineDeleteBtn.current = ref;
-        break;
-      case "tableRef":
-        tableRef.current = ref;
+      case "lineRow":
+        lineRowRef.current = ref;
         break;
       case "playerRef":
         playerRef.current = ref;
-        break;
-      default:
         break;
     }
   };
 
   return (
-    <RefsContext.Provider
-      value={{ lineAddBtn, lineUpdateBtn, lineDeleteBtn, tableRef, playerRef, setRef }}
-    >
+    <RefsContext.Provider value={{ editorTabRef, infoUploadTabRef, lineRowRef, playerRef, setRef }}>
       {children}
     </RefsContext.Provider>
   );
@@ -59,10 +57,9 @@ export const RefsProvider = ({ children }) => {
 export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
-    lineAddBtn: context.lineAddBtn,
-    lineUpdateBtn: context.lineUpdateBtn,
-    lineDeleteBtn: context.lineDeleteBtn,
-    tableRef: context.tableRef,
+    editorTabRef: context.editorTabRef,
+    infoUploadTabRef: context.infoUploadTabRef,
+    lineRowRef: context.lineRowRef,
     playerRef: context.playerRef,
     setRef: context.setRef,
   };

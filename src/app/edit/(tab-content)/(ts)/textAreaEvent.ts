@@ -1,5 +1,5 @@
 import { UseFormSetValue } from "react-hook-form";
-import { ButtonEvents } from "./buttonEvent";
+import { ButtonEvents, Line } from "./buttonEvent";
 import { Dispatch } from "@reduxjs/toolkit";
 import { setIsLoadingWordConvertBtn } from "../../(redux)/buttonLoadSlice";
 export class TextAreaEvents {
@@ -22,10 +22,13 @@ export class TextAreaEvents {
   ) {
     const lines = addLyrics.split("\n");
     const lyrics = lines[0].replace(/\r$/, "");
-    setValue("lyrics", lyrics);
-    dispatch(setIsLoadingWordConvertBtn(true));
-    await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
-    dispatch(setIsLoadingWordConvertBtn(false));
+
+    if (lyrics) {
+      setValue("lyrics", lyrics);
+      dispatch(setIsLoadingWordConvertBtn(true));
+      await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
+      dispatch(setIsLoadingWordConvertBtn(false));
+    }
   }
 
   static deleteTopLyrics(
@@ -43,5 +46,17 @@ export class TextAreaEvents {
       setValue("addLyrics", newText);
     }
     TextAreaEvents.setTopLyrics(setValue, newText, dispatch, convertOption);
+  }
+
+  static undoTopLyrics(setValue: UseFormSetValue<any>, undoLine: Line, addLyrics: string) {
+    const lyrics = undoLine.lyrics;
+    const word = undoLine.word;
+
+    const lines = addLyrics?.split("\n") || [];
+    lines.unshift(lyrics);
+    const newText = lines.join("\n");
+    setValue("addLyrics", newText);
+    setValue("lyrics", lyrics || "");
+    setValue("word", word || "");
   }
 }

@@ -182,19 +182,22 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        refs.lineAddBtn.current!.click();
+        refs.editorTabRef.current!.add();
         break;
 
       case "KeyU":
         event.preventDefault();
-        refs.lineUpdateBtn.current!.click();
+        refs.editorTabRef.current!.update();
         break;
 
       case "KeyZ":
         if (event.ctrlKey) {
-          dispatch(mapDataUndoRedo(undoredoState.present));
-          dispatch(undo());
-          event.preventDefault();
+          if (undoredoState.present) {
+            dispatch(mapDataUndoRedo(undoredoState.present));
+            refs.editorTabRef.current?.undoAdd(undoredoState.present.data!);
+            dispatch(undo());
+            event.preventDefault();
+          }
         }
 
         break;
@@ -212,7 +215,7 @@ export const handleKeydown = (
         break;
 
       case "Delete":
-        refs.lineDeleteBtn.current!.click();
+        refs.editorTabRef.current!.delete();
         event.preventDefault();
 
         break;

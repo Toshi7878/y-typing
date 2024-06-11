@@ -27,7 +27,6 @@ export class ButtonEvents {
         lineNumber: line.lineNumber,
       })
     );
-    dispatch(setSelectedIndex(null));
   }
 
   static async lyricsConvert(
@@ -43,6 +42,5 @@ export class ButtonEvents {
   static deleteLine(dispatch: Dispatch<any>, line: Line) {
     dispatch(deleteLine(line.lineNumber));
     dispatch(addHistory({ type: "delete", data: line }));
-    dispatch(setSelectedIndex(null));
   }
 }

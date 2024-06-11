@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRefs } from "../../(contexts)/refsProvider";
+import { Line } from "../(ts)/buttonEvent";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -34,6 +35,8 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
   const [maxTime, setMaxTime] = useState("0");
   const isPlaying = useSelector((state: RootState) => state.ytState.isPlaying);
   const { playerRef } = useRefs();
+  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
 
   useEffect(() => {
     onFormStateChange(isValid);
@@ -68,6 +71,15 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
       setValue("time", "", { shouldValidate: true });
     },
     getTime: () => Number(methods.getValues("time")),
+    selectedTime: () => {
+      if (selectedIndex !== null) {
+        const selectedTime = mapData[selectedIndex]?.["time"];
+        setValue("time", selectedTime, { shouldValidate: true });
+      }
+    },
+    undoAdd: (time: Line["time"]) => {
+      setValue("time", time, { shouldValidate: true });
+    },
   }));
 
   return (

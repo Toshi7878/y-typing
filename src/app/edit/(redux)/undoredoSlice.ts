@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
 
-interface InitialState {
+export interface UndoRedoStatus {
   past: { type: string; data: Line }[];
   present: { type: string; data: Line } | null;
   future: { type: string; data: Line }[];
 }
 
-const initialState: InitialState = {
+const initialState: UndoRedoStatus = {
   past: [],
   present: null,
   future: [],

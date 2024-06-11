@@ -37,6 +37,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const [optionsData, setOptionsData] = useState<EditorOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
 
+  const DEFAULT_ADJUST_TIME = -0.16;
   useEffect(() => {
     db.editorOption.toArray().then((allData) => {
       const formattedData = allData.reduce((acc, { optionName, value }) => {
@@ -46,7 +47,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
       setOptionsData(formattedData);
       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
       methods.reset({
-        time_offset: formattedData["time-offset"] ?? -1.6,
+        time_offset: formattedData["time-offset"] ?? DEFAULT_ADJUST_TIME,
       });
     });
   }, []);
@@ -78,6 +79,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
       dispatch(allAdjustTime(adjustTime));
   };
 
+  
   return (
     <>
       <Button
@@ -110,7 +112,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
 
                         <Input
                           {...register("time_offset", {
-                            value: optionsData?.["time-offset"] ?? -1.6,
+                            value: optionsData?.["time-offset"] ?? DEFAULT_ADJUST_TIME,
                           })}
                           name="time-offset"
                           placeholder=""

@@ -3,7 +3,48 @@ import { createSlice } from "@reduxjs/toolkit";
 export const mapDataSlice = createSlice({
   name: "mapData",
   initialState: {
-    value: [{ time: "0", lyrics: "", word: "" }],
+    value: [
+      {
+        time: "0",
+        lyrics: "",
+        word: "",
+      },
+      {
+        time: "13.422",
+        lyrics: "君が代は",
+        word: "きみがよは",
+      },
+      {
+        time: "23.701",
+        lyrics: "千代に八千代に",
+        word: "ちよにやちよに",
+      },
+      {
+        time: "34.488",
+        lyrics: "さざれ石の",
+        word: "さざれせきの",
+      },
+      {
+        time: "45.530",
+        lyrics: "巖となりて",
+        word: "いわおとなりて",
+      },
+      {
+        time: "56.058",
+        lyrics: "苔のむすまで",
+        word: "こけのむすまで",
+      },
+      {
+        time: "73.909",
+        lyrics: "",
+        word: "",
+      },
+      {
+        time: "82.461",
+        lyrics: "end",
+        word: "",
+      },
+    ],
   },
   reducers: {
     addLine: (state, action) => {
