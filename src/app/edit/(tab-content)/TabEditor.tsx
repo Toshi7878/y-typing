@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
 import { ButtonEvents, Line } from "./(ts)/buttonEvent";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TextAreaEvents } from "./(ts)/textAreaEvent";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { RootState } from "../(redux)/store";
 import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import EditorSettingModal from "./(components)/EditorSettingModal";
-import { addHistory, UndoRedoStatus } from "../(redux)/undoredoSlice";
+import { addHistory } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
+import { setLastAddedTime } from "../(redux)/mapDataSlice";
 
 const TabEditor = forwardRef((props, ref) => {
   // console.log("Editor");
@@ -32,6 +33,7 @@ const TabEditor = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
+
   const isLoadingWordConvertBtn = useSelector(
     (state: RootState) => state.buttonLoad.isLoadingWordConvertBtn
   );
@@ -74,7 +76,7 @@ const TabEditor = forwardRef((props, ref) => {
     const addLyrics = methods.getValues("addLyrics");
 
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
-
+    dispatch(setLastAddedTime(time));
     ButtonEvents.addLine(dispatch, { time, lyrics, word });
     lineInit();
 
@@ -115,15 +117,34 @@ const TabEditor = forwardRef((props, ref) => {
 
   const deleteLine = () => {
     const lineNumber: string = methods.getValues("lineNumber");
-    ButtonEvents.deleteLine(dispatch, { ...mapData[parseInt(lineNumber)], lineNumber });
+    if (lineNumber) {
+      ButtonEvents.deleteLine(dispatch, { ...mapData[parseInt(lineNumber)], lineNumber });
+    }
     lineInit();
+  };
+
+  const setAddLyrics = (e: React.ChangeEvent<HTMLTextAreaElement> | null) => {
+    const lyrics = methods.getValues("lyrics");
+
+    const lines = (
+      e ? (e.target as HTMLTextAreaElement).value : methods.getValues("addLyrics")
+    ).split("\n");
+    const topLyrics = lines[0].replace(/\r$/, "");
+    if (topLyrics !== lyrics) {
+      const convertOption = editorSettingRef.current!.getWordConvertOption();
+
+      TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
+    }
   };
 
   const buttonConfigs = {
     add: {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
-      onClick: add,
+      onClick: () => {
+        add();
+        (document.activeElement as HTMLElement)?.blur(); // フォーカスを外す
+      },
       text: (
         <>
           追加<small className="hidden sm:inline">(S)</small>
@@ -186,6 +207,12 @@ const TabEditor = forwardRef((props, ref) => {
       TextAreaEvents.undoTopLyrics(setValue, undoLine, addLyrics);
       timeInputRef.current!.undoAdd(undoLine.time);
     },
+    setAddLyrics: () => {
+      setAddLyrics(null);
+    },
+    lineInit: () => {
+      lineInit();
+    },
   }));
 
   return (
@@ -237,17 +264,7 @@ const TabEditor = forwardRef((props, ref) => {
             const convertOption = editorSettingRef.current!.getWordConvertOption();
             TextAreaEvents.paste(setValue, dispatch, convertOption);
           }}
-          onChange={(e) => {
-            const lyrics = methods.getValues("lyrics");
-
-            const lines = e.target.value.split("\n");
-            const topLyrics = lines[0].replace(/\r$/, "");
-            if (topLyrics !== lyrics) {
-              const convertOption = editorSettingRef.current!.getWordConvertOption();
-
-              TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
-            }
-          }}
+          onChange={(e) => setAddLyrics(e)}
         />
       </Box>
     </form>

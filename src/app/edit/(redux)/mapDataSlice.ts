@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const mapDataSlice = createSlice({
   name: "mapData",
   initialState: {
+    lastAddedTime: "0",
     value: [
       {
         time: "0",
@@ -121,9 +122,12 @@ export const mapDataSlice = createSlice({
 
       state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
+    setLastAddedTime(state, action) {
+      state.lastAddedTime = action.payload;
+    },
   },
 });
 
-export const { addLine, updateLine, deleteLine, allAdjustTime, mapDataUndoRedo } =
+export const { addLine, updateLine, deleteLine, allAdjustTime, mapDataUndoRedo, setLastAddedTime } =
   mapDataSlice.actions;
 export default mapDataSlice.reducer;

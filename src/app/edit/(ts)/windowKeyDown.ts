@@ -4,128 +4,163 @@ import { Action, Dispatch } from "@reduxjs/toolkit";
 import { YTSpeedController } from "../(youtube-content)/ytHandleEvents";
 import { RootState } from "../(redux)/store";
 import { RefsContextType } from "../(contexts)/refsProvider";
-import { mapDataUndoRedo } from "../(redux)/mapDataSlice";
+import { mapDataUndoRedo, updateLine } from "../(redux)/mapDataSlice";
 import { undo } from "../(redux)/undoredoSlice";
-// 	getKanaSearchLength(searchReg){
+import { setSelectedIndex } from "../(redux)/lineIndexSlice";
+class WordReplace {
+  mapData: RootState["mapData"]["value"];
+  tbodyRef: RefsContextType["tbodyRef"];
+  dispatch: Dispatch<Action>;
+  newWord: string;
 
-// 		let lyricsKana = ""
+  constructor(
+    mapData: RootState["mapData"]["value"],
+    tbodyRef: RefsContextType["tbodyRef"],
+    dispatch: Dispatch<Action>
+  ) {
+    this.mapData = mapData;
+    this.tbodyRef = tbodyRef;
+    this.dispatch = dispatch;
+    this.newWord = "";
+  }
 
-// 		for(let i=0,len=lineData.value.length; i<len; i++){
-// 			lyricsKana += lineData.value[i]['word']
-// 		}
+  async wordSearchReplace() {
+    const search = this.escapeRegExp(prompt("置き換えしたい読みを入力してください。"));
 
-// 		const Result = lyricsKana.match(searchReg)
+    if (!search) {
+      return;
+    }
 
-// 		return Result ? Result.length:0;
-// 	}
+    let matchLength = this.getKanaSearchLength(new RegExp(search, "g"));
+    const replace = prompt("置き換えする文字を入力してください。");
+    if (!replace) {
+      return;
+    }
 
-// 	replaceFoundFocus(i, search) {
+    const searchReg = new RegExp(`${replace ? `(?!${replace})` : ""}${search}`, "g");
 
-// 		return new Promise(resolve => {
-// 		  setTimeout(() => {
-// 			// 指定された行にスクロール
-// 			tableScroll(i-2,'instant');
+    if (search && replace.match(search)) {
+      alert("sorry...置き換えする文字に検索する文字が含まないようにしてください。");
+      return;
+    }
+    for (let i = 0, len = this.mapData.length; i < len; i++) {
+      const match = this.mapData[i]["word"].match(searchReg);
+      if (!match) {
+        continue;
+      }
+      let replacedWord = this.mapData[i]["word"];
+      let replacedLength = 0;
 
-// 			let range = document.createRange();
+      for (let j = 1; j < match.length + 1; j++) {
+        await this.replaceFoundFocus(i, search);
+        await this.replaceDialog(i, searchReg, replace, matchLength);
+        replacedWord = replacedWord.replace(search, "");
+        replacedLength += search.length;
+        matchLength--;
+      }
+    }
+  }
 
-// 			// 取得した要素の内側を範囲とする
-// 			const WORD_NODE = document.getElementsByClassName('line')[i].children[3].firstElementChild;
-// 			const textMatch = WORD_NODE.textContent.match(new RegExp(search));
+  getKanaSearchLength(searchReg) {
+    let lyricsKana = "";
 
-// 			if (textMatch) {
-// 			  range.selectNodeContents(WORD_NODE);
+    for (let i = 0, len = this.mapData.length; i < len; i++) {
+      lyricsKana += this.mapData[i]["word"];
+    }
 
-// 			  // 範囲を選択状態にする
-// 			  range.setStart(WORD_NODE.firstChild, textMatch.index);
-// 			  range.setEnd(WORD_NODE.firstChild, textMatch.index + textMatch[0].length);
+    const Result = lyricsKana.match(searchReg);
 
-// 			  // 選択範囲をクリアして新しい範囲を追加
-// 			  window.getSelection().removeAllRanges();
-// 			  window.getSelection().addRange(range);
+    return Result ? Result.length : 0;
+  }
 
-// 			  resolve(1);
-// 			} else {
-// 			  console.error('検索語が見つかりませんでした。');
-// 			  resolve(0);
-// 			}
-// 		  }, 50);
-// 		});
-// 	  }
+  replaceFoundFocus(i, search) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const targetRow = this.tbodyRef.current?.children[i];
 
-// 	replaceDialog(i,searchReg,replace,matchLength){
-// 		return new Promise(resolve => {
-// 			setTimeout(() => {
-// 				if(confirm(`残り${matchLength}件\n${lineData.value[i]['word']}\n置き換えますか？`)){
-// 					let n = 0
-// 					lineData.value[i]['word'] = lineData.value[i]['word'].replace(searchReg,function(match){ if(++n==1) return replace; else return match; })
-// 				}
-// 				resolve(1)
-// 			}, 50)
-// 		})
-// 	}
+        if (targetRow) {
+          targetRow.scrollIntoView({ behavior: "auto", block: "center" });
+        }
 
-// 	escapeRegExp(string) {
-// 		return string ? string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') : null;
-// 	}
+        let range = document.createRange();
 
-// }
+        // 取得した要素の内側を範囲とする
+        const WORD_NODE = this.tbodyRef.current?.children[i].children[2];
+        if (WORD_NODE && WORD_NODE.textContent) {
+          this.newWord = WORD_NODE.textContent;
+          const textMatch = WORD_NODE.textContent.match(new RegExp(search));
+          if (textMatch) {
+            range.selectNodeContents(WORD_NODE);
+          }
+          if (WORD_NODE && WORD_NODE.firstChild && textMatch && textMatch.index !== undefined) {
+            // 範囲を選択状態にする
+            range.setStart(WORD_NODE.firstChild, textMatch.index);
+            range.setEnd(WORD_NODE.firstChild, textMatch.index + (textMatch[0]?.length || 0));
 
-// class KeyHandler extends WordReplace {
+            // 選択範囲をクリアして新しい範囲を追加
+            const selection = window.getSelection();
+            if (selection) {
+              selection.removeAllRanges();
+              selection.addRange(range);
+            } else {
+              console.error("選択オブジェクトが見つかりませんでした。");
+            }
+          } else {
+            console.error("WORD_NODE または textMatch が見つかりませんでした。");
+          }
+          const selection = window.getSelection();
+          if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+          } else {
+            console.error("選択オブジェクトが見つかりませんでした。");
+          }
 
-// 	constructor(){
-// 		super()
-// 	}
+          resolve(1);
+          console.error("検索語が見つかりませんでした。");
+          resolve(0);
+        }
+      }, 50);
+    });
+  }
 
-// 	lineSeek(num){
-// 		const seekLine = document.getElementsByClassName("line")[NUMBER.value + num]
-// 		seekLine.children[1].click()
+  replaceDialog(i, searchReg, replace, matchLength) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (confirm(`残り${matchLength}件\n${this.newWord}\n置き換えますか？`)) {
+          let n = 0;
 
-// 		const scLine = NUMBER.value + (num-3)
+          const lineNumber = i;
 
-// 		tableScroll(scLine, 'smooth')
-// 	}
+          const time = this.mapData[i]["time"];
 
-// 	async wordSearchReplace(){
+          const lyrics = this.mapData[i]["lyrics"];
 
-// 		const search = this.escapeRegExp(prompt("置き換えしたい読みを入力してください。"))
+          this.newWord = this.newWord.replace(searchReg, (match) => {
+            if (++n == 1) return replace;
+            else return match;
+          });
 
-// 		if(!search){return;}
+          this.dispatch(updateLine({ lineNumber, time, lyrics, word: this.newWord }));
+        }
 
-// 		let matchLength = this.getKanaSearchLength(new RegExp(search,"g"))
-// 		const replace = prompt("置き換えする文字を入力してください。")
-// 		const searchReg = new RegExp(`${replace ? `(?!${replace})` : ""}${search}`,"g");
+        resolve(1);
+      }, 50);
+    });
+  }
 
-// 		if(search && replace.match(search)){
-// 			alert("sorry...置き換えする文字に検索する文字が含まないようにしてください。")
-// 			return;
-// 		}
-
-// 		for(let i=0,len=lineData.value.length; i<len; i++){
-
-// 			const match = lineData.value[i]['word'].match(searchReg)
-// 			if(!match){continue;}
-// 			let replacedWord = lineData.value[i]['word']
-// 			let replacedLength = 0
-
-// 			for(let j=1;j<match.length+1;j++){
-// 				await this.replaceFoundFocus(i,search)
-// 				await this.replaceDialog(i,searchReg,replace,matchLength)
-// 				replacedWord = replacedWord.replace(search,"")
-// 				replacedLength += search.length
-// 				matchLength--
-// 			}
-
-// 		}
-
-// 	}
-// }
+  escapeRegExp(string) {
+    return string ? string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&") : null;
+  }
+}
 
 export const handleKeydown = (
   event: KeyboardEvent,
   refs: RefsContextType,
   dispatch: Dispatch<Action>,
   ytState: RootState["ytState"],
-  undoredoState: RootState["undoRedo"]
+  undoredoState: RootState["undoRedo"],
+  mapData: RootState["mapData"]["value"]
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -136,11 +171,37 @@ export const handleKeydown = (
 
     switch (event.code) {
       case "ArrowUp":
+        {
+          const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
+
+          if (selectedLine) {
+            const lineIndex = Number((selectedLine as HTMLElement).dataset.lineIndex);
+
+            const prevLine = mapData[lineIndex - 1];
+            if (prevLine) {
+              player.seekTo(prevLine["time"]);
+              dispatch(setSelectedIndex(lineIndex - 1));
+            }
+          }
+        }
         event.preventDefault();
 
         break;
 
       case "ArrowDown":
+        {
+          const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
+
+          if (selectedLine) {
+            const lineIndex = Number((selectedLine as HTMLElement).dataset.lineIndex);
+
+            const nextLine = mapData[lineIndex + 1];
+            if (nextLine) {
+              player.seekTo(nextLine["time"]);
+              dispatch(setSelectedIndex(lineIndex + 1));
+            }
+          }
+        }
         event.preventDefault();
 
         break;
@@ -196,6 +257,7 @@ export const handleKeydown = (
         break;
 
       case "KeyD":
+        refs.editorTabRef.current?.lineInit();
         event.preventDefault();
 
         break;
@@ -207,11 +269,16 @@ export const handleKeydown = (
         break;
 
       case "KeyQ":
+        refs.editorTabRef.current!.setAddLyrics();
         event.preventDefault();
 
         break;
 
       case "KeyF":
+        if (event.ctrlKey && event.shiftKey) {
+          new WordReplace(mapData, refs.tbodyRef, dispatch).wordSearchReplace();
+          event.preventDefault();
+        }
         break;
 
       case "Escape":

@@ -6,12 +6,14 @@ export interface EditorTab {
   update: () => void;
   delete: () => void;
   undoAdd: (undoLine: Line) => void;
+  setAddLyrics: () => void;
+  lineInit: () => void;
 }
 
 export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTab>;
   infoUploadTabRef: React.RefObject<EditorTab>;
-  lineRowRef: React.RefObject<HTMLElement>;
+  tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
@@ -20,14 +22,14 @@ export interface RefsContextType {
 const RefsContext = createContext<RefsContextType>({
   editorTabRef: { current: null },
   infoUploadTabRef: { current: null },
-  lineRowRef: { current: null },
+  tbodyRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
   const editorTabRef = useRef(null);
   const infoUploadTabRef = useRef(null);
-  const lineRowRef = useRef(null);
+  const tbodyRef = useRef(null);
   const playerRef = useRef(null);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
@@ -38,8 +40,8 @@ export const RefsProvider = ({ children }) => {
       case "infoUploadTab":
         infoUploadTabRef.current = ref;
         break;
-      case "lineRow":
-        lineRowRef.current = ref;
+      case "tbody":
+        tbodyRef.current = ref;
         break;
       case "playerRef":
         playerRef.current = ref;
@@ -48,7 +50,7 @@ export const RefsProvider = ({ children }) => {
   };
 
   return (
-    <RefsContext.Provider value={{ editorTabRef, infoUploadTabRef, lineRowRef, playerRef, setRef }}>
+    <RefsContext.Provider value={{ editorTabRef, infoUploadTabRef, tbodyRef, playerRef, setRef }}>
       {children}
     </RefsContext.Provider>
   );
@@ -59,7 +61,7 @@ export const useRefs = () => {
   return {
     editorTabRef: context.editorTabRef,
     infoUploadTabRef: context.infoUploadTabRef,
-    lineRowRef: context.lineRowRef,
+    tbodyRef: context.tbodyRef,
     playerRef: context.playerRef,
     setRef: context.setRef,
   };

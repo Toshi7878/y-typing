@@ -17,13 +17,14 @@ export default function LineRow() {
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
-
+  const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const playerState = useSelector((state: RootState) => state.ytState);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
   const keydownHandler = useCallback(
-    (event: KeyboardEvent) => handleKeydown(event, refs, dispatch, playerState, undoredoState),
-    [dispatch, playerState, refs, undoredoState]
+    (event: KeyboardEvent) =>
+      handleKeydown(event, refs, dispatch, playerState, undoredoState, mapData),
+    [dispatch, playerState, refs, undoredoState, mapData]
   );
 
   useEffect(() => {
@@ -32,6 +33,25 @@ export default function LineRow() {
       window.removeEventListener("keydown", keydownHandler);
     };
   }, [keydownHandler]);
+
+
+  useEffect(() => {
+    if (mapData.length > 0) {
+      for (let i = mapData.length - 1; i >= 0; i--) {
+        if (Number(mapData[i]["time"]) == Number(lastAddedTime)) {
+          const targetRow = refs.tbodyRef.current?.children[i];
+
+          if (targetRow) {
+            targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+
+          break;
+        }
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapData, lastAddedTime]);
 
   useEffect(() => {
     if (isStarted) {
@@ -86,11 +106,12 @@ export default function LineRow() {
         <Tr
           key={index}
           id={`line_${index}`}
+          data-line-index={index}
           className={`cursor-pointer relative ${
             selectedIndex === index
-              ? "bg-cyan-400 outline outline-2 outline-black"
+              ? "selected-line bg-cyan-400 outline outline-2 outline-black"
               : " hover:bg-cyan-400/35"
-          } ${timeIndex === index ? " bg-teal-400/35" : ""}`}
+          } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""}`}
           onClick={() => selectLine(index)}
         >
           <Td

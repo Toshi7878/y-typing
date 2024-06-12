@@ -5,15 +5,15 @@ import "../(style)/table.scss";
 import LineRow from "./(components)/LineRow";
 import { useEffect, useRef } from "react";
 import { useRefs } from "../(contexts)/refsProvider";
+
 export default function TableContent() {
-  console.log("Table");
-  const lineRowRef = useRef(null);
+  const tbodyRef = useRef(null);
 
   const { setRef } = useRefs();
 
   useEffect(() => {
-    setRef("lineRow", lineRowRef.current);
-  }, [lineRowRef]);
+    setRef("tbody", tbodyRef.current);
+  }, []);
 
   return (
     <TableContainer border="1px solid black" maxHeight="calc(100vh - 400px)" overflowY="auto">
@@ -30,7 +30,7 @@ export default function TableContent() {
             </Th>
           </Tr>
         </Thead>
-        <Tbody ref={lineRowRef}>
+        <Tbody ref={tbodyRef}>
           <LineRow />
         </Tbody>
       </Table>
