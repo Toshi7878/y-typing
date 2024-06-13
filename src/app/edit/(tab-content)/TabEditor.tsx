@@ -145,10 +145,14 @@ const TabEditor = forwardRef((props, ref) => {
     }
   };
 
+  const addButtonRef = useRef<HTMLButtonElement | null>(null);
+  const updateButtonRef = useRef<HTMLButtonElement | null>(null);
+  const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
   const buttonConfigs = {
     add: {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
+      ref: addButtonRef,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         add(mapData, e.shiftKey);
         //フォーカスを外さないとクリック時にテーブルがスクロールされない
@@ -164,6 +168,8 @@ const TabEditor = forwardRef((props, ref) => {
     update: {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
+      ref: updateButtonRef,
+
       colorScheme: "cyan",
       onClick: () => {
         update(mapData);
@@ -177,6 +183,7 @@ const TabEditor = forwardRef((props, ref) => {
     },
     wordConvert: {
       isDisabled: lineNumber === mapData.length - 1,
+      ref: undefined,
       isLoading: isLoadingWordConvertBtn,
       colorScheme: "blue",
       onClick: wordConvert,
@@ -185,6 +192,8 @@ const TabEditor = forwardRef((props, ref) => {
     delete: {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
+      ref: deleteButtonRef,
+
       colorScheme: "red",
       onClick: () => {
         deleteLine(mapData);
@@ -200,19 +209,13 @@ const TabEditor = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     add: (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-      if (buttonConfigs.add.isDisabled) {
-        add(mapData, isShiftKey);
-      }
+      addButtonRef.current!.click();
     },
     update: (mapData: RootState["mapData"]["value"]) => {
-      if (buttonConfigs.update.isDisabled) {
-        update(mapData);
-      }
+      updateButtonRef.current!.click();
     },
     delete: (mapData: RootState["mapData"]["value"]) => {
-      if (buttonConfigs.delete.isDisabled) {
-        deleteLine(mapData);
-      }
+      deleteButtonRef.current!.click();
     },
     undoAddLyrics: (undoLine: Line) => {
       const addLyrics = methods.getValues("addLyrics");
@@ -266,6 +269,7 @@ const TabEditor = forwardRef((props, ref) => {
           {Object.values(buttonConfigs).map((config, index) => (
             <Button
               key={index}
+              ref={config.ref ? config.ref : undefined}
               isDisabled={config.isDisabled}
               isLoading={config.isLoading}
               variant="outline"
@@ -285,7 +289,8 @@ const TabEditor = forwardRef((props, ref) => {
       <Box display="flex" alignItems="center">
         <Textarea
           placeholder="ここから歌詞をまとめて追加できます"
-          style={{ height: "92px" }}
+          size="lg"
+          style={{ height: "110px" }}
           {...register("addLyrics")}
           onPaste={() => {
             const convertOption = editorSettingRef.current!.getWordConvertOption();

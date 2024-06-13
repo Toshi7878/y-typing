@@ -16,7 +16,10 @@ export default function TableContent() {
   }, []);
 
   return (
-    <TableContainer border="1px solid black" maxHeight="calc(100vh - 400px)" overflowY="auto">
+    <TableContainer
+      className="border border-black sm:max-h-[calc(100vh-100px)] md:max-h-[500px] 2xl:max-h-[calc(100vh-400px)]"
+      overflowY="auto"
+    >
       <Table size="sm" variant="simple">
         <Thead>
           <Tr>

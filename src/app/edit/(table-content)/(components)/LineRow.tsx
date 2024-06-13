@@ -34,15 +34,20 @@ export default function LineRow() {
     };
   }, [keydownHandler]);
 
-
   useEffect(() => {
     if (mapData.length > 0) {
       for (let i = mapData.length - 1; i >= 0; i--) {
         if (Number(mapData[i]["time"]) == Number(lastAddedTime)) {
           const targetRow = refs.tbodyRef.current?.children[i];
 
-          if (targetRow) {
-            targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+          if (targetRow && targetRow instanceof HTMLElement) {
+            const parentElement = targetRow.parentElement!.parentElement!.parentElement;
+            if (parentElement && targetRow instanceof HTMLElement) {
+              parentElement.scrollTo({
+                top: targetRow.offsetTop - parentElement.offsetTop - targetRow.offsetHeight,
+                behavior: "smooth",
+              });
+            }
           }
 
           break;

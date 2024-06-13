@@ -9,6 +9,8 @@ import store from "./(redux)/store";
 import InfoTabProvider from "./(contexts)/InfoTabProvider";
 import { RefsProvider } from "./(contexts)/refsProvider";
 
+// あとでやる
+//ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
 
