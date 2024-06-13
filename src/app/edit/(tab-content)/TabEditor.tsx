@@ -208,13 +208,13 @@ const TabEditor = forwardRef((props, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-    add: (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
+    add: () => {
       addButtonRef.current!.click();
     },
-    update: (mapData: RootState["mapData"]["value"]) => {
+    update: () => {
       updateButtonRef.current!.click();
     },
-    delete: (mapData: RootState["mapData"]["value"]) => {
+    delete: () => {
       deleteButtonRef.current!.click();
     },
     undoAddLyrics: (undoLine: Line) => {

@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useRef } from "react";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
-import { RootState } from "../(redux)/store";
 
 export interface EditorTab {
-  add: (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => void;
-  update: (mapData: RootState["mapData"]["value"]) => void;
-  delete: (mapData: RootState["mapData"]["value"]) => void;
+  add: () => void;
+  update: () => void;
+  delete: () => void;
   undoAddLyrics: (undoLine: Line) => void;
   setAddLyrics: () => void;
   redoAddLyrics: (redoLine: Line) => void;

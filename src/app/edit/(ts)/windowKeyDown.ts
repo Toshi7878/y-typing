@@ -243,12 +243,12 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        refs.editorTabRef.current!.add(mapData, event.shiftKey);
+        refs.editorTabRef.current!.add();
         break;
 
       case "KeyU":
         event.preventDefault();
-        refs.editorTabRef.current!.update(mapData);
+        refs.editorTabRef.current!.update();
         break;
 
       case "KeyZ":
@@ -295,7 +295,7 @@ export const handleKeydown = (
         break;
 
       case "Delete":
-        refs.editorTabRef.current!.delete(mapData);
+        refs.editorTabRef.current!.delete();
         event.preventDefault();
 
         break;
