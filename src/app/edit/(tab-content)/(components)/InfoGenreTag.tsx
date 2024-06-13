@@ -135,11 +135,13 @@ const InfoGenreTag = () => {
         <Stack direction="row" spacing={3} wrap="wrap">
           {[
             "公式動画",
-            "Cover",
+            "Cover/歌ってみた",
             "英語",
+            "英語&日本語",
             "多言語",
             "ラップ",
             "同人音楽",
+            "初音ミク",
             "セリフ読み",
             "Nightcore",
             "キッズ＆ファミリー",

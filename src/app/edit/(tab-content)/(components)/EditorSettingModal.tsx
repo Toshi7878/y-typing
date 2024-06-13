@@ -21,6 +21,7 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  useToast,
 } from "@chakra-ui/react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -36,6 +37,7 @@ import { useRefs } from "../../(contexts)/refsProvider";
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [optionsData, setOptionsData] = useState<EditorOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
@@ -83,10 +85,34 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const allTimeAdjust = () => {
     const adjustTime = Number(methods.getValues("all-time-adjust"));
 
+    if (!adjustTime) {
+      return;
+    }
+
     const times = mapData.map((item) => item.time);
 
     dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
     dispatch(allAdjustTime(adjustTime));
+    toast({
+      title: "タイムを調整しました",
+      description: (
+        <small>
+          全体のタイムが{adjustTime}秒調整されました。
+          <br />
+          Ctrl + Zで前のタイムに戻ることができます。
+        </small>
+      ),
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom-right",
+      containerStyle: {
+        border: "1px solid",
+
+        borderColor: "gray.200",
+        fontSize: "lg", // サイズを大きくする
+      },
+    });
   };
 
   return (

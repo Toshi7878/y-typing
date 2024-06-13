@@ -13,6 +13,7 @@ import { addHistory } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 import { setLastAddedTime } from "../(redux)/mapDataSlice";
 
+// 後でリファクタリング
 const TabEditor = forwardRef((props, ref) => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
