@@ -28,7 +28,7 @@ export const mapDataSlice = createSlice({
   name: "mapData",
 
   initialState: {
-    lastAddedTime: "0",
+    lastAddedTime: "0", //テーブル内をスクロールする処理で使用
 
     value: [
       {

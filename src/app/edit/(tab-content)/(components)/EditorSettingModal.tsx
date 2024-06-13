@@ -23,7 +23,7 @@ import {
   SliderThumb,
 } from "@chakra-ui/react";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +31,7 @@ import { allAdjustTime } from "../../(redux)/mapDataSlice";
 import { db, EditorOption } from "@/lib/db";
 import { RootState } from "../../(redux)/store";
 import { addHistory } from "../../(redux)/undoredoSlice";
+import { useRefs } from "../../(contexts)/refsProvider";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,8 +40,10 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const [optionsData, setOptionsData] = useState<EditorOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
   const mapData = useSelector((state: RootState) => state.mapData.value);
+  const { playerRef } = useRefs();
 
   const DEFAULT_ADJUST_TIME = -0.16;
+  const DEFAULT_VOLUME = 50;
   useEffect(() => {
     db.editorOption.toArray().then((allData) => {
       const formattedData = allData.reduce((acc, { optionName, value }) => {
@@ -50,7 +53,8 @@ export default forwardRef(function EditorSettingModal(props, ref) {
       setOptionsData(formattedData);
       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
       methods.reset({
-        time_offset: formattedData["time-offset"] ?? DEFAULT_ADJUST_TIME,
+        "time-offset": formattedData["time-offset"] ?? DEFAULT_ADJUST_TIME,
+        "volume-range": formattedData["volume-range"] ?? DEFAULT_VOLUME,
       });
     });
   }, []);
@@ -67,8 +71,9 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   ];
 
   useImperativeHandle(ref, () => ({
-    getTimeOffset: () => Number(methods.getValues("time_offset")),
+    getTimeOffset: () => Number(methods.getValues("time-offset")),
     getWordConvertOption: () => selectedConvertOption,
+    getVolume: () => Number(methods.getValues("volume-range")),
   }));
 
   const sendIndexedDB = async (target: HTMLInputElement) => {
@@ -76,7 +81,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   };
 
   const allTimeAdjust = () => {
-    const adjustTime = Number(methods.getValues("all_time_adjust"));
+    const adjustTime = Number(methods.getValues("all-time-adjust"));
 
     const times = mapData.map((item) => item.time);
 
@@ -108,14 +113,14 @@ export default forwardRef(function EditorSettingModal(props, ref) {
               <ModalCloseButton />
 
               <ModalBody>
-                <form onChange={(e) => sendIndexedDB(e.target as HTMLInputElement)}>
+                <form>
                   <VStack align="start" spacing={4}>
                     <FormControl>
                       <HStack alignItems="baseline">
                         <FormLabel fontSize="sm">追加タイム調整</FormLabel>
 
                         <Input
-                          {...register("time_offset", {
+                          {...register("time-offset", {
                             value: optionsData?.["time-offset"] ?? DEFAULT_ADJUST_TIME,
                           })}
                           name="time-offset"
@@ -126,6 +131,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                           min="-3"
                           max="3"
                           className="max-w-[70px]"
+                          onChange={(e) => sendIndexedDB(e.target as HTMLInputElement)}
                         />
 
                         <FormLabel fontSize="xs" color="gray.500">
@@ -139,7 +145,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                         <FormLabel fontSize="sm">全体タイム調整</FormLabel>
 
                         <Input
-                          {...register("all_time_adjust")}
+                          {...register("all-time-adjust")}
                           placeholder=""
                           type="number"
                           size="md"
@@ -168,13 +174,28 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                       <HStack alignItems="center">
                         <FormLabel fontSize="sm">音量</FormLabel>
 
-                        <Slider w="200px" aria-label="slider-ex-1" defaultValue={30}>
-                          <SliderTrack>
-                            <SliderFilledTrack />
-                          </SliderTrack>
-
-                          <SliderThumb />
-                        </Slider>
+                        <Controller
+                          name="volume-range"
+                          control={methods.control}
+                          defaultValue={DEFAULT_VOLUME}
+                          render={({ field }) => (
+                            <Slider
+                              w="200px"
+                              aria-label="slider-ex-1"
+                              {...field}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                playerRef.current.setVolume(value);
+                                db.editorOption.put({ optionName: "volume-range", value });
+                              }}
+                            >
+                              <SliderTrack>
+                                <SliderFilledTrack />
+                              </SliderTrack>
+                              <SliderThumb />
+                            </Slider>
+                          )}
+                        />
                       </HStack>
                     </FormControl>
 

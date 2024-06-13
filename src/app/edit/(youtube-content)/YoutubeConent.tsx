@@ -22,7 +22,7 @@ const YouTubeContent = function YouTubeContent({ className }: { className: strin
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs.playerRef, dispatch);
+      ytState.ready(refs, dispatch);
     },
     [refs, dispatch]
   );

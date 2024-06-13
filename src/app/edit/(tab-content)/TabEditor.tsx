@@ -25,6 +25,7 @@ const TabEditor = forwardRef((props, ref) => {
   const editorSettingRef = useRef<{
     getTimeOffset: () => number;
     getWordConvertOption: () => string;
+    getVolume: () => number;
   } | null>(null);
 
   const methods = useForm();
@@ -68,17 +69,20 @@ const TabEditor = forwardRef((props, ref) => {
     }
   };
 
-  const add = (mapData: RootState["mapData"]["value"]) => {
+  const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
     const timeOffset = editorSettingRef.current!.getTimeOffset();
     const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
-    const lyrics = methods.getValues("lyrics");
-    const word = methods.getValues("word");
+    const lyrics = isShiftKey ? "" : methods.getValues("lyrics");
+    const word = isShiftKey ? "" : methods.getValues("word");
     const addLyrics = methods.getValues("addLyrics");
 
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
     dispatch(setLastAddedTime(time));
     ButtonEvents.addLine(dispatch, { time, lyrics, word });
-    lineInit();
+
+    if (!isShiftKey) {
+      lineInit();
+    }
 
     if (lyricsCopy) {
       const convertOption = editorSettingRef.current!.getWordConvertOption();
@@ -144,8 +148,8 @@ const TabEditor = forwardRef((props, ref) => {
     add: {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
-      onClick: () => {
-        add(mapData);
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        add(mapData, e.shiftKey);
         //フォーカスを外さないとクリック時にテーブルがスクロールされない
         (document.activeElement as HTMLElement)?.blur();
       },
@@ -194,9 +198,9 @@ const TabEditor = forwardRef((props, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-    add: (mapData: RootState["mapData"]["value"]) => {
+    add: (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
       if (buttonConfigs.add.isDisabled) {
-        add(mapData);
+        add(mapData, isShiftKey);
       }
     },
     update: (mapData: RootState["mapData"]["value"]) => {
@@ -230,6 +234,10 @@ const TabEditor = forwardRef((props, ref) => {
       const convertOption = editorSettingRef.current!.getWordConvertOption();
 
       TextAreaEvents.deleteTopLyrics(setValue, lyrics, addLyrics, dispatch, convertOption);
+    },
+
+    getVolume: () => {
+      return editorSettingRef.current?.getVolume();
     },
   }));
 

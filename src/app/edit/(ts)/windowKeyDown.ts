@@ -243,7 +243,7 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        refs.editorTabRef.current!.add(mapData);
+        refs.editorTabRef.current!.add(mapData, event.shiftKey);
         break;
 
       case "KeyU":
@@ -259,6 +259,7 @@ export const handleKeydown = (
             dispatch(mapDataUndo(undoredoState.present));
             if (undoredoState.present.type === "add") {
               refs.editorTabRef.current?.undoAddLyrics(data);
+              refs.playerRef.current.seekTo(Number(data.time) - 3 * ytState.speed);
             }
 
             dispatch(undo());
