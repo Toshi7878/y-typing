@@ -4,9 +4,10 @@ import { Action, Dispatch } from "@reduxjs/toolkit";
 import { YTSpeedController } from "../(youtube-content)/ytHandleEvents";
 import { RootState } from "../(redux)/store";
 import { RefsContextType } from "../(contexts)/refsProvider";
-import { mapDataUndoRedo, updateLine } from "../(redux)/mapDataSlice";
-import { undo } from "../(redux)/undoredoSlice";
+import { mapDataRedo, mapDataUndo, updateLine } from "../(redux)/mapDataSlice";
+import { addHistory, addLastUpdateHistory, redo, undo } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
+import { Line } from "../(tab-content)/(ts)/buttonEvent";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
@@ -136,10 +137,23 @@ class WordReplace {
 
           const lyrics = this.mapData[i]["lyrics"];
 
-          this.newWord = this.newWord.replace(searchReg, (match) => {
+          const newWord = this.newWord.replace(searchReg, (match) => {
             if (++n == 1) return replace;
             else return match;
           });
+
+          this.dispatch(
+            addHistory({
+              type: "update",
+              data: {
+                old: { time, lyrics, word: this.newWord },
+                new: { time, lyrics, word: newWord },
+                lineNumber: i,
+              },
+            })
+          );
+
+          this.newWord = newWord;
 
           this.dispatch(updateLine({ lineNumber, time, lyrics, word: this.newWord }));
         }
@@ -229,19 +243,24 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        refs.editorTabRef.current!.add();
+        refs.editorTabRef.current!.add(mapData);
         break;
 
       case "KeyU":
         event.preventDefault();
-        refs.editorTabRef.current!.update();
+        refs.editorTabRef.current!.update(mapData);
         break;
 
       case "KeyZ":
         if (event.ctrlKey) {
           if (undoredoState.present) {
-            dispatch(mapDataUndoRedo(undoredoState.present));
-            refs.editorTabRef.current?.undoAdd(undoredoState.present.data!);
+            const data = undoredoState.present.data as Line;
+
+            dispatch(mapDataUndo(undoredoState.present));
+            if (undoredoState.present.type === "add") {
+              refs.editorTabRef.current?.undoAddLyrics(data);
+            }
+
             dispatch(undo());
             event.preventDefault();
           }
@@ -251,7 +270,19 @@ export const handleKeydown = (
 
       case "KeyY":
         if (event.ctrlKey) {
-          event.preventDefault();
+          if (undoredoState.future.length) {
+            const future = undoredoState.future[undoredoState.future.length - 1];
+
+            dispatch(mapDataRedo(future));
+
+            if (future.type === "add") {
+              const data = future.data as Line;
+              refs.editorTabRef.current?.redoAddLyrics(data);
+            }
+
+            dispatch(redo());
+            event.preventDefault();
+          }
         }
 
         break;
@@ -263,7 +294,7 @@ export const handleKeydown = (
         break;
 
       case "Delete":
-        refs.editorTabRef.current!.delete();
+        refs.editorTabRef.current!.delete(mapData);
         event.preventDefault();
 
         break;

@@ -26,9 +26,11 @@ import {
 import { useForm } from "react-hook-form";
 
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { allAdjustTime } from "../../(redux)/mapDataSlice";
 import { db, EditorOption } from "@/lib/db";
+import { RootState } from "../../(redux)/store";
+import { addHistory } from "../../(redux)/undoredoSlice";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,6 +38,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
 
   const [optionsData, setOptionsData] = useState<EditorOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
+  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   const DEFAULT_ADJUST_TIME = -0.16;
   useEffect(() => {
@@ -75,11 +78,12 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const allTimeAdjust = () => {
     const adjustTime = Number(methods.getValues("all_time_adjust"));
 
-    if (confirm(`全体のタイムを ${adjustTime} ずつ調整しますか？`))
-      dispatch(allAdjustTime(adjustTime));
+    const times = mapData.map((item) => item.time);
+
+    dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
+    dispatch(allAdjustTime(adjustTime));
   };
 
-  
   return (
     <>
       <Button

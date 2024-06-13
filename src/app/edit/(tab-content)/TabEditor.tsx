@@ -56,7 +56,7 @@ const TabEditor = forwardRef((props, ref) => {
     }
   }, [selectedIndex, setValue, mapData]);
 
-  const timeValidate = (time: number) => {
+  const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
     const lastLineTime = Number(mapData[mapData.length - 1]["time"]);
 
     if (0 >= time) {
@@ -68,9 +68,9 @@ const TabEditor = forwardRef((props, ref) => {
     }
   };
 
-  const add = () => {
+  const add = (mapData: RootState["mapData"]["value"]) => {
     const timeOffset = editorSettingRef.current!.getTimeOffset();
-    const time = timeValidate(timeInputRef.current!.getTime() + timeOffset).toFixed(3);
+    const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
     const lyrics = methods.getValues("lyrics");
     const word = methods.getValues("word");
     const addLyrics = methods.getValues("addLyrics");
@@ -87,14 +87,17 @@ const TabEditor = forwardRef((props, ref) => {
     }
   };
 
-  const update = () => {
-    const time = timeValidate(timeInputRef.current!.getTime()).toFixed(3);
+  const update = (mapData: RootState["mapData"]["value"]) => {
+    const time = timeValidate(timeInputRef.current!.getTime(), mapData).toFixed(3);
     const lyrics: string = methods.getValues("lyrics");
     const word: string = methods.getValues("word");
     const lineNumber: string = methods.getValues("lineNumber");
 
     dispatch(
-      addHistory({ type: "update", data: { ...mapData[parseInt(lineNumber)], lineNumber } })
+      addHistory({
+        type: "update",
+        data: { old: mapData[parseInt(lineNumber)], new: { time, lyrics, word }, lineNumber },
+      })
     );
 
     ButtonEvents.updateLine(dispatch, {
@@ -115,7 +118,7 @@ const TabEditor = forwardRef((props, ref) => {
     dispatch(setIsLoadingWordConvertBtn(false));
   };
 
-  const deleteLine = () => {
+  const deleteLine = (mapData: RootState["mapData"]["value"]) => {
     const lineNumber: string = methods.getValues("lineNumber");
     if (lineNumber) {
       ButtonEvents.deleteLine(dispatch, { ...mapData[parseInt(lineNumber)], lineNumber });
@@ -142,8 +145,9 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled: !isTimeInputValid,
       colorScheme: "teal",
       onClick: () => {
-        add();
-        (document.activeElement as HTMLElement)?.blur(); // フォーカスを外す
+        add(mapData);
+        //フォーカスを外さないとクリック時にテーブルがスクロールされない
+        (document.activeElement as HTMLElement)?.blur();
       },
       text: (
         <>
@@ -156,7 +160,9 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "cyan",
-      onClick: update,
+      onClick: () => {
+        update(mapData);
+      },
       text: (
         <>
           変更<small className="hidden sm:inline">(U)</small>
@@ -175,7 +181,9 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled:
         !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
       colorScheme: "red",
-      onClick: deleteLine,
+      onClick: () => {
+        deleteLine(mapData);
+      },
       text: (
         <>
           削除<small className="hidden sm:inline">(Del)</small>
@@ -186,32 +194,42 @@ const TabEditor = forwardRef((props, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-    add: () => {
+    add: (mapData: RootState["mapData"]["value"]) => {
       if (buttonConfigs.add.isDisabled) {
-        add();
+        add(mapData);
       }
     },
-    update: () => {
+    update: (mapData: RootState["mapData"]["value"]) => {
       if (buttonConfigs.update.isDisabled) {
-        update();
+        update(mapData);
       }
     },
-    delete: () => {
+    delete: (mapData: RootState["mapData"]["value"]) => {
       if (buttonConfigs.delete.isDisabled) {
-        deleteLine();
+        deleteLine(mapData);
       }
     },
-    undoAdd: (undoLine: Line) => {
+    undoAddLyrics: (undoLine: Line) => {
       const addLyrics = methods.getValues("addLyrics");
 
       TextAreaEvents.undoTopLyrics(setValue, undoLine, addLyrics);
       timeInputRef.current!.undoAdd(undoLine.time);
     },
+
     setAddLyrics: () => {
       setAddLyrics(null);
     },
+
     lineInit: () => {
       lineInit();
+    },
+
+    redoAddLyrics: (redoLine: Line) => {
+      const lyrics = redoLine.lyrics;
+      const addLyrics = methods.getValues("addLyrics");
+      const convertOption = editorSettingRef.current!.getWordConvertOption();
+
+      TextAreaEvents.deleteTopLyrics(setValue, lyrics, addLyrics, dispatch, convertOption);
     },
   }));
 

@@ -1,18 +1,19 @@
 import React, { createContext, useContext, useRef } from "react";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
+import { RootState } from "../(redux)/store";
 
 export interface EditorTab {
-  add: () => void;
-  update: () => void;
-  delete: () => void;
-  undoAdd: (undoLine: Line) => void;
+  add: (mapData: RootState["mapData"]["value"]) => void;
+  update: (mapData: RootState["mapData"]["value"]) => void;
+  delete: (mapData: RootState["mapData"]["value"]) => void;
+  undoAddLyrics: (undoLine: Line) => void;
   setAddLyrics: () => void;
+  redoAddLyrics: (redoLine: Line) => void;
   lineInit: () => void;
 }
 
 export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTab>;
-  infoUploadTabRef: React.RefObject<EditorTab>;
   tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
@@ -21,14 +22,12 @@ export interface RefsContextType {
 // Start of Selection
 const RefsContext = createContext<RefsContextType>({
   editorTabRef: { current: null },
-  infoUploadTabRef: { current: null },
   tbodyRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
   const editorTabRef = useRef(null);
-  const infoUploadTabRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
 
@@ -36,9 +35,6 @@ export const RefsProvider = ({ children }) => {
     switch (key) {
       case "editorTab":
         editorTabRef.current = ref;
-        break;
-      case "infoUploadTab":
-        infoUploadTabRef.current = ref;
         break;
       case "tbody":
         tbodyRef.current = ref;
@@ -50,7 +46,7 @@ export const RefsProvider = ({ children }) => {
   };
 
   return (
-    <RefsContext.Provider value={{ editorTabRef, infoUploadTabRef, tbodyRef, playerRef, setRef }}>
+    <RefsContext.Provider value={{ editorTabRef, tbodyRef, playerRef, setRef }}>
       {children}
     </RefsContext.Provider>
   );
@@ -60,7 +56,6 @@ export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
     editorTabRef: context.editorTabRef,
-    infoUploadTabRef: context.infoUploadTabRef,
     tbodyRef: context.tbodyRef,
     playerRef: context.playerRef,
     setRef: context.setRef,
