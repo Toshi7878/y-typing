@@ -19,7 +19,7 @@ export default async function Login() {
         <Menu>
           <MenuButton as={Button}>
             <HStack spacing="3">
-              <span>{session.user.name}</span>
+              <div suppressHydrationWarning={true}>{session.user.name}</div>
               <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
                 {!session.user.image && <AvatarBadge boxSize="1.25em" bg="gray.300" />}
               </Avatar>
