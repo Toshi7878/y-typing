@@ -16,7 +16,7 @@ import { setGenre, setTags } from "../(redux)/GenreTagSlice";
 import { setMapData } from "../(redux)/mapDataSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 // あとでやる
-//ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
+//動画切り替えで終了時間が前より短い動画が選択されたらendタイムの後に追加できてしまうバグ修正
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
 
