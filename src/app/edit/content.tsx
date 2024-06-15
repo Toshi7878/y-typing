@@ -1,15 +1,24 @@
 "use client";
 import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
-import store from "./(redux)/store";
+import store, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";
-import { FetchMapData } from "./[id]/page";
 import { setCreatorComment, setVideoId, setYtTitle } from "./(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "./(redux)/GenreTagSlice";
 import { setMapData } from "./(redux)/mapDataSlice";
+import { useParams } from "next/navigation";
+
+export interface FetchMapData {
+  videoId: string;
+  title?: string;
+  creatorComment?: string;
+  genre?: string;
+  tags?: string[];
+  mapData?: RootState["mapData"]["value"];
+}
 
 function Content({ data }: { data: FetchMapData }) {
   return (
@@ -22,15 +31,19 @@ function Content({ data }: { data: FetchMapData }) {
 function ContentInner({ data }: { data: FetchMapData }) {
   const { videoId, title, creatorComment, genre, tags } = data;
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   useLayoutEffect(() => {
-    dispatch(setVideoId(videoId));
-    dispatch(setYtTitle(title));
-    dispatch(setCreatorComment(creatorComment));
-    dispatch(setGenre(genre));
-    dispatch(setTags(tags));
-    dispatch(setMapData(data.mapData));
-  }, [creatorComment, data.mapData, dispatch, genre, tags, title, videoId]);
+    if (id) {
+      dispatch(setVideoId(videoId));
+      dispatch(setYtTitle(title));
+      dispatch(setCreatorComment(creatorComment));
+      dispatch(setGenre(genre));
+      dispatch(setTags(tags));
+      dispatch(setMapData(data.mapData));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14">

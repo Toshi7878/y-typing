@@ -63,17 +63,19 @@ export default function LineRow() {
     if (isStarted) {
       const duration = refs.playerRef.current?.getDuration();
 
-      if (mapData[mapData.length - 1].lyrics !== "end") {
-        dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
-      } else {
-        dispatch(
-          updateLine({
-            time: duration.toFixed(3),
-            lyrics: "end",
-            word: "",
-            lineNumber: (mapData.length - 1).toString(),
-          })
-        );
+      if (duration) {
+        if (mapData[mapData.length - 1].lyrics !== "end") {
+          dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
+        } else {
+          dispatch(
+            updateLine({
+              time: duration.toFixed(3),
+              lyrics: "end",
+              word: "",
+              lineNumber: (mapData.length - 1).toString(),
+            })
+          );
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

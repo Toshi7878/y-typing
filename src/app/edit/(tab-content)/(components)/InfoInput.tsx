@@ -68,7 +68,7 @@ const InfoInput = () => {
           <InputLeftAddon>https://www.youtube.com/watch?v=</InputLeftAddon>
 
           <Input
-            placeholder="YouTube URL"
+            placeholder="YouTube URL(動画URLをそのまま貼り付けできます)"
             size="sm"
             maxLength={11} // YouTubeのID11文字に制限
             {...register("url", { value: `${videoId}` })}
