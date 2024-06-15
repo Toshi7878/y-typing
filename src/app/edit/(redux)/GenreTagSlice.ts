@@ -21,7 +21,13 @@ export const genreTagSlice = createSlice({
       state.genre = action.payload;
     },
     setTags: (state, action) => {
-      state.tags = [...state.tags, action.payload];
+      if (Array.isArray(action.payload)) {
+        const tagsData = action.payload;
+
+        state.tags = tagsData.map((tag) => ({ id: tag, text: tag, className: "" }));
+      } else {
+        state.tags = [...state.tags, action.payload];
+      }
     },
 
     deleteTags: (state, action) => {

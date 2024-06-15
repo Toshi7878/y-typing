@@ -4,6 +4,7 @@ import { WordConvert } from "./wordConvert";
 import { UseFormSetValue } from "react-hook-form";
 import { setSelectedIndex } from "../../(redux)/lineIndexSlice";
 import { addHistory } from "../../(redux)/undoredoSlice";
+import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
 
 export interface Line {
   time: string;
@@ -15,6 +16,7 @@ export interface Line {
 export class ButtonEvents {
   static addLine(dispatch: Dispatch<any>, line: Line) {
     dispatch(addLine({ time: line.time, lyrics: line.lyrics, word: line.word }));
+    dispatch(setCanUpload(true));
     dispatch(addHistory({ type: "add", data: line }));
   }
 
@@ -41,6 +43,7 @@ export class ButtonEvents {
 
   static deleteLine(dispatch: Dispatch<any>, line: Line) {
     dispatch(deleteLine(line.lineNumber));
+    dispatch(setCanUpload(true));
     dispatch(addHistory({ type: "delete", data: line }));
   }
 }

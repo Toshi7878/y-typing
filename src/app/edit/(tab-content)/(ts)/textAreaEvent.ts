@@ -1,7 +1,7 @@
 import { UseFormSetValue } from "react-hook-form";
 import { ButtonEvents, Line } from "./buttonEvent";
 import { Dispatch } from "@reduxjs/toolkit";
-import { setIsLoadingWordConvertBtn } from "../../(redux)/buttonLoadSlice";
+import { setIsLoadingWordConvertBtn } from "../../(redux)/buttonFlagsSlice";
 export class TextAreaEvents {
   static async paste(setValue: UseFormSetValue<any>, dispatch: Dispatch, convertOption: string) {
     setTimeout(() => {

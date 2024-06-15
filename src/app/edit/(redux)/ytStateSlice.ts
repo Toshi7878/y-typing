@@ -3,11 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export const YTStateSlice = createSlice({
   name: "YTState",
   initialState: {
-    isPlaying: false,
+    isReady: false,
     isStarted: false,
+    isPlaying: false,
     speed: 1,
   },
   reducers: {
+    setIsReady: (state, action) => {
+      state.isReady = action.payload;
+    },
     setIsPlaying: (state, action) => {
       state.isPlaying = action.payload;
     },
@@ -20,6 +24,6 @@ export const YTStateSlice = createSlice({
   },
 });
 
-export const { setIsPlaying, setIsStarted, setSpeed } = YTStateSlice.actions;
+export const { setIsReady, setIsPlaying, setIsStarted, setSpeed } = YTStateSlice.actions;
 
 export default YTStateSlice.reducer;

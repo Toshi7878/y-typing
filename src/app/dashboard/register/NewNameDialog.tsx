@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { Button, Input, FormControl, useToast } from "@chakra-ui/react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { nameSchema } from "./validationSchema";
@@ -19,6 +19,7 @@ export default function NewNameDialog() {
 
   const [state, formAction] = useFormState(actions, initialState);
   const { data: session, update } = useSession();
+
   const toast = useToast();
   const {
     register,
@@ -29,7 +30,7 @@ export default function NewNameDialog() {
 
   useEffect(() => {
     async function handleStateChange() {
-      if (state.status !== 200) {
+      if (state.status && state.status !== 200) {
         toast({
           id: "name-error-toast",
           title: "入力エラー",

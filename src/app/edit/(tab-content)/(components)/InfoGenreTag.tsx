@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box, Flex, Stack, Badge } from "@chakra-ui/react";
 
@@ -8,6 +8,8 @@ import "../../(style)/reactTags.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../(redux)/store";
 import { deleteTags, setGenre, setTags } from "../../(redux)/GenreTagSlice";
+import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
+import { useRefs } from "../../(contexts)/refsProvider";
 
 // react-tag-input Tag 型は時前で定義しなければならない
 export interface Tag {
@@ -18,7 +20,16 @@ export interface Tag {
 const InfoGenreTag = () => {
   const { genre, tags } = useSelector((state: RootState) => state.genreTag);
   const dispatch = useDispatch();
-  const ytTitle = useSelector((state: RootState) => state.ytTitle.title);
+  const { playerRef } = useRefs();
+  const [ytTitle, setYtTitle] = useState("動画タイトル");
+  const isReady = useSelector((state: RootState) => state.ytState.isReady);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      setYtTitle(playerRef.current.getVideoData().title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady]);
 
   const suggestions = [
     { id: "1", text: "公式MV", className: "" },
@@ -27,10 +38,12 @@ const InfoGenreTag = () => {
   ];
 
   const toggleBadge = (label: string) => {
+    dispatch(setCanUpload(true));
     dispatch(setGenre(label));
   };
 
   const handleDelete = (index: number) => {
+    dispatch(setCanUpload(true));
     dispatch(deleteTags(tags.filter((_, i) => i !== index)));
   };
 
@@ -41,6 +54,7 @@ const InfoGenreTag = () => {
     const isTagAdded = tags.some((tags) => tags.id === tag.id);
 
     if (!isTagAdded) {
+      dispatch(setCanUpload(true));
       dispatch(setTags(tag));
     }
   };

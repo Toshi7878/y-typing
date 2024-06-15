@@ -5,26 +5,29 @@ import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(redux)/store";
-import { useSearchParams } from "next/navigation";
 import { useRefs } from "../(contexts)/refsProvider"; // 変更
 
-const YouTubeContent = function YouTubeContent({ className }: { className: string }) {
+interface YouTubeProps {
+  className: string;
+  videoId: string;
+}
+
+const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
   console.log("YouTube");
   const dispatch = useDispatch();
-  const searchParams = useSearchParams();
-  const videoId = searchParams.get("new") || "";
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const playerState = useSelector((state: RootState) => state.ytState);
   const refs = useRefs();
+  const ytTitle = useSelector((state: RootState) => state.tabInfoInput.title);
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs, dispatch);
+      ytState.ready(refs, dispatch, ytTitle);
     },
-    [refs, dispatch]
+    [refs, dispatch, ytTitle]
   );
 
   const handlePlay = useCallback(() => {

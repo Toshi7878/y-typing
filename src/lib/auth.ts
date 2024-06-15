@@ -64,7 +64,7 @@ export const config: NextAuthConfig = {
           where: { email_hash: hash },
         });
         if (dbUser) {
-          token.uid = dbUser.id;
+          token.uid = dbUser.id.toString();
           token.email_hash = dbUser.email_hash;
           token.picture = dbUser.image;
         } else {
@@ -78,6 +78,7 @@ export const config: NextAuthConfig = {
     },
     async session({ session, token }) {
       if (token) {
+        session.user.id = token.uid as string;
         session.user.name = token.name;
         session.user.email = token.email_hash as string;
       }

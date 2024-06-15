@@ -1,10 +1,10 @@
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
-import { setIsPlaying, setIsStarted } from "../(redux)/ytStateSlice";
+import { setIsPlaying, setIsReady, setIsStarted } from "../(redux)/ytStateSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { setTimeIndex } from "../(redux)/lineIndexSlice";
-import { setYtTitle } from "../(redux)/ytTitleSlice";
+import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
@@ -48,11 +48,13 @@ class YTState {
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  ready(refs: RefsContextType, dispatch: Dispatch<Action>) {
+  ready(refs: RefsContextType, dispatch: Dispatch<Action>, title: string) {
     console.log("ready");
     const videoData = refs.playerRef!.current!.getVideoData();
 
-    if (videoData) {
+    dispatch(setIsReady(true));
+
+    if (videoData && !title) {
       const { title } = videoData;
       dispatch(setYtTitle(title));
     }

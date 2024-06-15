@@ -3,7 +3,6 @@
 import { auth } from "../../../lib/auth"; // updateSessionNameをインポート
 import { PrismaClient } from "@prisma/client";
 import { nameSchema } from "./validationSchema";
-import { redirect } from "next/navigation";
 // export const runtime = "edge";
 
 const prisma = new PrismaClient();

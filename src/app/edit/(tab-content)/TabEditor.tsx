@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TextAreaEvents } from "./(ts)/textAreaEvent";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { RootState } from "../(redux)/store";
-import { setIsLoadingWordConvertBtn } from "../(redux)/buttonLoadSlice";
+import { setCanUpload, setIsLoadingWordConvertBtn } from "../(redux)/buttonFlagsSlice";
 import EditorTimeInput from "./(components)/EditorTimeInput";
 import EditorSettingModal from "./(components)/EditorSettingModal";
 import { addHistory } from "../(redux)/undoredoSlice";
@@ -37,7 +37,7 @@ const TabEditor = forwardRef((props, ref) => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
 
   const isLoadingWordConvertBtn = useSelector(
-    (state: RootState) => state.buttonLoad.isLoadingWordConvertBtn
+    (state: RootState) => state.btnFlags.isLoadingWordConvertBtn
   );
 
   const lineInit = () => {
@@ -98,6 +98,7 @@ const TabEditor = forwardRef((props, ref) => {
     const word: string = methods.getValues("word");
     const lineNumber: string = methods.getValues("lineNumber");
 
+    dispatch(setCanUpload(true));
     dispatch(
       addHistory({
         type: "update",

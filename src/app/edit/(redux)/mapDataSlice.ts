@@ -38,66 +38,13 @@ export const mapDataSlice = createSlice({
 
         word: "",
       },
-
-      {
-        time: "13.422",
-
-        lyrics: "君が代は",
-
-        word: "きみがよは",
-      },
-
-      {
-        time: "23.701",
-
-        lyrics: "千代に八千代に",
-
-        word: "ちよにやちよに",
-      },
-
-      {
-        time: "34.488",
-
-        lyrics: "さざれ石の",
-
-        word: "さざれせきの",
-      },
-
-      {
-        time: "45.530",
-
-        lyrics: "巖となりて",
-
-        word: "いわおとなりて",
-      },
-
-      {
-        time: "56.058",
-
-        lyrics: "苔のむすまで",
-
-        word: "こけのむすまで",
-      },
-
-      {
-        time: "73.909",
-
-        lyrics: "",
-
-        word: "",
-      },
-
-      {
-        time: "82.461",
-
-        lyrics: "end",
-
-        word: "",
-      },
     ],
   },
 
   reducers: {
+    setMapData: (state, action) => {
+      state.value = action.payload;
+    },
     addLine: (state, action) => {
       const newValue = [...state.value, action.payload].sort(
         (a, b) => parseFloat(a.time) - parseFloat(b.time)
@@ -221,6 +168,7 @@ export const {
   mapDataUndo,
   mapDataRedo,
   setLastAddedTime,
+  setMapData,
 } = mapDataSlice.actions;
 
 export default mapDataSlice.reducer;

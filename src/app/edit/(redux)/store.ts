@@ -3,8 +3,8 @@ import YTStateReducer from "./ytStateSlice";
 import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
-import buttonLoadReducer from "./buttonLoadSlice";
-import ytTitleReducer from "./ytTitleSlice";
+import buttonFlagsReducer from "./buttonFlagsSlice";
+import ytTitleReducer from "./tabInfoInputSlice";
 import undoRedoReducer from "./undoredoSlice"; // 追加
 import genreTagReducer from "./GenreTagSlice";
 
@@ -14,8 +14,8 @@ const store = configureStore({
     tabIndex: tabIndexReducer,
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,
-    buttonLoad: buttonLoadReducer,
-    ytTitle: ytTitleReducer,
+    btnFlags: buttonFlagsReducer,
+    tabInfoInput: ytTitleReducer,
     undoRedo: undoRedoReducer,
     genreTag: genreTagReducer,
   },

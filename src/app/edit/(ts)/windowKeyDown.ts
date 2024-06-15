@@ -8,6 +8,7 @@ import { mapDataRedo, mapDataUndo, updateLine } from "../(redux)/mapDataSlice";
 import { addHistory, addLastUpdateHistory, redo, undo } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
+import { setCanUpload } from "../(redux)/buttonFlagsSlice";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
@@ -142,6 +143,7 @@ class WordReplace {
             else return match;
           });
 
+          this.dispatch(setCanUpload(true));
           this.dispatch(
             addHistory({
               type: "update",

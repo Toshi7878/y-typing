@@ -8,6 +8,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Map {
+  id             Int @id @default(autoincrement())
+  videoId        String
+  title          String
+  creatorComment String
+  genre          String
+  tags           String[] //分ける
+  creatorId      Int
+  mapData        Json
+  user           User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+
 model User {
   id            Int             @id @default(autoincrement())
   name          String?         @unique
@@ -18,6 +31,7 @@ model User {
   accounts      Account[]
   Authenticator Authenticator[]
   sessions      Session[]
+  maps          Map[]
 }
 
 model Account {

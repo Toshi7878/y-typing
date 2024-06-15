@@ -33,6 +33,7 @@ import { db, EditorOption } from "@/lib/db";
 import { RootState } from "../../(redux)/store";
 import { addHistory } from "../../(redux)/undoredoSlice";
 import { useRefs } from "../../(contexts)/refsProvider";
+import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,6 +91,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
     }
 
     const times = mapData.map((item) => item.time);
+    dispatch(setCanUpload(true));
 
     dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
     dispatch(allAdjustTime(adjustTime));
