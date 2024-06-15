@@ -7,7 +7,7 @@ import { mapSendSchema } from "./validationSchema";
 
 const prisma = new PrismaClient();
 
-const sendMapData = async (data: SendData, userId: number) => {
+const createMap = async (data: SendData, userId: number) => {
   const newMap = await prisma.map.create({
     data: {
       ...data,
@@ -18,7 +18,20 @@ const sendMapData = async (data: SendData, userId: number) => {
   return newMap.id; // 新しく作成されたマップのIDを返す
 };
 
-export async function actions(data: SendData) {
+const updateMap = async (data: SendData, mapId: number) => {
+  const updatedMap = await prisma.map.update({
+    where: {
+      id: mapId,
+    },
+    data: {
+      ...data,
+      mapData: data.mapData as unknown as Prisma.JsonObject, // mapDataをunknownに変換してからJsonObjectにキャスト
+    },
+  });
+  return updatedMap.id; // 更新されたマップのIDを返す
+};
+
+export async function actions(data: SendData, mapId: string) {
   const session = await auth();
 
   const validatedFields = mapSendSchema.safeParse({
@@ -39,8 +52,13 @@ export async function actions(data: SendData) {
   }
   try {
     const userId = Number(session?.user?.id);
-    const newMapId = await sendMapData(data, userId);
-    return { id: newMapId, message: "アップロード完了", status: 200 };
+    if (mapId === "new") {
+      const newMapId = await createMap(data, userId);
+      return { id: newMapId, message: "アップロード完了", status: 200 };
+    } else {
+      const newMapId = await updateMap(data, Number(mapId));
+      return { id: newMapId, message: "アップデート完了", status: 200 };
+    }
   } catch (error) {
     return { id: null, message: "サーバー側で問題が発生しました", status: 500 };
   }

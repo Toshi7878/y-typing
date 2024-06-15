@@ -23,12 +23,6 @@ const UploadButton = ({ responseStatus }: UploadButtonProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseStatus]);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (isUpButtonDisabled) {
-      e.preventDefault();
-    }
-  };
-
   return (
     <Button
       className="cursor-pointer"
@@ -38,11 +32,14 @@ const UploadButton = ({ responseStatus }: UploadButtonProps) => {
       width="200px"
       border="1px"
       borderColor="black"
-      disabled={isUpButtonDisabled}
       opacity={isUpButtonDisabled ? "0.6" : "1"}
       _hover={{ bg: "#3a90f3" }}
       type="submit"
-      onClick={handleClick}
+      onClick={(e) => {
+        if (!canUpload) {
+          e.preventDefault();
+        }
+      }}
     >
       保存
     </Button>

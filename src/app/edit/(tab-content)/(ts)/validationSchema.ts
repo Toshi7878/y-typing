@@ -21,6 +21,9 @@ export const mapSendSchema = z.object({
       {
         message: "mapDataにはhttpから始まる文字を含めることはできません",
       }
-    ),
+    )
+    .refine((lines) => lines.some((line) => line.word && line.word.length > 0), {
+      message: "タイピングワードが設定されていません",
+    }),
   videoId: z.string(),
 });

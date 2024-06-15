@@ -8,11 +8,12 @@ import { useRefs } from "../(contexts)/refsProvider";
 import InfoInput from "./(components)/InfoInput";
 import InfoGenreTag from "./(components)/InfoGenreTag";
 import UploadButton from "./(components)/UploadButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(redux)/store";
 import { actions } from "./(ts)/serverActions";
 import { useFormState } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { setCanUpload } from "../(redux)/buttonFlagsSlice";
 
 export interface SendData {
   title: string;
@@ -24,6 +25,7 @@ export interface SendData {
 }
 
 const TabInfoUpload = forwardRef((props, ref) => {
+  const dispatch = useDispatch();
   const initialState = { id: null, message: "", status: 0 };
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -31,6 +33,8 @@ const TabInfoUpload = forwardRef((props, ref) => {
   const toast = useToast();
 
   const { playerRef } = useRefs();
+  const { id } = useParams();
+
   const upload = () => {
     const sendData = {
       videoId: playerRef.current.getVideoData().video_id,
@@ -41,7 +45,7 @@ const TabInfoUpload = forwardRef((props, ref) => {
       tags: tags.map((tag) => tag.id),
     };
 
-    const result = actions(sendData);
+    const result = actions(sendData, Array.isArray(id) ? id[0] : id || "new");
 
     return result;
   };
@@ -67,8 +71,7 @@ const TabInfoUpload = forwardRef((props, ref) => {
         });
       } else if (state.status === 200) {
         toast({
-          title: "アップロード完了",
-          description: <small>{state.message}</small>,
+          title: state.message,
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -80,7 +83,12 @@ const TabInfoUpload = forwardRef((props, ref) => {
             fontSize: "lg", // サイズを大きくする
           },
         });
-        router.push(`/edit/${state.id}`);
+
+        dispatch(setCanUpload(false));
+
+        if (!id) {
+          router.push(`/edit/${state.id}`);
+        }
       }
     }
     handleStateChange();
