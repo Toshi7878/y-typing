@@ -108,10 +108,10 @@ const InfoInput = () => {
         </FormLabel>
 
         <Input
-          isInvalid={!title}
+          isInvalid={title === ""}
           placeholder="曲名 / アーティスト【アニメ名OP】など"
           size="sm"
-          {...register("title")}
+          {...register("title", { value: ytTitle })}
           fontWeight="bold"
           onChange={(e) => {
             dispatch(setCanUpload(true));
