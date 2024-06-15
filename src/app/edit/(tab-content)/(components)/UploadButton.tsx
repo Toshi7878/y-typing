@@ -5,10 +5,12 @@ import { RootState } from "../../(redux)/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
+import { useFormStatus } from "react-dom";
 interface UploadButtonProps {
   responseStatus: number;
 }
 const UploadButton = ({ responseStatus }: UploadButtonProps) => {
+  const { pending } = useFormStatus();
   const { genre, tags } = useSelector((state: RootState) => state.genreTag);
   const canUpload = useSelector((state: RootState) => state.btnFlags.canUpload);
 
@@ -32,6 +34,8 @@ const UploadButton = ({ responseStatus }: UploadButtonProps) => {
       width="200px"
       border="1px"
       borderColor="black"
+      isLoading={pending} // 変更
+      cursor={canUpload ? "" : "not-allowed"}
       opacity={isUpButtonDisabled ? "0.6" : "1"}
       _hover={{ bg: "#3a90f3" }}
       type="submit"

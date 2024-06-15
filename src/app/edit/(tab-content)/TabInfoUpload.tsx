@@ -3,7 +3,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Stack, useToast } from "@chakra-ui/react";
 
 import { Line } from "./(ts)/buttonEvent";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useRefs } from "../(contexts)/refsProvider";
 import InfoInput from "./(components)/InfoInput";
 import InfoGenreTag from "./(components)/InfoGenreTag";

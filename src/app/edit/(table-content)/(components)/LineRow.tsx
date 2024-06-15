@@ -9,6 +9,7 @@ import { useRefs } from "../../(contexts)/refsProvider";
 import { addLine, updateLine } from "../../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../../(redux)/lineIndexSlice";
 import { timer } from "../../(youtube-content)/timer";
+import { setTabIndex } from "../../(redux)/tabIndexSlice";
 
 export default function LineRow() {
   console.log("Table");
@@ -117,7 +118,10 @@ export default function LineRow() {
               ? "selected-line bg-cyan-400 outline outline-2 outline-black"
               : " hover:bg-cyan-400/35"
           } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""}`}
-          onClick={() => selectLine(index)}
+          onClick={() => {
+            selectLine(index);
+            dispatch(setTabIndex(1));
+          }}
         >
           <Td
             borderRight="1px solid black"
