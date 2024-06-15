@@ -159,7 +159,7 @@ const InfoGenreTag = () => {
             "ロック",
             "セリフ読み",
             "Nightcore",
-            "キッズ＆ファミリー",
+            "キッズ&ファミリー",
             "映画",
             "MAD",
             "Remix",

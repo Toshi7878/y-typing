@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import { useEffect, useRef, useState } from "react";
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";

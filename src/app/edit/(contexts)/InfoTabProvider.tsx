@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, ReactNode } from "react";
 import { useForm, FormProvider, UseFormReturn } from "react-hook-form";
 import { MovieInfoFormSchema } from "./Schema";

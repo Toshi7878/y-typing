@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useRef } from "react";
 import { Line } from "../(tab-content)/(ts)/buttonEvent";
 

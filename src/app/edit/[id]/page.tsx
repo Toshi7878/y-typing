@@ -1,49 +1,18 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import TabContent from "../(tab-content)/Tab";
-import TableContent from "../(table-content)/TableContent";
-import TimeRange from "../TimeRange";
-import YouTubeContent from "../(youtube-content)/YoutubeConent";
-import { Provider, useDispatch } from "react-redux";
-import store, { RootState } from "../(redux)/store";
+import React from "react";
+import { RootState } from "../(redux)/store";
 import InfoTabProvider from "../(contexts)/InfoTabProvider";
 import { RefsProvider } from "../(contexts)/refsProvider";
-import { useParams } from "next/navigation";
-import axios from "axios";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { setCreatorComment, setVideoId, setYtTitle } from "../(redux)/tabInfoInputSlice";
-import { setGenre, setTags } from "../(redux)/GenreTagSlice";
-import { setMapData } from "../(redux)/mapDataSlice";
-import { Action, Dispatch } from "@reduxjs/toolkit";
-// あとでやる
-//動画切り替えで終了時間が前より短い動画が選択されたらendタイムの後に追加できてしまうバグ修正
-export default function Home() {
-  const [isMounted, setIsMounted] = useState(false);
+import Content from "../content";
 
-  const queryClient = new QueryClient();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (typeof window === "undefined" || !isMounted) {
-    return null; // クライアントサイドでのみレンダリングする
+async function fetchMapData(id: string): Promise<FetchMapData> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <InfoTabProvider>
-          <RefsProvider>
-            <Content />
-          </RefsProvider>
-        </InfoTabProvider>
-      </Provider>
-    </QueryClientProvider>
-  );
+  return response.json();
 }
 
-interface FetchData {
+export interface FetchMapData {
   videoId: string;
   title: string;
   creatorComment: string;
@@ -52,54 +21,14 @@ interface FetchData {
   mapData: RootState["mapData"]["value"];
 }
 
-function Content() {
-  const { id } = useParams();
-  const dispatch = useDispatch();
+export default async function Page({ params }: { params: { id: string } }) {
+  const mapData = await fetchMapData(params.id);
 
-  const { data, isPending } = useQuery({
-    queryKey: ["map"],
-    queryFn: () =>
-      axios.get(`/api/map?id=${id}`).then((res) => {
-        updateStore(res.data, dispatch);
-        console.log(res.data);
-        return res.data;
-      }),
-    staleTime: Infinity, // データを無期限にキャッシュする
-  });
-
-  if (!isPending) {
-    console.log("Content Render");
-  }
   return (
-    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14">
-      {isPending ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <section className="flex flex-col lg:flex-row w-full ">
-            <YouTubeContent
-              className="md:mr-5 md:min-w-[384px] md:min-h-[216px]"
-              videoId={data.videoId}
-            />
-            <TabContent className="w-full border-black" />
-          </section>
-          <section className="w-full mt-2">
-            <TimeRange />
-          </section>
-          <section className="w-full mt-3">
-            <TableContent />
-          </section>
-        </>
-      )}
-    </main>
+    <InfoTabProvider>
+      <RefsProvider>
+        <Content data={mapData} />
+      </RefsProvider>
+    </InfoTabProvider>
   );
-}
-
-function updateStore(data: FetchData, dispatch: Dispatch<Action>) {
-  dispatch(setVideoId(data.videoId));
-  dispatch(setYtTitle(data.title));
-  dispatch(setCreatorComment(data.creatorComment));
-  dispatch(setGenre(data.genre));
-  dispatch(setTags(data.tags));
-  dispatch(setMapData(data.mapData));
 }

@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
 
