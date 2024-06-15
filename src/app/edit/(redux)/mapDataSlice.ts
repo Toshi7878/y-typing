@@ -46,9 +46,11 @@ export const mapDataSlice = createSlice({
       state.value = action.payload;
     },
     addLine: (state, action) => {
-      const newValue = [...state.value, action.payload].sort(
-        (a, b) => parseFloat(a.time) - parseFloat(b.time)
-      );
+      const newValue = [
+        ...state.value.slice(0, -1),
+        action.payload,
+        state.value[state.value.length - 1],
+      ].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
       state.value = newValue;
     },
@@ -60,7 +62,10 @@ export const mapDataSlice = createSlice({
 
       newValue[Number(lineNumber)] = { time, lyrics, word };
 
-      state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+      state.value = [
+        ...newValue.slice(0, -1).sort((a, b) => parseFloat(a.time) - parseFloat(b.time)),
+        newValue[newValue.length - 1],
+      ];
     },
 
     deleteLine: (state, action) => {
@@ -118,7 +123,10 @@ export const mapDataSlice = createSlice({
           break;
       }
 
-      state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+      state.value = [
+        ...newValue.slice(0, -1).sort((a, b) => parseFloat(a.time) - parseFloat(b.time)),
+        newValue[newValue.length - 1],
+      ];
     },
 
     // Ctrl + Y
@@ -151,7 +159,10 @@ export const mapDataSlice = createSlice({
           break;
       }
 
-      state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+      state.value = [
+        ...newValue.slice(0, -1).sort((a, b) => parseFloat(a.time) - parseFloat(b.time)),
+        newValue[newValue.length - 1],
+      ];
     },
 
     setLastAddedTime(state, action) {

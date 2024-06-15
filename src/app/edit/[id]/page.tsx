@@ -5,15 +5,16 @@ import TableContent from "../(table-content)/TableContent";
 import TimeRange from "../TimeRange";
 import YouTubeContent from "../(youtube-content)/YoutubeConent";
 import { Provider, useDispatch } from "react-redux";
-import store from "../(redux)/store";
+import store, { RootState } from "../(redux)/store";
 import InfoTabProvider from "../(contexts)/InfoTabProvider";
 import { RefsProvider } from "../(contexts)/refsProvider";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { setCreatorComment, setYtTitle } from "../(redux)/tabInfoInputSlice";
+import { setCreatorComment, setVideoId, setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "../(redux)/GenreTagSlice";
 import { setMapData } from "../(redux)/mapDataSlice";
+import { Action, Dispatch } from "@reduxjs/toolkit";
 // あとでやる
 //ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
 export default function Home() {
@@ -42,9 +43,19 @@ export default function Home() {
   );
 }
 
+interface FetchData {
+  videoId: string;
+  title: string;
+  creatorComment: string;
+  genre: string;
+  tags: string[];
+  mapData: RootState["mapData"]["value"];
+}
+
 function Content() {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const { data, isPending } = useQuery({
     queryKey: ["map"],
     queryFn: () =>
@@ -53,6 +64,7 @@ function Content() {
         console.log(res.data);
         return res.data;
       }),
+    staleTime: Infinity, // データを無期限にキャッシュする
   });
 
   if (!isPending) {
@@ -83,10 +95,11 @@ function Content() {
   );
 }
 
-function updateStore(data, dispatch) {
+function updateStore(data: FetchData, dispatch: Dispatch<Action>) {
+  dispatch(setVideoId(data.videoId));
   dispatch(setYtTitle(data.title));
+  dispatch(setCreatorComment(data.creatorComment));
   dispatch(setGenre(data.genre));
   dispatch(setTags(data.tags));
   dispatch(setMapData(data.mapData));
-  dispatch(setCreatorComment(data.creatorComment));
 }

@@ -37,13 +37,15 @@ const TimeRange = () => {
   );
 
   useEffect(() => {
-    if (isStarted && isDisabled) {
+    if (isStarted) {
       setIsDisabled(false);
       const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
         setRangeMaxValue(duration);
         dispatch(setTimeIndex(0));
       }
+    } else {
+      setIsDisabled(true);
     }
   }, [isStarted]);
 

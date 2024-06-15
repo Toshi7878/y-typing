@@ -10,7 +10,7 @@ export const tabInfoInputSlice = createSlice({
   },
 
   reducers: {
-    setvideoId: (state, action) => {
+    setVideoId: (state, action) => {
       state.videoId = action.payload;
     },
     setYtTitle: (state, action) => {
@@ -22,6 +22,6 @@ export const tabInfoInputSlice = createSlice({
   },
 });
 
-export const { setYtTitle, setCreatorComment } = tabInfoInputSlice.actions;
+export const { setVideoId, setYtTitle, setCreatorComment } = tabInfoInputSlice.actions;
 
 export default tabInfoInputSlice.reducer;
