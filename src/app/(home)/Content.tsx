@@ -8,7 +8,9 @@ interface FetchMapList {
 }
 
 async function fetchMapList(): Promise<FetchMapList[]> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-list`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-list`, {
+    cache: "no-cache",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -20,22 +22,27 @@ export default async function Content() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {mapList.map((map) => (
-          <div key={map.id} suppressHydrationWarning>
-            <a suppressHydrationWarning href={`/edit/${map.id}`}>
-              <Image
-                alt="キミの冒険【YouTube Premium】"
-                className="w-100"
-                style={{ aspectRatio: "16/9" }}
-                loading="lazy"
-                src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
-                width={320}
-                height={180}
-              />
-              {map.title}
+          <Card key={map.id}>
+            <a href={`/type/${map.id}`}>
+              <CardBody className="flex items-start bg-slate-500">
+                <Image
+                  suppressHydrationWarning
+                  alt={map.title}
+                  className="w-100"
+                  style={{ aspectRatio: "16/9" }}
+                  loading="lazy"
+                  src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
+                  width={160}
+                  height={90}
+                />
+                <div suppressHydrationWarning className="ml-4">
+                  {map.title}
+                </div>
+              </CardBody>
             </a>
-          </div>
+          </Card>
         ))}
       </div>
     </main>
