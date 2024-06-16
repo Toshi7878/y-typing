@@ -17,7 +17,7 @@
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.5.0",
     "@pixi/ticker": "^7.4.2",
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.15.0",
     "@reduxjs/toolkit": "^2.2.5",
     "@tanstack/react-query": "^5.45.0",
     "@types/crypto-js": "^4.2.2",
@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "date-fns": "^3.6.0",
     "dexie": "^4.0.7",
     "dexie-react-hooks": "^1.1.7",
     "framer-motion": "^11.2.10",
@@ -56,7 +57,7 @@
     "@types/youtube-player": "^5.5.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
-    "prisma": "^5.14.0",
+    "prisma": "^5.15.0",
     "typescript": "^5"
   }
 }

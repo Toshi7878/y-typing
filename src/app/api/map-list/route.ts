@@ -13,6 +13,13 @@ export async function GET(request: Request) {
         tags: false,
         mapData: false,
         videoId: true,
+        updatedAt: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
     return new Response(JSON.stringify(mapList), {

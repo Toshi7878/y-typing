@@ -11,7 +11,6 @@ import { setGenre, setTags } from "./(redux)/GenreTagSlice";
 import { setMapData } from "./(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { setIsLrcConverting } from "./(redux)/buttonFlagsSlice";
 
 export interface FetchMapData {
   videoId: string;
