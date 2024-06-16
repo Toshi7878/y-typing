@@ -10,13 +10,8 @@ import { RootState } from "../../(redux)/store";
 import { deleteTags, setGenre, setTags } from "../../(redux)/GenreTagSlice";
 import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
 import { useRefs } from "../../(contexts)/refsProvider";
+import { Tag } from "@/types";
 
-// react-tag-input Tag 型は時前で定義しなければならない
-export interface Tag {
-  id: string;
-  className: string;
-  [key: string]: string;
-}
 const InfoGenreTag = () => {
   const { genre, tags } = useSelector((state: RootState) => state.genreTag);
   const dispatch = useDispatch();

@@ -47,3 +47,10 @@ export interface Line {
   word: string;
   lineNumber?: string;
 }
+
+// react-tag-input Tag 型は時前で定義しなければならない
+export interface Tag {
+  id: string;
+  className: string;
+  [key: string]: string;
+}

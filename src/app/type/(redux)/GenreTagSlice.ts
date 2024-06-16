@@ -1,5 +1,5 @@
+import { Tag } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
-import { Tag } from "../(tab-content)/(components)/InfoGenreTag";
 
 export interface GenreTag {
   tags: Array<Tag>;
