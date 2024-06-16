@@ -2,7 +2,6 @@ import { useForm, FormProvider } from "react-hook-form";
 
 import { Stack, useToast } from "@chakra-ui/react";
 
-import { Line } from "./(ts)/buttonEvent";
 import { forwardRef, useEffect, useState } from "react";
 import { useRefs } from "../(contexts)/refsProvider";
 import InfoInput from "./(components)/InfoInput";
@@ -14,6 +13,7 @@ import { actions } from "./(ts)/serverActions";
 import { useFormState } from "react-dom";
 import { useParams, useRouter } from "next/navigation";
 import { setCanUpload } from "../(redux)/buttonFlagsSlice";
+import { Line } from "@/types";
 
 export interface SendData {
   title: string;

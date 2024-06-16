@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRefs } from "../../(contexts)/refsProvider";
-import { Line } from "../(ts)/buttonEvent";
+import { Line } from "@/types";
 
 const schema = z.object({
   time: z.string().min(1),
