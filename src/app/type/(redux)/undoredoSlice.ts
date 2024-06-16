@@ -1,5 +1,5 @@
+import { Line } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
-import { Line } from "../(tab-content)/(ts)/buttonEvent";
 
 interface LineChange {
   old: Line;

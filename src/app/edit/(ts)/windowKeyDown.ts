@@ -5,10 +5,10 @@ import { YTSpeedController } from "../(youtube-content)/ytHandleEvents";
 import { RootState } from "../(redux)/store";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { mapDataRedo, mapDataUndo, updateLine } from "../(redux)/mapDataSlice";
-import { addHistory, addLastUpdateHistory, redo, undo } from "../(redux)/undoredoSlice";
+import { addHistory, redo, undo } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
-import { Line } from "../(tab-content)/(ts)/buttonEvent";
 import { setCanUpload } from "../(redux)/buttonFlagsSlice";
+import { Line } from "@/types";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];

@@ -7,7 +7,6 @@ import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "@/types";
-// import { Line } from "../(tab-content)/(ts)/buttonEvent";
 const ticker = new Ticker();
 
 class YTState {
