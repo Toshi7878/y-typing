@@ -43,7 +43,7 @@ export default function NewNameDialog() {
         });
       } else if (state.status === 200) {
         await update({ ...session?.user, name: state.newName });
-        router.push(`/`);
+        window.location.href = "/";
       }
     }
     handleStateChange();
