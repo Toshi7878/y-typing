@@ -16,10 +16,10 @@ export async function GET(request: Request) {
       select: {
         id: false,
         title: true,
-        creatorComment: false,
-        genre: false,
-        tags: false,
-        mapData: true,
+        creatorComment: true,
+        genre: true,
+        tags: true,
+        mapData: false,
         videoId: true,
       },
     });

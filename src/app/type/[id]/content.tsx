@@ -1,7 +1,7 @@
 "use client";
 import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
-import store, { RootState } from "../../edit/(redux)/store";
+import store from "../../edit/(redux)/store";
 import YouTubeContent from "../(youtube-content)/YoutubeConent";
 import { setCreatorComment, setVideoId, setYtTitle } from "../../edit/(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "../../edit/(redux)/GenreTagSlice";
@@ -10,25 +10,24 @@ import { useParams } from "next/navigation";
 import TabContent from "../(tab)/Tab";
 import { Box, Card, Flex } from "@chakra-ui/react";
 
-export interface FetchMapData {
+export interface GetInfoData {
   videoId: string;
   title?: string;
   creatorComment?: string;
   genre?: string;
   tags?: string[];
-  mapData?: RootState["mapData"]["value"];
 }
 
-function Content({ data }: { data: FetchMapData }) {
+function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <Provider store={store}>
-      <ContentInner data={data} />
+      <ContentInner mapInfo={mapInfo} />
     </Provider>
   );
 }
 
-function ContentInner({ data }: { data: FetchMapData }) {
-  const { videoId, title, creatorComment, genre, tags } = data;
+function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
+  const { videoId, title, creatorComment, genre, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -39,7 +38,7 @@ function ContentInner({ data }: { data: FetchMapData }) {
       dispatch(setCreatorComment(creatorComment));
       dispatch(setGenre(genre));
       dispatch(setTags(tags));
-      dispatch(setMapData(data.mapData));
+      // dispatch(setMapData(data.mapData));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
