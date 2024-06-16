@@ -2,12 +2,11 @@ import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
 import { setIsPlaying, setIsReady, setIsStarted } from "../(redux)/ytStateSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
-import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { setTimeIndex } from "../(redux)/lineIndexSlice";
 import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
-import { Line } from "../(tab-content)/(ts)/buttonEvent";
+import { Line } from "@/types";
 const ticker = new Ticker();
 
 class YTState {

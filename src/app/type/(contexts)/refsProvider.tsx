@@ -1,14 +1,14 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { Line } from "../(tab-content)/(ts)/buttonEvent";
+// import { Line } from "../(tab-content)/(ts)/buttonEvent";
 
 export interface EditorTab {
   add: () => void;
   update: () => void;
   delete: () => void;
-  undoAddLyrics: (undoLine: Line) => void;
+  // undoAddLyrics: (undoLine: Line) => void;
   setAddLyrics: () => void;
-  redoAddLyrics: (redoLine: Line) => void;
+  // redoAddLyrics: (redoLine: Line) => void;
   lineInit: () => void;
   getVolume: () => number;
 }

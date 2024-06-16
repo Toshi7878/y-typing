@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
-import { ButtonEvents, Line } from "./(ts)/buttonEvent";
+import { ButtonEvents } from "./(ts)/buttonEvent";
 import { useDispatch, useSelector } from "react-redux";
 import { TextAreaEvents } from "./(ts)/textAreaEvent";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
@@ -12,6 +12,7 @@ import EditorSettingModal from "./(components)/EditorSettingModal";
 import { addHistory } from "../(redux)/undoredoSlice";
 import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 import { setLastAddedTime } from "../(redux)/mapDataSlice";
+import { Line } from "@/types";
 
 // 後でリファクタリング
 const TabEditor = forwardRef((props, ref) => {

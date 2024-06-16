@@ -2,16 +2,9 @@ import { Dispatch } from "react";
 import { addLine, deleteLine, updateLine } from "../../(redux)/mapDataSlice";
 import { WordConvert } from "./wordConvert";
 import { UseFormSetValue } from "react-hook-form";
-import { setSelectedIndex } from "../../(redux)/lineIndexSlice";
 import { addHistory } from "../../(redux)/undoredoSlice";
 import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
-
-export interface Line {
-  time: string;
-  lyrics: string;
-  word: string;
-  lineNumber?: string;
-}
+import { Line } from "@/types";
 
 export class ButtonEvents {
   static addLine(dispatch: Dispatch<any>, line: Line) {

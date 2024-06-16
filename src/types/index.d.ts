@@ -40,3 +40,10 @@ export type DashboardConfig = {
   mainNav: NavItem[];
   sidebarNav: SidebarNavItem[];
 };
+
+export interface Line {
+  time: string;
+  lyrics: string;
+  word: string;
+  lineNumber?: string;
+}
