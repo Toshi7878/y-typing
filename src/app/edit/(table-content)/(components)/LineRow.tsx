@@ -57,7 +57,7 @@ export default function LineRow() {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapData, lastAddedTime]);
+  }, [lastAddedTime]);
 
   useEffect(() => {
     if (isStarted) {
@@ -107,6 +107,7 @@ export default function LineRow() {
     const time = Number(event.currentTarget.textContent);
     refs.playerRef.current.seekTo(time);
   };
+  const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
 
   return (
     <>
@@ -119,7 +120,10 @@ export default function LineRow() {
             selectedIndex === index
               ? "selected-line bg-cyan-400 outline outline-2 outline-black"
               : " hover:bg-cyan-400/35"
-          } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""}`}
+          } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""} ${
+            endAfterLineIndex < index && line.lyrics !== "end" ? " bg-red-400/35" : ""
+          }
+          `}
           onClick={() => {
             selectLine(index);
             dispatch(setTabIndex(1));

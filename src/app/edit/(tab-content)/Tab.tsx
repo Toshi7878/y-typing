@@ -11,7 +11,10 @@ import { RootState } from "../(redux)/store";
 import { useRefs } from "../(contexts)/refsProvider";
 import TabInfoUpload from "./TabInfoUpload";
 
-export default function TabContent({ className }: { className?: string }) {
+interface TabContentProps {
+  className?: string;
+}
+export default function TabContent({ className }: TabContentProps) {
   console.log("Tab");
 
   const editorTabRef = useRef(null);

@@ -14,7 +14,9 @@ import { setSelectedIndex } from "../(redux)/lineIndexSlice";
 import { setLastAddedTime } from "../(redux)/mapDataSlice";
 import { Line } from "@/types";
 
+/* eslint-disable react-hooks/exhaustive-deps */
 // 後でリファクタリング
+
 const TabEditor = forwardRef((props, ref) => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
@@ -33,10 +35,17 @@ const TabEditor = forwardRef((props, ref) => {
   const methods = useForm();
   const { register, setValue, watch } = methods;
   const lineNumber = Number(watch("lineNumber"));
+
   const dispatch = useDispatch();
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
-
+  const endAfterLineIndex =
+    mapData.length -
+    1 -
+    mapData
+      .slice()
+      .reverse()
+      .findIndex((line) => line.lyrics === "end");
   const isLoadingWordConvertBtn = useSelector(
     (state: RootState) => state.btnFlags.isLoadingWordConvertBtn
   );
@@ -60,7 +69,7 @@ const TabEditor = forwardRef((props, ref) => {
   }, [selectedIndex, setValue, mapData]);
 
   const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
-    const lastLineTime = Number(mapData[mapData.length - 1]["time"]);
+    const lastLineTime = Number(mapData[endAfterLineIndex]["time"]);
 
     if (0 >= time) {
       return 0.001;
@@ -150,6 +159,9 @@ const TabEditor = forwardRef((props, ref) => {
   const addButtonRef = useRef<HTMLButtonElement | null>(null);
   const updateButtonRef = useRef<HTMLButtonElement | null>(null);
   const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const isLastLineSelected = lineNumber === endAfterLineIndex;
+  const isNotSelect = !lineNumber || lineNumber === 0;
   const buttonConfigs = {
     add: {
       isDisabled: !isTimeInputValid,
@@ -168,8 +180,7 @@ const TabEditor = forwardRef((props, ref) => {
       isLoading: false,
     },
     update: {
-      isDisabled:
-        !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
+      isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: updateButtonRef,
 
       colorScheme: "cyan",
@@ -184,7 +195,7 @@ const TabEditor = forwardRef((props, ref) => {
       isLoading: false,
     },
     wordConvert: {
-      isDisabled: lineNumber === mapData.length - 1,
+      isDisabled: isLastLineSelected,
       ref: undefined,
       isLoading: isLoadingWordConvertBtn,
       colorScheme: "blue",
@@ -192,8 +203,7 @@ const TabEditor = forwardRef((props, ref) => {
       text: "読み変換",
     },
     delete: {
-      isDisabled:
-        !isTimeInputValid || !lineNumber || lineNumber === 0 || lineNumber === mapData.length - 1,
+      isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: deleteButtonRef,
 
       colorScheme: "red",

@@ -5,7 +5,7 @@ export const buttonFlagsSlice = createSlice({
 
   initialState: {
     isLoadingWordConvertBtn: false,
-
+    isLrcConverting: false,
     canUpload: false,
   },
 
@@ -17,9 +17,14 @@ export const buttonFlagsSlice = createSlice({
     setCanUpload: (state, action) => {
       state.canUpload = action.payload;
     },
+
+    setIsLrcConverting: (state, action) => {
+      state.isLrcConverting = action.payload;
+    },
   },
 });
 
-export const { setIsLoadingWordConvertBtn, setCanUpload } = buttonFlagsSlice.actions;
+export const { setIsLoadingWordConvertBtn, setCanUpload, setIsLrcConverting } =
+  buttonFlagsSlice.actions;
 
 export default buttonFlagsSlice.reducer;

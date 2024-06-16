@@ -26,14 +26,15 @@ import {
 
 import { Controller, useForm } from "react-hook-form";
 
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allAdjustTime } from "../../(redux)/mapDataSlice";
 import { db, EditorOption } from "@/lib/db";
 import { RootState } from "../../(redux)/store";
 import { addHistory } from "../../(redux)/undoredoSlice";
 import { useRefs } from "../../(contexts)/refsProvider";
-import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
+import { setCanUpload, setIsLrcConverting } from "../../(redux)/buttonFlagsSlice";
+import { ImportFile } from "../(ts)/importFile";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,6 +45,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const { playerRef } = useRefs();
+  const fileInputRef = useRef<HTMLInputElement>(null); // useRefを使用してfileInputRefを定義
 
   const DEFAULT_ADJUST_TIME = -0.16;
   const DEFAULT_VOLUME = 50;
@@ -258,6 +260,49 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                             ))}
                           </Stack>
                         </RadioGroup>
+                      </HStack>
+                    </FormControl>
+
+                    <FormControl>
+                      <HStack alignItems="baseline">
+                        <FormLabel fontSize="sm">譜面インポート</FormLabel>
+
+                        <input
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          accept=".lrc,.json" // lrcファイルとjsonファイルのみを許可)
+                          onChange={async (e) => {
+                            const file = e.target.files![0];
+                            try {
+                              dispatch(setIsLrcConverting(true));
+
+                              const importFile = new ImportFile();
+                              await importFile.open(file, selectedConvertOption, dispatch, mapData);
+                              e.target.value = "";
+                            } catch (error) {
+                              console.error("ファイルの処理中にエラーが発生しました:", error);
+                              toast({
+                                title: "エラー",
+                                description: "ファイルの処理中にエラーが発生しました。",
+                                status: "error",
+                                duration: 5000,
+                                isClosable: true,
+                                position: "bottom-right",
+                              });
+                            } finally {
+                              dispatch(setIsLrcConverting(false));
+                            }
+                          }}
+                        />
+
+                        <Button
+                          colorScheme="teal"
+                          size="sm"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          lrcファイルを開く
+                        </Button>
                       </HStack>
                     </FormControl>
                   </VStack>

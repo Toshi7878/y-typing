@@ -43,8 +43,8 @@ const InfoGenreTag = () => {
   };
 
   const handleAddition = (tag: Tag) => {
-    tag.id = tag.id.replace(/^\s+/g, "");
-    tag.text = tag.text.replace(/\s+$/, "");
+    tag.id = tag.id.trim();
+    tag.text = tag.text.trim();
 
     const isTagAdded = tags.some((tags) => tags.id === tag.id);
 

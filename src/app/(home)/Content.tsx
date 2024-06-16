@@ -24,13 +24,13 @@ export default async function Content() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {mapList.map((map) => (
-          <Card key={map.id}>
+          <Card key={map.id} variant={"outline"}>
             <a href={`/type/${map.id}`}>
-              <CardBody className="flex items-start bg-slate-500">
+              <CardBody className="flex items-start bg-slate-500" style={{ padding: 0 }}>
                 <Image
                   suppressHydrationWarning
                   alt={map.title}
-                  className="w-100"
+                  className="w-100 cover"
                   style={{ aspectRatio: "16/9" }}
                   loading="lazy"
                   src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
