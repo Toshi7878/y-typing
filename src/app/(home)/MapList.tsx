@@ -49,23 +49,29 @@ export default function MapList() {
         >
           <a href={`/type/${map.id}`}>
             <CardBody className="flex items-start bg-slate-300 rounded-lg" style={{ padding: 0 }}>
-              <Image
-                alt={map.title}
-                className="cover rounded-lg"
-                style={{ aspectRatio: "16/9" }}
-                loading="lazy"
-                src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
-                width={220}
-                height={120}
-              />
-              <Box className="ml-3 mt-2 font-bold sm:w-full md:w-[500px] text-lg">
+              <Box>
+                <Image
+                  alt={map.title}
+                  className="cover rounded-lg"
+                  style={{ aspectRatio: "16/9" }}
+                  loading="lazy"
+                  layout={"responsive"}
+                  src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
+                  width={220}
+                  height={120}
+                />
+              </Box>
+
+              <Box className="ml-3 mt-2 font-bold w-full text-xs sm:text-sm md:text-md lg:text-lg">
                 <div className="text-teal-700 hover:underline">
                   <a href={`/type/${map.id}`}>{map.title}</a>
                 </div>
+
                 <div>
                   <a className="text-teal-700 hover:underline" href={`/users/${map.user.id}`}>
                     {map.user.name}
                   </a>
+
                   <small>
                     {" "}
                     - {formatDistanceToNowStrict(new Date(map.updatedAt), { addSuffix: true })}
