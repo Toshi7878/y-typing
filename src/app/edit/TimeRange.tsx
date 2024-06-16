@@ -78,7 +78,9 @@ const TimeRange = () => {
           <button
             type="button"
             className="text-cyan-400 cursor-pointer"
-            onClick={() => new YTSpeedController("down", { dispatch, playerRef })}
+            onClick={() =>
+              new YTSpeedController("down", { dispatch, playerRef: playerRef.current })
+            }
           >
             <div className="relative">
               -<small className="f-key">F9</small>
@@ -92,7 +94,7 @@ const TimeRange = () => {
           <button
             type="button"
             className="text-cyan-400 cursor-pointer"
-            onClick={() => new YTSpeedController("up", { dispatch, playerRef })}
+            onClick={() => new YTSpeedController("up", { dispatch, playerRef: playerRef.current })}
           >
             <div className="relative">
               +<small className="f-key">F10</small>

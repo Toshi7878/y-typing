@@ -6,6 +6,7 @@ import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(redux)/store";
 import { useRefs } from "../(contexts)/refsProvider"; // 変更
+import { Box } from "@chakra-ui/react";
 
 interface YouTubeProps {
   className: string;
@@ -65,23 +66,25 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
     [dispatch, mapData, playerState.isStarted]
   );
 
-  const HEIGHT = "216px";
-
+  const HEIGHT = (288).toFixed();
+  const WIDTH = ((Number(HEIGHT) * 16) / 9).toFixed();
   return (
-    <YouTube
-      className={className}
-      videoId={videoId}
-      opts={{
-        width: "100%",
-        height: HEIGHT,
-        playerVars: { enablejsapi: 1 },
-      }}
-      onReady={handleReady}
-      onPlay={handlePlay}
-      onPause={handlePause}
-      onEnd={handleEnd}
-      onStateChange={handleStateChange}
-    />
+    <Box style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}>
+      <YouTube
+        className={`${className}`}
+        videoId={videoId}
+        opts={{
+          width: `${WIDTH}px`,
+          height: `${HEIGHT}px`,
+          playerVars: { enablejsapi: 1 },
+        }}
+        onReady={handleReady}
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onEnd={handleEnd}
+        onStateChange={handleStateChange}
+      />
+    </Box>
   );
 };
 

@@ -7,6 +7,8 @@ import { setCreatorComment, setVideoId, setYtTitle } from "../../edit/(redux)/ta
 import { setGenre, setTags } from "../../edit/(redux)/GenreTagSlice";
 import { setMapData } from "../../edit/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
+import TabContent from "../(tab)/Tab";
+import { Box, Card, Flex } from "@chakra-ui/react";
 
 export interface FetchMapData {
   videoId: string;
@@ -43,12 +45,32 @@ function ContentInner({ data }: { data: FetchMapData }) {
   }, []);
 
   return (
-    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14">
-      <section className="flex flex-col lg:flex-row w-full ">
-        <YouTubeContent className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" videoId={videoId} />
-      </section>
+    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-8 md:px-14 w-full">
+      <Flex direction="column" align="center" w="full" pt="8">
+        <Flex w="full" gap="4" direction={{ base: "column", lg: "row" }}>
+          <Box flex={{ base: "1", lg: "3" }}>
+            <YouTubeContent className="" videoId={videoId} />
+          </Box>
 
-      <section className="w-full mt-3">{/* <TableContent /> */}</section>
+          <Box
+            flex={{ base: "1", lg: "7" }}
+            ml={{ lg: "auto" }}
+            display="flex"
+            flexDirection="column"
+          >
+            <TabContent />
+          </Box>
+        </Flex>
+
+        <Box w="full" mt="8" h="calc(100vh - 400px)">
+          <Card variant={"outline"} h="full" borderColor="black">
+            <Box p="4">
+              <h2>仮のタイトル</h2>
+              <p>これは仮の内容です。後で実際のデータに置き換えてください。</p>
+            </Box>
+          </Card>
+        </Box>
+      </Flex>
     </main>
   );
 }

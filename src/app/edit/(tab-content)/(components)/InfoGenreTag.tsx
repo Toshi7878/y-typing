@@ -77,7 +77,7 @@ const InfoGenreTag = () => {
             { label: "Vtuber", color: "green" },
             { label: "東方ボーカル", color: "red" },
             { label: "洋楽", color: "pink" },
-            { label: "その他", color: "gray" },
+            { label: "未分類", color: "gray" },
           ].map(({ label, color }, index) => {
             const isSelected = genre.includes(label);
 

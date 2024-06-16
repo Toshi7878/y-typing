@@ -4,6 +4,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Link from "next/link";
 
 interface GetMapList {
   id: number;
@@ -47,7 +48,7 @@ export default function MapList() {
           maxW="2xl"
           size="lg"
         >
-          <a href={`/type/${map.id}`}>
+          <Link href={`/type/${map.id}`}>
             <CardBody className="flex items-start bg-slate-300 rounded-lg" style={{ padding: 0 }}>
               <Box>
                 <Image
@@ -64,13 +65,13 @@ export default function MapList() {
 
               <Box className="ml-3 mt-2 font-bold w-full text-xs sm:text-sm md:text-md lg:text-lg">
                 <div className="text-teal-700 hover:underline">
-                  <a href={`/type/${map.id}`}>{map.title}</a>
+                  <Link href={`/type/${map.id}`}>{map.title}</Link>
                 </div>
 
                 <div>
-                  <a className="text-teal-700 hover:underline" href={`/users/${map.user.id}`}>
+                  <Link className="text-teal-700 hover:underline" href={`/users/${map.user.id}`}>
                     {map.user.name}
-                  </a>
+                  </Link>
 
                   <small>
                     {" "}
@@ -79,7 +80,7 @@ export default function MapList() {
                 </div>
               </Box>
             </CardBody>
-          </a>
+          </Link>
         </Card>
       ))}
     </>
