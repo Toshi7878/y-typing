@@ -63,21 +63,21 @@ export default function MapList() {
                 />
               </Box>
 
-              <Box className="ml-3 mt-2 font-bold w-full text-xs sm:text-sm md:text-md lg:text-lg">
-                <div className="text-teal-700 hover:underline">
+              <Box className="ml-3 mt-2 w-full text-xs sm:text-sm md:text-md lg:text-lg">
+                <div className="text-teal-700 hover:underline font-bold">
                   <Link href={`/type/${map.id}`}>{map.title}</Link>
                 </div>
 
-                <div>
-                  <Link className="text-teal-700 hover:underline" href={`/users/${map.user.id}`}>
+                <small>
+                  <Link className="text-teal-700 hover:underline" href={`/user/${map.user.id}`}>
                     {map.user.name}
                   </Link>
 
-                  <small>
+                  <span className="text-xs">
                     {" "}
                     - {formatDistanceToNowStrict(new Date(map.updatedAt), { addSuffix: true })}
-                  </small>
-                </div>
+                  </span>
+                </small>
               </Box>
             </CardBody>
           </Link>

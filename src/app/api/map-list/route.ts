@@ -21,6 +21,9 @@ export async function GET(request: Request) {
           },
         },
       },
+      orderBy: {
+        updatedAt: "desc", // 逆順で取得
+      },
     });
     return new Response(JSON.stringify(mapList), {
       headers: { "Content-Type": "application/json" },
