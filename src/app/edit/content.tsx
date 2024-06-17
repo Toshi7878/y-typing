@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
@@ -8,32 +8,40 @@ import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeConent";
 import { setCreatorComment, setVideoId, setYtTitle } from "./(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "./(redux)/GenreTagSlice";
-import { setMapData } from "./(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
+import { GetInfoData } from "@/types/api";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { setMapData } from "./(redux)/mapDataSlice";
+const queryClient = new QueryClient();
 
-export interface FetchMapData {
-  videoId: string;
-  title?: string;
-  creatorComment?: string;
-  genre?: string;
-  tags?: string[];
-  mapData?: RootState["mapData"]["value"];
-}
-
-function Content({ data }: { data: FetchMapData }) {
+function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
-    <Provider store={store}>
-      <ContentInner data={data} />
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <ContentInner mapInfo={mapInfo} />
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
-function ContentInner({ data }: { data: FetchMapData }) {
-  const { videoId, title, creatorComment, genre, tags } = data;
+function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
+  const { videoId, title, creatorComment, genre, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["mapData"],
+    queryFn: async () => {
+      if (!id) return;
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
+      dispatch(setMapData(data.mapData));
+    },
+    enabled: !!id, // useQueryをidが存在する場合にのみ実行
+    staleTime: 0, // データを常に新鮮に保つ
+  });
 
   useLayoutEffect(() => {
     if (id) {
@@ -42,7 +50,6 @@ function ContentInner({ data }: { data: FetchMapData }) {
       dispatch(setCreatorComment(creatorComment));
       dispatch(setGenre(genre));
       dispatch(setTags(tags));
-      dispatch(setMapData(data.mapData));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

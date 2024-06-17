@@ -1,6 +1,7 @@
 import React from "react";
 import { RefsProvider } from "../(contexts)/refsProvider";
-import Content, { GetInfoData } from "./content";
+import Content from "./content";
+import { GetInfoData } from "@/types/api";
 
 async function getMapInfo(id: string): Promise<GetInfoData> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {

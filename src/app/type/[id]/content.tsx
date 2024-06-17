@@ -9,14 +9,7 @@ import { setMapData } from "../../edit/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import TabContent from "../(tab)/Tab";
 import { Box, Card, Flex } from "@chakra-ui/react";
-
-export interface GetInfoData {
-  videoId: string;
-  title?: string;
-  creatorComment?: string;
-  genre?: string;
-  tags?: string[];
-}
+import { GetInfoData } from "@/types/api";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (

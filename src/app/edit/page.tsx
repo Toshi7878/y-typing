@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <InfoTabProvider>
       <RefsProvider>
-        <Content data={{ videoId }} />
+        <Content mapInfo={{ videoId }} />
       </RefsProvider>
     </InfoTabProvider>
   );

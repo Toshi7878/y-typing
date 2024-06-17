@@ -29,7 +29,7 @@ export default function TabContent({ className }: TabContentProps) {
 
   const dispatch = useDispatch();
   const tabIndex: number = useSelector(
-    (state: { tabIndex: { value: number } }) => state.tabIndex.value
+    (state: { tabIndex: { value: number } }) => state.tabIndex.value,
   );
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -49,7 +49,7 @@ export default function TabContent({ className }: TabContentProps) {
       isFitted
       size="sm"
       position="relative"
-      variant="unstyled"
+      variant="line"
     >
       <TabList height="24px" borderBottom="1px solid lightgray">
         <Tab borderRight="1px solid lightgray">情報 & 保存</Tab>
@@ -57,9 +57,6 @@ export default function TabContent({ className }: TabContentProps) {
           エディター
         </Tab>
       </TabList>
-
-      {/* ↓ウィンドウリサイズイベント時に再レンダリングしたほうが良さそう */}
-      {isDisabled ? "" : <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />}
 
       <TabPanels>
         <TabPanel>

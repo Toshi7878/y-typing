@@ -36,11 +36,6 @@ export type SidebarNavItem =
       icon?: keyof typeof Icon;
     };
 
-export type DashboardConfig = {
-  mainNav: NavItem[];
-  sidebarNav: SidebarNavItem[];
-};
-
 export interface Line {
   time: string;
   lyrics: string;

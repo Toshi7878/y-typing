@@ -7,8 +7,8 @@ export function CheckName({ name }: { name: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (name === "" && pathname !== "/dashboard/register") {
-      redirect("/dashboard/register");
+    if (name === "" && pathname !== "/user/register") {
+      redirect("/user/register");
     }
   }, [name, pathname, router]);
 

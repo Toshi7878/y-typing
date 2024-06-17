@@ -14,11 +14,7 @@ export async function GET(request: Request) {
     const mapContents = await prisma.map.findUnique({
       where: { id: Number(mapId) },
       select: {
-        id: false,
         title: true,
-        creatorComment: false,
-        genre: false,
-        tags: false,
         mapData: true,
         videoId: true,
       },

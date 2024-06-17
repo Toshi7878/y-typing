@@ -7,7 +7,9 @@
     "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
@@ -50,14 +52,26 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@chakra-ui/storybook-addon": "^5.1.0",
+    "@chromatic-com/storybook": "^1.5.0",
     "@cloudflare/next-on-pages": "^1.11.3",
+    "@storybook/addon-essentials": "^8.1.9",
+    "@storybook/addon-interactions": "^8.1.9",
+    "@storybook/addon-links": "^8.1.9",
+    "@storybook/addon-onboarding": "^8.1.9",
+    "@storybook/blocks": "^8.1.9",
+    "@storybook/nextjs": "^8.1.9",
+    "@storybook/react": "^8.1.9",
+    "@storybook/test": "^8.1.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/youtube-player": "^5.5.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "eslint-plugin-storybook": "^0.8.0",
     "prisma": "^5.15.0",
+    "storybook": "^8.1.9",
     "typescript": "^5"
   }
 }
