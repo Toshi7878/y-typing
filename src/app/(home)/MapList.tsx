@@ -47,7 +47,9 @@ function MapList() {
     return <Spinner />;
   }
 
-  const previewYouTube = (e: React.MouseEvent<HTMLDivElement>) => {
+  const previewYouTube = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
     const target = e.currentTarget as HTMLDivElement;
     const targetPreviewTime = target.getAttribute("data-preview-time");
     const targetVideoId = target.getAttribute("data-video-id");
@@ -93,6 +95,7 @@ function MapList() {
                 data-preview-time={map.previewTime}
                 data-video-id={map.videoId}
                 onClick={previewYouTube}
+                onTouchEnd={previewYouTube}
               >
                 {videoId === map.videoId ? (
                   <FaPause color="white" size={35} />
