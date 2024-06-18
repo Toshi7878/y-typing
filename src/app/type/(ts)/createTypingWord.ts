@@ -235,13 +235,13 @@ const SYMBOL_LIST = [
 class ParseLyrics {
   data: { time: string; lyrics: string; word: string }[];
   typePattern: { k: string; r: string[] }[][];
-  lineWord: { k: string; r: string[] }[];
+  // lineWord: { k: string; r: string[] }[];
   // symbolCount: { [key: string]: number };
 
   constructor(data: { time: string; lyrics: string; word: string }[]) {
     this.data = data;
     this.typePattern = [];
-    this.lineWord = [];
+    // this.lineWord = [];
     // this.symbolCount = {};
   }
   joinLyrics() {
@@ -294,7 +294,7 @@ class ParseLyrics {
   }
 
   hiraganaToRomaArray(str) {
-    this.lineWord = [];
+    let lineWord: { k: string; r: string[] }[] = [];
 
     str = str.split("\t").filter((word) => word > "");
     const STR_LEN = str.length;
@@ -304,25 +304,25 @@ class ParseLyrics {
       }
       const CHAR = structuredClone(ROMA_MAP[parseInt(str[i])]);
       if (CHAR) {
-        this.lineWord.push(CHAR);
+        lineWord.push(CHAR);
 
         //促音の打鍵パターン
-        if (this.lineWord.length >= 2) {
-          const PREVIOUS_KANA = this.lineWord[this.lineWord.length - 2]["k"];
+        if (lineWord.length >= 2) {
+          const PREVIOUS_KANA = lineWord[lineWord.length - 2]["k"];
 
           if (PREVIOUS_KANA && PREVIOUS_KANA[PREVIOUS_KANA.length - 1] == "っ") {
-            const KANA = this.lineWord[this.lineWord.length - 1]["k"][0];
+            const KANA = lineWord[lineWord.length - 1]["k"][0];
 
             if (SOKUON_JOIN_LIST.includes(KANA)) {
-              this.joinSokuonPattern("");
+              lineWord = this.joinSokuonPattern("", lineWord);
             } else if (["い", "う", "ん"].includes(KANA)) {
-              this.joinSokuonPattern("iunFlag");
+              lineWord = this.joinSokuonPattern("iunFlag", lineWord);
             }
           }
         }
 
         //n→nn変換
-        this.nConvert_nn();
+        lineWord = this.nConvert_nn(lineWord);
 
         //記号の種類をカウント
         // this.symbolCounter();
@@ -337,11 +337,11 @@ class ParseLyrics {
           }
 
           //追加
-          this.lineWord.push({ k: char, r: [char] });
+          lineWord.push({ k: char, r: [char] });
 
           //n→nn変換
           if (v == 0) {
-            this.nConvert_nn();
+            lineWord = this.nConvert_nn(lineWord);
           }
 
           // this.symbolCounter();
@@ -350,21 +350,21 @@ class ParseLyrics {
     }
 
     //this.kanaArray最後の文字が「ん」だった場合も[nn]に置き換えます。
-    if (this.lineWord[this.lineWord.length - 1]["k"] == "ん") {
-      this.lineWord[this.lineWord.length - 1]["r"][0] = "nn";
-      this.lineWord[this.lineWord.length - 1]["r"].push("n'");
+    if (lineWord[lineWord.length - 1]["k"] == "ん") {
+      lineWord[lineWord.length - 1]["r"][0] = "nn";
+      lineWord[lineWord.length - 1]["r"].push("n'");
     }
 
-    return this.lineWord;
+    return lineWord;
   }
 
   //'っ','か' → 'っか'等の繋げられる促音をつなげる
-  joinSokuonPattern(iunFlag) {
-    const PREVIOUS_KANA = this.lineWord[this.lineWord.length - 2]["k"];
-    const KANA = this.lineWord[this.lineWord.length - 1]["k"];
+  joinSokuonPattern(iunFlag: string, lineWord: { k: string; r: string[] }[]) {
+    const PREVIOUS_KANA = lineWord[lineWord.length - 2]["k"];
+    const KANA = lineWord[lineWord.length - 1]["k"];
 
-    this.lineWord[this.lineWord.length - 1]["k"] = PREVIOUS_KANA + KANA;
-    this.lineWord.splice(-2, 1);
+    lineWord[lineWord.length - 1]["k"] = PREVIOUS_KANA + KANA;
+    lineWord.splice(-2, 1);
 
     let repeat: string[] = [];
     let xtu: string[] = [];
@@ -373,37 +373,35 @@ class ParseLyrics {
     let ltsu: string[] = [];
 
     const XTU_LEN = (PREVIOUS_KANA.match(/っ/g) || []).length;
-    const ROMA_LEN = this.lineWord[this.lineWord.length - 1]["r"].length;
+    const ROMA_LEN = lineWord[lineWord.length - 1]["r"].length;
     //変数に値渡し？して処理する方がわかりやすい(後でリファクタリング)
     for (let i = 0; i < ROMA_LEN; i++) {
-      if (
-        !iunFlag ||
-        !["i", "u", "n"].includes(this.lineWord[this.lineWord.length - 1]["r"][i][0])
-      ) {
+      if (!iunFlag || !["i", "u", "n"].includes(lineWord[lineWord.length - 1]["r"][i][0])) {
         repeat.push(
-          this.lineWord[this.lineWord.length - 1]["r"][i][0].repeat(XTU_LEN) +
-            this.lineWord[this.lineWord.length - 1]["r"][i],
+          lineWord[lineWord.length - 1]["r"][i][0].repeat(XTU_LEN) +
+            lineWord[lineWord.length - 1]["r"][i],
         );
       }
 
-      xtu.push("x".repeat(XTU_LEN) + "tu" + this.lineWord[this.lineWord.length - 1]["r"][i]);
-      ltu.push("l".repeat(XTU_LEN) + "tu" + this.lineWord[this.lineWord.length - 1]["r"][i]);
-      xtsu.push("x".repeat(XTU_LEN) + "tsu" + this.lineWord[this.lineWord.length - 1]["r"][i]);
-      ltsu.push("l".repeat(XTU_LEN) + "tsu" + this.lineWord[this.lineWord.length - 1]["r"][i]);
+      xtu.push("x".repeat(XTU_LEN) + "tu" + lineWord[lineWord.length - 1]["r"][i]);
+      ltu.push("l".repeat(XTU_LEN) + "tu" + lineWord[lineWord.length - 1]["r"][i]);
+      xtsu.push("x".repeat(XTU_LEN) + "tsu" + lineWord[lineWord.length - 1]["r"][i]);
+      ltsu.push("l".repeat(XTU_LEN) + "tsu" + lineWord[lineWord.length - 1]["r"][i]);
     }
 
-    this.lineWord[this.lineWord.length - 1]["r"] = [...repeat, ...xtu, ...ltu, ...xtsu, ...ltsu];
+    lineWord[lineWord.length - 1]["r"] = [...repeat, ...xtu, ...ltu, ...xtsu, ...ltsu];
+
+    return lineWord;
   }
 
-  nConvert_nn() {
+  nConvert_nn(lineWord: { k: string; r: string[] }[]) {
     //n→nn変換
-    const PREVIOUS_KANA =
-      this.lineWord.length >= 2 ? this.lineWord[this.lineWord.length - 2]["k"] : false;
+    const PREVIOUS_KANA = lineWord.length >= 2 ? lineWord[lineWord.length - 2]["k"] : false;
 
     if (PREVIOUS_KANA && PREVIOUS_KANA[PREVIOUS_KANA.length - 1] == "ん") {
-      if (NN_LIST.includes(this.lineWord[this.lineWord.length - 1]["k"])) {
-        for (let i = 0; i < this.lineWord[this.lineWord.length - 2]["r"].length; i++) {
-          const ROMA_PATTERN = this.lineWord[this.lineWord.length - 2]["r"][i];
+      if (NN_LIST.includes(lineWord[lineWord.length - 1]["k"])) {
+        for (let i = 0; i < lineWord[lineWord.length - 2]["r"].length; i++) {
+          const ROMA_PATTERN = lineWord[lineWord.length - 2]["r"][i];
           const IS_N =
             (ROMA_PATTERN.length >= 2 &&
               ROMA_PATTERN[ROMA_PATTERN.length - 2] != "x" &&
@@ -411,26 +409,23 @@ class ParseLyrics {
             ROMA_PATTERN == "n";
 
           if (IS_N) {
-            this.lineWord[this.lineWord.length - 2]["r"][i] =
-              this.lineWord[this.lineWord.length - 2]["r"][i] + "n";
-            this.lineWord[this.lineWord.length - 2]["r"].push("n'");
+            lineWord[lineWord.length - 2]["r"][i] = lineWord[lineWord.length - 2]["r"][i] + "n";
+            lineWord[lineWord.length - 2]["r"].push("n'");
           }
         }
 
         //それ以外の文字でもnnの入力を可能にする
-      } else if (this.lineWord[this.lineWord.length - 1]["k"]) {
-        const ROMA_PATTERN_LEN = this.lineWord[this.lineWord.length - 1]["r"].length;
+      } else if (lineWord[lineWord.length - 1]["k"]) {
+        const ROMA_PATTERN_LEN = lineWord[lineWord.length - 1]["r"].length;
 
         for (let i = 0; i < ROMA_PATTERN_LEN; i++) {
-          this.lineWord[this.lineWord.length - 1]["r"].push(
-            "n" + this.lineWord[this.lineWord.length - 1]["r"][i],
-          );
-          this.lineWord[this.lineWord.length - 1]["r"].push(
-            "'" + this.lineWord[this.lineWord.length - 1]["r"][i],
-          );
+          lineWord[lineWord.length - 1]["r"].push("n" + lineWord[lineWord.length - 1]["r"][i]);
+          lineWord[lineWord.length - 1]["r"].push("'" + lineWord[lineWord.length - 1]["r"][i]);
         }
       }
     }
+
+    return lineWord;
   }
 
   // symbolCounter() {
@@ -523,7 +518,7 @@ export class CreateMap extends ParseLyrics {
 
       if (this.data[i]["lyrics"] != "end" && this.typePattern[i].length) {
         if (this.startLine == 0) {
-          this.startLine = i + 1;
+          this.startLine = i;
         }
 
         this.lineLength++;

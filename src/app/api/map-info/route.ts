@@ -17,7 +17,6 @@ export async function GET(request: Request) {
         id: false,
         title: true,
         creatorComment: true,
-        genre: true,
         tags: true,
         mapData: false,
         videoId: true,

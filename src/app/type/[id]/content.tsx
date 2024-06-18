@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
 import store from "../../edit/(redux)/store";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
-import { setGenre, setTags } from "../../edit/(redux)/GenreTagSlice";
+import { setTags } from "../../edit/(redux)/GenreTagSlice";
 import { setMapData } from "../../edit/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
@@ -27,7 +27,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 }
 
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
-  const { videoId, title, creatorComment, genre, tags } = mapInfo;
+  const { videoId, title, creatorComment, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -49,7 +49,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       // dispatch(setVideoId(videoId));
       // dispatch(setYtTitle(title));
       // dispatch(setCreatorComment(creatorComment));
-      dispatch(setGenre(genre));
       dispatch(setTags(tags));
       dispatch(setMapData(mapData));
       const map = new CreateMap(mapData);

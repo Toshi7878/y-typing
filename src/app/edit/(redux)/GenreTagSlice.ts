@@ -3,11 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface GenreTag {
   tags: Array<Tag>;
-  genre: string;
 }
 
 const initialState: GenreTag = {
-  genre: "",
   tags: [],
 };
 
@@ -17,9 +15,7 @@ export const genreTagSlice = createSlice({
   initialState,
 
   reducers: {
-    setGenre: (state, action) => {
-      state.genre = action.payload;
-    },
+
     setTags: (state, action) => {
       if (Array.isArray(action.payload)) {
         const tagsData = action.payload;
@@ -35,6 +31,6 @@ export const genreTagSlice = createSlice({
     },
   },
 });
-export const { setGenre, setTags, deleteTags } = genreTagSlice.actions;
+export const {  setTags, deleteTags } = genreTagSlice.actions;
 
 export default genreTagSlice.reducer;

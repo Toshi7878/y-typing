@@ -7,13 +7,13 @@ import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 import "../../(style)/reactTags.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../(redux)/store";
-import { deleteTags, setGenre, setTags } from "../../(redux)/GenreTagSlice";
+import { deleteTags, setTags } from "../../(redux)/GenreTagSlice";
 import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
 import { useRefs } from "../../(contexts)/refsProvider";
 import { Tag } from "@/types";
 
 const InfoGenreTag = () => {
-  const { genre, tags } = useSelector((state: RootState) => state.genreTag);
+  const { tags } = useSelector((state: RootState) => state.genreTag);
   const dispatch = useDispatch();
   const { playerRef } = useRefs();
   const [ytTitle, setYtTitle] = useState("動画タイトル");
@@ -34,7 +34,6 @@ const InfoGenreTag = () => {
 
   const toggleBadge = (label: string) => {
     dispatch(setCanUpload(true));
-    dispatch(setGenre(label));
   };
 
   const handleDelete = (index: number) => {
@@ -60,49 +59,11 @@ const InfoGenreTag = () => {
   return (
     <Box display="flex" flexDirection="column" gap="5">
       <Box fontWeight="bold">
-        <span>{genre ? 1 : 0}/1 ジャンル, </span>
         <span>
           {tags.length}
           {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`} タグ
         </span>
       </Box>
-
-      <Flex>
-        <Stack direction="row" spacing={4} wrap="wrap">
-          {[
-            { label: "J-POP", color: "blue" },
-            { label: "ボーカロイド", color: "cyan" },
-            { label: "ゲーム", color: "purple" },
-            { label: "アニメ", color: "orange" },
-            { label: "Vtuber", color: "green" },
-            { label: "東方ボーカル", color: "red" },
-            { label: "洋楽", color: "pink" },
-            { label: "未分類", color: "gray" },
-          ].map(({ label, color }, index) => {
-            const isSelected = genre.includes(label);
-
-            return (
-              <Badge
-                key={index}
-                variant="solid"
-                colorScheme={color}
-                bg={`${color}.400`}
-                px="1"
-                border={isSelected ? "2px" : "1px"}
-                borderColor="black"
-                opacity={isSelected ? "1" : "0.5"}
-                transform={isSelected ? "scale(1.1)" : "scale(1)"}
-                className={`${isSelected ? "" : "cursor-pointer"} text-xl rounded-lg`}
-                _hover={{ opacity: "1" }}
-                onClick={() => toggleBadge(label)}
-                textTransform="none"
-              >
-                {label}
-              </Badge>
-            );
-          })}
-        </Stack>
-      </Flex>
 
       <div
         {...(tags.length !== 0
@@ -139,12 +100,18 @@ const InfoGenreTag = () => {
           inline={false}
         />
       </div>
-
       <Flex direction="column" wrap="wrap">
         <Stack direction="row" spacing={3} wrap="wrap">
           {[
             "公式動画",
             "Cover/歌ってみた",
+            "J-POP",
+            "ボーカロイド/ボカロ",
+            "東方ボーカル",
+            "洋楽",
+            "Vtuber",
+            "アニメ",
+            "ゲーム",
             "英語",
             "英語&日本語",
             "多言語",

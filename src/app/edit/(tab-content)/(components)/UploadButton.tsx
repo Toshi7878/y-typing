@@ -11,10 +11,10 @@ interface UploadButtonProps {
 }
 const UploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
-  const { genre, tags } = useSelector((state: RootState) => state.genreTag);
+  const { tags } = useSelector((state: RootState) => state.genreTag);
   const canUpload = useSelector((state: RootState) => state.btnFlags.canUpload);
 
-  const isUpButtonDisabled = genre === "" || tags.length < 2 || !canUpload;
+  const isUpButtonDisabled = tags.length < 2 || !canUpload;
   const dispatch = useDispatch();
 
   useEffect(() => {

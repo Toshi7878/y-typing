@@ -20,7 +20,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     videoId: "e7uuVlmCZKk",
     title: "Superman / Tampalay",
     creatorComment: "",
-    genre: "J-POP",
     tags: ["Superman", "Tampalay", "公式動画"],
   };
 

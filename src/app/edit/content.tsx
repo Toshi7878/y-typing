@@ -7,7 +7,7 @@ import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeContent";
 import { setCreatorComment, setVideoId, setYtTitle } from "./(redux)/tabInfoInputSlice";
-import { setGenre, setTags } from "./(redux)/GenreTagSlice";
+import { setTags } from "./(redux)/GenreTagSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { GetInfoData } from "@/types/api";
@@ -27,7 +27,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 }
 
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
-  const { videoId, title, creatorComment, genre, tags } = mapInfo;
+  const { videoId, title, creatorComment, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
@@ -49,7 +49,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       dispatch(setVideoId(videoId));
       dispatch(setYtTitle(title));
       dispatch(setCreatorComment(creatorComment));
-      dispatch(setGenre(genre));
       dispatch(setTags(tags));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

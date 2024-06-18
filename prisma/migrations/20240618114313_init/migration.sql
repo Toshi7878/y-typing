@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Map" ALTER COLUMN "difficulty" SET DEFAULT '0.0',
+ALTER COLUMN "difficulty" SET DATA TYPE TEXT,
+ALTER COLUMN "previewTime" SET DEFAULT '0',
+ALTER COLUMN "previewTime" SET DATA TYPE TEXT;

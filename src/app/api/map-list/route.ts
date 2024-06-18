@@ -9,11 +9,12 @@ export async function GET(request: Request) {
         id: true,
         title: true,
         creatorComment: false,
-        genre: false,
         tags: false,
         mapData: false,
         videoId: true,
         updatedAt: true,
+        previewTime: true,
+        difficulty: true,
         user: {
           select: {
             id: true,
@@ -22,7 +23,7 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        updatedAt: "desc", // 逆順で取得
+        id: "desc", // 逆順で取得
       },
     });
 

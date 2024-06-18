@@ -14,11 +14,11 @@ import { useFormState } from "react-dom";
 import { useParams, useRouter } from "next/navigation";
 import { setCanUpload } from "../(redux)/buttonFlagsSlice";
 import { Line } from "@/types";
+import { CreateMap } from "@/app/type/(ts)/createTypingWord";
 
 export interface SendData {
   title: string;
   creatorComment: string;
-  genre: string;
   tags: string[];
   mapData: Line[];
   videoId: string;
@@ -29,20 +29,22 @@ const TabInfoUpload = forwardRef((props, ref) => {
   const initialState = { id: null, message: "", status: 0 };
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const { genre, tags } = useSelector((state: RootState) => state.genreTag);
+  const { tags } = useSelector((state: RootState) => state.genreTag);
   const toast = useToast();
 
   const { playerRef } = useRefs();
   const { id } = useParams();
 
   const upload = () => {
+    const map = new CreateMap(mapData);
     const sendData = {
       videoId: playerRef.current.getVideoData().video_id,
       title: methods.getValues("title"),
       creatorComment: methods.getValues("creatorComment"),
       mapData,
-      genre,
       tags: tags.map((tag) => tag.id),
+      previewTime: mapData[map.startLine]["time"],
+      difficulty: map.romaMedianSpeed.toFixed(1),
     };
 
     const result = actions(sendData, Array.isArray(id) ? id[0] : id || "new");

@@ -38,7 +38,6 @@ export async function actions(data: SendData, mapId: string) {
   const validatedFields = mapSendSchema.safeParse({
     title: data.title,
     creatorComment: data.creatorComment,
-    genre: data.genre,
     tags: data.tags,
     mapData: data.mapData,
     videoId: data.videoId,
@@ -60,7 +59,7 @@ export async function actions(data: SendData, mapId: string) {
       newMapId = await updateMap(data, Number(mapId));
     }
 
-    // リストの再検証をトリガー
+    // リストの再検証をトリガー(更新されるようになる)
     revalidatePath("/api/map-list");
 
     return {
