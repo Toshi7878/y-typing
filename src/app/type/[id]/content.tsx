@@ -3,12 +3,11 @@ import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
 import store from "../../edit/(redux)/store";
 import YouTubeContent from "../components/(youtube-content)/YoutubeConent";
-import { setCreatorComment, setVideoId, setYtTitle } from "../../edit/(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "../../edit/(redux)/GenreTagSlice";
 import { setMapData } from "../../edit/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
-import { Box, Card, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -47,9 +46,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   useLayoutEffect(() => {
     if (id) {
-      dispatch(setVideoId(videoId));
-      dispatch(setYtTitle(title));
-      dispatch(setCreatorComment(creatorComment));
+      // dispatch(setVideoId(videoId));
+      // dispatch(setYtTitle(title));
+      // dispatch(setCreatorComment(creatorComment));
       dispatch(setGenre(genre));
       dispatch(setTags(tags));
       dispatch(setMapData(mapData));

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setTabIndex } from "../../(redux)/tabIndexSlice";
