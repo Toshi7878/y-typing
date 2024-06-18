@@ -22,12 +22,19 @@ export default function Content() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId]);
 
+  const isMobile = window.innerWidth <= 480;
+
   return (
     <QueryClientProvider client={queryClient}>
       <Box className="grid md:grid-cols-1 lg:grid-cols-2 gap-3">
         <MapList />
       </Box>
-      <Box position="fixed" bottom="5" right="5" backgroundColor="black">
+      <Box
+        position="fixed"
+        bottom={isMobile ? "2" : "5"}
+        right={isMobile ? "2" : "5"}
+        backgroundColor="black"
+      >
         <YouTubeContent />
       </Box>
     </QueryClientProvider>
