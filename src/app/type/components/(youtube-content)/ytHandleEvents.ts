@@ -1,5 +1,5 @@
 import { Action, Dispatch } from "@reduxjs/toolkit";
-import { setSpeed } from "../(redux)/ytStateSlice";
+import { setSpeed } from "../../(redux)/ytStateSlice";
 
 interface UpdateProps {
   dispatch: Dispatch<Action>;

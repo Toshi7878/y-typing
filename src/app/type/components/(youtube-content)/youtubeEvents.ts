@@ -1,11 +1,10 @@
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
-import { setIsPlaying, setIsReady, setIsStarted } from "../(redux)/ytStateSlice";
-import { setTabIndex } from "../(redux)/tabIndexSlice";
-import { setTimeIndex } from "../(redux)/lineIndexSlice";
-import { setYtTitle } from "../(redux)/tabInfoInputSlice";
+import { setIsPlaying, setIsReady, setIsStarted } from "../../(redux)/ytStateSlice";
+import { setTabIndex } from "../../(redux)/tabIndexSlice";
+import { setTimeIndex } from "../../(redux)/lineIndexSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
-import { RefsContextType } from "../(contexts)/refsProvider";
+import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
 const ticker = new Ticker();
 
@@ -49,15 +48,10 @@ class YTState {
 
   ready(refs: RefsContextType, dispatch: Dispatch<Action>, title: string) {
     console.log("ready");
-    const videoData = refs.playerRef!.current!.getVideoData();
 
     dispatch(setIsReady(true));
 
-    if (videoData && !title) {
-      const { title } = videoData;
-      dispatch(setYtTitle(title));
-    }
-    refs.playerRef.current.setVolume(refs.editorTabRef.current?.getVolume());
+    refs.playerRef.current.setVolume(30);
   }
 }
 

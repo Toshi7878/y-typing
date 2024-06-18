@@ -34,6 +34,7 @@
     "dexie-react-hooks": "^1.1.7",
     "framer-motion": "^11.2.10",
     "identicon.js": "^2.3.3",
+    "jotai": "^2.8.3",
     "jschardet": "^3.1.2",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.18",

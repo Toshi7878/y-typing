@@ -14,15 +14,15 @@ async function getMapInfo(id: string): Promise<GetInfoData> {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const mapInfo = await getMapInfo(params.id);
+  // const mapInfo = await getMapInfo(params.id);
 
-  // const mapInfo = {
-  //   videoId: "2b1IexhKPz4",
-  //   title: "きゅうくらりん / いよわ feat.可不（Kyu-kurarin / Iyowa feat.Kafu）",
-  //   creatorComment: "test",
-  //   genre: "ボーカロイド",
-  //   Tags: ["a", "b", "c"],
-  // };
+  const mapInfo = {
+    videoId: "e7uuVlmCZKk",
+    title: "Superman / Tampalay",
+    creatorComment: "",
+    genre: "J-POP",
+    tags: ["Superman", "Tampalay", "公式動画"],
+  };
 
   return (
     <RefsProvider>

@@ -17,6 +17,7 @@ async function getMapInfo(id: string): Promise<GetInfoData> {
 export default async function Page({ params }: { params: { id: string } }) {
   const mapInfo = await getMapInfo(params.id);
 
+
   return (
     <InfoTabProvider>
       <RefsProvider>

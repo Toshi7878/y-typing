@@ -4,8 +4,8 @@ import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(redux)/store";
-import { useRefs } from "../(contexts)/refsProvider"; // 変更
+import { RootState } from "../../(redux)/store";
+import { useRefs } from "../../(contexts)/refsProvider"; // 変更
 import { Box } from "@chakra-ui/react";
 
 interface YouTubeProps {
@@ -28,7 +28,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
       refs.setRef("playerRef", player);
       ytState.ready(refs, dispatch, ytTitle);
     },
-    [refs, dispatch, ytTitle]
+    [refs, dispatch, ytTitle],
   );
 
   const handlePlay = useCallback(() => {
@@ -63,7 +63,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
         console.log("未スタート -1");
       }
     },
-    [dispatch, mapData, playerState.isStarted]
+    [dispatch, mapData, playerState.isStarted],
   );
 
   const HEIGHT = (288).toFixed();

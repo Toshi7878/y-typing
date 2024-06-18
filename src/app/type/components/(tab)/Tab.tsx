@@ -3,7 +3,7 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setTabIndex } from "../(redux)/tabIndexSlice";
+import { setTabIndex } from "../../(redux)/tabIndexSlice";
 
 interface TabContentProps {
   className?: string;

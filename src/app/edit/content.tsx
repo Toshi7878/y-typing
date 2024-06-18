@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
@@ -39,6 +39,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       dispatch(setMapData(data.mapData));
     },
+
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
     staleTime: 0, // データを常に新鮮に保つ
   });
