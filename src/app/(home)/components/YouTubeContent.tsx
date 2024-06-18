@@ -17,19 +17,22 @@ const YouTubeContent = function YouTubeContent() {
     event.target.seekTo(Number(previewTime));
   };
 
-  const WIDTH = "448px";
-  const HEIGHT = `252px`; // 16:9の比率に調整
+  const WIDTH_DESKTOP = "448px";
+  const HEIGHT_DESKTOP = "252px"; // 16:9の比率に調整
+  const WIDTH_MOBILE = "320px";
+  const HEIGHT_MOBILE = "180px"; // 16:9の比率に調整
+
+  const isMobile = window.innerWidth <= 480;
 
   return (
     <YouTube
       videoId={videoId}
       opts={{
-        width: WIDTH,
-        height: HEIGHT,
+        width: isMobile ? WIDTH_MOBILE : WIDTH_DESKTOP,
+        height: isMobile ? HEIGHT_MOBILE : HEIGHT_DESKTOP,
         playerVars: {
           enablejsapi: 1,
           start: Number(previewTime), // 再生時間を指定
-
           autoplay: 1,
         },
       }}
