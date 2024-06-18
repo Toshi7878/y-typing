@@ -55,12 +55,11 @@ export async function actions(data: SendData, mapId: string) {
     let newMapId: number;
     if (mapId === "new") {
       newMapId = await createMap(data, userId);
+      // リストの再検証をトリガー(更新されるようになる)
+      revalidatePath("/api/map-list");
     } else {
       newMapId = await updateMap(data, Number(mapId));
     }
-
-    // リストの再検証をトリガー(更新されるようになる)
-    revalidatePath("/api/map-list");
 
     return {
       id: newMapId,
