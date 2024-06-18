@@ -63,6 +63,16 @@ function MapList() {
     }
   };
 
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!e.changedTouches || e.changedTouches.length === 0) return;
+    const touch = e.changedTouches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLDivElement;
+    if (target && target.getAttribute("data-video-id") === videoId) {
+      setVideoId(target.getAttribute("data-video-id"));
+      setPreviewTime(target.getAttribute("data-preview-time"));
+    }
+  };
+
   return (
     <>
       {mapList.map((map) => (
@@ -95,7 +105,7 @@ function MapList() {
                 data-preview-time={map.previewTime}
                 data-video-id={map.videoId}
                 onClick={previewYouTube}
-                onTouchEnd={previewYouTube}
+                onTouchEnd={handleTouchEnd}
               >
                 {videoId === map.videoId ? (
                   <FaPause color="white" size={35} />
