@@ -4,6 +4,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { SendData } from "../TabInfoUpload";
 import { mapSendSchema } from "./validationSchema";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
@@ -52,13 +53,21 @@ export async function actions(data: SendData, mapId: string) {
   }
   try {
     const userId = Number(session?.user?.id);
+    let newMapId: number;
     if (mapId === "new") {
-      const newMapId = await createMap(data, userId);
-      return { id: newMapId, message: "アップロード完了", status: 200 };
+      newMapId = await createMap(data, userId);
     } else {
-      const newMapId = await updateMap(data, Number(mapId));
-      return { id: newMapId, message: "アップデート完了", status: 200 };
+      newMapId = await updateMap(data, Number(mapId));
     }
+
+    // リストの再検証をトリガー
+    revalidatePath("/api/map-list");
+
+    return {
+      id: newMapId,
+      message: mapId === "new" ? "アップロード完了" : "アップデート完了",
+      status: 200,
+    };
   } catch (error) {
     return { id: null, message: "サーバー側で問題が発生しました", status: 500 };
   }
