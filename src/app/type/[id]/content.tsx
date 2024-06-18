@@ -2,7 +2,7 @@
 import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
 import store from "../../edit/(redux)/store";
-import YouTubeContent from "../components/(youtube-content)/YoutubeConent";
+import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { setGenre, setTags } from "../../edit/(redux)/GenreTagSlice";
 import { setMapData } from "../../edit/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";

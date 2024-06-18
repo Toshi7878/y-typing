@@ -46,7 +46,7 @@ class YTState {
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  ready(refs: RefsContextType, dispatch: Dispatch<Action>, title: string) {
+  ready(refs: RefsContextType, dispatch: Dispatch<Action>) {
     console.log("ready");
 
     dispatch(setIsReady(true));

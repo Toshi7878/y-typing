@@ -20,15 +20,14 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const playerState = useSelector((state: RootState) => state.ytState);
   const refs = useRefs();
-  const ytTitle = useSelector((state: RootState) => state.tabInfoInput.title);
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs, dispatch, ytTitle);
+      ytState.ready(refs, dispatch);
     },
-    [refs, dispatch, ytTitle],
+    [refs, dispatch],
   );
 
   const handlePlay = useCallback(() => {

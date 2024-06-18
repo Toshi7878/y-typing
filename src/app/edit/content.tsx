@@ -5,7 +5,7 @@ import store, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
-import YouTubeContent from "./(youtube-content)/YoutubeConent";
+import YouTubeContent from "./(youtube-content)/YoutubeContent";
 import { setCreatorComment, setVideoId, setYtTitle } from "./(redux)/tabInfoInputSlice";
 import { setGenre, setTags } from "./(redux)/GenreTagSlice";
 import { useParams } from "next/navigation";
