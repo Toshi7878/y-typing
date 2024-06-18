@@ -19,8 +19,8 @@ const YouTubeContent = function YouTubeContent() {
 
   const WIDTH_DESKTOP = "448px";
   const HEIGHT_DESKTOP = "252px"; // 16:9の比率に調整
-  const WIDTH_MOBILE = "320px";
-  const HEIGHT_MOBILE = "180px"; // 16:9の比率に調整
+  const WIDTH_MOBILE = "256px";
+  const HEIGHT_MOBILE = "144px"; // 16:9の比率に調整
 
   const isMobile = window.innerWidth <= 480;
 
