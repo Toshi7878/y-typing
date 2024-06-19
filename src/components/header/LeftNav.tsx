@@ -11,7 +11,7 @@ export default function LeftNav({ items }: LeftNavProps) {
   return (
     <div className="flex items-center md:gap-10">
       <span>
-        <Link href={"/"} replace className="md:flex items-center space-x-2 font-extrabold text-xl">
+        <Link href={"/"} className="md:flex items-center space-x-2 font-extrabold text-xl">
           Y-Typing
         </Link>
       </span>
