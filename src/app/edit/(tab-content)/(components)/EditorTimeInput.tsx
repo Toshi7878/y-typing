@@ -64,7 +64,7 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
         if (duration !== undefined) {
           setMaxTime(duration);
         }
-      } else if (mapData.length >= 2) {
+      } else if (mapData.length >= 3) {
         setMaxTime(mapData[mapData.length - 1]["time"]);
       }
     }
