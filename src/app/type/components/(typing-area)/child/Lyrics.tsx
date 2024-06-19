@@ -2,19 +2,21 @@ import { lyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box, Heading } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-export interface LyricsHandle {
-  setLyrics: (lyrics: string) => void;
+// export interface LyricsHandle {
+//   setLyrics: (lyrics: string) => void;
+// }
+interface LyricsProps {
+  lyrics: string;
 }
-interface LyricsProps {}
 
-const Lyrics = forwardRef<LyricsHandle, LyricsProps>((props, ref) => {
-  const [lyrics, setLyrics] = useState("");
+const Lyrics = ({ lyrics }: LyricsProps) => {
+  //   const [lyrics, setLyrics] = useState("");
 
-  useImperativeHandle(ref, () => ({
-    setLyrics: (newLyrics: string) => {
-      setLyrics(newLyrics);
-    },
-  }));
+  //   useImperativeHandle(ref, () => ({
+  //     setLyrics: (newLyrics: string) => {
+  //       setLyrics(newLyrics);
+  //     },
+  //   }));
 
   return (
     <Heading
@@ -26,7 +28,7 @@ const Lyrics = forwardRef<LyricsHandle, LyricsProps>((props, ref) => {
       }}
     />
   );
-});
+};
 Lyrics.displayName = "Lyrics";
 
 export default Lyrics;

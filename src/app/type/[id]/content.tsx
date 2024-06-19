@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
@@ -26,9 +26,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { id } = useParams();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["mapData"],
+    queryKey: ["mapData", id],
     queryFn: async () => {
-      if (!id || id == "2") return;
+      if (!id || id == "3") return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);
       const mapAtom = atom(map);
@@ -41,7 +41,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   useLayoutEffect(() => {
     if (id) {
-      if (id == "2") {
+      if (id == "3") {
         const map = new CreateMap(mapData);
         const mapAtom = atom(map);
 
@@ -51,6 +51,13 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    return () => {
+      // コンポーネントのアンマウント時にクエリキャッシュをクリア
+      queryClient.removeQueries({ queryKey: ["mapData", id] });
+    };
+  }, [id, queryClient]);
 
   return (
     <main className="flex min-h-screen sm:px-0 flex-col items-center pt-8 md:px-14 w-full">

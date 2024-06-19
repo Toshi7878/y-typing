@@ -31,6 +31,7 @@ class Timer extends TimerEvent {
   update(playerRef: RefsContextType["playerRef"]) {
     const currentTime = Number(playerRef.current.getCurrentTime()).toFixed(3);
     this.currentTime = currentTime;
+    console.log(this.currentTime);
     this.notifyListeners(currentTime);
   }
 }

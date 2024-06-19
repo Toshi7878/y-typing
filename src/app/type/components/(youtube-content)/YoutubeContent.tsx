@@ -26,8 +26,8 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(refs.playerRef);
-  }, [refs.playerRef]);
+    ytState.play();
+  }, []);
 
   const handlePause = useCallback(() => {
     ytState.pause();

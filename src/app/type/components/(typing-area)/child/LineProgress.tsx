@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React, { forwardRef, memo } from "react";
 
 const LineProgress = forwardRef<HTMLProgressElement>((props, ref) => {
+  console.log("render Progress");
   return (
     <Box p="4" className="text-xl" display="inline">
       <progress ref={ref as React.LegacyRef<HTMLProgressElement>} className="w-full" />
@@ -11,4 +12,4 @@ const LineProgress = forwardRef<HTMLProgressElement>((props, ref) => {
 
 LineProgress.displayName = "LineProgress";
 
-export default LineProgress;
+export default memo(LineProgress);

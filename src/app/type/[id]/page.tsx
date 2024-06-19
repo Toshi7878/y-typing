@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   let mapInfo;
 
-  if (params.id != "2") {
+  if (params.id != "3") {
     mapInfo = await getMapInfo(params.id);
   } else {
     mapInfo = {

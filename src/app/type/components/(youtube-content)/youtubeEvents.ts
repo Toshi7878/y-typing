@@ -1,15 +1,14 @@
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
-import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
-const ticker = new Ticker();
+export const ticker = new Ticker();
 
+export let updateFunction;
 class YTState {
-  play(playerRef: RefsContextType["playerRef"]) {
+  play() {
     console.log("再生 1");
 
-    ticker.add(() => timer.update(playerRef));
     ticker.start();
   }
 
@@ -20,6 +19,7 @@ class YTState {
 
   stop() {
     console.log("動画停止");
+    ticker.stop();
   }
 
   pause() {
@@ -36,6 +36,9 @@ class YTState {
     console.log("ready");
 
     refs.playerRef.current.setVolume(30);
+    updateFunction = () => timer.update(refs.playerRef);
+
+    ticker.add(updateFunction);
   }
 }
 
