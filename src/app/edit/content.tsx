@@ -33,7 +33,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["mapData"],
+    queryKey: ["mapData", id],
     queryFn: async () => {
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
@@ -41,7 +41,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
-    staleTime: 0, // データを常に新鮮に保つ
+    staleTime: Infinity, // データを常に新鮮に保つ
   });
 
   useLayoutEffect(() => {
