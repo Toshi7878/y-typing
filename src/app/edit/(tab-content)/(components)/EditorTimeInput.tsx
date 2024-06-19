@@ -18,7 +18,7 @@ interface EditorTimeInputProps {
 }
 const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function EditorTimeInput(
   { onFormStateChange },
-  ref
+  ref,
 ) {
   const methods = useForm({
     mode: "all",
@@ -46,7 +46,7 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
     (currentTime: string) => {
       setValue("time", currentTime, { shouldValidate: true });
     },
-    [setValue]
+    [setValue],
   );
 
   useEffect(() => {
@@ -58,13 +58,17 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
   }, [updateTimeValue]);
 
   useEffect(() => {
-    if (isPlaying && maxTime === "0") {
-      const duration = playerRef.current?.getDuration().toFixed(3);
-      if (duration !== undefined) {
-        setMaxTime(duration);
+    if (maxTime === "0") {
+      if (isPlaying) {
+        const duration = playerRef.current?.getDuration().toFixed(3);
+        if (duration !== undefined) {
+          setMaxTime(duration);
+        }
+      } else if (mapData.length >= 2) {
+        setMaxTime(mapData[mapData.length - 1]["time"]);
       }
     }
-  }, [maxTime, playerRef, isPlaying]);
+  }, [mapData, maxTime, playerRef, isPlaying]);
 
   useImperativeHandle(ref, () => ({
     clearTime: () => {
