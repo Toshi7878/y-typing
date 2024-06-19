@@ -14,6 +14,7 @@ function TypingArea({ mapData }: TypingAreaProps) {
   const lineCountRef = useRef(0);
   const progressRef = useRef<HTMLProgressElement>(null);
   const [lyrics, setLyrics] = useState(mapData[0]["lyrics"]);
+  const [nextLyrics, setNextLyrics] = useState(mapData[0]["lyrics"]);
   useEffect(() => {
     const updateLine = () => {
       const prevLine = mapData[lineCountRef.current - 1];
@@ -23,6 +24,7 @@ function TypingArea({ mapData }: TypingAreaProps) {
       if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
         lineCountRef.current += 1;
         setLyrics(currentLine["lyrics"]);
+        setNextLyrics(nextLine["lyrics"]);
         if (progressRef.current) {
           progressRef.current.max = Number(nextLine["time"]) - Number(currentLine["time"]);
         }
@@ -64,6 +66,7 @@ function TypingArea({ mapData }: TypingAreaProps) {
         <LineProgress ref={progressRef} />
         <Box p="4" className="text-xl" display="inline">
           <Lyrics lyrics={lyrics} />
+          <Lyrics lyrics={nextLyrics} />
         </Box>
       </Card>
     </Box>
