@@ -1,35 +1,39 @@
 import { Box, Card, Heading } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../(redux)/store";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { timer } from "../(youtube-content)/timer";
-import { setTimeCount } from "../../(redux)/lineCountSlice";
+import { Line } from "@/types";
+import Lyrics from "./child/Lyrics";
+import LineProgress from "./child/LineProgress";
+import { useAtom } from "jotai";
+import { lyricsAtom } from "../../(atoms)/gameRenderAtoms";
+import { LyricsHandle } from "./child/Lyrics";
 
-function TypingArea() {
-  const [lineProgress, setLineProgress] = useState("0");
-  const timeIndex = useSelector((state: RootState) => state.lineCountReducer.timeCount);
-  const mapData = useSelector((state: RootState) => state.mapData?.value || []);
+interface TypingAreaProps {
+  mapData: Line[];
+}
 
-  const [maxLineProgress, setMaxLineProgress] = useState("0");
-  const dispatch = useDispatch();
-
+function TypingArea({ mapData }: TypingAreaProps) {
+  const lineCountRef = useRef(0);
+  const progressRef = useRef<HTMLProgressElement>(null);
+  const lyricsRef = useRef<LyricsHandle>(null);
   useEffect(() => {
     const updateLine = () => {
-      if (Number(timer.currentTime) >= Number(mapData[timeIndex]["time"])) {
-        const maxProgress = (
-          Number(mapData[timeIndex + 1]["time"]) - Number(mapData[timeIndex]["time"])
-        ).toFixed(3);
-        setLineProgress("0");
-        setMaxLineProgress(maxProgress);
-        dispatch(setTimeCount(timeIndex + 1));
+      const prevLine = mapData[lineCountRef.current - 1];
+      const currentLine = mapData[lineCountRef.current];
+      const nextLine = mapData[lineCountRef.current + 1];
+
+      if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
+        lineCountRef.current += 1;
+        lyricsRef.current!.setLyrics(currentLine["lyrics"]);
+        if (progressRef.current) {
+          progressRef.current.max = Number(nextLine["time"]) - Number(currentLine["time"]);
+        }
       }
 
-      if (timeIndex) {
-        setLineProgress(
-          (Number(timer.currentTime) - Number(mapData[timeIndex - 1]["time"])).toFixed(3),
-        );
+      if (prevLine) {
+        progressRef.current!.value = Number(timer.currentTime) - Number(prevLine["time"]);
       } else {
-        setLineProgress(Number(timer.currentTime).toFixed(3));
+        progressRef.current!.value = Number(timer.currentTime);
       }
     };
 
@@ -37,32 +41,15 @@ function TypingArea() {
     return () => {
       timer.removeListener(updateLine);
     };
-  }, [timeIndex, mapData, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Box w="full" mt="8" h="calc(100vh - 400px)">
       <Card variant={"outline"} h="full" borderColor="black">
+        <LineProgress ref={progressRef} />
         <Box p="4" className="text-xl" display="inline">
-          <progress className="w-full" value={lineProgress} max={maxLineProgress} />
-        </Box>
-        <Box p="4" className="text-xl" display="inline">
-          <Heading
-            as="h3"
-            size="lg"
-            className="indent-0"
-            dangerouslySetInnerHTML={{
-              __html: `${timeIndex ? mapData[timeIndex - 1]["lyrics"] : ""}`,
-            }}
-          />
-        </Box>
-        <Box p="4" className="text-xl" display="inline">
-          <Heading
-            as="h3"
-            size="lg"
-            className="indent-0"
-            dangerouslySetInnerHTML={{
-              __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${timeIndex ? mapData[timeIndex - 1]["lyrics"] : ""}`,
-            }}
-          />
+          <Lyrics ref={lyricsRef} />
         </Box>
       </Card>
     </Box>

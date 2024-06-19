@@ -1,10 +1,6 @@
 "use client";
 import React, { useLayoutEffect } from "react";
-import { Provider, useDispatch } from "react-redux";
-import typeStore from "../../type/(redux)/store";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
-import { setTags } from "../../type/(redux)/GenreTagSlice";
-import { setMapData } from "../../type/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
 import { Box, Flex } from "@chakra-ui/react";
@@ -14,22 +10,19 @@ import axios from "axios";
 import TypingArea from "../components/(typing-area)/TypingArea";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { atom } from "jotai";
-import { setTimeCount } from "../(redux)/lineCountSlice";
+import { Line } from "@/types";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={typeStore}>
-        <ContentInner mapInfo={mapInfo} />
-      </Provider>
+      <ContentInner mapInfo={mapInfo} />
     </QueryClientProvider>
   );
 }
 
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
-  const dispatch = useDispatch();
   const { id } = useParams();
 
   const { data, error, isLoading } = useQuery({
@@ -37,10 +30,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     queryFn: async () => {
       if (!id || id == "2") return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      console.log(data.mapData);
-      dispatch(setMapData(data.mapData));
       const map = new CreateMap(data.mapData);
       const mapAtom = atom(map);
+      return data.mapData as Line[];
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
@@ -49,13 +41,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   useLayoutEffect(() => {
     if (id) {
-      // dispatch(setVideoId(videoId));
-      // dispatch(setYtTitle(title));
-      // dispatch(setCreatorComment(creatorComment));
-      dispatch(setTimeCount(0));
       if (id == "2") {
-        dispatch(setTags(tags));
-        dispatch(setMapData(mapData));
         const map = new CreateMap(mapData);
         const mapAtom = atom(map);
 
@@ -83,7 +69,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             <TabContent />
           </Box>
         </Flex>
-        <TypingArea />
+        {!isLoading && data && <TypingArea mapData={data} />}
       </Flex>
     </main>
   );

@@ -2,24 +2,16 @@
 "use client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setTabIndex } from "../../(redux)/tabIndexSlice";
-
 interface TabContentProps {
   className?: string;
 }
 export default function TabContent({ className }: TabContentProps) {
   console.log("Tab");
 
-  const dispatch = useDispatch();
-  const tabIndex: number = useSelector(
-    (state: { tabIndex: { value: number } }) => state.tabIndex.value,
-  );
-
   return (
     <Tabs
-      index={tabIndex}
-      onChange={(index) => dispatch(setTabIndex(index))}
+      // index={tabIndex}
+      // onChange={(index) => dispatch(setTabIndex(index))}
       border="1px solid"
       className={className}
       isFitted

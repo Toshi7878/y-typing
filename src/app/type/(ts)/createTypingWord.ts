@@ -1,4 +1,4 @@
-import { RootState } from "../(redux)/store";
+import { Line } from "@/types";
 import { ROMA_MAP } from "./const/romaMap";
 
 const ZENKAKU_LIST = [
@@ -461,7 +461,7 @@ export class CreateMap extends ParseLyrics {
   movieTotalTime: number;
   movieTimeMM: number;
   movieTimeSS: number;
-  constructor(data: RootState["mapData"]["value"]) {
+  constructor(data: Line[]) {
     super(data);
     this.lineWords = [];
 

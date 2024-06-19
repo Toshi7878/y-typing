@@ -1,55 +1,39 @@
 import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
-import { setIsPlaying, setIsReady, setIsStarted } from "../../(redux)/ytStateSlice";
-import { setTabIndex } from "../../(redux)/tabIndexSlice";
-import { setTimeCount } from "../../(redux)/lineCountSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
 const ticker = new Ticker();
 
 class YTState {
-  play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
+  play(playerRef: RefsContextType["playerRef"]) {
     console.log("再生 1");
 
-    if (!isStarted) {
-      ticker.add(() => timer.update(playerRef));
-    }
+    ticker.add(() => timer.update(playerRef));
     ticker.start();
-    dispatch(setIsPlaying(true));
-    dispatch(setIsStarted(true));
-    dispatch(setTabIndex(1));
   }
 
-  end(dispatch: Dispatch<Action>) {
+  end() {
     console.log("プレイ終了");
     ticker.stop();
-    dispatch(setIsPlaying(false));
   }
 
-  stop(dispatch: Dispatch<Action>) {
+  stop() {
     console.log("動画停止");
-    dispatch(setIsPlaying(false));
   }
 
-  pause(dispatch: Dispatch<Action>) {
+  pause() {
     console.log("一時停止");
 
     ticker.stop();
-    dispatch(setIsPlaying(false));
   }
 
-  seek(event: any, dispatch: Dispatch<Action>, mapData: Line[]) {
+  seek() {
     console.log("シーク");
-
-    const time = event.target.getCurrentTime()!;
-    dispatch(setTimeCount(seekTimeIndex(time, mapData)));
   }
 
-  ready(refs: RefsContextType, dispatch: Dispatch<Action>) {
+  ready(refs: RefsContextType) {
     console.log("ready");
-
-    dispatch(setIsReady(true));
 
     refs.playerRef.current.setVolume(30);
   }
