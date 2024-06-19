@@ -1,7 +1,7 @@
 "use client";
 import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import store, { RootState } from "./(redux)/store";
+import editStore, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
+      <Provider store={editStore}>
         <ContentInner mapInfo={mapInfo} />
       </Provider>
     </QueryClientProvider>

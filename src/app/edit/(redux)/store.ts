@@ -8,7 +8,7 @@ import tabInfoReducer from "./tabInfoInputSlice";
 import undoRedoReducer from "./undoredoSlice"; // 追加
 import genreTagReducer from "./GenreTagSlice";
 
-const store = configureStore({
+const editStore = configureStore({
   reducer: {
     ytState: YTStateReducer,
     tabIndex: tabIndexReducer,
@@ -21,6 +21,6 @@ const store = configureStore({
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof editStore.getState>;
 
-export default store;
+export default editStore;

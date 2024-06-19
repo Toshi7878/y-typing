@@ -2,7 +2,7 @@ import { useForm, FormProvider } from "react-hook-form";
 
 import { Stack, useToast } from "@chakra-ui/react";
 
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect } from "react";
 import { useRefs } from "../(contexts)/refsProvider";
 import InfoInput from "./(components)/InfoInput";
 import InfoGenreTag from "./(components)/InfoGenreTag";
@@ -54,6 +54,7 @@ const TabInfoUpload = forwardRef((props, ref) => {
 
   const [state, formAction] = useFormState(upload, initialState);
   const router = useRouter();
+
   useEffect(() => {
     async function handleStateChange() {
       if (state.status && state.status !== 200) {

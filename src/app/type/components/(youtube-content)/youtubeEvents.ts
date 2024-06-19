@@ -2,7 +2,7 @@ import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
 import { setIsPlaying, setIsReady, setIsStarted } from "../../(redux)/ytStateSlice";
 import { setTabIndex } from "../../(redux)/tabIndexSlice";
-import { setTimeIndex } from "../../(redux)/lineIndexSlice";
+import { setTimeCount } from "../../(redux)/lineCountSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
@@ -43,7 +43,7 @@ class YTState {
     console.log("シーク");
 
     const time = event.target.getCurrentTime()!;
-    dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
+    dispatch(setTimeCount(seekTimeIndex(time, mapData)));
   }
 
   ready(refs: RefsContextType, dispatch: Dispatch<Action>) {

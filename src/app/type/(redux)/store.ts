@@ -2,19 +2,19 @@ import { configureStore } from "@reduxjs/toolkit";
 import YTStateReducer from "./ytStateSlice";
 import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
-import lineIndexReducer from "./lineIndexSlice";
+import lineCountReducer from "./lineCountSlice";
 import genreTagReducer from "./GenreTagSlice";
 
-const store = configureStore({
+const typeStore = configureStore({
   reducer: {
     ytState: YTStateReducer,
     tabIndex: tabIndexReducer,
     mapData: mapDataReducer,
-    lineIndex: lineIndexReducer,
+    lineCountReducer,
     // genreTag: genreTagReducer,
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof typeStore.getState>;
 
-export default store;
+export default typeStore;

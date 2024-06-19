@@ -34,9 +34,9 @@ export default function TabContent({ className }: TabContentProps) {
       </TabList>
 
       <TabPanels>
-        <TabPanel>{/* <TabInfoUpload ref={infoUploadTabRef} /> */}</TabPanel>
+        <TabPanel></TabPanel>
 
-        <TabPanel>{/* <TabEditor ref={editorTabRef} /> */}</TabPanel>
+        <TabPanel></TabPanel>
       </TabPanels>
     </Tabs>
   );

@@ -1,10 +1,10 @@
 "use client";
 import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
-import store from "../../edit/(redux)/store";
+import typeStore from "../../type/(redux)/store";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
-import { setTags } from "../../edit/(redux)/GenreTagSlice";
-import { setMapData } from "../../edit/(redux)/mapDataSlice";
+import { setTags } from "../../type/(redux)/GenreTagSlice";
+import { setMapData } from "../../type/(redux)/mapDataSlice";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
 import { Box, Flex } from "@chakra-ui/react";
@@ -14,12 +14,13 @@ import axios from "axios";
 import TypingArea from "../components/(typing-area)/TypingArea";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { atom } from "jotai";
+import { setTimeCount } from "../(redux)/lineCountSlice";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
+      <Provider store={typeStore}>
         <ContentInner mapInfo={mapInfo} />
       </Provider>
     </QueryClientProvider>
@@ -31,30 +32,35 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  // const { data, error, isLoading } = useQuery({
-  //   queryKey: ["mapData"],
-  //   queryFn: async () => {
-  //     if (!id) return;
-  //     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-  //     console.log(data.mapData);
-  //     dispatch(setMapData(data.mapData));
-  //   },
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["mapData"],
+    queryFn: async () => {
+      if (!id || id == "2") return;
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
+      console.log(data.mapData);
+      dispatch(setMapData(data.mapData));
+      const map = new CreateMap(data.mapData);
+      const mapAtom = atom(map);
+    },
 
-  //   enabled: !!id, // useQueryをidが存在する場合にのみ実行
-  //   staleTime: Infinity, // データを常に新鮮に保つ
-  // });
+    enabled: !!id, // useQueryをidが存在する場合にのみ実行
+    staleTime: Infinity, // データを常に新鮮に保つ
+  });
 
   useLayoutEffect(() => {
     if (id) {
       // dispatch(setVideoId(videoId));
       // dispatch(setYtTitle(title));
       // dispatch(setCreatorComment(creatorComment));
-      dispatch(setTags(tags));
-      dispatch(setMapData(mapData));
-      const map = new CreateMap(mapData);
-      const mapAtom = atom(map);
+      dispatch(setTimeCount(0));
+      if (id == "2") {
+        dispatch(setTags(tags));
+        dispatch(setMapData(mapData));
+        const map = new CreateMap(mapData);
+        const mapAtom = atom(map);
 
-      console.log(map);
+        console.log(map);
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

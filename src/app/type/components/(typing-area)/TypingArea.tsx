@@ -3,44 +3,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../(redux)/store";
 import { useEffect, useState } from "react";
 import { timer } from "../(youtube-content)/timer";
-import { setTimeIndex } from "../../(redux)/lineIndexSlice";
+import { setTimeCount } from "../../(redux)/lineCountSlice";
 
 function TypingArea() {
   const [lineProgress, setLineProgress] = useState("0");
-  const [maxLineProgress, setMaxLineProgress] = useState("0");
-  const timeIndex = useSelector((state: RootState) => state.lineIndex?.timeIndex || 0);
+  const timeIndex = useSelector((state: RootState) => state.lineCountReducer.timeCount);
   const mapData = useSelector((state: RootState) => state.mapData?.value || []);
 
+  const [maxLineProgress, setMaxLineProgress] = useState("0");
   const dispatch = useDispatch();
 
   useEffect(() => {
     const updateLine = () => {
-      if (timeIndex !== null) {
-        if (
-          mapData[timeIndex + 1] &&
-          Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
-        ) {
-          const maxProgress = (
-            Number(mapData[timeIndex + 2]["time"]) - Number(mapData[timeIndex + 1]["time"])
-          ).toFixed(3);
-          setLineProgress("0");
-          setMaxLineProgress(maxProgress);
-          dispatch(setTimeIndex(timeIndex + 1));
-        }
-      } else {
-        dispatch(setTimeIndex(0));
+      if (Number(timer.currentTime) >= Number(mapData[timeIndex]["time"])) {
+        const maxProgress = (
+          Number(mapData[timeIndex + 1]["time"]) - Number(mapData[timeIndex]["time"])
+        ).toFixed(3);
+        setLineProgress("0");
+        setMaxLineProgress(maxProgress);
+        dispatch(setTimeCount(timeIndex + 1));
       }
 
-      setLineProgress((Number(timer.currentTime) - Number(mapData[timeIndex]["time"])).toFixed(3));
+      if (timeIndex) {
+        setLineProgress(
+          (Number(timer.currentTime) - Number(mapData[timeIndex - 1]["time"])).toFixed(3),
+        );
+      } else {
+        setLineProgress(Number(timer.currentTime).toFixed(3));
+      }
     };
 
     timer.addListener(updateLine);
     return () => {
       timer.removeListener(updateLine);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeIndex, mapData]);
-
+  }, [timeIndex, mapData, dispatch]);
   return (
     <Box w="full" mt="8" h="calc(100vh - 400px)">
       <Card variant={"outline"} h="full" borderColor="black">
@@ -53,7 +50,7 @@ function TypingArea() {
             size="lg"
             className="indent-0"
             dangerouslySetInnerHTML={{
-              __html: `${mapData[timeIndex]["lyrics"]}`,
+              __html: `${timeIndex ? mapData[timeIndex - 1]["lyrics"] : ""}`,
             }}
           />
         </Box>
@@ -63,7 +60,7 @@ function TypingArea() {
             size="lg"
             className="indent-0"
             dangerouslySetInnerHTML={{
-              __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${mapData[timeIndex]["lyrics"]}`,
+              __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${timeIndex ? mapData[timeIndex - 1]["lyrics"] : ""}`,
             }}
           />
         </Box>

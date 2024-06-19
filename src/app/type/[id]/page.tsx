@@ -16,12 +16,18 @@ async function getMapInfo(id: string): Promise<GetInfoData> {
 export default async function Page({ params }: { params: { id: string } }) {
   // const mapInfo = await getMapInfo(params.id);
 
-  const mapInfo = {
-    videoId: "e7uuVlmCZKk",
-    title: "Superman / Tampalay",
-    creatorComment: "",
-    tags: ["Superman", "Tampalay", "公式動画"],
-  };
+  let mapInfo;
+
+  if (params.id != "2") {
+    mapInfo = await getMapInfo(params.id);
+  } else {
+    mapInfo = {
+      videoId: "e7uuVlmCZKk",
+      title: "Superman / Tampalay",
+      creatorComment: "",
+      tags: ["Superman", "Tampalay", "公式動画"],
+    };
+  }
 
   return (
     <RefsProvider>
