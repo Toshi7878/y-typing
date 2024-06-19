@@ -66,7 +66,7 @@ function TypingArea({ mapData }: TypingAreaProps) {
         <LineProgress ref={progressRef} />
         <Box p="4" className="text-xl" display="inline">
           <Lyrics lyrics={lyrics} />
-          <Lyrics lyrics={nextLyrics} />
+          <Lyrics className={" text-gray-400 text-xs"} lyrics={nextLyrics} />
         </Box>
       </Card>
     </Box>

@@ -7,14 +7,15 @@ import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
 // }
 interface LyricsProps {
   lyrics: string;
+  className?: string;
 }
 
-const Lyrics = memo(({ lyrics }: LyricsProps) => {
+const Lyrics = memo(({ className = "", lyrics }: LyricsProps) => {
   return (
     <Heading
       as="h3"
       size="lg"
-      className="indent-0"
+      className={`${className} indent-0`}
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}
