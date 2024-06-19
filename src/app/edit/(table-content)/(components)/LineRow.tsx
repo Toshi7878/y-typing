@@ -25,7 +25,7 @@ export default function LineRow() {
   const keydownHandler = useCallback(
     (event: KeyboardEvent) =>
       handleKeydown(event, refs, dispatch, playerState, undoredoState, mapData),
-    [dispatch, playerState, refs, undoredoState, mapData]
+    [dispatch, playerState, refs, undoredoState, mapData],
   );
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function LineRow() {
               lyrics: "end",
               word: "",
               lineNumber: (mapData.length - 1).toString(),
-            })
+            }),
           );
         }
       }
@@ -136,7 +136,7 @@ export default function LineRow() {
           >
             {line.time}
           </Td>
-          <Td borderRight="1px solid black">{line.lyrics}</Td>
+          <Td borderRight="1px solid black" dangerouslySetInnerHTML={{ __html: line.lyrics }}></Td>
           <Td borderRight="1px solid black">{line.word}</Td>
           <Td>
             <Button
