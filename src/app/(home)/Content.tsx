@@ -18,9 +18,10 @@ export default function Content() {
 
     return () => {
       window.removeEventListener("keydown", (event) => handleKeyDown(event, videoId, setVideoId));
+      setVideoId(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoId]);
+  }, []);
 
   const isMobile = window.innerWidth <= 480;
 

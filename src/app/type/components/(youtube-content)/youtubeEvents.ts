@@ -6,14 +6,16 @@ export const ticker = new Ticker();
 
 export let updateFunction;
 class YTState {
-  play() {
+  play(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>) {
     console.log("再生 1");
-
+    setScene("playing");
     ticker.start();
   }
 
-  end() {
+  end(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>) {
     console.log("プレイ終了");
+    setScene("end");
+
     ticker.stop();
   }
 

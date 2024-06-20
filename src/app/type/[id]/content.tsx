@@ -7,10 +7,11 @@ import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import TypingArea from "../components/(typing-area)/TypingArea";
 import { CreateMap } from "../(ts)/createTypingWord";
-import { atom } from "jotai";
+import { useAtom } from "jotai";
 import { Line } from "@/types";
+import { mapAtom } from "../(atoms)/gameRenderAtoms";
+import SceneWrapper from "../components/(typing-area)/Scene";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -24,6 +25,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
+  const [, setMap] = useAtom(mapAtom);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -31,8 +33,8 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       if (!id || id == "3") return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);
-      const mapAtom = atom(map);
-      return data.mapData as Line[];
+      setMap(map);
+      return map;
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
@@ -46,8 +48,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     if (id) {
       if (id == "3") {
         const map = new CreateMap(mapData);
-        const mapAtom = atom(map);
-
+        setMap(map);
         console.log(map);
       }
     }
@@ -60,6 +61,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
       queryClient.removeQueries({ queryKey: ["mapData", id] });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);
 
   return (
@@ -67,7 +69,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       <Flex direction="column" align="center" w="full" pt="8">
         <Flex w="full" gap="4" direction={{ base: "column", lg: "row" }}>
           <Box flex={{ base: "1", lg: "3" }}>
-            <YouTubeContent className="" videoId={videoId} />
+            <YouTubeContent className={isLoading ? "invisible" : ""} videoId={videoId} />
           </Box>
 
           <Box
@@ -79,7 +81,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             <TabContent />
           </Box>
         </Flex>
-        {!isLoading && data && <TypingArea mapData={data} />}
+        <SceneWrapper />
       </Flex>
     </main>
   );

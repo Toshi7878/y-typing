@@ -5,6 +5,8 @@ import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
 import { Box } from "@chakra-ui/react";
+import { useAtom } from "jotai";
+import { sceneAtom } from "../../(atoms)/gameRenderAtoms";
 
 interface YouTubeProps {
   className: string;
@@ -13,7 +15,7 @@ interface YouTubeProps {
 
 const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
   console.log("YouTube");
-
+  const [, setScene] = useAtom(sceneAtom);
   const refs = useRefs();
 
   const handleReady = useCallback(
@@ -22,11 +24,13 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
       refs.setRef("playerRef", player);
       ytState.ready(refs);
     },
-    [refs],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play();
+    ytState.play(setScene);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePause = useCallback(() => {
@@ -34,7 +38,8 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   }, []);
 
   const handleEnd = useCallback(() => {
-    ytState.end();
+    ytState.end(setScene);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStateChange = useCallback((event: any) => {

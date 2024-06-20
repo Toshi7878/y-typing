@@ -1,0 +1,4 @@
+#main-word::before,
+#sub-word::before {
+  content: "\200B";
+}
