@@ -230,18 +230,14 @@ const SYMBOL_LIST = [
 ];
 
 //symbolCount無効になってる
-//不要なthisプロパティは使わないようにしたいthis.lineWordとか
-//
 class ParseLyrics {
   data: { time: string; lyrics: string; word: string }[];
   typePattern: { k: string; r: string[] }[][];
-  // lineWord: { k: string; r: string[] }[];
   // symbolCount: { [key: string]: number };
 
   constructor(data: { time: string; lyrics: string; word: string }[]) {
     this.data = data;
     this.typePattern = [];
-    // this.lineWord = [];
     // this.symbolCount = {};
   }
   joinLyrics() {
@@ -288,7 +284,7 @@ class ParseLyrics {
         const arr: { k: string; r: string[] }[] = this.hiraganaToRomaArray(lyrics[i]);
         this.typePattern.push(arr);
       } else {
-        this.typePattern.push([]);
+        this.typePattern.push([{ k: "", r: [""] }]);
       }
     }
   }
@@ -442,7 +438,6 @@ class ParseLyrics {
 }
 
 export class CreateMap extends ParseLyrics {
-  lineWords: { k: string[]; r: string[] }[];
   scoreParChar: number;
   missPenalty: number;
   startLine: number;
@@ -463,7 +458,6 @@ export class CreateMap extends ParseLyrics {
   movieTimeSS: number;
   constructor(data: Line[]) {
     super(data);
-    this.lineWords = [];
 
     this.scoreParChar = 0;
     this.missPenalty = 0;
@@ -570,7 +564,6 @@ export class CreateMap extends ParseLyrics {
           ? Math.round(((kanaLineNotes + dakuHandakuLineNotes) / lineSpeed) * 100) / 100
           : 0,
       );
-      this.lineWords.push({ k: kanaWord, r: romaWord });
     }
 
     return;

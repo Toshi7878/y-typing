@@ -8,14 +8,15 @@ import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
 interface LyricsProps {
   lyrics: string;
   className?: string;
+  size?: string;
 }
 
-const Lyrics = memo(({ className = "", lyrics }: LyricsProps) => {
+const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
   return (
     <Heading
       as="h3"
-      size="lg"
-      className={`${className} indent-0`}
+      size={size}
+      className={`${className} -indent-4`} // マイナスのインデントを追加
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}

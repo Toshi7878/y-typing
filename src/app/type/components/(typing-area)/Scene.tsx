@@ -2,7 +2,7 @@ import React from "react";
 import Playing, { PlayingHandle } from "./scene/Playing";
 import End from "./scene/End";
 import { useAtom } from "jotai";
-import { sceneAtom } from "../../(atoms)/gameRenderAtoms";
+import { currentLineWordAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
 
 import { Box, Card } from "@chakra-ui/react";
@@ -53,16 +53,13 @@ function SceneWrapper() {
 
       if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
         lineCountRef.current += 1;
+
         playingSceneRef.current!.setMainWord({
-          correct: "",
-          nextChar: "",
-          word: map.lineWords[count]["k"].join(""),
+          correct: { k: "", r: "" },
+          nextChar: [...map.typePattern[count]][0],
+          word: [...map.typePattern[count]].slice(1),
         });
-        playingSceneRef.current!.setSubWord({
-          correct: "",
-          nextChar: "",
-          word: map.lineWords[count]["r"].join("").toUpperCase(),
-        });
+
         playingSceneRef.current!.setLyrics(currentLine["lyrics"]);
         playingSceneRef.current!.setNextLyrics(nextLine["lyrics"]);
         if (progressRef.current) {
@@ -88,15 +85,11 @@ function SceneWrapper() {
 
       if (playingScene) {
         playingSceneRef.current!.setMainWord({
-          correct: "",
-          nextChar: "",
-          word: "",
+          correct: { k: "", r: "" },
+          nextChar: { k: "", r: [""] },
+          word: [{ k: "", r: [""] }],
         });
-        playingSceneRef.current!.setSubWord({
-          correct: "",
-          nextChar: "",
-          word: "",
-        });
+
         playingSceneRef.current!.setLyrics("");
         playingSceneRef.current!.setNextLyrics("");
       }
