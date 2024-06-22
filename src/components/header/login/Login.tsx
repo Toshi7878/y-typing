@@ -17,7 +17,7 @@ export default async function Login() {
     return (
       <div>
         <Menu>
-          <MenuButton as={Button}>
+          <MenuButton as={"button"} className="hover:bg-slate-400">
             <HStack spacing="3">
               <div suppressHydrationWarning={true}>{session.user.name}</div>
               <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>

@@ -7,21 +7,28 @@ import { useEffect } from "react";
 import { handleKeyDown } from "./ts/keydown";
 import { useAtom } from "jotai";
 import { videoIdAtom } from "./atoms/atoms";
+import { usePathname, useRouter } from "next/navigation";
 
 const queryClient = new QueryClient();
 
 export default function Content() {
   const [videoId, setVideoId] = useAtom(videoIdAtom);
+  const router = useRouter(); // 追加
 
   useEffect(() => {
     window.addEventListener("keydown", (event) => handleKeyDown(event, videoId, setVideoId));
 
     return () => {
       window.removeEventListener("keydown", (event) => handleKeyDown(event, videoId, setVideoId));
-      setVideoId(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [videoId]);
+
+  useEffect(() => {
+    return () => {
+      setVideoId(null);
+    };
+  }, [router, setVideoId]);
 
   const isMobile = window.innerWidth <= 480;
 
