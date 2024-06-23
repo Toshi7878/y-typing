@@ -1,5 +1,5 @@
 import { Ticker } from "@pixi/ticker";
-import { timer } from "./timer";
+import { timer } from "../../(ts)/timer";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
 export const ticker = new Ticker();

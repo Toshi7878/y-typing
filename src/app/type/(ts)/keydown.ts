@@ -1,4 +1,4 @@
-import { Word } from "../components/(typing-area)/scene/Playing";
+import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
 
 const keyboardCharacters = [
   "0",
@@ -332,11 +332,11 @@ interface TypingEvent {
 }
 
 export class Typing {
-  lineWord: Word;
+  lineWord: Word | false;
   constructor({ event, lineWord }: TypingEvent) {
     const isTyped = this.isTyped({ event, lineWord });
 
-    this.lineWord = isTyped ? this.handleType({ event, lineWord }).newLineWord : lineWord;
+    this.lineWord = isTyped ? this.handleType({ event, lineWord }).newLineWord : false;
   }
 
   isTyped({ event, lineWord }: TypingEvent) {

@@ -68,12 +68,12 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     <main className="flex min-h-screen sm:px-0 flex-col items-center pt-8 md:px-14 w-full">
       <Flex direction="column" align="center" w="full" pt="8">
         <Flex w="full" gap="4" direction={{ base: "column", lg: "row" }}>
-          <Box flex={{ base: "1", lg: "3" }}>
+          <Box flex={{ base: "1" }}>
             <YouTubeContent className={isLoading ? "invisible" : ""} videoId={videoId} />
           </Box>
 
           <Box
-            flex={{ base: "1", lg: "7" }}
+            flex={{ base: "1", lg: "8" }}
             ml={{ lg: "auto" }}
             display="flex"
             flexDirection="column"

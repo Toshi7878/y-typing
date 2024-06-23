@@ -1,14 +1,6 @@
 base64で効果音
 描画多い部分canvas
-worker
-
-const lrc = decodedData.split("\r\n")
-
-
-for(let i=0; i<lrc.length;i++){
-const firstTimeTag = lrc[i].match(/\[\d\d:\d\d.\d\d\]/)
-const lyrics = lrc[i].replace(/\[\d\d:\d\d.\d\d\]/g, '')
-    const wordConvert = new WordConvert(convertOption);
-    const word = await wordConvert.convert(lyrics);
-    setValue("word", word);
-}
+データはクライアントで取る
+YouTubeタイトルなど読み込みアニメーションつける
+validate youtube id
+ランダムに譜面10個表示

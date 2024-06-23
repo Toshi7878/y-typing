@@ -1,78 +1,97 @@
-import { Box, Stack } from "@chakra-ui/react";
-import Lyrics from "./child/Lyrics";
-import { lyricsAtom, mainWordAtom, nextLyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { Box } from "@chakra-ui/react";
+import PlayingTop from "./child/PlayingTop";
+import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
+import { useEffect, useRef } from "react";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { forwardRef, useEffect, useImperativeHandle } from "react";
-import Word from "./child/Word";
-import { Typing } from "@/app/type/(ts)/keydown";
+import { timer } from "@/app/type/(ts)/timer";
+import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
 
-export interface Word {
-  correct: { k: string; r: string };
-  nextChar: { k: string; r: string[] };
-  word: { k: string; r: string[] }[];
-}
-export interface PlayingHandle {
-  setMainWord: (newWord: Word) => void;
-  setLyrics: (newLyrics: string) => void;
-  setNextLyrics: (newNextLyrics: string) => void;
-}
-
-const Playing = forwardRef<PlayingHandle>(function Playing(props, ref) {
-  const [lineWord, setLineWord] = useAtom(mainWordAtom);
-  const [lyrics, setLyrics] = useAtom(lyricsAtom);
-  const [nextLyrics, setNextLyrics] = useAtom(nextLyricsAtom);
-
-  useImperativeHandle(ref, () => ({
-    setMainWord: (newWord) => setLineWord(newWord),
-    setLyrics: (newLyrics) => setLyrics(newLyrics),
-    setNextLyrics: (newNextLyrics) => setNextLyrics(newNextLyrics),
-  }));
+const Playing = () => {
+  const { lineCountRef } = useRefs();
+  const [map] = useAtom(mapAtom);
+  const progressRef = useRef(null);
+  const playingCenterRef = useRef<PlayingCenterRef>(null);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const result: Word = new Typing({ event, lineWord }).lineWord;
-      setLineWord(result);
+    const updateLine = () => {
+      if (!map) {
+        return;
+      }
+      const count = lineCountRef.current;
 
-      const IS_COPY = event.ctrlKey && event.code == "KeyC";
-      if (event.type == "keydown" && !IS_COPY) {
-        event.preventDefault();
+      const prevLine = map.data[count - 1];
+      const currentLine = map.data[count];
+      const nextLine = map.data[count + 1];
+
+      if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
+        lineCountRef.current += 1;
+
+        if (playingCenterRef.current) {
+          playingCenterRef.current.setLineWord({
+            correct: { k: "", r: "" },
+            nextChar: [...map.typePattern[count]][0],
+            word: [...map.typePattern[count]].slice(1),
+          });
+
+          playingCenterRef.current.setLyrics(currentLine["lyrics"]);
+          playingCenterRef.current.setNextLyrics(nextLine["lyrics"]);
+        }
+
+        if (progressRef.current) {
+          const progressElement = progressRef.current as HTMLProgressElement;
+
+          progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
+        }
+      }
+
+      if (progressRef.current) {
+        const progressElement = progressRef.current as HTMLProgressElement;
+        if (prevLine) {
+          progressElement.value = Number(timer.currentTime) - Number(prevLine["time"]);
+        } else {
+          progressElement.value = Number(timer.currentTime);
+        }
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    timer.addListener(updateLine);
+    // クリーンアップ: refのデータをリセット
+    const currentPlayingCenterRef = playingCenterRef.current; // 追加
+    const progressElement = progressRef.current as unknown as HTMLProgressElement;
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      timer.removeListener(updateLine);
+      ticker.stop();
+      ticker.remove(updateFunction);
+
+      if (currentPlayingCenterRef) {
+        currentPlayingCenterRef.setLineWord({
+          correct: { k: "", r: "" },
+          nextChar: { k: "", r: [""] },
+          word: [{ k: "", r: [""] }],
+        });
+
+        currentPlayingCenterRef.setLyrics("");
+        currentPlayingCenterRef.setNextLyrics("");
+      }
+
+      lineCountRef.current = 0;
+
+      if (progressElement) {
+        progressElement.value = 0;
+        progressElement.max = 0;
+      }
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Stack p="4" className="text-xl" display="inline">
-      <Box mb="4">
-        <Word
-          id="main-word"
-          correct={lineWord.correct["k"].replace(/ /g, "ˍ")}
-          nextChar={lineWord.nextChar["k"]}
-          word={lineWord.word.map((w) => w["k"]).join("")}
-          className="lowercase"
-        />
-
-        <Word
-          id="main-word"
-          correct={lineWord.correct["r"].replace(/ /g, "ˍ")}
-          nextChar={lineWord.nextChar["r"][0]}
-          word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className="uppercase"
-        />
-      </Box>
-
-      <Lyrics lyrics={lyrics} />
-
-      <Lyrics
-        size={"md"}
-        className={"text-gray-400"}
-        lyrics={nextLyrics ? `NEXT: ${nextLyrics}` : ""}
-      />
-    </Stack>
+    <Box>
+      <PlayingTop progressRef={progressRef} />
+      <PlayingCenter ref={playingCenterRef} />
+    </Box>
   );
-});
+};
 export default Playing;

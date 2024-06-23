@@ -16,11 +16,13 @@ export default function Content() {
   const router = useRouter(); // 追加
 
   useEffect(() => {
-    window.addEventListener("keydown", (event) => handleKeyDown(event, videoId, setVideoId));
+    const keyDownHandler = (event: KeyboardEvent) => handleKeyDown(event, videoId, setVideoId);
+    window.addEventListener("keydown", keyDownHandler);
 
     return () => {
-      window.removeEventListener("keydown", (event) => handleKeyDown(event, videoId, setVideoId));
+      window.removeEventListener("keydown", keyDownHandler);
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId]);
 

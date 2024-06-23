@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import TabStatus from "./tab/TabStatus";
 
 interface TabContentProps {
   className?: string;
@@ -26,7 +27,9 @@ export default function TabContent({ className }: TabContentProps) {
       </TabList>
 
       <TabPanels>
-        <TabPanel></TabPanel>
+        <TabPanel>
+          <TabStatus />
+        </TabPanel>
 
         <TabPanel></TabPanel>
       </TabPanels>

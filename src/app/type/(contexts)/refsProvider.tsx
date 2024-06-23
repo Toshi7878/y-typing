@@ -1,10 +1,11 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { PlayingHandle } from "../components/(typing-area)/scene/Playing";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
 
 export interface RefsContextType {
   playerRef: any;
-  playingSceneRef: React.RefObject<PlayingHandle>;
+  playingCenterRef: React.RefObject<PlayingCenterRef>;
+  lineCountRef: React.MutableRefObject<number>; // 修正
 
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
@@ -12,17 +13,19 @@ export interface RefsContextType {
 // Start of Selection
 const RefsContext = createContext<RefsContextType>({
   playerRef: null,
-  playingSceneRef: { current: null },
+  playingCenterRef: { current: null },
+  lineCountRef: { current: 0 }, // 修正
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
-  const playingSceneRef = useRef(null);
+  const playingCenterRef = useRef(null);
+  const lineCountRef = useRef(0);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "playingSceneRef":
-        playingSceneRef.current = ref;
+      case "playingCenterRef":
+        playingCenterRef.current = ref;
         break;
 
       case "playerRef":
@@ -32,7 +35,7 @@ export const RefsProvider = ({ children }) => {
   };
 
   return (
-    <RefsContext.Provider value={{ playingSceneRef, playerRef, setRef }}>
+    <RefsContext.Provider value={{ lineCountRef, playingCenterRef, playerRef, setRef }}>
       {children}
     </RefsContext.Provider>
   );
@@ -42,7 +45,8 @@ export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
     playerRef: context.playerRef,
-    playingSceneRef: context.playingSceneRef,
+    playingCenterRef: context.playingCenterRef,
+    lineCountRef: context.lineCountRef,
     setRef: context.setRef,
   };
 };
