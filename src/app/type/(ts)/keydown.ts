@@ -1,4 +1,6 @@
+import { SetStateAction } from "jotai";
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { Status } from "../(atoms)/type";
 
 const keyboardCharacters = [
   "0",
@@ -134,7 +136,22 @@ const OptimisationWhiteList = ["っっ", "っん", "っい", "っう"];
 const kana_mode_convert_rule_before = ["←", "↓", "↑", "→", "『", "』"];
 const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ", "「", "」"];
 
-class KeyCalc {
+interface CharsType {
+  key: string[];
+  shift: boolean;
+}
+
+interface JudgeType {
+  chars: CharsType;
+  lineWord: Word;
+}
+class Judge {
+  newLineWord: Word | false;
+  updatePoint: number;
+  constructor({ chars, lineWord }: JudgeType) {
+    this.updatePoint = 0;
+    this.newLineWord = this.hasRomaPattern(chars, lineWord);
+  }
   hasRomaPattern(chars: CharsType, lineWord: Word) {
     let newLineWord = { ...lineWord };
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
@@ -219,65 +236,13 @@ class KeyCalc {
     if (!romaPattern.length) {
       newLineWord.correct["k"] += kana;
       //スコア加算
-      // status.value.point.type += POINT;
-      newLineWord.nextChar = newLineWord.word.shift() || { k: "", r: [""] };
+      this.updatePoint = newLineWord.nextChar["p"];
+      newLineWord.nextChar = newLineWord.word.shift() || { k: "", r: [""], p: 0 };
     }
 
     newLineWord.correct["r"] += chars["key"][0];
 
     return newLineWord;
-  }
-}
-
-interface CharsType {
-  key: string[];
-  shift: boolean;
-}
-
-interface JudgeType {
-  chars: CharsType;
-  lineWord: Word;
-}
-class Judge extends KeyCalc {
-  newLineWord: Word;
-  constructor({ chars, lineWord }: JudgeType) {
-    super();
-
-    this.newLineWord = this.hasRomaPattern(chars, lineWord) || lineWord;
-
-    // if (newLineWord) {
-    //   this.success(chars, newLineWord);
-    // } else {
-    //   this.failure();
-    // }
-  }
-
-  success(chars: CharsType, newLineWord: Word) {
-    // const NEXT_POINT = 10 * newLineWord.nextChar["r"].length;
-    // if (NEXT_POINT == 0) {
-    //   Type.completed();
-    // }
-    // Type.add();
-    // const KANA_MODE = game.inputMode != "roma";
-    // this.char.key = this.char.key[0];
-    // lineResult.value.typingResult.push({
-    //   char: this.char,
-    //   result: true,
-    //   time: timer.currentTime,
-    //   kanaMode: KANA_MODE,
-    // });
-  }
-
-  failure() {
-    // Miss.add();
-    // const KANA_MODE = game.inputMode != "roma";
-    // this.char.key = this.char.key[0];
-    // lineResult.value.typingResult.push({
-    //   char: this.char,
-    //   result: false,
-    //   time: timer.currentTime,
-    //   kanaMode: KANA_MODE,
-    // });
   }
 }
 
@@ -332,39 +297,14 @@ interface TypingEvent {
 }
 
 export class Typing {
-  lineWord: Word | false;
+  newLineWord: Word | false;
+  updatePoint: number;
   constructor({ event, lineWord }: TypingEvent) {
-    const isTyped = this.isTyped({ event, lineWord });
-
-    this.lineWord = isTyped ? this.handleType({ event, lineWord }).newLineWord : false;
-  }
-
-  isTyped({ event, lineWord }: TypingEvent) {
-    const KEY_CODE = event.keyCode;
-    const CODE = event.code;
-
-    // isTyped
-    const IS_TYPE =
-      (KEY_CODE >= 65 && KEY_CODE <= 90) || CODES.includes(CODE) || TENKEYS.includes(CODE);
-    //event.keyが"Process"になるブラウザの不具合が昔はあったので場合によっては追加する
-    //ChatGPT「'Process' キーは通常、国際的なキーボードで入力方法やプロセスのキーを指すために使用されます。」
-
-    const ACTIVE_ELEMENT = document.activeElement as HTMLInputElement;
-    const HAS_FOCUS = ACTIVE_ELEMENT && ACTIVE_ELEMENT.type != "text";
-    const KANA = lineWord.nextChar["k"];
-
-    return IS_TYPE && HAS_FOCUS && KANA;
-  }
-
-  handleType({ event, lineWord }: TypingEvent) {
     const chars: CharsType = this.makeInput(event);
-    const newLineWord = new Judge({ chars, lineWord });
+    const judgeResult = new Judge({ chars, lineWord });
 
-    // if (HAS_FOCUS && event.type == "keydown") {
-    //   typingShortcut.shortcuts(event);
-    // }
-
-    return newLineWord;
+    this.newLineWord = judgeResult.newLineWord;
+    this.updatePoint = judgeResult.updatePoint;
   }
 
   makeInput(event: KeyboardEvent) {
@@ -375,4 +315,80 @@ export class Typing {
 
     return Input;
   }
+}
+
+export class Success {
+  newStatus: Status;
+
+  constructor(status: Status, updatePoint: number, newLineWord: Word) {
+    //  const NEXT_POINT = 10 * newLineWord.nextChar["r"][0].length;
+    // if (NEXT_POINT == 0) {
+    //   // Type.completed();
+    // }
+    this.newStatus = this.typeCounter({ ...status }, updatePoint, newLineWord);
+    // const KANA_MODE = game.inputMode != "roma";
+    // this.char.key = this.char.key[0];
+    // lineResult.value.typingResult.push({
+    //   char: this.char,
+    //   result: true,
+    //   time: timer.currentTime,
+    //   kanaMode: KANA_MODE,
+    // });
+  }
+
+  typeCounter(newStatus: Status, updatePoint: number, newLineWord: Word) {
+    newStatus.typeCount++;
+    newStatus.comboCount++;
+    newStatus.missComboCount = 0;
+    newStatus.point += updatePoint;
+
+    //ライン打ち切り
+    if (!newLineWord.nextChar["k"]) {
+      newStatus.lineCompleteCount++;
+    }
+
+    return newStatus;
+  }
+}
+
+export class Miss {
+  newStatus: Status;
+
+  constructor(status: Status) {
+    this.newStatus = this.missCounter({ ...status });
+
+    // const KANA_MODE = game.inputMode != "roma";
+    // this.char.key = this.char.key[0];
+    // lineResult.value.typingResult.push({
+    //   char: this.char,
+    //   result: false,
+    //   time: timer.currentTime,
+    //   kanaMode: KANA_MODE,
+    // });
+  }
+
+  missCounter(newStatus: Status) {
+    newStatus.missCount++;
+    newStatus.missComboCount++;
+    newStatus.comboCount = 0;
+
+    return newStatus;
+  }
+}
+
+export function isTyped({ event, lineWord }: TypingEvent) {
+  const KEY_CODE = event.keyCode;
+  const CODE = event.code;
+
+  // isTyped
+  const IS_TYPE =
+    (KEY_CODE >= 65 && KEY_CODE <= 90) || CODES.includes(CODE) || TENKEYS.includes(CODE);
+  //event.keyが"Process"になるブラウザの不具合が昔はあったので場合によっては追加する
+  //ChatGPT「'Process' キーは通常、国際的なキーボードで入力方法やプロセスのキーを指すために使用されます。」
+
+  const ACTIVE_ELEMENT = document.activeElement as HTMLInputElement;
+  const HAS_FOCUS = ACTIVE_ELEMENT && ACTIVE_ELEMENT.type != "text";
+  const KANA = lineWord.nextChar["k"];
+
+  return IS_TYPE && HAS_FOCUS && KANA;
 }

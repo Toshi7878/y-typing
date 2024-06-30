@@ -2,3 +2,20 @@
 #sub-word::before {
   content: "\200B";
 }
+
+progress {
+  appearance: none;
+  width: 100%;
+  height: 0.5rem;
+  outline: solid thin #000;
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-bar {
+  background: #375a7f52;
+}
+
+progress::-webkit-progress-value {
+  background: #4d97e6;
+  border-radius: 5px;
+}

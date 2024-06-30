@@ -1,12 +1,15 @@
+import { statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import React from "react";
+import { useAtom } from "jotai";
+import React, { memo } from "react";
 
-const PlayingCombo = () => {
+const PlayingCombo = ({ comboCount }: { comboCount: number }) => {
+
   return (
     <Box fontWeight="bold" fontSize="xl">
-      0
+      {comboCount}
     </Box>
   );
 };
 
-export default PlayingCombo;
+export default memo(PlayingCombo);

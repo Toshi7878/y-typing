@@ -23,7 +23,7 @@ function SceneWrapper() {
 
   return (
     <Box w="full" mt="8" h="calc(100vh - 400px)">
-      <Card variant={"outline"} h="full" borderColor="black">
+      <Card variant={"filled"} bg="blue.100" h="full" borderColor="black">
         <Scene />
       </Card>
     </Box>

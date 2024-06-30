@@ -229,10 +229,12 @@ const SYMBOL_LIST = [
   "\\",
 ];
 
+const CHAR_POINT = 5;
+
 //symbolCount無効になってる
 class ParseLyrics {
   data: { time: string; lyrics: string; word: string }[];
-  typePattern: { k: string; r: string[] }[][];
+  typePattern: { k: string; r: string[]; p: number }[][];
   // symbolCount: { [key: string]: number };
 
   constructor(data: { time: string; lyrics: string; word: string }[]) {
@@ -241,17 +243,9 @@ class ParseLyrics {
     // this.symbolCount = {};
   }
   joinLyrics() {
-    let lyrics = "";
-
-    for (let li = 0; li < this.data.length; li++) {
-      let line = this.data[li];
-
-      lyrics += line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, "") + "\n";
-
-      if (line["lyrics"] == "end") {
-        break;
-      }
-    }
+    let lyrics = this.data
+      .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
+      .join("\n");
 
     lyrics = lyrics
       .replace(/…/g, "...")
@@ -281,16 +275,16 @@ class ParseLyrics {
 
     for (let i = 0; i < this.data.length; i++) {
       if (lyrics[i] && this.data[i]["lyrics"] != "end") {
-        const arr: { k: string; r: string[] }[] = this.hiraganaToRomaArray(lyrics[i]);
+        const arr: { k: string; r: string[]; p: number }[] = this.hiraganaToRomaArray(lyrics[i]);
         this.typePattern.push(arr);
       } else {
-        this.typePattern.push([{ k: "", r: [""] }]);
+        this.typePattern.push([{ k: "", r: [""], p: 0 }]);
       }
     }
   }
 
   hiraganaToRomaArray(str) {
-    let lineWord: { k: string; r: string[] }[] = [];
+    let lineWord: { k: string; r: string[]; p: number }[] = [];
 
     str = str.split("\t").filter((word) => word > "");
     const STR_LEN = str.length;
@@ -300,7 +294,7 @@ class ParseLyrics {
       }
       const CHAR = structuredClone(ROMA_MAP[parseInt(str[i])]);
       if (CHAR) {
-        lineWord.push(CHAR);
+        lineWord.push({ ...CHAR, p: CHAR_POINT * CHAR["r"][0].length });
 
         //促音の打鍵パターン
         if (lineWord.length >= 2) {
@@ -325,7 +319,7 @@ class ParseLyrics {
       } else {
         //打鍵パターン生成を行わなくて良い文字はそのままthis.typingArrayに追加
         for (let v = 0; v < str[i].length; v++) {
-          let char = str[i][v];
+          let char: string = str[i][v];
 
           //全角→半角に変換(英数字記号)
           if (ZENKAKU_LIST.includes(str[i][v])) {
@@ -333,7 +327,7 @@ class ParseLyrics {
           }
 
           //追加
-          lineWord.push({ k: char, r: [char] });
+          lineWord.push({ k: char, r: [char], p: CHAR_POINT * char.length });
 
           //n→nn変換
           if (v == 0) {
@@ -355,7 +349,7 @@ class ParseLyrics {
   }
 
   //'っ','か' → 'っか'等の繋げられる促音をつなげる
-  joinSokuonPattern(iunFlag: string, lineWord: { k: string; r: string[] }[]) {
+  joinSokuonPattern(iunFlag: string, lineWord: { k: string; r: string[]; p: number }[]) {
     const PREVIOUS_KANA = lineWord[lineWord.length - 2]["k"];
     const KANA = lineWord[lineWord.length - 1]["k"];
 
@@ -390,7 +384,7 @@ class ParseLyrics {
     return lineWord;
   }
 
-  nConvert_nn(lineWord: { k: string; r: string[] }[]) {
+  nConvert_nn(lineWord: { k: string; r: string[]; p: number }[]) {
     //n→nn変換
     const PREVIOUS_KANA = lineWord.length >= 2 ? lineWord[lineWord.length - 2]["k"] : false;
 

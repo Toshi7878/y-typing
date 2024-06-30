@@ -1,15 +1,20 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { lyricsAtom, lineWordAtom, nextLyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import {
+  lyricsAtom,
+  lineWordAtom,
+  nextLyricsAtom,
+  statusAtom,
+} from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
-import { Typing } from "@/app/type/(ts)/keydown";
+import { isTyped, Miss, Success, Typing } from "@/app/type/(ts)/keydown";
 import Word from "./Word";
 import Lyrics from "./child/PlayingLyrics";
 
 export interface Word {
   correct: { k: string; r: string };
-  nextChar: { k: string; r: string[] };
-  word: { k: string; r: string[] }[];
+  nextChar: { k: string; r: string[]; p: number };
+  word: { k: string; r: string[]; p: number }[];
 }
 
 export interface PlayingCenterRef {
@@ -22,6 +27,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef>((props, ref) => {
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [lyrics, setLyrics] = useAtom(lyricsAtom);
   const [nextLyrics, setNextLyrics] = useAtom(nextLyricsAtom);
+  const [status, setStatus] = useAtom(statusAtom);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),
@@ -31,13 +37,20 @@ const PlayingCenter = forwardRef<PlayingCenterRef>((props, ref) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const result = new Typing({ event, lineWord }).lineWord;
-      if (result) {
-        setLineWord(result);
+      if (isTyped({ event, lineWord })) {
+        const result = new Typing({ event, lineWord });
+
+        if (result.newLineWord) {
+          // 変更
+          setStatus(new Success(status, result.updatePoint, result.newLineWord).newStatus);
+          setLineWord(result.newLineWord);
+        } else {
+          setStatus(new Miss(status).newStatus);
+        }
       }
 
       const IS_COPY = event.ctrlKey && event.code == "KeyC";
-      if (event.type == "keydown" && !IS_COPY) {
+      if (!IS_COPY) {
         event.preventDefault();
       }
     };
@@ -48,7 +61,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef>((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lineWord]);
+  }, [lineWord, status]);
 
   return (
     <VStack p="4" className="text-xl" display="inline">

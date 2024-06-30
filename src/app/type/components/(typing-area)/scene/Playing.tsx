@@ -69,8 +69,8 @@ const Playing = () => {
       if (currentPlayingCenterRef) {
         currentPlayingCenterRef.setLineWord({
           correct: { k: "", r: "" },
-          nextChar: { k: "", r: [""] },
-          word: [{ k: "", r: [""] }],
+          nextChar: { k: "", r: [""], p: 0 },
+          word: [{ k: "", r: [""], p: 0 }],
         });
 
         currentPlayingCenterRef.setLyrics("");
