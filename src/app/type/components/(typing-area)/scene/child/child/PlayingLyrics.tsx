@@ -15,6 +15,7 @@ const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
   return (
     <Heading
       as="h3"
+      id="lyrics"
       size={size}
       className={`${className} -indent-4`} // マイナスのインデントを追加
       dangerouslySetInnerHTML={{

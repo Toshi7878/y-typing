@@ -448,8 +448,8 @@ export class CreateMap extends ParseLyrics {
   romaLineSpeedList: number[];
   kanaLineSpeedList: number[];
   movieTotalTime: number;
-  movieTimeMM: number;
-  movieTimeSS: number;
+  totalTimeSSMM: string;
+
   constructor(data: Line[]) {
     super(data);
 
@@ -475,8 +475,7 @@ export class CreateMap extends ParseLyrics {
 
     //totalTime
     this.movieTotalTime = 0;
-    this.movieTimeMM = 0;
-    this.movieTimeSS = 0;
+    this.totalTimeSSMM = "00:00";
 
     //movieSpeedController = new MovieSpeedController()
     //movieSpeedController.addEvent()
@@ -537,6 +536,7 @@ export class CreateMap extends ParseLyrics {
         this.scoreParChar = 100 / this.romaTotalNotes;
         this.missPenalty = this.scoreParChar / 4;
         this.movieTotalTime = +this.data[i].time;
+        this.totalTimeSSMM = this.formatTotalTime(this.movieTotalTime);
         // this.setTotalTime(this.movieTotalTime);
 
         // status.value.lineCount = this.lineLength;
@@ -561,6 +561,13 @@ export class CreateMap extends ParseLyrics {
     }
 
     return;
+  }
+
+  formatTotalTime(time: number): string {
+    const MM = ("00" + parseInt((time / 60).toString())).slice(-2);
+    const SS = ("00" + parseInt((time % 60).toString())).slice(-2);
+
+    return `${MM}:${SS}`;
   }
 
   median(arr) {

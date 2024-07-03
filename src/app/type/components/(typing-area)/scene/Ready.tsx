@@ -1,13 +1,15 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import { useRef } from "react";
+import PlayingBottom from "./child/PlayingBottom";
 
 function Ready() {
   const progressRef = useRef(null);
   return (
-    <Box>
+    <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop progressRef={progressRef} />
-      <Box>Ready</Box>
+      <Box flex="1">Ready</Box>
+      <PlayingBottom />
     </Box>
   );
 }

@@ -11,7 +11,7 @@ export const lineWordAtom = atom<Word>({
   word: [{ k: "", r: [""], p: 0 }],
 });
 export const lyricsAtom = atom<string>("");
-export const nextLyricsAtom = atom<string>("");
+export const nextLyricsAtom = atom<{ lyrics: string; kpm: string }>({ lyrics: "", kpm: "" });
 export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
 
 // PlayingTop

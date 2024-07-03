@@ -1,5 +1,8 @@
-#main-word::before,
-#sub-word::before {
+#main_word::before,
+#sub_word::before,
+#lyrics::before,
+#next_lyrics::before,
+#next_kpm::before {
   content: "\200B";
 }
 

@@ -7,6 +7,7 @@ import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
 import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
+import PlayingBottom from "./child/PlayingBottom";
 
 const Playing = () => {
   const { lineCountRef } = useRefs();
@@ -19,6 +20,7 @@ const Playing = () => {
       if (!map) {
         return;
       }
+
       const count = lineCountRef.current;
 
       const prevLine = map.data[count - 1];
@@ -36,7 +38,10 @@ const Playing = () => {
           });
 
           playingCenterRef.current.setLyrics(currentLine["lyrics"]);
-          playingCenterRef.current.setNextLyrics(nextLine["lyrics"]);
+          playingCenterRef.current.setNextLyrics({
+            lyrics: nextLine["lyrics"],
+            kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
+          });
         }
 
         if (progressRef.current) {
@@ -74,7 +79,7 @@ const Playing = () => {
         });
 
         currentPlayingCenterRef.setLyrics("");
-        currentPlayingCenterRef.setNextLyrics("");
+        currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
       }
 
       lineCountRef.current = 0;
@@ -88,9 +93,10 @@ const Playing = () => {
   }, []);
 
   return (
-    <Box>
+    <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop progressRef={progressRef} />
-      <PlayingCenter ref={playingCenterRef} />
+      <PlayingCenter ref={playingCenterRef} flex="1" />
+      <PlayingBottom />
     </Box>
   );
 };
