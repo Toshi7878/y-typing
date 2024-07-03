@@ -14,8 +14,8 @@ const PlayingBottom = forwardRef(function (props, ref) {
   return (
     <Box>
       <HStack justify="space-between" mx="4">
-        <PlayingSkipGuide skip={false} />
-        <PlayingTotalTime currentTime={"00:00"} totalTime={totalTime} />
+        <PlayingSkipGuide />
+        <PlayingTotalTime totalTime={totalTime} />
       </HStack>
       <PlayingLineProgress />
     </Box>

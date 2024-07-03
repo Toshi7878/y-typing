@@ -12,6 +12,8 @@ export const lineWordAtom = atom<Word>({
 });
 export const lyricsAtom = atom<string>("");
 export const nextLyricsAtom = atom<{ lyrics: string; kpm: string }>({ lyrics: "", kpm: "" });
+export const currentTimeSSMMAtom = atom<number>(0);
+
 export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
 
 // PlayingTop
@@ -32,5 +34,6 @@ export const statusAtom = atom<Status>({
 });
 
 export const playingNotifyAtom = atom<string>("");
-export const lineKpmNotify = atom<number>(0);
-export const playingRemainTime = atom<number>(0);
+export const lineKpmNotifyAtom = atom<number>(0);
+export const playingRemainTimeAtom = atom<number>(0);
+export const skipGuideAtom = atom<string>("");

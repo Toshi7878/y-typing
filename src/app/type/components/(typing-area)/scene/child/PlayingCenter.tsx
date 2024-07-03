@@ -22,6 +22,7 @@ export interface PlayingCenterRef {
   setLineWord: (newLineWord: Word) => void;
   setLyrics: (newLyrics: string) => void;
   setNextLyrics: (params: { lyrics: string; kpm: string }) => void;
+  getLineWord: () => Word;
 }
 
 interface Props {
@@ -38,6 +39,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
     setLineWord: (newLineWord) => setLineWord(newLineWord),
     setLyrics: (newLyrics) => setLyrics(newLyrics),
     setNextLyrics: (params) => setNextLyrics(params),
+    getLineWord: () => lineWord,
   }));
 
   useEffect(() => {
