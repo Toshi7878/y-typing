@@ -19,3 +19,31 @@ progress::-webkit-progress-value {
   background: #4d97e6;
   border-radius: 5px;
 }
+
+.outline-text {
+  text-shadow:
+    black 0.6px 0px,
+    black -0.6px 0px,
+    black 0px -0.6px,
+    black 0px 0.6px,
+    black 0.6px 0.6px,
+    black -0.6px 0.6px,
+    black 0.6px -0.6px,
+    black -0.6px -0.6px,
+    black 1px 0.6px,
+    black -1px 0.6px,
+    black 1px -0.6px,
+    black -1px -0.6px,
+    black 0.6px 1px,
+    black -0.6px 1px,
+    black 0.6px -1px,
+    black -0.6px -1px;
+}
+
+.word-font {
+  font-family:
+    Segoe UI,
+    "Yu Gothic",
+    "YuGothic",
+    sans-serif;
+}

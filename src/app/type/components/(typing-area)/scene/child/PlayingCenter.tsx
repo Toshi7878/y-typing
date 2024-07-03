@@ -65,7 +65,10 @@ const PlayingCenter = forwardRef<PlayingCenterRef>((props, ref) => {
 
   return (
     <VStack p="4" className="text-xl" display="inline">
-      <Box>
+      <Box
+        className="outline-text word-font text-white font-bold"
+        style={{ letterSpacing: "0.1em" }}
+      >
         <Word
           id="main-word"
           correct={lineWord.correct["k"].replace(/ /g, "ˍ")}
