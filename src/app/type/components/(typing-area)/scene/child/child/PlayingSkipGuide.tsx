@@ -1,14 +1,18 @@
 import { skipGuideAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
+
+export interface SkipGuideRef {
+  getSkipGuide: () => string;
+  setSkipGuide: (guide: string) => void;
+}
 
 export const skipGuide = (
   kana: string,
   lineTime: number,
   lineRemainTime: number,
-  skip: string,
-  setSkipGuide: (value: string) => void,
+  skipGuideRef: React.RefObject<SkipGuideRef>,
 ) => {
   const SKIP_IN = 0.4; //ラインが切り替わり後、指定のtimeが経過したら表示
   const SKIP_OUT = 4; //ラインの残り時間が指定のtimeを切ったら非表示
@@ -16,24 +20,32 @@ export const skipGuide = (
 
   const IS_SKIP_DISPLAY = !kana && lineTime >= SKIP_IN && lineRemainTime >= SKIP_OUT;
 
+  const skip = skipGuideRef.current?.getSkipGuide();
   //スキップ表示絶対条件 && 既に表示されているか
   if (IS_SKIP_DISPLAY) {
     if (!skip) {
-      setSkipGuide(SKIP_KEY);
+      skipGuideRef.current!.setSkipGuide(SKIP_KEY);
     }
   } else if (skip) {
-    setSkipGuide("");
+    skipGuideRef.current!.setSkipGuide("");
   }
 };
 
-const PlayingSkipGuide = () => {
-  const [skip] = useAtom(skipGuideAtom);
+const PlayingSkipGuide = forwardRef<SkipGuideRef>((props, ref) => {
+  const [skip, setSkipGuide] = useAtom(skipGuideAtom);
+
+  useImperativeHandle(ref, () => ({
+    getSkipGuide: () => skip,
+    setSkipGuide: (guide: string) => setSkipGuide(guide),
+  }));
 
   return (
     <Box fontWeight="bold" fontSize="sm">
-      {skip ? `Type Space key to Skip. ⏩` : ""}
+      {skip ? `Type ${skip} key to Skip. ⏩` : ""}
     </Box>
   );
-};
+});
+
+PlayingSkipGuide.displayName = "PlayingSkipGuide"; // 追加
 
 export default PlayingSkipGuide;

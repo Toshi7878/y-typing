@@ -8,17 +8,19 @@ import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
 import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
 import PlayingBottom from "./child/PlayingBottom";
-import { skipGuide } from "./child/child/PlayingSkipGuide";
+import { skipGuide, SkipGuideRef } from "./child/child/PlayingSkipGuide";
 
 const Playing = () => {
   const { lineCountRef } = useRefs();
   const [map] = useAtom(mapAtom);
   const progressRef = useRef(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
+  const skipGuideRef = useRef<SkipGuideRef>(null);
   const [, setCurrentTimeSSMM] = useAtom(currentTimeSSMMAtom);
   const currentTimeRef = useRef(0);
   const remainTimeRef = useRef(0);
-  const [skip, setSkipGuide] = useAtom(skipGuideAtom);
+  const [, setSkipGuide] = useAtom(skipGuideAtom);
+
   useEffect(() => {
     const updateLine = () => {
       if (!map) {
@@ -43,12 +45,14 @@ const Playing = () => {
         //     this.updateTypeSpeed();
         //   }
         // }
+        remainTimeRef.current = Number(timer.currentTime);
         const currentPlayingCenterRef = playingCenterRef.current; // 追加
 
         const kana = currentPlayingCenterRef!.getLineWord();
-        const lineTime = Number(timer.currentTime) - Number(currentLine.time);
+        const lineTime = Number(timer.currentTime) - Number(prevLine.time);
         const remainTime = Number(nextLine.time) - Number(timer.currentTime);
-        skipGuide(kana.nextChar["k"], lineTime, remainTime, skip, setSkipGuide);
+
+        skipGuide(kana.nextChar["k"], lineTime, remainTime, skipGuideRef);
 
         if (Math.abs(Number(timer.currentTime) - currentTimeRef.current) >= 1) {
           //曲の経過時間を[分:秒]で表示}
@@ -126,7 +130,7 @@ const Playing = () => {
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop progressRef={progressRef} />
       <PlayingCenter ref={playingCenterRef} flex="1" />
-      <PlayingBottom />
+      <PlayingBottom skipGuideRef={skipGuideRef} />
     </Box>
   );
 };

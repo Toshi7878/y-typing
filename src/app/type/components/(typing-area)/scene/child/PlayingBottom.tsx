@@ -1,12 +1,16 @@
 import { Box, HStack } from "@chakra-ui/react";
 import PlayingLineProgress from "./child/PlayingLineProgress";
-import PlayingSkipGuide from "./child/PlayingSkipGuide";
+import PlayingSkipGuide, { SkipGuideRef } from "./child/PlayingSkipGuide";
 import PlayingTotalTime from "./child/PlayingTotalTime";
 import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useRef } from "react";
 
-const PlayingBottom = forwardRef(function (props, ref) {
+interface PlayingBottomRef {
+  skipGuideRef: React.RefObject<SkipGuideRef>;
+}
+
+const PlayingBottom = function ({ skipGuideRef }: PlayingBottomRef) {
   const [map] = useAtom(mapAtom);
 
   const totalTime = map?.totalTimeSSMM ?? "00:00"; // 'map' が null の場合に対応
@@ -14,13 +18,13 @@ const PlayingBottom = forwardRef(function (props, ref) {
   return (
     <Box>
       <HStack justify="space-between" mx="4">
-        <PlayingSkipGuide />
+        <PlayingSkipGuide ref={skipGuideRef} />
         <PlayingTotalTime totalTime={totalTime} />
       </HStack>
       <PlayingLineProgress />
     </Box>
   );
-});
+};
 
 PlayingBottom.displayName = "PlayingBottom";
 
