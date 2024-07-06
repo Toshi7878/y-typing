@@ -7,7 +7,7 @@ import {
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
-import { isTyped, Miss, Success, Typing } from "@/app/type/(ts)/keydown";
+import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 import Word from "./Word";
 import Lyrics from "./child/PlayingLyrics";
 import NextLyrics from "./child/PlayingNextLyrics";
@@ -33,7 +33,6 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [lyrics, setLyrics] = useAtom(lyricsAtom);
   const [nextLyrics, setNextLyrics] = useAtom(nextLyricsAtom);
-  const [status, setStatus] = useAtom(statusAtom);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),
@@ -42,33 +41,6 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
     getLineWord: () => lineWord,
   }));
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (isTyped({ event, lineWord })) {
-        const result = new Typing({ event, lineWord });
-
-        if (result.newLineWord) {
-          // 変更
-          setStatus(new Success(status, result.updatePoint, result.newLineWord).newStatus);
-          setLineWord(result.newLineWord);
-        } else {
-          setStatus(new Miss(status).newStatus);
-        }
-      }
-
-      const IS_COPY = event.ctrlKey && event.code == "KeyC";
-      if (!IS_COPY) {
-        event.preventDefault();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lineWord, status]);
 
   return (
     <VStack p="2" className="text-xl" display="" flex={flex}>

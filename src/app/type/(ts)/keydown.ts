@@ -1,6 +1,8 @@
 import { SetStateAction } from "jotai";
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
 import { Status } from "../(atoms)/type";
+import { CreateMap } from "./createTypingWord";
+import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 
 const keyboardCharacters = [
   "0",
@@ -391,4 +393,23 @@ export function isTyped({ event, lineWord }: TypingEvent) {
   const KANA = lineWord.nextChar["k"];
 
   return IS_TYPE && HAS_FOCUS && KANA;
+}
+
+export function shortcutKey(
+  event: KeyboardEvent,
+  skipGuideRef: React.RefObject<SkipGuideRef>,
+  map: CreateMap,
+  count: number,
+  speed: number,
+  playerRef: any,
+) {
+  //間奏スキップ
+  const skip = skipGuideRef.current?.getSkipGuide?.();
+
+  if (event.code === skip) {
+    const nextLine = map.data[count];
+    playerRef.current.seekTo(Number(nextLine.time) - 1 + (1 - speed));
+    skipGuideRef.current?.setSkipGuide?.("");
+    event.preventDefault();
+  }
 }

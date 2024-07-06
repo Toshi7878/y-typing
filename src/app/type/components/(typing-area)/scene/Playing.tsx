@@ -3,15 +3,21 @@ import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { currentTimeSSMMAtom, mapAtom, skipGuideAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import {
+  currentTimeSSMMAtom,
+  lineWordAtom,
+  mapAtom,
+  statusAtom,
+} from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
 import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
 import PlayingBottom from "./child/PlayingBottom";
 import { skipGuide, SkipGuideRef } from "./child/child/PlayingSkipGuide";
+import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 
 const Playing = () => {
-  const { lineCountRef } = useRefs();
+  const { lineCountRef, playerRef } = useRefs();
   const [map] = useAtom(mapAtom);
   const progressRef = useRef(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
@@ -19,7 +25,38 @@ const Playing = () => {
   const [, setCurrentTimeSSMM] = useAtom(currentTimeSSMMAtom);
   const currentTimeRef = useRef(0);
   const remainTimeRef = useRef(0);
-  const [, setSkipGuide] = useAtom(skipGuideAtom);
+  const [status, setStatus] = useAtom(statusAtom);
+  const [lineWord, setLineWord] = useAtom(lineWordAtom);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isTyped({ event, lineWord })) {
+        const result = new Typing({ event, lineWord });
+
+        if (result.newLineWord) {
+          // 変更
+          setStatus(new Success(status, result.updatePoint, result.newLineWord).newStatus);
+          setLineWord(result.newLineWord);
+        } else {
+          setStatus(new Miss(status).newStatus);
+        }
+      } else {
+        shortcutKey(event, skipGuideRef, map!, lineCountRef.current, 1, playerRef);
+      }
+
+      const IS_COPY = event.ctrlKey && event.code == "KeyC";
+      if (!IS_COPY) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lineWord, status]);
 
   useEffect(() => {
     const updateLine = () => {
@@ -35,7 +72,6 @@ const Playing = () => {
 
       if (Math.abs(Number(timer.currentTime) - remainTimeRef.current) >= 0.1) {
         //ライン経過時間 ＆ 打鍵速度計算
-        // typeArea.value.lineRemainTime = REMAIN_TIME; //ライン残り時間
 
         // if (!lineResult.value.completed) {
         //   this.lineTime = this.currentTime - nextLine.time / speed.value;
@@ -50,7 +86,8 @@ const Playing = () => {
 
         const kana = currentPlayingCenterRef!.getLineWord();
         const lineTime = Number(timer.currentTime) - Number(prevLine.time);
-        const remainTime = Number(nextLine.time) - Number(timer.currentTime);
+        const remainTime = Number(currentLine.time) - Number(timer.currentTime);
+        console.log(remainTime);
 
         skipGuide(kana.nextChar["k"], lineTime, remainTime, skipGuideRef);
 
