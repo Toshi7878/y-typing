@@ -4,12 +4,7 @@ import { useAtom } from "jotai";
 import React, { memo } from "react";
 
 const PlayingCombo = ({ comboCount }: { comboCount: number }) => {
-
-  return (
-    <Box fontWeight="bold" fontSize="xl">
-      {comboCount}
-    </Box>
-  );
+  return <Box>{comboCount}</Box>;
 };
 
 export default memo(PlayingCombo);

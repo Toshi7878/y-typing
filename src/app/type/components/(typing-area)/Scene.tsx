@@ -5,26 +5,31 @@ import { useAtom } from "jotai";
 import { sceneAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
 import { Box, Card } from "@chakra-ui/react";
+import { TabStatusRef } from "../(tab)/tab/TabStatus";
 
-export const Scene = () => {
+interface SceneProps {
+  tabStatusRef: React.RefObject<TabStatusRef>;
+}
+
+export const Scene = ({ tabStatusRef }: SceneProps) => {
   const [scene] = useAtom(sceneAtom);
 
   if (scene === "ready") {
     return <Ready />;
   } else if (scene === "playing") {
-    return <Playing />;
+    return <Playing tabStatusRef={tabStatusRef} />;
   } else if (scene === "end") {
     return <End />;
   }
 };
 
-function SceneWrapper() {
+function SceneWrapper({ tabStatusRef }: SceneProps) {
   console.log("SceneWrapper");
 
   return (
     <Box w="full" mt="8" h="calc(100vh - 400px)">
       <Card variant={"filled"} bg="blue.100" h="full" borderColor="black">
-        <Scene />
+        <Scene tabStatusRef={tabStatusRef} />
       </Card>
     </Box>
   );

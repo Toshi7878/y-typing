@@ -1,7 +1,6 @@
 import { signIn, signOut } from "@/lib/auth";
 import { Button } from "@chakra-ui/react";
 
-
 import React from "react";
 
 export function SignIn({
@@ -13,12 +12,19 @@ export function SignIn({
     "use server";
     await signIn(provider);
   };
+  const isLocal = process.env.NODE_ENV === "development";
 
   return (
     <form action={handleSignIn}>
-      <Button type="submit" colorScheme="blue" size="sm" {...props}>
-        ログイン
-      </Button>
+      {isLocal ? (
+        <Button type="submit" variant="link" size="sm" {...props}>
+          ログイン
+        </Button>
+      ) : (
+        <Button variant="link" size="sm" {...props}>
+          ログイン(準備中)
+        </Button>
+      )}
     </form>
   );
 }

@@ -3,6 +3,8 @@ import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
 import { Status } from "../(atoms)/type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
+import { LineStatus } from "../components/(typing-area)/scene/Playing";
+import { CalcTypeSpeed } from "./calcTypeSpeed";
 
 const keyboardCharacters = [
   "0",
@@ -319,15 +321,30 @@ export class Typing {
   }
 }
 
-export class Success {
+export class Success extends CalcTypeSpeed {
   newStatus: Status;
 
-  constructor(status: Status, updatePoint: number, newLineWord: Word) {
-    //  const NEXT_POINT = 10 * newLineWord.nextChar["r"][0].length;
-    // if (NEXT_POINT == 0) {
-    //   // Type.completed();
-    // }
-    this.newStatus = this.typeCounter({ ...status }, updatePoint, newLineWord);
+  constructor(
+    status: Status,
+    lineStatusRef: React.RefObject<LineStatus>,
+    setTimeBonus: React.Dispatch<SetStateAction<number>>,
+    updatePoint: number,
+    newLineWord: Word,
+    map: CreateMap,
+    lineTime: number,
+    totalTime: number,
+    remainTime: number,
+  ) {
+    super(status, lineStatusRef.current!, lineTime, totalTime);
+    this.newStatus = this.typeCounter(
+      { ...status },
+      lineStatusRef,
+      setTimeBonus,
+      updatePoint,
+      newLineWord,
+      map,
+      remainTime,
+    );
     // const KANA_MODE = game.inputMode != "roma";
     // this.char.key = this.char.key[0];
     // lineResult.value.typingResult.push({
@@ -338,15 +355,31 @@ export class Success {
     // });
   }
 
-  typeCounter(newStatus: Status, updatePoint: number, newLineWord: Word) {
+  typeCounter(
+    newStatus: Status,
+    lineStatusRef: React.RefObject<LineStatus>,
+    setTimeBonus: React.Dispatch<SetStateAction<number>>,
+
+    updatePoint: number,
+    newLineWord: Word,
+    map: CreateMap,
+    remainTime: number,
+  ) {
     newStatus.type++;
+    lineStatusRef.current!.type++;
     newStatus.combo++;
     newStatus.missCombo = 0;
     newStatus.point += updatePoint;
+    newStatus.kpm = this.totalTypeSpeed;
 
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
+      const timeBonus = Math.round(remainTime * 1 * 100);
+      setTimeBonus(timeBonus); //speed;
+      console.log(timeBonus);
+      newStatus.score += newStatus.point + timeBonus;
       newStatus.lineCompleteCount++;
+      newStatus.line = map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
     }
 
     return newStatus;

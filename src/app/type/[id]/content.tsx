@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
@@ -26,6 +26,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const [, setMap] = useAtom(mapAtom);
+  const tabStatusRef = useRef(null);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -77,11 +78,12 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             ml={{ lg: "auto" }}
             display="flex"
             flexDirection="column"
+            height="100%" // 追加: 高さをflexに合わせる
           >
-            <TabContent />
+            <TabContent tabStatusRef={tabStatusRef} />
           </Box>
         </Flex>
-        <SceneWrapper />
+        <SceneWrapper tabStatusRef={tabStatusRef} />
       </Flex>
     </main>
   );

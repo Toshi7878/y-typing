@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import TabStatus from "./tab/TabStatus";
+import TabStatus, { TabStatusRef } from "./tab/TabStatus";
+import TabRanking from "./tab/TabRanking";
 
 interface TabContentProps {
   className?: string;
+  tabStatusRef: React.RefObject<TabStatusRef>;
 }
-export default function TabContent({ className }: TabContentProps) {
+export default function TabContent({ className, tabStatusRef }: TabContentProps) {
   console.log("Tab");
 
   return (
     <Tabs
       // index={tabIndex}
       // onChange={(index) => dispatch(setTabIndex(index))}
-      border="1px solid"
       className={className}
       isFitted
       flex={1}
@@ -22,16 +23,18 @@ export default function TabContent({ className }: TabContentProps) {
       variant="line"
     >
       <TabList height="24px" borderBottom="1px solid lightgray">
-        <Tab borderRight="1px solid lightgray">ステータス</Tab>
-        <Tab borderRight="1px solid lightgray">ランキング</Tab>
+        <Tab>ステータス</Tab>
+        <Tab>ランキング</Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
-          <TabStatus />
+          <TabStatus ref={tabStatusRef} />
         </TabPanel>
 
-        <TabPanel></TabPanel>
+        <TabPanel>
+          <TabRanking />
+        </TabPanel>
       </TabPanels>
     </Tabs>
   );

@@ -1,52 +1,41 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
+import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 
 export interface RefsContextType {
   playerRef: any;
-  playingCenterRef: React.RefObject<PlayingCenterRef>;
-  skipGuideRef: React.RefObject<SkipGuideRef>;
-
-  lineCountRef: React.MutableRefObject<number>; // 修正
-
+  tabStatusRef: React.RefObject<TabStatusRef>;
+  lineCountRef: React.MutableRefObject<number>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
 // Start of Selection
 const RefsContext = createContext<RefsContextType>({
   playerRef: null,
-  playingCenterRef: { current: null },
-  skipGuideRef: { current: null },
-  lineCountRef: { current: 0 }, // 修正
+  tabStatusRef: { current: null },
+  lineCountRef: { current: 0 },
+
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
-  const playingCenterRef = useRef(null);
-  const skipGuideRef = useRef(null);
+  const tabStatusRef = useRef(null);
   const lineCountRef = useRef(0);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "playingCenterRef":
-        playingCenterRef.current = ref;
-        break;
-
       case "playerRef":
         playerRef.current = ref;
         break;
 
-      case "skipGuideRef":
-        skipGuideRef.current = ref;
+      case "tabStatusRef":
+        tabStatusRef.current = ref;
         break;
     }
   };
 
   return (
-    <RefsContext.Provider
-      value={{ skipGuideRef, lineCountRef, playingCenterRef, playerRef, setRef }}
-    >
+    <RefsContext.Provider value={{ tabStatusRef, lineCountRef, playerRef, setRef }}>
       {children}
     </RefsContext.Provider>
   );
@@ -56,9 +45,8 @@ export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
     playerRef: context.playerRef,
-    playingCenterRef: context.playingCenterRef,
     lineCountRef: context.lineCountRef,
-    skipGuideRef: context.skipGuideRef,
+    tabStatusRef: context.tabStatusRef,
     setRef: context.setRef,
   };
 };

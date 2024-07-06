@@ -19,7 +19,7 @@ export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
 // PlayingTop
 export const comboAtom = atom<number>(0);
 
-export const statusAtom = atom<Status>({
+export const defaultStatus = {
   score: 0,
   point: 0,
   type: 0,
@@ -32,9 +32,11 @@ export const statusAtom = atom<Status>({
   line: 0,
   lineCompleteCount: 0,
   lineFailureCount: 0,
-});
+};
+export const statusAtom = atom<Status>(defaultStatus);
 
 export const playingNotifyAtom = atom<string>("");
-export const lineKpmNotifyAtom = atom<number>(0);
+export const lineKpmAtom = atom<number>(0);
 export const skipGuideAtom = atom<string>("");
 export const remainTimeAtom = atom<string>("0.0");
+export const timeBonusAtom = atom<number>(0);

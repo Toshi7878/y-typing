@@ -5,10 +5,13 @@ import { useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   currentTimeSSMMAtom,
+  defaultStatus,
+  lineKpmAtom,
   lineWordAtom,
   mapAtom,
   remainTimeAtom,
   statusAtom,
+  timeBonusAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
@@ -16,19 +19,41 @@ import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
 import PlayingBottom from "./child/PlayingBottom";
 import { skipGuide, SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
+import { LineResult } from "@/app/type/(ts)/lineResult";
+import { TabStatusRef } from "../../(tab)/tab/TabStatus";
+import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
+import { Status } from "@/app/type/(atoms)/type";
 
-const Playing = () => {
+export interface LineStatus {
+  type: number;
+  miss: number;
+}
+interface PlayingProps {
+  tabStatusRef: React.RefObject<TabStatusRef>;
+}
+
+const defaultLineStatus = {
+  type: 0,
+  miss: 0,
+};
+
+const Playing = ({ tabStatusRef }: PlayingProps) => {
   const { lineCountRef, playerRef } = useRefs();
+  const lineStatusRef = useRef(structuredClone(defaultLineStatus));
+
   const [map] = useAtom(mapAtom);
+  const [, setTimeBonus] = useAtom(timeBonusAtom);
   const progressRef = useRef(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
   const [, setCurrentTimeSSMM] = useAtom(currentTimeSSMMAtom);
   const currentTimeRef = useRef(0);
   const remainTimeRef = useRef(0);
+  const totalTypeTimeRef = useRef(0);
   const [status, setStatus] = useAtom(statusAtom);
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [, setRemainTime] = useAtom(remainTimeAtom);
+  const [, setLineKpm] = useAtom(lineKpmAtom);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -37,8 +62,31 @@ const Playing = () => {
 
         if (result.newLineWord) {
           // 変更
-          setStatus(new Success(status, result.updatePoint, result.newLineWord).newStatus);
+          const count = lineCountRef.current;
+          const prevLine = map!.data[count - 1];
+          const currentLine = map!.data[count];
+
+          const lineTime = Number(timer.currentTime) - Number(prevLine.time);
+          const remainTime = Number(currentLine.time) - Number(timer.currentTime);
+
+          const success = new Success(
+            status,
+            lineStatusRef,
+            setTimeBonus,
+            result.updatePoint,
+            result.newLineWord,
+            map!,
+            lineTime,
+            totalTypeTimeRef.current,
+            remainTime,
+          );
+          setStatus(success.newStatus);
           setLineWord(result.newLineWord);
+
+          setLineKpm(success.lineTypeSpeed);
+          if (!result.newLineWord.nextChar["k"]) {
+            totalTypeTimeRef.current += lineTime;
+          }
         } else {
           setStatus(new Miss(status).newStatus);
         }
@@ -73,25 +121,27 @@ const Playing = () => {
       const nextLine = map.data[count + 1];
 
       if (Math.abs(Number(timer.currentTime) - remainTimeRef.current) >= 0.1) {
-        //ライン経過時間 ＆ 打鍵速度計算
-
-        // if (!lineResult.value.completed) {
-        //   this.lineTime = this.currentTime - nextLine.time / speed.value;
-
-        //   const IS_WORD = typeArea.value.nextChar["k"];
-        //   if (IS_WORD) {
-        //     this.updateTypeSpeed();
-        //   }
-        // }
         remainTimeRef.current = Number(timer.currentTime);
         const currentPlayingCenterRef = playingCenterRef.current; // 追加
 
-        const kana = currentPlayingCenterRef!.getLineWord();
+        const lineWord = currentPlayingCenterRef!.getLineWord();
         const lineTime = Number(timer.currentTime) - Number(prevLine.time);
         const remainTime = Number(currentLine.time) - Number(timer.currentTime);
-        setRemainTime(remainTime.toFixed(1));
+        const status = tabStatusRef.current?.getStatus() as unknown as Status; // 変更
 
-        skipGuide(kana.nextChar["k"], lineTime, remainTime, skipGuideRef);
+        setRemainTime(remainTime.toFixed(1));
+        if (lineWord.nextChar["k"]) {
+          const typeSpeed = new CalcTypeSpeed(
+            status!,
+            lineStatusRef.current!,
+            lineTime,
+            totalTypeTimeRef.current,
+          );
+          setLineKpm(typeSpeed.lineTypeSpeed);
+
+          setStatus({ ...status!, kpm: typeSpeed.totalTypeSpeed });
+        }
+        skipGuide(lineWord.nextChar["k"], lineTime, remainTime, skipGuideRef);
 
         if (Math.abs(Number(timer.currentTime) - currentTimeRef.current) >= 1) {
           //曲の経過時間を[分:秒]で表示}
@@ -100,10 +150,24 @@ const Playing = () => {
         }
       }
 
+      //ラインアップデート
       if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
+        const currentPlayingCenterRef = playingCenterRef.current; // 追加
+
+        const lineWord = currentPlayingCenterRef!.getLineWord();
+        const status = tabStatusRef.current?.getStatus();
+        const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
+
+        const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
+        setStatus(lineResult.newStatus);
+
         lineCountRef.current += 1;
 
         if (playingCenterRef.current) {
+          lineStatusRef.current = structuredClone(defaultLineStatus);
+          setLineKpm(0);
+          setTimeBonus(0);
+
           playingCenterRef.current.setLineWord({
             correct: { k: "", r: "" },
             nextChar: [...map.typePattern[count]][0],
@@ -156,6 +220,7 @@ const Playing = () => {
       }
 
       lineCountRef.current = 0;
+      setStatus(defaultStatus);
 
       if (progressElement) {
         progressElement.value = 0;

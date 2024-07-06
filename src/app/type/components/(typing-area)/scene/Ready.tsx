@@ -9,7 +9,9 @@ function Ready() {
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop progressRef={progressRef} />
-      <Box flex="1">Ready</Box>
+      <Box flex="1" className="text-3xl text-center">
+        開始前画面(動画を再生して開始)
+      </Box>
       <PlayingBottom skipGuideRef={skipGuideRef} />
     </Box>
   );

@@ -6,11 +6,7 @@ import React from "react";
 const PlayingNotify = () => {
   const [playingNotify] = useAtom(playingNotifyAtom);
 
-  return (
-    <Box fontWeight="bold" fontSize="xl">
-      {playingNotify}
-    </Box>
-  );
+  return <Box>{playingNotify}</Box>;
 };
 
 export default PlayingNotify;
