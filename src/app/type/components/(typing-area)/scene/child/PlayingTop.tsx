@@ -4,15 +4,20 @@ import PlayingLineProgress from "./child/PlayingLineProgress";
 import PlayingCombo from "./child/PlayingCombo";
 import PlayingLineTime from "./child/PlayingLineTime";
 import PlayingNotify from "./child/PlayingNotify";
-import { statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { sceneAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 
 function PlayingTop({ progressRef }) {
   const [status] = useAtom(statusAtom);
+  const [scene] = useAtom(sceneAtom);
 
   return (
     <Box>
-      <HStack justify="space-between" mx="4" className="text-2xl font-bold mt-2">
+      <HStack
+        justify="space-between"
+        mx="4"
+        className={`text-2xl font-bold mt-2 ${scene !== "playing" ? "invisible" : ""}`}
+      >
         <PlayingCombo comboCount={status.combo} />
         <PlayingNotify />
         <PlayingLineTime />

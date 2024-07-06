@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import editStore, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
@@ -54,6 +54,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       dispatch(setCreatorComment(creatorComment));
       dispatch(setTags(tags));
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

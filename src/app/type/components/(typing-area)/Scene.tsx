@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
 import { useAtom } from "jotai";
-import { sceneAtom } from "../../(atoms)/gameRenderAtoms";
+import { mapAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
 import { Box, Card } from "@chakra-ui/react";
 import { TabStatusRef } from "../(tab)/tab/TabStatus";
@@ -12,11 +12,12 @@ interface SceneProps {
 }
 
 export const Scene = ({ tabStatusRef }: SceneProps) => {
-  const [scene] = useAtom(sceneAtom);
+  const [scene, setScene] = useAtom(sceneAtom);
+  const [map] = useAtom(mapAtom);
 
   if (scene === "ready") {
     return <Ready />;
-  } else if (scene === "playing") {
+  } else if (scene === "playing" && map) {
     return <Playing tabStatusRef={tabStatusRef} />;
   } else if (scene === "end") {
     return <End />;

@@ -44,6 +44,14 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     refetchOnReconnect: false, // 再接続時に再フェッチしない
     refetchOnMount: false, // マウント時に再フェッチしない
   });
+  useEffect(() => {
+    return () => {
+      // コンポーネントのアンマウント時にクエリキャッシュをクリア
+      queryClient.removeQueries({ queryKey: ["mapData", id] });
+      setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, queryClient]);
 
   useLayoutEffect(() => {
     if (id) {
@@ -61,6 +69,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     return () => {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
       queryClient.removeQueries({ queryKey: ["mapData", id] });
+      setMap(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);

@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   currentTimeSSMMAtom,
@@ -108,96 +108,110 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lineWord, status]);
 
-  useEffect(() => {
-    const updateLine = () => {
-      if (!map) {
-        return;
+  const updateLine = useCallback(() => {
+    if (!map) {
+      return;
+    }
+
+    const count = lineCountRef.current;
+
+    const prevLine = map.data[count - 1];
+    const currentLine = map.data[count];
+    const nextLine = map.data[count + 1];
+
+    if (Math.abs(Number(timer.currentTime) - remainTimeRef.current) >= 0.1) {
+      remainTimeRef.current = Number(timer.currentTime);
+      const currentPlayingCenterRef = playingCenterRef.current;
+
+      const lineWord = currentPlayingCenterRef!.getLineWord();
+      const lineTime = Number(timer.currentTime) - Number(prevLine.time);
+      const remainTime = Number(currentLine.time) - Number(timer.currentTime);
+      const status = tabStatusRef.current?.getStatus() as unknown as Status;
+
+      setRemainTime(remainTime.toFixed(1));
+      if (lineWord.nextChar["k"]) {
+        const typeSpeed = new CalcTypeSpeed(
+          status!,
+          lineStatusRef.current!,
+          lineTime,
+          totalTypeTimeRef.current,
+        );
+        setLineKpm(typeSpeed.lineTypeSpeed);
+
+        setStatus({ ...status!, kpm: typeSpeed.totalTypeSpeed });
       }
+      skipGuide(lineWord.nextChar["k"], lineTime, remainTime, skipGuideRef);
 
-      const count = lineCountRef.current;
-
-      const prevLine = map.data[count - 1];
-      const currentLine = map.data[count];
-      const nextLine = map.data[count + 1];
-
-      if (Math.abs(Number(timer.currentTime) - remainTimeRef.current) >= 0.1) {
-        remainTimeRef.current = Number(timer.currentTime);
-        const currentPlayingCenterRef = playingCenterRef.current; // 追加
-
-        const lineWord = currentPlayingCenterRef!.getLineWord();
-        const lineTime = Number(timer.currentTime) - Number(prevLine.time);
-        const remainTime = Number(currentLine.time) - Number(timer.currentTime);
-        const status = tabStatusRef.current?.getStatus() as unknown as Status; // 変更
-
-        setRemainTime(remainTime.toFixed(1));
-        if (lineWord.nextChar["k"]) {
-          const typeSpeed = new CalcTypeSpeed(
-            status!,
-            lineStatusRef.current!,
-            lineTime,
-            totalTypeTimeRef.current,
-          );
-          setLineKpm(typeSpeed.lineTypeSpeed);
-
-          setStatus({ ...status!, kpm: typeSpeed.totalTypeSpeed });
-        }
-        skipGuide(lineWord.nextChar["k"], lineTime, remainTime, skipGuideRef);
-
-        if (Math.abs(Number(timer.currentTime) - currentTimeRef.current) >= 1) {
-          //曲の経過時間を[分:秒]で表示}
-          setCurrentTimeSSMM(Number(timer.currentTime));
-          currentTimeRef.current = Number(timer.currentTime);
-        }
+      if (Math.abs(Number(timer.currentTime) - currentTimeRef.current) >= 1) {
+        setCurrentTimeSSMM(Number(timer.currentTime));
+        currentTimeRef.current = Number(timer.currentTime);
       }
+    }
 
-      //ラインアップデート
-      if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
-        const currentPlayingCenterRef = playingCenterRef.current; // 追加
+    if (nextLine && Number(timer.currentTime) >= Number(currentLine["time"])) {
+      const currentPlayingCenterRef = playingCenterRef.current;
 
-        const lineWord = currentPlayingCenterRef!.getLineWord();
-        const status = tabStatusRef.current?.getStatus();
-        const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
+      const lineWord = currentPlayingCenterRef!.getLineWord();
+      const status = tabStatusRef.current?.getStatus();
+      const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
 
-        const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
-        setStatus(lineResult.newStatus);
+      const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
+      setStatus(lineResult.newStatus);
 
-        lineCountRef.current += 1;
+      lineCountRef.current += 1;
 
-        if (playingCenterRef.current) {
-          lineStatusRef.current = structuredClone(defaultLineStatus);
-          setLineKpm(0);
-          setTimeBonus(0);
+      if (playingCenterRef.current) {
+        lineStatusRef.current = structuredClone(defaultLineStatus);
+        setLineKpm(0);
+        setTimeBonus(0);
 
-          playingCenterRef.current.setLineWord({
-            correct: { k: "", r: "" },
-            nextChar: [...map.typePattern[count]][0],
-            word: [...map.typePattern[count]].slice(1),
-          });
+        playingCenterRef.current.setLineWord({
+          correct: { k: "", r: "" },
+          nextChar: [...map.typePattern[count]][0],
+          word: [...map.typePattern[count]].slice(1),
+        });
 
-          playingCenterRef.current.setLyrics(currentLine["lyrics"]);
-          playingCenterRef.current.setNextLyrics({
-            lyrics: nextLine["lyrics"],
-            kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
-          });
-        }
-
-        if (progressRef.current) {
-          const progressElement = progressRef.current as HTMLProgressElement;
-
-          progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
-        }
+        playingCenterRef.current.setLyrics(currentLine["lyrics"]);
+        playingCenterRef.current.setNextLyrics({
+          lyrics: nextLine["lyrics"],
+          kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
+        });
       }
 
       if (progressRef.current) {
         const progressElement = progressRef.current as HTMLProgressElement;
-        if (prevLine) {
-          progressElement.value = Number(timer.currentTime) - Number(prevLine["time"]);
-        } else {
-          progressElement.value = Number(timer.currentTime);
-        }
-      }
-    };
 
+        progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
+      }
+    }
+
+    if (progressRef.current) {
+      const progressElement = progressRef.current as HTMLProgressElement;
+      if (prevLine) {
+        progressElement.value = Number(timer.currentTime) - Number(prevLine["time"]);
+      } else {
+        progressElement.value = Number(timer.currentTime);
+      }
+    }
+  }, [
+    map,
+    lineCountRef,
+    playingCenterRef,
+    tabStatusRef,
+    skipGuideRef,
+    setRemainTime,
+    setLineKpm,
+    setStatus,
+    setTimeBonus,
+    setCurrentTimeSSMM,
+    lineStatusRef,
+    totalTypeTimeRef,
+    currentTimeRef,
+    remainTimeRef,
+    progressRef,
+  ]);
+
+  useEffect(() => {
     timer.addListener(updateLine);
     // クリーンアップ: refのデータをリセット
     const progressElement = progressRef.current as unknown as HTMLProgressElement;
