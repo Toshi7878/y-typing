@@ -7,6 +7,7 @@ import {
   currentTimeSSMMAtom,
   lineWordAtom,
   mapAtom,
+  remainTimeAtom,
   statusAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
@@ -27,6 +28,7 @@ const Playing = () => {
   const remainTimeRef = useRef(0);
   const [status, setStatus] = useAtom(statusAtom);
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
+  const [, setRemainTime] = useAtom(remainTimeAtom);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -87,7 +89,7 @@ const Playing = () => {
         const kana = currentPlayingCenterRef!.getLineWord();
         const lineTime = Number(timer.currentTime) - Number(prevLine.time);
         const remainTime = Number(currentLine.time) - Number(timer.currentTime);
-        console.log(remainTime);
+        setRemainTime(remainTime.toFixed(1));
 
         skipGuide(kana.nextChar["k"], lineTime, remainTime, skipGuideRef);
 

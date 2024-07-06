@@ -13,7 +13,7 @@ function PlayingTop({ progressRef }) {
   return (
     <Box>
       <HStack justify="space-between" mx="4">
-        <PlayingCombo comboCount={status.comboCount} />
+        <PlayingCombo comboCount={status.combo} />
         <PlayingNotify />
         <PlayingLineTime />
       </HStack>

@@ -20,20 +20,21 @@ export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
 export const comboAtom = atom<number>(0);
 
 export const statusAtom = atom<Status>({
-  Score: 0,
+  score: 0,
   point: 0,
-  typeCount: 0,
-  missCount: 0,
-  lostCount: 0,
-  comboCount: 0,
-  missComboCount: 0,
+  type: 0,
+  miss: 0,
+  lost: 0,
+  combo: 0,
+  missCombo: 0,
   rank: 0,
   kpm: 0,
+  line: 0,
   lineCompleteCount: 0,
   lineFailureCount: 0,
 });
 
 export const playingNotifyAtom = atom<string>("");
 export const lineKpmNotifyAtom = atom<number>(0);
-export const playingRemainTimeAtom = atom<number>(0);
 export const skipGuideAtom = atom<string>("");
+export const remainTimeAtom = atom<string>("0.0");

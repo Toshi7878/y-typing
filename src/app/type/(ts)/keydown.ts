@@ -339,9 +339,9 @@ export class Success {
   }
 
   typeCounter(newStatus: Status, updatePoint: number, newLineWord: Word) {
-    newStatus.typeCount++;
-    newStatus.comboCount++;
-    newStatus.missComboCount = 0;
+    newStatus.type++;
+    newStatus.combo++;
+    newStatus.missCombo = 0;
     newStatus.point += updatePoint;
 
     //ライン打ち切り
@@ -370,9 +370,9 @@ export class Miss {
   }
 
   missCounter(newStatus: Status) {
-    newStatus.missCount++;
-    newStatus.missComboCount++;
-    newStatus.comboCount = 0;
+    newStatus.miss++;
+    newStatus.missCombo++;
+    newStatus.combo = 0;
 
     return newStatus;
   }

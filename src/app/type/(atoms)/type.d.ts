@@ -1,13 +1,14 @@
 export interface Status {
-  Score: number;
+  score: number;
   point: number;
-  typeCount: number;
-  missCount: number;
-  lostCount: number;
-  comboCount: number;
-  missComboCount: number;
+  type: number;
+  miss: number;
+  lost: number;
+  combo: number;
+  missCombo: number;
   rank: number;
   kpm: number;
+  line: number;
   lineCompleteCount: number;
   lineFailureCount: number;
 }
