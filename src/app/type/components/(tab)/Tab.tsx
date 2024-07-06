@@ -21,6 +21,7 @@ export default function TabContent({ className, tabStatusRef }: TabContentProps)
       size="sm"
       position="relative"
       variant="line"
+      colorScheme="teal" // ここで色を指定します
     >
       <TabList height="24px" borderBottom="1px solid lightgray">
         <Tab>ステータス</Tab>

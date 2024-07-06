@@ -16,7 +16,7 @@ export default function LeftNav({ items }: LeftNavProps) {
         </Link>
       </span>
       <nav className="md:flex gap-6 hidden">
-        {items?.map((item, index) => {
+        {/* {items?.map((item, index) => {
           return (
             <Link
               key={index}
@@ -26,7 +26,7 @@ export default function LeftNav({ items }: LeftNavProps) {
               {item.title}
             </Link>
           );
-        })}
+        })} */}
       </nav>
     </div>
   );
