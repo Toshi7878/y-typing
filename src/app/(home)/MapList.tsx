@@ -90,7 +90,7 @@ function MapList() {
                 style={{ aspectRatio: "16/9" }}
                 loading="lazy"
                 layout={"responsive"}
-                src={`https://i.ytimg.com/vi_webp/${map.videoId}/mqdefault.webp`}
+                src={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
                 width={220}
                 height={120}
               />

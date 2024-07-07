@@ -406,6 +406,7 @@ export class Miss {
     newStatus.miss++;
     newStatus.missCombo++;
     newStatus.combo = 0;
+    newStatus.point -= 5;
 
     return newStatus;
   }

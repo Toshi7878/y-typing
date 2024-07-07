@@ -237,7 +237,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
       }
 
       lineCountRef.current = 0;
-      if (scene !== "end") {
+      if (scene !== "end" && scene !== "playing") {
         setStatus(defaultStatus);
       }
 
