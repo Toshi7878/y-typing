@@ -4,15 +4,16 @@ import { useRef } from "react";
 import PlayingBottom from "./child/PlayingBottom";
 
 function Ready() {
-  const progressRef = useRef(null);
+  const lineProgressRef = useRef(null);
+  const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <PlayingTop progressRef={progressRef} />
+      <PlayingTop lineProgressRef={lineProgressRef} />
       <Box flex="1" className="text-3xl text-center">
         開始前画面(動画を再生して開始)
       </Box>
-      <PlayingBottom skipGuideRef={skipGuideRef} />
+      <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
     </Box>
   );
 }

@@ -44,7 +44,8 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
 
   const [map] = useAtom(mapAtom);
   const [, setTimeBonus] = useAtom(timeBonusAtom);
-  const progressRef = useRef(null);
+  const lineProgressRef = useRef(null);
+  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
   const [, setCurrentTimeSSMM] = useAtom(currentTimeSSMMAtom);
@@ -122,6 +123,18 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
     const currentLine = map.data[count];
     const nextLine = map.data[count + 1];
 
+    const currentTotalTimeProgress = totalTimeProgressRef.current;
+    // 倍速実装時timer.constantTimeで計算
+
+    if (
+      currentTotalTimeProgress &&
+      Math.abs(Number(timer.currentTime) - currentTotalTimeProgress.value) >=
+        map.currentTimeBarFrequency
+    ) {
+      //ライン経過時間 ＆ 打鍵速度計算
+      currentTotalTimeProgress.value = Number(timer.currentTime);
+    }
+
     if (Math.abs(Number(timer.currentTime) - remainTimeRef.current) >= 0.1) {
       remainTimeRef.current = Number(timer.currentTime);
       const currentPlayingCenterRef = playingCenterRef.current;
@@ -181,15 +194,15 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
         });
       }
 
-      if (progressRef.current) {
-        const progressElement = progressRef.current as HTMLProgressElement;
+      if (lineProgressRef.current) {
+        const progressElement = lineProgressRef.current as HTMLProgressElement;
 
         progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
       }
     }
 
-    if (progressRef.current) {
-      const progressElement = progressRef.current as HTMLProgressElement;
+    if (lineProgressRef.current) {
+      const progressElement = lineProgressRef.current as HTMLProgressElement;
       if (prevLine) {
         progressElement.value = Number(timer.currentTime) - Number(prevLine["time"]);
       } else {
@@ -211,14 +224,17 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
     totalTypeTimeRef,
     currentTimeRef,
     remainTimeRef,
-    progressRef,
+    lineProgressRef,
   ]);
 
   useEffect(() => {
     timer.addListener(updateLine);
     // クリーンアップ: refのデータをリセット
-    const progressElement = progressRef.current as unknown as HTMLProgressElement;
+    const progressElement = lineProgressRef.current as unknown as HTMLProgressElement;
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
+
+    const currentTotalTimeProgress = totalTimeProgressRef.current;
+    currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
 
     return () => {
       timer.removeListener(updateLine);
@@ -251,9 +267,9 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column" className="select-none">
-      <PlayingTop progressRef={progressRef} />
+      <PlayingTop lineProgressRef={lineProgressRef} />
       <PlayingCenter ref={playingCenterRef} flex="1" />
-      <PlayingBottom skipGuideRef={skipGuideRef} />
+      <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
     </Box>
   );
 };

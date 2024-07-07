@@ -8,9 +8,10 @@ import { forwardRef, useRef } from "react";
 
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;
+  totalTimeProgressRef: React.RefObject<HTMLProgressElement>;
 }
 
-const PlayingBottom = function ({ skipGuideRef }: PlayingBottomRef) {
+const PlayingBottom = function ({ skipGuideRef, totalTimeProgressRef }: PlayingBottomRef) {
   const [map] = useAtom(mapAtom);
   const [scene] = useAtom(sceneAtom);
 
@@ -25,7 +26,7 @@ const PlayingBottom = function ({ skipGuideRef }: PlayingBottomRef) {
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
         <PlayingTotalTime totalTime={totalTime} className="text-2xl font-mono" />
       </HStack>
-      <PlayingLineProgress />
+      <PlayingLineProgress ref={totalTimeProgressRef} />
     </Box>
   );
 };

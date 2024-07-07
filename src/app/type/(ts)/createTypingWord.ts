@@ -447,6 +447,7 @@ export class CreateMap extends ParseLyrics {
   kanaMaxSpeed: number;
   romaLineSpeedList: number[];
   kanaLineSpeedList: number[];
+  currentTimeBarFrequency: number;
   movieTotalTime: number;
   totalTimeSSMM: string;
 
@@ -475,8 +476,9 @@ export class CreateMap extends ParseLyrics {
 
     //totalTime
     this.movieTotalTime = 0;
-    this.totalTimeSSMM = "00:00";
+    this.currentTimeBarFrequency = 0;
 
+    this.totalTimeSSMM = "00:00";
     //movieSpeedController = new MovieSpeedController()
     //movieSpeedController.addEvent()
 
@@ -487,7 +489,6 @@ export class CreateMap extends ParseLyrics {
   // setTotalTime(endTime: number) {
   //   const TIME = endTime // / speed.value;
   //   typeArea.value.durationTime = TIME;
-  //   timer.currentTimeBarFrequency = TIME / 1700; //1700 = 更新頻度の閾値
   // }
 
   getScorePerChar() {
@@ -537,6 +538,7 @@ export class CreateMap extends ParseLyrics {
         this.missPenalty = this.scoreParChar / 4;
         this.movieTotalTime = +this.data[i].time;
         this.totalTimeSSMM = this.formatTotalTime(this.movieTotalTime);
+        this.currentTimeBarFrequency = +this.data[i].time / 1700; //1700 = 更新頻度の閾値
         // this.setTotalTime(this.movieTotalTime);
 
         // status.value.lineCount = this.lineLength;

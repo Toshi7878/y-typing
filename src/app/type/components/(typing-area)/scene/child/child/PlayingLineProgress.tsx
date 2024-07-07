@@ -5,7 +5,7 @@ const PlayingLineProgress = forwardRef<HTMLProgressElement>((props, ref) => {
   console.log("render Progress");
   return (
     <Box>
-    <progress ref={ref as React.LegacyRef<HTMLProgressElement>} className="w-full" />
+      <progress ref={ref as React.LegacyRef<HTMLProgressElement>} className="w-full" />
     </Box>
   );
 });

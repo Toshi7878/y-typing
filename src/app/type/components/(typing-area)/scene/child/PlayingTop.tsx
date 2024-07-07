@@ -7,7 +7,7 @@ import PlayingNotify from "./child/PlayingNotify";
 import { sceneAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 
-function PlayingTop({ progressRef }) {
+function PlayingTop({ lineProgressRef }) {
   const [status] = useAtom(statusAtom);
   const [scene] = useAtom(sceneAtom);
 
@@ -21,7 +21,7 @@ function PlayingTop({ progressRef }) {
         <PlayingNotify className="text-3xl" />
         <PlayingLineTime className="text-3xl" />
       </HStack>
-      <PlayingLineProgress ref={progressRef} />
+      <PlayingLineProgress ref={lineProgressRef} />
     </Box>
   );
 }
