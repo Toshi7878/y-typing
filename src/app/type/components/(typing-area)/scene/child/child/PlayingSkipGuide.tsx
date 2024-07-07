@@ -31,20 +31,22 @@ export const skipGuide = (
   }
 };
 
-const PlayingSkipGuide = forwardRef<SkipGuideRef>((props, ref) => {
-  const [skip, setSkipGuide] = useAtom(skipGuideAtom);
+interface PlayingSkipGuideProps {
+  className?: string;
+}
 
-  useImperativeHandle(ref, () => ({
-    getSkipGuide: () => skip,
-    setSkipGuide: (guide: string) => setSkipGuide(guide),
-  }));
+const PlayingSkipGuide = forwardRef<SkipGuideRef, PlayingSkipGuideProps>(
+  ({ className = "" }: PlayingSkipGuideProps, ref) => {
+    const [skip, setSkipGuide] = useAtom(skipGuideAtom);
 
-  return (
-    <Box fontWeight="bold" fontSize="sm">
-      {skip ? `Type ${skip} key to Skip. ⏩` : ""}
-    </Box>
-  );
-});
+    useImperativeHandle(ref, () => ({
+      getSkipGuide: () => skip,
+      setSkipGuide: (guide: string) => setSkipGuide(guide),
+    }));
+
+    return <Box className={className}>{skip ? `Type ${skip} key to Skip. ⏩` : ""}</Box>;
+  },
+);
 
 PlayingSkipGuide.displayName = "PlayingSkipGuide"; // 追加
 

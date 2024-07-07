@@ -17,7 +17,7 @@ const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
       as="h3"
       id="lyrics"
       size={size}
-      className={`${className} -indent-4`} // マイナスのインデントを追加
+      className={`${className} -indent-4 mb-4`} // マイナスのインデントを追加
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}

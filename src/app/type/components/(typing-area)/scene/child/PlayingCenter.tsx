@@ -1,13 +1,7 @@
 import { Box, VStack } from "@chakra-ui/react";
-import {
-  lyricsAtom,
-  lineWordAtom,
-  nextLyricsAtom,
-  statusAtom,
-} from "@/app/type/(atoms)/gameRenderAtoms";
+import { lyricsAtom, lineWordAtom, nextLyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { forwardRef, useEffect, useImperativeHandle } from "react";
-import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
+import { forwardRef, useImperativeHandle } from "react";
 import Word from "./Word";
 import Lyrics from "./child/PlayingLyrics";
 import NextLyrics from "./child/PlayingNextLyrics";
@@ -41,35 +35,33 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
     getLineWord: () => lineWord,
   }));
 
-
   return (
-    <VStack p="2" className="text-xl" display="" flex={flex}>
+    <VStack p="2" className="truncate" display="" flex={flex}>
       <Box
-        className="outline-text word-font text-white font-bold ml-3"
+        className="text-4xl outline-text word-font text-white font-bold ml-3 mb-2"
         style={{ letterSpacing: "0.1em" }}
       >
         <Word
           id="main_word"
-          correct={lineWord.correct["k"].replace(/ /g, "ˍ")}
+          correct={lineWord.correct["k"].slice(-10).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["k"]}
           word={lineWord.word.map((w) => w["k"]).join("")}
-          className="lowercase mb-3"
+          className="lowercase"
         />
 
         <Word
           id="sub_word"
-          correct={lineWord.correct["r"].replace(/ /g, "ˍ")}
+          correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className="uppercase"
+          className="uppercase ml-1 mt-2"
         />
       </Box>
 
       <Lyrics lyrics={lyrics} />
 
       <NextLyrics
-        size={"md"}
-        className={"text-gray-400"}
+        className={"text-gray-400 ml-3 text-xl"}
         lyrics={nextLyrics.lyrics}
         kpm={nextLyrics.kpm}
       />

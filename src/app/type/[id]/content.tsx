@@ -10,7 +10,7 @@ import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import { Line } from "@/types";
-import { mapAtom } from "../(atoms)/gameRenderAtoms";
+import { defaultStatus, mapAtom, statusAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 const queryClient = new QueryClient();
 
@@ -27,6 +27,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { id } = useParams();
   const [, setMap] = useAtom(mapAtom);
   const tabStatusRef = useRef(null);
+  const [status, setStatus] = useAtom(statusAtom);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -35,6 +36,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);
       setMap(map);
+      setStatus(defaultStatus);
       return map;
     },
 

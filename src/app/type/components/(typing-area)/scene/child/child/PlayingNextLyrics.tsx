@@ -1,5 +1,5 @@
 import { lyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Heading, Stack, VStack } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
 // export interface LyricsHandle {
@@ -12,20 +12,20 @@ interface NextLyricsProps {
   kpm: string;
 }
 
-const NextLyrics = memo(({ size = "lg", className = "", lyrics, kpm }: NextLyricsProps) => {
+const NextLyrics = memo(({ className = "", lyrics, kpm }: NextLyricsProps) => {
   return (
-    <Stack spacing={3}>
-      <Heading
-        as="h3"
+    <Box className={`${className} -indent-4`}>
+      <Box
         id="next_lyrics"
-        size={size}
-        className={`${className} -indent-4`} // マイナスのインデントを追加
+        className="font-bold text-xl"
         dangerouslySetInnerHTML={{
           __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
         }}
       />
-      <Box id="next_kpm">{Number(kpm) > 0 ? `NEXT: ${kpm}kpm` : ""}</Box>
-    </Stack>
+      <Box id="next_kpm" className="ml-5">
+        {Number(kpm) > 0 ? `NEXT: ${kpm}kpm` : ""}
+      </Box>
+    </Box>
   );
 });
 NextLyrics.displayName = "NextLyrics";

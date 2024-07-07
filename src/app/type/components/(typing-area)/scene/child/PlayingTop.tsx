@@ -12,11 +12,10 @@ function PlayingTop({ progressRef }) {
   const [scene] = useAtom(sceneAtom);
 
   return (
-    <Box>
+    <Box mx="4">
       <HStack
         justify="space-between"
-        mx="4"
-        className={`text-2xl font-bold mt-2 ${scene !== "playing" ? "invisible" : ""}`}
+        className={`mx-1 text-2xl font-bold mt-3 font-mono ${scene !== "playing" ? "invisible" : ""}`}
       >
         <PlayingCombo comboCount={status.combo} />
         <PlayingNotify />

@@ -5,6 +5,7 @@ import React from "react";
 
 interface TotalTimeProps {
   totalTime: string;
+  className?: string;
 }
 
 const formatTime = (time: number): string => {
@@ -14,11 +15,11 @@ const formatTime = (time: number): string => {
   return `${MM}:${SS}`;
 };
 
-const PlayingTotalTime = ({ totalTime }: TotalTimeProps) => {
+const PlayingTotalTime = ({ totalTime, className = "" }: TotalTimeProps) => {
   const [currentTimeSSMM] = useAtom(currentTimeSSMMAtom);
 
   return (
-    <Box fontWeight="bold" fontSize="xl">
+    <Box className={className}>
       <span id="current_time">{formatTime(currentTimeSSMM)}</span> /{" "}
       <span id="total_time">{totalTime}</span>
     </Box>

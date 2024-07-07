@@ -10,6 +10,7 @@ import {
   lineWordAtom,
   mapAtom,
   remainTimeAtom,
+  sceneAtom,
   statusAtom,
   timeBonusAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
@@ -54,6 +55,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [, setRemainTime] = useAtom(remainTimeAtom);
   const [, setLineKpm] = useAtom(lineKpmAtom);
+  const [scene] = useAtom(sceneAtom);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -234,7 +236,9 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
       }
 
       lineCountRef.current = 0;
-      setStatus(defaultStatus);
+      if (scene !== "end") {
+        setStatus(defaultStatus);
+      }
 
       if (progressElement) {
         progressElement.value = 0;

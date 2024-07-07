@@ -75,7 +75,7 @@ const TabStatus = forwardRef((props, ref) => {
     height: 102px; // 高さを大きく設定
   `;
   return (
-    <Card variant={"filled"} bg="blue.100">
+    <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody>
         <TableContainer>
           <Table variant="unstyled" className="table-fixed">

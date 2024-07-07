@@ -28,8 +28,8 @@ function SceneWrapper({ tabStatusRef }: SceneProps) {
   console.log("SceneWrapper");
 
   return (
-    <Box w="full" mt="8" h="calc(100vh - 400px)">
-      <Card variant={"filled"} bg="blue.100" h="full" borderColor="black">
+    <Box className="w-full mt-8 overflow-hidden" height="calc(100vh - 400px)">
+      <Card variant={"filled"} className="max-h-[95%]" bg="blue.100" boxShadow="lg">
         <Scene tabStatusRef={tabStatusRef} />
       </Card>
     </Box>
