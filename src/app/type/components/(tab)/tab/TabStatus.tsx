@@ -73,41 +73,51 @@ const TabStatus = forwardRef((props, ref) => {
     }
   `;
 
-  const TrStyled = styled(Tr)`
-    height: 104px; // 高さを大きく設定
+  const TrStyled = styled(Tr)<{ isMdOrSmaller: boolean }>`
+    height: ${({ isMdOrSmaller }) =>
+      isMdOrSmaller ? "52px" : "122px"}; // isMdOrSmallerがtrueのとき高さを小さく設定
+  `;
+  const TdStyled = styled(Td)<{ isCentered: boolean }>`
+    ${({ isCentered }) => isCentered && "text-align: center;"}
   `;
   return (
-    <Card variant={"filled"} bg="blue.100" boxShadow="lg">
+    <Card
+      variant={"filled"}
+      bg="blue.100"
+      boxShadow="lg"
+      size={isMdOrSmaller ? "sm" : "md"} // isMdOrSmallerがtrueでサイズを小さく
+    >
       <CardBody>
         <TableContainer>
           <Table variant="unstyled" className="table-fixed overflow-hidden">
-            <Tbody className="font-bold text-3xl font-mono">
+            <Tbody className="font-bold text-2xl 2xl:text-4xl font-mono">
               {/* 1段目 */}
 
-              <TrStyled>
+              <TrStyled isMdOrSmaller={isMdOrSmaller}>
                 {STATUS_LABEL.slice(0, STATUS_LABEL.length / 2).map((label) => {
                   return (
-                    <Td
+                    <TdStyled
                       key={label}
                       id={label}
                       className={label === "rank" && status["rank"] === 0 ? " opacity-45" : ""}
+                      isCentered={isMdOrSmaller}
                     >
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
                         <span className="value">{status[label]}</span>
                       </UnderlinedSpan>
-                    </Td>
+                    </TdStyled>
                   );
                 })}
               </TrStyled>
 
               {/* 2段目 */}
 
-              <TrStyled>
+              <TrStyled isMdOrSmaller={isMdOrSmaller}>
                 {STATUS_LABEL.slice(STATUS_LABEL.length / 2).map((label) => {
                   return (
-                    <Td key={label} id={label}>
+                    <TdStyled key={label} id={label} isCentered={isMdOrSmaller}>
                       <Label>{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
@@ -117,7 +127,7 @@ const TabStatus = forwardRef((props, ref) => {
                             : status[label]}
                         </span>
                       </UnderlinedSpan>
-                    </Td>
+                    </TdStyled>
                   );
                 })}
               </TrStyled>

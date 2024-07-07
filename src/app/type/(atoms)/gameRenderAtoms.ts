@@ -15,6 +15,7 @@ export const nextLyricsAtom = atom<{ lyrics: string; kpm: string }>({ lyrics: ""
 export const currentTimeSSMMAtom = atom<number>(0);
 
 export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
+export const tabIndexAtom = atom<0 | 1>(1);
 
 // PlayingTop
 export const comboAtom = atom<number>(0);

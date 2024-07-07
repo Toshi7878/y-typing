@@ -3,11 +3,14 @@ import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React from "react";
 
-const PlayingLineTime = () => {
+interface PlayingLineTimeProps {
+  className?: string;
+}
+const PlayingLineTime = ({ className = "" }: PlayingLineTimeProps) => {
   const [remainTime] = useAtom(remainTimeAtom);
   const [lineKpm] = useAtom(lineKpmAtom);
   return (
-    <Box>
+    <Box className={className}>
       {lineKpm}kpm - 残り{remainTime}秒
     </Box>
   );

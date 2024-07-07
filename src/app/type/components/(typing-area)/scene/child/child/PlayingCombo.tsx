@@ -3,8 +3,11 @@ import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React, { memo } from "react";
 
-const PlayingCombo = ({ comboCount }: { comboCount: number }) => {
-  return <Box>{comboCount}</Box>;
+interface PlayingComboProps {
+  comboCount: number;
+  className?: string;
+}
+const PlayingCombo = ({ comboCount, className = "" }: PlayingComboProps) => {
+  return <Box className={className}>{comboCount}</Box>;
 };
-
 export default memo(PlayingCombo);

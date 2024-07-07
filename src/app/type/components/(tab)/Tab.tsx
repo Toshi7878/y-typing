@@ -3,7 +3,8 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import TabStatus, { TabStatusRef } from "./tab/TabStatus";
 import TabRanking from "./tab/TabRanking";
-import { useState } from "react";
+import { useAtom } from "jotai";
+import { tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
 
 interface TabContentProps {
   className?: string;
@@ -11,12 +12,12 @@ interface TabContentProps {
 }
 export default function TabContent({ className, tabStatusRef }: TabContentProps) {
   console.log("Tab");
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
 
   return (
     <Tabs
-      // index={tabIndex}
-      onChange={(index) => setSelectedIndex(index)}
+      index={tabIndex} // デフォルトの選択されたタブを設定
+      onChange={(index: number) => setTabIndex(index as 0 | 1)} // 型を 'number' に変更
       className={className}
       flex={1}
       size="md"
@@ -27,7 +28,7 @@ export default function TabContent({ className, tabStatusRef }: TabContentProps)
       <TabList height="33px" px="8" borderBottom="1px solid lightgray">
         <Tab
           width="200px"
-          opacity={selectedIndex === 0 ? 1 : 0.5}
+          opacity={tabIndex === 0 ? 1 : 0.5}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ステータス
@@ -35,7 +36,7 @@ export default function TabContent({ className, tabStatusRef }: TabContentProps)
 
         <Tab
           width="200px"
-          opacity={selectedIndex === 1 ? 1 : 0.5}
+          opacity={tabIndex === 1 ? 1 : 0.5}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ランキング

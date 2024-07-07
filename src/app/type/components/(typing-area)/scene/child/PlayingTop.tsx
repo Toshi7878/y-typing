@@ -15,11 +15,11 @@ function PlayingTop({ progressRef }) {
     <Box mx="4">
       <HStack
         justify="space-between"
-        className={`mx-1 text-2xl font-bold mt-3 font-mono ${scene !== "playing" ? "invisible" : ""}`}
+        className={`mx-1 font-bold mt-3 mb-1 font-mono ${scene !== "playing" ? "invisible" : ""}`}
       >
-        <PlayingCombo comboCount={status.combo} />
-        <PlayingNotify />
-        <PlayingLineTime />
+        <PlayingCombo comboCount={status.combo} className="text-3xl" />
+        <PlayingNotify className="text-3xl" />
+        <PlayingLineTime className="text-3xl" />
       </HStack>
       <PlayingLineProgress ref={progressRef} />
     </Box>

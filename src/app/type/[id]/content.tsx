@@ -83,12 +83,11 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       <Flex direction="column" align="center" w="full" pt="7">
         <Flex w="full" gap="4" direction={{ base: "column", xl: "row" }}>
           <Box flex={{ base: "1" }}>
-            <YouTubeContent className={isLoading ? "invisible" : ""} videoId={videoId} />
+            <YouTubeContent className={`${isLoading ? "invisible" : ""} `} videoId={videoId} />
           </Box>
 
           <Box
-            flex={{ base: "1", lg: "8" }}
-            ml={{ lg: "auto" }}
+            flex={{ base: "8" }}
             display="flex"
             flexDirection="column"
             height="100%" // 追加: 高さをflexに合わせる

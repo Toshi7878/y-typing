@@ -1,7 +1,5 @@
-import { lyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { Box, Heading } from "@chakra-ui/react";
-import { useAtom } from "jotai";
-import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import React, { memo } from "react";
 // export interface LyricsHandle {
 //   setLyrics: (lyrics: string) => void;
 // }
@@ -13,11 +11,9 @@ interface LyricsProps {
 
 const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
   return (
-    <Heading
-      as="h3"
+    <Box
       id="lyrics"
-      size={size}
-      className={`${className} -indent-4 mb-4`} // マイナスのインデントを追加
+      className={`${className}`} // マイナスのインデントを追加
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}

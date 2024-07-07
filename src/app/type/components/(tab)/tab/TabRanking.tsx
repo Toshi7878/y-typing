@@ -7,7 +7,7 @@ import "../../../style/statusTable.scss";
 const TabRanking = forwardRef((props, ref) => {
   return (
     <Card variant={"filled"} bg="blue.100">
-      <CardBody className="text-3xl font-bold">{`(* ' ｰ ' ) < ランキングはじゅんびちゅう`}</CardBody>
+      <CardBody className="text-3xl font-bold w-full">{`(* ' ｰ ' ) < ランキングはじゅんびちゅう`}</CardBody>
     </Card>
   );
 });

@@ -38,7 +38,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   return (
     <VStack p="2" className="truncate" display="" flex={flex}>
       <Box
-        className="text-4xl outline-text word-font text-white font-bold ml-3 mb-2"
+        className="word-font outline-text text-white font-bold ml-3 mb-2 mt-1"
         style={{ letterSpacing: "0.1em" }}
       >
         <Word
@@ -46,7 +46,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["k"].slice(-10).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["k"]}
           word={lineWord.word.map((w) => w["k"]).join("")}
-          className="lowercase"
+          className="lowercase text-[2.5rem]"
         />
 
         <Word
@@ -54,14 +54,17 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className="uppercase ml-1 mt-2"
+          className="uppercase ml-1 text-[2.5rem]"
         />
       </Box>
 
-      <Lyrics lyrics={lyrics} />
+      <Lyrics
+        lyrics={lyrics}
+        className="-indent-2 mb-4 font-bold text-[2.5rem] text-truncate lyrics-font"
+      />
 
       <NextLyrics
-        className={"text-gray-400 ml-3 text-xl"}
+        className={"text-gray-400 ml-3 text-3xl lyrics-font"}
         lyrics={nextLyrics.lyrics}
         kpm={nextLyrics.kpm}
       />

@@ -14,15 +14,15 @@ interface NextLyricsProps {
 
 const NextLyrics = memo(({ className = "", lyrics, kpm }: NextLyricsProps) => {
   return (
-    <Box className={`${className} -indent-4`}>
+    <Box className={`${className}`}>
       <Box
         id="next_lyrics"
-        className="font-bold text-xl"
+        className="font-bold -indent-3 ml-[1px]"
         dangerouslySetInnerHTML={{
           __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
         }}
       />
-      <Box id="next_kpm" className="ml-5">
+      <Box id="next_kpm" className="ml-4">
         {Number(kpm) > 0 ? `NEXT: ${kpm}kpm` : ""}
       </Box>
     </Box>

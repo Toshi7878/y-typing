@@ -3,10 +3,13 @@ import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React from "react";
 
-const PlayingNotify = () => {
+interface PlayingNotifyProps {
+  className?: string;
+}
+const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
   const [playingNotify] = useAtom(playingNotifyAtom);
 
-  return <Box>{playingNotify}</Box>;
+  return <Box className={className}>{playingNotify}</Box>;
 };
 
 export default PlayingNotify;

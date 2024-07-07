@@ -59,7 +59,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
     }
   }, []);
 
-  const HEIGHT = (288).toFixed();
+  const HEIGHT = (325).toFixed();
   const WIDTH = ((Number(HEIGHT) * 16) / 9).toFixed();
   return (
     <Box style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}>
