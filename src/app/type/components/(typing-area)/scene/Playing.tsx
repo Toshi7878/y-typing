@@ -59,10 +59,11 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (isTyped({ event, lineWord })) {
-        const result = new Typing({ event, lineWord });
+      const cloneLineWord = structuredClone(lineWord);
+      if (isTyped({ event, lineWord: cloneLineWord })) {
+        const result = new Typing({ event, lineWord: cloneLineWord });
 
-        if (result.newLineWord) {
+        if (lineWord.correct["r"] !== result.newLineWord.correct["r"]) {
           // 変更
           const count = lineCountRef.current;
           const prevLine = map!.data[count - 1];
@@ -89,7 +90,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
           if (!result.newLineWord.nextChar["k"]) {
             totalTypeTimeRef.current += lineTime;
           }
-        } else {
+        } else if (result.newLineWord.correct["r"] !== "") {
           setStatus(new Miss(status).newStatus);
         }
       } else {

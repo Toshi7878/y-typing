@@ -64,7 +64,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   return (
     <Box style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}>
       <YouTube
-        className={`${className}`}
+        className={`${className} mt-2`}
         videoId={videoId}
         opts={{
           width: `${WIDTH}px`,

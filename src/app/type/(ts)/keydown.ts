@@ -150,7 +150,7 @@ interface JudgeType {
   lineWord: Word;
 }
 class Judge {
-  newLineWord: Word | false;
+  newLineWord: Word;
   updatePoint: number;
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
@@ -165,7 +165,7 @@ class Judge {
     );
 
     if (!IS_SUCCESS) {
-      return false;
+      return lineWord;
     }
 
     if (kana == "ん" && newLineWord.word[0]) {
@@ -301,7 +301,7 @@ interface TypingEvent {
 }
 
 export class Typing {
-  newLineWord: Word | false;
+  newLineWord: Word;
   updatePoint: number;
   constructor({ event, lineWord }: TypingEvent) {
     const chars: CharsType = this.makeInput(event);

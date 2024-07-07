@@ -10,7 +10,7 @@ import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import { Line } from "@/types";
-import { defaultStatus, mapAtom, statusAtom } from "../(atoms)/gameRenderAtoms";
+import { defaultStatus, mapAtom, sceneAtom, statusAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 const queryClient = new QueryClient();
 
@@ -28,6 +28,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setMap] = useAtom(mapAtom);
   const tabStatusRef = useRef(null);
   const [status, setStatus] = useAtom(statusAtom);
+  const [, setScene] = useAtom(sceneAtom);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -51,6 +52,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
       queryClient.removeQueries({ queryKey: ["mapData", id] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
+      setScene("ready");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);
@@ -77,9 +79,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   }, [id, queryClient]);
 
   return (
-    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-8 md:px-14 w-full">
-      <Flex direction="column" align="center" w="full" pt="8">
-        <Flex w="full" gap="4" direction={{ base: "column", lg: "row" }}>
+    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-7 md:px-14 w-full">
+      <Flex direction="column" align="center" w="full" pt="7">
+        <Flex w="full" gap="4" direction={{ base: "column", xl: "row" }}>
           <Box flex={{ base: "1" }}>
             <YouTubeContent className={isLoading ? "invisible" : ""} videoId={videoId} />
           </Box>

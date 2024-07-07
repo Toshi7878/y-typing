@@ -17,7 +17,7 @@ const PlayingBottom = function ({ skipGuideRef }: PlayingBottomRef) {
   const totalTime = map?.totalTimeSSMM ?? "00:00"; // 'map' が null の場合に対応
 
   return (
-    <Box mx="4" mb="3">
+    <Box mx="4" mb="6">
       <HStack
         justify="space-between"
         className={`mx-1 font-bold font-mono ${scene !== "playing" ? "invisible" : ""}`}

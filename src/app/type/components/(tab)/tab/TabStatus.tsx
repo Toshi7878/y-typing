@@ -1,13 +1,21 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 
-import { Table, Tbody, Tr, Td, TableContainer, Card, CardBody } from "@chakra-ui/react"; // Card, CardBodyを追加
+import {
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  TableContainer,
+  Card,
+  CardBody,
+  useMediaQuery,
+} from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
 import { mapAtom, statusAtom, timeBonusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
-import { useRefs } from "@/app/edit/(contexts)/refsProvider";
 
 export interface TabStatusRef {
   getStatus: () => void;
@@ -18,6 +26,7 @@ const TabStatus = forwardRef((props, ref) => {
   const [timeBonus] = useAtom(timeBonusAtom);
 
   const [status, setStatus] = useAtom(statusAtom);
+  const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
 
   useImperativeHandle(ref, () => ({
     getStatus: () => status,
@@ -35,7 +44,9 @@ const TabStatus = forwardRef((props, ref) => {
 
   if (!map) return null; // mapが存在しない場合は何も表示しない
 
-  const STATUS_LABEL = ["score", "type", "kpm", "rank", "point", "miss", "lost", "line"];
+  const STATUS_LABEL = isMdOrSmaller
+    ? ["score", "line", "miss", "lost"]
+    : ["score", "type", "kpm", "rank", "point", "miss", "lost", "line"];
   const capitalizeFirstLetter = (string: string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -49,41 +60,32 @@ const TabStatus = forwardRef((props, ref) => {
 
     .value {
       position: relative;
-
-      z-index: 1;
     }
 
     &::after {
       content: "";
-
       position: absolute;
       bottom: 0;
       left: 0;
-
-      right: 0;
-
       height: 2px;
       width: ${({ label }) => (label === "score" || label === "point" ? "120px" : "70px")};
-
       background-color: black;
-
-      z-index: 0;
     }
   `;
 
   const TrStyled = styled(Tr)`
-    height: 102px; // 高さを大きく設定
+    height: 104px; // 高さを大きく設定
   `;
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody>
         <TableContainer>
-          <Table variant="unstyled" className="table-fixed">
+          <Table variant="unstyled" className="table-fixed overflow-hidden">
             <Tbody className="font-bold text-3xl font-mono">
               {/* 1段目 */}
 
               <TrStyled>
-                {STATUS_LABEL.slice(0, 4).map((label) => {
+                {STATUS_LABEL.slice(0, STATUS_LABEL.length / 2).map((label) => {
                   return (
                     <Td
                       key={label}
@@ -103,7 +105,7 @@ const TabStatus = forwardRef((props, ref) => {
               {/* 2段目 */}
 
               <TrStyled>
-                {STATUS_LABEL.slice(4).map((label) => {
+                {STATUS_LABEL.slice(STATUS_LABEL.length / 2).map((label) => {
                   return (
                     <Td key={label} id={label}>
                       <Label>{capitalizeFirstLetter(label)}</Label>
