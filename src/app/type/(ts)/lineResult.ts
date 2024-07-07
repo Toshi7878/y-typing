@@ -25,9 +25,9 @@ export class LineResult {
       newStatus.line = map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
       const lostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       newStatus.lost += lostWord.length;
+      newStatus.score += newStatus.point;
     }
 
-    newStatus.score += newStatus.point;
     newStatus.point = 0;
     return newStatus;
   }

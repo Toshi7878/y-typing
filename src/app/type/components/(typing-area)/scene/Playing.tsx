@@ -250,7 +250,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
   }, []);
 
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box height="100vh" display="flex" flexDirection="column" className="select-none">
       <PlayingTop progressRef={progressRef} />
       <PlayingCenter ref={playingCenterRef} flex="1" />
       <PlayingBottom skipGuideRef={skipGuideRef} />
