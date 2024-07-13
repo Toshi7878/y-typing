@@ -10,6 +10,6 @@ export class CalcTypeSpeed {
 
   updateTotalTypeSpeed(status: Status, lineTime: number, totalTime: number) {
     const totalTypeTime = lineTime + totalTime;
-    return Math.round((status.type / totalTypeTime) * 60);
+    return Math.round((status.display.type / totalTypeTime) * 60);
   }
 }

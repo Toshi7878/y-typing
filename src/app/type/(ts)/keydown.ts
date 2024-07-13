@@ -372,25 +372,27 @@ export class Success extends CalcTypeSpeed {
     lineTime: number,
     clearTimeRef: React.RefObject<number>,
   ) {
-    newStatus.type++;
+    newStatus.display.type++;
     lineStatusRef.current!.type++;
-    newStatus.combo++;
+    newStatus.display.combo++;
     newStatus.missCombo = 0;
-    newStatus.point += updatePoint;
-    newStatus.kpm = this.totalTypeSpeed;
+    newStatus.lineTypePoint += updatePoint;
+    newStatus.display.point += updatePoint;
+    newStatus.display.kpm = this.totalTypeSpeed;
 
-    if (newStatus.combo > newStatus.maxCombo) {
-      newStatus.maxCombo = newStatus.combo;
+    if (newStatus.display.combo > newStatus.maxCombo) {
+      newStatus.maxCombo = newStatus.display.combo;
     }
 
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
-      newStatus.timeBonus = timeBonus; //speed;
+      newStatus.display.timeBonus = timeBonus; //speed;
       (clearTimeRef as React.MutableRefObject<number>).current = lineTime;
-      newStatus.score += newStatus.point + timeBonus;
+      newStatus.display.score += newStatus.display.point + timeBonus;
       newStatus.lineCompleteCount++;
-      newStatus.line = map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
+      newStatus.display.line =
+        map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
     }
 
     return newStatus;
@@ -402,11 +404,12 @@ export class Miss {
 
   constructor(
     status: Status,
+    map: CreateMap,
     lineTime: number,
     char: string,
     lineTypeResult: React.RefObject<TypeResult[]>,
   ) {
-    this.newStatus = this.missCounter({ ...status });
+    this.newStatus = this.missCounter({ ...status }, map);
 
     lineTypeResult.current!.push({
       type: {
@@ -417,11 +420,13 @@ export class Miss {
     });
   }
 
-  missCounter(newStatus: Status) {
-    newStatus.miss++;
+  missCounter(newStatus: Status, map: CreateMap) {
+    newStatus.display.miss++;
     newStatus.missCombo++;
-    newStatus.combo = 0;
-    newStatus.point -= 5;
+    newStatus.display.combo = 0;
+    newStatus.display.point -= 5;
+    newStatus.lineMissPoint -= 5;
+    newStatus.acc -= Number(map.getScorePerChar) / 2;
 
     return newStatus;
   }
@@ -484,7 +489,13 @@ export function shortcutKey(
 
     case "F4":
       const currentPlayingCenterRef = playingCenterRef.current; // 追加
-      setStatus({ ...defaultStatus, line: map.lineLength });
+      setStatus({
+        ...defaultStatus,
+        display: {
+          ...defaultStatus.display, // 追加
+          line: map.lineLength,
+        },
+      });
       (lineStatusRef.current as LineStatus) = structuredClone(defaultLineStatus);
 
       (totalTypeTimeRef.current as number) = 0;

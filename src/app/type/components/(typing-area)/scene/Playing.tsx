@@ -109,7 +109,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
             totalTypeTimeRef.current += lineTime;
           }
         } else if (result.newLineWord.correct["r"] !== "") {
-          const miss = new Miss(status, lineTime, event.key, lineTypeResult);
+          const miss = new Miss(status, map!, lineTime, event.key, lineTypeResult);
           setStatus(miss.newStatus);
         }
       } else {
@@ -185,7 +185,13 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
         );
         setLineKpm(typeSpeed.lineTypeSpeed);
 
-        setStatus({ ...status!, kpm: typeSpeed.totalTypeSpeed });
+        setStatus({
+          ...status!,
+          display: {
+            ...status.display, // 追加
+            kpm: typeSpeed.totalTypeSpeed,
+          },
+        });
       }
 
       skipGuide(lineWord.nextChar["k"], lineTime, remainTime, skipGuideRef);
@@ -203,21 +209,20 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
       const status = tabStatusRef.current?.getStatus() as Status | undefined;
       const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
 
-      const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
+      const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef, count);
       lineResultRef.current!.push({
         status: {
-          point: status!.point,
-          timeBonus: status!.timeBonus,
-          type: status!.type,
-          miss: status!.miss,
-          combo: status!.combo,
+          point: status!.display.point,
+          timeBonus: status!.display.timeBonus,
+          type: status!.display.type,
+          miss: status!.display.miss,
+          combo: status!.display.combo,
           clearTime: clearTimeRef.current,
-          kpm: status!.kpm,
+          kpm: status!.display.kpm,
           rkpm: 0,
         },
         typeResult: lineTypeResult.current,
       });
-      console.log(lineResultRef.current);
       setStatus(lineResult.newStatus);
       if (lineWord.nextChar["k"]) {
         totalTypeTimeRef.current = lineResult.newTotalTime;

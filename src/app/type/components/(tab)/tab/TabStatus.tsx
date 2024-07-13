@@ -34,7 +34,7 @@ const TabStatus = forwardRef((props, ref) => {
   useEffect(() => {
     if (map) {
       const newStatus = { ...status };
-      newStatus.line = map.lineLength;
+      newStatus.display.line = map.lineLength;
 
       setStatus(newStatus);
     }
@@ -98,13 +98,15 @@ const TabStatus = forwardRef((props, ref) => {
                     <TdStyled
                       key={label}
                       id={label}
-                      className={label === "rank" && status["rank"] === 0 ? " opacity-45" : ""}
+                      className={
+                        label === "rank" && status.display["rank"] === 0 ? " opacity-45" : ""
+                      }
                       isCentered={isMdOrSmaller}
                     >
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        <span className="value">{status[label]}</span>
+                        <span className="value">{status.display[label]}</span>
                       </UnderlinedSpan>
                     </TdStyled>
                   );
@@ -121,9 +123,9 @@ const TabStatus = forwardRef((props, ref) => {
 
                       <UnderlinedSpan label={label}>
                         <span className="value">
-                          {label === "point" && status["timeBonus"]
-                            ? `${status[label]}+${status["timeBonus"]}`
-                            : status[label]}
+                          {label === "point" && status.display["timeBonus"]
+                            ? `${status.display[label]}+${status.display["timeBonus"]}`
+                            : status.display[label]}
                         </span>
                       </UnderlinedSpan>
                     </TdStyled>

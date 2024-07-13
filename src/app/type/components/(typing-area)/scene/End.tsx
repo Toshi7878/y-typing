@@ -21,12 +21,12 @@ const End = ({ lineResultRef }: EndProps) => {
 
   const upload = () => {
     const sendStatus = {
-      score: status.score,
-      type: status.type,
-      miss: status.miss,
-      lost: status.lost,
+      score: status.display.score,
+      type: status.display.type,
+      miss: status.display.miss,
+      lost: status.display.lost,
       maxCombo: status.maxCombo,
-      kpm: status.kpm,
+      kpm: status.display.kpm,
     };
     const sendData = {
       mapId: mapId,
@@ -80,7 +80,7 @@ const End = ({ lineResultRef }: EndProps) => {
   return (
     <Box flex="1" className="text-3xl text-center">
       終了画面(リザルト・ランキング登録ボタンを設置)
-      {status.score > bestScoreRef.current ? (
+      {status.display.score > bestScoreRef.current ? (
         <form action={formAction}>
           <Stack display="flex" flexDirection="column" gap="6">
             <UploadButton responseStatus={state.status} />

@@ -1,18 +1,23 @@
 import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 
 export interface Status {
-  score: number;
-  point: number;
-  timeBonus: number;
-  type: number;
-  miss: number;
-  lost: number;
-  combo: number;
+  display: {
+    score: number;
+    point: number;
+    timeBonus: number;
+    type: number;
+    miss: number;
+    lost: number;
+    combo: number;
+    rank: number;
+    kpm: number;
+    line: number;
+  };
+  lineTypePoint: number;
+  lineMissPoint: number;
+  acc: number;
   maxCombo: number;
   missCombo: number;
-  rank: number;
-  kpm: number;
-  line: number;
   lineCompleteCount: number;
   lineFailureCount: number;
 }
