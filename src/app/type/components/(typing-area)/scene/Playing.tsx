@@ -187,6 +187,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
 
         setStatus({ ...status!, kpm: typeSpeed.totalTypeSpeed });
       }
+
       skipGuide(lineWord.nextChar["k"], lineTime, remainTime, skipGuideRef);
 
       if (Math.abs(Number(timer.currentTime) - currentTimeRef.current) >= 1) {

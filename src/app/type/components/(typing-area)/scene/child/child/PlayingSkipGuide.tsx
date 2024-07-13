@@ -19,6 +19,8 @@ export const skipGuide = (
   const IS_SKIP_DISPLAY = !kana && lineTime >= SKIP_IN && lineRemainTime >= SKIP_OUT;
 
   const skip = skipGuideRef.current?.getSkipGuide();
+
+  // console.log(`lineTime:${lineTime} lineRemainTime:${lineRemainTime} skip:${skip}`);
   //スキップ表示絶対条件 && 既に表示されているか
   if (IS_SKIP_DISPLAY) {
     if (!skip) {
