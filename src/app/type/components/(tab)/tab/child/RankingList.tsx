@@ -80,19 +80,18 @@ const RankingList = () => {
             user: { userId: string; user: { name: string }; status: SendResultData["status"] },
             index: number,
           ) => (
-            <Tooltip
-              label={
-                <div>
-                  <div>タイプ数: {user.status.type}</div>
-                  <div>ミス数: {user.status.miss}</div>
-                  <div>ロスト数: {user.status.lost}</div>
-                  <div>最大コンボ: {user.status.maxCombo}</div>
-                </div>
-              }
-              placement="bottom"
-              key={index}
-            >
-              <React.Fragment>
+            <React.Fragment key={index}>
+              <Tooltip
+                label={
+                  <div>
+                    <div>タイプ数: {user.status.type}</div>
+                    <div>ミス数: {user.status.miss}</div>
+                    <div>ロスト数: {user.status.lost}</div>
+                    <div>最大コンボ: {user.status.maxCombo}</div>
+                  </div>
+                }
+                placement="bottom"
+              >
                 <Tr
                   _hover={{ backgroundColor: "gray.100" }}
                   className="cursor-pointer"
@@ -104,7 +103,7 @@ const RankingList = () => {
                     }
                   }}
                 >
-                  <Td>{index + 1}</Td>
+                  <Td pr={5} className="">{`#${index + 1}`}</Td>
                   <Td>{user.user.name}</Td>
                   <Td>{user.status.score}</Td>
                   <Td>
@@ -116,38 +115,39 @@ const RankingList = () => {
                   </Td>
                   <Td>{user.status.kpm}</Td>
                 </Tr>
-                {showMenu === index && ( // クリックされた行のメニューを表示
-                  <Stack
-                    className="rounded-md"
-                    position="absolute"
-                    zIndex="tooltip"
-                    bg="white"
-                    boxShadow="md"
-                    p={2} // パディングを追加
+              </Tooltip>
+
+              {showMenu === index && ( // クリックされた行のメニューを表示
+                <Stack
+                  className="rounded-md"
+                  position="absolute"
+                  zIndex="tooltip"
+                  bg="white"
+                  boxShadow="md"
+                  p={2} // パディングを追加
+                >
+                  <Button
+                    as="a" // Linkとして機能させる
+                    href={`/user/${user.userId}`} // ユーザーページへのリンク
+                    variant="unstyled" // ボタンのスタイルを変更
+                    size="sm"
+                    _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
                   >
-                    <Button
-                      as="a" // Linkとして機能させる
-                      href={`/user/${user.userId}`} // ユーザーページへのリンク
-                      variant="unstyled" // ボタンのスタイルを変更
-                      size="sm"
-                      _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
-                    >
-                      ユーザーページへ
-                    </Button>
-                    <Button
-                      variant="unstyled" // ボタンのスタイルを変更
-                      size="sm"
-                      _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
-                      onClick={() => {
-                        /* リプレイ再生ロジック */
-                      }}
-                    >
-                      リプレイ再生
-                    </Button>
-                  </Stack>
-                )}
-              </React.Fragment>
-            </Tooltip>
+                    ユーザーページへ
+                  </Button>
+                  <Button
+                    variant="unstyled" // ボタンのスタイルを変更
+                    size="sm"
+                    _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
+                    onClick={() => {
+                      /* リプレイ再生ロジック */
+                    }}
+                  >
+                    リプレイ再生
+                  </Button>
+                </Stack>
+              )}
+            </React.Fragment>
           ),
         )}
     </>
