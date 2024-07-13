@@ -1,17 +1,23 @@
 "use client";
 import { Button } from "@chakra-ui/react";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react"; // useStateを追加
 import { useFormStatus } from "react-dom";
+
 interface UploadButtonProps {
   responseStatus: number;
 }
+
 const UploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
 
+  const [isDisabled, setIsDisabled] = useState(false); // isDisabledの状態を追加
+
   useEffect(() => {
-    if (responseStatus !== 200) {
+    if (responseStatus === 200) {
+      setIsDisabled(true); // responseStatusが200のときボタンを無効化
     } else {
+      setIsDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseStatus]);
@@ -25,9 +31,8 @@ const UploadButton = ({ responseStatus }: UploadButtonProps) => {
       width="200px"
       border="1px"
       borderColor="black"
-      isLoading={pending} // 変更
-      // cursor={canUpload ? "" : "not-allowed"}
-      // opacity={isUpButtonDisabled ? "0.6" : "1"}
+      isLoading={pending}
+      isDisabled={isDisabled} // isDisabledを追加
       _hover={{ bg: "#3a90f3" }}
       type="submit"
     >
