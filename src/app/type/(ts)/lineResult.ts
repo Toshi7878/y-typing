@@ -20,6 +20,7 @@ export class LineResult {
   updateStatus(status: Status, lineWord: Word, map: CreateMap) {
     const newStatus = { ...status };
 
+    newStatus.timeBonus = 0;
     if (lineWord.nextChar["k"]) {
       newStatus.lineFailureCount++;
       newStatus.line = map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
