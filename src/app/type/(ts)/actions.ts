@@ -2,23 +2,38 @@
 
 import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { revalidatePath } from "next/cache";
 import { resultSendSchema } from "./validationSchema";
 import { SendResultData } from "./type";
 
 const prisma = new PrismaClient();
 
 const send = async (data: SendResultData, userId: number) => {
-  const newResult = await prisma.result.create({
-    data: {
-      ...data,
-
-      userId,
-
-      lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
+  const existingResult = await prisma.result.findFirst({
+    where: {
+      mapId: data.mapId,
+      userId: userId,
     },
   });
-  return newResult.id; // 新しく作成されたマップのIDを返す
+
+  if (existingResult) {
+    const updatedResult = await prisma.result.update({
+      where: { id: existingResult.id },
+      data: {
+        ...data,
+        lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
+      },
+    });
+    return updatedResult.id; // 更新されたマップのIDを返す
+  } else {
+    const newResult = await prisma.result.create({
+      data: {
+        ...data,
+        userId,
+        lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
+      },
+    });
+    return newResult.id; // 新しく作成されたマップのIDを返す
+  }
 };
 
 export async function actions(data: SendResultData) {
@@ -40,8 +55,6 @@ export async function actions(data: SendResultData) {
   try {
     const userId = Number(session?.user?.id);
     const newId = await send(data, userId);
-    // リストの再検証をトリガー(更新されるようになる)
-    // revalidatePath("/api/map-list");
 
     return {
       id: newId,
