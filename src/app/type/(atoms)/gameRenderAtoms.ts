@@ -40,6 +40,5 @@ export const statusAtom = atom<Status>(defaultStatus);
 
 export const playingNotifyAtom = atom<{ text: string }>({ text: "" });
 export const lineKpmAtom = atom<number>(0);
-export const skipGuideAtom = atom<string>("");
 export const remainTimeAtom = atom<string>("0.0");
 export const mapIdAtom = atom<number>(0);

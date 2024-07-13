@@ -5,6 +5,7 @@ import TabStatus, { TabStatusRef } from "./tab/TabStatus";
 import TabRanking from "./tab/TabRanking";
 import { useAtom } from "jotai";
 import { tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
+import { useEffect } from "react";
 
 interface TabContentProps {
   className?: string;
@@ -13,6 +14,12 @@ interface TabContentProps {
 export default function TabContent({ className, tabStatusRef }: TabContentProps) {
   console.log("Tab");
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
+
+  useEffect(() => {
+    return () => {
+      setTabIndex(1);
+    };
+  }, []);
 
   return (
     <Tabs

@@ -1,7 +1,5 @@
-import { skipGuideAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import { useAtom } from "jotai";
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 export interface SkipGuideRef {
   getSkipGuide: () => string;
@@ -37,7 +35,7 @@ interface PlayingSkipGuideProps {
 
 const PlayingSkipGuide = forwardRef<SkipGuideRef, PlayingSkipGuideProps>(
   ({ className = "" }: PlayingSkipGuideProps, ref) => {
-    const [skip, setSkipGuide] = useAtom(skipGuideAtom);
+    const [skip, setSkipGuide] = useState("");
 
     useImperativeHandle(ref, () => ({
       getSkipGuide: () => skip,
