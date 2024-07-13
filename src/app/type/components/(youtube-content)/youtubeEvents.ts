@@ -30,7 +30,12 @@ class YTState {
     ticker.stop();
   }
 
-  seek() {
+  seek(target: any, lineCountRef: React.RefObject<number>) {
+    const time = target.getCurrentTime();
+
+    if (time === 0) {
+      (lineCountRef as React.MutableRefObject<number>).current = 0;
+    }
     console.log("シーク");
   }
 

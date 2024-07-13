@@ -1,10 +1,13 @@
 import { SetStateAction } from "jotai";
-import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { PlayingCenterRef, Word } from "../components/(typing-area)/scene/child/PlayingCenter";
 import { Status } from "../(atoms)/type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
-import { LineStatus } from "../components/(typing-area)/scene/Playing";
+import { defaultLineStatus, LineStatus } from "../components/(typing-area)/scene/Playing";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
+import { Dispatch } from "react";
+import { defaultStatus } from "../(atoms)/gameRenderAtoms";
+import { timer } from "./timer";
 
 const keyboardCharacters = [
   "0",
@@ -433,17 +436,58 @@ export function shortcutKey(
   event: KeyboardEvent,
   skipGuideRef: React.RefObject<SkipGuideRef>,
   map: CreateMap,
-  count: number,
+  countRef: React.RefObject<number>,
   speed: number,
   playerRef: any,
+  isPausedRef: React.RefObject<boolean>,
+  playingCenterRef: React.RefObject<PlayingCenterRef>,
+  setStatus: Dispatch<SetStateAction<Status>>, // 修正: Diapatch -> Dispatch
+  lineStatusRef: React.RefObject<LineStatus>, // 型を追加
+  totalTypeTimeRef: React.RefObject<number>,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
 
-  if (event.code === skip) {
-    const nextLine = map.data[count];
-    playerRef.current.seekTo(Number(nextLine.time) - 1 + (1 - speed));
-    skipGuideRef.current?.setSkipGuide?.("");
-    event.preventDefault();
+  switch (event.code) {
+    case "Escape": //Escでポーズ
+      if (isPausedRef.current) {
+        playerRef.current.playVideo();
+        (isPausedRef as React.MutableRefObject<boolean>).current = false;
+      } else {
+        playerRef.current.pauseVideo();
+        (isPausedRef as React.MutableRefObject<boolean>).current = true;
+      }
+      event.preventDefault();
+      break;
+    case "ArrowDown":
+
+    case skip:
+      const nextLine = map.data[countRef.current!];
+      playerRef.current.seekTo(Number(nextLine.time) - 1 + (1 - speed));
+      skipGuideRef.current?.setSkipGuide?.("");
+      event.preventDefault();
+
+      break;
+
+    case "F4":
+      const currentPlayingCenterRef = playingCenterRef.current; // 追加
+      setStatus({ ...defaultStatus, line: map.lineLength });
+      (lineStatusRef.current as LineStatus) = structuredClone(defaultLineStatus);
+
+      (totalTypeTimeRef.current as number) = 0;
+      if (currentPlayingCenterRef) {
+        currentPlayingCenterRef.setLineWord({
+          correct: { k: "", r: "" },
+          nextChar: { k: "", r: [""], p: 0 },
+          word: [{ k: "", r: [""], p: 0 }],
+        });
+
+        currentPlayingCenterRef.setLyrics("");
+        currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
+      }
+
+      playerRef.current.seekTo(0);
+
+      break;
   }
 }

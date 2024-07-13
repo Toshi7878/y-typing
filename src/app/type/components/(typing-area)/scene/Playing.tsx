@@ -33,7 +33,7 @@ interface PlayingProps {
   tabStatusRef: React.RefObject<TabStatusRef>;
 }
 
-const defaultLineStatus = {
+export const defaultLineStatus = {
   type: 0,
   miss: 0,
 };
@@ -57,11 +57,12 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
   const [, setRemainTime] = useAtom(remainTimeAtom);
   const [, setLineKpm] = useAtom(lineKpmAtom);
   const [scene] = useAtom(sceneAtom);
+  const isPausedRef = useRef(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const cloneLineWord = structuredClone(lineWord);
-      if (isTyped({ event, lineWord: cloneLineWord })) {
+      if (!isPausedRef.current && isTyped({ event, lineWord: cloneLineWord })) {
         const result = new Typing({ event, lineWord: cloneLineWord });
 
         if (lineWord.correct["r"] !== result.newLineWord.correct["r"]) {
@@ -95,7 +96,19 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
           setStatus(new Miss(status).newStatus);
         }
       } else {
-        shortcutKey(event, skipGuideRef, map!, lineCountRef.current, 1, playerRef);
+        shortcutKey(
+          event,
+          skipGuideRef,
+          map!,
+          lineCountRef,
+          1,
+          playerRef,
+          isPausedRef,
+          playingCenterRef,
+          setStatus,
+          lineStatusRef,
+          totalTypeTimeRef,
+        );
       }
 
       const IS_COPY = event.ctrlKey && event.code == "KeyC";
@@ -140,7 +153,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
       const currentPlayingCenterRef = playingCenterRef.current;
 
       const lineWord = currentPlayingCenterRef!.getLineWord();
-      const lineTime = Number(timer.currentTime) - Number(prevLine.time);
+      const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
       const remainTime = Number(currentLine.time) - Number(timer.currentTime);
       const status = tabStatusRef.current?.getStatus() as unknown as Status;
 
@@ -173,7 +186,9 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
 
       const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
       setStatus(lineResult.newStatus);
-
+      if (lineWord.nextChar["k"]) {
+        totalTypeTimeRef.current = lineResult.newTotalTime;
+      }
       lineCountRef.current += 1;
 
       if (playingCenterRef.current) {

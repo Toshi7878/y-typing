@@ -504,7 +504,7 @@ export class CreateMap extends ParseLyrics {
       let kanaWord: string[] = [];
       let romaWord: string[] = [];
 
-      if (this.data[i]["lyrics"] != "end" && this.typePattern[i].length) {
+      if (this.data[i]["lyrics"] != "end" && this.typePattern[i][0]["k"]) {
         if (this.startLine == 0) {
           this.startLine = i;
         }
