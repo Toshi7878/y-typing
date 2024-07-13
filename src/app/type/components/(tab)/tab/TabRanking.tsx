@@ -18,6 +18,8 @@ const TabRanking = forwardRef((props, ref) => {
                 <Th>順位</Th>
                 <Th>名前</Th>
                 <Th>Score</Th>
+                <Th>正確率</Th>
+                <Th>kpm</Th>
               </Tr>
             </Thead>
             <Tbody>

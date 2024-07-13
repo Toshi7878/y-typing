@@ -15,6 +15,7 @@ export interface Status {
   };
   lineTypePoint: number;
   lineMissPoint: number;
+  correct: number;
   acc: number;
   maxCombo: number;
   missCombo: number;

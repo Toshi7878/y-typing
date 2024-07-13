@@ -35,6 +35,7 @@ export const defaultStatus = {
   },
   lineTypePoint: 0,
   lineMissPoint: 0,
+  correct: 0,
   acc: 100,
   maxCombo: 0,
   missCombo: 0,

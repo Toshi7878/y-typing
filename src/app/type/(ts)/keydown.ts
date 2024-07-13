@@ -426,6 +426,10 @@ export class Miss {
     newStatus.display.combo = 0;
     newStatus.display.point -= 5;
     newStatus.lineMissPoint -= 5;
+    newStatus.correct =
+      Math.round(
+        (newStatus.display.type / (newStatus.display.miss + newStatus.display.type)) * 100 * 10,
+      ) / 10;
     newStatus.acc -= Number(map.getScorePerChar) / 2;
 
     return newStatus;
