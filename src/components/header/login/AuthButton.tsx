@@ -21,8 +21,8 @@ export function SignIn({
           ログイン
         </Button>
       ) : (
-        <Button variant="link" size="sm" {...props}>
-          ログイン(準備中)
+        <Button type="submit" variant="link" size="sm" {...props}>
+          ログイン
         </Button>
       )}
     </form>
