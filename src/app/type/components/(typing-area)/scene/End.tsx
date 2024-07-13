@@ -1,11 +1,12 @@
 import { Box, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import UploadButton from "../../(tab)/tab/child/UploadButton";
+import UploadButton from "./child/RankingButton";
 import { actions } from "@/app/type/(ts)/actions";
 import { mapIdAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { LineResultObj } from "@/app/type/(ts)/type";
 import { useFormState } from "react-dom";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 interface EndProps {
   lineResultRef: React.RefObject<LineResultObj[]>;
@@ -13,6 +14,7 @@ interface EndProps {
 const End = ({ lineResultRef }: EndProps) => {
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
+  const { bestScoreRef } = useRefs();
 
   const initialState = { id: null, message: "", status: 0 };
   const [status] = useAtom(statusAtom);
@@ -78,11 +80,15 @@ const End = ({ lineResultRef }: EndProps) => {
   return (
     <Box flex="1" className="text-3xl text-center">
       終了画面(リザルト・ランキング登録ボタンを設置)
-      <form action={formAction}>
-        <Stack display="flex" flexDirection="column" gap="6">
-          <UploadButton responseStatus={state.status} />
-        </Stack>
-      </form>{" "}
+      {status.score > bestScoreRef.current ? (
+        <form action={formAction}>
+          <Stack display="flex" flexDirection="column" gap="6">
+            <UploadButton responseStatus={state.status} />
+          </Stack>
+        </form>
+      ) : (
+        ""
+      )}
     </Box>
   );
 };

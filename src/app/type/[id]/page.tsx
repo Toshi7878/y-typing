@@ -2,6 +2,8 @@ import React from "react";
 import { RefsProvider } from "../(contexts)/refsProvider";
 import Content from "./content";
 import { GetInfoData } from "@/types/api";
+import { auth } from "@/lib/auth";
+import { SessionProvider } from "next-auth/react";
 
 async function getMapInfo(id: string): Promise<GetInfoData> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {
@@ -15,6 +17,7 @@ async function getMapInfo(id: string): Promise<GetInfoData> {
 
 export default async function Page({ params }: { params: { id: string } }) {
   // const mapInfo = await getMapInfo(params.id);
+  const session = await auth();
 
   let mapInfo;
 
@@ -30,8 +33,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <RefsProvider>
-      <Content mapInfo={mapInfo} />
-    </RefsProvider>
+    <SessionProvider session={session}>
+      <RefsProvider>
+        <Content mapInfo={mapInfo} />
+      </RefsProvider>
+    </SessionProvider>
   );
 }

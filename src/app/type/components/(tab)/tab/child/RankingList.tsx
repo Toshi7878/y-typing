@@ -4,19 +4,30 @@ import React from "react";
 
 import { Box, Spinner, Td, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 import { useParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 const RankingList = () => {
   const { id } = useParams();
+  const { data: session } = useSession();
+  const { bestScoreRef } = useRefs();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["userRanking", id],
-    queryFn: async () => {
+    queryKey: ["userRanking", id, Number(session?.user?.id)],
+    queryFn: async ({ queryKey }) => {
+      const [_key, id, userId] = queryKey;
+
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`);
+
+      for (let i = 0; i < data.length; i++) {
+        if (userId === data[i].userId) {
+          bestScoreRef.current = data[i].status.score;
+        }
+      }
 
       // データ取得ロジックをここに追加
       return data;
