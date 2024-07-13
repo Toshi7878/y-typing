@@ -8,6 +8,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Result {
+  id             Int @id @default(autoincrement())
+  mapId          Int
+  userId         Int
+  lineResult     Json
+  status         Json
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade) // 追加されたリレーション
+}
 model Map {
   id             Int @id @default(autoincrement())
   videoId        String
@@ -21,6 +30,7 @@ model Map {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @default(now()) @updatedAt
   user           User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  result         Result[]
 }
 
 
@@ -31,50 +41,6 @@ model User {
   image         String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  accounts      Account[]
-  Authenticator Authenticator[]
-  sessions      Session[]
   maps          Map[]
-}
-
-model Account {
-  userId            Int
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-}
-
-model Session {
-  sessionToken String   @unique
-  userId       Int
-  expires      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Authenticator {
-  credentialID         String  @unique
-  userId               Int
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, credentialID])
+  result        Result[]
 }

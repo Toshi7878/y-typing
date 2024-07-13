@@ -1,9 +1,9 @@
 import { SetStateAction } from "jotai";
 import { PlayingCenterRef, Word } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { Status } from "../(atoms)/type";
+import { LineStatus, Status, TypeResult } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
-import { defaultLineStatus, LineStatus } from "../components/(typing-area)/scene/Playing";
+import { defaultLineStatus } from "../components/(typing-area)/scene/Playing";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { Dispatch } from "react";
 import { defaultStatus } from "../(atoms)/gameRenderAtoms";
@@ -330,43 +330,47 @@ export class Success extends CalcTypeSpeed {
   constructor(
     status: Status,
     lineStatusRef: React.RefObject<LineStatus>,
-    setTimeBonus: React.Dispatch<SetStateAction<number>>,
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
     lineTime: number,
     totalTime: number,
     remainTime: number,
+    char: string,
+    lineTypeResult: React.RefObject<TypeResult[]>,
+    clearTimeRef: React.RefObject<number>,
   ) {
     super(status, lineStatusRef.current!, lineTime, totalTime);
     this.newStatus = this.typeCounter(
       { ...status },
       lineStatusRef,
-      setTimeBonus,
       updatePoint,
       newLineWord,
       map,
       remainTime,
+      lineTime,
+      clearTimeRef,
     );
-    // const KANA_MODE = game.inputMode != "roma";
-    // this.char.key = this.char.key[0];
-    // lineResult.value.typingResult.push({
-    //   char: this.char,
-    //   result: true,
-    //   time: timer.currentTime,
-    //   kanaMode: KANA_MODE,
-    // });
+
+    lineTypeResult.current!.push({
+      type: {
+        char: char,
+        isSuccess: true,
+      },
+      time: lineTime,
+    });
   }
 
   typeCounter(
     newStatus: Status,
     lineStatusRef: React.RefObject<LineStatus>,
-    setTimeBonus: React.Dispatch<SetStateAction<number>>,
 
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
     remainTime: number,
+    lineTime: number,
+    clearTimeRef: React.RefObject<number>,
   ) {
     newStatus.type++;
     lineStatusRef.current!.type++;
@@ -375,11 +379,15 @@ export class Success extends CalcTypeSpeed {
     newStatus.point += updatePoint;
     newStatus.kpm = this.totalTypeSpeed;
 
+    if (newStatus.combo > newStatus.maxCombo) {
+      newStatus.maxCombo = newStatus.combo;
+    }
+
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
-      setTimeBonus(timeBonus); //speed;
-      console.log(timeBonus);
+      newStatus.timeBonus = timeBonus; //speed;
+      (clearTimeRef as React.MutableRefObject<number>).current = lineTime;
       newStatus.score += newStatus.point + timeBonus;
       newStatus.lineCompleteCount++;
       newStatus.line = map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
@@ -392,17 +400,21 @@ export class Success extends CalcTypeSpeed {
 export class Miss {
   newStatus: Status;
 
-  constructor(status: Status) {
+  constructor(
+    status: Status,
+    lineTime: number,
+    char: string,
+    lineTypeResult: React.RefObject<TypeResult[]>,
+  ) {
     this.newStatus = this.missCounter({ ...status });
 
-    // const KANA_MODE = game.inputMode != "roma";
-    // this.char.key = this.char.key[0];
-    // lineResult.value.typingResult.push({
-    //   char: this.char,
-    //   result: false,
-    //   time: timer.currentTime,
-    //   kanaMode: KANA_MODE,
-    // });
+    lineTypeResult.current!.push({
+      type: {
+        char: char,
+        isSuccess: false,
+      },
+      time: lineTime,
+    });
   }
 
   missCounter(newStatus: Status) {
@@ -444,6 +456,7 @@ export function shortcutKey(
   setStatus: Dispatch<SetStateAction<Status>>, // 修正: Diapatch -> Dispatch
   lineStatusRef: React.RefObject<LineStatus>, // 型を追加
   totalTypeTimeRef: React.RefObject<number>,
+  setNotify: Dispatch<SetStateAction<{ text: string }>>,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
@@ -486,6 +499,7 @@ export function shortcutKey(
         currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
       }
 
+      setNotify({ text: "Retry" });
       playerRef.current.seekTo(0);
 
       break;

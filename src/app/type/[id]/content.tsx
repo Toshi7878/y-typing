@@ -9,8 +9,13 @@ import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-quer
 import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
-import { Line } from "@/types";
-import { defaultStatus, mapAtom, sceneAtom, statusAtom } from "../(atoms)/gameRenderAtoms";
+import {
+  defaultStatus,
+  mapAtom,
+  mapIdAtom,
+  sceneAtom,
+  statusAtom,
+} from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 const queryClient = new QueryClient();
 
@@ -29,10 +34,13 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const tabStatusRef = useRef(null);
   const [status, setStatus] = useAtom(statusAtom);
   const [, setScene] = useAtom(sceneAtom);
+  const [, setMapId] = useAtom(mapIdAtom);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {
+      setMapId(Number(id));
+
       if (!id || id == "3") return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);

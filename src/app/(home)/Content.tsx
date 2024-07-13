@@ -45,7 +45,7 @@ export default function Content() {
         right={isMobile ? "2" : "5"}
         backgroundColor="black"
       >
-        <YouTubeContent />
+        <YouTubeContent className="" />
       </Box>
     </QueryClientProvider>
   );

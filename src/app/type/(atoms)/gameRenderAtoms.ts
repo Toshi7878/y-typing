@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { Status } from "./type";
+import { Status } from "../(ts)/type";
 
 export const mapAtom = atom<CreateMap | null>(null);
 
@@ -23,10 +23,12 @@ export const comboAtom = atom<number>(0);
 export const defaultStatus = {
   score: 0,
   point: 0,
+  timeBonus: 0,
   type: 0,
   miss: 0,
   lost: 0,
   combo: 0,
+  maxCombo: 0,
   missCombo: 0,
   rank: 0,
   kpm: 0,
@@ -36,8 +38,8 @@ export const defaultStatus = {
 };
 export const statusAtom = atom<Status>(defaultStatus);
 
-export const playingNotifyAtom = atom<string>("");
+export const playingNotifyAtom = atom<{ text: string }>({ text: "" });
 export const lineKpmAtom = atom<number>(0);
 export const skipGuideAtom = atom<string>("");
 export const remainTimeAtom = atom<string>("0.0");
-export const timeBonusAtom = atom<number>(0);
+export const mapIdAtom = atom<number>(0);

@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
-import { mapAtom, statusAtom, timeBonusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
@@ -23,7 +23,6 @@ export interface TabStatusRef {
 
 const TabStatus = forwardRef((props, ref) => {
   const [map] = useAtom(mapAtom);
-  const [timeBonus] = useAtom(timeBonusAtom);
 
   const [status, setStatus] = useAtom(statusAtom);
   const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
@@ -122,8 +121,8 @@ const TabStatus = forwardRef((props, ref) => {
 
                       <UnderlinedSpan label={label}>
                         <span className="value">
-                          {label === "point" && timeBonus
-                            ? `${status[label]}+${timeBonus}`
+                          {label === "point" && status["timeBonus"]
+                            ? `${status[label]}+${status["timeBonus"]}`
                             : status[label]}
                         </span>
                       </UnderlinedSpan>

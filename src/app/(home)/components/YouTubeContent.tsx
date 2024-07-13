@@ -4,7 +4,10 @@ import YouTube from "react-youtube";
 import { useAtom } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
 
-const YouTubeContent = function YouTubeContent() {
+interface YouTubeContentProps {
+  className: string;
+}
+const YouTubeContent = function YouTubeContent({ className }: YouTubeContentProps) {
   const [videoId] = useAtom(videoIdAtom);
   const [previewTime] = useAtom(previewTimeAtom);
 
@@ -26,6 +29,7 @@ const YouTubeContent = function YouTubeContent() {
 
   return (
     <YouTube
+      className={className}
       videoId={videoId}
       opts={{
         width: isMobile ? WIDTH_MOBILE : WIDTH_DESKTOP,

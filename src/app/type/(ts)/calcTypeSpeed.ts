@@ -1,4 +1,4 @@
-import { Status } from "../(atoms)/type";
+import { Status } from "./type";
 import { LineStatus } from "../components/(typing-area)/scene/Playing";
 
 export class CalcTypeSpeed {

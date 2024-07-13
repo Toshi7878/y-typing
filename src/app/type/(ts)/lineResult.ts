@@ -1,4 +1,4 @@
-import { Status } from "../(atoms)/type";
+import { Status } from "./type";
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
 import { CreateMap } from "./createTypingWord";
 

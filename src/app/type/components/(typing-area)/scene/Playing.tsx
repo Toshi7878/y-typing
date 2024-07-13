@@ -9,10 +9,10 @@ import {
   lineKpmAtom,
   lineWordAtom,
   mapAtom,
+  playingNotifyAtom,
   remainTimeAtom,
   sceneAtom,
   statusAtom,
-  timeBonusAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
@@ -23,14 +23,25 @@ import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/key
 import { LineResult } from "@/app/type/(ts)/lineResult";
 import { TabStatusRef } from "../../(tab)/tab/TabStatus";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
-import { Status } from "@/app/type/(atoms)/type";
+import { LineResultObj, Status, TypeResult } from "@/app/type/(ts)/type";
 
-export interface LineStatus {
-  type: number;
-  miss: number;
-}
+export const defaultLineResultObj: LineResultObj = {
+  status: {
+    point: 0,
+    timeBonus: 0,
+    type: 0,
+    miss: 0,
+    combo: 0,
+    clearTime: 0,
+    kpm: 0,
+    rkpm: 0,
+  },
+  typeResult: [],
+};
+
 interface PlayingProps {
   tabStatusRef: React.RefObject<TabStatusRef>;
+  lineResultRef: React.RefObject<LineResultObj[]>;
 }
 
 export const defaultLineStatus = {
@@ -38,52 +49,57 @@ export const defaultLineStatus = {
   miss: 0,
 };
 
-const Playing = ({ tabStatusRef }: PlayingProps) => {
+const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
   const { lineCountRef, playerRef } = useRefs();
   const lineStatusRef = useRef(structuredClone(defaultLineStatus));
 
   const [map] = useAtom(mapAtom);
-  const [, setTimeBonus] = useAtom(timeBonusAtom);
   const lineProgressRef = useRef(null);
   const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
+  const lineTypeResult = useRef<TypeResult[]>([]);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
   const [, setCurrentTimeSSMM] = useAtom(currentTimeSSMMAtom);
   const currentTimeRef = useRef(0);
   const remainTimeRef = useRef(0);
   const totalTypeTimeRef = useRef(0);
+  const clearTimeRef = useRef(0);
   const [status, setStatus] = useAtom(statusAtom);
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [, setRemainTime] = useAtom(remainTimeAtom);
   const [, setLineKpm] = useAtom(lineKpmAtom);
   const [scene] = useAtom(sceneAtom);
   const isPausedRef = useRef(false);
+  const [, setNotify] = useAtom(playingNotifyAtom);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const cloneLineWord = structuredClone(lineWord);
       if (!isPausedRef.current && isTyped({ event, lineWord: cloneLineWord })) {
+        const count = lineCountRef.current;
+
         const result = new Typing({ event, lineWord: cloneLineWord });
+        const prevLine = map!.data[count - 1];
+
+        const lineTime = Number(timer.currentTime) - Number(prevLine.time);
 
         if (lineWord.correct["r"] !== result.newLineWord.correct["r"]) {
           // 変更
-          const count = lineCountRef.current;
-          const prevLine = map!.data[count - 1];
           const currentLine = map!.data[count];
-
-          const lineTime = Number(timer.currentTime) - Number(prevLine.time);
           const remainTime = Number(currentLine.time) - Number(timer.currentTime);
 
           const success = new Success(
             status,
             lineStatusRef,
-            setTimeBonus,
             result.updatePoint,
             result.newLineWord,
             map!,
             lineTime,
             totalTypeTimeRef.current,
             remainTime,
+            event.key,
+            lineTypeResult,
+            clearTimeRef,
           );
           setStatus(success.newStatus);
           setLineWord(result.newLineWord);
@@ -93,7 +109,8 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
             totalTypeTimeRef.current += lineTime;
           }
         } else if (result.newLineWord.correct["r"] !== "") {
-          setStatus(new Miss(status).newStatus);
+          const miss = new Miss(status, lineTime, event.key, lineTypeResult);
+          setStatus(miss.newStatus);
         }
       } else {
         shortcutKey(
@@ -108,6 +125,7 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
           setStatus,
           lineStatusRef,
           totalTypeTimeRef,
+          setNotify,
         );
       }
 
@@ -181,10 +199,24 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
       const currentPlayingCenterRef = playingCenterRef.current;
 
       const lineWord = currentPlayingCenterRef!.getLineWord();
-      const status = tabStatusRef.current?.getStatus();
+      const status = tabStatusRef.current?.getStatus() as Status | undefined;
       const lineTime = prevLine ? Number(timer.currentTime) - Number(prevLine.time) : 0;
 
       const lineResult = new LineResult(status!, lineWord, map, lineTime, totalTypeTimeRef);
+      lineResultRef.current!.push({
+        status: {
+          point: status!.point,
+          timeBonus: status!.timeBonus,
+          type: status!.type,
+          miss: status!.miss,
+          combo: status!.combo,
+          clearTime: clearTimeRef.current,
+          kpm: status!.kpm,
+          rkpm: 0,
+        },
+        typeResult: lineTypeResult.current,
+      });
+      console.log(lineResultRef.current);
       setStatus(lineResult.newStatus);
       if (lineWord.nextChar["k"]) {
         totalTypeTimeRef.current = lineResult.newTotalTime;
@@ -194,7 +226,8 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
       if (playingCenterRef.current) {
         lineStatusRef.current = structuredClone(defaultLineStatus);
         setLineKpm(0);
-        setTimeBonus(0);
+        clearTimeRef.current = 0;
+        lineTypeResult.current = [];
 
         playingCenterRef.current.setLineWord({
           correct: { k: "", r: "" },
@@ -233,13 +266,13 @@ const Playing = ({ tabStatusRef }: PlayingProps) => {
     setRemainTime,
     setLineKpm,
     setStatus,
-    setTimeBonus,
     setCurrentTimeSSMM,
     lineStatusRef,
     totalTypeTimeRef,
     currentTimeRef,
     remainTimeRef,
     lineProgressRef,
+    lineResultRef,
   ]);
 
   useEffect(() => {
