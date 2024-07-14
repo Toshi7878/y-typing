@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
-import { useCallback, useEffect, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   currentTimeSSMMAtom,
@@ -12,6 +12,7 @@ import {
   playingNotifyAtom,
   remainTimeAtom,
   sceneAtom,
+  speedAtom,
   statusAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
@@ -23,7 +24,8 @@ import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/key
 import { LineResult } from "@/app/type/(ts)/lineResult";
 import { TabStatusRef } from "../../(tab)/tab/TabStatus";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
-import { LineResultObj, Status, TypeResult } from "@/app/type/(ts)/type";
+import { LineResultObj, LineStatus, Status, TypeResult } from "@/app/type/(ts)/type";
+import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 export const defaultLineResultObj: LineResultObj = {
   status: {
@@ -50,8 +52,11 @@ export const defaultLineStatus = {
   miss: 0,
 };
 
-const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
-  const { lineCountRef, playerRef } = useRefs();
+const Playing = forwardRef((props: PlayingProps, ref) => {
+  const { tabStatusRef, lineResultRef } = props;
+
+  const { lineCountRef, playerRef, playingRef, setRef } = useRefs();
+
   const lineStatusRef = useRef(structuredClone(defaultLineStatus));
 
   const [map] = useAtom(mapAtom);
@@ -72,6 +77,64 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
   const [scene] = useAtom(sceneAtom);
   const isPausedRef = useRef(false);
   const [, setNotify] = useAtom(playingNotifyAtom);
+  const [speedData, setSpeedData] = useAtom(speedAtom);
+
+  useImperativeHandle(ref, () => ({
+    retry: () => {
+      const currentPlayingCenterRef = playingCenterRef.current; // 追加
+      setStatus(
+        structuredClone({
+          ...defaultStatus,
+          display: {
+            ...defaultStatus.display, // 追加
+            line: map!.lineLength,
+          },
+        }),
+      );
+      (lineStatusRef.current as LineStatus) = structuredClone(defaultLineStatus);
+
+      (totalTypeTimeRef.current as number) = 0;
+      if (currentPlayingCenterRef) {
+        currentPlayingCenterRef.setLineWord({
+          correct: { k: "", r: "" },
+          nextChar: { k: "", r: [""], p: 0 },
+          word: [{ k: "", r: [""], p: 0 }],
+        });
+
+        currentPlayingCenterRef.setLyrics("");
+        currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
+      }
+
+      setNotify({ text: "Retry" });
+      playerRef.current.seekTo(0);
+    },
+    pressSkip: () => {
+      const nextLine = map!.data[lineCountRef.current!];
+      playerRef.current.seekTo(Number(nextLine.time) - 1 + (1 - speedData.realtimeSpeed));
+      skipGuideRef.current?.setSkipGuide?.("");
+    },
+    realtimeSpeedChange: () => {
+      new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
+    },
+    gamePause: () => {
+      if (isPausedRef.current) {
+        playerRef.current.playVideo();
+        isPausedRef.current = false;
+        setNotify({ text: "▶" });
+      } else {
+        playerRef.current.pauseVideo();
+        isPausedRef.current = true;
+        setNotify({ text: "ll" });
+      }
+    },
+  }));
+
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("playingRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -114,20 +177,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
           setStatus(miss.newStatus);
         }
       } else {
-        shortcutKey(
-          event,
-          skipGuideRef,
-          map!,
-          lineCountRef,
-          1,
-          playerRef,
-          isPausedRef,
-          playingCenterRef,
-          setStatus,
-          lineStatusRef,
-          totalTypeTimeRef,
-          setNotify,
-        );
+        shortcutKey(event, skipGuideRef, playingRef);
       }
 
       const IS_COPY = event.ctrlKey && event.code == "KeyC";
@@ -329,5 +379,8 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
       <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
     </Box>
   );
-};
+});
+
+Playing.displayName = "Playing";
+
 export default Playing;

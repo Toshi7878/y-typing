@@ -229,7 +229,7 @@ const SYMBOL_LIST = [
   "\\",
 ];
 
-const CHAR_POINT = 5;
+const CHAR_POINT = 10;
 
 //symbolCount無効になってる
 class ParseLyrics {

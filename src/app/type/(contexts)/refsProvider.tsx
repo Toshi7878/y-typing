@@ -1,10 +1,12 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
+import { PlayingRef } from "../(ts)/type";
 
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
+  playingRef: React.RefObject<PlayingRef>;
   lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
   setRef: (key: string, ref: HTMLElement | any) => void;
@@ -14,6 +16,7 @@ export interface RefsContextType {
 const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
+  playingRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
 
@@ -22,6 +25,7 @@ const RefsContext = createContext<RefsContextType>({
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
   const tabStatusRef = useRef(null);
+  const playingRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
 
@@ -34,11 +38,16 @@ export const RefsProvider = ({ children }) => {
       case "tabStatusRef":
         tabStatusRef.current = ref;
         break;
+      case "playingRef":
+        playingRef.current = ref;
+        break;
     }
   };
 
   return (
-    <RefsContext.Provider value={{ bestScoreRef, tabStatusRef, lineCountRef, playerRef, setRef }}>
+    <RefsContext.Provider
+      value={{ playingRef, bestScoreRef, tabStatusRef, lineCountRef, playerRef, setRef }}
+    >
       {children}
     </RefsContext.Provider>
   );
@@ -51,6 +60,7 @@ export const useRefs = () => {
     lineCountRef: context.lineCountRef,
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
+    playingRef: context.playingRef,
     setRef: context.setRef,
   };
 };

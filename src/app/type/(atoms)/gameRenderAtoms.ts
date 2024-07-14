@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { Status } from "../(ts)/type";
+import { Speed, Status } from "../(ts)/type";
 
 export const mapAtom = atom<CreateMap | null>(null);
 
@@ -52,3 +52,8 @@ export const playingNotifyAtom = atom<{ text: string }>({ text: "" });
 export const lineKpmAtom = atom<number>(0);
 export const remainTimeAtom = atom<string>("0.0");
 export const mapIdAtom = atom<number>(0);
+
+export const speedAtom = atom<Speed>({
+  playSpeed: 1,
+  realtimeSpeed: 1,
+});

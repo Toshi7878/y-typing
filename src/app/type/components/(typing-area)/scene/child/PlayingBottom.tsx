@@ -1,10 +1,13 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Badge, Box, HStack, Kbd } from "@chakra-ui/react";
 import PlayingLineProgress from "./child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "./child/PlayingSkipGuide";
 import PlayingTotalTime from "./child/PlayingTotalTime";
-import { mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
+import PlayingBottomBadge from "./child/PlayingBottomBadge";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;
@@ -14,11 +17,17 @@ interface PlayingBottomRef {
 const PlayingBottom = function ({ skipGuideRef, totalTimeProgressRef }: PlayingBottomRef) {
   const [map] = useAtom(mapAtom);
   const [scene] = useAtom(sceneAtom);
+  const [speedData, setSpeedData] = useAtom(speedAtom);
+  const { playerRef } = useRefs();
 
   const totalTime = map?.totalTimeSSMM ?? "00:00"; // 'map' が null の場合に対応
 
+  const handleRealtimeSpeedChange = () => {
+    new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
+  };
+
   return (
-    <Box mx="4" mb="10">
+    <Box mx="4">
       <HStack
         justify="space-between"
         className={`mx-1 font-bold ${scene !== "playing" ? "invisible" : ""}`}
@@ -27,6 +36,17 @@ const PlayingBottom = function ({ skipGuideRef, totalTimeProgressRef }: PlayingB
         <PlayingTotalTime totalTime={totalTime} className="text-2xl font-mono" />
       </HStack>
       <PlayingLineProgress ref={totalTimeProgressRef} />
+      <HStack
+        justify="space-between"
+        className={`mx-3 mt-2 mb-4 font-bold ${scene !== "playing" ? "invisible" : ""}`}
+      >
+        <PlayingBottomBadge
+          badgeText={speedData.realtimeSpeed.toFixed(2) + "倍速"}
+          kbdText="F10"
+          // onClick={handleRealtimeSpeedChange}
+        />
+        <PlayingBottomBadge badgeText="やり直し" kbdText="F4" />
+      </HStack>
     </Box>
   );
 };

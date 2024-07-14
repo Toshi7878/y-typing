@@ -16,6 +16,7 @@ import { mapAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
+import StatusValue from "./child/StatusValue";
 
 export interface TabStatusRef {
   getStatus: () => void;
@@ -106,7 +107,7 @@ const TabStatus = forwardRef((props, ref) => {
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        <span className="value">{status.display[label]}</span>
+                        <StatusValue value={status.display[label]} />
                       </UnderlinedSpan>
                     </TdStyled>
                   );
@@ -122,11 +123,13 @@ const TabStatus = forwardRef((props, ref) => {
                       <Label>{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        <span className="value">
-                          {label === "point" && status.display["timeBonus"]
-                            ? `${status.display[label]}+${status.display["timeBonus"]}`
-                            : status.display[label]}
-                        </span>
+                        <StatusValue
+                          value={
+                            label === "point" && status.display["timeBonus"]
+                              ? `${status.display[label]}+${status.display["timeBonus"]}`
+                              : status.display[label]
+                          }
+                        />
                       </UnderlinedSpan>
                     </TdStyled>
                   );

@@ -1,5 +1,12 @@
 import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 
+export interface PlayingRef {
+  retry: () => void;
+  pressSkip: () => void;
+  realtimeSpeedChange: () => void;
+  gamePause: () => void;
+}
+
 export interface Status {
   display: {
     score: number;
@@ -73,4 +80,9 @@ export interface LineResultObj {
     lineKpm: number;
   };
   typeResult: TypeResult[];
+}
+
+export interface Speed {
+  playSpeed: number;
+  realtimeSpeed: number;
 }

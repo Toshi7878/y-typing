@@ -2,7 +2,7 @@ import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapIdAtom, speedAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { LineResultObj } from "@/app/type/(ts)/type";
 import { useFormState } from "react-dom";
@@ -16,6 +16,8 @@ interface EndProps {
 const End = ({ lineResultRef }: EndProps) => {
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
+  const [speedData] = useAtom(speedAtom);
+
   const { bestScoreRef } = useRefs();
 
   const initialState = { id: null, message: "", status: 0 };
@@ -35,7 +37,7 @@ const End = ({ lineResultRef }: EndProps) => {
       rkpm: 0,
       maxCombo: status.maxCombo,
       kpm: status.display.kpm,
-      playSpeed: 1,
+      playSpeed: speedData.playSpeed,
     };
     const sendData = {
       mapId: mapId,
@@ -93,7 +95,9 @@ const End = ({ lineResultRef }: EndProps) => {
         <form action={status.display.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-2xl" mx={2}>
-              {status.display.score >= bestScoreRef.current ? (
+              {bestScoreRef.current === 0 ? (
+                <>初めての記録です！スコアは{status.display.score}です。</>
+              ) : status.display.score >= bestScoreRef.current ? (
                 <>
                   おめでとうございます！最高スコアが{bestScoreRef.current}から{status.display.score}
                   に更新されました！
