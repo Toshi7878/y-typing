@@ -2,11 +2,14 @@ import { z } from "zod";
 
 export const statusSchema = z.object({
   score: z.number(),
-  type: z.number(),
+  kanaType: z.number(),
+  romaType: z.number(),
+  flickType: z.number(),
   miss: z.number(),
   lost: z.number(),
   maxCombo: z.number(),
   kpm: z.number(),
+  playSpeed: z.number(),
 });
 
 export const lineResultObjSchema = z.object({
@@ -19,6 +22,7 @@ export const lineResultObjSchema = z.object({
     clearTime: z.number(),
     kpm: z.number(),
     rkpm: z.number(),
+    lineKpm: z.number(),
   }),
   typeResult: z.array(
     z.object({

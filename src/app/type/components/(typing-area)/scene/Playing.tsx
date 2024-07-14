@@ -35,6 +35,7 @@ export const defaultLineResultObj: LineResultObj = {
     clearTime: 0,
     kpm: 0,
     rkpm: 0,
+    lineKpm: 0,
   },
   typeResult: [],
 };
@@ -67,7 +68,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
   const [status, setStatus] = useAtom(statusAtom);
   const [lineWord, setLineWord] = useAtom(lineWordAtom);
   const [, setRemainTime] = useAtom(remainTimeAtom);
-  const [, setLineKpm] = useAtom(lineKpmAtom);
+  const [lineKpm, setLineKpm] = useAtom(lineKpmAtom);
   const [scene] = useAtom(sceneAtom);
   const isPausedRef = useRef(false);
   const [, setNotify] = useAtom(playingNotifyAtom);
@@ -220,6 +221,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
           clearTime: clearTimeRef.current,
           kpm: status!.display.kpm,
           rkpm: 0,
+          lineKpm: lineKpm,
         },
         typeResult: lineTypeResult.current,
       });
@@ -270,6 +272,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
     tabStatusRef,
     skipGuideRef,
     setRemainTime,
+    lineKpm,
     setLineKpm,
     setStatus,
     setCurrentTimeSSMM,

@@ -341,6 +341,8 @@ export class Success extends CalcTypeSpeed {
     clearTimeRef: React.RefObject<number>,
   ) {
     super(status, lineStatusRef.current!, lineTime, totalTime);
+
+    const mode = "roma";
     this.newStatus = this.typeCounter(
       { ...status },
       lineStatusRef,
@@ -350,6 +352,7 @@ export class Success extends CalcTypeSpeed {
       remainTime,
       lineTime,
       clearTimeRef,
+      mode,
     );
 
     lineTypeResult.current!.push({
@@ -364,13 +367,13 @@ export class Success extends CalcTypeSpeed {
   typeCounter(
     newStatus: Status,
     lineStatusRef: React.RefObject<LineStatus>,
-
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
     remainTime: number,
     lineTime: number,
     clearTimeRef: React.RefObject<number>,
+    mode: string,
   ) {
     newStatus.display.type++;
     lineStatusRef.current!.type++;
@@ -382,6 +385,14 @@ export class Success extends CalcTypeSpeed {
 
     if (newStatus.display.combo > newStatus.maxCombo) {
       newStatus.maxCombo = newStatus.display.combo;
+    }
+
+    if (mode === "roma") {
+      newStatus.romaType++;
+    } else if (mode === "kana") {
+      newStatus.kanaType++;
+    } else if (mode === "flick") {
+      newStatus.flickType++;
     }
 
     //ライン打ち切り
@@ -426,10 +437,9 @@ export class Miss {
     newStatus.display.combo = 0;
     newStatus.display.point -= 5;
     newStatus.lineMissPoint -= 5;
-    newStatus.correct =
-      Math.round(
-        (newStatus.display.type / (newStatus.display.miss + newStatus.display.type)) * 100 * 10,
-      ) / 10;
+    Math.round(
+      (newStatus.display.type / (newStatus.display.miss + newStatus.display.type)) * 100 * 10,
+    ) / 10;
     newStatus.acc -= Number(map.getScorePerChar) / 2;
 
     return newStatus;

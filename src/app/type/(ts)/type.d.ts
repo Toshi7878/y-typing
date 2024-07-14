@@ -13,10 +13,16 @@ export interface Status {
     kpm: number;
     line: number;
   };
+
+  //あとでRefで管理ようにする。
   lineTypePoint: number;
   lineMissPoint: number;
+  romaType: number;
+  kanaType: number;
+  flickType: number;
   correct: number;
   acc: number;
+  rkpm: number;
   maxCombo: number;
   missCombo: number;
   lineCompleteCount: number;
@@ -28,11 +34,15 @@ export interface SendResultData {
   lineResult: LineResultObj;
   status: {
     score: number;
-    type: number;
+    kanaType: number;
+    romaType: number;
+    flickType: number;
     miss: number;
     lost: number;
+    rkpm: number;
     maxCombo: number;
     kpm: number;
+    playSpeed: number;
   };
 }
 
@@ -60,6 +70,7 @@ export interface LineResultObj {
     clearTime: number;
     kpm: number;
     rkpm: number;
+    lineKpm: number;
   };
   typeResult: TypeResult[];
 }

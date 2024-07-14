@@ -10,16 +10,15 @@ const TabRanking = forwardRef((props, ref) => {
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">
         <Box maxH="244px" minH="244px" overflowY="auto">
-          {" "}
-          {/* max heightとスクロールを追加 */}
           <Table variant="simple" className="ranking-table" size="sm">
             <Thead>
               <Tr>
-                <Th>順位</Th>
-                <Th>名前</Th>
-                <Th>Score</Th>
-                <Th>正確率</Th>
-                <Th>kpm</Th>
+                <Th width="5%">順位</Th>
+                <Th width="15%">名前</Th>
+                <Th width="10%">Score</Th>
+                <Th width="5%">正確率</Th>
+                <Th width="5%">kpm</Th>
+                <Th width="15%">モード</Th>
               </Tr>
             </Thead>
             <Tbody>
