@@ -45,7 +45,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);
       setMap(map);
-      setStatus(defaultStatus);
+      setStatus(structuredClone(defaultStatus));
       return map;
     },
 

@@ -503,13 +503,13 @@ export function shortcutKey(
 
     case "F4":
       const currentPlayingCenterRef = playingCenterRef.current; // 追加
-      setStatus({
+      setStatus(structuredClone({
         ...defaultStatus,
         display: {
           ...defaultStatus.display, // 追加
           line: map.lineLength,
         },
-      });
+      }));
       (lineStatusRef.current as LineStatus) = structuredClone(defaultLineStatus);
 
       (totalTypeTimeRef.current as number) = 0;

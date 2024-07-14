@@ -311,7 +311,7 @@ const Playing = ({ tabStatusRef, lineResultRef }: PlayingProps) => {
 
       lineCountRef.current = 0;
       if (scene !== "end" && scene !== "playing") {
-        setStatus(defaultStatus);
+        setStatus(structuredClone(defaultStatus));
       }
 
       if (progressElement) {
