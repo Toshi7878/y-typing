@@ -5,7 +5,7 @@ import { actions } from "@/app/type/(ts)/actions";
 import { mapIdAtom, speedAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { LineResultObj } from "@/app/type/(ts)/type";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
 import PlayingBottom from "./child/PlayingBottom";
@@ -14,6 +14,8 @@ interface EndProps {
   lineResultRef: React.RefObject<LineResultObj[]>;
 }
 const End = ({ lineResultRef }: EndProps) => {
+  const { pending } = useFormStatus();
+
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
@@ -111,7 +113,7 @@ const End = ({ lineResultRef }: EndProps) => {
             </Box>
             <HStack justifyContent="space-around">
               {status.display.score >= bestScoreRef.current && (
-                <EndUploadButton responseStatus={state.status} />
+                <EndUploadButton responseStatus={state.status} pending={pending}/>
               )}
               <Button
                 className="cursor-pointer"
