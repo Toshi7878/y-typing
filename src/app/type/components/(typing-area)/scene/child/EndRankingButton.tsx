@@ -6,10 +6,11 @@ import { useFormStatus } from "react-dom";
 
 interface UploadButtonProps {
   responseStatus: number;
-  pending: boolean;
 }
 
-const EndUploadButton = ({ responseStatus, pending }: UploadButtonProps) => {
+const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
+  const { pending } = useFormStatus();
+
   const [isDisabled, setIsDisabled] = useState(false); // isDisabledの状態を追加
 
   useEffect(() => {

@@ -14,7 +14,6 @@ interface EndProps {
   lineResultRef: React.RefObject<LineResultObj[]>;
 }
 const End = ({ lineResultRef }: EndProps) => {
-  const { pending } = useFormStatus();
 
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
@@ -113,7 +112,7 @@ const End = ({ lineResultRef }: EndProps) => {
             </Box>
             <HStack justifyContent="space-around">
               {status.display.score >= bestScoreRef.current && (
-                <EndUploadButton responseStatus={state.status} pending={pending}/>
+                <EndUploadButton responseStatus={state.status}/>
               )}
               <Button
                 className="cursor-pointer"
