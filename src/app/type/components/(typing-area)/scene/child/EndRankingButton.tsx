@@ -8,7 +8,7 @@ interface UploadButtonProps {
   responseStatus: number;
 }
 
-const UploadButton = ({ responseStatus }: UploadButtonProps) => {
+const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
 
   const [isDisabled, setIsDisabled] = useState(false); // isDisabledの状態を追加
@@ -26,19 +26,20 @@ const UploadButton = ({ responseStatus }: UploadButtonProps) => {
     <Button
       className="cursor-pointer"
       variant="solid"
-      size="lg"
+      py={12} // ボタンの縦幅を大きくする
+      width="450px" // ボタンの幅を大きくする
       colorScheme="blue"
-      width="200px"
       border="1px"
       borderColor="black"
       isLoading={pending}
       isDisabled={isDisabled} // isDisabledを追加
       _hover={{ bg: "#3a90f3" }}
       type="submit"
+      fontSize="3xl" // 文字サイズを大きくする
     >
-      ランキング登録
+      {isDisabled ? "ランキング登録完了" : "ランキング登録"}
     </Button>
   );
 };
 
-export default UploadButton;
+export default EndUploadButton;

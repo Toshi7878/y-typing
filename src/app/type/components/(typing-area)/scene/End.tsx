@@ -1,6 +1,6 @@
-import { Box, Stack, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
-import UploadButton from "./child/RankingButton";
+import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
 import { mapIdAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
@@ -89,17 +89,71 @@ const End = ({ lineResultRef }: EndProps) => {
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} />
-      <Box flex="1" className="text-3xl text-center">
-        終了画面(リザルト・ランキング登録ボタンを設置)
-        {status.display.score > bestScoreRef.current ? (
-          <form action={formAction}>
-            <Stack display="flex" flexDirection="column" gap="6">
-              <UploadButton responseStatus={state.status} />
-            </Stack>
-          </form>
-        ) : (
+      <Box flex="1" className="text-center mx-6">
+        {/* {status.display.score > bestScoreRef.current ? ( */}
+        <form action={formAction}>
+          <Stack display="flex" spacing={8}>
+            <Box textAlign="left" className="text-2xl" mx={2}>
+              {status.display.score >= bestScoreRef.current ? (
+                <>
+                  おめでとうございます！最高スコアが{bestScoreRef.current}から{status.display.score}
+                  に更新されました！
+                </>
+              ) : (
+                <>
+                  最高スコアは{bestScoreRef.current}です。最高スコアまであと
+                  {bestScoreRef.current - status.display.score}です。
+                </>
+              )}
+            </Box>
+            <HStack justifyContent="space-around">
+              {status.display.score >= bestScoreRef.current && (
+                <EndUploadButton responseStatus={state.status} />
+              )}
+              <Button
+                className="cursor-pointer"
+                variant="solid"
+                py={12} // ボタンの縦幅を大きくする
+                width="450px" // ボタンの幅を大きくする
+                colorScheme="blue"
+                border="1px"
+                borderColor="black"
+                _hover={{ bg: "#3a90f3" }}
+                fontSize="3xl" // 文字サイズを大きくする
+              >
+                詳細リザルトを見る
+              </Button>
+              <Button
+                className="cursor-pointer"
+                variant="solid"
+                py={12} // ボタンの縦幅を大きくする
+                width="450px" // ボタンの幅を大きくする
+                colorScheme="blue"
+                border="1px"
+                borderColor="black"
+                _hover={{ bg: "#3a90f3" }}
+                fontSize="3xl" // 文字サイズを大きくする
+              >
+                結果をXにポスト
+              </Button>
+            </HStack>
+            <Box display="flex" justifyContent="flex-end" mx="12" mt="12">
+              <Button
+                size="2xl"
+                px={12}
+                py={6}
+                fontSize="2xl"
+                variant="outline"
+                borderColor="black"
+              >
+                もう一度プレイ
+              </Button>
+            </Box>
+          </Stack>
+        </form>
+        {/* ) : (
           ""
-        )}
+        )} */}
       </Box>
       <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
     </Box>

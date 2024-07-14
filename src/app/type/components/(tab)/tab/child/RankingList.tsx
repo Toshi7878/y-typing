@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
 import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { useQuery } from "@tanstack/react-query";
-
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
