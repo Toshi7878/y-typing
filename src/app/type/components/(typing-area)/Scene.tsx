@@ -27,11 +27,11 @@ export const Scene = ({ tabStatusRef }: SceneProps) => {
   }, [scene]);
 
   if (scene === "ready") {
-    return <End lineResultRef={lineResultRef} />;
+    return <Ready />;
   } else if (scene === "playing" && map) {
     return <Playing tabStatusRef={tabStatusRef} lineResultRef={lineResultRef} />;
   } else if (scene === "end") {
-    return <Ready />;
+    return <End lineResultRef={lineResultRef} />;
   }
 };
 

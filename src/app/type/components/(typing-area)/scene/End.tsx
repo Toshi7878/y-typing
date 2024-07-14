@@ -90,8 +90,7 @@ const End = ({ lineResultRef }: EndProps) => {
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} />
       <Box flex="1" className="text-center mx-6">
-        {/* {status.display.score > bestScoreRef.current ? ( */}
-        <form action={formAction}>
+        <form action={status.display.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-2xl" mx={2}>
               {status.display.score >= bestScoreRef.current ? (
