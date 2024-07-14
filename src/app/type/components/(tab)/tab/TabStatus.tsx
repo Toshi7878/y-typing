@@ -68,7 +68,7 @@ const TabStatus = forwardRef((props, ref) => {
       bottom: 0;
       left: 0;
       height: 2px;
-      width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "70px")};
+      width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "81px")};
       background-color: black;
     }
   `;
