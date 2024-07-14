@@ -87,7 +87,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   }, [id, queryClient]);
 
   return (
-    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-7 lg:px-40 w-full">
+    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-7 lg:px-48 w-full">
       <Flex direction="column" align="center" w="full" pt="7">
         <Flex w="full" gap="4" direction={{ base: "column", xl: "row" }}>
           <Box flex={{ base: "1" }}>
