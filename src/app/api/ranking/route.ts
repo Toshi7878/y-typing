@@ -16,6 +16,7 @@ export async function GET(request: Request) {
         userId: true,
         status: true,
         lineResult: false, // lineResultを追加
+        updatedAt: true,
         user: {
           select: {
             name: true, // userからnameを取得

@@ -1,5 +1,5 @@
 import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { LineStatus, PlayingRef, Status, TypeResult } from "./type";
+import { PlayingRef, Status, StatusRef, TypeResult } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
@@ -324,33 +324,29 @@ export class Success extends CalcTypeSpeed {
 
   constructor(
     status: Status,
-    lineStatusRef: React.RefObject<LineStatus>,
+    statusRef: React.RefObject<StatusRef>,
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
     lineTime: number,
-    totalTime: number,
     remainTime: number,
     char: string,
-    lineTypeResult: React.RefObject<TypeResult[]>,
-    clearTimeRef: React.RefObject<number>,
   ) {
-    super(status, lineStatusRef.current!, lineTime, totalTime);
+    super(status, lineTime, statusRef);
 
     const mode = "roma";
     this.newStatus = this.typeCounter(
       { ...status },
-      lineStatusRef,
+      statusRef,
       updatePoint,
       newLineWord,
       map,
       remainTime,
       lineTime,
-      clearTimeRef,
       mode,
     );
 
-    lineTypeResult.current!.push({
+    statusRef.current!.lineStatus.typeResult.push({
       type: {
         char: char,
         isSuccess: true,
@@ -361,44 +357,43 @@ export class Success extends CalcTypeSpeed {
 
   typeCounter(
     newStatus: Status,
-    lineStatusRef: React.RefObject<LineStatus>,
+    statusRef: React.RefObject<StatusRef>,
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
     remainTime: number,
     lineTime: number,
-    clearTimeRef: React.RefObject<number>,
     mode: string,
   ) {
-    newStatus.display.type++;
-    lineStatusRef.current!.type++;
-    newStatus.display.combo++;
-    newStatus.missCombo = 0;
-    newStatus.lineTypePoint += updatePoint;
-    newStatus.display.point += updatePoint;
-    newStatus.display.kpm = this.totalTypeSpeed;
+    newStatus.type++;
+    statusRef.current!.lineStatus.lineType++;
+    newStatus.combo++;
+    statusRef.current!.status.missCombo = 0;
+    newStatus.point += updatePoint;
+    newStatus.kpm = this.totalTypeSpeed;
 
-    if (newStatus.display.combo > newStatus.maxCombo) {
-      newStatus.maxCombo = newStatus.display.combo;
+    if (newStatus.combo > statusRef.current!.status.maxCombo) {
+      statusRef.current!.status.maxCombo = newStatus.combo;
     }
 
     if (mode === "roma") {
-      newStatus.romaType++;
+      statusRef.current!.status.romaType++;
     } else if (mode === "kana") {
-      newStatus.kanaType++;
+      statusRef.current!.status.kanaType++;
     } else if (mode === "flick") {
-      newStatus.flickType++;
+      statusRef.current!.status.flickType++;
     }
 
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
-      newStatus.display.timeBonus = timeBonus; //speed;
-      (clearTimeRef as React.MutableRefObject<number>).current = lineTime;
-      newStatus.display.score += newStatus.display.point + timeBonus;
-      newStatus.lineCompleteCount++;
-      newStatus.display.line =
-        map.lineLength - (newStatus.lineCompleteCount + newStatus.lineFailureCount);
+      newStatus.timeBonus = timeBonus; //speed;
+      statusRef.current!.lineStatus.lineClearTime = lineTime;
+      newStatus.score += newStatus.point + timeBonus;
+      statusRef.current!.status.lineCompleteCount++;
+      newStatus.line =
+        map.lineLength -
+        (statusRef.current!.status.lineCompleteCount + statusRef.current!.status.lineFailureCount);
     }
 
     return newStatus;
@@ -410,14 +405,14 @@ export class Miss {
 
   constructor(
     status: Status,
+    statusRef: React.RefObject<StatusRef>,
     map: CreateMap,
     lineTime: number,
     char: string,
-    lineTypeResult: React.RefObject<TypeResult[]>,
   ) {
-    this.newStatus = this.missCounter({ ...status }, map);
+    this.newStatus = this.missCounter({ ...status }, statusRef, map);
 
-    lineTypeResult.current!.push({
+    statusRef.current!.lineStatus.typeResult.push({
       type: {
         char: char,
         isSuccess: false,
@@ -426,17 +421,12 @@ export class Miss {
     });
   }
 
-  missCounter(newStatus: Status, map: CreateMap) {
-    newStatus.display.miss++;
-    newStatus.missCombo++;
-    newStatus.display.combo = 0;
-    newStatus.display.point -= 5;
-    newStatus.lineMissPoint -= 5;
-    Math.round(
-      (newStatus.display.type / (newStatus.display.miss + newStatus.display.type)) * 100 * 10,
-    ) / 10;
-    newStatus.acc -= Number(map.getScorePerChar) / 2;
-
+  missCounter(newStatus: Status, statusRef: React.RefObject<StatusRef>, map: CreateMap) {
+    newStatus.miss++;
+    statusRef.current!.lineStatus.lineMiss++;
+    statusRef.current!.status.missCombo++;
+    newStatus.combo = 0;
+    newStatus.point -= 5;
     return newStatus;
   }
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { formatDistanceToNowStrict } from "date-fns";
+import { ja } from "date-fns/locale"; // 追加
 
 interface RankingTrProps {
   rank: number;
@@ -15,6 +17,8 @@ interface RankingTrProps {
   miss: number;
   lost: number;
   maxCombo: number;
+  playSpeed: number;
+  updatedAt: string;
   isHighlighted: boolean; // 変更
   isHovered: boolean; // 追加
   onMouseEnter: () => void; // 追加
@@ -52,6 +56,18 @@ const RankingTr = (props: RankingTrProps) => {
           <div>ミス数: {props.miss}</div>
           <div>ロスト数: {props.lost}</div>
           <div>最大コンボ: {props.maxCombo}</div>
+          {props.playSpeed > 1 && <div>倍速: {props.playSpeed.toFixed(2)}</div>}
+          <div>
+            更新日時:{" "}
+            {new Date(props.updatedAt).toLocaleString("ja-JP", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
         </div>
       }
       hasArrow
@@ -75,6 +91,9 @@ const RankingTr = (props: RankingTrProps) => {
         <Td>{props.kpm}</Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           {getInputMode()}
+        </Td>
+        <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+          {formatDistanceToNowStrict(new Date(props.updatedAt), { addSuffix: true, locale: ja })}
         </Td>
       </Tr>
     </Tooltip>

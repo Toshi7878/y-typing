@@ -77,7 +77,12 @@ const RankingList = () => {
       {data &&
         data.map(
           (
-            user: { userId: string; user: { name: string }; status: SendResultData["status"] },
+            user: {
+              updatedAt: string;
+              userId: string;
+              user: { name: string };
+              status: SendResultData["status"];
+            },
             index: number,
           ) => {
             const romaType = user.status.romaType;
@@ -107,6 +112,8 @@ const RankingList = () => {
                   miss={user.status.miss}
                   lost={user.status.lost}
                   maxCombo={user.status.maxCombo}
+                  playSpeed={user.status.playSpeed}
+                  updatedAt={user.updatedAt}
                   isHighlighted={showMenu === index}
                   isHovered={hoveredIndex === index} // 追加
                   onMouseEnter={() => setHoveredIndex(index)} // 追加

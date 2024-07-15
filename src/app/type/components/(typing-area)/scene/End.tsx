@@ -14,12 +14,11 @@ interface EndProps {
   lineResultRef: React.RefObject<LineResultObj[]>;
 }
 const End = ({ lineResultRef }: EndProps) => {
-
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef } = useRefs();
+  const { bestScoreRef, statusRef } = useRefs();
 
   const initialState = { id: null, message: "", status: 0 };
   const [status] = useAtom(statusAtom);
@@ -29,15 +28,15 @@ const End = ({ lineResultRef }: EndProps) => {
 
   const upload = () => {
     const sendStatus = {
-      score: status.display.score,
-      romaType: status.romaType,
-      kanaType: status.kanaType,
-      flickType: status.flickType,
-      miss: status.display.miss,
-      lost: status.display.lost,
+      score: status.score,
+      romaType: statusRef.current!.status.romaType,
+      kanaType: statusRef.current!.status.kanaType,
+      flickType: statusRef.current!.status.flickType,
+      miss: status.miss,
+      lost: status.lost,
       rkpm: 0,
-      maxCombo: status.maxCombo,
-      kpm: status.display.kpm,
+      maxCombo: statusRef.current!.status.maxCombo,
+      kpm: status.kpm,
       playSpeed: speedData.playSpeed,
     };
     const sendData = {
@@ -93,26 +92,26 @@ const End = ({ lineResultRef }: EndProps) => {
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} />
       <Box flex="1" className="text-center mx-6">
-        <form action={status.display.score >= bestScoreRef.current ? formAction : undefined}>
+        <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-2xl" mx={2}>
               {bestScoreRef.current === 0 ? (
-                <>初めての記録です！スコアは{status.display.score}です。</>
-              ) : status.display.score >= bestScoreRef.current ? (
+                <>初めての記録です！スコアは{status.score}です。</>
+              ) : status.score >= bestScoreRef.current ? (
                 <>
-                  おめでとうございます！最高スコアが{bestScoreRef.current}から{status.display.score}
+                  おめでとうございます！最高スコアが{bestScoreRef.current}から{status.score}
                   に更新されました！
                 </>
               ) : (
                 <>
-                  最高スコアは{bestScoreRef.current}です。最高スコアまであと
-                  {bestScoreRef.current - status.display.score}です。
+                  最高スコアは{bestScoreRef.current}です。記録更新まであと
+                  {bestScoreRef.current - status.score}です。
                 </>
               )}
             </Box>
             <HStack justifyContent="space-around">
-              {status.display.score >= bestScoreRef.current && (
-                <EndUploadButton responseStatus={state.status}/>
+              {status.score >= bestScoreRef.current && (
+                <EndUploadButton responseStatus={state.status} />
               )}
               <Button
                 className="cursor-pointer"

@@ -1,15 +1,16 @@
-import { LineStatus, Status } from "./type";
+import { Status, StatusRef } from "./type";
 
 export class CalcTypeSpeed {
   lineTypeSpeed: number;
   totalTypeSpeed: number;
-  constructor(status: Status, lineStatusRef: LineStatus, lineTime: number, totalTime: number) {
-    this.lineTypeSpeed = Math.round((lineStatusRef.type / lineTime) * 60);
-    this.totalTypeSpeed = this.updateTotalTypeSpeed(status, lineTime, totalTime);
+  constructor(status: Status, lineTime: number, statusRef: React.RefObject<StatusRef>,
+  ) {
+    this.lineTypeSpeed = Math.round((statusRef.current!.lineStatus.lineType / lineTime) * 60);
+    this.totalTypeSpeed = this.updateTotalTypeSpeed(status, lineTime, statusRef);
   }
 
-  updateTotalTypeSpeed(status: Status, lineTime: number, totalTime: number) {
-    const totalTypeTime = lineTime + totalTime;
-    return Math.round((status.display.type / totalTypeTime) * 60);
+  updateTotalTypeSpeed(status: Status, lineTime: number, statusRef: React.RefObject<StatusRef>) {
+    const totalTypeTime = lineTime + statusRef.current!.status.totalTypeTime;
+    return Math.round((status.type / totalTypeTime) * 60);
   }
 }

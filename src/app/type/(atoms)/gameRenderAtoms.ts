@@ -17,40 +17,23 @@ export const currentTimeSSMMAtom = atom<number>(0);
 export const sceneAtom = atom<"ready" | "playing" | "end">("ready");
 export const tabIndexAtom = atom<0 | 1>(1);
 
-// PlayingTop
-export const comboAtom = atom<number>(0);
-
 export const defaultStatus = {
-  display: {
-    score: 0,
-    point: 0,
-    timeBonus: 0,
-    type: 0,
-    miss: 0,
-    lost: 0,
-    combo: 0,
-    rank: 0,
-    kpm: 0,
-    line: 0,
-  },
-  lineTypePoint: 0,
-  lineMissPoint: 0,
-  romaType: 0,
-  kanaType: 0,
-  flickType: 0,
-  correct: 0,
-  acc: 100,
-  rkpm: 0,
-  maxCombo: 0,
-  missCombo: 0,
-  lineCompleteCount: 0,
-  lineFailureCount: 0,
+  score: 0,
+  point: 0,
+  timeBonus: 0,
+  type: 0,
+  miss: 0,
+  lost: 0,
+  combo: 0,
+  rank: 0,
+  kpm: 0,
+  line: 0,
 };
 export const statusAtom = atom<Status>(defaultStatus);
 
 export const playingNotifyAtom = atom<{ text: string }>({ text: "" });
 export const lineKpmAtom = atom<number>(0);
-export const remainTimeAtom = atom<string>("0.0");
+export const remainTimeAtom = atom<number>(0);
 export const mapIdAtom = atom<number>(0);
 
 export const speedAtom = atom<Speed>({

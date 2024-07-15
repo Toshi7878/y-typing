@@ -14,23 +14,27 @@ model Result {
   userId         Int
   lineResult     Json
   status         Json
+  updatedAt      DateTime @default(now()) @updatedAt
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade) // 追加されたリレーション
 }
+
+
 model Map {
-  id             Int @id @default(autoincrement())
-  videoId        String
-  title          String
-  creatorComment String
-  tags           String[] //分ける
-  creatorId      Int
-  mapData        Json
-  previewTime    String @default("0")
-  difficulty     String @default("0.0")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
-  user           User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  result         Result[]
+  id               Int @id @default(autoincrement())
+  videoId          String
+  title            String
+  creatorComment   String
+  tags             String[] //分ける
+  creatorId        Int
+  mapData          Json
+  previewTime      String @default("0")
+  difficulty       String @default("0.0")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  mapDataUpdatedAt DateTime @default(now()) @updatedAt
+  user             User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  result           Result[]
 }
 
 

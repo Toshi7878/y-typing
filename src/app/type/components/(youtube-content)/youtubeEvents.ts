@@ -2,14 +2,16 @@ import { Ticker } from "@pixi/ticker";
 import { timer } from "../../(ts)/timer";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
+import { YTStateRef } from "../../(ts)/type";
 export const ticker = new Ticker();
 
 export let updateFunction;
 class YTState {
-  play(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>) {
+  play(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>, YTStateRef:React.RefObject<YTStateRef>) {
     console.log("再生 1");
     setScene("playing");
     ticker.start();
+    YTStateRef.current!.isPaused = false;
   }
 
   end(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>) {
@@ -24,10 +26,11 @@ class YTState {
     ticker.stop();
   }
 
-  pause() {
+  pause(YTStateRef:React.RefObject<YTStateRef>) {
     console.log("一時停止");
 
     ticker.stop();
+    YTStateRef.current!.isPaused = true;
   }
 
   seek(target: any, lineCountRef: React.RefObject<number>) {

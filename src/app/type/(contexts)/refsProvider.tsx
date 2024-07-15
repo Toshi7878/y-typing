@@ -1,14 +1,37 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { PlayingRef } from "../(ts)/type";
+import { PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
 
+export const defaultStatusRef = {
+  status: {
+    count: 0,
+    isPaused: false,
+    romaType: 0,
+    kanaType: 0,
+    flickType: 0,
+    rkpm: 0,
+    maxCombo: 0,
+    missCombo: 0,
+    totalTypeTime: 0,
+    lineCompleteCount: 0,
+    lineFailureCount: 0,
+  },
+  lineStatus: { lineType: 0, lineMiss: 0, lineClearTime: 0, latency: 0, typeResult: [] },
+};
+
+export const defaultYTStateRef = {
+  isPlayed: false,
+  isPaused: false,
+};
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
   playingRef: React.RefObject<PlayingRef>;
   lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
+  statusRef: React.RefObject<StatusRef>;
+  ytStateRef: React.RefObject<YTStateRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
@@ -19,6 +42,8 @@ const RefsContext = createContext<RefsContextType>({
   playingRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
+  statusRef: { current: defaultStatusRef },
+  ytStateRef: { current: defaultYTStateRef },
 
   setRef: (ref: HTMLElement | any) => {},
 });
@@ -28,6 +53,8 @@ export const RefsProvider = ({ children }) => {
   const playingRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
+  const statusRef = useRef(defaultStatusRef);
+  const ytStateRef = useRef(defaultYTStateRef);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
@@ -46,7 +73,16 @@ export const RefsProvider = ({ children }) => {
 
   return (
     <RefsContext.Provider
-      value={{ playingRef, bestScoreRef, tabStatusRef, lineCountRef, playerRef, setRef }}
+      value={{
+        ytStateRef,
+        statusRef,
+        playingRef,
+        bestScoreRef,
+        tabStatusRef,
+        lineCountRef,
+        playerRef,
+        setRef,
+      }}
     >
       {children}
     </RefsContext.Provider>
@@ -61,6 +97,8 @@ export const useRefs = () => {
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
     playingRef: context.playingRef,
+    statusRef: context.statusRef,
+    ytStateRef: context.ytStateRef,
     setRef: context.setRef,
   };
 };

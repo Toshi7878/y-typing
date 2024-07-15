@@ -8,32 +8,45 @@ export interface PlayingRef {
 }
 
 export interface Status {
-  display: {
-    score: number;
-    point: number;
-    timeBonus: number;
-    type: number;
-    miss: number;
-    lost: number;
-    combo: number;
-    rank: number;
-    kpm: number;
-    line: number;
-  };
+  score: number;
+  point: number;
+  timeBonus: number;
+  type: number;
+  miss: number;
+  lost: number;
+  combo: number;
+  rank: number;
+  kpm: number;
+  line: number;
+}
 
-  //あとでRefで管理ようにする。
-  lineTypePoint: number;
-  lineMissPoint: number;
-  romaType: number;
-  kanaType: number;
-  flickType: number;
-  correct: number;
-  acc: number;
-  rkpm: number;
-  maxCombo: number;
-  missCombo: number;
-  lineCompleteCount: number;
-  lineFailureCount: number;
+export interface StatusRef {
+  status: {
+    count: number;
+    isPaused: boolean;
+    romaType: number;
+    kanaType: number;
+    flickType: number;
+
+    rkpm: number;
+    maxCombo: number;
+    missCombo: number;
+    totalTypeTime: number;
+    lineCompleteCount: number;
+    lineFailureCount: number;
+  };
+  lineStatus: {
+    lineType: number;
+    lineMiss: number;
+    lineClearTime: number;
+    latency: number;
+    typeResult: TypeResult[];
+  };
+}
+
+export interface YTStateRef {
+  isPlayed:boolean;
+  isPaused:boolean;
 }
 
 export interface SendResultData {
@@ -52,12 +65,6 @@ export interface SendResultData {
     playSpeed: number;
   };
 }
-
-export interface LineStatus {
-  type: number;
-  miss: number;
-}
-
 export interface TypeResult {
   type?: {
     char: string;

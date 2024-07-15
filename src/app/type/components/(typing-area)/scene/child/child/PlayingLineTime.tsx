@@ -11,7 +11,7 @@ const PlayingLineTime = ({ className = "" }: PlayingLineTimeProps) => {
   const [lineKpm] = useAtom(lineKpmAtom);
   return (
     <Box className={className}>
-      {lineKpm}kpm - 残り{remainTime}秒
+      {lineKpm}kpm - 残り{remainTime.toFixed(1)}秒
     </Box>
   );
 };

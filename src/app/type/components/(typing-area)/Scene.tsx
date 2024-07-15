@@ -7,7 +7,6 @@ import Ready from "./scene/Ready";
 import { Box, Card } from "@chakra-ui/react";
 import { TabStatusRef } from "../(tab)/tab/TabStatus";
 import { LineResultObj, PlayingRef } from "../../(ts)/type";
-import { useRefs } from "../../(contexts)/refsProvider";
 
 interface SceneProps {
   tabStatusRef: React.RefObject<TabStatusRef>;
@@ -19,7 +18,7 @@ export const Scene = ({ tabStatusRef }: SceneProps) => {
 
   const [, setTabIndex] = useAtom(tabIndexAtom);
   const lineResultRef = useRef<LineResultObj[]>([]);
-  const _playingRef = useRef<PlayingRef>(null);
+  const playingRef = useRef<PlayingRef>(null);
 
   useEffect(() => {
     if (scene === "playing") {
@@ -31,7 +30,7 @@ export const Scene = ({ tabStatusRef }: SceneProps) => {
   if (scene === "ready") {
     return <Ready />;
   } else if (scene === "playing" && map) {
-    return <Playing tabStatusRef={tabStatusRef} lineResultRef={lineResultRef} ref={_playingRef} />;
+    return <Playing tabStatusRef={tabStatusRef} lineResultRef={lineResultRef} ref={playingRef} />;
   } else if (scene === "end") {
     return <End lineResultRef={lineResultRef} />;
   }

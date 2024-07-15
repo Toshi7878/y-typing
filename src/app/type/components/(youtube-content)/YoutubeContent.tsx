@@ -29,12 +29,12 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(setScene);
+    ytState.play(setScene, refs.ytStateRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePause = useCallback(() => {
-    ytState.pause();
+    ytState.pause(refs.ytStateRef);
   }, []);
 
   const handleEnd = useCallback(() => {
