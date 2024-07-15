@@ -1,8 +1,8 @@
 import { Ticker } from "@pixi/ticker";
 import { timer } from "../../(ts)/timer";
-import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
 import { SceneType, StatusRef, YTStateRef } from "../../(ts)/type";
+import { RefsContextType } from "../../(contexts)/refsProvider";
 export const ticker = new Ticker();
 
 export let updateFunction;
@@ -12,11 +12,14 @@ class YTState {
     setScene: React.Dispatch<React.SetStateAction<SceneType>>,
     YTStateRef: React.RefObject<YTStateRef>,
     setNotify: React.Dispatch<React.SetStateAction<string>>,
+    playerRef: RefsContextType["playerRef"],
   ) {
     console.log("再生 1");
 
     if (scene !== "end") {
       setScene("playing");
+      updateFunction = () => timer.update(playerRef);
+      ticker.add(updateFunction);
       if (!ticker.started) {
         ticker.start();
       }
@@ -75,13 +78,10 @@ class YTState {
     console.log("シーク");
   }
 
-  ready(refs: RefsContextType) {
+  ready(player: any) {
     console.log("ready");
 
-    refs.playerRef.current.setVolume(30);
-    updateFunction = () => timer.update(refs.playerRef);
-
-    ticker.add(updateFunction);
+    player.setVolume(30);
   }
 }
 

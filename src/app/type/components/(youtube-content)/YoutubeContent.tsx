@@ -24,14 +24,14 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs);
+      ytState.ready(player);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(scene, setScene, refs.ytStateRef, setNotify);
+    ytState.play(scene, setScene, refs.ytStateRef, setNotify, refs.playerRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
