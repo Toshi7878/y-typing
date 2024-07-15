@@ -5,11 +5,15 @@ import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box } from "@chakra-ui/rea
 import "../../../style/statusTable.scss";
 import RankingList from "./child/RankingList";
 
-const TabRanking = forwardRef((props, ref) => {
+interface TabRankingProps {
+  height: string;
+}
+
+const TabRanking = forwardRef((props: TabRankingProps, ref) => {
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">
-        <Box overflowY="auto">
+        <Box overflowY="auto" minH={props.height}>
           <Table variant="simple" className="ranking-table" size="sm">
             <Thead>
               <Tr>

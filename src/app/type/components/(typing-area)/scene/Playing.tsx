@@ -303,7 +303,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   }, []);
 
   return (
-    <Box height="100vh" display="flex" flexDirection="column" className="select-none">
+    <Box display="flex" flexDirection="column" className="select-none">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
       <PlayingCenter ref={playingCenterRef} flex="1" />
       <PlayingBottom

@@ -26,7 +26,11 @@ export interface TabStatusRef {
   resetStatus: () => void;
 }
 
-const TabStatus = forwardRef((props, ref) => {
+interface TabStatusProps {
+  height: string;
+}
+
+const TabStatus = forwardRef((props:TabStatusProps, ref) => {
   const [map] = useAtom(mapAtom);
 
   const defaultStatus: Status = {
@@ -100,21 +104,20 @@ const TabStatus = forwardRef((props, ref) => {
 
   const TrStyled = styled(Tr)<{ isMdOrSmaller: boolean }>`
     height: ${({ isMdOrSmaller }) =>
-      isMdOrSmaller ? "" : ""}; // isMdOrSmallerがtrueのとき高さを小さく設定
+      isMdOrSmaller ? "52px" : "122px"}; // isMdOrSmallerがtrueのとき高さを小さく設定
   `;
-  const TdStyled = styled(Td)<{ isCentered: boolean }>`
-    ${({ isCentered }) => isCentered && "text-align: center;"}
-  `;
+  const TdStyled = styled(Td)<{ isCentered: boolean }>``;
+
   return (
-    <Card
-      variant={"filled"}
-      bg="blue.100"
-      boxShadow="lg"
-      size={isMdOrSmaller ? "sm" : "md"} // isMdOrSmallerがtrueでサイズを小さく
-    >
+    <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody>
         <TableContainer>
-          <Table variant="unstyled" className="table-fixed overflow-hidden">
+          <Table
+            minH={props.height}
+            variant="unstyled"
+            className="table-fixed overflow-hidden"
+            overflowY="auto"
+          >
             <Tbody className="font-bold text-2xl 2xl:text-4xl font-mono">
               {/* 1段目 */}
 

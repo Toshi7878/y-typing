@@ -16,7 +16,7 @@ function Ready() {
   const playingTotalTimeRef = useRef(null);
 
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
       <Box className="mx-6 mt-2" flex="1">
         <Box className="font-bold text-2xl">Enterキー / 動画をクリックして開始</Box>

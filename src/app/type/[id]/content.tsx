@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
@@ -11,6 +11,7 @@ import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import { mapAtom, mapIdAtom, sceneAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
+import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -22,6 +23,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 }
 
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
+  const { scale } = useWindowScale();
+
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const [, setMap] = useAtom(mapAtom);
@@ -77,20 +80,33 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);
 
-  return (
-    <main className="flex min-h-screen sm:px-0 flex-col items-center pt-7 lg:px-20 xl:px-48 w-full">
-      <Flex direction="column" align="center" w="full" pt="7">
-        <Flex w="full" gap="4" direction={{ base: "column", xl: "row" }}>
-          <Box flex={{ base: "1" }} w="full">
-            <YouTubeContent className={`${isLoading ? "invisible" : ""} `} videoId={videoId} />
-          </Box>
+  const style: CSSProperties = {
+    transform: `scale(${scale})`,
+    transformOrigin: "top",
+    width: `${CONTENT_WIDTH}px`,
+    height: `${CONTENT_HEIGHT}px`,
+  };
 
-          <Box flex={{ base: "8" }} display="flex" flexDirection="column">
-            <TabContent />
+  return (
+    <main className="flex flex-col items-center pt-16">
+      <Box style={style}>
+        <Flex direction="column">
+          <Flex gap="4">
+            <Box className="">
+              <YouTubeContent
+                className={`h-[340px] ${isLoading ? "invisible" : ""} aspect-video`}
+                videoId={videoId}
+              />
+            </Box>
+            <Box flex={{ base: "8" }} flexDirection="column">
+              <TabContent />
+            </Box>
+          </Flex>
+          <Box className=" mt-6">
+            <SceneWrapper />
           </Box>
         </Flex>
-        <SceneWrapper height="540px" />
-      </Flex>
+      </Box>
     </main>
   );
 }

@@ -27,9 +27,6 @@ export default function TabContent({ className }: TabContentProps) {
       index={tabIndex} // デフォルトの選択されたタブを設定
       onChange={(index: number) => setTabIndex(index as 0 | 1)} // 型を 'number' に変更
       className={className}
-      flex={1}
-      size="md"
-      position="relative"
       variant="line"
       colorScheme="black" // ここで色を指定します
     >
@@ -53,11 +50,11 @@ export default function TabContent({ className }: TabContentProps) {
 
       <TabPanels>
         <TabPanel px={0}>
-          <TabStatus ref={tabStatusRef} />
+          <TabStatus ref={tabStatusRef} height={"250px"}/>
         </TabPanel>
 
         <TabPanel px={0}>
-          <TabRanking />
+          <TabRanking height={"250px"}/>
         </TabPanel>
       </TabPanels>
     </Tabs>

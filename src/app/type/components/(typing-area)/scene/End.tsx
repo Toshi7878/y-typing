@@ -88,7 +88,7 @@ const End = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
       <Box flex="1" className="text-center mx-6">
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>

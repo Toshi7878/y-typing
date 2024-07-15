@@ -31,18 +31,13 @@ export const Scene = () => {
   }
 };
 
-interface SceneWrapperProps {
-  height: string;
-}
-function SceneWrapper({ height }: SceneWrapperProps) {
+function SceneWrapper() {
   console.log("SceneWrapper");
 
   return (
-    <Box className="w-full mt-4 overflow-hidden" height={height}>
-      <Card variant={"filled"} className="max-h-[95%]" bg="blue.100" boxShadow="lg">
-        <Scene />
-      </Card>
-    </Box>
+    <Card variant={"filled"} bg="blue.100" boxShadow="lg">
+      <Scene />
+    </Card>
   );
 }
 

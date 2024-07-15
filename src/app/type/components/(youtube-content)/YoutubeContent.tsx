@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { CSSProperties, useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
-import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { playingNotifyAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
 
@@ -64,22 +63,20 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   }, []);
 
   return (
-    <Box className={`${className} mt-2 w-full xl:w-[300px] 2xl:w-[500px]`}>
-      <YouTube
-        className={`h-[30vh]`}
-        videoId={videoId}
-        opts={{
-          width: "100%",
-          height: "100%",
-          playerVars: { enablejsapi: 1 },
-        }}
-        onReady={handleReady}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onEnd={handleEnd}
-        onStateChange={handleStateChange}
-      />
-    </Box>
+    <YouTube
+      className={className}
+      videoId={videoId}
+      opts={{
+        width: "100%",
+        height: "100%",
+        playerVars: { enablejsapi: 1 },
+      }}
+      onReady={handleReady}
+      onPlay={handlePlay}
+      onPause={handlePause}
+      onEnd={handleEnd}
+      onStateChange={handleStateChange}
+    />
   );
 };
 
