@@ -3,6 +3,7 @@ import { PlayingRef, Status, StatusRef, TypeResult } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
+import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 
 const keyboardCharacters = [
   "0",
@@ -325,6 +326,7 @@ export class Success extends CalcTypeSpeed {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
+    playingComboRef: React.RefObject<PlayingComboRef>,
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
@@ -335,9 +337,10 @@ export class Success extends CalcTypeSpeed {
     super(status, lineTime, statusRef);
 
     const mode = "roma";
-    this.newStatus = this.typeCounter(
+    this.newStatus = this.updateStatus(
       { ...status },
       statusRef,
+      playingComboRef,
       updatePoint,
       newLineWord,
       map,
@@ -355,9 +358,10 @@ export class Success extends CalcTypeSpeed {
     });
   }
 
-  typeCounter(
+  updateStatus(
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
+    playingComboRef: React.RefObject<PlayingComboRef>,
     updatePoint: number,
     newLineWord: Word,
     map: CreateMap,
@@ -367,13 +371,16 @@ export class Success extends CalcTypeSpeed {
   ) {
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
-    newStatus.combo++;
     statusRef.current!.status.missCombo = 0;
     newStatus.point += updatePoint;
     newStatus.kpm = this.totalTypeSpeed;
 
-    if (newStatus.combo > statusRef.current!.status.maxCombo) {
-      statusRef.current!.status.maxCombo = newStatus.combo;
+    const newCombo = playingComboRef.current!.getCombo() + 1;
+
+    playingComboRef.current?.setCombo(newCombo);
+
+    if (newCombo > statusRef.current!.status.maxCombo) {
+      statusRef.current!.status.maxCombo = newCombo;
     }
 
     if (mode === "roma") {
@@ -390,10 +397,10 @@ export class Success extends CalcTypeSpeed {
       newStatus.timeBonus = timeBonus; //speed;
       statusRef.current!.lineStatus.lineClearTime = lineTime;
       newStatus.score += newStatus.point + timeBonus;
-      statusRef.current!.status.lineCompleteCount++;
+      statusRef.current!.status.completeCount++;
       newStatus.line =
         map.lineLength -
-        (statusRef.current!.status.lineCompleteCount + statusRef.current!.status.lineFailureCount);
+        (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
     }
 
     return newStatus;
@@ -406,11 +413,11 @@ export class Miss {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    map: CreateMap,
+    playingComboRef: React.RefObject<PlayingComboRef>,
     lineTime: number,
     char: string,
   ) {
-    this.newStatus = this.missCounter({ ...status }, statusRef, map);
+    this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef);
 
     statusRef.current!.lineStatus.typeResult.push({
       type: {
@@ -421,11 +428,15 @@ export class Miss {
     });
   }
 
-  missCounter(newStatus: Status, statusRef: React.RefObject<StatusRef>, map: CreateMap) {
+  missCounter(
+    newStatus: Status,
+    statusRef: React.RefObject<StatusRef>,
+    playingComboRef: React.RefObject<PlayingComboRef>,
+  ) {
     newStatus.miss++;
     statusRef.current!.lineStatus.lineMiss++;
     statusRef.current!.status.missCombo++;
-    newStatus.combo = 0;
+    playingComboRef.current?.setCombo(0);
     newStatus.point -= 5;
     return newStatus;
   }

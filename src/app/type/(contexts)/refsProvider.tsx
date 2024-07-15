@@ -2,11 +2,11 @@
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 import { PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
+import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 
-export const defaultStatusRef = {
+export const defaultStatusRef: StatusRef = {
   status: {
     count: 0,
-    isPaused: false,
     romaType: 0,
     kanaType: 0,
     flickType: 0,
@@ -14,8 +14,9 @@ export const defaultStatusRef = {
     maxCombo: 0,
     missCombo: 0,
     totalTypeTime: 0,
-    lineCompleteCount: 0,
-    lineFailureCount: 0,
+    completeCount: 0,
+    failureCount: 0,
+    result: [],
   },
   lineStatus: { lineType: 0, lineMiss: 0, lineClearTime: 0, latency: 0, typeResult: [] },
 };
@@ -23,11 +24,13 @@ export const defaultStatusRef = {
 export const defaultYTStateRef = {
   isPlayed: false,
   isPaused: false,
+  currentTime: 0,
 };
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
   playingRef: React.RefObject<PlayingRef>;
+  playingComboRef: React.RefObject<PlayingComboRef>;
   lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
   statusRef: React.RefObject<StatusRef>;
@@ -39,11 +42,12 @@ export interface RefsContextType {
 const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
+  playingComboRef: { current: null },
   playingRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
-  statusRef: { current: defaultStatusRef },
-  ytStateRef: { current: defaultYTStateRef },
+  statusRef: { current: structuredClone(defaultStatusRef) },
+  ytStateRef: { current: structuredClone(defaultYTStateRef) },
 
   setRef: (ref: HTMLElement | any) => {},
 });
@@ -51,10 +55,11 @@ export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
   const tabStatusRef = useRef(null);
   const playingRef = useRef(null);
+  const playingComboRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
-  const statusRef = useRef(defaultStatusRef);
-  const ytStateRef = useRef(defaultYTStateRef);
+  const statusRef = useRef(structuredClone(defaultStatusRef));
+  const ytStateRef = useRef(structuredClone(defaultYTStateRef));
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
@@ -68,6 +73,9 @@ export const RefsProvider = ({ children }) => {
       case "playingRef":
         playingRef.current = ref;
         break;
+      case "playingComboRef":
+        playingComboRef.current = ref;
+        break;
     }
   };
 
@@ -77,6 +85,7 @@ export const RefsProvider = ({ children }) => {
         ytStateRef,
         statusRef,
         playingRef,
+        playingComboRef,
         bestScoreRef,
         tabStatusRef,
         lineCountRef,
@@ -96,6 +105,7 @@ export const useRefs = () => {
     lineCountRef: context.lineCountRef,
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
+    playingComboRef: context.playingComboRef,
     playingRef: context.playingRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,

@@ -9,20 +9,19 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
 import PlayingBottom from "./child/PlayingBottom";
+import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 
-interface EndProps {
-  lineResultRef: React.RefObject<LineResultObj[]>;
-}
-const End = ({ lineResultRef }: EndProps) => {
+const End = () => {
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
   const { bestScoreRef, statusRef } = useRefs();
+  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
+  const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
 
   const initialState = { id: null, message: "", status: 0 };
   const [status] = useAtom(statusAtom);
-  const lineProgressRef = useRef(null);
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
 
@@ -41,7 +40,7 @@ const End = ({ lineResultRef }: EndProps) => {
     };
     const sendData = {
       mapId: mapId,
-      lineResult: lineResultRef.current,
+      lineResult: statusRef.current?.status.result,
       status: sendStatus,
     };
 
@@ -90,7 +89,7 @@ const End = ({ lineResultRef }: EndProps) => {
   }, [state]);
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <PlayingTop lineProgressRef={lineProgressRef} />
+      <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
       <Box flex="1" className="text-center mx-6">
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>

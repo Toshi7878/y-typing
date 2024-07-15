@@ -29,10 +29,10 @@ export class LineResult {
     newStatus.timeBonus = 0;
 
     if (lineWord.nextChar["k"]) {
-      statusRef.current!.status.lineFailureCount++;
+      statusRef.current!.status.failureCount++;
       newStatus.line =
         map.lineLength -
-        (statusRef.current!.status.lineCompleteCount + statusRef.current!.status.lineFailureCount);
+        (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
       const lostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       newStatus.lost += lostWord.length;
       newStatus.score += newStatus.point;

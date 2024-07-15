@@ -1,13 +1,38 @@
 import { statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
+
 import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import React, { memo } from "react";
+import React, { memo, useState, forwardRef, useImperativeHandle, useEffect } from "react";
 
 interface PlayingComboProps {
-  comboCount: number;
   className?: string;
 }
-const PlayingCombo = ({ comboCount, className = "" }: PlayingComboProps) => {
-  return <Box className={className}>{comboCount}</Box>;
-};
+
+export interface PlayingComboRef {
+  getCombo: () => number;
+  setCombo: (newCombo: number) => void;
+}
+const PlayingCombo = forwardRef<PlayingComboRef, PlayingComboProps>(({ className = "" }, ref) => {
+  const [combo, setCombo] = useState(0);
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("playingComboRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combo]);
+
+  const { setRef } = useRefs();
+  useImperativeHandle(ref, () => ({
+    getCombo: () => combo,
+    setCombo: (newCombo) => {
+      setCombo(newCombo);
+    },
+  }));
+
+  return <Box className={className}>{combo}</Box>;
+});
+
+PlayingCombo.displayName = "PlayingCombo";
+
 export default memo(PlayingCombo);

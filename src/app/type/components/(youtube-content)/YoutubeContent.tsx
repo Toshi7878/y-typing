@@ -35,6 +35,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
 
   const handlePause = useCallback(() => {
     ytState.pause(refs.ytStateRef);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEnd = useCallback(() => {

@@ -31,7 +31,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const [, setMap] = useAtom(mapAtom);
-  const tabStatusRef = useRef(null);
   const [status, setStatus] = useAtom(statusAtom);
   const [, setScene] = useAtom(sceneAtom);
   const [, setMapId] = useAtom(mapIdAtom);
@@ -100,10 +99,10 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             flexDirection="column"
             height="100%" // 追加: 高さをflexに合わせる
           >
-            <TabContent tabStatusRef={tabStatusRef} />
+            <TabContent />
           </Box>
         </Flex>
-        <SceneWrapper tabStatusRef={tabStatusRef} />
+        <SceneWrapper />
       </Flex>
     </main>
   );

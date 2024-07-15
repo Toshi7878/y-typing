@@ -24,7 +24,6 @@ export const defaultStatus = {
   type: 0,
   miss: 0,
   lost: 0,
-  combo: 0,
   rank: 0,
   kpm: 0,
   line: 0,
@@ -32,8 +31,6 @@ export const defaultStatus = {
 export const statusAtom = atom<Status>(defaultStatus);
 
 export const playingNotifyAtom = atom<{ text: string }>({ text: "" });
-export const lineKpmAtom = atom<number>(0);
-export const remainTimeAtom = atom<number>(0);
 export const mapIdAtom = atom<number>(0);
 
 export const speedAtom = atom<Speed>({

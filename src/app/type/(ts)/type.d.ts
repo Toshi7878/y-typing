@@ -14,7 +14,6 @@ export interface Status {
   type: number;
   miss: number;
   lost: number;
-  combo: number;
   rank: number;
   kpm: number;
   line: number;
@@ -23,17 +22,16 @@ export interface Status {
 export interface StatusRef {
   status: {
     count: number;
-    isPaused: boolean;
     romaType: number;
     kanaType: number;
     flickType: number;
-
     rkpm: number;
     maxCombo: number;
     missCombo: number;
     totalTypeTime: number;
-    lineCompleteCount: number;
-    lineFailureCount: number;
+    completeCount: number;
+    failureCount: number;
+    result: LineResultObj[];
   };
   lineStatus: {
     lineType: number;
@@ -45,8 +43,9 @@ export interface StatusRef {
 }
 
 export interface YTStateRef {
-  isPlayed:boolean;
-  isPaused:boolean;
+  isPlayed: boolean;
+  isPaused: boolean;
+  currentTime: number;
 }
 
 export interface SendResultData {

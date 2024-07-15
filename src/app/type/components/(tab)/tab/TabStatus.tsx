@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import {
   Table,
@@ -12,25 +12,41 @@ import {
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
-import { mapAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { defaultStatus, mapAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
 import StatusValue from "./child/StatusValue";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { Status } from "@/app/type/(ts)/type";
 
 export interface TabStatusRef {
-  getStatus: () => void;
+  getStatus: () => Status;
+  setStatus: (newStatus: Status) => void;
 }
 
 const TabStatus = forwardRef((props, ref) => {
   const [map] = useAtom(mapAtom);
 
-  const [status, setStatus] = useAtom(statusAtom);
+  const [status, setStatus] = useState(defaultStatus);
   const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
+  const { setRef } = useRefs();
 
-  useImperativeHandle(ref, () => ({
-    getStatus: () => status,
-  }));
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("tabStatusRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  useImperativeHandle(
+    ref,
+
+    () => ({
+      getStatus: () => status,
+      setStatus: (newStatus: Status) => setStatus(newStatus),
+    }),
+  );
 
   useEffect(() => {
     if (map) {

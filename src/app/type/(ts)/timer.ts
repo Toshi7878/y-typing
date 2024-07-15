@@ -1,36 +1,32 @@
 import { RefsContextType } from "../(contexts)/refsProvider";
 
 class TimerEvent {
-  private listeners: Array<(currentTime: string) => void>;
+  private listeners: Array<(currentTime: number) => void>;
 
   constructor() {
     this.listeners = [];
   }
 
-  addListener(listener: (currentTime: string) => void) {
+  addListener(listener: (currentTime: number) => void) {
     this.listeners.push(listener);
   }
 
-  removeListener(listener: (currentTime: string) => void) {
+  removeListener(listener: (currentTime: number) => void) {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  protected notifyListeners(currentTime: string) {
+  protected notifyListeners(currentTime: number) {
     this.listeners.forEach((listener) => listener(currentTime));
   }
 }
 
 class Timer extends TimerEvent {
-  public currentTime: string;
-
   constructor() {
     super();
-    this.currentTime = "0";
   }
 
   update(playerRef: RefsContextType["playerRef"]) {
-    const currentTime = Number(playerRef.current.getCurrentTime()).toFixed(3);
-    this.currentTime = currentTime;
+    const currentTime = Number(playerRef.current.getCurrentTime());
 
     this.notifyListeners(currentTime);
   }
