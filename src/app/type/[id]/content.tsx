@@ -88,7 +88,12 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   };
 
   return (
-    <main className="flex flex-col items-center pt-16">
+    <main
+      className="flex flex-col items-center pt-16"
+      style={{
+        height: "100vh",
+      }}
+    >
       <Box style={style}>
         <Flex direction="column">
           <Flex gap="4">
