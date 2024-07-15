@@ -1,8 +1,6 @@
-import { statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 import { Box } from "@chakra-ui/react";
-import { useAtom } from "jotai";
 import React, { memo, useState, forwardRef, useImperativeHandle, useEffect } from "react";
 
 interface PlayingComboProps {

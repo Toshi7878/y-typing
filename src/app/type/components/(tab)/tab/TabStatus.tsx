@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
-import { defaultStatus, mapAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
@@ -24,6 +24,18 @@ export interface TabStatusRef {
   getStatus: () => Status;
   setStatus: (newStatus: Status) => void;
 }
+
+export const defaultStatus:Status = {
+  score: 0,
+  point: 0,
+  timeBonus: 0,
+  type: 0,
+  miss: 0,
+  lost: 0,
+  rank: 0,
+  kpm: 0,
+  line: 0,
+};
 
 const TabStatus = forwardRef((props, ref) => {
   const [map] = useAtom(mapAtom);

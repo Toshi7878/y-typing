@@ -4,7 +4,7 @@ import PlayingLineProgress from "./child/PlayingLineProgress";
 import PlayingCombo from "./child/PlayingCombo";
 import PlayingLineTime, { PlayingLineTimeRef } from "./child/PlayingLineTime";
 import PlayingNotify from "./child/PlayingNotify";
-import { sceneAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { useRef } from "react";
 

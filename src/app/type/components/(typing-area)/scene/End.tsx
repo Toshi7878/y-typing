@@ -2,10 +2,9 @@ import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, speedAtom, statusAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapIdAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { LineResultObj } from "@/app/type/(ts)/type";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
 import PlayingBottom from "./child/PlayingBottom";
@@ -16,14 +15,15 @@ const End = () => {
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
+  const playingTotalTimeRef = useRef(null);
 
   const initialState = { id: null, message: "", status: 0 };
-  const [status] = useAtom(statusAtom);
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
+  const status = tabStatusRef.current!.getStatus();
 
   const upload = () => {
     const sendStatus = {
@@ -157,7 +157,11 @@ const End = () => {
           ""
         )} */}
       </Box>
-      <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
+      <PlayingBottom
+        skipGuideRef={skipGuideRef}
+        totalTimeProgressRef={totalTimeProgressRef}
+        playingTotalTimeRef={playingTotalTimeRef}
+      />
     </Box>
   );
 };

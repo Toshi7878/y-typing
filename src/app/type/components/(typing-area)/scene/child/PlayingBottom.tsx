@@ -1,10 +1,9 @@
-import { Badge, Box, HStack, Kbd } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import PlayingLineProgress from "./child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "./child/PlayingSkipGuide";
-import PlayingTotalTime from "./child/PlayingTotalTime";
+import PlayingTotalTime, { PlayingTotalTimeRef } from "./child/PlayingTotalTime";
 import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { forwardRef, useEffect, useRef } from "react";
 import PlayingBottomBadge from "./child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
@@ -12,9 +11,14 @@ import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;
   totalTimeProgressRef: React.RefObject<HTMLProgressElement>;
+  playingTotalTimeRef: React.RefObject<PlayingTotalTimeRef>;
 }
 
-const PlayingBottom = function ({ skipGuideRef, totalTimeProgressRef }: PlayingBottomRef) {
+const PlayingBottom = function ({
+  skipGuideRef,
+  totalTimeProgressRef,
+  playingTotalTimeRef,
+}: PlayingBottomRef) {
   const [map] = useAtom(mapAtom);
   const [scene] = useAtom(sceneAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
@@ -33,7 +37,11 @@ const PlayingBottom = function ({ skipGuideRef, totalTimeProgressRef }: PlayingB
         className={`mx-1 font-bold ${scene !== "playing" ? "invisible" : ""}`}
       >
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
-        <PlayingTotalTime totalTime={totalTime} className="text-2xl font-mono" />
+        <PlayingTotalTime
+          totalTime={totalTime}
+          className="text-2xl font-mono"
+          ref={playingTotalTimeRef}
+        />
       </HStack>
       <PlayingLineProgress ref={totalTimeProgressRef} />
       <HStack

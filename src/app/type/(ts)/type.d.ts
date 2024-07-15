@@ -7,6 +7,17 @@ export interface PlayingRef {
   gamePause: () => void;
 }
 
+export interface WordType {
+  correct: { k: string; r: string };
+  nextChar: { k: string; r: string[]; p: number };
+  word: { k: string; r: string[]; p: number }[];
+}
+
+export interface NextLyricsType {
+  lyrics: string;
+  kpm: string;
+}
+
 export interface Status {
   score: number;
   point: number;

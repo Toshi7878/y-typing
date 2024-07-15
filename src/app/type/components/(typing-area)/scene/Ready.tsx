@@ -13,6 +13,8 @@ function Ready() {
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
+  const playingTotalTimeRef = useRef(null);
+
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -26,7 +28,11 @@ function Ready() {
           <ReadyPracticeButton />
         </Flex>
       </Box>
-      <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
+      <PlayingBottom
+        skipGuideRef={skipGuideRef}
+        totalTimeProgressRef={totalTimeProgressRef}
+        playingTotalTimeRef={playingTotalTimeRef}
+      />
     </Box>
   );
 }

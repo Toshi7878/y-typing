@@ -4,9 +4,6 @@ import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
-  currentTimeSSMMAtom,
-  defaultStatus,
-  lineWordAtom,
   mapAtom,
   playingNotifyAtom,
   sceneAtom,
@@ -23,6 +20,8 @@ import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
 import { LineResultObj, StatusRef } from "@/app/type/(ts)/type";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
+import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
+import { defaultStatus } from "../../(tab)/tab/TabStatus";
 
 export const defaultLineResultObj: LineResultObj = {
   status: {
@@ -47,9 +46,9 @@ const Playing = forwardRef((props, ref) => {
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
   const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
-  const [currentTimeMMSS, setCurrentTimeMMSS] = useAtom(currentTimeSSMMAtom);
   const [scene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
@@ -222,8 +221,10 @@ const Playing = forwardRef((props, ref) => {
           skipGuideRef,
         );
 
-        if (Math.abs(ytCurrentTime - currentTimeMMSS) >= 1) {
-          setCurrentTimeMMSS(ytCurrentTime);
+        const currentTotalTime = playingTotalTimeRef.current!.getCurrentTime();
+
+        if (Math.abs(ytCurrentTime - currentTotalTime) >= 1) {
+          playingTotalTimeRef.current?.setCurrentTime(ytCurrentTime);
         }
       }
 
@@ -275,7 +276,9 @@ const Playing = forwardRef((props, ref) => {
         }
       }
     },
-    [map, ytStateRef, statusRef, currentTimeMMSS, setCurrentTimeMMSS, tabStatusRef],
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   useEffect(() => {
@@ -322,7 +325,11 @@ const Playing = forwardRef((props, ref) => {
     <Box height="100vh" display="flex" flexDirection="column" className="select-none">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
       <PlayingCenter ref={playingCenterRef} flex="1" />
-      <PlayingBottom skipGuideRef={skipGuideRef} totalTimeProgressRef={totalTimeProgressRef} />
+      <PlayingBottom
+        skipGuideRef={skipGuideRef}
+        totalTimeProgressRef={totalTimeProgressRef}
+        playingTotalTimeRef={playingTotalTimeRef}
+      />
     </Box>
   );
 });

@@ -1,32 +1,36 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { lyricsAtom, lineWordAtom, nextLyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
-import { forwardRef, useImperativeHandle } from "react";
-import Word from "./Word";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import Lyrics from "./child/PlayingLyrics";
+import type { NextLyricsType, WordType } from "@/app/type/(ts)/type";
+import Word from "./Word";
 import NextLyrics from "./child/PlayingNextLyrics";
 
-export interface Word {
-  correct: { k: string; r: string };
-  nextChar: { k: string; r: string[]; p: number };
-  word: { k: string; r: string[]; p: number }[];
-}
-
 export interface PlayingCenterRef {
-  setLineWord: (newLineWord: Word) => void;
+  setLineWord: (newLineWord: WordType) => void;
   setLyrics: (newLyrics: string) => void;
-  setNextLyrics: (params: { lyrics: string; kpm: string }) => void;
-  getLineWord: () => Word;
+  setNextLyrics: (params: NextLyricsType) => void;
+  getLineWord: () => WordType;
 }
 
 interface Props {
   flex: string;
 }
 
+export const defaultLineWord: WordType = {
+  correct: { k: "", r: "" },
+  nextChar: { k: "", r: [""], p: 0 },
+  word: [{ k: "", r: [""], p: 0 }],
+};
+
+export const defaultNextLyrics: NextLyricsType = {
+  lyrics: "",
+  kpm: "",
+};
+
 const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
-  const [lineWord, setLineWord] = useAtom(lineWordAtom);
-  const [lyrics, setLyrics] = useAtom(lyricsAtom);
-  const [nextLyrics, setNextLyrics] = useAtom(nextLyricsAtom);
+  const [lineWord, setLineWord] = useState(defaultLineWord);
+  const [lyrics, setLyrics] = useState("");
+  const [nextLyrics, setNextLyrics] = useState(defaultNextLyrics);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),

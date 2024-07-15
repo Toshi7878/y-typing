@@ -1,11 +1,14 @@
-import { currentTimeSSMMAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import { useAtom } from "jotai";
-import React from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 interface TotalTimeProps {
   totalTime: string;
   className?: string;
+}
+
+export interface PlayingTotalTimeRef {
+  getCurrentTime: () => number;
+  setCurrentTime: (newCurrentTime: number) => void;
 }
 
 const formatTime = (time: number): string => {
@@ -15,15 +18,24 @@ const formatTime = (time: number): string => {
   return `${MM}:${SS}`;
 };
 
-const PlayingTotalTime = ({ totalTime, className = "" }: TotalTimeProps) => {
-  const [currentTimeSSMM] = useAtom(currentTimeSSMMAtom);
+const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
+  ({ totalTime, className = "" }, ref) => {
+    const [currentTimeSSMM, setCurrentTimeSSMM] = useState(0);
 
-  return (
-    <Box className={className}>
-      <span id="current_time">{formatTime(currentTimeSSMM)}</span> /{" "}
-      <span id="total_time">{totalTime}</span>
-    </Box>
-  );
-};
+    useImperativeHandle(ref, () => ({
+      getCurrentTime: () => currentTimeSSMM,
+      setCurrentTime: (newCurrentTime: number) => setCurrentTimeSSMM(newCurrentTime),
+    }));
+
+    return (
+      <Box className={className}>
+        <span id="current_time">{formatTime(currentTimeSSMM)}</span> /{" "}
+        <span id="total_time">{totalTime}</span>
+      </Box>
+    );
+  },
+);
+
+PlayingTotalTime.displayName = "PlayingTotalTime";
 
 export default PlayingTotalTime;
