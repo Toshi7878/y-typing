@@ -9,7 +9,7 @@ const TabRanking = forwardRef((props, ref) => {
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">
-        <Box maxH="244px" minH="244px" overflowY="auto">
+        <Box overflowY="auto">
           <Table variant="simple" className="ranking-table" size="sm">
             <Thead>
               <Tr>

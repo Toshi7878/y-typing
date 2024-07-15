@@ -81,20 +81,15 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     <main className="flex min-h-screen sm:px-0 flex-col items-center pt-7 lg:px-20 xl:px-48 w-full">
       <Flex direction="column" align="center" w="full" pt="7">
         <Flex w="full" gap="4" direction={{ base: "column", xl: "row" }}>
-          <Box flex={{ base: "1" }}>
+          <Box flex={{ base: "1" }} w="full">
             <YouTubeContent className={`${isLoading ? "invisible" : ""} `} videoId={videoId} />
           </Box>
 
-          <Box
-            flex={{ base: "8" }}
-            display="flex"
-            flexDirection="column"
-            height="100%" // 追加: 高さをflexに合わせる
-          >
+          <Box flex={{ base: "8" }} display="flex" flexDirection="column">
             <TabContent />
           </Box>
         </Flex>
-        <SceneWrapper />
+        <SceneWrapper height="540px" />
       </Flex>
     </main>
   );

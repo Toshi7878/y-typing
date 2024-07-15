@@ -60,18 +60,17 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
       //	未スタート、他の動画に切り替えた時など
       console.log("未スタート -1");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const HEIGHT = (325).toFixed();
-  const WIDTH = ((Number(HEIGHT) * 16) / 9).toFixed();
   return (
-    <Box style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}>
+    <Box className={`${className} mt-2 w-full xl:w-[300px] 2xl:w-[500px]`}>
       <YouTube
-        className={`${className} mt-2`}
+        className={`h-[30vh]`}
         videoId={videoId}
         opts={{
-          width: `${WIDTH}px`,
-          height: `${HEIGHT}px`,
+          width: "100%",
+          height: "100%",
           playerVars: { enablejsapi: 1 },
         }}
         onReady={handleReady}

@@ -8,7 +8,6 @@ import { Box, Card } from "@chakra-ui/react";
 import { TabStatusRef } from "../(tab)/tab/TabStatus";
 import { LineResultObj, PlayingRef } from "../../(ts)/type";
 
-
 export const Scene = () => {
   const [scene] = useAtom(sceneAtom);
   const [map] = useAtom(mapAtom);
@@ -32,11 +31,14 @@ export const Scene = () => {
   }
 };
 
-function SceneWrapper() {
+interface SceneWrapperProps {
+  height: string;
+}
+function SceneWrapper({ height }: SceneWrapperProps) {
   console.log("SceneWrapper");
 
   return (
-    <Box className="w-full mt-4 overflow-hidden" height="calc(100vh - 425px)">
+    <Box className="w-full mt-4 overflow-hidden" height={height}>
       <Card variant={"filled"} className="max-h-[95%]" bg="blue.100" boxShadow="lg">
         <Scene />
       </Card>

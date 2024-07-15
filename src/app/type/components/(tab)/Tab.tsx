@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import TabStatus, { TabStatusRef } from "./tab/TabStatus";
+import TabStatus from "./tab/TabStatus";
 import TabRanking from "./tab/TabRanking";
 import { useAtom } from "jotai";
 import { tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
 import { useEffect, useRef } from "react";
-import { useRefs } from "../../(contexts)/refsProvider";
 
 interface TabContentProps {
   className?: string;

@@ -100,7 +100,7 @@ const TabStatus = forwardRef((props, ref) => {
 
   const TrStyled = styled(Tr)<{ isMdOrSmaller: boolean }>`
     height: ${({ isMdOrSmaller }) =>
-      isMdOrSmaller ? "52px" : "122px"}; // isMdOrSmallerがtrueのとき高さを小さく設定
+      isMdOrSmaller ? "" : ""}; // isMdOrSmallerがtrueのとき高さを小さく設定
   `;
   const TdStyled = styled(Td)<{ isCentered: boolean }>`
     ${({ isCentered }) => isCentered && "text-align: center;"}
