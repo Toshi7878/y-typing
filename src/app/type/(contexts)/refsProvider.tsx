@@ -58,8 +58,8 @@ export const RefsProvider = ({ children }) => {
   const playingComboRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
-  const statusRef = useRef(structuredClone(defaultStatusRef));
-  const ytStateRef = useRef(structuredClone(defaultYTStateRef));
+  const statusRef = useRef<StatusRef>(structuredClone(defaultStatusRef));
+  const ytStateRef = useRef<YTStateRef>(structuredClone(defaultYTStateRef));
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {

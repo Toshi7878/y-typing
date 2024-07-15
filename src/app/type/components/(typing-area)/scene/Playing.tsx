@@ -1,6 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
-import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
+import PlayingCenter, {
+  defaultLineWord,
+  defaultNextLyrics,
+  PlayingCenterRef,
+} from "./child/PlayingCenter";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
@@ -68,16 +72,9 @@ const Playing = forwardRef((props, ref) => {
       );
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      if (currentPlayingCenterRef) {
-        currentPlayingCenterRef.setLineWord({
-          correct: { k: "", r: "" },
-          nextChar: { k: "", r: [""], p: 0 },
-          word: [{ k: "", r: [""], p: 0 }],
-        });
-
-        currentPlayingCenterRef.setLyrics("");
-        currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
-      }
+      currentPlayingCenterRef!.setLineWord(structuredClone(defaultLineWord));
+      currentPlayingCenterRef!.setLyrics("");
+      currentPlayingCenterRef!.setNextLyrics(structuredClone(defaultNextLyrics));
 
       setNotify({ text: "Retry" });
       playerRef.current.seekTo(0);
