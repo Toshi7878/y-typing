@@ -63,7 +63,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       tabStatusRef.current!.resetStatus(), setNotify("Retry");
       playerRef.current.seekTo(0);
-      ticker.stop();
+      if (ticker.started) {
+        ticker.stop();
+      }
     },
     pressSkip: () => {
       const nextLine = map!.data[statusRef.current!.status.count];
@@ -250,10 +252,18 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         });
 
         currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
-        currentPlayingCenterRef!.setNextLyrics({
-          lyrics: nextLine["lyrics"],
-          kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
-        });
+
+        if (map.romaLineSpeedList[count + 1]) {
+          currentPlayingCenterRef!.setNextLyrics({
+            lyrics: nextLine["lyrics"],
+            kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
+          });
+        } else {
+          currentPlayingCenterRef!.setNextLyrics({
+            lyrics: "",
+            kpm: "",
+          });
+        }
 
         if (lineProgressRef.current) {
           const progressElement = lineProgressRef.current as HTMLProgressElement;
@@ -269,29 +279,24 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
   useEffect(() => {
     timer.addListener(updateLine);
-    // クリーンアップ: refのデータをリセット
-    const progressElement = lineProgressRef.current as HTMLProgressElement;
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
-
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
 
     return () => {
       timer.removeListener(updateLine);
-      ticker.stop();
+      if (ticker.started) {
+        ticker.stop();
+      }
       ticker.remove(updateFunction);
 
       currentPlayingCenterRef!.resetWordLyrics();
+      setNotify("");
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         tabStatusRef.current!.resetStatus();
         // eslint-disable-next-line react-hooks/exhaustive-deps
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      }
-
-      if (progressElement) {
-        progressElement.value = 0;
-        progressElement.max = 0;
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

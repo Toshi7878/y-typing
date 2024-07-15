@@ -14,16 +14,21 @@ class YTState {
     setNotify: React.Dispatch<React.SetStateAction<string>>,
   ) {
     console.log("再生 1");
+
     if (scene !== "end") {
       setScene("playing");
-      ticker.start();
+      if (!ticker.started) {
+        ticker.start();
+      }
     }
 
     const isPaused = YTStateRef.current!.isPaused;
 
     if (isPaused) {
       YTStateRef.current!.isPaused = false;
-      ticker.start();
+      if (!ticker.started) {
+        ticker.start();
+      }
       setNotify("▶");
     }
   }
@@ -32,12 +37,16 @@ class YTState {
     console.log("プレイ終了");
     setScene("end");
 
-    ticker.stop();
+    if (ticker.started) {
+      ticker.stop();
+    }
   }
 
   stop() {
     console.log("動画停止");
-    ticker.stop();
+    if (ticker.started) {
+      ticker.stop();
+    }
   }
 
   pause(
@@ -45,10 +54,13 @@ class YTState {
     setNotify: React.Dispatch<React.SetStateAction<string>>,
   ) {
     console.log("一時停止");
-    ticker.stop();
+
+    if (ticker.started) {
+      ticker.stop();
+    }
 
     const isPaused = YTStateRef.current!.isPaused;
-    if (isPaused) {
+    if (!isPaused) {
       YTStateRef.current!.isPaused = true;
       setNotify("ll");
     }
