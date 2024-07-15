@@ -1,7 +1,5 @@
-import { lyricsAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { Box, Heading, Stack, VStack } from "@chakra-ui/react";
-import { useAtom } from "jotai";
-import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import React, { memo } from "react";
 // export interface LyricsHandle {
 //   setLyrics: (lyrics: string) => void;
 // }
