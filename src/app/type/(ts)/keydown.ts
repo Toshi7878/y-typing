@@ -1,9 +1,19 @@
-import { InputModeType, PlayingRef, Status, StatusRef, WordType } from "./type";
+import {
+  Dakuten,
+  HanDakuten,
+  InputModeType,
+  NormalizeHirakana,
+  PlayingRef,
+  Status,
+  StatusRef,
+  WordType,
+} from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
+import { normalize } from "path";
 
 const keyboardCharacters = [
   "0",
@@ -117,6 +127,8 @@ const dakuKanaList = [
   "ぼ",
 ];
 const handakuKanaList = ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"];
+
+const dakuHandakuList = dakuKanaList.concat(handakuKanaList);
 const yoonFlickList = ["ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "っ", "ゎ"];
 const yoonFlickListLarge = ["あ", "い", "う", "え", "お", "や", "ゆ", "よ", "つ", "わ"];
 const smallKanaList = [
@@ -155,7 +167,7 @@ class RomaInput {
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     const result = this.hasRomaPattern(chars, lineWord);
-    this.newLineWord = result.lineWord as WordType;
+    this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
   }
   hasRomaPattern(chars: CharsType, lineWord: WordType) {
@@ -167,7 +179,7 @@ class RomaInput {
     );
 
     if (!IS_SUCCESS) {
-      return { lineWord, successKey: "" };
+      return { newLineWord, successKey: "" };
     }
 
     if (kana == "ん" && newLineWord.word[0]) {
@@ -252,6 +264,12 @@ class RomaInput {
   }
 }
 
+type DakuHandakuData = {
+  type: "" | "゛" | "゜";
+  normalized: "" | NormalizeHirakana;
+  dakuHandaku: "" | Dakuten | HanDakuten;
+};
+
 class KanaInput {
   newLineWord: WordType;
   updatePoint: number;
@@ -259,7 +277,7 @@ class KanaInput {
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     const result = this.hasKana({ chars, lineWord });
-    this.newLineWord = result.lineWord as WordType;
+    this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
   }
 
@@ -268,62 +286,61 @@ class KanaInput {
 
     const nextKana = lineWord.nextChar["k"];
     const keys = chars.keys;
-    const successIndex: number = keys.indexOf(lineWord.nextChar["k"].slice(0, 1).toLowerCase());
-    const char = keys[successIndex];
+    const isdakuHandaku = dakuHandakuList.includes(nextKana[0]);
+
+    const dakuHanDakuData: DakuHandakuData = isdakuHandaku
+      ? this.parseDakuHandaku(nextKana[0] as Dakuten | HanDakuten)
+      : {
+          type: "",
+          normalized: "",
+          dakuHandaku: "",
+        };
+
+    const successIndex: number = keys.indexOf(
+      dakuHanDakuData.normalized ? dakuHanDakuData.normalized : nextKana[0].toLowerCase(),
+    );
+
+    const char =
+      keys[successIndex] === "゛" || keys[successIndex] === "゜"
+        ? newLineWord.kanaDakuten
+        : keys[successIndex];
 
     if (!char) {
-      return { lineWord, successKey: "" };
+      return { newLineWord, successKey: "" };
     }
 
-    const daku = dakuKanaList.includes(nextKana[0])
-      ? dakuKanaList[dakuKanaList.indexOf(nextKana[0])]
-      : "";
-    const handaku = handakuKanaList.includes(nextKana[0])
-      ? handakuKanaList[handakuKanaList.indexOf(nextKana[0])]
-      : "";
-
-    if (nextKana[0] == "゛" || nextKana[0] == "゜") {
-    }
-
-    let yoon = "";
-    const isDakuHandakuAndYoon = nextKana.length >= 2 && (daku || handaku);
-
-    if (isDakuHandakuAndYoon) {
-      //濁点・半濁点 + 小文字の小文字部分を抽出
-      yoon = nextKana[1];
-    }
-
-    let isDakuten = daku && keys.includes(daku.normalize("NFD")[0]);
-    let isHandaku = handaku && keys.includes(handaku.normalize("NFD")[0]);
-    let isNormal = successIndex > -1;
-
-    //return trueは正解　return falseは不正解。
-    if (isDakuten || isHandaku) {
-      if (isDakuten) {
-        newLineWord.nextChar["k"] = "゛" + yoon;
-        newLineWord.kanaDakuten = daku;
-      } else if (isHandaku) {
-        newLineWord.nextChar["k"] = "゜" + yoon;
-        newLineWord.kanaDakuten = handaku;
-      }
-    } else if (isNormal) {
+    if (dakuHanDakuData.type) {
+      const yoon = nextKana.length >= 2 && dakuHanDakuData.type ? nextKana[1] : "";
+      newLineWord.nextChar["k"] = dakuHanDakuData.type + yoon;
+      newLineWord.kanaDakuten = dakuHanDakuData.dakuHandaku;
+    } else {
       if (nextKana.length >= 2) {
         newLineWord.correct["k"] += char;
         newLineWord.nextChar["k"] = newLineWord.nextChar["k"].slice(1);
       } else {
         //チャンク打ち切り
-        newLineWord = this.wordUpdate(newLineWord);
+        newLineWord = this.wordUpdate(char, newLineWord);
       }
     }
 
     return { newLineWord, successKey: char };
   }
 
-  wordUpdate(newLineWord: WordType) {
+  parseDakuHandaku(dakuHandaku: Dakuten | HanDakuten): {
+    type: "" | "゛" | "゜";
+    normalized: "" | NormalizeHirakana;
+    dakuHandaku: "" | Dakuten | HanDakuten;
+  } {
+    const type: "" | "゛" | "゜" = dakuKanaList.includes(dakuHandaku) ? "゛" : "゜";
+    const normalized: "" | NormalizeHirakana = dakuHandaku.normalize("NFD")[0] as NormalizeHirakana;
+    return { type, normalized, dakuHandaku };
+  }
+
+  wordUpdate(char: string, newLineWord: WordType) {
     const kana = newLineWord.nextChar["k"];
     const romaPattern = newLineWord.nextChar["r"];
 
-    newLineWord.correct["k"] += kana;
+    newLineWord.correct["k"] += char;
     newLineWord.correct["r"] += romaPattern[0];
 
     //スコア加算

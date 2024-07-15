@@ -16,6 +16,7 @@ class YTState {
     console.log("再生 1");
     if (scene !== "end") {
       setScene("playing");
+      ticker.start();
     }
 
     const isPaused = YTStateRef.current!.isPaused;

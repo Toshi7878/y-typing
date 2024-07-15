@@ -125,7 +125,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             if (!result.newLineWord.nextChar["k"]) {
               statusRef.current!.status.totalTypeTime += lineTime;
             }
-          } else if (result.newLineWord.correct["r"] !== "") {
+          } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
             const miss = new Miss(status, statusRef, playingComboRef, lineTime, event.key);
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
@@ -285,6 +285,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         tabStatusRef.current!.resetStatus();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       }
 

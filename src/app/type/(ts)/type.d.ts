@@ -2,6 +2,55 @@ import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 
 export type InputModeType = "roma" | "kana" | "flick";
 export type SceneType = "ready" | "playing" | "end";
+
+export type Dakuten =
+  | "ゔ"
+  | "が"
+  | "ぎ"
+  | "ぐ"
+  | "げ"
+  | "ご"
+  | "ざ"
+  | "じ"
+  | "ず"
+  | "ぜ"
+  | "ぞ"
+  | "だ"
+  | "ぢ"
+  | "づ"
+  | "で"
+  | "ど"
+  | "ば"
+  | "び"
+  | "ぶ"
+  | "べ"
+  | "ぼ";
+
+export type NormalizeHirakana =
+  | "う"
+  | "か"
+  | "き"
+  | "く"
+  | "け"
+  | "こ"
+  | "さ"
+  | "し"
+  | "す"
+  | "せ"
+  | "そ"
+  | "た"
+  | "ち"
+  | "つ"
+  | "て"
+  | "と"
+  | "は"
+  | "ひ"
+  | "ふ"
+  | "へ"
+  | "ほ";
+
+export type HanDakuten = "ぱ" | "ぴ" | "ぷ" | "ぺ" | "ぽ";
+
 export interface PlayingRef {
   retry: () => void;
   pressSkip: () => void;

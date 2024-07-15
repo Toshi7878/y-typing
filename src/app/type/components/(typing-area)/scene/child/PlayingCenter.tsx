@@ -67,7 +67,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className={`uppercase ml-1 text-[2.5rem] ${inputMode === "kana" ? "" : ""}`}
+          className={`uppercase ml-1 text-[2.5rem] ${inputMode === "kana" ? "invisible" : ""}`}
         />
       </Box>
 
