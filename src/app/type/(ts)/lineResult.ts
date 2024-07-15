@@ -1,5 +1,4 @@
-import { Status, StatusRef } from "./type";
-import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { Status, StatusRef, WordType } from "./type";
 import { CreateMap } from "./createTypingWord";
 
 export class LineResult {
@@ -10,7 +9,7 @@ export class LineResult {
     status: Status,
     statusRef: React.RefObject<StatusRef>,
 
-    lineWord: Word,
+    lineWord: WordType,
     map: CreateMap,
     lineTime: number,
   ) {
@@ -21,7 +20,7 @@ export class LineResult {
   updateStatus(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    lineWord: Word,
+    lineWord: WordType,
     map: CreateMap,
   ) {
     const newStatus = { ...status };

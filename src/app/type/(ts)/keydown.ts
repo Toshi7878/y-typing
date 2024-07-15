@@ -1,5 +1,4 @@
-import { Word } from "../components/(typing-area)/scene/child/PlayingCenter";
-import { PlayingRef, Status, StatusRef, TypeResult } from "./type";
+import { PlayingRef, Status, StatusRef, WordType } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
@@ -146,16 +145,16 @@ interface CharsType {
 
 interface JudgeType {
   chars: CharsType;
-  lineWord: Word;
+  lineWord: WordType;
 }
 class Judge {
-  newLineWord: Word;
+  newLineWord: WordType;
   updatePoint: number;
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     this.newLineWord = this.hasRomaPattern(chars, lineWord);
   }
-  hasRomaPattern(chars: CharsType, lineWord: Word) {
+  hasRomaPattern(chars: CharsType, lineWord: WordType) {
     let newLineWord = { ...lineWord };
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
     const kana = lineWord.nextChar["k"];
@@ -196,7 +195,7 @@ class Judge {
     return nextRomaPattern;
   }
 
-  kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: Word) {
+  kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: WordType) {
     if (kana.length >= 2 && romaPattern.length) {
       const IS_SOKUON_YOUON =
         (kana[0] != "っ" && (romaPattern[0][0] == "x" || romaPattern[0][0] == "l")) ||
@@ -213,7 +212,7 @@ class Judge {
   }
 
   // xnで「ん」を打鍵する場合、次の文字から[nn, n']の打鍵パターンを除外する
-  nextNNFilter(char: string, newLineWord: Word) {
+  nextNNFilter(char: string, newLineWord: WordType) {
     const NEXT_TO_NEXT_CHAR = newLineWord.word[0]["r"];
     const isXN =
       char == "x" &&
@@ -230,7 +229,7 @@ class Judge {
     }
   }
 
-  wordUpdate(chars: CharsType, newLineWord: Word) {
+  wordUpdate(chars: CharsType, newLineWord: WordType) {
     const kana = newLineWord.nextChar["k"];
     const romaPattern = newLineWord.nextChar["r"];
     // const POINT = newLineWord.nextChar["point"];
@@ -296,11 +295,11 @@ const TENKEYS = [
 
 interface TypingEvent {
   event: KeyboardEvent;
-  lineWord: Word;
+  lineWord: WordType;
 }
 
 export class Typing {
-  newLineWord: Word;
+  newLineWord: WordType;
   updatePoint: number;
   constructor({ event, lineWord }: TypingEvent) {
     const chars: CharsType = this.makeInput(event);
@@ -328,7 +327,7 @@ export class Success extends CalcTypeSpeed {
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
     updatePoint: number,
-    newLineWord: Word,
+    newLineWord: WordType,
     map: CreateMap,
     lineTime: number,
     remainTime: number,
@@ -363,7 +362,7 @@ export class Success extends CalcTypeSpeed {
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
     updatePoint: number,
-    newLineWord: Word,
+    newLineWord: WordType,
     map: CreateMap,
     remainTime: number,
     lineTime: number,

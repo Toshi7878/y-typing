@@ -9,13 +9,7 @@ import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-quer
 import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
-import {
-  defaultStatus,
-  mapAtom,
-  mapIdAtom,
-  sceneAtom,
-  statusAtom,
-} from "../(atoms)/gameRenderAtoms";
+import { mapAtom, mapIdAtom, sceneAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 const queryClient = new QueryClient();
 
@@ -31,7 +25,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const [, setMap] = useAtom(mapAtom);
-  const [status, setStatus] = useAtom(statusAtom);
   const [, setScene] = useAtom(sceneAtom);
   const [, setMapId] = useAtom(mapIdAtom);
 
@@ -44,7 +37,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const map = new CreateMap(data.mapData);
       setMap(map);
-      setStatus(structuredClone(defaultStatus));
       return map;
     },
 
