@@ -94,7 +94,7 @@ export const KANA_KEY_MAP = {
   ":": ["け"],
   "*": ["け"],
 };
-export const KANA_KEY_MAP_CODE = {
+export const KANA_CODE_MAP = {
   IntlYen: ["ー", "￥", "\\"],
   IntlRo: ["ろ", "￥", "\\"],
   Space: [" "],

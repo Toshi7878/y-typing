@@ -6,7 +6,7 @@ import { ytState } from "./youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
 import { Box } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { sceneAtom } from "../../(atoms)/gameRenderAtoms";
+import { playingNotifyAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
 
 interface YouTubeProps {
   className: string;
@@ -15,7 +15,9 @@ interface YouTubeProps {
 
 const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
   console.log("YouTube");
-  const [, setScene] = useAtom(sceneAtom);
+  const [scene, setScene] = useAtom(sceneAtom);
+  const [, setNotify] = useAtom(playingNotifyAtom);
+
   const refs = useRefs();
 
   const handleReady = useCallback(
@@ -29,12 +31,12 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(setScene, refs.ytStateRef);
+    ytState.play(scene, setScene, refs.ytStateRef, setNotify);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [scene]);
 
   const handlePause = useCallback(() => {
-    ytState.pause(refs.ytStateRef);
+    ytState.pause(refs.ytStateRef, setNotify);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,7 +55,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
 
     if (event.data === 3) {
       // seek時の処理
-      ytState.seek(event.target, refs.lineCountRef);
+      ytState.seek(event.target, refs.statusRef);
     } else if (event.data === 1) {
       //	未スタート、他の動画に切り替えた時など
       console.log("未スタート -1");

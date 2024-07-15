@@ -6,7 +6,6 @@ import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtom
 import { useAtom } from "jotai";
 import PlayingBottomBadge from "./child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;
@@ -19,16 +18,12 @@ const PlayingBottom = function ({
   totalTimeProgressRef,
   playingTotalTimeRef,
 }: PlayingBottomRef) {
+  const { playingRef } = useRefs();
   const [map] = useAtom(mapAtom);
   const [scene] = useAtom(sceneAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
-  const { playerRef } = useRefs();
 
   const totalTime = map?.totalTimeSSMM ?? "00:00"; // 'map' が null の場合に対応
-
-  const handleRealtimeSpeedChange = () => {
-    new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
-  };
 
   return (
     <Box mx="4">
@@ -51,9 +46,13 @@ const PlayingBottom = function ({
         <PlayingBottomBadge
           badgeText={speedData.realtimeSpeed.toFixed(2) + "倍速"}
           kbdText="F10"
-          // onClick={handleRealtimeSpeedChange}
+          onClick={() => playingRef.current?.realtimeSpeedChange()}
         />
-        <PlayingBottomBadge badgeText="やり直し" kbdText="F4" />
+        <PlayingBottomBadge
+          badgeText="やり直し"
+          kbdText="F4"
+          onClick={() => playingRef.current?.retry()}
+        />
       </HStack>
     </Box>
   );

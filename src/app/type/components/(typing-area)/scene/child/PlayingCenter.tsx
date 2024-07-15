@@ -4,12 +4,15 @@ import Lyrics from "./child/PlayingLyrics";
 import type { NextLyricsType, WordType } from "@/app/type/(ts)/type";
 import Word from "./Word";
 import NextLyrics from "./child/PlayingNextLyrics";
+import { inputModeAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { useAtom } from "jotai";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;
   setLyrics: (newLyrics: string) => void;
   setNextLyrics: (params: NextLyricsType) => void;
   getLineWord: () => WordType;
+  resetWordLyrics: () => void;
 }
 
 interface Props {
@@ -28,15 +31,21 @@ export const defaultNextLyrics: NextLyricsType = {
 };
 
 const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
-  const [lineWord, setLineWord] = useState(defaultLineWord);
+  const [lineWord, setLineWord] = useState(structuredClone(defaultLineWord));
   const [lyrics, setLyrics] = useState("");
-  const [nextLyrics, setNextLyrics] = useState(defaultNextLyrics);
+  const [nextLyrics, setNextLyrics] = useState(structuredClone(defaultNextLyrics));
+  const [inputMode] = useAtom(inputModeAtom);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),
     setLyrics: (newLyrics) => setLyrics(newLyrics),
     setNextLyrics: (params) => setNextLyrics(params),
     getLineWord: () => lineWord,
+    resetWordLyrics: () => {
+      setLineWord(structuredClone(defaultLineWord));
+      setLyrics("");
+      setNextLyrics(structuredClone(defaultNextLyrics));
+    },
   }));
 
   return (
@@ -58,7 +67,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className="uppercase ml-1 text-[2.5rem]"
+          className={`uppercase ml-1 text-[2.5rem] ${inputMode === "kana" ? "" : ""}`}
         />
       </Box>
 

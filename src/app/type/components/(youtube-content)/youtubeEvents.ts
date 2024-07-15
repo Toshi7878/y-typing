@@ -2,19 +2,32 @@ import { Ticker } from "@pixi/ticker";
 import { timer } from "../../(ts)/timer";
 import { RefsContextType } from "../../(contexts)/refsProvider";
 import { Line } from "@/types";
-import { YTStateRef } from "../../(ts)/type";
+import { SceneType, StatusRef, YTStateRef } from "../../(ts)/type";
 export const ticker = new Ticker();
 
 export let updateFunction;
 class YTState {
-  play(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>, YTStateRef:React.RefObject<YTStateRef>) {
+  play(
+    scene: SceneType,
+    setScene: React.Dispatch<React.SetStateAction<SceneType>>,
+    YTStateRef: React.RefObject<YTStateRef>,
+    setNotify: React.Dispatch<React.SetStateAction<string>>,
+  ) {
     console.log("再生 1");
-    setScene("playing");
-    ticker.start();
-    YTStateRef.current!.isPaused = false;
+    if (scene !== "end") {
+      setScene("playing");
+    }
+
+    const isPaused = YTStateRef.current!.isPaused;
+
+    if (isPaused) {
+      YTStateRef.current!.isPaused = false;
+      ticker.start();
+      setNotify("▶");
+    }
   }
 
-  end(setScene: React.Dispatch<React.SetStateAction<"ready" | "playing" | "end">>) {
+  end(setScene: React.Dispatch<React.SetStateAction<SceneType>>) {
     console.log("プレイ終了");
     setScene("end");
 
@@ -26,18 +39,25 @@ class YTState {
     ticker.stop();
   }
 
-  pause(YTStateRef:React.RefObject<YTStateRef>) {
+  pause(
+    YTStateRef: React.RefObject<YTStateRef>,
+    setNotify: React.Dispatch<React.SetStateAction<string>>,
+  ) {
     console.log("一時停止");
-
     ticker.stop();
-    YTStateRef.current!.isPaused = true;
+
+    const isPaused = YTStateRef.current!.isPaused;
+    if (isPaused) {
+      YTStateRef.current!.isPaused = true;
+      setNotify("ll");
+    }
   }
 
-  seek(target: any, lineCountRef: React.RefObject<number>) {
+  seek(target: any, statusRef: React.RefObject<StatusRef>) {
     const time = target.getCurrentTime();
 
     if (time === 0) {
-      (lineCountRef as React.MutableRefObject<number>).current = 0;
+      statusRef.current!.status.count = 0;
     }
     console.log("シーク");
   }

@@ -1,8 +1,9 @@
-import { PlayingRef, Status, StatusRef, WordType } from "./type";
+import { InputModeType, PlayingRef, Status, StatusRef, WordType } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
+import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
 
 const keyboardCharacters = [
   "0",
@@ -139,7 +140,7 @@ const kana_mode_convert_rule_before = ["←", "↓", "↑", "→", "『", "』"]
 const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ", "「", "」"];
 
 interface CharsType {
-  key: string[];
+  keys: string[];
   shift: boolean;
 }
 
@@ -147,40 +148,43 @@ interface JudgeType {
   chars: CharsType;
   lineWord: WordType;
 }
-class Judge {
+class RomaInput {
   newLineWord: WordType;
   updatePoint: number;
+  successKey: string;
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
-    this.newLineWord = this.hasRomaPattern(chars, lineWord);
+    const result = this.hasRomaPattern(chars, lineWord);
+    this.newLineWord = result.lineWord as WordType;
+    this.successKey = result.successKey;
   }
   hasRomaPattern(chars: CharsType, lineWord: WordType) {
-    let newLineWord = { ...lineWord };
+    let newLineWord = { ...lineWord } as WordType;
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
     const kana = lineWord.nextChar["k"];
     const IS_SUCCESS = nextRomaPattern.some(
-      (pattern) => pattern[0].toLowerCase() === chars["key"][0],
+      (pattern) => pattern[0].toLowerCase() === chars["keys"][0],
     );
 
     if (!IS_SUCCESS) {
-      return lineWord;
+      return { lineWord, successKey: "" };
     }
 
     if (kana == "ん" && newLineWord.word[0]) {
-      newLineWord.word[0]["r"] = this.nextNNFilter(chars["key"][0], newLineWord);
+      newLineWord.word[0]["r"] = this.nextNNFilter(chars["keys"][0], newLineWord);
     }
 
     newLineWord.nextChar["r"] = this.updateNextRomaPattern(chars, nextRomaPattern);
-    newLineWord = this.kanaFilter(kana, chars["key"][0], nextRomaPattern, newLineWord);
+    newLineWord = this.kanaFilter(kana, chars["keys"][0], nextRomaPattern, newLineWord);
 
     newLineWord = this.wordUpdate(chars, newLineWord);
 
-    return newLineWord;
+    return { newLineWord, successKey: chars["keys"][0] };
   }
 
   updateNextRomaPattern(chars: CharsType, nextRomaPattern: string[]) {
     for (let i = 0; i < nextRomaPattern.length; i++) {
-      if (chars["key"][0] === nextRomaPattern[i][0]) {
+      if (chars["keys"][0] === nextRomaPattern[i][0]) {
         nextRomaPattern[i] = nextRomaPattern[i].slice(1);
         if (nextRomaPattern[i].length == 0) {
           nextRomaPattern.splice(i, 1);
@@ -242,7 +246,89 @@ class Judge {
       newLineWord.nextChar = newLineWord.word.shift() || { k: "", r: [""], p: 0 };
     }
 
-    newLineWord.correct["r"] += chars["key"][0];
+    newLineWord.correct["r"] += chars["keys"][0];
+
+    return newLineWord;
+  }
+}
+
+class KanaInput {
+  newLineWord: WordType;
+  updatePoint: number;
+  successKey: string;
+  constructor({ chars, lineWord }: JudgeType) {
+    this.updatePoint = 0;
+    const result = this.hasKana({ chars, lineWord });
+    this.newLineWord = result.lineWord as WordType;
+    this.successKey = result.successKey;
+  }
+
+  hasKana({ chars, lineWord }: JudgeType) {
+    let newLineWord = { ...lineWord };
+
+    const nextKana = lineWord.nextChar["k"];
+    const keys = chars.keys;
+    const successIndex: number = keys.indexOf(lineWord.nextChar["k"].slice(0, 1).toLowerCase());
+    const char = keys[successIndex];
+
+    if (!char) {
+      return { lineWord, successKey: "" };
+    }
+
+    const daku = dakuKanaList.includes(nextKana[0])
+      ? dakuKanaList[dakuKanaList.indexOf(nextKana[0])]
+      : "";
+    const handaku = handakuKanaList.includes(nextKana[0])
+      ? handakuKanaList[handakuKanaList.indexOf(nextKana[0])]
+      : "";
+
+    if (nextKana[0] == "゛" || nextKana[0] == "゜") {
+    }
+
+    let yoon = "";
+    const isDakuHandakuAndYoon = nextKana.length >= 2 && (daku || handaku);
+
+    if (isDakuHandakuAndYoon) {
+      //濁点・半濁点 + 小文字の小文字部分を抽出
+      yoon = nextKana[1];
+    }
+
+    let isDakuten = daku && keys.includes(daku.normalize("NFD")[0]);
+    let isHandaku = handaku && keys.includes(handaku.normalize("NFD")[0]);
+    let isNormal = successIndex > -1;
+
+    //return trueは正解　return falseは不正解。
+    if (isDakuten || isHandaku) {
+      if (isDakuten) {
+        newLineWord.nextChar["k"] = "゛" + yoon;
+        newLineWord.kanaDakuten = daku;
+      } else if (isHandaku) {
+        newLineWord.nextChar["k"] = "゜" + yoon;
+        newLineWord.kanaDakuten = handaku;
+      }
+    } else if (isNormal) {
+      if (nextKana.length >= 2) {
+        newLineWord.correct["k"] += char;
+        newLineWord.nextChar["k"] = newLineWord.nextChar["k"].slice(1);
+      } else {
+        //チャンク打ち切り
+        newLineWord = this.wordUpdate(newLineWord);
+      }
+    }
+
+    return { newLineWord, successKey: char };
+  }
+
+  wordUpdate(newLineWord: WordType) {
+    const kana = newLineWord.nextChar["k"];
+    const romaPattern = newLineWord.nextChar["r"];
+
+    newLineWord.correct["k"] += kana;
+    newLineWord.correct["r"] += romaPattern[0];
+
+    //スコア加算
+    this.updatePoint = newLineWord.nextChar["p"];
+    newLineWord.nextChar = newLineWord.word.shift() || { k: "", r: [""], p: 0 };
 
     return newLineWord;
   }
@@ -296,26 +382,81 @@ const TENKEYS = [
 interface TypingEvent {
   event: KeyboardEvent;
   lineWord: WordType;
+  inputMode?: InputModeType;
 }
 
 export class Typing {
   newLineWord: WordType;
   updatePoint: number;
-  constructor({ event, lineWord }: TypingEvent) {
-    const chars: CharsType = this.makeInput(event);
-    const judgeResult = new Judge({ chars, lineWord });
+  successKey: string;
 
-    this.newLineWord = judgeResult.newLineWord;
-    this.updatePoint = judgeResult.updatePoint;
+  constructor({ event, lineWord, inputMode }: TypingEvent) {
+    const chars: CharsType =
+      inputMode === "roma" ? this.romaMakeInput(event) : this.kanaMakeInput(event);
+    const inputResult =
+      inputMode === "roma"
+        ? new RomaInput({ chars, lineWord })
+        : new KanaInput({ chars, lineWord });
+
+    this.newLineWord = inputResult.newLineWord;
+    this.updatePoint = inputResult.updatePoint;
+    this.successKey = inputResult.successKey;
   }
 
-  makeInput(event: KeyboardEvent) {
-    const Input = {
-      key: [event.key.toLowerCase()],
+  romaMakeInput(event: KeyboardEvent) {
+    const input = {
+      keys: [event.key.toLowerCase()],
       shift: event.shiftKey,
     };
 
-    return Input;
+    return input;
+  }
+
+  kanaMakeInput(event: KeyboardEvent) {
+    const input = {
+      keys: KANA_CODE_MAP[event.code] ? KANA_CODE_MAP[event.code] : KANA_KEY_MAP[event.key],
+      shift: event.shiftKey,
+    };
+
+    if (event.shiftKey) {
+      if (event.code == "KeyE") {
+        input.keys[0] = "ぃ";
+      }
+      if (event.code == "KeyZ") {
+        input.keys[0] = "っ";
+      }
+
+      //ATOK入力 https://support.justsystems.com/faq/1032/app/servlet/qadoc?QID=024273
+      if (event.code == "KeyV") {
+        input.keys.push("ゐ", "ヰ");
+      }
+      if (event.code == "Equal") {
+        input.keys.push("ゑ", "ヱ");
+      }
+      if (event.code == "KeyT") {
+        input.keys.push("ヵ");
+      }
+      if (event.code == "Quote") {
+        input.keys.push("ヶ");
+      }
+      if (event.code == "KeyF") {
+        input.keys.push("ゎ");
+      }
+      if (event.key == "0") {
+        input.keys = ["を"];
+      }
+    }
+
+    if (keyboardCharacters.includes(event.key)) {
+      input.keys.push(
+        event.key.toLowerCase(),
+        event.key.toLowerCase().replace(event.key.toLowerCase(), function (s) {
+          return String.fromCharCode(s.charCodeAt(0) + 0xfee0);
+        }),
+      );
+    }
+
+    return input;
   }
 }
 
@@ -326,6 +467,7 @@ export class Success extends CalcTypeSpeed {
     status: Status,
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
+    inputMode: InputModeType,
     updatePoint: number,
     newLineWord: WordType,
     map: CreateMap,
@@ -335,17 +477,16 @@ export class Success extends CalcTypeSpeed {
   ) {
     super(status, lineTime, statusRef);
 
-    const mode = "roma";
     this.newStatus = this.updateStatus(
       { ...status },
       statusRef,
       playingComboRef,
+      inputMode,
       updatePoint,
       newLineWord,
       map,
       remainTime,
       lineTime,
-      mode,
     );
 
     statusRef.current!.lineStatus.typeResult.push({
@@ -361,12 +502,12 @@ export class Success extends CalcTypeSpeed {
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
+    inputMode: InputModeType,
     updatePoint: number,
     newLineWord: WordType,
     map: CreateMap,
     remainTime: number,
     lineTime: number,
-    mode: string,
   ) {
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
@@ -382,11 +523,11 @@ export class Success extends CalcTypeSpeed {
       statusRef.current!.status.maxCombo = newCombo;
     }
 
-    if (mode === "roma") {
+    if (inputMode === "roma") {
       statusRef.current!.status.romaType++;
-    } else if (mode === "kana") {
+    } else if (inputMode === "kana") {
       statusRef.current!.status.kanaType++;
-    } else if (mode === "flick") {
+    } else if (inputMode === "flick") {
       statusRef.current!.status.flickType++;
     }
 

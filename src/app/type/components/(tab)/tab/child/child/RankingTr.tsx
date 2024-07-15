@@ -30,9 +30,9 @@ const RankingTr = (props: RankingTrProps) => {
 
     if (props.romaType && props.kanaType) {
       if (props.romaType >= props.kanaType) {
-        mode = "ローマ字 & かな";
+        mode = "ローマ字&かな";
       } else {
-        mode = "かな & ローマ字";
+        mode = "かな&ローマ字";
       }
     } else {
       if (props.romaType) {

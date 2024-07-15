@@ -1,5 +1,7 @@
 import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 
+export type InputModeType = "roma" | "kana" | "flick";
+export type SceneType = "ready" | "playing" | "end";
 export interface PlayingRef {
   retry: () => void;
   pressSkip: () => void;
@@ -11,6 +13,7 @@ export interface WordType {
   correct: { k: string; r: string };
   nextChar: { k: string; r: string[]; p: number };
   word: { k: string; r: string[]; p: number }[];
+  kanaDakuten?: string;
 }
 
 export interface NextLyricsType {
@@ -54,7 +57,6 @@ export interface StatusRef {
 }
 
 export interface YTStateRef {
-  isPlayed: boolean;
   isPaused: boolean;
   currentTime: number;
 }

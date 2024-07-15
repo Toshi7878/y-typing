@@ -15,15 +15,15 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
   const [animationClass, setAnimationClass] = useState("");
 
   useEffect(() => {
-    if (notify.text) {
-      // 修正: notifyが存在するかどうかではなく、notify.textが存在するかどうかを確認
-
+    if (notify !== "ll") {
       setAnimationClass("animate-fade-out");
     }
 
     const timer = setTimeout(() => {
+      if (notify !== "ll") {
+        setNotify("");
+      }
       setAnimationClass("");
-      setNotify({ text: "" });
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -31,7 +31,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notify]);
 
-  return <Box className={`${className} ${animationClass}`}>{notify["text"]}</Box>;
+  return <Box className={`${className} ${animationClass}`}>{notify}</Box>;
 };
 
 export default PlayingNotify;

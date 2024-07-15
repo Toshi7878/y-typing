@@ -1,13 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
-import PlayingCenter, {
-  defaultLineWord,
-  defaultNextLyrics,
-  PlayingCenterRef,
-} from "./child/PlayingCenter";
+import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
+  inputModeAtom,
   mapAtom,
   playingNotifyAtom,
   sceneAtom,
@@ -21,11 +18,10 @@ import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 import { LineResult } from "@/app/type/(ts)/lineResult";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
-import { LineResultObj, StatusRef } from "@/app/type/(ts)/type";
+import { LineResultObj, PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
-import { defaultStatus } from "../../(tab)/tab/TabStatus";
 
 export const defaultLineResultObj: LineResultObj = {
   status: {
@@ -42,7 +38,7 @@ export const defaultLineResultObj: LineResultObj = {
   typeResult: [],
 };
 
-const Playing = forwardRef((props, ref) => {
+const Playing = forwardRef<PlayingRef>((props, ref) => {
   const { playerRef, playingComboRef, tabStatusRef, playingRef, statusRef, ytStateRef, setRef } =
     useRefs();
 
@@ -56,28 +52,18 @@ const Playing = forwardRef((props, ref) => {
   const [scene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
+  const [inputMode] = useAtom(inputModeAtom);
 
   useImperativeHandle(ref, () => ({
     retry: () => {
       const currentPlayingCenterRef = playingCenterRef.current; // 追加
 
-      tabStatusRef.current!.setStatus(
-        structuredClone({
-          ...defaultStatus,
-          display: {
-            ...defaultStatus, // 追加
-            line: map!.lineLength,
-          },
-        }),
-      );
+      currentPlayingCenterRef!.resetWordLyrics();
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      currentPlayingCenterRef!.setLineWord(structuredClone(defaultLineWord));
-      currentPlayingCenterRef!.setLyrics("");
-      currentPlayingCenterRef!.setNextLyrics(structuredClone(defaultNextLyrics));
-
-      setNotify({ text: "Retry" });
+      tabStatusRef.current!.resetStatus(), setNotify("Retry");
       playerRef.current.seekTo(0);
+      ticker.stop();
     },
     pressSkip: () => {
       const nextLine = map!.data[statusRef.current!.status.count];
@@ -90,10 +76,8 @@ const Playing = forwardRef((props, ref) => {
     gamePause: () => {
       if (ytStateRef.current?.isPaused) {
         playerRef.current.playVideo();
-        setNotify({ text: "▶" });
       } else {
         playerRef.current.pauseVideo();
-        setNotify({ text: "ll" });
       }
     },
   }));
@@ -103,48 +87,53 @@ const Playing = forwardRef((props, ref) => {
       setRef("playingRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [speedData]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const lineWord = playingCenterRef.current!.getLineWord();
 
       const cloneLineWord = structuredClone(lineWord);
-      if (!ytStateRef.current?.isPaused && isTyped({ event, lineWord: cloneLineWord })) {
-        const count = statusRef.current!.status.count;
-        const result = new Typing({ event, lineWord: cloneLineWord });
-        const prevLine = map!.data[count - 1];
-        const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
-        const status = tabStatusRef.current!.getStatus();
+      if (!ytStateRef.current?.isPaused) {
+        if (isTyped({ event, lineWord: cloneLineWord })) {
+          const count = statusRef.current!.status.count;
+          const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
+          const prevLine = map!.data[count - 1];
+          const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
+          const status = tabStatusRef.current!.getStatus();
 
-        if (lineWord.correct["r"] !== result.newLineWord.correct["r"]) {
-          const currentLine = map!.data[count];
-          const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+          if (result.successKey) {
+            const currentLine = map!.data[count];
+            const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
 
-          const success = new Success(
-            status,
-            statusRef,
-            playingComboRef,
-            result.updatePoint,
-            result.newLineWord,
-            map!,
-            lineTime,
-            remainTime,
-            event.key,
-          );
+            const success = new Success(
+              status,
+              statusRef,
+              playingComboRef,
+              inputMode,
+              result.updatePoint,
+              result.newLineWord,
+              map!,
+              lineTime,
+              remainTime,
+              result.successKey,
+            );
 
-          tabStatusRef.current!.setStatus(success.newStatus);
-          playingCenterRef.current!.setLineWord(result.newLineWord);
-          playingLineTimeRef.current?.setLineKpm(success.lineTypeSpeed);
-          if (!result.newLineWord.nextChar["k"]) {
-            statusRef.current!.status.totalTypeTime += lineTime;
+            tabStatusRef.current!.setStatus(success.newStatus);
+            playingCenterRef.current!.setLineWord(result.newLineWord);
+            playingLineTimeRef.current?.setLineKpm(success.lineTypeSpeed);
+            if (!result.newLineWord.nextChar["k"]) {
+              statusRef.current!.status.totalTypeTime += lineTime;
+            }
+          } else if (result.newLineWord.correct["r"] !== "") {
+            const miss = new Miss(status, statusRef, playingComboRef, lineTime, event.key);
+            tabStatusRef.current!.setStatus(miss.newStatus);
           }
-        } else if (result.newLineWord.correct["r"] !== "") {
-          const miss = new Miss(status, statusRef, playingComboRef, lineTime, event.key);
-          tabStatusRef.current!.setStatus(miss.newStatus);
+        } else {
+          shortcutKey(event, skipGuideRef, playingRef);
         }
-      } else {
-        shortcutKey(event, skipGuideRef, playingRef);
+      } else if (event.key === "Escape") {
+        playingRef.current?.gamePause();
       }
 
       const IS_COPY = event.ctrlKey && event.code == "KeyC";
@@ -159,7 +148,7 @@ const Playing = forwardRef((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [inputMode]);
 
   const updateLine = useCallback(
     (ytCurrentTime: number) => {
@@ -281,33 +270,22 @@ const Playing = forwardRef((props, ref) => {
   useEffect(() => {
     timer.addListener(updateLine);
     // クリーンアップ: refのデータをリセット
-    const progressElement = lineProgressRef.current as unknown as HTMLProgressElement;
+    const progressElement = lineProgressRef.current as HTMLProgressElement;
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
 
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
-    const currentStatusRef = statusRef.current; // 追加
 
     return () => {
       timer.removeListener(updateLine);
       ticker.stop();
       ticker.remove(updateFunction);
 
-      if (currentPlayingCenterRef) {
-        currentPlayingCenterRef.setLineWord({
-          correct: { k: "", r: "" },
-          nextChar: { k: "", r: [""], p: 0 },
-          word: [{ k: "", r: [""], p: 0 }],
-        });
-
-        currentPlayingCenterRef.setLyrics("");
-        currentPlayingCenterRef.setNextLyrics({ lyrics: "", kpm: "" });
-      }
-
+      currentPlayingCenterRef!.resetWordLyrics();
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        tabStatusRef.current!.setStatus(structuredClone(defaultStatus));
-        (currentStatusRef as StatusRef) = structuredClone(defaultStatusRef);
+        tabStatusRef.current!.resetStatus();
+        (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       }
 
       if (progressElement) {

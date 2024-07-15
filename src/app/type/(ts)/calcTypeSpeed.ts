@@ -4,7 +4,6 @@ export class CalcTypeSpeed {
   lineTypeSpeed: number;
   totalTypeSpeed: number;
   constructor(status: Status, lineTime: number, statusRef: React.RefObject<StatusRef>) {
-    console.log(statusRef.current!.lineStatus.lineType);
     this.lineTypeSpeed = Math.round((statusRef.current!.lineStatus.lineType / lineTime) * 60);
     this.totalTypeSpeed = this.updateTotalTypeSpeed(status, lineTime, statusRef);
   }

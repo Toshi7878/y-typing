@@ -23,22 +23,23 @@ import { Status } from "@/app/type/(ts)/type";
 export interface TabStatusRef {
   getStatus: () => Status;
   setStatus: (newStatus: Status) => void;
+  resetStatus: () => void;
 }
-
-export const defaultStatus:Status = {
-  score: 0,
-  point: 0,
-  timeBonus: 0,
-  type: 0,
-  miss: 0,
-  lost: 0,
-  rank: 0,
-  kpm: 0,
-  line: 0,
-};
 
 const TabStatus = forwardRef((props, ref) => {
   const [map] = useAtom(mapAtom);
+
+  const defaultStatus: Status = {
+    score: 0,
+    point: 0,
+    timeBonus: 0,
+    type: 0,
+    miss: 0,
+    lost: 0,
+    rank: 0,
+    kpm: 0,
+    line: map ? map.lineLength : 0,
+  };
 
   const [status, setStatus] = useState(defaultStatus);
   const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
@@ -51,20 +52,16 @@ const TabStatus = forwardRef((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  useImperativeHandle(
-    ref,
-
-    () => ({
-      getStatus: () => status,
-      setStatus: (newStatus: Status) => setStatus(newStatus),
-    }),
-  );
+  useImperativeHandle(ref, () => ({
+    getStatus: () => status,
+    setStatus: (newStatus: Status) => setStatus(newStatus),
+    resetStatus: () => setStatus(structuredClone(defaultStatus)),
+  }));
 
   useEffect(() => {
     if (map) {
       const newStatus = { ...status };
       newStatus.line = map.lineLength;
-
       setStatus(newStatus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -24,6 +24,7 @@ export const defaultStatusRef: StatusRef = {
 export const defaultYTStateRef = {
   isPlayed: false,
   isPaused: false,
+  isFinished: false,
   currentTime: 0,
 };
 export interface RefsContextType {
