@@ -16,7 +16,7 @@ class YTState {
   ) {
     console.log("再生 1");
 
-    if (scene !== "end") {
+    if (scene === "ready") {
       setScene("playing");
       updateFunction = () => timer.update(playerRef);
       ticker.add(updateFunction);
