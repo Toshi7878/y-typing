@@ -1,12 +1,13 @@
 import { Box, Flex } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import PlayingBottom from "./child/PlayingBottom";
 import ReadyInputModeRadioCards from "./child/ReadyInputModeRadioCards";
 import ReadyPlaySpeed from "./child/ReadyPlaySpeed";
 import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./child/ReadyPracticeButton";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 function Ready() {
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -14,6 +15,23 @@ function Ready() {
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
   const playingTotalTimeRef = useRef(null);
+  const { playerRef } = useRefs();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Enter" && playerRef.current) {
+        playerRef.current.playVideo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerRef]);
 
   return (
     <Box display="flex" flexDirection="column">
