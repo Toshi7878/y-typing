@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, Stack } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
 const RankingMenu = ({ userId }: { userId: string }) => {

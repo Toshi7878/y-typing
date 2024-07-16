@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
+import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 
 export const defaultStatusRef: StatusRef = {
@@ -22,10 +22,11 @@ export const defaultStatusRef: StatusRef = {
 };
 
 export const defaultYTStateRef = {
-  isPlayed: false,
   isPaused: false,
-  isFinished: false,
   currentTime: 0,
+};
+export const defaultGameStateRef = {
+  isRetrySkip: false,
 };
 export interface RefsContextType {
   playerRef: any;
@@ -36,6 +37,7 @@ export interface RefsContextType {
   bestScoreRef: React.MutableRefObject<number>;
   statusRef: React.RefObject<StatusRef>;
   ytStateRef: React.RefObject<YTStateRef>;
+  gameStateRef: React.RefObject<GameStateRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
@@ -49,6 +51,7 @@ const RefsContext = createContext<RefsContextType>({
   bestScoreRef: { current: 0 },
   statusRef: { current: structuredClone(defaultStatusRef) },
   ytStateRef: { current: structuredClone(defaultYTStateRef) },
+  gameStateRef: { current: structuredClone(defaultGameStateRef) },
 
   setRef: (ref: HTMLElement | any) => {},
 });
@@ -61,13 +64,13 @@ export const RefsProvider = ({ children }) => {
   const bestScoreRef = useRef(0);
   const statusRef = useRef<StatusRef>(structuredClone(defaultStatusRef));
   const ytStateRef = useRef<YTStateRef>(structuredClone(defaultYTStateRef));
+  const gameStateRef = useRef<GameStateRef>(structuredClone(defaultGameStateRef));
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
       case "playerRef":
         playerRef.current = ref;
         break;
-
       case "tabStatusRef":
         tabStatusRef.current = ref;
         break;
@@ -84,6 +87,7 @@ export const RefsProvider = ({ children }) => {
     <RefsContext.Provider
       value={{
         ytStateRef,
+        gameStateRef,
         statusRef,
         playingRef,
         playingComboRef,
@@ -110,6 +114,7 @@ export const useRefs = () => {
     playingRef: context.playingRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,
+    gameStateRef: context.gameStateRef,
     setRef: context.setRef,
   };
 };

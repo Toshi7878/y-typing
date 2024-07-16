@@ -12,7 +12,6 @@ import {
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { timer } from "@/app/type/(ts)/timer";
-import { ticker, updateFunction } from "../../(youtube-content)/youtubeEvents";
 import PlayingBottom from "./child/PlayingBottom";
 import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
@@ -22,6 +21,8 @@ import { LineResultObj, PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
+import { Ticker } from "@pixi/ticker";
+export const ticker = new Ticker();
 
 export const defaultLineResultObj: LineResultObj = {
   status: {
@@ -39,8 +40,16 @@ export const defaultLineResultObj: LineResultObj = {
 };
 
 const Playing = forwardRef<PlayingRef>((props, ref) => {
-  const { playerRef, playingComboRef, tabStatusRef, playingRef, statusRef, ytStateRef, setRef } =
-    useRefs();
+  const {
+    playerRef,
+    playingComboRef,
+    tabStatusRef,
+    playingRef,
+    statusRef,
+    ytStateRef,
+    gameStateRef,
+    setRef,
+  } = useRefs();
 
   const [map] = useAtom(mapAtom);
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -61,7 +70,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       currentPlayingCenterRef!.resetWordLyrics();
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      tabStatusRef.current!.resetStatus(), setNotify("Retry");
+      tabStatusRef.current!.resetStatus();
+      setNotify("Retry");
+      gameStateRef.current!.isRetrySkip = true;
       playerRef.current.seekTo(0);
       if (ticker.started) {
         ticker.stop();
@@ -69,7 +80,11 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
     pressSkip: () => {
       const nextLine = map!.data[statusRef.current!.status.count];
-      playerRef.current.seekTo(Number(nextLine.time) - 1 + (1 - speedData.realtimeSpeed));
+      const skippedTime = gameStateRef.current!.isRetrySkip
+        ? Number(map!.data[map!.startLine]["time"])
+        : Number(nextLine["time"]);
+
+      playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.realtimeSpeed));
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -202,11 +217,18 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           });
         }
 
+        const isRetrySkip = gameStateRef.current!.isRetrySkip;
+
+        if (isRetrySkip && Number(map.data[map.startLine]["time"]) - 1 <= ytCurrentTime) {
+          gameStateRef.current!.isRetrySkip = false;
+        }
+
         skipGuideRef.current!.displaySkipGuide(
           lineWord.nextChar["k"],
           lineTime,
           remainTime,
           skipGuideRef,
+          isRetrySkip,
         );
 
         const currentTotalTime = playingTotalTimeRef.current!.getCurrentTime();
@@ -253,10 +275,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
         currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
 
-        if (map.romaLineSpeedList[count + 1]) {
+        const nextKpm =
+          inputMode === "roma"
+            ? map.romaLineSpeedList[count + 1]
+            : map.kanaLineSpeedList[count + 1];
+        if (nextKpm) {
           currentPlayingCenterRef!.setNextLyrics({
             lyrics: nextLine["lyrics"],
-            kpm: (map.romaLineSpeedList[count + 1] * 60).toFixed(0),
+            kpm: (nextKpm * 60).toFixed(0),
           });
         } else {
           currentPlayingCenterRef!.setNextLyrics({
@@ -278,10 +304,17 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   );
 
   useEffect(() => {
+    const updateFunction = () => timer.update(playerRef);
+    ticker.add(updateFunction);
+
     timer.addListener(updateLine);
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
+
+    if (!ticker.started) {
+      ticker.start();
+    }
 
     return () => {
       timer.removeListener(updateLine);
@@ -292,6 +325,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       currentPlayingCenterRef!.resetWordLyrics();
       setNotify("");
+
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         tabStatusRef.current!.resetStatus();

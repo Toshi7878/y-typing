@@ -1,28 +1,18 @@
-import { Ticker } from "@pixi/ticker";
-import { timer } from "../../(ts)/timer";
 import { Line } from "@/types";
 import { SceneType, StatusRef, YTStateRef } from "../../(ts)/type";
-import { RefsContextType } from "../../(contexts)/refsProvider";
-export const ticker = new Ticker();
+import { ticker } from "../(typing-area)/scene/Playing";
 
-export let updateFunction;
 class YTState {
   play(
     scene: SceneType,
     setScene: React.Dispatch<React.SetStateAction<SceneType>>,
     YTStateRef: React.RefObject<YTStateRef>,
     setNotify: React.Dispatch<React.SetStateAction<string>>,
-    playerRef: RefsContextType["playerRef"],
   ) {
     console.log("再生 1");
 
     if (scene === "ready") {
       setScene("playing");
-      updateFunction = () => timer.update(playerRef);
-      ticker.add(updateFunction);
-      if (!ticker.started) {
-        ticker.start();
-      }
     }
 
     const isPaused = YTStateRef.current!.isPaused;
@@ -69,11 +59,14 @@ class YTState {
     }
   }
 
-  seek(target: any, statusRef: React.RefObject<StatusRef>) {
+  seek(target: any, statusRef: React.RefObject<StatusRef>, isRetrySkip: boolean) {
     const time = target.getCurrentTime();
 
-    if (time === 0) {
+    if (isRetrySkip && time === 0) {
       statusRef.current!.status.count = 0;
+      if (!ticker.started) {
+        ticker.start();
+      }
     }
     console.log("シーク");
   }

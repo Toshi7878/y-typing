@@ -1,5 +1,5 @@
 "use client";
-import React, { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { CSSProperties, useEffect, useLayoutEffect } from "react";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
@@ -31,6 +31,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setScene] = useAtom(sceneAtom);
   const [, setMapId] = useAtom(mapIdAtom);
 
+  //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {
@@ -99,7 +100,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
           <Flex gap="4">
             <Box className="">
               <YouTubeContent
-                className={`h-[340px] ${isLoading ? "invisible" : ""} aspect-video`}
+                className={` w-[600px] ${isLoading ? "invisible" : ""} aspect-video`}
                 videoId={videoId}
               />
             </Box>

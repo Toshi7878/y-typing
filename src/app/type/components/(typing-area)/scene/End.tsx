@@ -2,20 +2,25 @@ import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapIdAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { useFormState } from "react-dom";
-import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
 import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
+import { useSession } from "next-auth/react";
+import { StatusRef } from "@/app/type/(ts)/type";
+import EndRetryButton from "./child/EndRetryButton";
 
 const End = () => {
+  const { data: session } = useSession();
+
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef, playerRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const playingTotalTimeRef = useRef(null);
@@ -94,7 +99,12 @@ const End = () => {
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-2xl" mx={2}>
-              {bestScoreRef.current === 0 ? (
+              {!session ? (
+                <>
+                  スコアは{status.score}
+                  です。ログインをするとランキングに登録することができます。
+                </>
+              ) : bestScoreRef.current === 0 ? (
                 <>初めての記録です！スコアは{status.score}です。</>
               ) : status.score >= bestScoreRef.current ? (
                 <>
@@ -109,7 +119,7 @@ const End = () => {
               )}
             </Box>
             <HStack justifyContent="space-around">
-              {status.score >= bestScoreRef.current && (
+              {session && status.score >= bestScoreRef.current && (
                 <EndUploadButton responseStatus={state.status} />
               )}
               <Button
@@ -140,16 +150,7 @@ const End = () => {
               </Button>
             </HStack>
             <Box display="flex" justifyContent="flex-end" mx="12" mt="12">
-              <Button
-                size="2xl"
-                px={12}
-                py={6}
-                fontSize="2xl"
-                variant="outline"
-                borderColor="black"
-              >
-                もう一度プレイ
-              </Button>
+              <EndRetryButton />
             </Box>
           </Stack>
         </form>

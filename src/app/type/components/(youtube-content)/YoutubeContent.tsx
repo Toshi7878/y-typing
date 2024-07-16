@@ -1,6 +1,6 @@
 "use client";
 
-import React, { CSSProperties, useCallback } from "react";
+import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "./youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
@@ -30,7 +30,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(scene, setScene, refs.ytStateRef, setNotify, refs.playerRef);
+    ytState.play(scene, setScene, refs.ytStateRef, setNotify);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
@@ -54,7 +54,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
 
     if (event.data === 3) {
       // seek時の処理
-      ytState.seek(event.target, refs.statusRef);
+      ytState.seek(event.target, refs.statusRef, refs.gameStateRef.current!.isRetrySkip);
     } else if (event.data === 1) {
       //	未スタート、他の動画に切り替えた時など
       console.log("未スタート -1");

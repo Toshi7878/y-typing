@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-"use client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import TabStatus from "./tab/TabStatus";
 import TabRanking from "./tab/TabRanking";
@@ -20,6 +18,7 @@ export default function TabContent({ className }: TabContentProps) {
     return () => {
       setTabIndex(1);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -50,11 +49,11 @@ export default function TabContent({ className }: TabContentProps) {
 
       <TabPanels>
         <TabPanel px={0}>
-          <TabStatus ref={tabStatusRef} height={"250px"}/>
+          <TabStatus ref={tabStatusRef} height={"250px"} />
         </TabPanel>
 
         <TabPanel px={0}>
-          <TabRanking height={"250px"}/>
+          <TabRanking height={"250px"} />
         </TabPanel>
       </TabPanels>
     </Tabs>
