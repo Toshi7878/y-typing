@@ -1,17 +1,37 @@
 import { SignIn, SignOut } from "./AuthButton";
 import { auth } from "../../../lib/auth";
-import { Avatar, AvatarBadge } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, MenuItem } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
+import { BsDiscord } from "react-icons/bs";
+import { BsGoogle } from "react-icons/bs";
 
 export default async function Login() {
   const session = await auth();
 
   if (!session?.user) {
     return (
-      <nav>
-        <SignIn provider="google" />
-      </nav>
+      <Menu>
+        <MenuButton as={Button} variant="link" fontSize="sm">
+          ログイン
+        </MenuButton>
+        <MenuList>
+          <MenuItem>
+            <SignIn
+              provider="discord"
+              buttonText={"Discordでログイン"}
+              icon={<BsDiscord size="1.5em" />}
+            />
+          </MenuItem>
+          <MenuItem>
+            <SignIn
+              provider="google"
+              buttonText={"Googleでログイン"}
+              icon={<BsGoogle size="1.5em" />}
+            />
+          </MenuItem>{" "}
+        </MenuList>
+      </Menu>
     );
   } else {
     return (

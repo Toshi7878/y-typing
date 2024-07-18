@@ -3,6 +3,22 @@ import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 export type InputModeType = "roma" | "kana" | "flick";
 export type SceneType = "ready" | "playing" | "end";
 
+export interface RankingListType {
+  userId: string;
+  user: { name: string };
+  status: {
+    score: number;
+    romaType: number;
+    kanaType: number;
+    flickType: number;
+    kpm: number;
+    miss: number;
+    lost: number;
+    maxCombo: number;
+    playSpeed: number;
+  };
+  updatedAt: string;
+}
 export interface PlayingRef {
   retry: () => void;
   pressSkip: () => void;
@@ -48,6 +64,7 @@ export interface StatusRef {
     maxCombo: number;
     missCombo: number;
     totalTypeTime: number;
+    totalLatency: number;
     completeCount: number;
     failureCount: number;
     result: LineResultObj[];

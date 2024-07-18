@@ -1,15 +1,16 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import Google from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import generateIdenticon from "./generateIdenticon";
 import CryptoJS from "crypto-js";
+import Discord from "next-auth/providers/discord";
 
 // export const runtime = "edge";
 
 const prisma = new PrismaClient();
 
 export const config: NextAuthConfig = {
-  providers: [GoogleProvider],
+  providers: [Discord, Google],
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {

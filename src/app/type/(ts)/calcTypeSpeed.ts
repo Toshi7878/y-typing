@@ -2,9 +2,17 @@ import { Status, StatusRef } from "./type";
 
 export class CalcTypeSpeed {
   lineTypeSpeed: number;
+  lineTypeRkpm: number;
   totalTypeSpeed: number;
   constructor(status: Status, lineTime: number, statusRef: React.RefObject<StatusRef>) {
-    this.lineTypeSpeed = Math.round((statusRef.current!.lineStatus.lineType / lineTime) * 60);
+    const lineTypeCount = statusRef.current!.lineStatus.lineType;
+    const lineLatency = statusRef.current!.lineStatus.latency;
+    this.lineTypeSpeed = Math.round((lineTypeCount / lineTime) * 60);
+    this.lineTypeRkpm =
+      lineTypeCount == 0
+        ? this.lineTypeSpeed
+        : Math.round((lineTypeCount / (lineTime - lineLatency)) * 60);
+
     this.totalTypeSpeed = this.updateTotalTypeSpeed(status, lineTime, statusRef);
   }
 

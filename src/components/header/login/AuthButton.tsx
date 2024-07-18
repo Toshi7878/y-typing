@@ -3,28 +3,27 @@ import { Button } from "@chakra-ui/react";
 
 import React from "react";
 
+interface SignInProps {
+  provider: string;
+  buttonText: string;
+  icon: React.ReactElement;
+}
 export function SignIn({
   provider,
-
-  ...props
-}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
+  buttonText,
+  icon,
+}: SignInProps & React.ComponentPropsWithRef<typeof Button>) {
   const handleSignIn = async () => {
     "use server";
     await signIn(provider);
   };
-  const isLocal = process.env.NODE_ENV === "development";
+  // const isLocal = process.env.NODE_ENV === "development";
 
   return (
     <form action={handleSignIn}>
-      {isLocal ? (
-        <Button type="submit" variant="link" size="sm" {...props}>
-          ログイン
-        </Button>
-      ) : (
-        <Button type="submit" variant="link" size="sm" {...props}>
-          ログイン
-        </Button>
-      )}
+      <Button leftIcon={icon} type="submit" variant="">
+        {buttonText}
+      </Button>
     </form>
   );
 }

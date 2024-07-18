@@ -2,7 +2,7 @@
 
 import { Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
-import { ja } from "date-fns/locale"; // 追加
+import { ja } from "date-fns/locale";
 
 interface RankingTrProps {
   rank: number;
@@ -19,10 +19,10 @@ interface RankingTrProps {
   maxCombo: number;
   playSpeed: number;
   updatedAt: string;
-  isHighlighted: boolean; // 変更
-  isHovered: boolean; // 追加
-  onMouseEnter: () => void; // 追加
-  onMouseLeave: () => void; // 追加
+  isHighlighted: boolean;
+  isHovered: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }
 const RankingTr = (props: RankingTrProps) => {
   const getInputMode = () => {
@@ -58,7 +58,7 @@ const RankingTr = (props: RankingTrProps) => {
           <div>最大コンボ: {props.maxCombo}</div>
           {props.playSpeed > 1 && <div>倍速: {props.playSpeed.toFixed(2)}</div>}
           <div>
-            更新日時:{" "}
+            登録日時:{" "}
             {new Date(props.updatedAt).toLocaleString("ja-JP", {
               year: "numeric",
               month: "2-digit",
@@ -72,15 +72,15 @@ const RankingTr = (props: RankingTrProps) => {
       }
       hasArrow
       placement="bottom"
-      isOpen={props.isHighlighted || props.isHovered} // 変更
+      isOpen={props.isHighlighted || props.isHovered}
     >
       <Tr
         _hover={{ backgroundColor: "gray.100" }}
-        backgroundColor={props.isHighlighted ? "gray.100" : "transparent"} // 変更
+        backgroundColor={props.isHighlighted ? "gray.100" : "transparent"}
         className="cursor-pointer"
         onClick={props.handleShowMenu}
-        onMouseEnter={props.onMouseEnter} // 追加
-        onMouseLeave={props.onMouseLeave} // 追加
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
       >
         <Td pr={5} className="">{`#${props.rank}`}</Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">

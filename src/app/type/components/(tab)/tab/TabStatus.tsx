@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   useMediaQuery,
+  Box,
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
@@ -19,6 +20,7 @@ import styled from "@emotion/styled";
 import StatusValue from "./child/StatusValue";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { Status } from "@/app/type/(ts)/type";
+import PointStatusValue from "./child/PointStatusValue";
 
 export interface TabStatusRef {
   getStatus: () => Status;
@@ -30,9 +32,12 @@ interface TabStatusProps {
   height: string;
 }
 
-const TabStatus = forwardRef((props:TabStatusProps, ref) => {
+const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const [map] = useAtom(mapAtom);
 
+  const { playingComboRef, tabRankingListRef } = useRefs();
+
+  const rankingLength = tabRankingListRef.current?.getRankingScores().length;
   const defaultStatus: Status = {
     score: 0,
     point: 0,
@@ -40,7 +45,7 @@ const TabStatus = forwardRef((props:TabStatusProps, ref) => {
     type: 0,
     miss: 0,
     lost: 0,
-    rank: 0,
+    rank: rankingLength ? rankingLength : 0,
     kpm: 0,
     line: map ? map.lineLength : 0,
   };
@@ -65,11 +70,12 @@ const TabStatus = forwardRef((props:TabStatusProps, ref) => {
   useEffect(() => {
     if (map) {
       const newStatus = { ...status };
+
       newStatus.line = map.lineLength;
       setStatus(newStatus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map]);
+  }, [map, tabRankingListRef]);
 
   if (!map) return null; // mapが存在しない場合は何も表示しない
 
@@ -107,6 +113,8 @@ const TabStatus = forwardRef((props:TabStatusProps, ref) => {
       isMdOrSmaller ? "52px" : "122px"}; // isMdOrSmallerがtrueのとき高さを小さく設定
   `;
   const TdStyled = styled(Td)<{ isCentered: boolean }>``;
+
+  const combo = playingComboRef.current!.getCombo();
 
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
@@ -149,13 +157,14 @@ const TabStatus = forwardRef((props:TabStatusProps, ref) => {
                       <Label>{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        <StatusValue
-                          value={
-                            label === "point" && status["timeBonus"]
-                              ? `${status[label]}+${status["timeBonus"]}`
-                              : status[label]
-                          }
-                        />
+                        {label === "point" ? (
+                          <PointStatusValue
+                            value={status[label]}
+                            timeBonusValue={status["timeBonus"]}
+                          />
+                        ) : (
+                          <StatusValue value={status[label]} />
+                        )}
                       </UnderlinedSpan>
                     </TdStyled>
                   );

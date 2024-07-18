@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { useEffect, useState } from "react"; // useStateを追加
 import { useFormStatus } from "react-dom";
@@ -10,12 +11,14 @@ interface UploadButtonProps {
 
 const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
+  const queryClient = useQueryClient(); // useQueryClientのインスタンスを作成
 
   const [isDisabled, setIsDisabled] = useState(false); // isDisabledの状態を追加
 
   useEffect(() => {
     if (responseStatus === 200) {
       setIsDisabled(true); // responseStatusが200のときボタンを無効化
+      queryClient.invalidateQueries({ queryKey: ["userRanking"] });
     } else {
       setIsDisabled(false);
     }

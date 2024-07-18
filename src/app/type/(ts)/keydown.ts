@@ -337,7 +337,6 @@ class KanaInput {
   }
 
   wordUpdate(char: string, newLineWord: WordType) {
-    const kana = newLineWord.nextChar["k"];
     const romaPattern = newLineWord.nextChar["r"];
 
     newLineWord.correct["k"] += char;
@@ -526,6 +525,10 @@ export class Success extends CalcTypeSpeed {
     remainTime: number,
     lineTime: number,
   ) {
+
+    if(statusRef.current!.lineStatus.lineType === 0){
+      statusRef.current!.lineStatus.latency = lineTime
+    }
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
     statusRef.current!.status.missCombo = 0;

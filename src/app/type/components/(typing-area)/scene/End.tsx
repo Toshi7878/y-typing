@@ -2,25 +2,25 @@ import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapIdAtom, speedAtom, tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { useFormState } from "react-dom";
-import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
 import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
-import { StatusRef } from "@/app/type/(ts)/type";
 import EndRetryButton from "./child/EndRetryButton";
 
 const End = () => {
   const { data: session } = useSession();
+  const [, setTabIndex] = useAtom(tabIndexAtom);
 
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef, tabStatusRef, playerRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const playingTotalTimeRef = useRef(null);
@@ -31,6 +31,9 @@ const End = () => {
   const status = tabStatusRef.current!.getStatus();
 
   const upload = () => {
+    const rkpmTime =
+      statusRef.current!.status.totalTypeTime - statusRef.current!.status.totalLatency;
+
     const sendStatus = {
       score: status.score,
       romaType: statusRef.current!.status.romaType,
@@ -38,7 +41,7 @@ const End = () => {
       flickType: statusRef.current!.status.flickType,
       miss: status.miss,
       lost: status.lost,
-      rkpm: 0,
+      rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
       playSpeed: speedData.playSpeed,
@@ -87,6 +90,7 @@ const End = () => {
             fontSize: "lg", // サイズを大きくする
           },
         });
+        setTabIndex(1);
       }
     }
     handleStateChange();
@@ -106,7 +110,7 @@ const End = () => {
                 </>
               ) : bestScoreRef.current === 0 ? (
                 <>初めての記録です！スコアは{status.score}です。</>
-              ) : status.score >= bestScoreRef.current ? (
+              ) : status.score > bestScoreRef.current ? (
                 <>
                   おめでとうございます！最高スコアが{bestScoreRef.current}から{status.score}
                   に更新されました！
@@ -119,19 +123,19 @@ const End = () => {
               )}
             </Box>
             <HStack justifyContent="space-around">
-              {session && status.score >= bestScoreRef.current && (
+              {session && status.score > 0 && status.score >= bestScoreRef.current && (
                 <EndUploadButton responseStatus={state.status} />
               )}
               <Button
                 className="cursor-pointer"
                 variant="solid"
-                py={12} // ボタンの縦幅を大きくする
-                width="450px" // ボタンの幅を大きくする
+                py={12}
+                width="450px"
                 colorScheme="blue"
                 border="1px"
                 borderColor="black"
                 _hover={{ bg: "#3a90f3" }}
-                fontSize="3xl" // 文字サイズを大きくする
+                fontSize="3xl"
               >
                 詳細リザルトを見る
               </Button>
@@ -154,9 +158,6 @@ const End = () => {
             </Box>
           </Stack>
         </form>
-        {/* ) : (
-          ""
-        )} */}
       </Box>
       <PlayingBottom
         skipGuideRef={skipGuideRef}

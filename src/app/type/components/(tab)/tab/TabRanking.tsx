@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
@@ -10,6 +10,9 @@ interface TabRankingProps {
 }
 
 const TabRanking =(props: TabRankingProps) => {
+
+  const rankingListRef = useRef(null)
+
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">
@@ -27,7 +30,7 @@ const TabRanking =(props: TabRankingProps) => {
               </Tr>
             </Thead>
             <Tbody>
-              <RankingList />
+              <RankingList ref={rankingListRef}/>
             </Tbody>
           </Table>
         </Box>

@@ -1,6 +1,9 @@
+import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Button, Stack } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { useAtom } from "jotai";
 
 const RankingMenu = ({ userId }: { userId: string }) => {
+  const [scene] = useAtom(sceneAtom);
   return (
     <Stack
       className="rounded-md"
@@ -8,12 +11,12 @@ const RankingMenu = ({ userId }: { userId: string }) => {
       zIndex="tooltip"
       bg="white"
       boxShadow="md"
-      p={2} // パディングを追加
+      p={2}
     >
       <Button
-        as="a" // Linkとして機能させる
-        href={`/user/${userId}`} // ユーザーページへのリンク
-        variant="unstyled" // ボタンのスタイルを変更
+        as="a"
+        href={`/user/${userId}`}
+        variant="unstyled"
         size="sm"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
       >
@@ -26,6 +29,7 @@ const RankingMenu = ({ userId }: { userId: string }) => {
         onClick={() => {
           /* リプレイ再生ロジック */
         }}
+        isDisabled={scene === "playing"}
       >
         リプレイ再生
       </Button>

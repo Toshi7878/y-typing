@@ -10,7 +10,7 @@ export class ImportFile {
     file: File,
     convertOption: string,
     dispatch: Dispatch<Action>,
-    mapData: RootState["mapData"]["value"]
+    mapData: RootState["mapData"]["value"],
   ) {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -41,11 +41,13 @@ class Convert {
     const result: RootState["mapData"]["value"] = [{ time: "0", lyrics: "", word: "" }];
 
     for (let i = 0; i < jsonMap.length; i++) {
-      const time = jsonMap[i][0] === "0" ? "0.001" : jsonMap[i][0];
       const lyrics = jsonMap[i][1];
+      const time = jsonMap[i][0] === "0" ? "0.001" : jsonMap[i][0];
       const word = jsonMap[i][2];
 
-      result.push({ time, lyrics, word });
+      if (lyrics !== "end") {
+        result.push({ time, lyrics, word });
+      }
     }
 
     result.push(mapData[mapData.length - 1]);

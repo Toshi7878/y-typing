@@ -19,18 +19,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   // const mapInfo = await getMapInfo(params.id);
   const session = await auth();
 
-  let mapInfo;
-
-  if (params.id != "3") {
-    mapInfo = await getMapInfo(params.id);
-  } else {
-    mapInfo = {
-      videoId: "e7uuVlmCZKk",
-      title: "Superman / Tampalay",
-      creatorComment: "",
-      tags: ["Superman", "Tampalay", "公式動画"],
-    };
-  }
+  const mapInfo = await getMapInfo(params.id);
 
   return (
     <SessionProvider session={session}>

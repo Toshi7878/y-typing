@@ -21,12 +21,13 @@ const EndRetryButton = () => {
   const cancelRef = useRef(null);
 
   const { data: session } = useSession();
-  const { bestScoreRef, statusRef, tabStatusRef, playerRef, gameStateRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } =
+    useRefs();
   const status = tabStatusRef.current!.getStatus();
   const [, setScene] = useAtom(sceneAtom);
 
   const retry = () => {
-    if (session && status.score >= bestScoreRef.current) {
+    if (session && status.score > bestScoreRef.current) {
       onOpen();
     } else {
       proceedRetry();
@@ -37,6 +38,7 @@ const EndRetryButton = () => {
     setScene("playing");
     (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
     tabStatusRef.current!.resetStatus();
+    playingComboRef.current!.setCombo(0);
     gameStateRef.current!.isRetrySkip = true;
     playerRef.current.seekTo(0);
     playerRef.current.playVideo();

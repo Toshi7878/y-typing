@@ -42,6 +42,7 @@ export const defaultLineResultObj: LineResultObj = {
 const Playing = forwardRef<PlayingRef>((props, ref) => {
   const {
     playerRef,
+    tabRankingListRef,
     playingComboRef,
     tabStatusRef,
     playingRef,
@@ -66,11 +67,11 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   useImperativeHandle(ref, () => ({
     retry: () => {
       const currentPlayingCenterRef = playingCenterRef.current; // 追加
-
       currentPlayingCenterRef!.resetWordLyrics();
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       tabStatusRef.current!.resetStatus();
+      playingComboRef.current?.setCombo(0);
       setNotify("Retry");
       gameStateRef.current!.isRetrySkip = true;
       playerRef.current.seekTo(0);
@@ -243,7 +244,16 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         const status = tabStatusRef.current!.getStatus();
 
         const lineWord = currentPlayingCenterRef!.getLineWord();
-        const lineResult = new LineResult(status!, statusRef, lineWord, map, lineTime);
+        const typeSpeed = new CalcTypeSpeed(status!, lineTime, statusRef);
+
+        const lineResult = new LineResult(
+          status!,
+          statusRef,
+          lineWord,
+          map,
+          lineTime,
+          typeSpeed.totalTypeSpeed,
+        );
 
         statusRef.current!.status.result.push({
           status: {
@@ -253,8 +263,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             miss: status!.miss,
             combo: playingComboRef.current?.getCombo(),
             clearTime: statusRef.current!.lineStatus.lineClearTime,
-            kpm: status!.kpm,
-            rkpm: 0,
+            kpm: typeSpeed.lineTypeSpeed,
+            rkpm: typeSpeed.lineTypeRkpm,
             lineKpm: playingLineTimeRef.current?.getLineKpm(),
           },
           typeResult: statusRef.current!.lineStatus.typeResult,
@@ -263,10 +273,12 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (lineWord.nextChar["k"]) {
           statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
         }
+        statusRef.current!.status.totalLatency = statusRef.current!.lineStatus.latency;
 
         statusRef.current!.status.count += 1;
         statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
         playingLineTimeRef.current?.setLineKpm(0);
+        statusRef.current!.lineStatus.latency = 0;
         currentPlayingCenterRef!.setLineWord({
           correct: { k: "", r: "" },
           nextChar: [...map.typePattern[count]][0],
