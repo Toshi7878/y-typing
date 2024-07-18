@@ -11,7 +11,6 @@ interface TabRankingProps {
 
 const TabRanking =(props: TabRankingProps) => {
 
-  const rankingListRef = useRef(null)
 
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
@@ -30,7 +29,7 @@ const TabRanking =(props: TabRankingProps) => {
               </Tr>
             </Thead>
             <Tbody>
-              <RankingList ref={rankingListRef}/>
+              <RankingList />
             </Tbody>
           </Table>
         </Box>

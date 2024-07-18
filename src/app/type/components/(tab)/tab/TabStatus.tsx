@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 
 import {
   Table,
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import "../../../style/statusTable.scss";
-import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapAtom, rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
@@ -34,10 +34,10 @@ interface TabStatusProps {
 
 const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const [map] = useAtom(mapAtom);
+  const [rankingScores] = useAtom(rankingScoresAtom);
 
-  const { playingComboRef, tabRankingListRef } = useRefs();
+  const { playingComboRef } = useRefs();
 
-  const rankingLength = tabRankingListRef.current?.getRankingScores().length;
   const defaultStatus: Status = {
     score: 0,
     point: 0,
@@ -45,7 +45,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
     type: 0,
     miss: 0,
     lost: 0,
-    rank: rankingLength ? rankingLength : 0,
+    rank: rankingScores.length + 1,
     kpm: 0,
     line: map ? map.lineLength : 0,
   };
@@ -74,8 +74,20 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       newStatus.line = map.lineLength;
       setStatus(newStatus);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, tabRankingListRef]);
+  }, [map]);
+
+  useEffect(() => {
+    if (rankingScores.length) {
+      const newStatus = { ...status };
+
+      newStatus.rank = rankingScores.length + 1;
+      setStatus(newStatus);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rankingScores]);
 
   if (!map) return null; // mapが存在しない場合は何も表示しない
 

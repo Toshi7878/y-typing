@@ -10,16 +10,16 @@ import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { RankingListType, SendResultData } from "@/app/type/(ts)/type";
 import RankingTr from "./child/RankingTr";
 import RankingMenu from "./child/RankingMenu";
+import { useAtom } from "jotai";
+import { rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
-export interface TabRankingListRef {
-  getRankingScores: () => number[];
-}
-const RankingList = forwardRef((props, ref) => {
+const RankingList = () => {
   const { id } = useParams();
   const { data: session } = useSession();
-  const { tabStatusRef, bestScoreRef, setRef } = useRefs();
+  const { bestScoreRef } = useRefs();
   const [showMenu, setShowMenu] = useState<number | null>(null); // showMenuの状態をインデックスに変更
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [, setRankingScores] = useAtom(rankingScoresAtom);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -62,9 +62,6 @@ const RankingList = forwardRef((props, ref) => {
           bestScoreRef.current = data[i].status.score;
         }
       }
-      const status = tabStatusRef.current!.getStatus();
-      const scores = data ? data.map((result: RankingListType) => result.status.score) : [];
-      tabStatusRef.current!.setStatus({ ...status, rank: scores.length + 1 });
 
       return data;
     },
@@ -76,14 +73,11 @@ const RankingList = forwardRef((props, ref) => {
     refetchOnMount: false, // マウント時に再フェッチしない
   });
 
-  useImperativeHandle(ref, () => ({
-    getRankingScores: () => (data ? data.map((result) => result.status.score) : []),
-  }));
-
   useEffect(() => {
-    if (ref && "current" in ref) {
-      setRef("tabRankingListRef", ref.current!);
-    }
+    const scores = data ? data.map((result: RankingListType) => result.status.score) : [];
+
+    setRankingScores(scores);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -139,7 +133,7 @@ const RankingList = forwardRef((props, ref) => {
         })}
     </>
   );
-});
+};
 
 RankingList.displayName = "RankingList";
 

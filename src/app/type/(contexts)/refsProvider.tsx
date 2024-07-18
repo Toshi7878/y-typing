@@ -3,7 +3,6 @@ import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
-import { TabRankingListRef } from "../components/(tab)/tab/child/RankingList";
 
 export const defaultStatusRef: StatusRef = {
   status: {
@@ -33,7 +32,6 @@ export const defaultGameStateRef = {
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
-  tabRankingListRef: React.RefObject<TabRankingListRef>;
   playingRef: React.RefObject<PlayingRef>;
   playingComboRef: React.RefObject<PlayingComboRef>;
   lineCountRef: React.MutableRefObject<number>;
@@ -48,7 +46,6 @@ export interface RefsContextType {
 const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
-  tabRankingListRef: { current: null },
   playingComboRef: { current: null },
   playingRef: { current: null },
   lineCountRef: { current: 0 },
@@ -62,7 +59,6 @@ const RefsContext = createContext<RefsContextType>({
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
   const tabStatusRef = useRef(null);
-  const tabRankingListRef = useRef(null);
   const playingRef = useRef(null);
   const playingComboRef = useRef(null);
   const lineCountRef = useRef(0);
@@ -85,9 +81,7 @@ export const RefsProvider = ({ children }) => {
       case "playingComboRef":
         playingComboRef.current = ref;
         break;
-      case "tabRankingListRef":
-        tabRankingListRef.current = ref;
-        break;
+
     }
   };
 
@@ -101,8 +95,7 @@ export const RefsProvider = ({ children }) => {
         playingComboRef,
         bestScoreRef,
         tabStatusRef,
-        tabRankingListRef,
-        lineCountRef,
+         lineCountRef,
         playerRef,
         setRef,
       }}
@@ -119,7 +112,6 @@ export const useRefs = () => {
     lineCountRef: context.lineCountRef,
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
-    tabRankingListRef: context.tabRankingListRef,
     playingComboRef: context.playingComboRef,
     playingRef: context.playingRef,
     statusRef: context.statusRef,

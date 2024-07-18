@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-quer
 import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
-import { mapAtom, mapIdAtom, sceneAtom } from "../(atoms)/gameRenderAtoms";
+import { mapAtom, mapIdAtom, rankingScoresAtom, sceneAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 const queryClient = new QueryClient();
@@ -30,6 +30,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setMap] = useAtom(mapAtom);
   const [, setScene] = useAtom(sceneAtom);
   const [, setMapId] = useAtom(mapIdAtom);
+  const [, setRankingScores] = useAtom(rankingScoresAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -56,6 +57,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: ["mapData", id] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
+      setRankingScores([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);
