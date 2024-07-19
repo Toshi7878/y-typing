@@ -7,6 +7,7 @@ import {
   inputModeAtom,
   mapAtom,
   playingNotifyAtom,
+  rankingScoresAtom,
   sceneAtom,
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
@@ -42,7 +43,6 @@ export const defaultLineResultObj: LineResultObj = {
 const Playing = forwardRef<PlayingRef>((props, ref) => {
   const {
     playerRef,
-    tabRankingListRef,
     playingComboRef,
     tabStatusRef,
     playingRef,
@@ -63,6 +63,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode] = useAtom(inputModeAtom);
+  const [rankingScores] = useAtom(rankingScoresAtom);
 
   useImperativeHandle(ref, () => ({
     retry: () => {
@@ -135,6 +136,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               lineTime,
               remainTime,
               result.successKey,
+              rankingScores,
             );
 
             tabStatusRef.current!.setStatus(success.newStatus);
@@ -166,7 +168,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode]);
+  }, [inputMode, rankingScores]);
 
   const updateLine = useCallback(
     (ytCurrentTime: number) => {
@@ -253,6 +255,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           map,
           lineTime,
           typeSpeed.totalTypeSpeed,
+          rankingScores,
         );
 
         statusRef.current!.status.result.push({

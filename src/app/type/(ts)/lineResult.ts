@@ -13,8 +13,16 @@ export class LineResult {
     map: CreateMap,
     lineTime: number,
     totalTypeSpeed: number,
+    rankingScores: number[],
   ) {
-    this.newStatus = this.updateStatus(status, statusRef, lineWord, map, totalTypeSpeed);
+    this.newStatus = this.updateStatus(
+      status,
+      statusRef,
+      lineWord,
+      map,
+      totalTypeSpeed,
+      rankingScores,
+    );
     this.newTotalTime = this.updateTotalTypeTime(lineTime, statusRef.current!.status.totalTypeTime);
   }
 
@@ -24,6 +32,7 @@ export class LineResult {
     lineWord: WordType,
     map: CreateMap,
     totalTypeSpeed: number,
+    rankingScores: number[],
   ) {
     const newStatus = { ...status };
 
@@ -38,10 +47,18 @@ export class LineResult {
       newStatus.lost += lostWord.length;
       newStatus.score += newStatus.point;
       newStatus.kpm = totalTypeSpeed;
+      newStatus.rank = this.getRank(rankingScores, newStatus.score);
     }
 
     newStatus.point = 0;
     return newStatus;
+  }
+
+  getRank(scores: number[], currentScore: number): number {
+    // 現在のスコアが何番目に入るかを取得
+    const rank = scores.findIndex((score) => score > currentScore) + 2;
+
+    return rank;
   }
 
   updateTotalTypeTime(lineTime: number, totalTypeTime: number) {

@@ -55,7 +55,8 @@ export default function NewNameDialog() {
       <div className="grid gap-4 py-4">
         <FormControl isInvalid={!!errors.newName}>
           <label htmlFor="name">
-            名前を入力してください。半角英数字とアンダーバー( _ )のみ使うことができます
+            名前を入力してください。
+            現在データベースに保存するデータの構造が煮詰まっていないので、データの構造に一貫性をもたせるために予告なくユーザーデータが削除される可能性があります。ご了承くださいませ。
           </label>
           <Input
             size="lg"

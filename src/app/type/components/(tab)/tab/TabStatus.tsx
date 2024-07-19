@@ -144,12 +144,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
               <TrStyled isMdOrSmaller={isMdOrSmaller}>
                 {STATUS_LABEL.slice(0, STATUS_LABEL.length / 2).map((label) => {
                   return (
-                    <TdStyled
-                      key={label}
-                      id={label}
-                      className={label === "rank" && status["rank"] === 0 ? " opacity-45" : ""}
-                      isCentered={isMdOrSmaller}
-                    >
+                    <TdStyled key={label} id={label} isCentered={isMdOrSmaller}>
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>

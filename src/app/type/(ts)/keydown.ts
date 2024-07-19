@@ -490,6 +490,7 @@ export class Success extends CalcTypeSpeed {
     lineTime: number,
     remainTime: number,
     char: string,
+    rankingScores: number[],
   ) {
     super(status, lineTime, statusRef);
 
@@ -503,6 +504,7 @@ export class Success extends CalcTypeSpeed {
       map,
       remainTime,
       lineTime,
+      rankingScores,
     );
 
     statusRef.current!.lineStatus.typeResult.push({
@@ -524,10 +526,10 @@ export class Success extends CalcTypeSpeed {
     map: CreateMap,
     remainTime: number,
     lineTime: number,
+    rankingScores: number[],
   ) {
-
-    if(statusRef.current!.lineStatus.lineType === 0){
-      statusRef.current!.lineStatus.latency = lineTime
+    if (statusRef.current!.lineStatus.lineType === 0) {
+      statusRef.current!.lineStatus.latency = lineTime;
     }
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
@@ -561,9 +563,17 @@ export class Success extends CalcTypeSpeed {
       newStatus.line =
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
+      newStatus.rank = this.getRank(rankingScores, newStatus.score);
     }
 
     return newStatus;
+  }
+
+  getRank(scores: number[], currentScore: number): number {
+    // 現在のスコアが何番目に入るかを取得
+    const rank = scores.findIndex((score) => score > currentScore) + 2;
+
+    return rank;
   }
 }
 
