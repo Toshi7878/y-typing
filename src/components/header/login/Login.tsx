@@ -16,20 +16,20 @@ export default async function Login() {
           ログイン
         </MenuButton>
         <MenuList>
-          <MenuItem>
+          <MenuItem _hover={{ bg: "#7289DA", color: "white" }}>
             <SignIn
               provider="discord"
               buttonText={"Discordでログイン"}
               icon={<BsDiscord size="1.5em" />}
             />
           </MenuItem>
-          <MenuItem>
+          <MenuItem _hover={{ bg: "#DB4437", color: "white" }}>
             <SignIn
               provider="google"
               buttonText={"Googleでログイン"}
               icon={<BsGoogle size="1.5em" />}
             />
-          </MenuItem>{" "}
+          </MenuItem>
         </MenuList>
       </Menu>
     );

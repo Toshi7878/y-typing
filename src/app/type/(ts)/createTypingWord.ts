@@ -234,14 +234,15 @@ const CHAR_POINT = 10;
 //symbolCount無効になってる
 class ParseLyrics {
   data: { time: string; lyrics: string; word: string }[];
-  typePattern: { k: string; r: string[]; p: number }[][];
+  typingWords: { k: string; r: string[]; p: number }[][];
   // symbolCount: { [key: string]: number };
 
   constructor(data: { time: string; lyrics: string; word: string }[]) {
     this.data = data;
-    this.typePattern = [];
+    this.typingWords = [];
     // this.symbolCount = {};
   }
+
   joinLyrics() {
     let lyrics = this.data
       .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
@@ -264,21 +265,23 @@ class ParseLyrics {
     return lyrics;
   }
 
-  createWord(lyrics) {
+  createWord(lyrics: string) {
     const ROMA_MAP_LEN = ROMA_MAP.length;
 
     for (let i = 0; i < ROMA_MAP_LEN; i++) {
       lyrics = lyrics.replace(RegExp(ROMA_MAP[i]["k"], "g"), "\t" + i + "\t");
     }
 
-    lyrics = lyrics.split("\n");
+    const lyricsArray = lyrics.split("\n");
 
     for (let i = 0; i < this.data.length; i++) {
-      if (lyrics[i] && this.data[i]["lyrics"] != "end") {
-        const arr: { k: string; r: string[]; p: number }[] = this.hiraganaToRomaArray(lyrics[i]);
-        this.typePattern.push(arr);
+      if (lyricsArray[i] && this.data[i]["lyrics"] != "end") {
+        const arr: { k: string; r: string[]; p: number }[] = this.hiraganaToRomaArray(
+          lyricsArray[i],
+        );
+        this.typingWords.push(arr);
       } else {
-        this.typePattern.push([{ k: "", r: [""], p: 0 }]);
+        this.typingWords.push([{ k: "", r: [""], p: 0 }]);
       }
     }
   }
@@ -504,7 +507,7 @@ export class CreateMap extends ParseLyrics {
       let kanaWord: string[] = [];
       let romaWord: string[] = [];
 
-      if (this.data[i]["lyrics"] != "end" && this.typePattern[i][0]["k"]) {
+      if (this.data[i]["lyrics"] != "end" && this.typingWords[i][0]["k"]) {
         if (this.startLine == 0) {
           this.startLine = i;
         }
@@ -512,8 +515,8 @@ export class CreateMap extends ParseLyrics {
         this.lineLength++;
         lineSpeed = +this.data[i + 1]["time"] - +this.data[i]["time"];
 
-        kanaWord = this.typePattern[i].map((item) => item.k);
-        romaWord = this.typePattern[i].map((item) => item.r[0]);
+        kanaWord = this.typingWords[i].map((item) => item.k);
+        romaWord = this.typingWords[i].map((item) => item.r[0]);
         //かな入力
         dakuHandakuLineNotes = (
           kanaWord

@@ -284,8 +284,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         statusRef.current!.lineStatus.latency = 0;
         currentPlayingCenterRef!.setLineWord({
           correct: { k: "", r: "" },
-          nextChar: [...map.typePattern[count]][0],
-          word: [...map.typePattern[count]].slice(1),
+          nextChar: [...map.typingWords[count]][0],
+          word: [...map.typingWords[count]].slice(1),
         });
 
         currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);

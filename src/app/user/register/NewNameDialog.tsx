@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Button, Input, FormControl, useToast } from "@chakra-ui/react";
+import { Button, Input, FormControl, useToast, Box } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -54,10 +54,6 @@ export default function NewNameDialog() {
     <form action={formAction}>
       <div className="grid gap-4 py-4">
         <FormControl isInvalid={!!errors.newName}>
-          <label htmlFor="name">
-            名前を入力してください。
-            現在データベースに保存するデータの構造が煮詰まっていないので、データの構造に一貫性をもたせるために予告なくユーザーデータが削除される可能性があります。ご了承くださいませ。
-          </label>
           <Input
             size="lg"
             id="name"
@@ -69,6 +65,15 @@ export default function NewNameDialog() {
         <Button colorScheme="blue" type="submit">
           保存
         </Button>
+
+        <Box>
+          <Box className="text-lg font-semibold">おしらせ</Box>
+          現在データベースに保存するデータの構造が煮詰まっていないため、
+          データの構造に一貫性をもたせるために予告なくログインデータが削除される可能性があります。
+          ご了承くださいませ。
+          <br />
+          ᓚ₍ ^. .^₎
+        </Box>
       </div>
     </form>
   );
