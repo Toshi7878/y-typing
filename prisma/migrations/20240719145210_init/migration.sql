@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Map" ADD COLUMN     "kanaTotalNotes" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "romaTotalNotes" INTEGER NOT NULL DEFAULT 0;

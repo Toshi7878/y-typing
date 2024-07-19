@@ -1,8 +1,7 @@
 "use client";
 import { Button } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
-
-import { useEffect, useState } from "react"; // useStateを追加
+import { useEffect, useState } from "react"; // forwardRefを追加
 import { useFormStatus } from "react-dom";
 
 interface UploadButtonProps {

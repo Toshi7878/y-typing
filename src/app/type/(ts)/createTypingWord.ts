@@ -1,5 +1,5 @@
-import { Line } from "@/types";
 import { ROMA_MAP } from "./const/romaMap";
+import { LineData, MapData, SpeedDifficulty, TypeChank } from "./type";
 
 const ZENKAKU_LIST = [
   "０",
@@ -231,110 +231,99 @@ const SYMBOL_LIST = [
 
 const CHAR_POINT = 10;
 
-//symbolCount無効になってる
-class ParseLyrics {
-  data: { time: string; lyrics: string; word: string }[];
-  typingWords: { k: string; r: string[]; p: number }[][];
-  // symbolCount: { [key: string]: number };
+class TypingWords {
+  typingWords: LineData[];
+  startLine: number;
+  lineLength: number;
 
-  constructor(data: { time: string; lyrics: string; word: string }[]) {
-    this.data = data;
-    this.typingWords = [];
-    // this.symbolCount = {};
+  constructor(wordRomaMap: string[], data: MapData) {
+    const result = this.create(wordRomaMap, data);
+
+    this.typingWords = result.typingWords;
+    this.startLine = result.startLine;
+    this.lineLength = result.lineLength;
   }
 
-  joinLyrics() {
-    let lyrics = this.data
-      .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
-      .join("\n");
+  create(wordRomaMap: string[], data: MapData) {
+    const typingWords: LineData[] = []; // 修正
+    let startLine = 0;
+    let lineLength = 0;
+    for (let i = 0; i < data.length; i++) {
+      const time = data[i]["time"];
+      const lyrics = data[i]["lyrics"];
 
-    lyrics = lyrics
-      .replace(/…/g, "...")
-      .replace(/‥/g, "..")
-      .replace(/･/g, "・")
-      .replace(/〜/g, "～")
-      .replace(/｢/g, "「")
-      .replace(/｣/g, "」")
-      .replace(/､/g, "、")
-      .replace(/｡/g, "。")
-      .replace(/　/g, " ")
-      .replace(/ {2,}/g, " ")
-      .replace(/ヴ/g, "ゔ")
-      .replace(/－/g, "ー");
+      if (wordRomaMap[i] && lyrics != "end") {
+        if (startLine == 0) {
+          startLine = i;
+        }
+        lineLength++;
+        const remainTime = +data[i + 1]["time"] - +time;
 
-    return lyrics;
-  }
-
-  createWord(lyrics: string) {
-    const ROMA_MAP_LEN = ROMA_MAP.length;
-
-    for (let i = 0; i < ROMA_MAP_LEN; i++) {
-      lyrics = lyrics.replace(RegExp(ROMA_MAP[i]["k"], "g"), "\t" + i + "\t");
-    }
-
-    const lyricsArray = lyrics.split("\n");
-
-    for (let i = 0; i < this.data.length; i++) {
-      if (lyricsArray[i] && this.data[i]["lyrics"] != "end") {
-        const arr: { k: string; r: string[]; p: number }[] = this.hiraganaToRomaArray(
-          lyricsArray[i],
-        );
-        this.typingWords.push(arr);
+        const arr: LineData = this.hiraganaToRomaArray(wordRomaMap[i], time, lyrics, remainTime);
+        typingWords.push(arr);
       } else {
-        this.typingWords.push([{ k: "", r: [""], p: 0 }]);
+        typingWords.push({
+          time,
+          lyrics,
+          word: [{ k: "", r: [""], p: 0 }],
+          kpm: { k: 0, r: 0 },
+          notes: { k: 0, r: 0 },
+        });
       }
     }
+
+    return { typingWords, startLine, lineLength };
   }
 
-  hiraganaToRomaArray(str) {
-    let lineWord: { k: string; r: string[]; p: number }[] = [];
+  hiraganaToRomaArray(str: string, time: string, lyrics: string, remainTime: number) {
+    let word: TypeChank[] = [];
 
-    str = str.split("\t").filter((word) => word > "");
-    const STR_LEN = str.length;
+    const wordIndexs = str.split("\t").filter((word) => word > "");
+    const STR_LEN = wordIndexs.length;
 
     for (let i = 0; i < STR_LEN; i++) {
-      if (!isNaN(Number(str[i]))) {
+      if (!isNaN(Number(wordIndexs[i]))) {
       }
-      const CHAR = structuredClone(ROMA_MAP[parseInt(str[i])]);
+      const CHAR = structuredClone(ROMA_MAP[parseInt(wordIndexs[i])]);
       if (CHAR) {
-        lineWord.push({ ...CHAR, p: CHAR_POINT * CHAR["r"][0].length });
+        word.push({ ...CHAR, p: CHAR_POINT * CHAR["r"][0].length });
 
         //促音の打鍵パターン
-        if (lineWord.length >= 2) {
-          const PREVIOUS_KANA = lineWord[lineWord.length - 2]["k"];
+        if (word.length >= 2) {
+          const PREVIOUS_KANA = word[word.length - 2]["k"];
 
           if (PREVIOUS_KANA && PREVIOUS_KANA[PREVIOUS_KANA.length - 1] == "っ") {
-            const KANA = lineWord[lineWord.length - 1]["k"][0];
+            const KANA = word[word.length - 1]["k"][0];
 
             if (SOKUON_JOIN_LIST.includes(KANA)) {
-              lineWord = this.joinSokuonPattern("", lineWord);
+              word = this.joinSokuonPattern("", word);
             } else if (["い", "う", "ん"].includes(KANA)) {
-              lineWord = this.joinSokuonPattern("iunFlag", lineWord);
+              word = this.joinSokuonPattern("iunFlag", word);
             }
           }
         }
 
         //n→nn変換
-        lineWord = this.nConvert_nn(lineWord);
+        word = this.nConvert_nn(word);
 
         //記号の種類をカウント
         // this.symbolCounter();
       } else {
         //打鍵パターン生成を行わなくて良い文字はそのままthis.typingArrayに追加
-        for (let v = 0; v < str[i].length; v++) {
-          let char: string = str[i][v];
+        for (let v = 0; v < wordIndexs[i].length; v++) {
+          let char: string = wordIndexs[i][v];
 
           //全角→半角に変換(英数字記号)
-          if (ZENKAKU_LIST.includes(str[i][v])) {
+          if (ZENKAKU_LIST.includes(wordIndexs[i][v])) {
             char = String.fromCharCode(char.charCodeAt(0) - 0xfee0);
           }
 
           //追加
-          lineWord.push({ k: char, r: [char], p: CHAR_POINT * char.length });
+          word.push({ k: char, r: [char], p: CHAR_POINT * char.length });
 
           //n→nn変換
           if (v == 0) {
-            lineWord = this.nConvert_nn(lineWord);
+            word = this.nConvert_nn(word);
           }
 
           // this.symbolCounter();
@@ -343,12 +332,15 @@ class ParseLyrics {
     }
 
     //this.kanaArray最後の文字が「ん」だった場合も[nn]に置き換えます。
-    if (lineWord[lineWord.length - 1]["k"] == "ん") {
-      lineWord[lineWord.length - 1]["r"][0] = "nn";
-      lineWord[lineWord.length - 1]["r"].push("n'");
+    if (word[word.length - 1]["k"] == "ん") {
+      word[word.length - 1]["r"][0] = "nn";
+      word[word.length - 1]["r"].push("n'");
     }
 
-    return lineWord;
+    const notes = this.notes(word);
+    const kpm = this.kpm(notes, remainTime);
+
+    return { time, lyrics, word, notes, kpm };
   }
 
   //'っ','か' → 'っか'等の繋げられる促音をつなげる
@@ -387,7 +379,7 @@ class ParseLyrics {
     return lineWord;
   }
 
-  nConvert_nn(lineWord: { k: string; r: string[]; p: number }[]) {
+  nConvert_nn(lineWord: TypeChank[]) {
     //n→nn変換
     const PREVIOUS_KANA = lineWord.length >= 2 ? lineWord[lineWord.length - 2]["k"] : false;
 
@@ -421,158 +413,107 @@ class ParseLyrics {
     return lineWord;
   }
 
-  // symbolCounter() {
-  //   const symbolEncount = SYMBOL_LIST.indexOf(this.lineWord[this.lineWord.length - 1]["r"][0]);
+  kpm(notes: { k: number; r: number }, remainTime: number) {
+    const romaKpm = Math.round((notes.r / remainTime) * 60);
+    const kanaKpm = Math.round((notes.k / remainTime) * 60);
+    return { r: romaKpm, k: kanaKpm };
+  }
 
-  //   if (symbolEncount > -1) {
-  //     if (this.symbolCount[this.lineWord[this.lineWord.length - 1]["k"]]) {
-  //       this.symbolCount[this.lineWord[this.lineWord.length - 1]["k"]]++;
-  //     } else {
-  //       this.symbolCount[this.lineWord[this.lineWord.length - 1]["k"]] = 1;
-  //     }
-  //   }
-  // }
+  notes(word: TypeChank[]) {
+    const kanaWord = word.map((item) => item.k);
+    const dakuHandakuLineNotes = (
+      kanaWord
+        .join("")
+        .match(
+          /[ゔ|が|ぎ|ぐ|げ|ご|ざ|じ|ず|ぜ|ぞ|だ|ぢ|づ|で|ど|ば|び|ぶ|べ|ぼ|ぱ|ぴ|ぷ|ぺ|ぽ]/g,
+        ) || []
+    ).length;
+    const kanaNotes = kanaWord.join("").length + dakuHandakuLineNotes;
+
+    const romaWord = word.map((item) => item.r[0]);
+
+    return { k: kanaNotes, r: romaWord.join("").length };
+  }
 }
 
-export class CreateMap extends ParseLyrics {
-  scoreParChar: number;
-  missPenalty: number;
+export class CreateMap {
+  typingWords: LineData[];
+
   startLine: number;
   lineLength: number;
-  romaTotalNotes: number;
-  kanaTotalNotes: number;
-  romaLineNotesList: number[];
-  kanaLineNotesList: number[];
-
-  romaMedianSpeed: number;
-  kanaMedianSpeed: number;
-  romaMaxSpeed: number;
-  kanaMaxSpeed: number;
-  romaLineSpeedList: number[];
-  kanaLineSpeedList: number[];
+  totalNotes: { r: number; k: number };
+  speedDifficulty: SpeedDifficulty;
   currentTimeBarFrequency: number;
   movieTotalTime: number;
-  totalTimeSSMM: string;
 
-  constructor(data: Line[]) {
-    super(data);
+  constructor(data: MapData) {
+    const wordRomaMap = this.parseWord(data);
 
-    this.scoreParChar = 0;
-    this.missPenalty = 0;
+    const result = new TypingWords(wordRomaMap, data);
 
-    this.startLine = 0;
+    this.typingWords = result.typingWords;
+    this.startLine = result.startLine;
+    this.lineLength = result.lineLength;
 
-    //count
-    this.lineLength = 0;
-    this.romaTotalNotes = 0;
-    this.kanaTotalNotes = 0;
-    this.romaLineNotesList = [];
-    this.kanaLineNotesList = [];
+    this.totalNotes = this.calculateTotalNotes(result.typingWords);
+    this.speedDifficulty = this.calculateSpeedDifficulty(result.typingWords);
 
-    //typeSpeed
-    this.romaMedianSpeed = 0;
-    this.kanaMedianSpeed = 0;
-    this.romaMaxSpeed = 0;
-    this.kanaMaxSpeed = 0;
-    this.romaLineSpeedList = [];
-    this.kanaLineSpeedList = [];
-
-    //totalTime
-    this.movieTotalTime = 0;
-    this.currentTimeBarFrequency = 0;
-
-    this.totalTimeSSMM = "00:00";
-    //movieSpeedController = new MovieSpeedController()
-    //movieSpeedController.addEvent()
-
-    this.createWord(this.joinLyrics());
-    this.getScorePerChar();
+    this.movieTotalTime = +this.typingWords[result.typingWords.length - 1].time;
+    this.currentTimeBarFrequency = this.movieTotalTime / 1700;
   }
 
-  // setTotalTime(endTime: number) {
-  //   const TIME = endTime // / speed.value;
-  //   typeArea.value.durationTime = TIME;
-  // }
+  parseWord(data: MapData) {
+    let lyrics = data
+      .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
+      .join("\n")
+      .replace(/…/g, "...")
+      .replace(/‥/g, "..")
+      .replace(/･/g, "・")
+      .replace(/〜/g, "～")
+      .replace(/｢/g, "「")
+      .replace(/｣/g, "」")
+      .replace(/､/g, "、")
+      .replace(/｡/g, "。")
+      .replace(/　/g, " ")
+      .replace(/ {2,}/g, " ")
+      .replace(/ヴ/g, "ゔ")
+      .replace(/－/g, "ー");
 
-  getScorePerChar() {
-    const LINE_LEN = this.data.length;
+    const ROMA_MAP_LEN = ROMA_MAP.length;
 
-    for (let i = 0; i < LINE_LEN; i++) {
-      let romaLineNotes = 0;
-      let kanaLineNotes = 0;
-      let dakuHandakuLineNotes = 0;
-      let lineSpeed = 0;
-
-      //ワード結合
-      let kanaWord: string[] = [];
-      let romaWord: string[] = [];
-
-      if (this.data[i]["lyrics"] != "end" && this.typingWords[i][0]["k"]) {
-        if (this.startLine == 0) {
-          this.startLine = i;
-        }
-
-        this.lineLength++;
-        lineSpeed = +this.data[i + 1]["time"] - +this.data[i]["time"];
-
-        kanaWord = this.typingWords[i].map((item) => item.k);
-        romaWord = this.typingWords[i].map((item) => item.r[0]);
-        //かな入力
-        dakuHandakuLineNotes = (
-          kanaWord
-            .join("")
-            .match(
-              /[ゔ|が|ぎ|ぐ|げ|ご|ざ|じ|ず|ぜ|ぞ|だ|ぢ|づ|で|ど|ば|び|ぶ|べ|ぼ|ぱ|ぴ|ぷ|ぺ|ぽ]/g,
-            ) || []
-        ).length;
-        kanaLineNotes = kanaWord.join("").length;
-        this.kanaTotalNotes += kanaLineNotes + dakuHandakuLineNotes;
-
-        //ローマ字入力
-        romaLineNotes = romaWord.join("").length;
-        this.romaTotalNotes += romaLineNotes;
-      } else if (this.data[i]["lyrics"] == "end") {
-        this.romaMedianSpeed = this.median(this.romaLineSpeedList);
-        this.kanaMedianSpeed = this.median(this.kanaLineSpeedList);
-        this.romaMaxSpeed = Math.max(...this.romaLineSpeedList);
-        this.kanaMaxSpeed = Math.max(...this.kanaLineSpeedList);
-
-        this.scoreParChar = 100 / this.romaTotalNotes;
-        this.missPenalty = this.scoreParChar / 4;
-        this.movieTotalTime = +this.data[i].time;
-        this.totalTimeSSMM = this.formatTotalTime(this.movieTotalTime);
-        this.currentTimeBarFrequency = +this.data[i].time / 1700; //1700 = 更新頻度の閾値
-        // this.setTotalTime(this.movieTotalTime);
-
-        // status.value.lineCount = this.lineLength;
-        // result.value = new Result(LINE_LEN);
-        // if(movieSpeedController.fixedSpeed){
-        // 	movieSpeedController.speed = movieSpeedController.fixedSpeed
-        // 	movieSpeedController.playSpeed = movieSpeedController.fixedSpeed;
-        // }
-        break;
-      }
-
-      this.kanaLineNotesList.push(kanaLineNotes + dakuHandakuLineNotes);
-      this.romaLineNotesList.push(romaLineNotes);
-      this.romaLineSpeedList.push(
-        lineSpeed > 0 ? Math.round((romaLineNotes / lineSpeed) * 100) / 100 : 0,
-      );
-      this.kanaLineSpeedList.push(
-        lineSpeed > 0
-          ? Math.round(((kanaLineNotes + dakuHandakuLineNotes) / lineSpeed) * 100) / 100
-          : 0,
-      );
+    for (let i = 0; i < ROMA_MAP_LEN; i++) {
+      lyrics = lyrics.replace(RegExp(ROMA_MAP[i]["k"], "g"), "\t" + i + "\t");
     }
 
-    return;
+    const lyricsArray = lyrics.split("\n");
+
+    return lyricsArray;
   }
 
-  formatTotalTime(time: number): string {
-    const MM = ("00" + parseInt((time / 60).toString())).slice(-2);
-    const SS = ("00" + parseInt((time % 60).toString())).slice(-2);
+  calculateTotalNotes(typingWords: LineData[]) {
+    return typingWords.reduce(
+      (acc, line) => {
+        acc.k += line.notes.k;
+        acc.r += line.notes.r;
+        return acc;
+      },
+      { k: 0, r: 0 },
+    );
+  }
 
-    return `${MM}:${SS}`;
+  calculateSpeedDifficulty(typingWords: LineData[]) {
+    const romaSpeedList = typingWords.map((line) => line.kpm.r);
+    const kanaSpeedList = typingWords.map((line) => line.kpm.k);
+
+    const romaMedianSpeed = this.median(romaSpeedList);
+    const kanaMedianSpeed = this.median(kanaSpeedList);
+    const romaMaxSpeed = Math.max(...romaSpeedList);
+    const kanaMaxSpeed = Math.max(...kanaSpeedList);
+
+    return {
+      median: { r: romaMedianSpeed, k: kanaMedianSpeed },
+      max: { r: romaMaxSpeed, k: kanaMaxSpeed },
+    };
   }
 
   median(arr) {

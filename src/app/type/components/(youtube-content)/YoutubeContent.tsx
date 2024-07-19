@@ -40,27 +40,34 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   }, []);
 
   const handleEnd = useCallback(() => {
-    ytState.end(setScene);
+    ytState.end(setScene,refs.playerRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleStateChange = useCallback((event: any) => {
-    if (
-      document.activeElement instanceof HTMLIFrameElement &&
-      document.activeElement.tagName === "IFRAME"
-    ) {
-      document.activeElement.blur();
-    }
+  const handleStateChange = useCallback(
+    (event: any) => {
+      if (
+        document.activeElement instanceof HTMLIFrameElement &&
+        document.activeElement.tagName === "IFRAME"
+      ) {
+        document.activeElement.blur();
+      }
 
-    if (event.data === 3) {
-      // seek時の処理
-      ytState.seek(event.target, refs.statusRef, refs.gameStateRef.current!.isRetrySkip);
-    } else if (event.data === 1) {
-      //	未スタート、他の動画に切り替えた時など
-      console.log("未スタート -1");
-    }
+      if (event.data === 3) {
+        // seek時の処理
+        ytState.seek(event.target, refs.statusRef, refs.gameStateRef.current!.isRetrySkip);
+      } else if (event.data === 1) {
+        //	未スタート、他の動画に切り替えた時など
+        console.log("未スタート -1");
+
+        if (scene === "ready") {
+          event.target.seekTo(0);
+        }
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [scene],
+  );
 
   return (
     <YouTube

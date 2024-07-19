@@ -11,7 +11,7 @@ import { RankingListType, SendResultData } from "@/app/type/(ts)/type";
 import RankingTr from "./child/RankingTr";
 import RankingMenu from "./child/RankingMenu";
 import { useAtom } from "jotai";
-import { rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { rankingScoresAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 const RankingList = () => {
   const { id } = useParams();
@@ -20,6 +20,7 @@ const RankingList = () => {
   const [showMenu, setShowMenu] = useState<number | null>(null); // showMenuの状態をインデックスに変更
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [, setRankingScores] = useAtom(rankingScoresAtom);
+  const [scene] = useAtom(sceneAtom);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -45,9 +46,9 @@ const RankingList = () => {
   }, [showMenu]);
 
   const { data, error, isLoading } = useQuery<RankingListType[]>({
-    queryKey: ["userRanking", id, Number(session?.user?.id)],
+    queryKey: ["userRanking", id],
     queryFn: async ({ queryKey }) => {
-      const [_key, id, userId] = queryKey;
+      const [_key, id] = queryKey;
 
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`);
 
@@ -56,12 +57,6 @@ const RankingList = () => {
         (a: { status: { score: number } }, b: { status: { score: number } }) =>
           b.status.score - a.status.score,
       );
-
-      for (let i = 0; i < data.length; i++) {
-        if (userId === data[i].userId) {
-          bestScoreRef.current = data[i].status.score;
-        }
-      }
 
       return data;
     },
@@ -80,6 +75,18 @@ const RankingList = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    const userId = Number(session?.user?.id);
+
+    if (scene === "playing" && data) {
+      for (let i = 0; i < data.length; i++) {
+        if (userId === Number(data[i].userId)) {
+          bestScoreRef.current = data[i].status.score;
+        }
+      }
+    }
+  }, [scene, data]);
 
   if (isLoading)
     return (
@@ -113,6 +120,7 @@ const RankingList = () => {
                 score={user.status.score}
                 type={type}
                 kpm={user.status.kpm}
+                rkpm={user.status.rkpm}
                 handleShowMenu={handleShowMenu}
                 romaType={romaType}
                 kanaType={kanaType}

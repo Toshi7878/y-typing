@@ -81,9 +81,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       }
     },
     pressSkip: () => {
-      const nextLine = map!.data[statusRef.current!.status.count];
+      const nextLine = map!.typingWords[statusRef.current!.status.count];
       const skippedTime = gameStateRef.current!.isRetrySkip
-        ? Number(map!.data[map!.startLine]["time"])
+        ? Number(map!.typingWords[map!.startLine]["time"])
         : Number(nextLine["time"]);
 
       playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.realtimeSpeed));
@@ -117,12 +117,12 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (isTyped({ event, lineWord: cloneLineWord })) {
           const count = statusRef.current!.status.count;
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-          const prevLine = map!.data[count - 1];
+          const prevLine = map!.typingWords[count - 1];
           const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
           const status = tabStatusRef.current!.getStatus();
 
           if (result.successKey) {
-            const currentLine = map!.data[count];
+            const currentLine = map!.typingWords[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
 
             const success = new Success(
@@ -178,19 +178,13 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       ytStateRef.current!.currentTime = ytCurrentTime;
 
       const count = statusRef.current!.status.count;
-      const prevLine = map.data[count - 1];
-      const currentLine = map.data[count];
-      const nextLine = map.data[count + 1];
-      let lineTime: number;
+      const prevLine = map.typingWords[count - 1];
+      const currentLine = map.typingWords[count];
+      const nextLine = map.typingWords[count + 1];
       const remainTime = Number(currentLine.time) - Number(ytCurrentTime);
       const currentTotalTimeProgress = totalTimeProgressRef.current;
       const currentLineProgress = lineProgressRef.current;
-
-      if (prevLine && count) {
-        lineTime = ytCurrentTime - Number(prevLine["time"]);
-      } else {
-        lineTime = ytCurrentTime;
-      }
+      const lineTime = prevLine && count ? ytCurrentTime - Number(prevLine["time"]) : ytCurrentTime;
 
       currentLineProgress!.value = lineTime;
 
@@ -222,7 +216,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
         const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
-        if (isRetrySkip && Number(map.data[map.startLine]["time"]) - 1 <= ytCurrentTime) {
+        if (isRetrySkip && Number(map.typingWords[map.startLine]["time"]) - 1 <= ytCurrentTime) {
           gameStateRef.current!.isRetrySkip = false;
         }
 
@@ -276,7 +270,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (lineWord.nextChar["k"]) {
           statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
         }
-        statusRef.current!.status.totalLatency = statusRef.current!.lineStatus.latency;
+        statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
 
         statusRef.current!.status.count += 1;
         statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
@@ -284,20 +278,20 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         statusRef.current!.lineStatus.latency = 0;
         currentPlayingCenterRef!.setLineWord({
           correct: { k: "", r: "" },
-          nextChar: [...map.typingWords[count]][0],
-          word: [...map.typingWords[count]].slice(1),
+          nextChar: [...map.typingWords[count].word][0],
+          word: [...map.typingWords[count].word].slice(1),
         });
 
         currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
 
         const nextKpm =
           inputMode === "roma"
-            ? map.romaLineSpeedList[count + 1]
-            : map.kanaLineSpeedList[count + 1];
+            ? map.typingWords[count + 1].kpm["r"]
+            : map.typingWords[count + 1].kpm["k"];
         if (nextKpm) {
           currentPlayingCenterRef!.setNextLyrics({
             lyrics: nextLine["lyrics"],
-            kpm: (nextKpm * 60).toFixed(0),
+            kpm: nextKpm.toFixed(0),
           });
         } else {
           currentPlayingCenterRef!.setNextLyrics({

@@ -10,24 +10,24 @@ import {
 } from "@chakra-ui/react";
 
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
-import { useSession } from "next-auth/react";
 import { StatusRef } from "@/app/type/(ts)/type";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useAtom } from "jotai";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { ticker } from "../Playing";
 
-const EndRetryButton = () => {
+interface EndRetryButtonProps {
+  isRetryAlert: boolean;
+}
+const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
-  const { data: session } = useSession();
-  const { bestScoreRef, statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } =
-    useRefs();
-  const status = tabStatusRef.current!.getStatus();
+  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const [, setScene] = useAtom(sceneAtom);
 
   const retry = () => {
-    if (session && status.score > bestScoreRef.current) {
+    if (isRetryAlert) {
       onOpen();
     } else {
       proceedRetry();

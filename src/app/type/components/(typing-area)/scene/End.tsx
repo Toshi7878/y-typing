@@ -96,6 +96,9 @@ const End = () => {
     handleStateChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  const isDisplayRankingButton =
+    session && status.score > 0 && status.score >= bestScoreRef.current;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -123,9 +126,7 @@ const End = () => {
               )}
             </Box>
             <HStack justifyContent="space-around">
-              {session && status.score > 0 && status.score >= bestScoreRef.current && (
-                <EndUploadButton responseStatus={state.status} />
-              )}
+              {isDisplayRankingButton && <EndUploadButton responseStatus={state.status} />}
               <Button
                 className="cursor-pointer"
                 variant="solid"
@@ -154,7 +155,9 @@ const End = () => {
               </Button>
             </HStack>
             <Box display="flex" justifyContent="flex-end" mx="12" mt="12">
-              <EndRetryButton />
+              <EndRetryButton
+                isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
+              />
             </Box>
           </Stack>
         </form>

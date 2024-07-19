@@ -29,7 +29,16 @@ model Map {
   creatorId        Int
   mapData          Json
   previewTime      String @default("0")
-  difficulty       String @default("0.0")
+  romaKpmMedian    Int @default(0)
+  romaKpmMax       Int @default(0)
+  kanaKpmMedian    Int @default(0)
+  kanaKpmMax       Int @default(0)
+  totalTime        Float @default(0)
+  romaTotalNotes   Int @default(0)
+  kanaTotalNotes   Int @default(0)
+  playCount        Int @default(0)
+  likeCount        Int @default(0)
+  rankingCount     Int @default(0)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now()) @updatedAt
   mapDataUpdatedAt DateTime @default(now()) @updatedAt

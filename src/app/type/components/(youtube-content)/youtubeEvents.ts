@@ -26,20 +26,23 @@ class YTState {
     }
   }
 
-  end(setScene: React.Dispatch<React.SetStateAction<SceneType>>) {
+  end(setScene: React.Dispatch<React.SetStateAction<SceneType>>, playerRef: React.RefObject<any>) {
     console.log("プレイ終了");
     setScene("end");
 
     if (ticker.started) {
       ticker.stop();
     }
+
+    playerRef.current.seekTo(0);
+    playerRef.current.stopVideo();
   }
 
   stop() {
     console.log("動画停止");
-    if (ticker.started) {
-      ticker.stop();
-    }
+    // if (ticker.started) {
+    //   ticker.stop();
+    // }
   }
 
   pause(

@@ -3,6 +3,19 @@ import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 export type InputModeType = "roma" | "kana" | "flick";
 export type SceneType = "ready" | "playing" | "end";
 
+export type MapData = { time: string; lyrics: string; word: string; option?: string }[];
+export type TypeChank = { k: string; r: string[]; p: number };
+
+export type SpeedDifficulty = { median: { r: number; k: number }; max: { r: number; k: number } };
+
+export interface LineData {
+  time: string; //後でここは配列に変更する;
+  word: TypeChank[];
+  lyrics: string; //後でここは配列に変更する;
+  kpm: { k: number; r: number };
+  notes: { k: number; r: number };
+}
+
 export interface RankingListType {
   userId: string;
   user: { name: string };
@@ -12,6 +25,7 @@ export interface RankingListType {
     kanaType: number;
     flickType: number;
     kpm: number;
+    rkpm: number;
     miss: number;
     lost: number;
     maxCombo: number;
@@ -28,8 +42,8 @@ export interface PlayingRef {
 
 export interface WordType {
   correct: { k: string; r: string };
-  nextChar: { k: string; r: string[]; p: number };
-  word: { k: string; r: string[]; p: number }[];
+  nextChar: TypeChank;
+  word: TypeChank[];
   kanaDakuten?: string;
 }
 

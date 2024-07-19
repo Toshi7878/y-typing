@@ -10,6 +10,7 @@ interface RankingTrProps {
   score: number;
   type: number;
   kpm: number;
+  rkpm: number;
   handleShowMenu: () => void;
   romaType: number;
   kanaType: number;
@@ -56,6 +57,7 @@ const RankingTr = (props: RankingTrProps) => {
           <div>ミス数: {props.miss}</div>
           <div>ロスト数: {props.lost}</div>
           <div>最大コンボ: {props.maxCombo}</div>
+          <div>rkpm: {props.rkpm}</div>
           {props.playSpeed > 1 && <div>倍速: {props.playSpeed.toFixed(2)}</div>}
           <div>
             登録日時:{" "}

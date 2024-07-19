@@ -15,11 +15,11 @@ export const mapSendSchema = z.object({
     .refine(
       (lines) =>
         !lines.some((line) =>
-          Object.values(line).some((value) => typeof value === "string" && value.includes("http"))
+          Object.values(line).some((value) => typeof value === "string" && value.includes("http")),
         ),
       {
         message: "譜面データにはhttpから始まる文字を含めることはできません",
-      }
+      },
     )
     .refine((lines) => lines.some((line) => line.word && line.word.length > 0), {
       message: "タイピングワードが設定されていません",
@@ -37,12 +37,12 @@ export const mapSendSchema = z.object({
       (lines) => {
         const endAfterLineIndex = lines.findIndex((line) => line.lyrics === "end");
         return lines.every((line, index) =>
-          endAfterLineIndex < index ? line.lyrics === "end" : true
+          endAfterLineIndex < index ? line.lyrics === "end" : true,
         );
       },
       {
         message: "endの後に無効な行があります",
-      }
+      },
     ),
   videoId: z.string(),
 });

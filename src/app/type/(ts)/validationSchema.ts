@@ -9,6 +9,7 @@ export const statusSchema = z.object({
   lost: z.number(),
   maxCombo: z.number(),
   kpm: z.number(),
+  rkpm: z.number(),
   playSpeed: z.number(),
 });
 

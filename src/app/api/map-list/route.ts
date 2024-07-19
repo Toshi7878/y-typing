@@ -14,7 +14,6 @@ export async function GET(request: Request) {
         videoId: true,
         updatedAt: true,
         previewTime: true,
-        difficulty: true,
         user: {
           select: {
             id: true,

@@ -22,6 +22,14 @@ export interface SendData {
   tags: string[];
   mapData: Line[];
   videoId: string;
+  previewTime: string;
+  romaKpmMedian: number;
+  romaKpmMax: number;
+  kanaKpmMedian: number;
+  kanaKpmMax: number;
+  totalTime: number;
+  romaTotalNotes: number;
+  kanaTotalNotes: number;
 }
 
 const TabInfoUpload = forwardRef((props, ref) => {
@@ -44,7 +52,13 @@ const TabInfoUpload = forwardRef((props, ref) => {
       mapData,
       tags: tags.map((tag) => tag.id),
       previewTime: mapData[map.startLine]["time"],
-      difficulty: map.romaMedianSpeed.toFixed(1),
+      romaKpmMedian: map.speedDifficulty.median.r,
+      romaKpmMax: map.speedDifficulty.max.r,
+      kanaKpmMedian: map.speedDifficulty.median.r,
+      kanaKpmMax: map.speedDifficulty.max.r,
+      totalTime: map.movieTotalTime,
+      romaTotalNotes: map.totalNotes.r,
+      kanaTotalNotes: map.totalNotes.k,
     };
 
     const result = actions(sendData, Array.isArray(id) ? id[0] : id || "new");
