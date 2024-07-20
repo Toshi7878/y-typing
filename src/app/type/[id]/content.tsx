@@ -82,7 +82,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     >
       <Box style={style}>
         <Flex direction="column">
-          <Flex gap="4">
+          <Flex gap="6">
             <Box className="">
               <YouTubeContent
                 className={` w-[600px] ${isLoading ? "invisible" : ""} aspect-video`}
@@ -93,7 +93,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
               <TabContent />
             </Box>
           </Flex>
-          <Box className=" mt-6">
+          <Box className=" mt-5">
             <SceneWrapper />
           </Box>
         </Flex>
