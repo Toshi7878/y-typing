@@ -38,9 +38,8 @@ export class LineResult {
 
     newStatus.timeBonus = 0;
 
-    newStatus.kpm = totalTypeSpeed;
-
     if (lineWord.nextChar["k"]) {
+      newStatus.kpm = totalTypeSpeed;
       statusRef.current!.status.failureCount++;
       newStatus.line =
         map.lineLength -
