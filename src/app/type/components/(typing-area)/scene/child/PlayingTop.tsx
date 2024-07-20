@@ -18,7 +18,7 @@ function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) 
   const playingComboRef = useRef(null);
 
   return (
-    <Box mx="4">
+    <Box mx="6">
       <HStack
         justify="space-between"
         className={`mx-1 font-bold mt-3 mb-1 font-mono ${scene !== "playing" ? "invisible" : ""}`}

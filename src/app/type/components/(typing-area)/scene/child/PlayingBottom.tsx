@@ -19,20 +19,17 @@ const PlayingBottom = function ({
   playingTotalTimeRef,
 }: PlayingBottomRef) {
   const { playingRef } = useRefs();
-   const [scene] = useAtom(sceneAtom);
+  const [scene] = useAtom(sceneAtom);
   const [speedData] = useAtom(speedAtom);
 
   return (
-    <Box mx="4">
+    <Box mx="6">
       <HStack
         justify="space-between"
         className={`mx-1 font-bold ${scene !== "playing" ? "invisible" : ""}`}
       >
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
-        <PlayingTotalTime
-           className="text-2xl font-mono"
-          ref={playingTotalTimeRef}
-        />
+        <PlayingTotalTime className="text-2xl font-mono" ref={playingTotalTimeRef} />
       </HStack>
       <PlayingLineProgress ref={totalTimeProgressRef} />
       <HStack

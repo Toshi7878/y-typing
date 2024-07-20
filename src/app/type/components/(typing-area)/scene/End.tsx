@@ -20,7 +20,7 @@ const End = () => {
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef, tabStatusRef, statusKpmValueRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const playingTotalTimeRef = useRef(null);
@@ -43,7 +43,7 @@ const End = () => {
       lost: status.lost,
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
-      kpm: statusKpmValueRef.current!.getKpm(),
+      kpm: status.kpm,
       playSpeed: speedData.playSpeed,
     };
     const sendData = {
@@ -105,7 +105,7 @@ const End = () => {
       <Box flex="1" className="text-center mx-6">
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
-            <Box textAlign="left" className="text-2xl" mx={2}>
+            <Box textAlign="left" className="text-3xl" mx={2}>
               {!session ? (
                 <>
                   スコアは{status.score}
@@ -125,7 +125,7 @@ const End = () => {
                 </>
               )}
             </Box>
-            <Box textAlign="left" className="text-2xl" mx={2}>
+            <Box textAlign="left" className="text-3xl" mx={2}>
               {speedData.playSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
             </Box>
             <HStack justifyContent="space-around">

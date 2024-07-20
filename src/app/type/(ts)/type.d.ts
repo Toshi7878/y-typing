@@ -59,6 +59,7 @@ export interface Status {
   timeBonus: number;
   type: number;
   miss: number;
+  kpm: number;
   lost: number;
   rank: number;
   line: number;

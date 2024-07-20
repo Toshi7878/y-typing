@@ -14,7 +14,6 @@ import { StatusRef } from "@/app/type/(ts)/type";
 import { useRef } from "react";
 import { useAtom } from "jotai";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { ticker } from "../Playing";
 
 interface EndRetryButtonProps {
   isRetryAlert: boolean;
@@ -23,7 +22,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
-  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef, statusKpmValueRef } =
+  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } =
     useRefs();
   const [, setScene] = useAtom(sceneAtom);
 
@@ -40,7 +39,6 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
     (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
     tabStatusRef.current!.resetStatus();
     playingComboRef.current!.setCombo(0);
-    statusKpmValueRef.current!.setKpm(0);
 
     gameStateRef.current!.isRetrySkip = true;
     playerRef.current.seekTo(0);

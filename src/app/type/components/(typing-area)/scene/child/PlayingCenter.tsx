@@ -49,9 +49,9 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   }));
 
   return (
-    <VStack p="2" className="truncate cursor-none" display="" flex={flex}>
+    <VStack mx="4" py="2" className="truncate cursor-none" display="" flex={flex}>
       <Box
-        className="word-font outline-text text-white font-bold ml-3 mb-2 mt-1"
+        className="word-font outline-text text-white ml-3 mb-2 mt-1 text-[2.75rem]"
         style={{ letterSpacing: "0.1em" }}
       >
         <Word
@@ -59,7 +59,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["k"].slice(-10).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["k"]}
           word={lineWord.word.map((w) => w["k"]).join("")}
-          className="lowercase text-[2.5rem]"
+          className="lowercase"
         />
 
         <Word
@@ -67,13 +67,13 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className={`uppercase ml-1 text-[2.5rem] ${inputMode === "kana" ? "invisible" : ""}`}
+          className={`uppercase ml-1 ${inputMode === "kana" ? "invisible" : ""}`}
         />
       </Box>
 
       <Lyrics
         lyrics={lyrics}
-        className="-indent-2 mb-4 font-bold text-[2.5rem] text-truncate lyrics-font"
+        className="-indent-2 mb-4 font-bold text-[2.75rem] text-truncate lyrics-font"
       />
 
       <NextLyrics

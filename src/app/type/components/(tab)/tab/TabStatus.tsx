@@ -1,11 +1,4 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import {
   Table,
@@ -28,7 +21,6 @@ import StatusValue from "./child/child/StatusValue";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { Status } from "@/app/type/(ts)/type";
 import PointStatusValue from "./child/child/StatusPointValue";
-import StatusKpmValue from "./child/child/StatusKpmValue";
 
 export interface TabStatusRef {
   getStatus: () => Status;
@@ -45,7 +37,6 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const [rankingScores] = useAtom(rankingScoresAtom);
 
   const { setRef } = useRefs();
-  const statusKpmValueRef = useRef(null);
 
   const defaultStatus: Status = {
     score: 0,
@@ -54,6 +45,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
     type: 0,
     miss: 0,
     lost: 0,
+    kpm: 0,
     rank: rankingScores.length + 1,
     line: map ? map.lineLength : 0,
   };
@@ -143,7 +135,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
             className="table-fixed overflow-hidden"
             overflowY="auto"
           >
-            <Tbody className="font-bold text-2xl 2xl:text-4xl font-mono">
+            <Tbody className="font-bold text-2xl 2xl:text-[1.9rem] font-mono">
               {/* 1段目 */}
 
               <TrStyled isMdOrSmaller={isMdOrSmaller}>
@@ -153,11 +145,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        {label === "kpm" ? (
-                          <StatusKpmValue ref={statusKpmValueRef} />
-                        ) : (
-                          <StatusValue value={status[label]} />
-                        )}
+                        <StatusValue value={status[label]} />
                       </UnderlinedSpan>
                     </TdStyled>
                   );

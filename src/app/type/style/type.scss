@@ -12,20 +12,7 @@
 }
 
 .lyrics-font {
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    "Noto Sans",
-    "Liberation Sans",
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
+  font-family: "Nunito", "system-ui", sans-serif;
 }
 
 progress {
@@ -39,29 +26,25 @@ progress::-webkit-progress-bar {
   background: #375a7f52;
 }
 
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 progress::-webkit-progress-value {
   background: #4d97e6;
   border-radius: 5px;
 }
-
 .outline-text {
   text-shadow:
-    black 0.6px 0px,
-    black -0.6px 0px,
-    black 0px -0.6px,
-    black 0px 0.6px,
-    black 0.6px 0.6px,
-    black -0.6px 0.6px,
-    black 0.6px -0.6px,
-    black -0.6px -0.6px,
-    black 1px 0.6px,
-    black -1px 0.6px,
-    black 1px -0.6px,
-    black -1px -0.6px,
-    black 0.6px 1px,
-    black -0.6px 1px,
-    black 0.6px -1px,
-    black -0.6px -1px;
+    1px 1px 1px #000000,
+    -1px 1px 1px #000000,
+    1px -1px 1px #000000,
+    -1px -1px 1px #000000,
+    1px 0px 1px #000000,
+    0px 1px 1px #000000,
+    -1px 0px 1px #000000,
+    0px -1px 1px #000000;
 }
 
 .word-font {
@@ -70,4 +53,5 @@ progress::-webkit-progress-value {
     "Yu Gothic",
     "YuGothic",
     sans-serif;
+  font-weight: 600;
 }

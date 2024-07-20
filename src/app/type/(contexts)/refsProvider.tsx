@@ -3,7 +3,6 @@ import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
-import { StatusKpmValueRef } from "../components/(tab)/tab/child/child/StatusKpmValue";
 
 export const defaultStatusRef: StatusRef = {
   status: {
@@ -35,7 +34,6 @@ export interface RefsContextType {
   tabStatusRef: React.RefObject<TabStatusRef>;
   playingRef: React.RefObject<PlayingRef>;
   playingComboRef: React.RefObject<PlayingComboRef>;
-  statusKpmValueRef: React.RefObject<StatusKpmValueRef>;
   lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
   statusRef: React.RefObject<StatusRef>;
@@ -49,7 +47,6 @@ const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
   playingComboRef: { current: null },
-  statusKpmValueRef: { current: null },
   playingRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
@@ -64,7 +61,6 @@ export const RefsProvider = ({ children }) => {
   const tabStatusRef = useRef(null);
   const playingRef = useRef(null);
   const playingComboRef = useRef(null);
-  const statusKpmValueRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
   const statusRef = useRef<StatusRef>(structuredClone(defaultStatusRef));
@@ -85,9 +81,7 @@ export const RefsProvider = ({ children }) => {
       case "playingComboRef":
         playingComboRef.current = ref;
         break;
-      case "statusKpmValueRef":
-        statusKpmValueRef.current = ref;
-        break;
+
     }
   };
 
@@ -99,7 +93,6 @@ export const RefsProvider = ({ children }) => {
         statusRef,
         playingRef,
         playingComboRef,
-        statusKpmValueRef,
         bestScoreRef,
         tabStatusRef,
         lineCountRef,
@@ -120,7 +113,6 @@ export const useRefs = () => {
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
     playingComboRef: context.playingComboRef,
-    statusKpmValueRef: context.statusKpmValueRef,
     playingRef: context.playingRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,
