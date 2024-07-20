@@ -45,9 +45,11 @@ class Convert {
       const time = jsonMap[i][0] === "0" ? "0.001" : jsonMap[i][0];
       const word = jsonMap[i][2];
 
-      if (lyrics !== "end") {
-        result.push({ time, lyrics, word });
+      if ((time === "0" && word === "" && lyrics === "") || lyrics === "end") {
+        continue;
       }
+
+      result.push({ time, lyrics, word });
     }
 
     result.push(mapData[mapData.length - 1]);

@@ -23,10 +23,10 @@ const PlayingBottom = function ({
   const [speedData] = useAtom(speedAtom);
 
   return (
-    <Box mx="6">
+    <Box mx="8">
       <HStack
         justify="space-between"
-        className={`mx-1 font-bold ${scene !== "playing" ? "invisible" : ""}`}
+        className={`mx-2 font-bold ${scene !== "playing" ? "invisible" : ""}`}
       >
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
         <PlayingTotalTime className="text-2xl font-mono" ref={playingTotalTimeRef} />
