@@ -20,7 +20,7 @@ const End = () => {
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef, statusKpmValueRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const playingTotalTimeRef = useRef(null);
@@ -43,7 +43,7 @@ const End = () => {
       lost: status.lost,
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
-      kpm: status.kpm,
+      kpm: statusKpmValueRef.current!.getKpm(),
       playSpeed: speedData.playSpeed,
     };
     const sendData = {
@@ -98,7 +98,7 @@ const End = () => {
   }, [state]);
 
   const isDisplayRankingButton =
-    session && status.score > 0 && status.score >= bestScoreRef.current;
+    session && status.score > 0 && status.score >= bestScoreRef.current && speedData.playSpeed >= 1;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -124,6 +124,9 @@ const End = () => {
                   {bestScoreRef.current - status.score}です。
                 </>
               )}
+            </Box>
+            <Box textAlign="left" className="text-2xl" mx={2}>
+              {speedData.playSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
             </Box>
             <HStack justifyContent="space-around">
               {isDisplayRankingButton && <EndUploadButton responseStatus={state.status} />}

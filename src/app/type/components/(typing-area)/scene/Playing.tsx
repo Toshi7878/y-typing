@@ -44,6 +44,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const {
     playerRef,
     playingComboRef,
+    statusKpmValueRef,
     tabStatusRef,
     playingRef,
     statusRef,
@@ -72,6 +73,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       tabStatusRef.current!.resetStatus();
+      statusKpmValueRef.current!.setKpm(0);
       playingComboRef.current?.setCombo(0);
       setNotify("Retry");
       gameStateRef.current!.isRetrySkip = true;
@@ -149,6 +151,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             );
 
             tabStatusRef.current!.setStatus(success.newStatus);
+            statusKpmValueRef.current!.setKpm(success.totalTypeSpeed);
             playingCenterRef.current!.setLineWord(result.newLineWord);
             playingLineTimeRef.current?.setLineKpm(success.lineTypeSpeed);
             if (!result.newLineWord.nextChar["k"]) {
@@ -217,10 +220,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (lineWord.nextChar["k"]) {
           const typeSpeed = new CalcTypeSpeed(status!, lineTime, statusRef);
           playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
-          tabStatusRef.current!.setStatus({
-            ...status!,
-            kpm: typeSpeed.totalTypeSpeed,
-          });
+          statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
         }
 
         const isRetrySkip = gameStateRef.current!.isRetrySkip;
@@ -257,7 +257,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           lineWord,
           map,
           lineTime,
-          typeSpeed.totalTypeSpeed,
           rankingScores,
         );
 
@@ -275,6 +274,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           },
           typeResult: statusRef.current!.lineStatus.typeResult,
         });
+        // statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
         tabStatusRef.current!.setStatus(lineResult.newStatus);
         if (lineWord.nextChar["k"]) {
           statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
@@ -347,6 +347,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         tabStatusRef.current!.resetStatus();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        statusKpmValueRef.current!.setKpm(0);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
       }

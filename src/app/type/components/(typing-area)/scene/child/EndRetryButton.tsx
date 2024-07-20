@@ -23,7 +23,8 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
-  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
+  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef, statusKpmValueRef } =
+    useRefs();
   const [, setScene] = useAtom(sceneAtom);
 
   const retry = () => {
@@ -39,6 +40,8 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
     (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
     tabStatusRef.current!.resetStatus();
     playingComboRef.current!.setCombo(0);
+    statusKpmValueRef.current!.setKpm(0);
+
     gameStateRef.current!.isRetrySkip = true;
     playerRef.current.seekTo(0);
     playerRef.current.playVideo();

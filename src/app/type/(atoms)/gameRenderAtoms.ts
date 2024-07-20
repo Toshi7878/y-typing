@@ -11,6 +11,7 @@ export const inputModeAtom = atom<InputModeType>("roma");
 export const playingNotifyAtom = atom<string>("");
 export const mapIdAtom = atom<number>(0);
 export const rankingScoresAtom = atom<number[]>([]);
+export const kpmAtom = atom<number>(0);
 
 export const speedAtom = atom<Speed>({
   playSpeed: 1,

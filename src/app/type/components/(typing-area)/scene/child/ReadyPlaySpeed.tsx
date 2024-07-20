@@ -18,6 +18,10 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
       label="低速プレイではランキング登録できません"
       placement="right"
       isOpen={speedData.playSpeed < 1 && true}
+      color="white" // テキスト色を白に変更
+      p={4} // パディングを追加
+      borderRadius="md" // 角を丸く
+      boxShadow="lg" // シャドウを追加
     >
       <HStack
         style={{ border: "1px solid black" }}

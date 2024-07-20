@@ -12,7 +12,6 @@ export class LineResult {
     lineWord: WordType,
     map: CreateMap,
     lineTime: number,
-    totalTypeSpeed: number,
     rankingScores: number[],
   ) {
     this.newStatus = this.updateStatus(
@@ -20,7 +19,6 @@ export class LineResult {
       statusRef,
       lineWord,
       map,
-      totalTypeSpeed,
       rankingScores,
     );
     this.newTotalTime = this.updateTotalTypeTime(lineTime, statusRef.current!.status.totalTypeTime);
@@ -31,7 +29,6 @@ export class LineResult {
     statusRef: React.RefObject<StatusRef>,
     lineWord: WordType,
     map: CreateMap,
-    totalTypeSpeed: number,
     rankingScores: number[],
   ) {
     const newStatus = { ...status };
@@ -46,7 +43,6 @@ export class LineResult {
       const lostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       newStatus.lost += lostWord.length;
       newStatus.score += newStatus.point;
-      newStatus.kpm = totalTypeSpeed;
       newStatus.rank = this.getRank(rankingScores, newStatus.score);
     }
 

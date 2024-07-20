@@ -13,6 +13,7 @@ import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/Play
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
+import { StatusKpmValueRef } from "../components/(tab)/tab/child/child/StatusKpmValue";
 
 const keyboardCharacters = [
   "0",
@@ -519,6 +520,7 @@ export class Success extends CalcTypeSpeed {
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
+
     inputMode: InputModeType,
     updatePoint: number,
     newLineWord: WordType,
@@ -534,7 +536,6 @@ export class Success extends CalcTypeSpeed {
     statusRef.current!.lineStatus.lineType++;
     statusRef.current!.status.missCombo = 0;
     newStatus.point += updatePoint;
-    newStatus.kpm = this.totalTypeSpeed;
 
     const newCombo = playingComboRef.current!.getCombo() + 1;
 

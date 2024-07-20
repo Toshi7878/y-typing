@@ -61,7 +61,6 @@ export interface Status {
   miss: number;
   lost: number;
   rank: number;
-  kpm: number;
   line: number;
 }
 

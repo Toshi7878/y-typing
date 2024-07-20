@@ -1,4 +1,11 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   Table,
@@ -17,10 +24,11 @@ import { mapAtom, rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
 import styled from "@emotion/styled";
-import StatusValue from "./child/StatusValue";
+import StatusValue from "./child/child/StatusValue";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { Status } from "@/app/type/(ts)/type";
-import PointStatusValue from "./child/PointStatusValue";
+import PointStatusValue from "./child/child/StatusPointValue";
+import StatusKpmValue from "./child/child/StatusKpmValue";
 
 export interface TabStatusRef {
   getStatus: () => Status;
@@ -36,7 +44,8 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const [map] = useAtom(mapAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
 
-  const { playingComboRef } = useRefs();
+  const { setRef } = useRefs();
+  const statusKpmValueRef = useRef(null);
 
   const defaultStatus: Status = {
     score: 0,
@@ -46,13 +55,11 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
     miss: 0,
     lost: 0,
     rank: rankingScores.length + 1,
-    kpm: 0,
     line: map ? map.lineLength : 0,
   };
 
   const [status, setStatus] = useState(defaultStatus);
   const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
-  const { setRef } = useRefs();
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -126,8 +133,6 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   `;
   const TdStyled = styled(Td)<{ isCentered: boolean }>``;
 
-  const combo = playingComboRef.current!.getCombo();
-
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody>
@@ -148,7 +153,11 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
                       <Label className="label">{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
-                        <StatusValue value={status[label]} />
+                        {label === "kpm" ? (
+                          <StatusKpmValue ref={statusKpmValueRef} />
+                        ) : (
+                          <StatusValue value={status[label]} />
+                        )}
                       </UnderlinedSpan>
                     </TdStyled>
                   );
