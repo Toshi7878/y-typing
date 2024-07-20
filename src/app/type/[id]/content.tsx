@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import { mapAtom, mapIdAtom, rankingScoresAtom, sceneAtom } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
+import { useRefs } from "../(contexts)/refsProvider";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -31,6 +32,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setScene] = useAtom(sceneAtom);
   const [, setMapId] = useAtom(mapIdAtom);
   const [, setRankingScores] = useAtom(rankingScoresAtom);
+  const { statusKpmValueRef } = useRefs();
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -62,6 +64,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
       setRankingScores([]);
+      statusKpmValueRef.current?.setKpm(0);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, queryClient]);

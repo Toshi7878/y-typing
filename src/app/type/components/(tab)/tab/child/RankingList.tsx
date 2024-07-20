@@ -86,6 +86,7 @@ const RankingList = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene, data]);
 
   if (isLoading)

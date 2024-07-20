@@ -4,9 +4,8 @@ import End from "./scene/End";
 import { useAtom } from "jotai";
 import { mapAtom, sceneAtom, tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
-import { Box, Card } from "@chakra-ui/react";
-import { TabStatusRef } from "../(tab)/tab/TabStatus";
-import { LineResultObj, PlayingRef } from "../../(ts)/type";
+import { Card } from "@chakra-ui/react";
+import { PlayingRef } from "../../(ts)/type";
 
 export const Scene = () => {
   const [scene] = useAtom(sceneAtom);

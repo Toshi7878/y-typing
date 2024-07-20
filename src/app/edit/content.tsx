@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import editStore, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
@@ -31,7 +31,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const dispatch = useDispatch();
   const { id } = useParams();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
-
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {
