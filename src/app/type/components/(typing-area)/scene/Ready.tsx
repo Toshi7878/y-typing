@@ -16,11 +16,28 @@ function Ready() {
   const skipGuideRef = useRef(null);
   const playingTotalTimeRef = useRef(null);
   const { playerRef } = useRefs();
+  const speedUpButtonRef = useRef<HTMLButtonElement>(null);
+  const speedDownButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Enter" && playerRef.current) {
-        playerRef.current.playVideo();
+      switch (event.code) {
+        case "Enter":
+          if (playerRef.current) {
+            playerRef.current.playVideo();
+          }
+          event.preventDefault();
+          break;
+        case "F9":
+          speedDownButtonRef.current?.click();
+          event.preventDefault();
+
+          break;
+        case "F10":
+          speedUpButtonRef.current?.click();
+          event.preventDefault();
+
+          break;
       }
     };
 
@@ -42,7 +59,10 @@ function Ready() {
           <ReadyInputModeRadioCards />
         </Flex>
         <Flex className=" text-center mt-10" justifyContent="space-between">
-          <ReadyPlaySpeed />
+          <ReadyPlaySpeed
+            speedUpButtonRef={speedUpButtonRef}
+            speedDownButtonRef={speedDownButtonRef}
+          />
           <ReadyPracticeButton />
         </Flex>
       </Box>

@@ -13,7 +13,6 @@ import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/Play
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
-import { normalize } from "path";
 
 const keyboardCharacters = [
   "0",
@@ -629,38 +628,76 @@ export function isTyped({ event, lineWord }: TypingEvent) {
   return IS_TYPE && HAS_FOCUS && KANA;
 }
 
+const disableKeys = [
+  "Home",
+  "End",
+  "PageUp",
+  "PageDown",
+  "CapsLock",
+  "Backquote",
+  "Tab",
+  "F3",
+  "Backspace",
+];
+
 export function shortcutKey(
   event: KeyboardEvent,
   skipGuideRef: React.RefObject<SkipGuideRef>,
   playingRef: React.RefObject<PlayingRef>,
+  inputMode: InputModeType,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
+
+  if (disableKeys.includes(event.code)) {
+    event.preventDefault();
+    return;
+  }
 
   switch (event.code) {
     case "Escape": //Escでポーズ
       playingRef.current!.gamePause();
       event.preventDefault();
       break;
+    case "ArrowUp":
+      event.preventDefault();
+      break;
     case "ArrowDown":
       event.preventDefault();
-
       break;
-
+    case "ArrowRight":
+      event.preventDefault();
+      break;
+    case "ArrowLeft":
+      event.preventDefault();
+      break;
     case skip:
       playingRef.current!.pressSkip();
       event.preventDefault();
-
       break;
-
     case "F4":
       playingRef.current!.retry();
       event.preventDefault();
-
       break;
-
+    case "F7": //F7で練習モードに切り替え
+      event.preventDefault();
+      break;
+    case "F9": //F9で低速(練習モード)
+      event.preventDefault();
+      break;
     case "F10":
       playingRef.current!.realtimeSpeedChange();
+      event.preventDefault();
+      break;
+    case "KanaMode":
+    case "Romaji":
+      if (inputMode === "roma" || inputMode === "kana") {
+        playingRef.current!.inputModeChange(inputMode);
+      }
+      event.preventDefault();
+      break;
+    case "Backspace":
+      event.preventDefault();
       break;
   }
 }

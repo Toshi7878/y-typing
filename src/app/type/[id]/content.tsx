@@ -38,11 +38,15 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     queryFn: async () => {
       setMapId(Number(id));
 
+      if (id === "9") {
+        setMap(new CreateMap(testMap));
+        return;
+      }
+
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      const map = new CreateMap(data.mapData);
-      setMap(map);
-      return map;
+      setMap(new CreateMap(data.mapData));
+      return;
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
@@ -97,5 +101,293 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     </main>
   );
 }
+
+const testMap = [
+  {
+    time: "0",
+    word: "",
+    lyrics: "",
+  },
+  {
+    time: "31.135",
+    word: "まよって",
+    lyrics: "迷って",
+  },
+  {
+    time: "33.739",
+    word: "まよって",
+    lyrics: "迷って",
+  },
+  {
+    time: "35.721",
+    word: "らびりんす",
+    lyrics: "ラビリンス",
+  },
+  {
+    time: "39.666",
+    word: "どきどき",
+    lyrics: "ドキドキ",
+  },
+  {
+    time: "41.527",
+    word: "こまって",
+    lyrics: "困って",
+  },
+  {
+    time: "44.231",
+    word: "こまって",
+    lyrics: "困って",
+  },
+  {
+    time: "46.225",
+    word: "こまーしゃる",
+    lyrics: "コマーシャル",
+  },
+  {
+    time: "50.138",
+    word: "そういえば",
+    lyrics: "そういえば",
+  },
+  {
+    time: "53.461",
+    word: "なつのおわりは",
+    lyrics: "夏の終わりは",
+  },
+  {
+    time: "56.297",
+    word: "あまいきゃんでぃーだった",
+    lyrics: "甘いキャンディーだった",
+  },
+  {
+    time: "60.744",
+    word: "",
+    lyrics: " ",
+  },
+  {
+    time: "63.887",
+    word: "なつのおわりに",
+    lyrics: "夏の終わりに",
+  },
+  {
+    time: "66.755",
+    word: "わたしこいをした",
+    lyrics: "わたし恋をした",
+  },
+  {
+    time: "71.597",
+    word: "",
+    lyrics: " ",
+  },
+  {
+    time: "73.337",
+    word: "きかせて",
+    lyrics: "聞かせて",
+  },
+  {
+    time: "75.908",
+    word: "きかせて",
+    lyrics: "聞かせて",
+  },
+  {
+    time: "77.949",
+    word: "えぴそーど",
+    lyrics: "エピソード",
+  },
+  {
+    time: "81.731",
+    word: "わくわく",
+    lyrics: "ワクワク",
+  },
+  {
+    time: "83.922",
+    word: "はじけて",
+    lyrics: "はじけて",
+  },
+  {
+    time: "86.420",
+    word: "はじけて",
+    lyrics: "はじけて",
+  },
+  {
+    time: "88.359",
+    word: "はちがつの",
+    lyrics: "八月の",
+  },
+  {
+    time: "92.236",
+    word: "すとーりー",
+    lyrics: "ストーリー",
+  },
+  {
+    time: "95.680",
+    word: "なつのおわりの",
+    lyrics: "夏の終わりの",
+  },
+  {
+    time: "98.541",
+    word: "りんすしゃんぷーせっけん",
+    lyrics: "リンスシャンプー石鹸",
+  },
+  {
+    time: "102.830",
+    word: "",
+    lyrics: "",
+  },
+  {
+    time: "106.137",
+    word: "なつのおわりに",
+    lyrics: "夏の終わりに",
+  },
+  {
+    time: "109.068",
+    word: "あわいこいをした",
+    lyrics: "淡い恋をした",
+  },
+  {
+    time: "113.317",
+    word: "",
+    lyrics: "",
+  },
+  {
+    time: "115.961",
+    word: "こんとれっくすはこがい",
+    lyrics: "コントレックス箱買い",
+  },
+  {
+    time: "118.502",
+    word: "こんとれっくすはこはこはこがい",
+    lyrics: "コントレックスはこはこはこ買い",
+  },
+  {
+    time: "121.293",
+    word: "こんとれっくすはこがい",
+    lyrics: "コントレックス箱買い",
+  },
+  {
+    time: "123.731",
+    word: "こんとれっくす",
+    lyrics: "コントレックス",
+  },
+  {
+    time: "126.480",
+    word: "こんとれっくすはこがい",
+    lyrics: "コントレックス箱買い",
+  },
+  {
+    time: "129.133",
+    word: "こんとれっくすはこはこはこがい",
+    lyrics: "コントレックスはこはこはこ買い",
+  },
+  {
+    time: "131.771",
+    word: "こんとれっくすはこがい",
+    lyrics: "コントレックス箱買い",
+  },
+  {
+    time: "134.320",
+    word: "こんとれっくす",
+    lyrics: "コントレックス",
+  },
+  {
+    time: "136.849",
+    word: "",
+    lyrics: "",
+  },
+  {
+    time: "157.133",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "159.871",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "162.395",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "165.144",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "167.604",
+    word: "こまってこまって",
+    lyrics: "困って困って",
+  },
+  {
+    time: "170.249",
+    word: "こまってこまって",
+    lyrics: "困って困って",
+  },
+  {
+    time: "172.830",
+    word: "こまってこまって",
+    lyrics: "困って困って",
+  },
+  {
+    time: "175.826",
+    word: "こまってこまって",
+    lyrics: "困って困って",
+  },
+  {
+    time: "178.163",
+    word: "ふたりはふたりは",
+    lyrics: "二人は二人は",
+  },
+  {
+    time: "181.013",
+    word: "であってであって",
+    lyrics: "出会って出会って",
+  },
+  {
+    time: "183.469",
+    word: "であってであって",
+    lyrics: "出会って出会って",
+  },
+  {
+    time: "186.113",
+    word: "であってであって",
+    lyrics: "出会って出会って",
+  },
+  {
+    time: "188.550",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "191.338",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "193.826",
+    word: "まよってまよって",
+    lyrics: "迷って迷って",
+  },
+  {
+    time: "196.468",
+    word: "まよって",
+    lyrics: "迷って",
+  },
+  {
+    time: "200.492",
+    word: "なつのおわりは",
+    lyrics: "夏の終わりは",
+  },
+  {
+    time: "203.846",
+    word: "あまいきゃんでぃーだった",
+    lyrics: "甘いキャンディーだった",
+  },
+  {
+    time: "220.541",
+    word: "",
+    lyrics: "end",
+  },
+];
 
 export default Content;

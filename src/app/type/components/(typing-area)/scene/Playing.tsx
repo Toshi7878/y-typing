@@ -62,7 +62,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [scene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
-  const [inputMode] = useAtom(inputModeAtom);
+  const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
 
   useImperativeHandle(ref, () => ({
@@ -97,6 +97,15 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playerRef.current.playVideo();
       } else {
         playerRef.current.pauseVideo();
+      }
+    },
+    inputModeChange: (inputMode) => {
+      if (inputMode === "roma") {
+        setInputMode("kana");
+        setNotify("KanaMode");
+      } else {
+        setInputMode("roma");
+        setNotify("Romaji");
       }
     },
   }));
@@ -150,7 +159,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
         } else {
-          shortcutKey(event, skipGuideRef, playingRef);
+          shortcutKey(event, skipGuideRef, playingRef, inputMode);
         }
       } else if (event.key === "Escape") {
         playingRef.current?.gamePause();

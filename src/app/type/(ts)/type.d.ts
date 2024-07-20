@@ -38,6 +38,7 @@ export interface PlayingRef {
   pressSkip: () => void;
   realtimeSpeedChange: () => void;
   gamePause: () => void;
+  inputModeChange: (inputMode: InputModeType) => void;
 }
 
 export interface WordType {
