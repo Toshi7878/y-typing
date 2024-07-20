@@ -2,16 +2,13 @@ import React, { useRef } from "react";
 
 import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
-import "../../../style/statusTable.scss";
 import RankingList from "./child/RankingList";
 
 interface TabRankingProps {
   height: string;
 }
 
-const TabRanking =(props: TabRankingProps) => {
-
-
+const TabRanking = (props: TabRankingProps) => {
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">

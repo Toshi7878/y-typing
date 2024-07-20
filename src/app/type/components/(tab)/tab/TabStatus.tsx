@@ -9,10 +9,8 @@ import {
   Card,
   CardBody,
   useMediaQuery,
-  Box,
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
-import "../../../style/statusTable.scss";
 import { mapAtom, rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 import { useAtom } from "jotai";
@@ -51,7 +49,6 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   };
 
   const [status, setStatus] = useState(defaultStatus);
-  const [isMdOrSmaller] = useMediaQuery("(max-width: 900px)"); // mdサイズ以下の判定
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -90,23 +87,21 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
 
   if (!map) return null; // mapが存在しない場合は何も表示しない
 
-  const STATUS_LABEL = isMdOrSmaller
-    ? ["score", "line", "miss", "lost"]
-    : ["score", "type", "kpm", "rank", "point", "miss", "lost", "line"];
+  const STATUS_LABEL = [
+    ["score", "type", "kpm", "rank"],
+    ["point", "miss", "lost", "line"],
+  ].flat();
   const capitalizeFirstLetter = (string: string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const Label = styled.span`
+  const Label = styled.span<{ label: string }>`
     position: relative;
     right: 8px;
+    ${({ label }) => label === "kpm" && `letter-spacing: 0.2em;`}
   `;
 
   const UnderlinedSpan = styled.span<{ label: string }>`
     position: relative;
-
-    .value {
-      position: relative;
-    }
 
     &::after {
       content: "";
@@ -114,20 +109,19 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       bottom: 0;
       left: 0;
       height: 2px;
-      width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "81px")};
+      width: ${({ label }) => (label === "score" || label === "point" ? "119px" : "68px")};
       background-color: black;
     }
   `;
 
-  const TrStyled = styled(Tr)<{ isMdOrSmaller: boolean }>`
-    height: ${({ isMdOrSmaller }) =>
-      isMdOrSmaller ? "52px" : "122px"}; // isMdOrSmallerがtrueのとき高さを小さく設定
+  const TrStyled = styled(Tr)``;
+  const TdStyled = styled(Td)<{ id: string }>`
+    width: ${({ id }) => (id === "score" || id === "point" ? "20%" : "15%")};
   `;
-  const TdStyled = styled(Td)<{ isCentered: boolean }>``;
 
   return (
     <Card variant={"filled"} bg="blue.100" boxShadow="lg">
-      <CardBody>
+      <CardBody className="">
         <TableContainer>
           <Table
             minH={props.height}
@@ -135,14 +129,16 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
             className="table-fixed overflow-hidden"
             overflowY="auto"
           >
-            <Tbody className="font-bold text-2xl 2xl:text-[1.9rem] font-mono">
+            <Tbody className="font-bold text-3xl font-mono">
               {/* 1段目 */}
 
-              <TrStyled isMdOrSmaller={isMdOrSmaller}>
+              <TrStyled>
                 {STATUS_LABEL.slice(0, STATUS_LABEL.length / 2).map((label) => {
                   return (
-                    <TdStyled key={label} id={label} isCentered={isMdOrSmaller}>
-                      <Label className="label">{capitalizeFirstLetter(label)}</Label>
+                    <TdStyled key={label} id={label}>
+                      <Label label={label} className="label">
+                        {capitalizeFirstLetter(label)}
+                      </Label>
 
                       <UnderlinedSpan label={label}>
                         <StatusValue value={status[label]} />
@@ -154,11 +150,11 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
 
               {/* 2段目 */}
 
-              <TrStyled isMdOrSmaller={isMdOrSmaller}>
+              <TrStyled>
                 {STATUS_LABEL.slice(STATUS_LABEL.length / 2).map((label) => {
                   return (
-                    <TdStyled key={label} id={label} isCentered={isMdOrSmaller}>
-                      <Label>{capitalizeFirstLetter(label)}</Label>
+                    <TdStyled key={label} id={label}>
+                      <Label label={label}>{capitalizeFirstLetter(label)}</Label>
 
                       <UnderlinedSpan label={label}>
                         {label === "point" ? (
