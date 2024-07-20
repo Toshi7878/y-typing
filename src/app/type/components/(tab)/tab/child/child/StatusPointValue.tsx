@@ -9,7 +9,7 @@ const PointStatusValue = ({ value, timeBonusValue }: PointStatusValueProps) => {
     <>
       <span className="value">
         {value.toString()}
-        <small>{timeBonusValue > 0 && `+${timeBonusValue.toString()}`}</small>
+        {timeBonusValue > 0 && `+${timeBonusValue.toString()}`}
       </span>
     </>
   );

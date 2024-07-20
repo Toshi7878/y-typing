@@ -97,6 +97,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const Label = styled.span<{ label: string }>`
     position: relative;
     right: 8px;
+    font-size: 80%;
     ${({ label }) => label === "kpm" && `letter-spacing: 0.2em;`}
   `;
 
@@ -109,7 +110,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       bottom: 0;
       left: 0;
       height: 2px;
-      width: ${({ label }) => (label === "score" || label === "point" ? "119px" : "68px")};
+      width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "80px")};
       background-color: black;
     }
   `;
@@ -129,7 +130,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
             className="table-fixed overflow-hidden"
             overflowY="auto"
           >
-            <Tbody className="font-bold text-3xl font-mono">
+            <Tbody className="font-bold text-[2rem] font-mono">
               {/* 1段目 */}
 
               <TrStyled>
