@@ -221,7 +221,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
         const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
-        if (isRetrySkip && Number(map.typingWords[map.startLine]["time"]) - 1 <= ytCurrentTime) {
+        if (isRetrySkip && Number(map.typingWords[map.startLine]["time"]) - 3 <= ytCurrentTime) {
           gameStateRef.current!.isRetrySkip = false;
         }
 
