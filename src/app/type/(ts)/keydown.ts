@@ -475,7 +475,7 @@ export class Typing {
   }
 }
 
-export class Success extends CalcTypeSpeed {
+export class Success {
   newStatus: Status;
 
   constructor(
@@ -487,12 +487,11 @@ export class Success extends CalcTypeSpeed {
     newLineWord: WordType,
     map: CreateMap,
     lineTime: number,
+    totalTypeSpeed: number,
     remainTime: number,
     char: string,
     rankingScores: number[],
   ) {
-    super(status, lineTime, statusRef);
-
     this.newStatus = this.updateStatus(
       { ...status },
       statusRef,
@@ -503,6 +502,7 @@ export class Success extends CalcTypeSpeed {
       map,
       remainTime,
       lineTime,
+      totalTypeSpeed,
       rankingScores,
     );
 
@@ -526,6 +526,7 @@ export class Success extends CalcTypeSpeed {
     map: CreateMap,
     remainTime: number,
     lineTime: number,
+    totalTypeSpeed: number,
     rankingScores: number[],
   ) {
     if (statusRef.current!.lineStatus.lineType === 0) {
@@ -535,7 +536,7 @@ export class Success extends CalcTypeSpeed {
     statusRef.current!.lineStatus.lineType++;
     statusRef.current!.status.missCombo = 0;
     newStatus.point += updatePoint;
-    newStatus.kpm = this.totalTypeSpeed;
+    newStatus.kpm = totalTypeSpeed;
 
     const newCombo = playingComboRef.current!.getCombo() + 1;
 

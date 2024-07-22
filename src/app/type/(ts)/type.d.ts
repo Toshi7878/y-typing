@@ -139,8 +139,8 @@ export interface LineResultObj {
 }
 
 export interface Speed {
+  defaultSpeed: number;
   playSpeed: number;
-  realtimeSpeed: number;
 }
 
 export type Dakuten =

@@ -17,7 +17,7 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
     <Tooltip
       label="低速プレイではランキング登録できません"
       placement="right"
-      isOpen={speedData.playSpeed < 1 && true}
+      isOpen={speedData.defaultSpeed < 1 && true}
       color="white" // テキスト色を白に変更
       p={4} // パディングを追加
       borderRadius="md" // 角を丸く
@@ -51,7 +51,7 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
         </Box>
 
         <Box className="font-bold mx-8 text-4xl">
-          <span id="speed">{speedData.playSpeed.toFixed(2)}</span>倍速
+          <span id="speed">{speedData.defaultSpeed.toFixed(2)}</span>倍速
         </Box>
 
         <Box>

@@ -37,7 +37,7 @@ const PlayingBottom = function ({
         className={`mx-3 mt-2 mb-4 font-bold ${scene !== "playing" ? "invisible" : ""}`}
       >
         <PlayingBottomBadge
-          badgeText={speedData.realtimeSpeed.toFixed(2) + "倍速"}
+          badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
           kbdText="F10"
           onClick={() => playingRef.current?.realtimeSpeedChange()}
         />

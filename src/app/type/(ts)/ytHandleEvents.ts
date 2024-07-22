@@ -36,18 +36,18 @@ export class YTSpeedController {
     }
   }
   speedChange(NEW_SPEED: number, { setSpeedData, playerRef }: UpdateProps) {
-    setSpeedData({ playSpeed: NEW_SPEED, realtimeSpeed: NEW_SPEED });
+    setSpeedData({ defaultSpeed: NEW_SPEED, playSpeed: NEW_SPEED });
     playerRef.setPlaybackRate(NEW_SPEED);
   }
 
   realtimeChange({ speedData, setSpeedData, playerRef }: UpdateProps) {
-    const playSpeed = speedData?.playSpeed!;
-    const realtimeSpeed = speedData?.realtimeSpeed!;
+    const playSpeed = speedData?.defaultSpeed!;
+    const realtimeSpeed = speedData?.playSpeed!;
     const newRealTimeSpeed = realtimeSpeed + 0.25 <= 2 ? realtimeSpeed + 0.25 : playSpeed;
 
     setSpeedData({
       ...speedData!,
-      realtimeSpeed: newRealTimeSpeed,
+      playSpeed: newRealTimeSpeed,
     });
 
     playerRef.setPlaybackRate(newRealTimeSpeed);

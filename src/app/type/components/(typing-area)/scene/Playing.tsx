@@ -12,7 +12,6 @@ import {
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
-import { timer } from "@/app/type/(ts)/timer";
 import PlayingBottom from "./child/PlayingBottom";
 import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
@@ -23,6 +22,7 @@ import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
+import { updateTimer } from "@/app/type/(ts)/timer";
 export const ticker = new Ticker();
 
 export const defaultLineResultObj: LineResultObj = {
@@ -86,7 +86,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         ? Number(map!.typingWords[map!.startLine]["time"])
         : Number(nextLine["time"]);
 
-      playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.realtimeSpeed));
+      playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.playSpeed));
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -128,11 +128,15 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
           const prevLine = map!.typingWords[count - 1];
           const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
+          const lineConstantTime = lineTime / speedData.playSpeed;
+
           const status = tabStatusRef.current!.getStatus();
 
           if (result.successKey) {
             const currentLine = map!.typingWords[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+
+            const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
 
             const success = new Success(
               status,
@@ -143,6 +147,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               result.newLineWord,
               map!,
               lineTime,
+              typeSpeed.totalTypeSpeed,
               remainTime,
               result.successKey,
               rankingScores,
@@ -150,9 +155,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
             tabStatusRef.current!.setStatus(success.newStatus);
             playingCenterRef.current!.setLineWord(result.newLineWord);
-            playingLineTimeRef.current?.setLineKpm(success.lineTypeSpeed);
+            playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
             if (!result.newLineWord.nextChar["k"]) {
-              statusRef.current!.status.totalTypeTime += lineTime;
+              statusRef.current!.status.totalTypeTime += lineConstantTime;
             }
           } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
             const miss = new Miss(status, statusRef, playingComboRef, lineTime, event.key);
@@ -179,151 +184,29 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputMode, rankingScores]);
 
-  const updateLine = useCallback(
-    (ytCurrentTime: number) => {
-      if (!map) {
-        return;
-      }
-      ytStateRef.current!.currentTime = ytCurrentTime;
-
-      const count = statusRef.current!.status.count;
-      const prevLine = map.typingWords[count - 1];
-      const currentLine = map.typingWords[count];
-      const nextLine = map.typingWords[count + 1];
-      const remainTime = Number(currentLine.time) - Number(ytCurrentTime);
-      const currentTotalTimeProgress = totalTimeProgressRef.current;
-      const currentLineProgress = lineProgressRef.current;
-      const lineTime = prevLine && count ? ytCurrentTime - Number(prevLine["time"]) : ytCurrentTime;
-
-      currentLineProgress!.value = lineTime;
-
-      if (
-        currentTotalTimeProgress &&
-        Math.abs(ytCurrentTime - currentTotalTimeProgress.value) >= map.currentTimeBarFrequency
-      ) {
-        //ライン経過時間 ＆ 打鍵速度計算
-        currentTotalTimeProgress.value = ytCurrentTime;
-      }
-
-      const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
-      if (Math.abs(Number(currentLine.time) - ytCurrentTime - displayRemainTime) >= 0.1) {
-        const currentPlayingCenterRef = playingCenterRef.current;
-
-        const lineWord = currentPlayingCenterRef!.getLineWord();
-        const status = tabStatusRef.current!.getStatus();
-
-        playingLineTimeRef.current?.setRemainTime(remainTime);
-
-        if (lineWord.nextChar["k"]) {
-          const typeSpeed = new CalcTypeSpeed(status!, lineTime, statusRef);
-          playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
-        }
-
-        const isRetrySkip = gameStateRef.current!.isRetrySkip;
-
-        if (isRetrySkip && Number(map.typingWords[map.startLine]["time"]) - 3 <= ytCurrentTime) {
-          gameStateRef.current!.isRetrySkip = false;
-        }
-
-        skipGuideRef.current!.displaySkipGuide(
-          lineWord.nextChar["k"],
-          lineTime,
-          remainTime,
-          skipGuideRef,
-          isRetrySkip,
-        );
-
-        const currentTotalTime = playingTotalTimeRef.current!.getCurrentTime();
-
-        if (Math.abs(ytCurrentTime - currentTotalTime) >= 1) {
-          playingTotalTimeRef.current?.setCurrentTime(ytCurrentTime);
-        }
-      }
-
-      if (nextLine && ytCurrentTime >= Number(currentLine["time"])) {
-        const currentPlayingCenterRef = playingCenterRef.current;
-        const status = tabStatusRef.current!.getStatus();
-
-        const lineWord = currentPlayingCenterRef!.getLineWord();
-        const typeSpeed = new CalcTypeSpeed(status!, lineTime, statusRef);
-
-        const lineResult = new LineResult(
-          status!,
-          statusRef,
-          lineWord,
-          map,
-          lineTime,
-          typeSpeed.totalTypeSpeed,
-          rankingScores,
-        );
-
-        statusRef.current!.status.result.push({
-          status: {
-            point: status!.point,
-            timeBonus: status!.timeBonus,
-            type: status!.type,
-            miss: status!.miss,
-            combo: playingComboRef.current?.getCombo(),
-            clearTime: statusRef.current!.lineStatus.lineClearTime,
-            kpm: typeSpeed.lineTypeSpeed,
-            rkpm: typeSpeed.lineTypeRkpm,
-            lineKpm: playingLineTimeRef.current?.getLineKpm(),
-          },
-          typeResult: statusRef.current!.lineStatus.typeResult,
-        });
-        // statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
-        tabStatusRef.current!.setStatus(lineResult.newStatus);
-
-        if (lineWord.nextChar["k"]) {
-          statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
-        }
-        statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
-
-        statusRef.current!.status.count += 1;
-        statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
-        playingLineTimeRef.current?.setLineKpm(0);
-        statusRef.current!.lineStatus.latency = 0;
-        currentPlayingCenterRef!.setLineWord({
-          correct: { k: "", r: "" },
-          nextChar: [...map.typingWords[count].word][0],
-          word: [...map.typingWords[count].word].slice(1),
-        });
-
-        currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
-
-        const nextKpm =
-          inputMode === "roma"
-            ? map.typingWords[count + 1].kpm["r"]
-            : map.typingWords[count + 1].kpm["k"];
-        if (nextKpm) {
-          currentPlayingCenterRef!.setNextLyrics({
-            lyrics: nextLine["lyrics"],
-            kpm: nextKpm.toFixed(0),
-          });
-        } else {
-          currentPlayingCenterRef!.setNextLyrics({
-            lyrics: "",
-            kpm: "",
-          });
-        }
-
-        if (lineProgressRef.current) {
-          const progressElement = lineProgressRef.current as HTMLProgressElement;
-
-          progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
-        }
-      }
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const updateFunction = () =>
+    updateTimer(
+      map!,
+      playerRef,
+      ytStateRef,
+      speedData,
+      totalTimeProgressRef,
+      playingTotalTimeRef,
+      playingLineTimeRef,
+      playingCenterRef,
+      lineProgressRef,
+      skipGuideRef,
+      statusRef,
+      tabStatusRef,
+      gameStateRef,
+      rankingScores,
+      playingComboRef,
+      inputMode,
+    );
 
   useEffect(() => {
-    const updateFunction = () => timer.update(playerRef);
     ticker.add(updateFunction);
 
-    timer.addListener(updateLine);
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
@@ -333,7 +216,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     }
 
     return () => {
-      timer.removeListener(updateLine);
       if (ticker.started) {
         ticker.stop();
       }

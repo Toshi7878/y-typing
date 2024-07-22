@@ -44,7 +44,7 @@ const End = () => {
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
-      playSpeed: speedData.playSpeed,
+      playSpeed: speedData.defaultSpeed,
     };
     const sendData = {
       mapId: mapId,
@@ -98,7 +98,10 @@ const End = () => {
   }, [state]);
 
   const isDisplayRankingButton =
-    session && status.score > 0 && status.score >= bestScoreRef.current && speedData.playSpeed >= 1;
+    session &&
+    status.score > 0 &&
+    status.score >= bestScoreRef.current &&
+    speedData.defaultSpeed >= 1;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -126,7 +129,7 @@ const End = () => {
               )}
             </Box>
             <Box textAlign="left" className="text-3xl" mx={2}>
-              {speedData.playSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
+              {speedData.defaultSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
             </Box>
             <HStack justifyContent="space-around">
               {isDisplayRankingButton && <EndUploadButton responseStatus={state.status} />}

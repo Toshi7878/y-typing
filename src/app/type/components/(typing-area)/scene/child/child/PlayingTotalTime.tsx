@@ -30,7 +30,7 @@ const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
       setCurrentTime: (newCurrentTime: number) => setCurrentTimeSSMM(newCurrentTime),
     }));
 
-    const totalTime = formatTime(map ? map.movieTotalTime / speedData.realtimeSpeed : 0);
+    const totalTime = formatTime(map ? map.movieTotalTime / speedData.playSpeed : 0);
 
     return (
       <Box className={className}>
