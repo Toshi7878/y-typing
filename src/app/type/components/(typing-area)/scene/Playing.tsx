@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
@@ -15,7 +15,6 @@ import { useAtom } from "jotai";
 import PlayingBottom from "./child/PlayingBottom";
 import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
-import { LineResult } from "@/app/type/(ts)/lineResult";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
 import { LineResultObj, PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
@@ -141,6 +140,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             const success = new Success(
               status,
               statusRef,
+              result.chars,
+              lineConstantTime,
               playingComboRef,
               inputMode,
               result.updatePoint,
@@ -149,7 +150,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               lineTime,
               typeSpeed.totalTypeSpeed,
               remainTime,
-              result.successKey,
               rankingScores,
             );
 
@@ -160,7 +160,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               statusRef.current!.status.totalTypeTime += lineConstantTime;
             }
           } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-            const miss = new Miss(status, statusRef, playingComboRef, lineTime, event.key);
+            const miss = new Miss(status, statusRef, result.chars, playingComboRef, lineTime);
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
         } else {
@@ -182,31 +182,53 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores]);
-
-  const updateFunction = () =>
-    updateTimer(
-      map!,
-      playerRef,
-      ytStateRef,
-      speedData,
-      totalTimeProgressRef,
-      playingTotalTimeRef,
-      playingLineTimeRef,
-      playingCenterRef,
-      lineProgressRef,
-      skipGuideRef,
-      statusRef,
-      tabStatusRef,
-      gameStateRef,
-      rankingScores,
-      playingComboRef,
-      inputMode,
-    );
+  }, [inputMode, rankingScores, speedData]);
 
   useEffect(() => {
+    const updateFunction = () =>
+      updateTimer(
+        map!,
+        playerRef,
+        ytStateRef,
+        speedData,
+        totalTimeProgressRef,
+        playingTotalTimeRef,
+        playingLineTimeRef,
+        playingCenterRef,
+        lineProgressRef,
+        skipGuideRef,
+        statusRef,
+        tabStatusRef,
+        gameStateRef,
+        rankingScores,
+        playingComboRef,
+        inputMode,
+      );
     ticker.add(updateFunction);
 
+    return () => {
+      ticker.remove(updateFunction);
+    };
+  }, [
+    playerRef,
+    ytStateRef,
+    speedData,
+    totalTimeProgressRef,
+    playingTotalTimeRef,
+    playingLineTimeRef,
+    playingCenterRef,
+    lineProgressRef,
+    skipGuideRef,
+    statusRef,
+    tabStatusRef,
+    gameStateRef,
+    rankingScores,
+    playingComboRef,
+    inputMode,
+    map,
+  ]);
+
+  useEffect(() => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
@@ -219,7 +241,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (ticker.started) {
         ticker.stop();
       }
-      ticker.remove(updateFunction);
 
       currentPlayingCenterRef!.resetWordLyrics();
       setNotify("");

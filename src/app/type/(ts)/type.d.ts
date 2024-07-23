@@ -116,7 +116,9 @@ export interface SendResultData {
 }
 export interface TypeResult {
   type?: {
-    char: string;
+    keys: string[];
+    code: string;
+    shift?: boolean;
     isSuccess: boolean;
   };
   option?: string;

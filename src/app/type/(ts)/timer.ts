@@ -56,7 +56,11 @@ export const updateTimer = (
   }
 
   const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
-  if (Math.abs(Number(currentLine.time) - ytCurrentTime - displayRemainTime) >= 0.1) {
+
+  if (
+    Math.abs(Number(currentLine.time) / speedData.playSpeed - ytConstantTime - displayRemainTime) >=
+    0.1
+  ) {
     const currentPlayingCenterRef = playingCenterRef.current;
 
     const lineWord = currentPlayingCenterRef!.getLineWord();
@@ -65,13 +69,17 @@ export const updateTimer = (
     playingLineTimeRef.current?.setRemainTime(remainTime);
 
     if (lineWord.nextChar["k"]) {
-      const typeSpeed = new CalcTypeSpeed(status!, lineTime, statusRef);
+      console.log(`lineTime: ${lineTime} lineConstantTime${lineConstantTime}`);
+      const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
       playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
     }
 
     const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
-    if (isRetrySkip && Number(map.typingWords[map.startLine]["time"]) - 3 <= ytCurrentTime) {
+    if (
+      isRetrySkip &&
+      Number(map.typingWords[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
+    ) {
       gameStateRef.current!.isRetrySkip = false;
     }
 
@@ -142,9 +150,9 @@ export const updateTimer = (
     currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
 
     const nextKpm =
-      inputMode === "roma"
+      (inputMode === "roma"
         ? map.typingWords[count + 1].kpm["r"]
-        : map.typingWords[count + 1].kpm["k"];
+        : map.typingWords[count + 1].kpm["k"]) * speedData.playSpeed;
     if (nextKpm) {
       currentPlayingCenterRef!.setNextLyrics({
         lyrics: nextLine["lyrics"],

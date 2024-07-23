@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import YouTube from "react-youtube";
-import { ytState } from "./youtubeEvents";
+import { ytState } from "../../(ts)/youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
 import { useAtom } from "jotai";
 import { playingNotifyAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
@@ -40,7 +40,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   }, []);
 
   const handleEnd = useCallback(() => {
-    ytState.end(setScene,refs.playerRef);
+    ytState.end(setScene, refs.playerRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -29,8 +29,9 @@ export const lineResultObjSchema = z.object({
     z.object({
       type: z
         .object({
-          char: z.string(),
-
+          keys: z.array(z.string()),
+          code: z.string(),
+          shift: z.boolean().optional(),
           isSuccess: z.boolean(),
         })
         .optional(),

@@ -1,6 +1,6 @@
 import { Line } from "@/types";
-import { SceneType, StatusRef, YTStateRef } from "../../(ts)/type";
-import { ticker } from "../(typing-area)/scene/Playing";
+import { SceneType, StatusRef, YTStateRef } from "./type";
+import { ticker } from "../components/(typing-area)/scene/Playing";
 
 class YTState {
   play(
@@ -40,9 +40,6 @@ class YTState {
 
   stop() {
     console.log("動画停止");
-    // if (ticker.started) {
-    //   ticker.stop();
-    // }
   }
 
   pause(
@@ -77,7 +74,7 @@ class YTState {
   ready(player: any) {
     console.log("ready");
 
-    player.setVolume(30);
+    player.setVolume(10);
   }
 }
 

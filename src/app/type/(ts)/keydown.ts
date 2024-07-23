@@ -152,6 +152,7 @@ const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ",
 
 interface CharsType {
   keys: string[];
+  code: string;
   shift: boolean;
 }
 
@@ -401,6 +402,7 @@ interface TypingEvent {
 }
 
 export class Typing {
+  chars: CharsType;
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
@@ -413,6 +415,7 @@ export class Typing {
         ? new RomaInput({ chars, lineWord })
         : new KanaInput({ chars, lineWord });
 
+    this.chars = chars;
     this.newLineWord = inputResult.newLineWord;
     this.updatePoint = inputResult.updatePoint;
     this.successKey = inputResult.successKey;
@@ -421,6 +424,7 @@ export class Typing {
   romaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: [event.key.toLowerCase()],
+      code: event.code,
       shift: event.shiftKey,
     };
 
@@ -430,6 +434,7 @@ export class Typing {
   kanaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: KANA_CODE_MAP[event.code] ? KANA_CODE_MAP[event.code] : KANA_KEY_MAP[event.key],
+      code: event.code,
       shift: event.shiftKey,
     };
 
@@ -481,6 +486,8 @@ export class Success {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
+    chars: CharsType,
+    lineConstantTime: number,
     playingComboRef: React.RefObject<PlayingComboRef>,
     inputMode: InputModeType,
     updatePoint: number,
@@ -489,12 +496,12 @@ export class Success {
     lineTime: number,
     totalTypeSpeed: number,
     remainTime: number,
-    char: string,
     rankingScores: number[],
   ) {
     this.newStatus = this.updateStatus(
       { ...status },
       statusRef,
+      lineConstantTime,
       playingComboRef,
       inputMode,
       updatePoint,
@@ -508,7 +515,7 @@ export class Success {
 
     statusRef.current!.lineStatus.typeResult.push({
       type: {
-        char: char,
+        ...chars,
         isSuccess: true,
       },
       time: lineTime,
@@ -518,8 +525,8 @@ export class Success {
   updateStatus(
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
+    lineConstantTime: number,
     playingComboRef: React.RefObject<PlayingComboRef>,
-
     inputMode: InputModeType,
     updatePoint: number,
     newLineWord: WordType,
@@ -530,7 +537,7 @@ export class Success {
     rankingScores: number[],
   ) {
     if (statusRef.current!.lineStatus.lineType === 0) {
-      statusRef.current!.lineStatus.latency = lineTime;
+      statusRef.current!.lineStatus.latency = lineConstantTime;
     }
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
@@ -584,15 +591,15 @@ export class Miss {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
+    chars: CharsType,
     playingComboRef: React.RefObject<PlayingComboRef>,
     lineTime: number,
-    char: string,
   ) {
     this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef);
 
     statusRef.current!.lineStatus.typeResult.push({
       type: {
-        char: char,
+        ...chars,
         isSuccess: false,
       },
       time: lineTime,
