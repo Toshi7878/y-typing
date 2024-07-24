@@ -34,9 +34,7 @@ export default function Content() {
   }, [router, setVideoId]);
 
   useEffect(() => {
-    return () => {
-      NProgress.done();
-    };
+    NProgress.done();
   }, []);
 
   const isMobile = window.innerWidth <= 480;

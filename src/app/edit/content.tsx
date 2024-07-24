@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import editStore, { RootState } from "./(redux)/store";
 import TabContent from "./(tab-content)/Tab";
@@ -14,9 +14,14 @@ import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { setMapData } from "./(redux)/mapDataSlice";
+import NProgress from "nprogress";
+
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
+  useEffect(() => {
+    NProgress.done();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={editStore}>

@@ -2,9 +2,7 @@
 
 import { NavItem } from "@/types";
 import { Link } from "@chakra-ui/next-js";
-import { useEffect } from "react";
-import NProgress from "nprogress";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { handleLinkClick } from "@/app/nprogress";
 
 interface LeftNavProps {
@@ -13,13 +11,15 @@ interface LeftNavProps {
 
 export default function LeftNav({ items }: LeftNavProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
+  console.log(pathname);
   return (
     <div className="flex items-center md:gap-10">
       <span>
         <Link
           href={"/"}
-          // onClick={handleLinkClick(`/`, router)}
+          onClick={pathname === "/" ? undefined : handleLinkClick(`/`, router)}
           className="md:flex items-center space-x-2 font-extrabold text-xl"
         >
           Y-Typing

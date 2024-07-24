@@ -18,9 +18,14 @@ import {
 } from "../(atoms)/gameRenderAtoms";
 import SceneWrapper from "../components/(typing-area)/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
+import NProgress from "nprogress";
+
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
+  useEffect(() => {
+    NProgress.done();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <ContentInner mapInfo={mapInfo} />
