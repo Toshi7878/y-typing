@@ -10,7 +10,7 @@ interface TabRankingProps {
 
 const TabRanking = (props: TabRankingProps) => {
   return (
-    <Card variant={"filled"} bg="blue.100" boxShadow="lg">
+    <Card className="tab-card" variant={"filled"} bg="blue.100" boxShadow="lg">
       <CardBody className="text-3xl font-bold w-full">
         <Box overflowY="auto" minH={props.height}>
           <Table variant="simple" className="ranking-table" size="sm">

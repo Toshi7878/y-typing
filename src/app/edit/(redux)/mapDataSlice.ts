@@ -1,10 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import { MapData } from "@/app/type/(ts)/type";
+import { Line } from "@/types";
 
+interface MapDataState {
+  lastAddedTime: string;
+  value: Line[];
+}
+
+const initialState: MapDataState = {
+  lastAddedTime: "0", //テーブル内をスクロールする処理で使用
+
+  value: [
+    {
+      time: "0",
+
+      lyrics: "",
+
+      word: "",
+    },
+    {
+      time: "Infinity",
+
+      lyrics: "end",
+
+      word: "",
+    },
+  ],
+};
 function adjustTimeForLine(
   newValue: RootState["mapData"]["value"],
   adjustTime: number,
-  lastLineTime: number
+  lastLineTime: number,
 ) {
   for (let i = 1; i < newValue.length; i++) {
     const time = Number(newValue[i]["time"]);
@@ -26,35 +53,16 @@ function adjustTimeForLine(
 
 export const mapDataSlice = createSlice({
   name: "mapData",
-
-  initialState: {
-    lastAddedTime: "0", //テーブル内をスクロールする処理で使用
-
-    value: [
-      {
-        time: "0",
-
-        lyrics: "",
-
-        word: "",
-      },
-      {
-        time: "Infinity",
-
-        lyrics: "end",
-
-        word: "",
-      },
-    ],
-  },
+  initialState, // initialStateを追加
 
   reducers: {
     setMapData: (state, action) => {
       state.value = action.payload.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
+
     addLine: (state, action) => {
       const newValue = [...state.value, action.payload].sort(
-        (a, b) => parseFloat(a.time) - parseFloat(b.time)
+        (a, b) => parseFloat(a.time) - parseFloat(b.time),
       );
 
       state.value = newValue;
@@ -81,6 +89,13 @@ export const mapDataSlice = createSlice({
       const adjustTime = Number(action.payload);
       const lastLineTime = Number(state.value[state.value.length - 1]["time"]);
       state.value = adjustTimeForLine(newValue, adjustTime, lastLineTime);
+    },
+
+    setLineOption: (state, action) => {
+      const { options, number } = action.payload;
+      const newValue = [...state.value];
+      newValue[number] = { ...newValue[number], options };
+      state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
 
     // Ctrl + Z
@@ -171,6 +186,7 @@ export const {
   addLine,
   updateLine,
   deleteLine,
+  setLineOption,
   allAdjustTime,
   mapDataUndo,
   mapDataRedo,

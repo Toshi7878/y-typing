@@ -13,8 +13,8 @@ interface WordProps {
 const Word = memo(({ correct, nextChar, word, className, id = "" }: WordProps) => {
   return (
     <Box id={id} className={className}>
-      <span className="text-teal-500">{correct}</span>
-      <span>{`${nextChar}${word}`}</span>
+      <span className="text-teal-500 word-correct">{correct}</span>
+      <span className=" word">{`${nextChar}${word}`}</span>
     </Box>
   );
 });

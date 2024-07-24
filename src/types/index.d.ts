@@ -41,6 +41,7 @@ export interface Line {
   lyrics: string;
   word: string;
   lineNumber?: string;
+  options?: { eternalCSS?: string; changeCSS?: string };
 }
 
 // react-tag-input Tag 型は時前で定義しなければならない

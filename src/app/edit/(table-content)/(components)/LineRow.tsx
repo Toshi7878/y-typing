@@ -1,6 +1,6 @@
 "use client";
-import { Tr, Td, Button } from "@chakra-ui/react";
-import { SetStateAction, useCallback, useEffect } from "react";
+import { Tr, Td, Button, useDisclosure } from "@chakra-ui/react";
+import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../(redux)/store";
@@ -10,10 +10,15 @@ import { addLine, updateLine } from "../../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../../(redux)/lineIndexSlice";
 import { timer } from "../../(youtube-content)/timer";
 import { setTabIndex } from "../../(redux)/tabIndexSlice";
+import LineOptionModal from "./LineOptionModal";
+import { Line } from "@/types";
 
 export default function LineRow() {
   console.log("Table");
   const dispatch = useDispatch();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
+  const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
@@ -144,12 +149,26 @@ export default function LineRow() {
               variant="outline"
               colorScheme={`${selectedIndex === index ? "green" : "cyan"}`}
               size="sm"
+              onClick={() => {
+                setOptionModalIndex(index);
+                setLineOptions(line.options);
+                onOpen();
+              }}
             >
               オプション
             </Button>
           </Td>
         </Tr>
       ))}
+
+      {isOpen && (
+        <LineOptionModal
+          isOpen={isOpen}
+          onClose={onClose}
+          optionModalIndex={optionModalIndex}
+          lineOptions={lineOptions}
+        />
+      )}
     </>
   );
 }

@@ -3,7 +3,12 @@ import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 export type InputModeType = "roma" | "kana" | "flick";
 export type SceneType = "ready" | "playing" | "end";
 
-export type MapData = { time: string; lyrics: string; word: string; option?: string }[];
+export type MapData = {
+  time: string;
+  lyrics: string;
+  word: string;
+  options?: { eternalCSS?: string; changeCSS?: string };
+}[];
 export type TypeChank = { k: string; r: string[]; p: number };
 
 export type SpeedDifficulty = { median: { r: number; k: number }; max: { r: number; k: number } };

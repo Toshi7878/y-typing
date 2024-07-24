@@ -8,7 +8,7 @@ import RightNav from "./RightNav";
 const Header = () => {
   return (
     <SessionProvider>
-      <header className="fixed w-full z-40 bg-background border-b-2">
+      <header id="header" className="fixed w-full z-40 bg-background">
         <div className="container md:max-w-[80rem] h-1 py-5 flex items-center justify-between">
           <LeftNav items={leftNavConfig.mainNav} />
           <RightNav />

@@ -1,3 +1,4 @@
+import { Line } from "@/types";
 import { ROMA_MAP } from "./const/romaMap";
 import { LineData, MapData, SpeedDifficulty, TypeChank, WordType } from "./type";
 
@@ -368,11 +369,12 @@ export class TypingWord {
 }
 
 export class CreateMap {
+  mapData: MapData;
   words: LineData[];
 
   startLine: number;
   lineLength: number;
-  totalNotes: { r: number; k: number };
+  totalNotes: LineData["notes"];
   speedDifficulty: SpeedDifficulty;
   currentTimeBarFrequency: number;
   movieTotalTime: number;
@@ -381,6 +383,8 @@ export class CreateMap {
     const wordRomaMap = this.parseWord(data);
 
     const result = this.create(wordRomaMap, data);
+
+    this.mapData = data;
 
     this.words = result.words;
     this.startLine = result.startLine;

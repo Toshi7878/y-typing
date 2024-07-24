@@ -289,6 +289,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
+      {map!.mapData[0].options?.eternalCSS && <style>{map!.mapData[0].options?.eternalCSS}</style>}
     </Box>
   );
 });

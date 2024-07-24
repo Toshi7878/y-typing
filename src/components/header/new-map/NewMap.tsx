@@ -17,6 +17,8 @@ import { extractYouTubeVideoId } from "./extractYTId";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import NProgress from "nprogress";
 
 const schema = z.object({
   URL: z
@@ -27,6 +29,8 @@ const schema = z.object({
 
 export default function NewMap() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
   const methods = useForm({
     resolver: zodResolver(schema),
   });
@@ -39,7 +43,12 @@ export default function NewMap() {
   const newCreate = (data) => {
     const ID = extractYouTubeVideoId(data.URL);
     if (ID && ID.length == 11 && isValid) {
-      window.location.href = `/edit?new=${ID}`;
+      NProgress.configure({ showSpinner: false });
+      NProgress.configure({ trickle: false });
+
+      NProgress.start();
+      router.push(`/edit?new=${ID}`);
+      onClose();
     }
   };
 
