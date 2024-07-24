@@ -28,11 +28,10 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
   const handleBtnClick = () => {
     dispatch(setLineOption({ options: { changeCSS, eternalCSS }, number: optionModalIndex }));
     dispatch(setCanUpload(true));
-
     onClose();
   };
   return (
-    <Modal isOpen={isOpen} onClose={handleBtnClick} isCentered>
+    <Modal isOpen={isOpen} isCentered onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent maxW="600px">
         <ModalHeader>ラインオプション </ModalHeader>
@@ -68,6 +67,12 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
                 value={changeCSS}
                 onChange={(e) => setChangeCSS(e.target.value)}
               />
+            </Box>
+
+            <Box display="flex" justifyContent="flex-end">
+              <Button colorScheme="teal" onClick={handleBtnClick}>
+                オプションを保存
+              </Button>
             </Box>
           </Stack>
         </ModalBody>
