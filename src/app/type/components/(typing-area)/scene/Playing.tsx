@@ -22,6 +22,7 @@ import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
 import { updateTimer } from "@/app/type/(ts)/timer";
+import { romaConvert } from "@/app/type/(ts)/createTypingWord";
 export const ticker = new Ticker();
 
 export const defaultLineResultObj: LineResultObj = {
@@ -80,9 +81,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       }
     },
     pressSkip: () => {
-      const nextLine = map!.typingWords[statusRef.current!.status.count];
+      const nextLine = map!.words[statusRef.current!.status.count];
       const skippedTime = gameStateRef.current!.isRetrySkip
-        ? Number(map!.typingWords[map!.startLine]["time"])
+        ? Number(map!.words[map!.startLine]["time"])
         : Number(nextLine["time"]);
 
       playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.playSpeed));
@@ -105,6 +106,29 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       } else {
         setInputMode("roma");
         setNotify("Romaji");
+        const lineWord = playingCenterRef.current!.getLineWord();
+
+        if (lineWord.nextChar["k"]) {
+          const wordFix = romaConvert(lineWord);
+
+          playingCenterRef.current!.setLineWord({
+            correct: lineWord.correct,
+            nextChar: wordFix.nextChar,
+            word: wordFix.word,
+          });
+        }
+      }
+
+      const count = statusRef.current!.status.count;
+      const nextLine = map!.words[count];
+      const nextKpm =
+        (inputMode === "roma" ? map!.words[count].kpm["r"] : map!.words[count].kpm["k"]) *
+        speedData.playSpeed;
+      if (nextKpm) {
+        playingCenterRef.current!.setNextLyrics({
+          lyrics: nextLine["lyrics"],
+          kpm: nextKpm.toFixed(0),
+        });
       }
     },
   }));
@@ -125,14 +149,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (isTyped({ event, lineWord: cloneLineWord })) {
           const count = statusRef.current!.status.count;
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-          const prevLine = map!.typingWords[count - 1];
+          const prevLine = map!.words[count - 1];
           const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
           const lineConstantTime = lineTime / speedData.playSpeed;
 
           const status = tabStatusRef.current!.getStatus();
 
           if (result.successKey) {
-            const currentLine = map!.typingWords[count];
+            const currentLine = map!.words[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
 
             const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);

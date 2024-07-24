@@ -38,9 +38,9 @@ export const updateTimer = (
   const ytConstantTime = ytCurrentTime / speedData.playSpeed;
 
   const count = statusRef.current!.status.count;
-  const prevLine = map.typingWords[count - 1];
-  const currentLine = map.typingWords[count];
-  const nextLine = map.typingWords[count + 1];
+  const prevLine = map.words[count - 1];
+  const currentLine = map.words[count];
+  const nextLine = map.words[count + 1];
   const remainTime = (Number(currentLine.time) - Number(ytCurrentTime)) / speedData.playSpeed;
   const currentTotalTimeProgress = totalTimeProgressRef.current;
   const currentLineProgress = lineProgressRef.current;
@@ -78,14 +78,14 @@ export const updateTimer = (
 
     if (
       isRetrySkip &&
-      Number(map.typingWords[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
+      Number(map.words[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
     ) {
       gameStateRef.current!.isRetrySkip = false;
     }
 
     skipGuideRef.current!.displaySkipGuide(
       lineWord.nextChar["k"],
-      lineTime,
+      lineConstantTime,
       remainTime,
       skipGuideRef,
       isRetrySkip,
@@ -143,16 +143,15 @@ export const updateTimer = (
     statusRef.current!.lineStatus.latency = 0;
     currentPlayingCenterRef!.setLineWord({
       correct: { k: "", r: "" },
-      nextChar: [...map.typingWords[count].word][0],
-      word: [...map.typingWords[count].word].slice(1),
+      nextChar: [...map.words[count].word][0],
+      word: [...map.words[count].word].slice(1),
     });
 
     currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
 
     const nextKpm =
-      (inputMode === "roma"
-        ? map.typingWords[count + 1].kpm["r"]
-        : map.typingWords[count + 1].kpm["k"]) * speedData.playSpeed;
+      (inputMode === "roma" ? map.words[count + 1].kpm["r"] : map.words[count + 1].kpm["k"]) *
+      speedData.playSpeed;
     if (nextKpm) {
       currentPlayingCenterRef!.setNextLyrics({
         lyrics: nextLine["lyrics"],

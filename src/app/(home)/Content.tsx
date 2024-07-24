@@ -7,7 +7,8 @@ import { useEffect } from "react";
 import { handleKeyDown } from "./ts/keydown";
 import { useAtom } from "jotai";
 import { videoIdAtom } from "./atoms/atoms";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import NProgress from "nprogress";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,12 @@ export default function Content() {
       setVideoId(null);
     };
   }, [router, setVideoId]);
+
+  useEffect(() => {
+    return () => {
+      NProgress.done();
+    };
+  }, []);
 
   const isMobile = window.innerWidth <= 480;
 

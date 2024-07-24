@@ -9,6 +9,8 @@ import { useAtom } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "./atoms/atoms";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { handleLinkClick } from "../nprogress";
 
 interface GetMapList {
   id: number;
@@ -36,6 +38,7 @@ async function getMapList(): Promise<GetMapList[]> {
 }
 
 function MapList() {
+  const router = useRouter();
   const [videoId, setVideoId] = useAtom(videoIdAtom);
   const [, setPreviewTime] = useAtom(previewTimeAtom);
   const { data: mapList = [], isLoading } = useQuery({
@@ -117,12 +120,17 @@ function MapList() {
 
             <Link
               href={`/type/${map.id}`}
+              onClick={handleLinkClick(`/type/${map.id}`, router)}
               className="pl-3 pt-2 w-full text-xs sm:text-sm md:text-md lg:text-lg flex flex-col justify-start h-full"
             >
               <div className="text-teal-700 hover:underline font-bold">{map.title}</div>
 
               <small>
-                <Link className="text-teal-700 hover:underline" href={`/user/${map.user.id}`}>
+                <Link
+                  className="text-teal-700 hover:underline"
+                  href={`/user/${map.user.id}`}
+                  onClick={handleLinkClick(`/user/${map.user.id}`, router)}
+                >
                   {map.user.name}
                 </Link>
 

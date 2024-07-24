@@ -1,5 +1,5 @@
 import { ROMA_MAP } from "./const/romaMap";
-import { LineData, MapData, SpeedDifficulty, TypeChank } from "./type";
+import { LineData, MapData, SpeedDifficulty, TypeChank, WordType } from "./type";
 
 const ZENKAKU_LIST = [
   "０",
@@ -231,60 +231,22 @@ const SYMBOL_LIST = [
 
 const CHAR_POINT = 10;
 
-class TypingWords {
-  typingWords: LineData[];
-  startLine: number;
-  lineLength: number;
+export class TypingWord {
+  word: LineData["word"];
 
-  constructor(wordRomaMap: string[], data: MapData) {
-    const result = this.create(wordRomaMap, data);
-
-    this.typingWords = result.typingWords;
-    this.startLine = result.startLine;
-    this.lineLength = result.lineLength;
+  constructor(lineRomaMap: [string, ...string[]]) {
+    this.word = this.hiraganaToRomaArray(lineRomaMap);
   }
 
-  create(wordRomaMap: string[], data: MapData) {
-    const typingWords: LineData[] = []; // 修正
-    let startLine = 0;
-    let lineLength = 0;
-    for (let i = 0; i < data.length; i++) {
-      const time = data[i]["time"];
-      const lyrics = data[i]["lyrics"];
-
-      if (wordRomaMap[i] && lyrics != "end") {
-        if (startLine == 0) {
-          startLine = i;
-        }
-        lineLength++;
-        const remainTime = +data[i + 1]["time"] - +time;
-
-        const arr: LineData = this.hiraganaToRomaArray(wordRomaMap[i], time, lyrics, remainTime);
-        typingWords.push(arr);
-      } else {
-        typingWords.push({
-          time,
-          lyrics,
-          word: [{ k: "", r: [""], p: 0 }],
-          kpm: { k: 0, r: 0 },
-          notes: { k: 0, r: 0 },
-        });
-      }
-    }
-
-    return { typingWords, startLine, lineLength };
-  }
-
-  hiraganaToRomaArray(str: string, time: string, lyrics: string, remainTime: number) {
+  hiraganaToRomaArray(lineRomaMap: [string, ...string[]]) {
     let word: TypeChank[] = [];
 
-    const wordIndexs = str.split("\t").filter((word) => word > "");
-    const STR_LEN = wordIndexs.length;
+    const STR_LEN = lineRomaMap.length;
 
     for (let i = 0; i < STR_LEN; i++) {
-      if (!isNaN(Number(wordIndexs[i]))) {
+      if (!isNaN(Number(lineRomaMap[i]))) {
       }
-      const CHAR = structuredClone(ROMA_MAP[parseInt(wordIndexs[i])]);
+      const CHAR = structuredClone(ROMA_MAP[parseInt(lineRomaMap[i])]);
       if (CHAR) {
         word.push({ ...CHAR, p: CHAR_POINT * CHAR["r"][0].length });
 
@@ -305,16 +267,12 @@ class TypingWords {
 
         //n→nn変換
         word = this.nConvert_nn(word);
-
-        //記号の種類をカウント
-        // this.symbolCounter();
       } else {
-        //打鍵パターン生成を行わなくて良い文字はそのままthis.typingArrayに追加
-        for (let v = 0; v < wordIndexs[i].length; v++) {
-          let char: string = wordIndexs[i][v];
+        for (let v = 0; v < lineRomaMap[i].length; v++) {
+          let char: string = lineRomaMap[i][v];
 
           //全角→半角に変換(英数字記号)
-          if (ZENKAKU_LIST.includes(wordIndexs[i][v])) {
+          if (ZENKAKU_LIST.includes(lineRomaMap[i][v])) {
             char = String.fromCharCode(char.charCodeAt(0) - 0xfee0);
           }
 
@@ -325,8 +283,6 @@ class TypingWords {
           if (v == 0) {
             word = this.nConvert_nn(word);
           }
-
-          // this.symbolCounter();
         }
       }
     }
@@ -337,10 +293,7 @@ class TypingWords {
       word[word.length - 1]["r"].push("n'");
     }
 
-    const notes = this.notes(word);
-    const kpm = this.kpm(notes, remainTime);
-
-    return { time, lyrics, word, notes, kpm };
+    return word;
   }
 
   //'っ','か' → 'っか'等の繋げられる促音をつなげる
@@ -412,14 +365,82 @@ class TypingWords {
 
     return lineWord;
   }
+}
 
-  kpm(notes: { k: number; r: number }, remainTime: number) {
+export class CreateMap {
+  words: LineData[];
+
+  startLine: number;
+  lineLength: number;
+  totalNotes: { r: number; k: number };
+  speedDifficulty: SpeedDifficulty;
+  currentTimeBarFrequency: number;
+  movieTotalTime: number;
+
+  constructor(data: MapData) {
+    const wordRomaMap = this.parseWord(data);
+
+    const result = this.create(wordRomaMap, data);
+
+    this.words = result.words;
+    this.startLine = result.startLine;
+    this.lineLength = result.lineLength;
+
+    this.totalNotes = this.calculateTotalNotes(result.words);
+    this.speedDifficulty = this.calculateSpeedDifficulty(result.words);
+
+    this.movieTotalTime = +this.words[result.words.length - 1].time;
+    this.currentTimeBarFrequency = this.movieTotalTime / 1700;
+  }
+
+  create(wordRomaMap: string[][], data: MapData) {
+    const words: LineData[] = [];
+    let startLine = 0;
+    let lineLength = 0;
+    for (let i = 0; i < data.length; i++) {
+      const time = data[i]["time"];
+      const lyrics = data[i]["lyrics"];
+
+      if (wordRomaMap[i].length && lyrics != "end") {
+        if (startLine == 0) {
+          startLine = i;
+        }
+        lineLength++;
+        const remainTime = +data[i + 1]["time"] - +time;
+
+        const createLineWord = new TypingWord(wordRomaMap[i] as [string, ...string[]]);
+
+        const word: LineData["word"] = createLineWord.word;
+        const notes: LineData["notes"] = this.calcLineNotes(word);
+        const kpm: LineData["kpm"] = this.calcLineKpm(notes, remainTime);
+        words.push({
+          time,
+          lyrics,
+          word,
+          kpm,
+          notes,
+        });
+      } else {
+        words.push({
+          time,
+          lyrics,
+          word: [{ k: "", r: [""], p: 0 }],
+          kpm: { k: 0, r: 0 },
+          notes: { k: 0, r: 0 },
+        });
+      }
+    }
+
+    return { words, startLine, lineLength };
+  }
+
+  calcLineKpm(notes: LineData["notes"], remainTime: number) {
     const romaKpm = Math.round((notes.r / remainTime) * 60);
     const kanaKpm = Math.round((notes.k / remainTime) * 60);
     return { r: romaKpm, k: kanaKpm };
   }
 
-  notes(word: TypeChank[]) {
+  calcLineNotes(word: TypeChank[]) {
     const kanaWord = word.map((item) => item.k);
     const dakuHandakuLineNotes = (
       kanaWord
@@ -433,33 +454,6 @@ class TypingWords {
     const romaWord = word.map((item) => item.r[0]);
 
     return { k: kanaNotes, r: romaWord.join("").length };
-  }
-}
-
-export class CreateMap {
-  typingWords: LineData[];
-
-  startLine: number;
-  lineLength: number;
-  totalNotes: { r: number; k: number };
-  speedDifficulty: SpeedDifficulty;
-  currentTimeBarFrequency: number;
-  movieTotalTime: number;
-
-  constructor(data: MapData) {
-    const wordRomaMap = this.parseWord(data);
-
-    const result = new TypingWords(wordRomaMap, data);
-
-    this.typingWords = result.typingWords;
-    this.startLine = result.startLine;
-    this.lineLength = result.lineLength;
-
-    this.totalNotes = this.calculateTotalNotes(result.typingWords);
-    this.speedDifficulty = this.calculateSpeedDifficulty(result.typingWords);
-
-    this.movieTotalTime = +this.typingWords[result.typingWords.length - 1].time;
-    this.currentTimeBarFrequency = this.movieTotalTime / 1700;
   }
 
   parseWord(data: MapData) {
@@ -487,7 +481,7 @@ export class CreateMap {
 
     const lyricsArray = lyrics.split("\n");
 
-    return lyricsArray;
+    return lyricsArray.map((array) => array.split("\t").filter((word) => word > ""));
   }
 
   calculateTotalNotes(typingWords: LineData[]) {
@@ -529,4 +523,21 @@ export class CreateMap {
 
     return (temp[half - 1] + temp[half]) / 2;
   }
+}
+
+export function romaConvert(lineWord: WordType) {
+  const dakuten = lineWord.kanaDakuten;
+  let kanaWord =
+    (dakuten ? dakuten : lineWord.nextChar["k"]) + lineWord.word.map((char) => char["k"]).join("");
+  const nextPoint = lineWord.nextChar["p"];
+  const ROMA_MAP_LEN = ROMA_MAP.length;
+
+  for (let i = 0; i < ROMA_MAP_LEN; i++) {
+    kanaWord = kanaWord.replace(RegExp(ROMA_MAP[i]["k"], "g"), "\t" + i + "\t");
+  }
+
+  const lyricsArray = kanaWord.split("\t").filter((word) => word > "");
+  const word = new TypingWord(lyricsArray as [string, ...string[]]).word;
+
+  return { nextChar: { ...word[0], p: nextPoint }, word: word.slice(1) };
 }

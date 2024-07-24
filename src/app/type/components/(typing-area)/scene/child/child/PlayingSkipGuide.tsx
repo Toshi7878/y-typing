@@ -6,7 +6,7 @@ export interface SkipGuideRef {
   setSkipGuide: (guide: string) => void;
   displaySkipGuide: (
     kana: string,
-    lineTime: number,
+    lineConstantTime: number,
     lineRemainTime: number,
     skipGuideRef: React.RefObject<SkipGuideRef>,
     isRetrySkip: boolean,
@@ -24,12 +24,12 @@ const PlayingSkipGuide = forwardRef<SkipGuideRef, PlayingSkipGuideProps>(
     useImperativeHandle(ref, () => ({
       getSkipGuide: () => skip,
       setSkipGuide: (guide: string) => setSkipGuide(guide),
-      displaySkipGuide: (kana, lineTime, lineRemainTime, skipGuideRef, isRetrySkip) => {
+      displaySkipGuide: (kana, lineConstantTime, lineRemainTime, skipGuideRef, isRetrySkip) => {
         const SKIP_IN = 0.4; //ラインが切り替わり後、指定のtimeが経過したら表示
         const SKIP_OUT = 4; //ラインの残り時間が指定のtimeを切ったら非表示
         const SKIP_KEY = "Space";
         const IS_SKIP_DISPLAY =
-          (!kana && lineTime >= SKIP_IN && lineRemainTime >= SKIP_OUT) || isRetrySkip;
+          (!kana && lineConstantTime >= SKIP_IN && lineRemainTime >= SKIP_OUT) || isRetrySkip;
         const skip = skipGuideRef.current?.getSkipGuide();
 
         //スキップ表示絶対条件 && 既に表示されているか
