@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  videoId: "",
+  title: "",
+  creatorComment: "",
+};
+
 export const tabInfoInputSlice = createSlice({
   name: "ytTitle",
 
-  initialState: {
-    videoId: "",
-    title: "",
-    creatorComment: "",
-  },
+  initialState: initialState,
 
   reducers: {
     setVideoId: (state, action) => {
@@ -19,9 +21,15 @@ export const tabInfoInputSlice = createSlice({
     setCreatorComment: (state, action) => {
       state.creatorComment = action.payload;
     },
+
+    resetYtData: (state) => {
+      state.videoId = initialState.videoId;
+      state.title = initialState.title;
+      state.creatorComment = initialState.creatorComment;
+    },
   },
 });
 
-export const { setVideoId, setYtTitle, setCreatorComment } = tabInfoInputSlice.actions;
+export const { setVideoId, setYtTitle, setCreatorComment, resetYtData } = tabInfoInputSlice.actions;
 
 export default tabInfoInputSlice.reducer;

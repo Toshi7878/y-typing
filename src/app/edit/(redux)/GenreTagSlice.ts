@@ -15,7 +15,6 @@ export const genreTagSlice = createSlice({
   initialState,
 
   reducers: {
-
     setTags: (state, action) => {
       if (Array.isArray(action.payload)) {
         const tagsData = action.payload;
@@ -29,8 +28,12 @@ export const genreTagSlice = createSlice({
     deleteTags: (state, action) => {
       state.tags = [...action.payload];
     },
+
+    resetTags: (state) => {
+      state.tags = initialState.tags;
+    },
   },
 });
-export const {  setTags, deleteTags } = genreTagSlice.actions;
+export const { setTags, deleteTags, resetTags } = genreTagSlice.actions;
 
 export default genreTagSlice.reducer;

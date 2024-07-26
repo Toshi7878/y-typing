@@ -18,7 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { extractYouTubeVideoId } from "@/components/header/new-map/extractYTId";
 import { z } from "zod";
 import { useRefs } from "../../(contexts)/refsProvider";
-import { setIsReady, setIsStarted } from "../../(redux)/ytStateSlice";
+import { setIsStarted } from "../../(redux)/ytStateSlice";
 
 const videoIdSchema = z
   .string()

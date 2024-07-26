@@ -123,7 +123,7 @@ export default function LineRow() {
           data-line-index={index}
           className={`cursor-pointer relative ${
             selectedIndex === index
-              ? "selected-line bg-cyan-400 outline outline-2 outline-black"
+              ? "selected-line bg-cyan-300 outline outline-2 outline-black"
               : " hover:bg-cyan-400/35"
           } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""} ${
             endAfterLineIndex < index && line.lyrics !== "end" ? " bg-red-400/35" : ""
@@ -146,16 +146,18 @@ export default function LineRow() {
           <Td>
             <Button
               disabled={mapData.length - 1 === index}
-              variant="outline"
-              colorScheme={`${selectedIndex === index ? "green" : "cyan"}`}
+              variant={line.options ? "solid" : "outline"}
+              colorScheme={`${selectedIndex === index ? "green" : "green"}`}
               size="sm"
               onClick={() => {
-                setOptionModalIndex(index);
-                setLineOptions(line.options);
-                onOpen();
+                if (mapData.length - 1 !== index) {
+                  setOptionModalIndex(index);
+                  setLineOptions(line.options);
+                  onOpen();
+                }
               }}
             >
-              オプション
+              {line.options ? "設定有" : "未設定"}
             </Button>
           </Td>
         </Tr>

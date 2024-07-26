@@ -1,6 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
-
-interface EditorOption {
+interface IndexDBOption {
   id: number;
   optionName: string;
   value: string | number | boolean;
@@ -8,15 +7,25 @@ interface EditorOption {
 
 const db = new Dexie("AppDB") as Dexie & {
   editorOption: EntityTable<
-    EditorOption,
+    IndexDBOption,
+    "id" // primary key "id" (for the typings only)
+  >;
+  globalOption: EntityTable<
+    IndexDBOption,
+    "id" // primary key "id" (for the typings only)
+  >;
+  typingOption: EntityTable<
+    IndexDBOption,
     "id" // primary key "id" (for the typings only)
   >;
 };
 
 // Schema declaration:
-db.version(1).stores({
+db.version(11).stores({
   editorOption: "optionName", // primary key "id" and unique "optionName"
+  globalOption: "optionName",
+  typingOption: "optionName",
 });
 
-export type { EditorOption };
+export type { IndexDBOption };
 export { db };

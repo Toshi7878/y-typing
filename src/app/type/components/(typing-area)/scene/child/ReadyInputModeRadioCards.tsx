@@ -3,7 +3,6 @@ import { InputModeType } from "@/app/type/(ts)/type";
 import { Box, HStack, useRadio, useRadioGroup } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
-// 1. Create a component that consumes the `useRadio` hook
 function RadioCard(props) {
   const { getInputProps, getRadioProps } = useRadio(props);
 
@@ -50,12 +49,22 @@ function ReadyInputModeRadioCards() {
     { value: "kana", label: "かな入力" },
     { value: "flick", label: "フリック入力" },
   ];
+
   const [, setInputMode] = useAtom(inputModeAtom);
+
+  const inputModeStorage = localStorage.getItem("inputMode");
+
+  const defaultInputMode =
+    inputModeStorage && ["roma", "kana", "flick"].includes(inputModeStorage)
+      ? (inputModeStorage as InputModeType)
+      : "roma";
+
   const { getRootProps, getRadioProps } = useRadioGroup({
-    defaultValue: "roma",
+    defaultValue: defaultInputMode,
     onChange: (value) => {
       console.log(value);
       setInputMode(value as InputModeType);
+      localStorage.setItem("inputMode", value);
     },
   });
 

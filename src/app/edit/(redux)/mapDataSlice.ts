@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { MapData } from "@/app/type/(ts)/type";
 import { Line } from "@/types";
 
 interface MapDataState {
@@ -94,6 +93,7 @@ export const mapDataSlice = createSlice({
     setLineOption: (state, action) => {
       const { options, number } = action.payload;
       const newValue = [...state.value];
+      const optionsKey = Object.keys({ ...options }).filter((option) => option === "");
       newValue[number] = { ...newValue[number], options };
       state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
@@ -179,6 +179,10 @@ export const mapDataSlice = createSlice({
     setLastAddedTime(state, action) {
       state.lastAddedTime = action.payload;
     },
+
+    resetMapData(state) {
+      state.value = initialState.value;
+    },
   },
 });
 
@@ -192,6 +196,7 @@ export const {
   mapDataRedo,
   setLastAddedTime,
   setMapData,
+  resetMapData,
 } = mapDataSlice.actions;
 
 export default mapDataSlice.reducer;

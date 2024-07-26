@@ -29,7 +29,7 @@ import { Controller, useForm } from "react-hook-form";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allAdjustTime } from "../../(redux)/mapDataSlice";
-import { db, EditorOption } from "@/lib/db";
+import { db, IndexDBOption } from "@/lib/db";
 import { RootState } from "../../(redux)/store";
 import { addHistory } from "../../(redux)/undoredoSlice";
 import { useRefs } from "../../(contexts)/refsProvider";
@@ -41,7 +41,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
   const dispatch = useDispatch();
   const toast = useToast();
 
-  const [optionsData, setOptionsData] = useState<EditorOption>();
+  const [optionsData, setOptionsData] = useState<IndexDBOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const { playerRef } = useRefs();
@@ -54,7 +54,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
       const formattedData = allData.reduce((acc, { optionName, value }) => {
         acc[optionName] = value;
         return acc;
-      }, {} as EditorOption);
+      }, {} as IndexDBOption);
       setOptionsData(formattedData);
       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
       methods.reset({

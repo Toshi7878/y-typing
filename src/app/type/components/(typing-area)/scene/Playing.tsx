@@ -25,21 +25,6 @@ import { updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
 export const ticker = new Ticker();
 
-export const defaultLineResultObj: LineResultObj = {
-  status: {
-    point: 0,
-    timeBonus: 0,
-    type: 0,
-    miss: 0,
-    combo: 0,
-    clearTime: 0,
-    kpm: 0,
-    rkpm: 0,
-    lineKpm: 0,
-  },
-  typeResult: [],
-};
-
 const Playing = forwardRef<PlayingRef>((props, ref) => {
   const {
     playerRef,
@@ -164,7 +149,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             const success = new Success(
               status,
               statusRef,
-              result.chars,
+              result.successKey,
               lineConstantTime,
               playingComboRef,
               inputMode,
@@ -184,7 +169,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               statusRef.current!.status.totalTypeTime += lineConstantTime;
             }
           } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-            const miss = new Miss(status, statusRef, result.chars, playingComboRef, lineTime);
+            const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineTime);
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
         } else {

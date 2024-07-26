@@ -10,7 +10,6 @@ import {
 } from "./type";
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
-import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
 
@@ -152,6 +151,7 @@ const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ",
 
 interface CharsType {
   keys: string[];
+  key: string;
   code: string;
   shift: boolean;
 }
@@ -164,11 +164,13 @@ class RomaInput {
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
+  failKey: string;
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     const result = this.hasRomaPattern(chars, lineWord);
     this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
+    this.failKey = result.failKey ?? "";
   }
   hasRomaPattern(chars: CharsType, lineWord: WordType) {
     let newLineWord = { ...lineWord } as WordType;
@@ -179,7 +181,7 @@ class RomaInput {
     );
 
     if (!IS_SUCCESS) {
-      return { newLineWord, successKey: "" };
+      return { newLineWord, successKey: "", failKey: chars.key };
     }
 
     if (kana == "ん" && newLineWord.word[0]) {
@@ -274,11 +276,14 @@ class KanaInput {
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
+  failKey: string;
+
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     const result = this.hasKana({ chars, lineWord });
     this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
+    this.failKey = result.failKey ?? "";
   }
 
   hasKana({ chars, lineWord }: JudgeType) {
@@ -306,7 +311,8 @@ class KanaInput {
         : keys[successIndex];
 
     if (!char) {
-      return { newLineWord, successKey: "" };
+      const isKanaInArray = !keyboardCharacters.includes(nextKana[0]);
+      return { newLineWord, successKey: "", failKey: isKanaInArray ? chars.keys[0] : chars.key };
     }
 
     if (dakuHanDakuData.type) {
@@ -406,6 +412,7 @@ export class Typing {
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
+  failKey: string;
 
   constructor({ event, lineWord, inputMode }: TypingEvent) {
     const chars: CharsType =
@@ -419,11 +426,13 @@ export class Typing {
     this.newLineWord = inputResult.newLineWord;
     this.updatePoint = inputResult.updatePoint;
     this.successKey = inputResult.successKey;
+    this.failKey = inputResult.failKey;
   }
 
   romaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: [event.key.toLowerCase()],
+      key: event.key.toLowerCase(),
       code: event.code,
       shift: event.shiftKey,
     };
@@ -434,6 +443,7 @@ export class Typing {
   kanaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: KANA_CODE_MAP[event.code] ? KANA_CODE_MAP[event.code] : KANA_KEY_MAP[event.key],
+      key: event.key.toLowerCase(),
       code: event.code,
       shift: event.shiftKey,
     };
@@ -486,7 +496,7 @@ export class Success {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    chars: CharsType,
+    successKey: string,
     lineConstantTime: number,
     playingComboRef: React.RefObject<PlayingComboRef>,
     inputMode: InputModeType,
@@ -514,11 +524,9 @@ export class Success {
     );
 
     statusRef.current!.lineStatus.typeResult.push({
-      type: {
-        ...chars,
-        isSuccess: true,
-      },
-      time: lineTime,
+      c: successKey,
+      is: true,
+      t: Math.round(lineTime * 1000) / 1000,
     });
   }
 
@@ -571,18 +579,17 @@ export class Success {
       newStatus.line =
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
-      newStatus.rank = this.getRank(rankingScores, newStatus.score);
+      newStatus.rank = getRank(rankingScores, newStatus.score);
     }
 
     return newStatus;
   }
+}
 
-  getRank(scores: number[], currentScore: number): number {
-    // 現在のスコアが何番目に入るかを取得
-    const rank = scores.findIndex((score) => score > currentScore) + 2;
-
-    return rank;
-  }
+export function getRank(scores: number[], currentScore: number): number {
+  // 現在のスコアが何番目に入るかを取得
+  const rank = scores.findIndex((score) => score < currentScore);
+  return (rank < 0 ? scores.length : rank) + 1;
 }
 
 export class Miss {
@@ -591,18 +598,16 @@ export class Miss {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    chars: CharsType,
+    failKey: string,
     playingComboRef: React.RefObject<PlayingComboRef>,
     lineTime: number,
   ) {
     this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef);
 
     statusRef.current!.lineStatus.typeResult.push({
-      type: {
-        ...chars,
-        isSuccess: false,
-      },
-      time: lineTime,
+      c: failKey,
+      is: false,
+      t: Math.round(lineTime * 1000) / 1000,
     });
   }
 

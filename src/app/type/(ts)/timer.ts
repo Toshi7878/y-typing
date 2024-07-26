@@ -126,6 +126,7 @@ export const updateTimer = (
         kpm: typeSpeed.lineTypeSpeed,
         rkpm: typeSpeed.lineTypeRkpm,
         lineKpm: playingLineTimeRef.current?.getLineKpm(),
+        inputMode: inputMode,
       },
       typeResult: statusRef.current!.lineStatus.typeResult,
     });

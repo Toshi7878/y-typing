@@ -6,7 +6,10 @@ export const mapAtom = atom<CreateMap | null>(null);
 
 export const sceneAtom = atom<SceneType>("ready");
 export const tabIndexAtom = atom<0 | 1>(1);
-export const inputModeAtom = atom<InputModeType>("roma");
+
+const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
+
+export const inputModeAtom = atom<InputModeType>(inputMode);
 
 export const playingNotifyAtom = atom<string>("");
 export const mapIdAtom = atom<number>(0);

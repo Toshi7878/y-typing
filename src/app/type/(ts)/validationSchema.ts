@@ -10,7 +10,7 @@ export const statusSchema = z.object({
   maxCombo: z.number(),
   kpm: z.number(),
   rkpm: z.number(),
-  playSpeed: z.number(),
+  defaultSpeed: z.number(),
 });
 
 export const lineResultObjSchema = z.object({
@@ -24,20 +24,14 @@ export const lineResultObjSchema = z.object({
     kpm: z.number(),
     rkpm: z.number(),
     lineKpm: z.number(),
+    inputMode: z.string(),
   }),
   typeResult: z.array(
     z.object({
-      type: z
-        .object({
-          keys: z.array(z.string()),
-          code: z.string(),
-          shift: z.boolean().optional(),
-          isSuccess: z.boolean(),
-        })
-        .optional(),
-
-      option: z.string().optional(),
-      time: z.number(),
+      c: z.string().optional(),
+      is: z.boolean().optional(),
+      op: z.string().optional(),
+      t: z.number(),
     }),
   ),
 });

@@ -10,6 +10,7 @@ import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import {
+  inputModeAtom,
   mapAtom,
   mapIdAtom,
   rankingScoresAtom,
@@ -19,6 +20,7 @@ import {
 import SceneWrapper from "../components/(typing-area)/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
+import { InputModeType } from "../(ts)/type";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setMapId] = useAtom(mapIdAtom);
   const [, setRankingScores] = useAtom(rankingScoresAtom);
   const [, setSpeedData] = useAtom(speedAtom);
+  const [, setInputMode] = useAtom(inputModeAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -73,6 +76,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: ["mapData", id] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
+      const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
+
+      setInputMode(inputMode);
       setRankingScores([]);
       setSpeedData({
         defaultSpeed: 1,

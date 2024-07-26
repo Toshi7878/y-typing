@@ -11,6 +11,7 @@ import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { handleLinkClick } from "../nprogress";
+import { ja } from "date-fns/locale";
 
 interface GetMapList {
   id: number;
@@ -136,7 +137,11 @@ function MapList() {
 
                 <span className="text-xs">
                   {" "}
-                  - {formatDistanceToNowStrict(new Date(map.updatedAt), { addSuffix: true })}
+                  -{" "}
+                  {formatDistanceToNowStrict(new Date(map.updatedAt), {
+                    addSuffix: true,
+                    locale: ja,
+                  })}
                 </span>
               </small>
             </Link>

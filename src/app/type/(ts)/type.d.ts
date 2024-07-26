@@ -116,18 +116,14 @@ export interface SendResultData {
     rkpm: number;
     maxCombo: number;
     kpm: number;
-    playSpeed: number;
+    defaultSpeed: number;
   };
 }
 export interface TypeResult {
-  type?: {
-    keys: string[];
-    code: string;
-    shift?: boolean;
-    isSuccess: boolean;
-  };
-  option?: string;
-  time: number;
+  is?: boolean;
+  c?: string;
+  op?: string;
+  t: number;
 }
 
 export interface LineResultObj {
@@ -141,6 +137,7 @@ export interface LineResultObj {
     kpm: number;
     rkpm: number;
     lineKpm: number;
+    inputMode: InputModeType;
   };
   typeResult: TypeResult[];
 }

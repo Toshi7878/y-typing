@@ -44,7 +44,7 @@ const End = () => {
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
-      playSpeed: speedData.defaultSpeed,
+      defaultSpeed: speedData.defaultSpeed,
     };
     const sendData = {
       mapId: mapId,

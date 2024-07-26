@@ -1,5 +1,6 @@
 import { Status, StatusRef, WordType } from "./type";
 import { CreateMap } from "./createTypingWord";
+import { getRank } from "./keydown";
 
 export class LineResult {
   newStatus: Status;
@@ -47,18 +48,11 @@ export class LineResult {
       const lostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       newStatus.lost += lostWord.length;
       newStatus.score += newStatus.point;
-      newStatus.rank = this.getRank(rankingScores, newStatus.score);
+      newStatus.rank = getRank(rankingScores, newStatus.score);
     }
 
     newStatus.point = 0;
     return newStatus;
-  }
-
-  getRank(scores: number[], currentScore: number): number {
-    // 現在のスコアが何番目に入るかを取得
-    const rank = scores.findIndex((score) => score > currentScore) + 2;
-
-    return rank;
   }
 
   updateTotalTypeTime(lineTime: number, totalTypeTime: number) {

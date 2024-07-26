@@ -6,15 +6,21 @@ import TabContent from "./(tab-content)/Tab";
 import TableContent from "./(table-content)/TableContent";
 import TimeRange from "./TimeRange";
 import YouTubeContent from "./(youtube-content)/YoutubeContent";
-import { setCreatorComment, setVideoId, setYtTitle } from "./(redux)/tabInfoInputSlice";
-import { setTags } from "./(redux)/GenreTagSlice";
+import {
+  resetYtData,
+  setCreatorComment,
+  setVideoId,
+  setYtTitle,
+} from "./(redux)/tabInfoInputSlice";
+import { resetTags, setTags } from "./(redux)/GenreTagSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { setMapData } from "./(redux)/mapDataSlice";
+import { resetMapData, setMapData } from "./(redux)/mapDataSlice";
 import NProgress from "nprogress";
+import { resetUndoRedoData } from "./(redux)/undoredoSlice";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +63,11 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       dispatch(setYtTitle(title));
       dispatch(setCreatorComment(creatorComment));
       dispatch(setTags(tags));
+    } else {
+      dispatch(resetMapData());
+      dispatch(resetTags());
+      dispatch(resetYtData());
+      dispatch(resetUndoRedoData());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
