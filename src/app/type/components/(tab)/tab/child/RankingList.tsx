@@ -1,13 +1,13 @@
 "use client";
 
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { RankingListType, SendResultData } from "@/app/type/(ts)/type";
+import { RankingListType } from "@/app/type/(ts)/type";
 import RankingTr from "./child/RankingTr";
 import RankingMenu from "./child/RankingMenu";
 import { useAtom } from "jotai";

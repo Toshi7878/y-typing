@@ -21,8 +21,7 @@ import {
 import { useAtom } from "jotai";
 import { memo } from "react";
 
-function EndTypingResultModal({ isOpen, onClose }) {
-  const { statusRef } = useRefs();
+function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
   const [map] = useAtom(mapAtom);
   console.log("modal Open");
   let lineCount = 0;
@@ -34,7 +33,7 @@ function EndTypingResultModal({ isOpen, onClose }) {
 
         <ModalCloseButton />
         <ModalBody>
-          {statusRef.current!.status.result.map((lineResult: LineResultObj, index) => {
+          {typingLineResults.map((lineResult: LineResultObj, index) => {
             if (!map?.words[index].notes.k) {
               return null;
             }

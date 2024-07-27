@@ -176,7 +176,13 @@ const End = () => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
-      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
+      {isOpen && (
+        <EndTypingResultModal
+          isOpen={isOpen}
+          onClose={onClose}
+          typingLineResults={statusRef.current?.lineStatus}
+        />
+      )}
     </Box>
   );
 };

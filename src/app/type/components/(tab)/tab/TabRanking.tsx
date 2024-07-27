@@ -1,5 +1,3 @@
-import React, { useRef } from "react";
-
 import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
 import RankingList from "./child/RankingList";

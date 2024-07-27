@@ -98,8 +98,6 @@ export const updateTimer = (
     }
   }
 
-  console.log(`${ytCurrentTime} >= ${ytStateRef.current!.movieEndTime}`);
-
   if (
     ytCurrentTime >= Number(currentLine["time"]) ||
     ytCurrentTime >= ytStateRef.current!.movieEndTime
