@@ -47,7 +47,7 @@ const TabEditor = forwardRef((props, ref) => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
   const isLoadingWordConvertBtn = useSelector(
-    (state: RootState) => state.btnFlags.isLoadingWordConvertBtn
+    (state: RootState) => state.btnFlags.isLoadingWordConvertBtn,
   );
 
   const lineInit = () => {
@@ -94,12 +94,9 @@ const TabEditor = forwardRef((props, ref) => {
     if (!isShiftKey) {
       lineInit();
     }
+    const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-    if (lyricsCopy) {
-      const convertOption = editorSettingRef.current!.getWordConvertOption();
-
-      TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics, dispatch, convertOption);
-    }
+    TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics, dispatch, convertOption);
   };
 
   const update = (mapData: RootState["mapData"]["value"]) => {
@@ -113,7 +110,7 @@ const TabEditor = forwardRef((props, ref) => {
       addHistory({
         type: "update",
         data: { old: mapData[parseInt(lineNumber)], new: { time, lyrics, word }, lineNumber },
-      })
+      }),
     );
 
     ButtonEvents.updateLine(dispatch, {
