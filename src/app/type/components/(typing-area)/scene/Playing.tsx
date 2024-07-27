@@ -138,11 +138,11 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       if (!ytStateRef.current?.isPaused) {
         //ライン切り替えギリギリのタイミングは処理されないようにしてみる(切り替えバグが起こるので)
-        if (isTyped({ event, lineWord: cloneLineWord })) {
-          const count = statusRef.current!.status.count;
+        const count = statusRef.current!.status.count;
+        const prevLine = map!.words[count - 1];
+        const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
+        if (lineTime > 0 && isTyped({ event, lineWord: cloneLineWord })) {
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-          const prevLine = map!.words[count - 1];
-          const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
           const lineConstantTime = lineTime / speedData.playSpeed;
 
           const status = tabStatusRef.current!.getStatus();
