@@ -128,16 +128,16 @@ export interface TypeResult {
 
 export interface LineResultObj {
   status: {
-    point: number;
-    timeBonus: number;
+    p: number;
+    tBonus: number;
     type: number;
     miss: number;
     combo: number;
-    clearTime: number;
+    cTime: number;
     kpm: number;
-    rkpm: number;
-    lineKpm: number;
-    inputMode: InputModeType;
+    lRkpm: number;
+    lKpm: number;
+    mode: InputModeType;
     lostW: string;
   };
   typeResult: TypeResult[];

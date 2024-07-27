@@ -230,7 +230,7 @@ const SYMBOL_LIST = [
   "\\",
 ];
 
-const CHAR_POINT = 10;
+export const CHAR_POINT = 10;
 
 export class TypingWord {
   word: LineData["word"];

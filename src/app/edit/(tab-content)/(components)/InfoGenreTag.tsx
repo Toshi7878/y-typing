@@ -132,6 +132,7 @@ const InfoGenreTag = () => {
             "難しい",
             "装飾譜面",
             "ギミック譜面",
+            "YouTube Premium",
           ].map((label, index) => {
             const isSelected = tags.some((tag) => tag.id === label);
 

@@ -16,7 +16,7 @@ import PlayingBottom from "./child/PlayingBottom";
 import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
-import { LineResultObj, PlayingRef, StatusRef } from "@/app/type/(ts)/type";
+import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
@@ -130,7 +130,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       const lineWord = playingCenterRef.current!.getLineWord();
 
       const cloneLineWord = structuredClone(lineWord);
+
       if (!ytStateRef.current?.isPaused) {
+        //ライン切り替えギリギリのタイミングは処理されないようにしてみる(切り替えバグが起こるので)
         if (isTyped({ event, lineWord: cloneLineWord })) {
           const count = statusRef.current!.status.count;
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });

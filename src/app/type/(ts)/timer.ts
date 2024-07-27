@@ -9,7 +9,15 @@ import { defaultStatusRef } from "@/app/type/(contexts)/refsProvider";
 
 import { CreateMap } from "./createTypingWord";
 import { LineResult } from "./lineResult";
-import { GameStateRef, InputModeType, Speed, StatusRef, YTStateRef } from "./type";
+import {
+  GameStateRef,
+  InputModeType,
+  LineData,
+  Speed,
+  StatusRef,
+  WordType,
+  YTStateRef,
+} from "./type";
 
 export const updateTimer = (
   map: CreateMap,
@@ -98,48 +106,88 @@ export const updateTimer = (
     }
   }
 
-  if (nextLine && ytCurrentTime >= Number(currentLine["time"])) {
-    const currentPlayingCenterRef = playingCenterRef.current;
-    const status = tabStatusRef.current!.getStatus();
-
-    const lineWord = currentPlayingCenterRef!.getLineWord();
-    const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
-
-    const lineResult = new LineResult(
-      status!,
-      statusRef,
-      lineWord,
-      inputMode as InputModeType,
+  if (ytCurrentTime >= Number(currentLine["time"])) {
+    lineUpdate(
       map,
-      lineTime,
-      typeSpeed.totalTypeSpeed,
+      statusRef,
+      tabStatusRef,
+      playingCenterRef,
+      playingLineTimeRef,
+      playingComboRef,
+      lineProgressRef,
+      inputMode as InputModeType,
+      speedData,
       rankingScores,
+      lineConstantTime,
+      lineTime,
+      count,
+      currentLine,
+      nextLine,
     );
+  }
+};
 
+export const lineUpdate = (
+  map: CreateMap,
+  statusRef: React.RefObject<StatusRef>,
+  tabStatusRef: React.RefObject<TabStatusRef>,
+  playingCenterRef: React.RefObject<PlayingCenterRef>,
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
+  playingComboRef: React.RefObject<PlayingComboRef>,
+  lineProgressRef: React.RefObject<HTMLProgressElement>,
+  inputMode: InputModeType,
+  speedData: Speed,
+  rankingScores: number[],
+  lineConstantTime: number,
+  lineTime: number,
+  count: number,
+  currentLine: LineData,
+  nextLine: LineData,
+) => {
+  const currentPlayingCenterRef = playingCenterRef.current;
+  const status = tabStatusRef.current!.getStatus();
+
+  const lineWord = currentPlayingCenterRef!.getLineWord();
+  const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
+
+  const lineResult = new LineResult(
+    status!,
+    statusRef,
+    lineWord,
+    inputMode as InputModeType,
+    map,
+    lineTime,
+    typeSpeed.totalTypeSpeed,
+    rankingScores,
+  );
+
+  if (count > 0) {
     statusRef.current!.status.result.push({
       status: {
-        point: status!.point,
-        timeBonus: status!.timeBonus,
+        p: status!.point,
+        tBonus: status!.timeBonus,
         type: status!.type,
         miss: status!.miss,
         combo: playingComboRef.current?.getCombo(),
-        clearTime: statusRef.current!.lineStatus.lineClearTime,
+        cTime: statusRef.current!.lineStatus.lineClearTime,
         kpm: typeSpeed.lineTypeSpeed,
-        rkpm: typeSpeed.lineTypeRkpm,
-        lineKpm: playingLineTimeRef.current?.getLineKpm(),
-        inputMode: inputMode,
+        lRkpm: typeSpeed.lineTypeRkpm,
+        lKpm: playingLineTimeRef.current?.getLineKpm(),
+        mode: inputMode,
         lostW: lineResult.lostW,
       },
       typeResult: statusRef.current!.lineStatus.typeResult,
     });
-    // statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
-    tabStatusRef.current!.setStatus(lineResult.newStatus);
+  }
+  // statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
+  tabStatusRef.current!.setStatus(lineResult.newStatus);
 
-    if (lineWord.nextChar["k"]) {
-      statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
-    }
-    statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
+  if (lineWord.nextChar["k"]) {
+    statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
+  }
+  statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
 
+  if (nextLine) {
     statusRef.current!.status.count += 1;
     statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
     playingLineTimeRef.current?.setLineKpm(0);

@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
@@ -11,10 +11,12 @@ import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
 import EndRetryButton from "./child/EndRetryButton";
+import EndTypingResultModal from "./child/child/EndTypingResultModal";
 
 const End = () => {
   const { data: session } = useSession();
   const [, setTabIndex] = useAtom(tabIndexAtom);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
@@ -143,6 +145,7 @@ const End = () => {
                 borderColor="black"
                 _hover={{ bg: "#3a90f3" }}
                 fontSize="3xl"
+                onClick={onOpen}
               >
                 詳細リザルトを見る
               </Button>
@@ -173,6 +176,7 @@ const End = () => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
+      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 };

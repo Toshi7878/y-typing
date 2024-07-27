@@ -15,16 +15,16 @@ export const statusSchema = z.object({
 
 export const lineResultObjSchema = z.object({
   status: z.object({
-    point: z.number(),
-    timeBonus: z.number(),
+    p: z.number(),
+    tBonus: z.number(),
     type: z.number(),
     miss: z.number(),
     combo: z.number(),
-    clearTime: z.number(),
+    cTime: z.number(),
     kpm: z.number(),
-    rkpm: z.number(),
-    lineKpm: z.number(),
-    inputMode: z.string(),
+    lRkpm: z.number(),
+    lKpm: z.number(),
+    mode: z.string(),
     lostW: z.string(),
   }),
   typeResult: z.array(
