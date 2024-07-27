@@ -52,8 +52,8 @@ function EndTypingResultModal({ isOpen, onClose }) {
             const maxLinePoint = map!.words[index].notes.r * CHAR_POINT;
 
             return (
-              <Card key={index} p={4} mb={4} boxShadow="md">
-                <CardHeader>
+              <Card key={index} p={4} mb={4} boxShadow="sm">
+                <CardHeader py={1}>
                   <Box>
                     <span data-list-number={index}>{index}</span> (
                     <span title="ライン打鍵数">{lineNotes}</span>打 ÷{" "}
@@ -61,11 +61,11 @@ function EndTypingResultModal({ isOpen, onClose }) {
                     <span title="要求打鍵速度">{lineKpm}</span>kpm)
                   </Box>
                 </CardHeader>
-                <CardBody>
-                  <Box className="kana-word word-font text-3xl">
+                <CardBody py={1} className="text-2xl word-font">
+                  <Box className="kana-word ">
                     <Box>{lineKanaWord}</Box>
                   </Box>
-                  <Box className="word-result word-font outline-text text-3xl text-white uppercase ml-1">
+                  <Box className="word-result  outline-text text-white uppercase ml-1">
                     {lineResult.typeResult.map(
                       (type, index) =>
                         type.c && (
@@ -77,7 +77,7 @@ function EndTypingResultModal({ isOpen, onClose }) {
                     {lineResult.status.lostW}
                   </Box>
                 </CardBody>
-                <CardFooter>
+                <CardFooter py={1} className="ml-1">
                   <Box className="line-status-result font-bold font-mono text-xl">
                     kpm: {lineResult.status.lKpm}, rkpm: {lineResult.status.lRkpm}, miss:
                     {lineResult.status.miss}, point: {lineResult.status.p} / {maxLinePoint},
