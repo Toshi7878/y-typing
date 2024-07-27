@@ -25,6 +25,7 @@ export const lineResultObjSchema = z.object({
     rkpm: z.number(),
     lineKpm: z.number(),
     inputMode: z.string(),
+    lostW: z.string(),
   }),
   typeResult: z.array(
     z.object({

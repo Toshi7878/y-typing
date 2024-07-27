@@ -138,6 +138,7 @@ export interface LineResultObj {
     rkpm: number;
     lineKpm: number;
     inputMode: InputModeType;
+    lostW: string;
   };
   typeResult: TypeResult[];
 }

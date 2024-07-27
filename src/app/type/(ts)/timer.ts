@@ -9,7 +9,7 @@ import { defaultStatusRef } from "@/app/type/(contexts)/refsProvider";
 
 import { CreateMap } from "./createTypingWord";
 import { LineResult } from "./lineResult";
-import { GameStateRef, Speed, StatusRef, YTStateRef } from "./type";
+import { GameStateRef, InputModeType, Speed, StatusRef, YTStateRef } from "./type";
 
 export const updateTimer = (
   map: CreateMap,
@@ -109,6 +109,7 @@ export const updateTimer = (
       status!,
       statusRef,
       lineWord,
+      inputMode as InputModeType,
       map,
       lineTime,
       typeSpeed.totalTypeSpeed,
@@ -127,6 +128,7 @@ export const updateTimer = (
         rkpm: typeSpeed.lineTypeRkpm,
         lineKpm: playingLineTimeRef.current?.getLineKpm(),
         inputMode: inputMode,
+        lostW: lineResult.lostW,
       },
       typeResult: statusRef.current!.lineStatus.typeResult,
     });
