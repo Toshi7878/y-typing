@@ -9,15 +9,8 @@ import { defaultStatusRef } from "@/app/type/(contexts)/refsProvider";
 
 import { CreateMap } from "./createTypingWord";
 import { LineResult } from "./lineResult";
-import {
-  GameStateRef,
-  InputModeType,
-  LineData,
-  Speed,
-  StatusRef,
-  WordType,
-  YTStateRef,
-} from "./type";
+import { GameStateRef, InputModeType, LineData, Speed, StatusRef, YTStateRef } from "./type";
+import { ticker } from "../components/(typing-area)/scene/Playing";
 
 export const updateTimer = (
   map: CreateMap,
@@ -77,7 +70,6 @@ export const updateTimer = (
     playingLineTimeRef.current?.setRemainTime(remainTime);
 
     if (lineWord.nextChar["k"]) {
-      console.log(`lineTime: ${lineTime} lineConstantTime${lineConstantTime}`);
       const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
       playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
     }
@@ -106,10 +98,18 @@ export const updateTimer = (
     }
   }
 
-  if (ytCurrentTime >= Number(currentLine["time"])) {
+  console.log(`${ytCurrentTime} >= ${ytStateRef.current!.movieEndTime}`);
+
+  if (
+    ytCurrentTime >= Number(currentLine["time"]) ||
+    ytCurrentTime >= ytStateRef.current!.movieEndTime
+  ) {
     lineUpdate(
+      playerRef,
       map,
       statusRef,
+      ytStateRef,
+      ytCurrentTime,
       tabStatusRef,
       playingCenterRef,
       playingLineTimeRef,
@@ -128,8 +128,11 @@ export const updateTimer = (
 };
 
 export const lineUpdate = (
+  playerRef: React.RefObject<any>,
   map: CreateMap,
   statusRef: React.RefObject<StatusRef>,
+  ytStateRef: React.RefObject<YTStateRef>,
+  ytCurrentTime: number,
   tabStatusRef: React.RefObject<TabStatusRef>,
   playingCenterRef: React.RefObject<PlayingCenterRef>,
   playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
@@ -166,11 +169,10 @@ export const lineUpdate = (
       status: {
         p: status!.point,
         tBonus: status!.timeBonus,
-        type: status!.type,
-        miss: status!.miss,
+        lType: statusRef.current!.lineStatus.lineType,
+        lMiss: statusRef.current!.lineStatus.lineMiss,
         combo: playingComboRef.current?.getCombo(),
         cTime: statusRef.current!.lineStatus.lineClearTime,
-        kpm: typeSpeed.lineTypeSpeed,
         lRkpm: typeSpeed.lineTypeRkpm,
         lKpm: playingLineTimeRef.current?.getLineKpm(),
         mode: inputMode,
@@ -187,7 +189,12 @@ export const lineUpdate = (
   }
   statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
 
-  if (nextLine) {
+  if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieEndTime) {
+    playerRef.current.stopVideo();
+    ticker.stop();
+    console.log("end");
+    return;
+  } else if (nextLine) {
     statusRef.current!.status.count += 1;
     statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
     playingLineTimeRef.current?.setLineKpm(0);

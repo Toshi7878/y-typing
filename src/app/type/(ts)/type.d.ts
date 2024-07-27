@@ -101,6 +101,7 @@ export interface StatusRef {
 export interface YTStateRef {
   isPaused: boolean;
   currentTime: number;
+  movieEndTime: number;
 }
 
 export interface SendResultData {
@@ -130,11 +131,10 @@ export interface LineResultObj {
   status: {
     p: number;
     tBonus: number;
-    type: number;
-    miss: number;
+    lType: number;
+    lMiss: number;
     combo: number;
     cTime: number;
-    kpm: number;
     lRkpm: number;
     lKpm: number;
     mode: InputModeType;

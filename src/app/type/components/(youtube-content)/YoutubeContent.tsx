@@ -16,7 +16,6 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   console.log("YouTube");
   const [scene, setScene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
-
   const refs = useRefs();
 
   const handleReady = useCallback(
@@ -30,12 +29,17 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(scene, setScene, refs.ytStateRef, setNotify);
+    ytState.play(scene, setScene, refs.ytStateRef, setNotify, refs.playerRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
   const handlePause = useCallback(() => {
     ytState.pause(refs.ytStateRef, setNotify);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleStop = useCallback(() => {
+    ytState.stop(setScene);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,6 +67,9 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
         if (scene === "ready") {
           event.target.seekTo(0);
         }
+      } else if (event.data === 5) {
+        console.log("動画強制停止");
+        ytState.stop(setScene);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

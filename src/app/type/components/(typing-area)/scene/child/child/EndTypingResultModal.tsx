@@ -25,7 +25,7 @@ function EndTypingResultModal({ isOpen, onClose }) {
   const { statusRef } = useRefs();
   const [map] = useAtom(mapAtom);
   console.log("modal Open");
-
+  let lineCount = 0;
   return (
     <Modal isOpen={isOpen} isCentered onClose={onClose}>
       <ModalOverlay />
@@ -39,6 +39,7 @@ function EndTypingResultModal({ isOpen, onClose }) {
               return null;
             }
 
+            lineCount++;
             const inputMode = lineResult.status.mode;
             const lineKanaWord = map!.words[index].word.map((w) => w["k"]).join("");
             const lineNotes =
@@ -51,12 +52,15 @@ function EndTypingResultModal({ isOpen, onClose }) {
 
             const maxLinePoint = map!.words[index].notes.r * CHAR_POINT;
 
+            const tBonus = lineResult.status.tBonus;
             return (
               <Card key={index} p={4} mb={4} boxShadow="sm">
                 <CardHeader py={1}>
                   <Box>
-                    <span data-list-number={index}>{index}</span> (
-                    <span title="ライン打鍵数">{lineNotes}</span>打 ÷{" "}
+                    <span data-list-number={index}>
+                      {lineCount}/{map.lineLength}
+                    </span>{" "}
+                    (<span title="ライン打鍵数">{lineNotes}</span>打 ÷{" "}
                     <span title="ライン時間">{lineTime.toFixed(1)}</span>秒 ={" "}
                     <span title="要求打鍵速度">{lineKpm}</span>kpm)
                   </Box>
@@ -70,7 +74,7 @@ function EndTypingResultModal({ isOpen, onClose }) {
                       (type, index) =>
                         type.c && (
                           <Text as="span" key={index} color={type.is ? "teal.500" : "red.500"}>
-                            {type.c}
+                            {type.c.replace(/ /g, "ˍ")}
                           </Text>
                         ),
                     )}
@@ -80,8 +84,8 @@ function EndTypingResultModal({ isOpen, onClose }) {
                 <CardFooter py={1} className="ml-1">
                   <Box className="line-status-result font-bold font-mono text-xl">
                     kpm: {lineResult.status.lKpm}, rkpm: {lineResult.status.lRkpm}, miss:
-                    {lineResult.status.miss}, point: {lineResult.status.p} / {maxLinePoint},
-                    timeBonus:+{lineResult.status.tBonus}
+                    {lineResult.status.lMiss}, point: {lineResult.status.p}
+                    {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
                   </Box>
                 </CardFooter>
               </Card>

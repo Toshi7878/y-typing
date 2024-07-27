@@ -71,7 +71,12 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         ? Number(map!.words[map!.startLine]["time"])
         : Number(nextLine["time"]);
 
-      playerRef.current.seekTo(skippedTime - 1 + (1 - speedData.playSpeed));
+      const seekTime =
+        nextLine["lyrics"] === "end"
+          ? ytStateRef.current!.movieEndTime - 2
+          : skippedTime - 1 + (1 - speedData.playSpeed);
+
+      playerRef.current.seekTo(seekTime);
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -81,7 +86,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (ytStateRef.current?.isPaused) {
         playerRef.current.playVideo();
       } else {
-        playerRef.current.pauseVideo();
+        playerRef.current.stopVideo();
       }
     },
     inputModeChange: (inputMode) => {

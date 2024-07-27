@@ -17,11 +17,10 @@ export const lineResultObjSchema = z.object({
   status: z.object({
     p: z.number(),
     tBonus: z.number(),
-    type: z.number(),
-    miss: z.number(),
+    lType: z.number(),
+    lMiss: z.number(),
     combo: z.number(),
     cTime: z.number(),
-    kpm: z.number(),
     lRkpm: z.number(),
     lKpm: z.number(),
     mode: z.string(),

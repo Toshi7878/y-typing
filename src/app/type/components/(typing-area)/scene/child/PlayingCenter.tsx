@@ -1,8 +1,8 @@
 import { Box, VStack } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import Lyrics from "./child/PlayingLyrics";
+import PlayingLyrics from "./child/PlayingLyrics";
 import type { NextLyricsType, WordType } from "@/app/type/(ts)/type";
-import Word from "./Word";
+import PlayingWord from "./child/PlayingWord";
 import NextLyrics from "./child/PlayingNextLyrics";
 import { inputModeAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
@@ -54,7 +54,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
         className="word-font outline-text text-white ml-6 mb-2 mt-1 text-[2.75rem]"
         style={{ letterSpacing: "0.1em" }}
       >
-        <Word
+        <PlayingWord
           id="main_word"
           correct={lineWord.correct["k"].slice(-10).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["k"]}
@@ -62,7 +62,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           className="lowercase"
         />
 
-        <Word
+        <PlayingWord
           id="sub_word"
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
@@ -71,7 +71,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
         />
       </Box>
 
-      <Lyrics
+      <PlayingLyrics
         lyrics={lyrics}
         className="-indent-1 mb-4 font-bold text-[2.75rem] text-truncate lyrics-font"
       />

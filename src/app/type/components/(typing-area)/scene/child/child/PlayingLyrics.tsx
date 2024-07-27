@@ -9,7 +9,7 @@ interface LyricsProps {
   size?: string;
 }
 
-const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
+const PlayingLyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
   return (
     <Box
       id="lyrics"
@@ -20,6 +20,6 @@ const Lyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
     />
   );
 });
-Lyrics.displayName = "Lyrics";
+PlayingLyrics.displayName = "PlayingLyrics";
 
-export default Lyrics;
+export default PlayingLyrics;

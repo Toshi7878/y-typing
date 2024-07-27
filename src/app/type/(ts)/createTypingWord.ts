@@ -388,6 +388,7 @@ export class CreateMap {
 
     this.words = result.words;
     this.startLine = result.startLine;
+
     this.lineLength = result.lineLength;
 
     this.totalNotes = this.calculateTotalNotes(result.words);
@@ -405,7 +406,7 @@ export class CreateMap {
       const time = data[i]["time"];
       const lyrics = data[i]["lyrics"];
 
-      if (wordRomaMap[i].length && lyrics != "end") {
+      if (wordRomaMap[i].length && lyrics !== "end") {
         if (startLine == 0) {
           startLine = i;
         }

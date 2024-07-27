@@ -8,11 +8,16 @@ class YTState {
     setScene: React.Dispatch<React.SetStateAction<SceneType>>,
     YTStateRef: React.RefObject<YTStateRef>,
     setNotify: React.Dispatch<React.SetStateAction<string>>,
+    playerRef: React.RefObject<any>,
   ) {
     console.log("再生 1");
 
     if (scene === "ready") {
       setScene("playing");
+      if (YTStateRef.current) {
+        YTStateRef.current.movieEndTime = playerRef.current.getDuration();
+        console.log(YTStateRef.current.movieEndTime);
+      }
     }
 
     const isPaused = YTStateRef.current!.isPaused;
@@ -38,8 +43,14 @@ class YTState {
     playerRef.current.stopVideo();
   }
 
-  stop() {
+  stop(setScene: React.Dispatch<React.SetStateAction<SceneType>>) {
     console.log("動画停止");
+
+    setScene("end");
+
+    if (ticker.started) {
+      ticker.stop();
+    }
   }
 
   pause(

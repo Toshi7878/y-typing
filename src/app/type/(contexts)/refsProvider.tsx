@@ -25,6 +25,7 @@ export const defaultStatusRef: StatusRef = {
 export const defaultYTStateRef = {
   isPaused: false,
   currentTime: 0,
+  movieEndTime: 0,
 };
 export const defaultGameStateRef = {
   isRetrySkip: false,
@@ -81,7 +82,6 @@ export const RefsProvider = ({ children }) => {
       case "playingComboRef":
         playingComboRef.current = ref;
         break;
-
     }
   };
 
