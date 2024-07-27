@@ -8,6 +8,7 @@ export interface EditorTab {
   delete: () => void;
   undoAddLyrics: (undoLine: Line) => void;
   setAddLyrics: () => void;
+  // setSelectLine: (selectedIndex: number) => void;
   redoAddLyrics: (redoLine: Line) => void;
   lineInit: () => void;
   getVolume: () => number;

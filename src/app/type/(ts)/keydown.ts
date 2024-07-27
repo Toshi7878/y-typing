@@ -573,7 +573,7 @@ export class Success {
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
-      statusRef.current!.lineStatus.lineClearTime = lineTime;
+      statusRef.current!.lineStatus.lineClearTime = Math.round(lineTime * 1000) / 1000;
       newStatus.score += newStatus.point + timeBonus;
       statusRef.current!.status.completeCount++;
       newStatus.line =

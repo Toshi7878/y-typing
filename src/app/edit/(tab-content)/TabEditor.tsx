@@ -241,6 +241,14 @@ const TabEditor = forwardRef((props, ref) => {
       lineInit();
     },
 
+    // setSelectLine: (selectedIndex: number) => {
+    //   const line = mapData[selectedIndex];
+    //   setValue("lyrics", line.lyrics || "");
+    //   setValue("word", line.word || "");
+    //   setValue("lineNumber", selectedIndex.toString());
+    //   timeInputRef.current!.selectedTime();
+    // },
+
     redoAddLyrics: (redoLine: Line) => {
       const lyrics = redoLine.lyrics;
       const addLyrics = methods.getValues("addLyrics");
