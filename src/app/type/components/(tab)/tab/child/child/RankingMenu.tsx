@@ -10,7 +10,15 @@ import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import EndTypingResultModal from "@/app/type/components/(typing-area)/scene/child/child/EndTypingResultModal";
 
-const RankingMenu = ({ userId }: { userId: string }) => {
+const RankingMenu = ({
+  userId,
+  setShowMenu,
+  setHoveredIndex,
+}: {
+  userId: string;
+  setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
+  setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [scene] = useAtom(sceneAtom);
@@ -37,10 +45,12 @@ const RankingMenu = ({ userId }: { userId: string }) => {
   const handleReplayClick = useCallback(async () => {
     const result = await refetch();
     if (result.data) {
-      // ここでフェッチしたデータを使用して必要な処理を行う
       onOpen();
+      setShowMenu(null);
+      setHoveredIndex(null);
       console.log(result.data);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
   return (
     <Stack
@@ -70,7 +80,7 @@ const RankingMenu = ({ userId }: { userId: string }) => {
         リプレイ再生
       </Button>
 
-      {data && (
+      {data !== undefined && (
         <EndTypingResultModal
           isOpen={isOpen}
           onClose={onClose}

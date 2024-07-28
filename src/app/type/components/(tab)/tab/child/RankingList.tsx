@@ -122,7 +122,6 @@ const RankingList = () => {
                 type={type}
                 kpm={user.status.kpm}
                 rkpm={user.status.rkpm}
-                handleShowMenu={handleShowMenu}
                 romaType={romaType}
                 kanaType={kanaType}
                 flickType={flickType}
@@ -133,10 +132,17 @@ const RankingList = () => {
                 updatedAt={user.updatedAt}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}
+                handleShowMenu={handleShowMenu}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               />
-              {showMenu === index && <RankingMenu userId={user.userId} />}
+              {showMenu === index && (
+                <RankingMenu
+                  userId={user.userId}
+                  setShowMenu={setShowMenu}
+                  setHoveredIndex={setHoveredIndex}
+                />
+              )}
             </React.Fragment>
           );
         })}

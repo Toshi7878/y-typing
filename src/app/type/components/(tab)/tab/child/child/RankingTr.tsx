@@ -11,7 +11,6 @@ interface RankingTrProps {
   type: number;
   kpm: number;
   rkpm: number;
-  handleShowMenu: () => void;
   romaType: number;
   kanaType: number;
   flickType: number;
@@ -22,6 +21,7 @@ interface RankingTrProps {
   updatedAt: string;
   isHighlighted: boolean;
   isHovered: boolean;
+  handleShowMenu: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }

@@ -180,7 +180,7 @@ const End = () => {
         <EndTypingResultModal
           isOpen={isOpen}
           onClose={onClose}
-          typingLineResults={statusRef.current?.lineStatus}
+          typingLineResults={statusRef.current!.status.result}
         />
       )}
     </Box>
