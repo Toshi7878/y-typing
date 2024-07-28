@@ -329,7 +329,10 @@ export class KanaInput {
       }
     }
 
-    return { newLineWord, successKey: isdakuHandaku ? dakuHanDakuData.type : char };
+    return {
+      newLineWord,
+      successKey: keys[successIndex],
+    };
   }
 
   parseDakuHandaku(dakuHandaku: Dakuten | HanDakuten): {
