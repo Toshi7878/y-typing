@@ -1,7 +1,7 @@
 import { LineResultObj } from "../components/(typing-area)/scene/Playing";
 
 export type InputModeType = "roma" | "kana" | "flick";
-export type SceneType = "ready" | "playing" | "end";
+export type SceneType = "ready" | "playing" | "end" | "replay" | "practice";
 
 export type MapData = {
   time: string;
@@ -72,6 +72,7 @@ export interface Status {
 
 export interface GameStateRef {
   isRetrySkip: boolean;
+  replayData: LineResultObj[];
 }
 
 export interface StatusRef {

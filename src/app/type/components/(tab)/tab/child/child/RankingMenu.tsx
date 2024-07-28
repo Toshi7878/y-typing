@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import EndTypingResultModal from "@/app/type/components/(typing-area)/scene/child/child/EndTypingResultModal";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 const RankingMenu = ({
   userId,
@@ -20,6 +21,8 @@ const RankingMenu = ({
   setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { gameStateRef, playerRef } = useRefs();
 
   const [scene] = useAtom(sceneAtom);
   const params = useParams();
@@ -48,7 +51,8 @@ const RankingMenu = ({
       onOpen();
       setShowMenu(null);
       setHoveredIndex(null);
-      console.log(result.data);
+      gameStateRef.current!.replayData = result.data.lineResult;
+      playerRef.current.playVideo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
@@ -80,13 +84,13 @@ const RankingMenu = ({
         リプレイ再生
       </Button>
 
-      {data !== undefined && (
+      {/* {data !== undefined && (
         <EndTypingResultModal
           isOpen={isOpen}
           onClose={onClose}
           typingLineResults={data.lineResult}
         />
-      )}
+      )} */}
     </Stack>
   );
 };

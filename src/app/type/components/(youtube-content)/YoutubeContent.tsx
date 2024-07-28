@@ -29,7 +29,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(scene, setScene, refs.ytStateRef, setNotify, refs.playerRef);
+    ytState.play(scene, setScene, refs.ytStateRef, setNotify, refs.playerRef, refs.gameStateRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 

@@ -1,5 +1,5 @@
 import { Line } from "@/types";
-import { SceneType, StatusRef, YTStateRef } from "./type";
+import { GameStateRef, SceneType, StatusRef, YTStateRef } from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
 
 class YTState {
@@ -9,6 +9,7 @@ class YTState {
     YTStateRef: React.RefObject<YTStateRef>,
     setNotify: React.Dispatch<React.SetStateAction<string>>,
     playerRef: React.RefObject<any>,
+    gameStateRef: React.RefObject<GameStateRef>,
   ) {
     console.log("再生 1");
 
@@ -16,7 +17,6 @@ class YTState {
       setScene("playing");
       if (YTStateRef.current) {
         YTStateRef.current.movieEndTime = playerRef.current.getDuration();
-        console.log(YTStateRef.current.movieEndTime);
       }
     }
 

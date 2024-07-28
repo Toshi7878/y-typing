@@ -14,8 +14,10 @@ export const Scene = () => {
   const [, setTabIndex] = useAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
 
+  const isPlayed = scene === "playing" || scene === "replay";
+
   useEffect(() => {
-    if (scene === "playing") {
+    if (isPlayed) {
       setTabIndex(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,7 +25,7 @@ export const Scene = () => {
 
   if (scene === "ready") {
     return <Ready />;
-  } else if (scene === "playing" && map) {
+  } else if (isPlayed && map) {
     return <Playing ref={playingRef} />;
   } else if (scene === "end") {
     return <End />;

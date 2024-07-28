@@ -29,6 +29,7 @@ export const defaultYTStateRef = {
 };
 export const defaultGameStateRef = {
   isRetrySkip: false,
+  replayData: [],
 };
 export interface RefsContextType {
   playerRef: any;
