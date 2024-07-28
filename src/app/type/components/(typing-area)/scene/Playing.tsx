@@ -86,7 +86,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (ytStateRef.current?.isPaused) {
         playerRef.current.playVideo();
       } else {
-        playerRef.current.stopVideo();
+        playerRef.current.pauseVideo();
       }
     },
     inputModeChange: (inputMode) => {
@@ -141,7 +141,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         const count = statusRef.current!.status.count;
         const prevLine = map!.words[count - 1];
         const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
-        if (lineTime > 0 && isTyped({ event, lineWord: cloneLineWord })) {
+        if (lineTime > 0 && isTyped({ event, lineWord: cloneLineWord }) && scene === "playing") {
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
           const lineConstantTime = lineTime / speedData.playSpeed;
 
@@ -150,7 +150,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           if (result.successKey) {
             const currentLine = map!.words[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
-
             const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
 
             const success = new Success(
@@ -185,11 +184,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       } else if (event.key === "Escape") {
         playingRef.current?.gamePause();
       }
-
-      const IS_COPY = event.ctrlKey && event.code == "KeyC";
-      if (!IS_COPY) {
-        event.preventDefault();
-      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -219,30 +213,15 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         rankingScores,
         playingComboRef,
         inputMode,
+        scene,
       );
     ticker.add(updateFunction);
 
     return () => {
       ticker.remove(updateFunction);
     };
-  }, [
-    playerRef,
-    ytStateRef,
-    speedData,
-    totalTimeProgressRef,
-    playingTotalTimeRef,
-    playingLineTimeRef,
-    playingCenterRef,
-    lineProgressRef,
-    skipGuideRef,
-    statusRef,
-    tabStatusRef,
-    gameStateRef,
-    rankingScores,
-    playingComboRef,
-    inputMode,
-    map,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speedData, rankingScores, inputMode, map, scene]);
 
   useEffect(() => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加

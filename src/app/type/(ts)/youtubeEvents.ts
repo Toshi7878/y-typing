@@ -14,9 +14,14 @@ class YTState {
     console.log("再生 1");
 
     if (scene === "ready") {
-      setScene("playing");
       if (YTStateRef.current) {
         YTStateRef.current.movieEndTime = playerRef.current.getDuration();
+      }
+
+      if (gameStateRef.current!.replayData.length > 0) {
+        setScene("replay");
+      } else {
+        setScene("playing");
       }
     }
 

@@ -22,7 +22,7 @@ const End = () => {
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const { bestScoreRef, statusRef, tabStatusRef } = useRefs();
+  const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
   const playingTotalTimeRef = useRef(null);
@@ -103,7 +103,8 @@ const End = () => {
     session &&
     status.score > 0 &&
     status.score >= bestScoreRef.current &&
-    speedData.defaultSpeed >= 1;
+    speedData.defaultSpeed >= 1 &&
+    gameStateRef.current!.replayData.length === 0;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -111,7 +112,9 @@ const End = () => {
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-3xl" mx={2}>
-              {!session ? (
+              {gameStateRef.current!.replayData.length > 0 ? (
+                <>リプレイ再生終了</>
+              ) : !session ? (
                 <>
                   スコアは{status.score}
                   です。ログインをするとランキングに登録することができます。

@@ -18,7 +18,7 @@ async function getMapInfo(id: string): Promise<GetInfoData> {
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
 
-  const mapInfo = params.id !== "9" ? await getMapInfo(params.id) : { videoId: "wGtX3nYpBkE" };
+  const mapInfo = params.id !== "1" ? await getMapInfo(params.id) : { videoId: "8iuYxdXFPbc" };
 
   return (
     <SessionProvider session={session}>

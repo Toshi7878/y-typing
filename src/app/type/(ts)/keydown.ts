@@ -11,7 +11,7 @@ import {
 import { CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
-import { KANA_CODE_MAP, KANA_KEY_MAP } from "./const/kanaKeyMap";
+import { CODE_TO_KANA, KEY_TO_KANA } from "./const/kanaKeyMap";
 
 const keyboardCharacters = [
   "0",
@@ -149,18 +149,18 @@ const OptimisationWhiteList = ["っっ", "っん", "っい", "っう"];
 const kana_mode_convert_rule_before = ["←", "↓", "↑", "→", "『", "』"];
 const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ", "「", "」"];
 
-interface CharsType {
+export interface CharsType {
   keys: string[];
   key: string;
-  code: string;
-  shift: boolean;
+  code?: string;
+  shift?: boolean;
 }
 
 interface JudgeType {
   chars: CharsType;
   lineWord: WordType;
 }
-class RomaInput {
+export class RomaInput {
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
@@ -272,7 +272,7 @@ type DakuHandakuData = {
   dakuHandaku: "" | Dakuten | HanDakuten;
 };
 
-class KanaInput {
+export class KanaInput {
   newLineWord: WordType;
   updatePoint: number;
   successKey: string;
@@ -329,7 +329,7 @@ class KanaInput {
       }
     }
 
-    return { newLineWord, successKey: char };
+    return { newLineWord, successKey: isdakuHandaku ? dakuHanDakuData.type : char };
   }
 
   parseDakuHandaku(dakuHandaku: Dakuten | HanDakuten): {
@@ -442,7 +442,7 @@ export class Typing {
 
   kanaMakeInput(event: KeyboardEvent) {
     const input = {
-      keys: KANA_CODE_MAP[event.code] ? KANA_CODE_MAP[event.code] : KANA_KEY_MAP[event.key],
+      keys: CODE_TO_KANA[event.code] ? CODE_TO_KANA[event.code] : KEY_TO_KANA[event.key],
       key: event.key.toLowerCase(),
       code: event.code,
       shift: event.shiftKey,
@@ -654,6 +654,8 @@ const disableKeys = [
   "Backspace",
 ];
 
+const keyWhiteList = ["F5"];
+
 export function shortcutKey(
   event: KeyboardEvent,
   skipGuideRef: React.RefObject<SkipGuideRef>,
@@ -665,6 +667,8 @@ export function shortcutKey(
 
   if (disableKeys.includes(event.code)) {
     event.preventDefault();
+    return;
+  } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
     return;
   }
 

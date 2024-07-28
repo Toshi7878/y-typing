@@ -9,8 +9,18 @@ import { defaultStatusRef } from "@/app/type/(contexts)/refsProvider";
 
 import { CreateMap } from "./createTypingWord";
 import { LineResult } from "./lineResult";
-import { GameStateRef, InputModeType, LineData, Speed, StatusRef, YTStateRef } from "./type";
+import {
+  GameStateRef,
+  InputModeType,
+  LineData,
+  LineResultObj,
+  SceneType,
+  Speed,
+  StatusRef,
+  YTStateRef,
+} from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
+import { CharsType, KanaInput, Miss, RomaInput, Success } from "./keydown";
 
 export const updateTimer = (
   map: CreateMap,
@@ -29,10 +39,8 @@ export const updateTimer = (
   rankingScores: number[],
   playingComboRef: React.RefObject<PlayingComboRef>,
   inputMode: string,
+  scene: SceneType,
 ) => {
-  if (!map) {
-    return;
-  }
   const ytCurrentTime = playerRef.current.getCurrentTime();
   ytStateRef.current!.currentTime = ytCurrentTime;
 
@@ -56,8 +64,27 @@ export const updateTimer = (
     currentTotalTimeProgress.value = ytCurrentTime;
   }
 
-  const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
+  if (scene === "replay") {
+    if (count && lineTime) {
+      replay(
+        count,
+        gameStateRef,
+        map,
+        lineTime,
+        playingCenterRef,
+        ytStateRef,
+        statusRef,
+        playingComboRef,
+        tabStatusRef,
+        playingLineTimeRef,
+        inputMode,
+        lineConstantTime,
+        rankingScores,
+      );
+    }
+  }
 
+  const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
   if (
     Math.abs(Number(currentLine.time) / speedData.playSpeed - ytConstantTime - displayRemainTime) >=
     0.1
@@ -107,6 +134,7 @@ export const updateTimer = (
       map,
       statusRef,
       ytStateRef,
+      gameStateRef,
       ytCurrentTime,
       tabStatusRef,
       playingCenterRef,
@@ -125,11 +153,100 @@ export const updateTimer = (
   }
 };
 
+const replay = (
+  count: number,
+  gameStateRef: React.RefObject<GameStateRef>,
+  map: CreateMap,
+  lineTime: number,
+  playingCenterRef: React.RefObject<PlayingCenterRef>,
+  ytStateRef: React.RefObject<YTStateRef>,
+  statusRef: React.RefObject<StatusRef>,
+  playingComboRef: React.RefObject<PlayingComboRef>,
+  tabStatusRef: React.RefObject<TabStatusRef>,
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
+  inputMode: string,
+  lineConstantTime: number,
+  rankingScores: number[],
+) => {
+  const typeResults = gameStateRef.current?.replayData[count - 1].typeResult;
+
+  if (typeResults.length === 0) {
+    return;
+  }
+  const keyCount = gameStateRef.current?.replayKeyCount!;
+
+  const typeData = typeResults[keyCount];
+
+  if (!typeData) {
+    return;
+  }
+
+  const keyTime = typeData.t;
+
+  if (lineTime >= keyTime) {
+    const key = typeData.c;
+    const isSuccess = typeData.is;
+    const option = typeData.op;
+    if (key) {
+      const lineWord = playingCenterRef.current!.getLineWord();
+      const chars: CharsType = {
+        keys: [key],
+        key: key,
+      };
+      const status = tabStatusRef.current!.getStatus();
+
+      if (isSuccess) {
+        console.log("update replay Success");
+
+        const result =
+          inputMode === "roma"
+            ? new RomaInput({ chars, lineWord })
+            : new KanaInput({ chars, lineWord });
+        const currentLine = map!.words[count];
+        const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+        const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
+
+        const success = new Success(
+          status,
+          statusRef,
+          result.successKey,
+          lineConstantTime,
+          playingComboRef,
+          inputMode as InputModeType,
+          result.updatePoint,
+          result.newLineWord,
+          map!,
+          lineTime,
+          typeSpeed.totalKpm,
+          remainTime,
+          rankingScores,
+        );
+
+        tabStatusRef.current!.setStatus(success.newStatus);
+        playingCenterRef.current!.setLineWord(result.newLineWord);
+        playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+        if (!result.newLineWord.nextChar["k"]) {
+          statusRef.current!.status.totalTypeTime += lineConstantTime;
+        }
+      } else {
+        console.log("update replay failed");
+        const miss = new Miss(status, statusRef, key, playingComboRef, lineTime);
+        tabStatusRef.current!.setStatus(miss.newStatus);
+      }
+    } else if (option) {
+      console.log("update replay option");
+    }
+
+    gameStateRef.current!.replayKeyCount++;
+  }
+};
+
 export const lineUpdate = (
   playerRef: React.RefObject<any>,
   map: CreateMap,
   statusRef: React.RefObject<StatusRef>,
   ytStateRef: React.RefObject<YTStateRef>,
+  gameStateRef: React.RefObject<GameStateRef>,
   ytCurrentTime: number,
   tabStatusRef: React.RefObject<TabStatusRef>,
   playingCenterRef: React.RefObject<PlayingCenterRef>,
@@ -229,5 +346,6 @@ export const lineUpdate = (
 
       progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
     }
+    gameStateRef.current!.replayKeyCount = 0;
   }
 };
