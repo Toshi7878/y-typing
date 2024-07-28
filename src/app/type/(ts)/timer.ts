@@ -13,7 +13,7 @@ import {
   GameStateRef,
   InputModeType,
   LineData,
-  LineResultObj,
+  PlayingRef,
   SceneType,
   Speed,
   StatusRef,
@@ -39,6 +39,7 @@ export const updateTimer = (
   rankingScores: number[],
   playingComboRef: React.RefObject<PlayingComboRef>,
   inputMode: string,
+  playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
 ) => {
   const ytCurrentTime = playerRef.current.getCurrentTime();
@@ -149,6 +150,8 @@ export const updateTimer = (
       count,
       currentLine,
       nextLine,
+      playingRef,
+      scene,
     );
   }
 };
@@ -241,6 +244,18 @@ const replay = (
   }
 };
 
+const lineReplayUpdate = (
+  gameStateRef: React.RefObject<GameStateRef>,
+  playingRef: React.RefObject<PlayingRef>,
+  count: number,
+) => {
+  const typeResults = gameStateRef.current?.replayData[count - 1];
+  const lineInputMode = typeResults.status.mode;
+
+  playingRef.current?.inputModeChange(lineInputMode);
+  gameStateRef.current!.replayKeyCount = 0;
+};
+
 export const lineUpdate = (
   playerRef: React.RefObject<any>,
   map: CreateMap,
@@ -261,6 +276,8 @@ export const lineUpdate = (
   count: number,
   currentLine: LineData,
   nextLine: LineData,
+  playingRef: React.RefObject<PlayingRef>,
+  scene: SceneType,
 ) => {
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
@@ -346,6 +363,9 @@ export const lineUpdate = (
 
       progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
     }
-    gameStateRef.current!.replayKeyCount = 0;
+
+    if (scene === "replay") {
+      lineReplayUpdate(gameStateRef, playingRef, statusRef.current!.status.count);
+    }
   }
 };

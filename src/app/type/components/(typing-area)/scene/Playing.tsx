@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
@@ -50,47 +50,13 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
 
-  useImperativeHandle(ref, () => ({
-    retry: () => {
-      const currentPlayingCenterRef = playingCenterRef.current; // 追加
-      currentPlayingCenterRef!.resetWordLyrics();
-
-      (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      tabStatusRef.current!.resetStatus();
-      playingComboRef.current?.setCombo(0);
-      setNotify("Retry");
-      gameStateRef.current!.isRetrySkip = true;
-      playerRef.current.seekTo(0);
-      if (ticker.started) {
-        ticker.stop();
+  const inputModeChange = useCallback(
+    (changeInputMode: string) => {
+      if (changeInputMode === inputMode) {
+        return;
       }
-    },
-    pressSkip: () => {
-      const nextLine = map!.words[statusRef.current!.status.count];
-      const skippedTime = gameStateRef.current!.isRetrySkip
-        ? Number(map!.words[map!.startLine]["time"])
-        : Number(nextLine["time"]);
 
-      const seekTime =
-        nextLine["lyrics"] === "end"
-          ? ytStateRef.current!.movieEndTime - 2
-          : skippedTime - 1 + (1 - speedData.playSpeed);
-
-      playerRef.current.seekTo(seekTime);
-      skipGuideRef.current?.setSkipGuide?.("");
-    },
-    realtimeSpeedChange: () => {
-      new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
-    },
-    gamePause: () => {
-      if (ytStateRef.current?.isPaused) {
-        playerRef.current.playVideo();
-      } else {
-        playerRef.current.pauseVideo();
-      }
-    },
-    inputModeChange: (inputMode) => {
-      if (inputMode === "roma") {
+      if (changeInputMode === "kana") {
         setInputMode("kana");
         setNotify("KanaMode");
       } else {
@@ -121,7 +87,56 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         });
       }
     },
-  }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputMode, speedData.playSpeed],
+  );
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      retry: () => {
+        const currentPlayingCenterRef = playingCenterRef.current; // 追加
+        currentPlayingCenterRef!.resetWordLyrics();
+
+        (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+        tabStatusRef.current!.resetStatus();
+        playingComboRef.current?.setCombo(0);
+        setNotify("Retry");
+        gameStateRef.current!.isRetrySkip = true;
+        playerRef.current.seekTo(0);
+        if (ticker.started) {
+          ticker.stop();
+        }
+      },
+      pressSkip: () => {
+        const nextLine = map!.words[statusRef.current!.status.count];
+        const skippedTime = gameStateRef.current!.isRetrySkip
+          ? Number(map!.words[map!.startLine]["time"])
+          : Number(nextLine["time"]);
+
+        const seekTime =
+          nextLine["lyrics"] === "end"
+            ? ytStateRef.current!.movieEndTime - 2
+            : skippedTime - 1 + (1 - speedData.playSpeed);
+
+        playerRef.current.seekTo(seekTime);
+        skipGuideRef.current?.setSkipGuide?.("");
+      },
+      realtimeSpeedChange: () => {
+        new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
+      },
+      gamePause: () => {
+        if (ytStateRef.current?.isPaused) {
+          playerRef.current.playVideo();
+        } else {
+          playerRef.current.pauseVideo();
+        }
+      },
+      inputModeChange: (changeInputMode) => inputModeChange(changeInputMode),
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [speedData, map, inputMode, inputModeChange],
+  );
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -213,6 +228,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         rankingScores,
         playingComboRef,
         inputMode,
+        ref as React.RefObject<PlayingRef>,
         scene,
       );
     ticker.add(updateFunction);

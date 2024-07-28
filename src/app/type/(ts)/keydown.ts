@@ -712,8 +712,10 @@ export function shortcutKey(
       break;
     case "KanaMode":
     case "Romaji":
-      if (inputMode === "roma" || inputMode === "kana") {
-        playingRef.current!.inputModeChange(inputMode);
+      if (inputMode === "roma") {
+        playingRef.current!.inputModeChange("kana");
+      } else {
+        playingRef.current!.inputModeChange("roma");
       }
       event.preventDefault();
       break;
