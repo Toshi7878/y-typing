@@ -164,14 +164,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               result.newLineWord,
               map!,
               lineTime,
-              typeSpeed.totalTypeSpeed,
+              typeSpeed.totalKpm,
               remainTime,
               rankingScores,
             );
 
             tabStatusRef.current!.setStatus(success.newStatus);
             playingCenterRef.current!.setLineWord(result.newLineWord);
-            playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
+            playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
             if (!result.newLineWord.nextChar["k"]) {
               statusRef.current!.status.totalTypeTime += lineConstantTime;
             }

@@ -71,7 +71,7 @@ export const updateTimer = (
 
     if (lineWord.nextChar["k"]) {
       const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
-      playingLineTimeRef.current?.setLineKpm(typeSpeed.lineTypeSpeed);
+      playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
     }
 
     const isRetrySkip = gameStateRef.current!.isRetrySkip;
@@ -149,7 +149,11 @@ export const lineUpdate = (
   const status = tabStatusRef.current!.getStatus();
 
   const lineWord = currentPlayingCenterRef!.getLineWord();
-  const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
+  const typeSpeed = new CalcTypeSpeed(
+    status!,
+    lineWord.nextChar["k"] ? lineConstantTime : statusRef.current!.lineStatus.lineClearTime,
+    statusRef,
+  );
 
   const lineResult = new LineResult(
     status!,
@@ -158,7 +162,7 @@ export const lineUpdate = (
     inputMode as InputModeType,
     map,
     lineTime,
-    typeSpeed.totalTypeSpeed,
+    typeSpeed.totalKpm,
     rankingScores,
   );
 
@@ -171,8 +175,8 @@ export const lineUpdate = (
         lMiss: statusRef.current!.lineStatus.lineMiss,
         combo: playingComboRef.current?.getCombo(),
         cTime: statusRef.current!.lineStatus.lineClearTime,
-        lRkpm: typeSpeed.lineTypeRkpm,
-        lKpm: playingLineTimeRef.current?.getLineKpm(),
+        lRkpm: typeSpeed.lineRkpm,
+        lKpm: typeSpeed.lineKpm,
         mode: inputMode,
         lostW: lineResult.lostW,
       },
