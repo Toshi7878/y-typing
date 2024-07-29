@@ -23,6 +23,7 @@ export const defaultLineWord: WordType = {
   correct: { k: "", r: "" },
   nextChar: { k: "", r: [""], p: 0 },
   word: [{ k: "", r: [""], p: 0 }],
+  lineCount: 0,
 };
 
 export const defaultNextLyrics: NextLyricsType = {

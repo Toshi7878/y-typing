@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
-import { StatusRef } from "@/app/type/(ts)/type";
+import { SceneType, StatusRef } from "@/app/type/(ts)/type";
 import { useRef } from "react";
 import { useAtom } from "jotai";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
@@ -22,23 +22,23 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
-  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } =
-    useRefs();
+  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const [, setScene] = useAtom(sceneAtom);
 
   const retry = () => {
     if (isRetryAlert) {
       onOpen();
     } else {
-      proceedRetry();
+      proceedRetry("playing");
     }
   };
 
-  const proceedRetry = () => {
-    setScene("playing");
+  const proceedRetry = (playMode: "playing" | "replay") => {
+    setScene(playMode);
     (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
     tabStatusRef.current!.resetStatus();
     playingComboRef.current!.setCombo(0);
+    gameStateRef.current!.replayKeyCount = 0;
 
     gameStateRef.current!.isRetrySkip = true;
     playerRef.current.seekTo(0);
@@ -73,7 +73,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
                 colorScheme="red"
                 onClick={() => {
                   onClose();
-                  proceedRetry();
+                  proceedRetry("playing");
                 }}
                 ml={3}
               >
@@ -91,9 +91,9 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         fontSize="2xl"
         variant="outline"
         borderColor="black"
-        onClick={retry}
+        onClick={gameStateRef.current?.replayData.length ? () => proceedRetry("replay") : retry}
       >
-        もう一度プレイ
+        {gameStateRef.current?.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
       </Button>
     </>
   );

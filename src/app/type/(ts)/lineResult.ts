@@ -6,6 +6,7 @@ export class LineResult {
   newStatus: Status;
   newTotalTime: number;
   lostW: string;
+  lostLen: number;
 
   constructor(
     status: Status,
@@ -18,14 +19,20 @@ export class LineResult {
     totalTypeSpeed: number,
     rankingScores: number[],
   ) {
+    this.lostLen = lineWord.nextChar["k"]
+      ? lineWord.nextChar["p"] / 10 + lineWord.word.map((w) => w["r"][0]).join("").length
+      : 0;
+
     this.newStatus = this.updateStatus(
       status,
       statusRef,
       lineWord,
+      this.lostLen,
       map,
       totalTypeSpeed,
       rankingScores,
     );
+
     this.lostW = this.setLostWord(lineWord, inputMode);
     this.newTotalTime = this.updateTotalTypeTime(lineTime, statusRef.current!.status.totalTypeTime);
   }
@@ -34,6 +41,7 @@ export class LineResult {
     status: Status,
     statusRef: React.RefObject<StatusRef>,
     lineWord: WordType,
+    lostLen: number,
     map: CreateMap,
     totalTypeSpeed: number,
     rankingScores: number[],
@@ -48,8 +56,7 @@ export class LineResult {
       newStatus.line =
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
-      const lostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
-      newStatus.lost += lostWord.length;
+      newStatus.lost += lostLen;
       newStatus.score += newStatus.point;
       newStatus.rank = getRank(rankingScores, newStatus.score);
     }

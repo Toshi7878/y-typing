@@ -4,6 +4,7 @@ import {
   InputModeType,
   NormalizeHirakana,
   PlayingRef,
+  SceneType,
   Status,
   StatusRef,
   WordType,
@@ -510,6 +511,7 @@ export class Success {
     totalTypeSpeed: number,
     remainTime: number,
     rankingScores: number[],
+    scene: SceneType,
   ) {
     this.newStatus = this.updateStatus(
       { ...status },
@@ -526,11 +528,13 @@ export class Success {
       rankingScores,
     );
 
-    statusRef.current!.lineStatus.typeResult.push({
-      c: successKey,
-      is: true,
-      t: Math.round(lineTime * 1000) / 1000,
-    });
+    if (scene === "playing") {
+      statusRef.current!.lineStatus.typeResult.push({
+        c: successKey,
+        is: true,
+        t: Math.round(lineTime * 1000) / 1000,
+      });
+    }
   }
 
   updateStatus(
@@ -591,7 +595,7 @@ export class Success {
 
 export function getRank(scores: number[], currentScore: number): number {
   // 現在のスコアが何番目に入るかを取得
-  const rank = scores.findIndex((score) => score < currentScore);
+  const rank = scores.findIndex((score) => score <= currentScore);
   return (rank < 0 ? scores.length : rank) + 1;
 }
 
@@ -663,7 +667,10 @@ export function shortcutKey(
   event: KeyboardEvent,
   skipGuideRef: React.RefObject<SkipGuideRef>,
   playingRef: React.RefObject<PlayingRef>,
+  statusRef: React.RefObject<StatusRef>,
   inputMode: InputModeType,
+  lineTime: number,
+  scene: SceneType,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
@@ -707,15 +714,31 @@ export function shortcutKey(
       event.preventDefault();
       break;
     case "F10":
-      playingRef.current!.realtimeSpeedChange();
+      if (scene === "playing") {
+        playingRef.current!.realtimeSpeedChange();
+        statusRef.current!.lineStatus.typeResult.push({
+          op: "speedChange",
+          t: Math.round(lineTime * 1000) / 1000,
+        });
+      }
       event.preventDefault();
       break;
     case "KanaMode":
     case "Romaji":
-      if (inputMode === "roma") {
-        playingRef.current!.inputModeChange("kana");
-      } else {
-        playingRef.current!.inputModeChange("roma");
+      if (scene === "playing") {
+        if (inputMode === "roma") {
+          playingRef.current!.inputModeChange("kana");
+          statusRef.current!.lineStatus.typeResult.push({
+            op: "kana",
+            t: Math.round(lineTime * 1000) / 1000,
+          });
+        } else {
+          playingRef.current!.inputModeChange("roma");
+          statusRef.current!.lineStatus.typeResult.push({
+            op: "roma",
+            t: Math.round(lineTime * 1000) / 1000,
+          });
+        }
       }
       event.preventDefault();
       break;

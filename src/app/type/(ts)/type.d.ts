@@ -43,6 +43,7 @@ export interface PlayingRef {
   pressSkip: () => void;
   realtimeSpeedChange: () => void;
   gamePause: () => void;
+  setRealTimeSpeed: (speed: number) => void;
   inputModeChange: (inputMode: InputModeType) => void;
 }
 
@@ -51,6 +52,7 @@ export interface WordType {
   nextChar: TypeChank;
   word: TypeChank[];
   kanaDakuten?: string;
+  lineCount: number;
 }
 
 export interface NextLyricsType {
@@ -97,6 +99,8 @@ export interface StatusRef {
     lineClearTime: number;
     latency: number;
     typeResult: TypeResult[];
+    lineStartSpeed: number;
+    lineStartInputMode: InputModeType;
   };
 }
 
@@ -125,23 +129,25 @@ export interface SendResultData {
 export interface TypeResult {
   is?: boolean;
   c?: string;
-  k?: string;
   op?: string;
   t: number;
 }
 
 export interface LineResultObj {
-  status: {
-    p: number;
-    tBonus: number;
-    lType: number;
-    lMiss: number;
+  status?: {
+    p?: number;
+    tBonus?: number;
+    lType?: number;
+    lMiss?: number;
+    cTime?: number;
+    lRkpm?: number;
+    lKpm?: number;
+    lostW?: string;
+    lLost?: number;
     combo: number;
-    cTime: number;
-    lRkpm: number;
-    lKpm: number;
+    tTime: number;
     mode: InputModeType;
-    lostW: string;
+    sp: number;
   };
   typeResult: TypeResult[];
 }

@@ -13,6 +13,7 @@ import {
   GameStateRef,
   InputModeType,
   LineData,
+  LineResultObj,
   PlayingRef,
   SceneType,
   Speed,
@@ -21,6 +22,7 @@ import {
 } from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
 import { CharsType, KanaInput, Miss, RomaInput, Success } from "./keydown";
+import { updateReplayStatus } from "./replay";
 
 export const updateTimer = (
   map: CreateMap,
@@ -70,6 +72,7 @@ export const updateTimer = (
       replay(
         count,
         gameStateRef,
+        playingRef,
         map,
         lineTime,
         playingCenterRef,
@@ -81,6 +84,7 @@ export const updateTimer = (
         inputMode,
         lineConstantTime,
         rankingScores,
+        scene,
       );
     }
   }
@@ -159,6 +163,7 @@ export const updateTimer = (
 const replay = (
   count: number,
   gameStateRef: React.RefObject<GameStateRef>,
+  playingRef: React.RefObject<PlayingRef>,
   map: CreateMap,
   lineTime: number,
   playingCenterRef: React.RefObject<PlayingCenterRef>,
@@ -170,8 +175,10 @@ const replay = (
   inputMode: string,
   lineConstantTime: number,
   rankingScores: number[],
+  scene: SceneType,
 ) => {
-  const typeResults = gameStateRef.current?.replayData[count - 1].typeResult;
+  const lineResult: LineResultObj = gameStateRef.current?.replayData[count - 1];
+  const typeResults = lineResult.typeResult;
 
   if (typeResults.length === 0) {
     return;
@@ -207,30 +214,45 @@ const replay = (
             : new KanaInput({ chars, lineWord });
         const currentLine = map!.words[count];
         const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
-        const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
 
-        const success = new Success(
-          status,
-          statusRef,
-          result.successKey,
-          lineConstantTime,
-          playingComboRef,
-          inputMode as InputModeType,
-          result.updatePoint,
-          result.newLineWord,
-          map!,
-          lineTime,
-          typeSpeed.totalKpm,
-          remainTime,
-          rankingScores,
-        );
+        if (result.newLineWord.nextChar["k"]) {
+          const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
+          const success = new Success(
+            status,
+            statusRef,
+            result.successKey,
+            lineConstantTime,
+            playingComboRef,
+            inputMode as InputModeType,
+            result.updatePoint,
+            result.newLineWord,
+            map!,
+            lineTime,
+            typeSpeed.totalKpm,
+            remainTime,
+            rankingScores,
+            scene,
+          );
 
-        tabStatusRef.current!.setStatus(success.newStatus);
-        playingCenterRef.current!.setLineWord(result.newLineWord);
-        playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
-        if (!result.newLineWord.nextChar["k"]) {
-          statusRef.current!.status.totalTypeTime += lineConstantTime;
+          tabStatusRef.current!.setStatus(success.newStatus);
+          playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+        } else {
+          const newStatus = updateReplayStatus(
+            count,
+            gameStateRef.current!.replayData,
+            map,
+            rankingScores,
+          );
+          newStatus.point = lineResult.status!.p as number;
+          newStatus.timeBonus = lineResult.status!.tBonus as number;
+
+          tabStatusRef.current!.setStatus(newStatus);
+          playingComboRef.current?.setCombo(lineResult.status!.combo as number);
+          playingLineTimeRef.current?.setLineKpm(lineResult.status!.lKpm as number);
+          statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
         }
+
+        playingCenterRef.current!.setLineWord(result.newLineWord);
       } else {
         console.log("update replay failed");
         const miss = new Miss(status, statusRef, key, playingComboRef, lineTime);
@@ -238,6 +260,18 @@ const replay = (
       }
     } else if (option) {
       console.log("update replay option");
+
+      switch (option) {
+        case "roma":
+          playingRef.current?.inputModeChange("roma");
+          break;
+        case "kana":
+          playingRef.current?.inputModeChange("kana");
+          break;
+        case "speedChange":
+          playingRef.current!.realtimeSpeedChange();
+          break;
+      }
     }
 
     gameStateRef.current!.replayKeyCount++;
@@ -249,10 +283,13 @@ const lineReplayUpdate = (
   playingRef: React.RefObject<PlayingRef>,
   count: number,
 ) => {
-  const typeResults = gameStateRef.current?.replayData[count - 1];
-  const lineInputMode = typeResults.status.mode;
+  const lineResult = gameStateRef.current?.replayData[count - 1];
+  const lineInputMode = lineResult.status.mode;
+  const speed = lineResult.status.sp;
 
   playingRef.current?.inputModeChange(lineInputMode);
+  playingRef.current?.setRealTimeSpeed(speed);
+
   gameStateRef.current!.replayKeyCount = 0;
 };
 
@@ -282,48 +319,84 @@ export const lineUpdate = (
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
 
-  const lineWord = currentPlayingCenterRef!.getLineWord();
-  const typeSpeed = new CalcTypeSpeed(
-    status!,
-    lineWord.nextChar["k"] ? lineConstantTime : statusRef.current!.lineStatus.lineClearTime,
-    statusRef,
-  );
+  if (scene === "playing") {
+    const lineWord = currentPlayingCenterRef!.getLineWord();
+    const typeSpeed = new CalcTypeSpeed(
+      status!,
+      lineWord.nextChar["k"] ? lineConstantTime : statusRef.current!.lineStatus.lineClearTime,
+      statusRef,
+    );
 
-  const lineResult = new LineResult(
-    status!,
-    statusRef,
-    lineWord,
-    inputMode as InputModeType,
-    map,
-    lineTime,
-    typeSpeed.totalKpm,
-    rankingScores,
-  );
+    const lineResult = new LineResult(
+      status!,
+      statusRef,
+      lineWord,
+      inputMode as InputModeType,
+      map,
+      lineTime,
+      typeSpeed.totalKpm,
+      rankingScores,
+    );
 
-  if (count > 0) {
-    statusRef.current!.status.result.push({
-      status: {
-        p: status!.point,
-        tBonus: status!.timeBonus,
-        lType: statusRef.current!.lineStatus.lineType,
-        lMiss: statusRef.current!.lineStatus.lineMiss,
-        combo: playingComboRef.current?.getCombo(),
-        cTime: statusRef.current!.lineStatus.lineClearTime,
-        lRkpm: typeSpeed.lineRkpm,
-        lKpm: typeSpeed.lineKpm,
-        mode: inputMode,
-        lostW: lineResult.lostW,
-      },
-      typeResult: statusRef.current!.lineStatus.typeResult,
-    });
+    if (count > 0) {
+      if (lineWord.nextChar["k"]) {
+        statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
+      }
+      statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
+
+      const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
+      const mode = statusRef.current!.lineStatus.lineStartInputMode;
+      const sp = statusRef.current!.lineStatus.lineStartSpeed;
+      const typeResult = statusRef.current!.lineStatus.typeResult;
+      const combo = playingComboRef.current?.getCombo();
+
+      if (map.words[count - 1].kpm.r > 0) {
+        statusRef.current!.status.result.push({
+          status: {
+            p: status!.point,
+            tBonus: status!.timeBonus,
+            lType: statusRef.current!.lineStatus.lineType,
+            lMiss: statusRef.current!.lineStatus.lineMiss,
+            cTime: statusRef.current!.lineStatus.lineClearTime,
+            lRkpm: typeSpeed.lineRkpm,
+            lKpm: typeSpeed.lineKpm,
+            lostW: lineResult.lostW,
+            lLost: lineResult.lostLen,
+            combo,
+            tTime,
+            mode,
+            sp,
+          },
+          typeResult,
+        });
+      } else {
+        //間奏ライン
+        statusRef.current!.status.result.push({
+          status: {
+            combo,
+            tTime,
+            mode,
+            sp,
+          },
+          typeResult,
+        });
+      }
+    }
+    tabStatusRef.current!.setStatus(lineResult.newStatus);
+  } else if (scene === "replay") {
+    const newStatus = updateReplayStatus(
+      count,
+      gameStateRef.current!.replayData,
+      map,
+      rankingScores,
+    );
+    tabStatusRef.current!.setStatus(newStatus);
+    if (count > 0) {
+      const lineResult = gameStateRef.current!.replayData[count - 1];
+      playingComboRef.current?.setCombo(lineResult.status!.combo as number);
+      statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
+    }
   }
-  // statusKpmValueRef.current?.setKpm(typeSpeed.totalTypeSpeed);
-  tabStatusRef.current!.setStatus(lineResult.newStatus);
-
-  if (lineWord.nextChar["k"]) {
-    statusRef.current!.status.totalTypeTime = lineResult.newTotalTime;
-  }
-  statusRef.current!.status.totalLatency += statusRef.current!.lineStatus.latency;
 
   if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieEndTime) {
     playerRef.current.stopVideo();
@@ -332,13 +405,18 @@ export const lineUpdate = (
     return;
   } else if (nextLine) {
     statusRef.current!.status.count += 1;
-    statusRef.current!.lineStatus = structuredClone(defaultStatusRef.lineStatus);
+    statusRef.current!.lineStatus = structuredClone({
+      ...defaultStatusRef.lineStatus,
+      lineStartSpeed: speedData.playSpeed,
+      lineStartInputMode: inputMode,
+    });
     playingLineTimeRef.current?.setLineKpm(0);
     statusRef.current!.lineStatus.latency = 0;
     currentPlayingCenterRef!.setLineWord({
       correct: { k: "", r: "" },
-      nextChar: [...map.words[count].word][0],
-      word: [...map.words[count].word].slice(1),
+      nextChar: [...structuredClone(map.words[count].word)][0],
+      word: [...structuredClone(map.words[count].word)].slice(1),
+      lineCount: count,
     });
 
     currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);

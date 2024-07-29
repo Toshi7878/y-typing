@@ -19,7 +19,15 @@ export const defaultStatusRef: StatusRef = {
     failureCount: 0,
     result: [],
   },
-  lineStatus: { lineType: 0, lineMiss: 0, lineClearTime: 0, latency: 0, typeResult: [] },
+  lineStatus: {
+    lineType: 0,
+    lineMiss: 0,
+    lineClearTime: 0,
+    latency: 0,
+    typeResult: [],
+    lineStartSpeed: 1,
+    lineStartInputMode: "roma",
+  },
 };
 
 export const defaultYTStateRef = {

@@ -90,7 +90,7 @@ class YTState {
   ready(player: any) {
     console.log("ready");
 
-    player.setVolume(10);
+    player.setVolume(30);
   }
 }
 

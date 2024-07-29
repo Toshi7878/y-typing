@@ -1,6 +1,5 @@
 "use client";
 import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
 import { LineResultObj } from "@/app/type/(ts)/type";
 import {
@@ -34,13 +33,13 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
 
         <ModalCloseButton />
         <ModalBody>
-          {typingLineResults.map((lineResult: LineResultObj, index) => {
+          {typingLineResults.map((lineResult: LineResultObj, index: number) => {
             if (!map?.words[index].notes.k) {
               return null;
             }
 
             lineCount++;
-            const inputMode = lineResult.status.mode;
+            const inputMode = lineResult.status!.mode;
             const lineKanaWord = map!.words[index].word.map((w) => w["k"]).join("");
             const lineNotes =
               inputMode === "roma" ? map!.words[index].notes.r : map!.words[index].notes.k;
@@ -52,7 +51,7 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
 
             const maxLinePoint = map!.words[index].notes.r * CHAR_POINT;
 
-            const tBonus = lineResult.status.tBonus;
+            const tBonus = lineResult.status?.tBonus;
             return (
               <Card key={index} p={4} mb={4} boxShadow="sm">
                 <CardHeader py={1}>
@@ -105,13 +104,13 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
                           </Tooltip>
                         ),
                     )}
-                    {lineResult.status.lostW}
+                    {lineResult.status?.lostW}
                   </Box>
                 </CardBody>
                 <CardFooter py={1} className="ml-1">
                   <Box className="line-status-result font-bold font-mono text-xl">
-                    kpm: {lineResult.status.lKpm}, rkpm: {lineResult.status.lRkpm}, miss:
-                    {lineResult.status.lMiss}, point: {lineResult.status.p}
+                    kpm: {lineResult.status?.lKpm}, rkpm: {lineResult.status?.lRkpm}, miss:
+                    {lineResult.status?.lMiss}, point: {lineResult.status?.p}
                     {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
                   </Box>
                 </CardFooter>

@@ -1,6 +1,6 @@
 "use client";
 
-import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { LineResultObj, SendResultData } from "@/app/type/(ts)/type";
 import { Button, Stack, useDisclosure } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import axios from "axios";
@@ -10,6 +10,7 @@ import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import EndTypingResultModal from "@/app/type/components/(typing-area)/scene/child/child/EndTypingResultModal";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 const RankingMenu = ({
   userId,
@@ -25,6 +26,7 @@ const RankingMenu = ({
   const { gameStateRef, playerRef } = useRefs();
 
   const [scene] = useAtom(sceneAtom);
+  const [speedData, setSpeedData] = useAtom(speedAtom);
   const params = useParams();
   const mapId = params.id as string;
 
@@ -52,6 +54,13 @@ const RankingMenu = ({
       setShowMenu(null);
       setHoveredIndex(null);
       gameStateRef.current!.replayData = result.data.lineResult;
+      const defaultSpeed = result.data.status.defaultSpeed;
+      new YTSpeedController("setDefaultSpeed", {
+        setSpeedData,
+        playerRef: playerRef.current,
+        speed: defaultSpeed,
+        defaultSpeed: defaultSpeed,
+      });
       playerRef.current.playVideo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

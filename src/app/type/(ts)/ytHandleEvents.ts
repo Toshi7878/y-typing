@@ -5,16 +5,25 @@ interface UpdateProps {
   speedData?: Speed;
   setSpeedData: Dispatch<Speed>;
   playerRef: any;
+  speed?: number;
+  defaultSpeed?: number;
 }
 
 export class YTSpeedController {
-  constructor(changeName: string, { speedData, setSpeedData, playerRef }: UpdateProps) {
+  constructor(
+    changeName: string,
+    { speedData, setSpeedData, playerRef, speed: setSpeed, defaultSpeed }: UpdateProps,
+  ) {
     if (changeName === "up") {
       this.speedUp({ setSpeedData, playerRef });
     } else if (changeName === "down") {
       this.speedDown({ setSpeedData, playerRef });
     } else if (changeName === "change") {
       this.realtimeChange({ speedData, setSpeedData, playerRef });
+    } else if (changeName === "setSpeed") {
+      this.speedChange(speedData!.defaultSpeed, setSpeed!, { setSpeedData, playerRef });
+    } else if (changeName === "setDefaultSpeed") {
+      this.speedChange(defaultSpeed!, setSpeed!, { setSpeedData, playerRef });
     }
   }
 
@@ -23,7 +32,7 @@ export class YTSpeedController {
 
     if (currentSpeed < 2) {
       const NEW_SPEED = currentSpeed + 0.25;
-      this.speedChange(NEW_SPEED, { setSpeedData, playerRef });
+      this.speedChange(NEW_SPEED, NEW_SPEED, { setSpeedData, playerRef });
     }
   }
 
@@ -32,12 +41,12 @@ export class YTSpeedController {
 
     if (currentSpeed > 0.25) {
       const NEW_SPEED = currentSpeed - 0.25;
-      this.speedChange(NEW_SPEED, { setSpeedData, playerRef });
+      this.speedChange(NEW_SPEED, NEW_SPEED, { setSpeedData, playerRef });
     }
   }
-  speedChange(NEW_SPEED: number, { setSpeedData, playerRef }: UpdateProps) {
-    setSpeedData({ defaultSpeed: NEW_SPEED, playSpeed: NEW_SPEED });
-    playerRef.setPlaybackRate(NEW_SPEED);
+  speedChange(defaultSpeed: number, playSpeed: number, { setSpeedData, playerRef }: UpdateProps) {
+    setSpeedData({ defaultSpeed: defaultSpeed, playSpeed: playSpeed });
+    playerRef.setPlaybackRate(playSpeed);
   }
 
   realtimeChange({ speedData, setSpeedData, playerRef }: UpdateProps) {

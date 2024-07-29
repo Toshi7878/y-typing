@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
@@ -50,8 +50,55 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
 
-  const inputModeChange = useCallback(
-    (changeInputMode: string) => {
+  useImperativeHandle(ref, () => ({
+    retry: () => {
+      const currentPlayingCenterRef = playingCenterRef.current; // 追加
+      currentPlayingCenterRef!.resetWordLyrics();
+
+      (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+      tabStatusRef.current!.resetStatus();
+      playingComboRef.current?.setCombo(0);
+      gameStateRef.current!.replayKeyCount = 0;
+      setNotify("Retry");
+      gameStateRef.current!.isRetrySkip = true;
+      playerRef.current.seekTo(0);
+      if (ticker.started) {
+        ticker.stop();
+      }
+    },
+    pressSkip: () => {
+      const nextLine = map!.words[statusRef.current!.status.count];
+      const skippedTime = gameStateRef.current!.isRetrySkip
+        ? Number(map!.words[map!.startLine]["time"])
+        : Number(nextLine["time"]);
+
+      const seekTime =
+        nextLine["lyrics"] === "end"
+          ? ytStateRef.current!.movieEndTime - 2
+          : skippedTime - 1 + (1 - speedData.playSpeed);
+
+      playerRef.current.seekTo(seekTime);
+      skipGuideRef.current?.setSkipGuide?.("");
+    },
+    realtimeSpeedChange: () => {
+      new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
+    },
+    setRealTimeSpeed: (speed: number) => {
+      new YTSpeedController("setSpeed", {
+        speedData,
+        setSpeedData,
+        playerRef: playerRef.current,
+        speed: speed,
+      });
+    },
+    gamePause: () => {
+      if (ytStateRef.current?.isPaused) {
+        playerRef.current.playVideo();
+      } else {
+        playerRef.current.pauseVideo();
+      }
+    },
+    inputModeChange: (changeInputMode: string) => {
       if (changeInputMode === inputMode) {
         return;
       }
@@ -71,6 +118,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             correct: lineWord.correct,
             nextChar: wordFix.nextChar,
             word: wordFix.word,
+            lineCount: lineWord.lineCount,
           });
         }
       }
@@ -87,63 +135,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         });
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputMode, speedData.playSpeed],
-  );
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      retry: () => {
-        const currentPlayingCenterRef = playingCenterRef.current; // 追加
-        currentPlayingCenterRef!.resetWordLyrics();
-
-        (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-        tabStatusRef.current!.resetStatus();
-        playingComboRef.current?.setCombo(0);
-        setNotify("Retry");
-        gameStateRef.current!.isRetrySkip = true;
-        playerRef.current.seekTo(0);
-        if (ticker.started) {
-          ticker.stop();
-        }
-      },
-      pressSkip: () => {
-        const nextLine = map!.words[statusRef.current!.status.count];
-        const skippedTime = gameStateRef.current!.isRetrySkip
-          ? Number(map!.words[map!.startLine]["time"])
-          : Number(nextLine["time"]);
-
-        const seekTime =
-          nextLine["lyrics"] === "end"
-            ? ytStateRef.current!.movieEndTime - 2
-            : skippedTime - 1 + (1 - speedData.playSpeed);
-
-        playerRef.current.seekTo(seekTime);
-        skipGuideRef.current?.setSkipGuide?.("");
-      },
-      realtimeSpeedChange: () => {
-        new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
-      },
-      gamePause: () => {
-        if (ytStateRef.current?.isPaused) {
-          playerRef.current.playVideo();
-        } else {
-          playerRef.current.pauseVideo();
-        }
-      },
-      inputModeChange: (changeInputMode) => inputModeChange(changeInputMode),
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [speedData, map, inputMode, inputModeChange],
-  );
+  }));
 
   useEffect(() => {
     if (ref && "current" in ref) {
       setRef("playingRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData]);
+  }, [speedData, inputMode]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -156,7 +155,12 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         const count = statusRef.current!.status.count;
         const prevLine = map!.words[count - 1];
         const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
-        if (lineTime > 0 && isTyped({ event, lineWord: cloneLineWord }) && scene === "playing") {
+
+        if (
+          count - 1 == lineWord.lineCount &&
+          isTyped({ event, lineWord: cloneLineWord }) &&
+          scene === "playing"
+        ) {
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
           const lineConstantTime = lineTime / speedData.playSpeed;
 
@@ -181,6 +185,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               typeSpeed.totalKpm,
               remainTime,
               rankingScores,
+              scene,
             );
 
             tabStatusRef.current!.setStatus(success.newStatus);
@@ -194,7 +199,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
         } else {
-          shortcutKey(event, skipGuideRef, playingRef, inputMode);
+          shortcutKey(event, skipGuideRef, playingRef, statusRef, inputMode, lineTime, scene);
         }
       } else if (event.key === "Escape") {
         playingRef.current?.gamePause();
@@ -207,7 +212,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores, speedData]);
+  }, [inputMode, rankingScores, speedData, scene]);
 
   useEffect(() => {
     const updateFunction = () =>
