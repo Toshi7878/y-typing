@@ -154,7 +154,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         //ライン切り替えギリギリのタイミングは処理されないようにしてみる(切り替えバグが起こるので)
         const count = statusRef.current!.status.count;
         const prevLine = map!.words[count - 1];
-        const lineTime = Number(ytStateRef.current!.currentTime) - Number(prevLine.time);
+        const lineTime = playerRef.current.getCurrentTime() - Number(prevLine.time);
 
         if (
           count - 1 == lineWord.lineCount &&
@@ -162,14 +162,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           scene === "playing"
         ) {
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-          const lineConstantTime = lineTime / speedData.playSpeed;
+          const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
 
           const status = tabStatusRef.current!.getStatus();
 
           if (result.successKey) {
             const currentLine = map!.words[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
-            const typeSpeed = new CalcTypeSpeed(status!, lineConstantTime, statusRef);
+            const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
 
             const success = new Success(
               status,
@@ -191,9 +191,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             tabStatusRef.current!.setStatus(success.newStatus);
             playingCenterRef.current!.setLineWord(result.newLineWord);
             playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
-            if (!result.newLineWord.nextChar["k"]) {
-              statusRef.current!.status.totalTypeTime += lineConstantTime;
-            }
           } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
             const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineTime);
             tabStatusRef.current!.setStatus(miss.newStatus);

@@ -4,7 +4,6 @@ import { getRank } from "./keydown";
 
 export class LineResult {
   newStatus: Status;
-  newTotalTime: number;
   lostW: string;
   lostLen: number;
 
@@ -15,7 +14,6 @@ export class LineResult {
     lineWord: WordType,
     inputMode: InputModeType,
     map: CreateMap,
-    lineTime: number,
     totalTypeSpeed: number,
     rankingScores: number[],
   ) {
@@ -34,7 +32,6 @@ export class LineResult {
     );
 
     this.lostW = this.setLostWord(lineWord, inputMode);
-    this.newTotalTime = this.updateTotalTypeTime(lineTime, statusRef.current!.status.totalTypeTime);
   }
 
   updateStatus(
@@ -63,10 +60,6 @@ export class LineResult {
 
     newStatus.point = 0;
     return newStatus;
-  }
-
-  updateTotalTypeTime(lineTime: number, totalTypeTime: number) {
-    return totalTypeTime + lineTime;
   }
 
   setLostWord(lineWord: WordType, inputMode: InputModeType) {

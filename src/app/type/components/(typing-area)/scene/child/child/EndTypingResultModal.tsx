@@ -84,7 +84,7 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
                         type.c && (
                           <Tooltip
                             key={index}
-                            label={`time: ${type.t}`}
+                            label={`time: ${type.t.toFixed(3)}`}
                             placement="top"
                             fontSize="sm"
                             hasArrow

@@ -1,6 +1,20 @@
+import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
+import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { CreateMap } from "./createTypingWord";
-import { getRank } from "./keydown";
-import { LineResultObj, Status } from "./type";
+import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown";
+import {
+  GameStateRef,
+  InputModeType,
+  LineResultObj,
+  PlayingRef,
+  SceneType,
+  Status,
+  StatusRef,
+  YTStateRef,
+} from "./type";
 
 export const updateReplayStatus = (
   count: number,
@@ -36,4 +50,137 @@ export const updateReplayStatus = (
   newStatus.rank = getRank(rankingScores, newStatus.score);
 
   return newStatus;
+};
+
+export const replay = (
+  count: number,
+  gameStateRef: React.RefObject<GameStateRef>,
+  playingRef: React.RefObject<PlayingRef>,
+  map: CreateMap,
+  lineTime: number,
+  playingCenterRef: React.RefObject<PlayingCenterRef>,
+  ytStateRef: React.RefObject<YTStateRef>,
+  statusRef: React.RefObject<StatusRef>,
+  playingComboRef: React.RefObject<PlayingComboRef>,
+  tabStatusRef: React.RefObject<TabStatusRef>,
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
+  inputMode: string,
+  lineConstantTime: number,
+  rankingScores: number[],
+  scene: SceneType,
+) => {
+  const lineResult: LineResultObj = gameStateRef.current?.replayData[count - 1];
+  const typeResults = lineResult.typeResult;
+
+  if (typeResults.length === 0) {
+    return;
+  }
+  const keyCount = gameStateRef.current?.replayKeyCount!;
+
+  const typeData = typeResults[keyCount];
+
+  if (!typeData) {
+    return;
+  }
+
+  const keyTime = typeData.t;
+
+  if (lineTime >= keyTime) {
+    const key = typeData.c;
+    const isSuccess = typeData.is;
+    const option = typeData.op;
+    if (key) {
+      const lineWord = playingCenterRef.current!.getLineWord();
+      const chars: CharsType = {
+        keys: [key],
+        key: key,
+      };
+      const status = tabStatusRef.current!.getStatus();
+
+      if (isSuccess) {
+        console.log("update replay Success");
+
+        const result =
+          inputMode === "roma"
+            ? new RomaInput({ chars, lineWord })
+            : new KanaInput({ chars, lineWord });
+        const currentLine = map!.words[count];
+        const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+
+        if (result.newLineWord.nextChar["k"]) {
+          const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
+          const success = new Success(
+            status,
+            statusRef,
+            result.successKey,
+            lineConstantTime,
+            playingComboRef,
+            inputMode as InputModeType,
+            result.updatePoint,
+            result.newLineWord,
+            map!,
+            lineTime,
+            typeSpeed.totalKpm,
+            remainTime,
+            rankingScores,
+            scene,
+          );
+
+          tabStatusRef.current!.setStatus(success.newStatus);
+          playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+        } else {
+          const newStatus = updateReplayStatus(
+            count,
+            gameStateRef.current!.replayData,
+            map,
+            rankingScores,
+          );
+          newStatus.point = lineResult.status!.p as number;
+          newStatus.timeBonus = lineResult.status!.tBonus as number;
+
+          tabStatusRef.current!.setStatus(newStatus);
+          playingComboRef.current?.setCombo(lineResult.status!.combo as number);
+          playingLineTimeRef.current?.setLineKpm(lineResult.status!.lKpm as number);
+          statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
+        }
+
+        playingCenterRef.current!.setLineWord(result.newLineWord);
+      } else {
+        console.log("update replay failed");
+        const miss = new Miss(status, statusRef, key, playingComboRef, lineTime);
+        tabStatusRef.current!.setStatus(miss.newStatus);
+      }
+    } else if (option) {
+      console.log("update replay option");
+
+      switch (option) {
+        case "roma":
+          playingRef.current?.inputModeChange("roma");
+          break;
+        case "kana":
+          playingRef.current?.inputModeChange("kana");
+          break;
+        case "speedChange":
+          playingRef.current!.realtimeSpeedChange();
+          break;
+      }
+    }
+
+    gameStateRef.current!.replayKeyCount++;
+  }
+};
+
+export const lineReplayUpdate = (
+  gameStateRef: React.RefObject<GameStateRef>,
+  playingRef: React.RefObject<PlayingRef>,
+  count: number,
+) => {
+  const lineResult = gameStateRef.current?.replayData[count - 1];
+  const lineInputMode = lineResult.status.mode;
+  const speed = lineResult.status.sp;
+
+  playingRef.current?.inputModeChange(lineInputMode);
+  playingRef.current?.setRealTimeSpeed(speed);
+
+  gameStateRef.current!.replayKeyCount = 0;
 };

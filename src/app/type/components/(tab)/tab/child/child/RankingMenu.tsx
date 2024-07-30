@@ -92,14 +92,6 @@ const RankingMenu = ({
       >
         リプレイ再生
       </Button>
-
-      {/* {data !== undefined && (
-        <EndTypingResultModal
-          isOpen={isOpen}
-          onClose={onClose}
-          typingLineResults={data.lineResult}
-        />
-      )} */}
     </Stack>
   );
 };

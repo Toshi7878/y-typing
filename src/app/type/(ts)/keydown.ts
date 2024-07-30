@@ -523,7 +523,6 @@ export class Success {
       newLineWord,
       map,
       remainTime,
-      lineTime,
       totalTypeSpeed,
       rankingScores,
     );
@@ -547,7 +546,6 @@ export class Success {
     newLineWord: WordType,
     map: CreateMap,
     remainTime: number,
-    lineTime: number,
     totalTypeSpeed: number,
     rankingScores: number[],
   ) {
@@ -580,7 +578,7 @@ export class Success {
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
-      statusRef.current!.lineStatus.lineClearTime = Math.round(lineTime * 1000) / 1000;
+      statusRef.current!.lineStatus.lineClearTime = Math.round(lineConstantTime * 1000) / 1000;
       newStatus.score += newStatus.point + timeBonus;
       statusRef.current!.status.completeCount++;
       newStatus.line =
