@@ -161,6 +161,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           isTyped({ event, lineWord: cloneLineWord }) &&
           scene === "playing"
         ) {
+          event.preventDefault();
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
           const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
 
