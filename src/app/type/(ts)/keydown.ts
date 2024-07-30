@@ -657,6 +657,7 @@ const disableKeys = [
   "Tab",
   "F3",
   "Backspace",
+  "Space",
 ];
 
 const keyWhiteList = ["F5"];
@@ -675,7 +676,6 @@ export function shortcutKey(
 
   if (disableKeys.includes(event.code)) {
     event.preventDefault();
-    return;
   } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
     return;
   }
