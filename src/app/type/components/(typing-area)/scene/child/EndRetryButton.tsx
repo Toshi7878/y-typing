@@ -7,17 +7,20 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Box,
 } from "@chakra-ui/react";
 
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
-import { SceneType, StatusRef } from "@/app/type/(ts)/type";
+import { StatusRef } from "@/app/type/(ts)/type";
 import { useRef } from "react";
 import { useAtom } from "jotai";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { proceedRetry } from "@/app/type/(ts)/retry";
 
 interface EndRetryButtonProps {
   isRetryAlert: boolean;
 }
+
 const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
@@ -25,29 +28,24 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const [, setScene] = useAtom(sceneAtom);
 
-  const retry = () => {
+  const retry = (playMode: "playing" | "replay") => {
     if (isRetryAlert) {
       onOpen();
     } else {
-      proceedRetry("playing");
+      proceedRetry(
+        playMode,
+        statusRef,
+        setScene,
+        tabStatusRef,
+        playingComboRef,
+        gameStateRef,
+        playerRef,
+      );
     }
-  };
-
-  const proceedRetry = (playMode: "playing" | "replay") => {
-    setScene(playMode);
-    (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-    tabStatusRef.current!.resetStatus();
-    playingComboRef.current!.setCombo(0);
-    gameStateRef.current!.replayKeyCount = 0;
-
-    gameStateRef.current!.isRetrySkip = true;
-    playerRef.current.seekTo(0);
-    playerRef.current.playVideo();
   };
 
   return (
     <>
-      {/* ... existing code ... */}
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -62,7 +60,8 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              ランキング登録が完了していませんが、リトライしますか？
+              <Box>ランキング登録が完了していませんが、リトライしますか？</Box>
+              <Box>※リトライすると今回の記録は失われます</Box>
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -73,7 +72,15 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
                 colorScheme="red"
                 onClick={() => {
                   onClose();
-                  proceedRetry("playing");
+                  proceedRetry(
+                    "playing",
+                    statusRef,
+                    setScene,
+                    tabStatusRef,
+                    playingComboRef,
+                    gameStateRef,
+                    playerRef,
+                  );
                 }}
                 ml={3}
               >
@@ -91,7 +98,20 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         fontSize="2xl"
         variant="outline"
         borderColor="black"
-        onClick={gameStateRef.current?.replayData.length ? () => proceedRetry("replay") : retry}
+        onClick={
+          gameStateRef.current?.replayData.length
+            ? () =>
+                proceedRetry(
+                  "replay",
+                  statusRef,
+                  setScene,
+                  tabStatusRef,
+                  playingComboRef,
+                  gameStateRef,
+                  playerRef,
+                )
+            : () => retry("playing")
+        }
       >
         {gameStateRef.current?.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
       </Button>

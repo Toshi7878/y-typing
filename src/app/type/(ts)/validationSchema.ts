@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const statusSchema = z.object({
-  score: z.number(),
   kanaType: z.number(),
   romaType: z.number(),
   flickType: z.number(),

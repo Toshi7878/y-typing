@@ -53,10 +53,7 @@ const RankingList = () => {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`);
 
       // scoreが高い順にソート
-      data.sort(
-        (a: { status: { score: number } }, b: { status: { score: number } }) =>
-          b.status.score - a.status.score,
-      );
+      data.sort((a: { score: number }, b: { score: number }) => b.score - a.score);
 
       return data;
     },
@@ -69,7 +66,7 @@ const RankingList = () => {
   });
 
   useEffect(() => {
-    const scores = data ? data.map((result: RankingListType) => result.status.score) : [];
+    const scores = data ? data.map((result: RankingListType) => result.score) : [];
 
     setRankingScores(scores);
 
@@ -82,7 +79,7 @@ const RankingList = () => {
     if (scene === "playing" && data) {
       for (let i = 0; i < data.length; i++) {
         if (userId === Number(data[i].userId)) {
-          bestScoreRef.current = data[i].status.score;
+          bestScoreRef.current = data[i].score;
         }
       }
     }
@@ -118,7 +115,7 @@ const RankingList = () => {
               <RankingTr
                 rank={index + 1}
                 name={user.user.name}
-                score={user.status.score}
+                score={user.score}
                 type={type}
                 kpm={user.status.kpm}
                 rkpm={user.status.rkpm}

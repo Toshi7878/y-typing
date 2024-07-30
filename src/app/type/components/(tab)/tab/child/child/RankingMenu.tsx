@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import EndTypingResultModal from "@/app/type/components/(typing-area)/scene/child/child/EndTypingResultModal";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
+import { proceedRetry } from "@/app/type/(ts)/retry";
 
 const RankingMenu = ({
   userId,
@@ -23,10 +24,10 @@ const RankingMenu = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { gameStateRef, playerRef } = useRefs();
+  const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
 
-  const [scene] = useAtom(sceneAtom);
-  const [speedData, setSpeedData] = useAtom(speedAtom);
+  const [scene, setScene] = useAtom(sceneAtom);
+  const [, setSpeedData] = useAtom(speedAtom);
   const params = useParams();
   const mapId = params.id as string;
 
@@ -50,7 +51,17 @@ const RankingMenu = ({
   const handleReplayClick = useCallback(async () => {
     const result = await refetch();
     if (result.data) {
-      onOpen();
+      if (scene === "end") {
+        proceedRetry(
+          "replay",
+          statusRef,
+          setScene,
+          tabStatusRef,
+          playingComboRef,
+          gameStateRef,
+          playerRef,
+        );
+      }
       setShowMenu(null);
       setHoveredIndex(null);
       gameStateRef.current!.replayData = result.data.lineResult;

@@ -44,7 +44,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
-  const [scene] = useAtom(sceneAtom);
+  const [scene, setScene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
@@ -232,6 +232,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         inputMode,
         ref as React.RefObject<PlayingRef>,
         scene,
+        setScene,
       );
     ticker.add(updateFunction);
 

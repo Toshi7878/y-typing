@@ -12,6 +12,7 @@ model Result {
   id             Int @id @default(autoincrement())
   mapId          Int
   userId         Int
+  score          Int @default(0)
   lineResult     Json
   status         Json
   updatedAt      DateTime @default(now()) @updatedAt

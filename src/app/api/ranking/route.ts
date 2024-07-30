@@ -15,6 +15,7 @@ export async function GET(request: Request) {
         mapId: false,
         userId: true,
         status: true,
+        score: true,
         lineResult: false, // lineResultを追加
         updatedAt: true,
         user: {

@@ -25,7 +25,6 @@ export interface RankingListType {
   userId: string;
   user: { name: string };
   status: {
-    score: number;
     romaType: number;
     kanaType: number;
     flickType: number;
@@ -36,6 +35,7 @@ export interface RankingListType {
     maxCombo: number;
     playSpeed: number;
   };
+  score: number;
   updatedAt: string;
 }
 export interface PlayingRef {
@@ -114,7 +114,6 @@ export interface SendResultData {
   mapId: number;
   lineResult: LineResultObj;
   status: {
-    score: number;
     kanaType: number;
     romaType: number;
     flickType: number;
@@ -125,6 +124,7 @@ export interface SendResultData {
     kpm: number;
     defaultSpeed: number;
   };
+  score: number;
 }
 export interface TypeResult {
   is?: boolean;

@@ -41,6 +41,7 @@ export const updateTimer = (
   inputMode: string,
   playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
+  setScene: React.Dispatch<React.SetStateAction<SceneType>>,
 ) => {
   const ytCurrentTime = playerRef.current.getCurrentTime();
   ytStateRef.current!.currentTime = ytCurrentTime;
@@ -153,6 +154,7 @@ export const updateTimer = (
       nextLine,
       playingRef,
       scene,
+      setScene,
     );
   }
 };
@@ -178,6 +180,7 @@ export const lineUpdate = (
   nextLine: LineData,
   playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
+  setScene: React.Dispatch<React.SetStateAction<SceneType>>,
 ) => {
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
@@ -245,6 +248,8 @@ export const lineUpdate = (
         });
       }
     }
+
+    console.log(statusRef.current!.status.result);
     tabStatusRef.current!.setStatus(lineResult.newStatus);
   } else if (scene === "replay") {
     const newStatus = updateReplayStatus(
@@ -264,7 +269,7 @@ export const lineUpdate = (
   if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieEndTime) {
     playerRef.current.stopVideo();
     ticker.stop();
-    console.log("end");
+
     return;
   } else if (nextLine) {
     statusRef.current!.status.count += 1;
