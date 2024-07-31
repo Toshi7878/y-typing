@@ -302,9 +302,11 @@ export class KanaInput {
           dakuHandaku: "",
         };
 
-    const successIndex: number = keys.indexOf(
-      dakuHanDakuData.normalized ? dakuHanDakuData.normalized : nextKana[0].toLowerCase(),
-    );
+    const successIndex: number = nextKana[0]
+      ? keys.indexOf(
+          dakuHanDakuData.normalized ? dakuHanDakuData.normalized : nextKana[0].toLowerCase(),
+        )
+      : -1;
 
     const char =
       keys[successIndex] === "゛" || keys[successIndex] === "゜"
