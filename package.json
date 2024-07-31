@@ -71,6 +71,8 @@
     "@types/react-dom": "^18",
     "@types/youtube-player": "^5.5.11",
     "eslint": "^8",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "14.2.3",
     "eslint-plugin-storybook": "^0.8.0",
     "prisma": "^5.17.0",

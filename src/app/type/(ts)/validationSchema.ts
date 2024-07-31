@@ -18,7 +18,6 @@ export const lineResultObjSchema = z.object({
     tBonus: z.number().optional(),
     lType: z.number().optional(),
     lMiss: z.number().optional(),
-    cTime: z.number().optional(),
     lRkpm: z.number().optional(),
     lKpm: z.number().optional(),
     lostW: z.string().optional(),

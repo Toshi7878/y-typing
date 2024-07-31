@@ -139,7 +139,6 @@ export interface LineResultObj {
     tBonus?: number;
     lType?: number;
     lMiss?: number;
-    cTime?: number;
     lRkpm?: number;
     lKpm?: number;
     lostW?: string;

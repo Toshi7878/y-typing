@@ -1,7 +1,7 @@
 "use client";
-import { mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { inputModeAtom, mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
-import { LineResultObj } from "@/app/type/(ts)/type";
+import { LineData, LineResultObj, TypeResult } from "@/app/type/(ts)/type";
 import {
   Modal,
   ModalOverlay,
@@ -21,8 +21,15 @@ import {
 import { useAtom } from "jotai";
 import { memo } from "react";
 
-function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
+interface EndTypingResultModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  typingLineResults?: LineResultObj[];
+}
+
+function EndTypingResultModal({ isOpen, onClose, typingLineResults }: EndTypingResultModalProps) {
   const [map] = useAtom(mapAtom);
+  const [inputMode] = useAtom(inputModeAtom);
   console.log("modal Open");
   let lineCount = 0;
   return (
@@ -33,27 +40,39 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
 
         <ModalCloseButton />
         <ModalBody>
-          {typingLineResults.map((lineResult: LineResultObj, index: number) => {
+          {map!.words.map((line: LineData, index: number) => {
             if (!map?.words[index].notes.k) {
               return null;
             }
 
             lineCount++;
-            const inputMode = lineResult.status!.mode;
-            const lineKanaWord = map!.words[index].word.map((w) => w["k"]).join("");
-            const lineNotes =
-              inputMode === "roma" ? map!.words[index].notes.r : map!.words[index].notes.k;
+            const lineResult = typingLineResults?.[index];
+
+            const lineInputMode = lineResult?.status?.mode ?? inputMode;
+            const lineKanaWord = line.word.map((w) => w["k"]).join("");
+            const lineTypeWord =
+              lineInputMode === "roma" ? line.word.map((w) => w["r"][0]).join("") : lineKanaWord;
+            const lineNotes = lineInputMode === "roma" ? line.notes.r : line.notes.k;
             const lineTime =
-              Number(map!.words[index + 1].time) -
-              (index === 0 ? 0 : Number(map!.words[index].time));
-            const lineKpm =
-              inputMode === "roma" ? map!.words[index].kpm.r : map!.words[index].kpm.k;
+              Number(map!.words[index + 1].time) - (index === 0 ? 0 : Number(line.time));
+            const lineKpm = lineInputMode === "roma" ? line.kpm.r : line.kpm.k;
 
-            const maxLinePoint = map!.words[index].notes.r * CHAR_POINT;
+            const maxLinePoint = line.notes.r * CHAR_POINT;
 
-            const tBonus = lineResult.status?.tBonus;
+            const kpm = lineResult?.status?.lKpm ?? 0;
+            const rkpm = lineResult?.status?.lRkpm ?? 0;
+            const point = lineResult?.status?.p ?? 0;
+            const lMiss = lineResult?.status?.lMiss ?? 0;
+            const tBonus = lineResult?.status?.tBonus ?? 0;
             return (
-              <Card key={index} p={4} mb={4} boxShadow="sm">
+              <Card
+                key={index}
+                p={4}
+                mb={4}
+                boxShadow="sm"
+                cursor="pointer"
+                _hover={{ boxShadow: "md", bg: "gray.100" }}
+              >
                 <CardHeader py={1}>
                   <Box>
                     <span data-list-number={index}>
@@ -79,8 +98,8 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
                     <Box>{lineKanaWord}</Box>
                   </Box>
                   <Box className="word-result  outline-text text-white uppercase ml-1">
-                    {lineResult.typeResult.map(
-                      (type, index) =>
+                    {lineResult?.typeResult?.map(
+                      (type: TypeResult, index: number) =>
                         type.c && (
                           <Tooltip
                             key={index}
@@ -104,13 +123,13 @@ function EndTypingResultModal({ isOpen, onClose, typingLineResults }) {
                           </Tooltip>
                         ),
                     )}
-                    {lineResult.status?.lostW}
+                    {lineResult ? lineResult.status?.lostW : lineTypeWord}
                   </Box>
                 </CardBody>
                 <CardFooter py={1} className="ml-1">
                   <Box className="line-status-result font-bold font-mono text-xl">
-                    kpm: {lineResult.status?.lKpm}, rkpm: {lineResult.status?.lRkpm}, miss:
-                    {lineResult.status?.lMiss}, point: {lineResult.status?.p}
+                    kpm: {kpm}, rkpm: {rkpm}, miss:
+                    {lMiss}, point: {point}
                     {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
                   </Box>
                 </CardFooter>

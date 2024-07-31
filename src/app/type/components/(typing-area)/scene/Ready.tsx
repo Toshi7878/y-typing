@@ -1,6 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import PlayingBottom from "./child/PlayingBottom";
 import ReadyInputModeRadioCards from "./child/ReadyInputModeRadioCards";
 import ReadyPlaySpeed from "./child/ReadyPlaySpeed";
@@ -8,6 +8,7 @@ import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./child/ReadyPracticeButton";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import EndTypingResultModal from "./child/child/EndTypingResultModal";
 
 function Ready() {
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -18,6 +19,7 @@ function Ready() {
   const { playerRef } = useRefs();
   const speedUpButtonRef = useRef<HTMLButtonElement>(null);
   const speedDownButtonRef = useRef<HTMLButtonElement>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -63,7 +65,7 @@ function Ready() {
             speedUpButtonRef={speedUpButtonRef}
             speedDownButtonRef={speedDownButtonRef}
           />
-          <ReadyPracticeButton />
+          <ReadyPracticeButton onOpen={onOpen} />
         </Flex>
       </Box>
       <PlayingBottom
@@ -71,6 +73,8 @@ function Ready() {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
+
+      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 }

@@ -223,7 +223,6 @@ export const lineUpdate = (
             tBonus: status!.timeBonus,
             lType: statusRef.current!.lineStatus.lineType,
             lMiss: statusRef.current!.lineStatus.lineMiss,
-            cTime: statusRef.current!.lineStatus.lineClearTime,
             lRkpm: typeSpeed.lineRkpm,
             lKpm: typeSpeed.lineKpm,
             lostW: lineResult.lostW,

@@ -10,8 +10,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
-import { StatusRef } from "@/app/type/(ts)/type";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { useRef } from "react";
 import { useAtom } from "jotai";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
