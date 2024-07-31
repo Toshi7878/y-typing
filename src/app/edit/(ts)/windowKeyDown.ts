@@ -18,7 +18,7 @@ class WordReplace {
   constructor(
     mapData: RootState["mapData"]["value"],
     tbodyRef: RefsContextType["tbodyRef"],
-    dispatch: Dispatch<Action>
+    dispatch: Dispatch<Action>,
   ) {
     this.mapData = mapData;
     this.tbodyRef = tbodyRef;
@@ -152,7 +152,7 @@ class WordReplace {
                 new: { time, lyrics, word: newWord },
                 lineNumber: i,
               },
-            })
+            }),
           );
 
           this.newWord = newWord;
@@ -176,7 +176,7 @@ export const handleKeydown = (
   dispatch: Dispatch<Action>,
   ytState: RootState["ytState"],
   undoredoState: RootState["undoRedo"],
-  mapData: RootState["mapData"]["value"]
+  mapData: RootState["mapData"]["value"],
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||

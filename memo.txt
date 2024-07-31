@@ -1,6 +1,0 @@
-base64で効果音
-描画多い部分canvas
-データはクライアントで取る
-YouTubeタイトルなど読み込みアニメーションつける
-validate youtube id
-ランダムに譜面10個表示

@@ -173,7 +173,7 @@ export class RomaInput {
     this.successKey = result.successKey;
     this.failKey = result.failKey ?? "";
   }
-  hasRomaPattern(chars: CharsType, lineWord: WordType) {
+  private hasRomaPattern(chars: CharsType, lineWord: WordType) {
     let newLineWord = { ...lineWord } as WordType;
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
     const kana = lineWord.nextChar["k"];
@@ -197,7 +197,7 @@ export class RomaInput {
     return { newLineWord, successKey: chars["keys"][0] };
   }
 
-  updateNextRomaPattern(chars: CharsType, nextRomaPattern: string[]) {
+  private updateNextRomaPattern(chars: CharsType, nextRomaPattern: string[]) {
     for (let i = 0; i < nextRomaPattern.length; i++) {
       if (chars["keys"][0] === nextRomaPattern[i][0]) {
         nextRomaPattern[i] = nextRomaPattern[i].slice(1);
@@ -214,7 +214,7 @@ export class RomaInput {
     return nextRomaPattern;
   }
 
-  kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: WordType) {
+  private kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: WordType) {
     if (kana.length >= 2 && romaPattern.length) {
       const IS_SOKUON_YOUON =
         (kana[0] != "っ" && (romaPattern[0][0] == "x" || romaPattern[0][0] == "l")) ||
@@ -231,7 +231,7 @@ export class RomaInput {
   }
 
   // xnで「ん」を打鍵する場合、次の文字から[nn, n']の打鍵パターンを除外する
-  nextNNFilter(char: string, newLineWord: WordType) {
+  private nextNNFilter(char: string, newLineWord: WordType) {
     const NEXT_TO_NEXT_CHAR = newLineWord.word[0]["r"];
     const isXN =
       char == "x" &&
@@ -248,7 +248,7 @@ export class RomaInput {
     }
   }
 
-  wordUpdate(chars: CharsType, newLineWord: WordType) {
+  private wordUpdate(chars: CharsType, newLineWord: WordType) {
     const kana = newLineWord.nextChar["k"];
     const romaPattern = newLineWord.nextChar["r"];
     // const POINT = newLineWord.nextChar["point"];
@@ -287,7 +287,7 @@ export class KanaInput {
     this.failKey = result.failKey ?? "";
   }
 
-  hasKana({ chars, lineWord }: JudgeType) {
+  private hasKana({ chars, lineWord }: JudgeType) {
     let newLineWord = { ...lineWord };
 
     const nextKana = lineWord.nextChar["k"];
@@ -336,7 +336,7 @@ export class KanaInput {
     };
   }
 
-  parseDakuHandaku(dakuHandaku: Dakuten | HanDakuten): {
+  private parseDakuHandaku(dakuHandaku: Dakuten | HanDakuten): {
     type: "" | "゛" | "゜";
     normalized: "" | NormalizeHirakana;
     dakuHandaku: "" | Dakuten | HanDakuten;
@@ -346,7 +346,7 @@ export class KanaInput {
     return { type, normalized, dakuHandaku };
   }
 
-  wordUpdate(char: string, newLineWord: WordType) {
+  private wordUpdate(char: string, newLineWord: WordType) {
     const romaPattern = newLineWord.nextChar["r"];
 
     newLineWord.correct["k"] += char;
@@ -433,7 +433,7 @@ export class Typing {
     this.failKey = inputResult.failKey;
   }
 
-  romaMakeInput(event: KeyboardEvent) {
+  private romaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: [event.key.toLowerCase()],
       key: event.key.toLowerCase(),
@@ -444,7 +444,7 @@ export class Typing {
     return input;
   }
 
-  kanaMakeInput(event: KeyboardEvent) {
+  private kanaMakeInput(event: KeyboardEvent) {
     const input = {
       keys: CODE_TO_KANA[event.code] ? CODE_TO_KANA[event.code] : KEY_TO_KANA[event.key],
       key: event.key.toLowerCase(),
@@ -536,7 +536,7 @@ export class Success {
     }
   }
 
-  updateStatus(
+  private updateStatus(
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
     lineConstantTime: number,
@@ -616,7 +616,7 @@ export class Miss {
     });
   }
 
-  missCounter(
+  private missCounter(
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,

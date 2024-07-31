@@ -239,7 +239,7 @@ export class TypingWord {
     this.word = this.hiraganaToRomaArray(lineRomaMap);
   }
 
-  hiraganaToRomaArray(lineRomaMap: [string, ...string[]]) {
+  private hiraganaToRomaArray(lineRomaMap: [string, ...string[]]) {
     let word: TypeChank[] = [];
 
     const STR_LEN = lineRomaMap.length;
@@ -298,7 +298,7 @@ export class TypingWord {
   }
 
   //'っ','か' → 'っか'等の繋げられる促音をつなげる
-  joinSokuonPattern(iunFlag: string, lineWord: { k: string; r: string[]; p: number }[]) {
+  private joinSokuonPattern(iunFlag: string, lineWord: { k: string; r: string[]; p: number }[]) {
     const PREVIOUS_KANA = lineWord[lineWord.length - 2]["k"];
     const KANA = lineWord[lineWord.length - 1]["k"];
 
@@ -333,7 +333,7 @@ export class TypingWord {
     return lineWord;
   }
 
-  nConvert_nn(lineWord: TypeChank[]) {
+  private nConvert_nn(lineWord: TypeChank[]) {
     //n→nn変換
     const PREVIOUS_KANA = lineWord.length >= 2 ? lineWord[lineWord.length - 2]["k"] : false;
 
@@ -398,7 +398,7 @@ export class CreateMap {
     this.currentTimeBarFrequency = this.movieTotalTime / 1700;
   }
 
-  create(wordRomaMap: string[][], data: MapData) {
+  private create(wordRomaMap: string[][], data: MapData) {
     const words: LineData[] = [];
     let startLine = 0;
     let lineLength = 0;
@@ -439,13 +439,13 @@ export class CreateMap {
     return { words, startLine, lineLength };
   }
 
-  calcLineKpm(notes: LineData["notes"], remainTime: number) {
+  private calcLineKpm(notes: LineData["notes"], remainTime: number) {
     const romaKpm = Math.round((notes.r / remainTime) * 60);
     const kanaKpm = Math.round((notes.k / remainTime) * 60);
     return { r: romaKpm, k: kanaKpm };
   }
 
-  calcLineNotes(word: TypeChank[]) {
+  private calcLineNotes(word: TypeChank[]) {
     const kanaWord = word.map((item) => item.k);
     const dakuHandakuLineNotes = (
       kanaWord
@@ -461,7 +461,7 @@ export class CreateMap {
     return { k: kanaNotes, r: romaWord.join("").length };
   }
 
-  parseWord(data: MapData) {
+  private parseWord(data: MapData) {
     let lyrics = data
       .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
       .join("\n")
@@ -489,7 +489,7 @@ export class CreateMap {
     return lyricsArray.map((array) => array.split("\t").filter((word) => word > ""));
   }
 
-  calculateTotalNotes(typingWords: LineData[]) {
+  private calculateTotalNotes(typingWords: LineData[]) {
     return typingWords.reduce(
       (acc, line) => {
         acc.k += line.notes.k;
@@ -500,7 +500,7 @@ export class CreateMap {
     );
   }
 
-  calculateSpeedDifficulty(typingWords: LineData[]) {
+  private calculateSpeedDifficulty(typingWords: LineData[]) {
     const romaSpeedList = typingWords.map((line) => line.kpm.r);
     const kanaSpeedList = typingWords.map((line) => line.kpm.k);
 
@@ -515,7 +515,7 @@ export class CreateMap {
     };
   }
 
-  median(arr) {
+  private median(arr) {
     arr = arr.filter(function (a) {
       return a !== 0;
     });

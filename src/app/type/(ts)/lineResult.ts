@@ -34,7 +34,7 @@ export class LineResult {
     this.lostW = this.setLostWord(lineWord, inputMode);
   }
 
-  updateStatus(
+  private updateStatus(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
     lineWord: WordType,
@@ -62,7 +62,7 @@ export class LineResult {
     return newStatus;
   }
 
-  setLostWord(lineWord: WordType, inputMode: InputModeType) {
+  private setLostWord(lineWord: WordType, inputMode: InputModeType) {
     if (lineWord.nextChar["k"]) {
       const romaLostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       const kanaLostWord = lineWord.nextChar["k"] + lineWord.word.map((w) => w["k"]).join("");

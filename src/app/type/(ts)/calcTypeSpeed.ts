@@ -23,7 +23,7 @@ export class CalcTypeSpeed {
     this.totalKpm = this.updateTotalKpm(totalTypeCount, lineConstantTime, statusRef);
   }
 
-  updateTotalKpm(
+  private updateTotalKpm(
     totalTypeCount: number,
     lineConstantTime: number,
     statusRef: React.RefObject<StatusRef>,
