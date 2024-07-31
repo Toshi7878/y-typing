@@ -1,6 +1,14 @@
 import { Line } from "@/types";
 import { ROMA_MAP } from "./const/romaMap";
-import { LineData, MapData, SpeedDifficulty, TypeChank, WordType } from "./type";
+import {
+  InputModeType,
+  LineData,
+  LineResultData,
+  MapData,
+  SpeedDifficulty,
+  TypeChank,
+  WordType,
+} from "./type";
 
 const ZENKAKU_LIST = [
   "０",
@@ -374,6 +382,7 @@ export class CreateMap {
 
   startLine: number;
   lineLength: number;
+  defaultLineResultData: LineResultData[];
   totalNotes: LineData["notes"];
   speedDifficulty: SpeedDifficulty;
   currentTimeBarFrequency: number;
@@ -391,6 +400,7 @@ export class CreateMap {
 
     this.lineLength = result.lineLength;
 
+    this.defaultLineResultData = result.defaultLineResultData;
     this.totalNotes = this.calculateTotalNotes(result.words);
     this.speedDifficulty = this.calculateSpeedDifficulty(result.words);
 
@@ -400,6 +410,9 @@ export class CreateMap {
 
   private create(wordRomaMap: string[][], data: MapData) {
     const words: LineData[] = [];
+    const defaultLineResultData: LineResultData[] = [];
+    const inputMode = (localStorage.getItem("inputMode") ?? "roma") as InputModeType;
+    const validatedInputMode = ["roma", "kana", "flick"].includes(inputMode) ? inputMode : "roma";
     let startLine = 0;
     let lineLength = 0;
     for (let i = 0; i < data.length; i++) {
@@ -425,6 +438,24 @@ export class CreateMap {
           kpm,
           notes,
         });
+
+        defaultLineResultData.push({
+          status: {
+            p: 0,
+            tBonus: 0,
+            lType: 0,
+            lMiss: 0,
+            lRkpm: 0,
+            lKpm: 0,
+            lostW: null,
+            lLost: 0,
+            combo: 0,
+            tTime: 0,
+            mode: validatedInputMode,
+            sp: 1,
+          },
+          typeResult: [],
+        });
       } else {
         words.push({
           time,
@@ -433,10 +464,20 @@ export class CreateMap {
           kpm: { k: 0, r: 0 },
           notes: { k: 0, r: 0 },
         });
+
+        defaultLineResultData.push({
+          status: {
+            combo: 0,
+            tTime: 0,
+            mode: validatedInputMode,
+            sp: 1,
+          },
+          typeResult: [],
+        });
       }
     }
 
-    return { words, startLine, lineLength };
+    return { words, startLine, lineLength, defaultLineResultData };
   }
 
   private calcLineKpm(notes: LineData["notes"], remainTime: number) {

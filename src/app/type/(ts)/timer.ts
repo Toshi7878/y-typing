@@ -214,7 +214,7 @@ export const lineUpdate = (
       const combo = playingComboRef.current?.getCombo();
 
       if (map.words[count - 1].kpm.r > 0) {
-        statusRef.current!.status.result.push({
+        statusRef.current!.status.result[count - 1] = {
           status: {
             p: status!.point,
             tBonus: status!.timeBonus,
@@ -230,10 +230,10 @@ export const lineUpdate = (
             sp,
           },
           typeResult,
-        });
+        };
       } else {
         //間奏ライン
-        statusRef.current!.status.result.push({
+        statusRef.current!.status.result[count - 1] = {
           status: {
             combo,
             tTime,
@@ -241,11 +241,10 @@ export const lineUpdate = (
             sp,
           },
           typeResult,
-        });
+        };
       }
     }
 
-    console.log(statusRef.current!.status.result);
     tabStatusRef.current!.setStatus(lineResult.newStatus);
   } else if (scene === "replay") {
     const newStatus = updateReplayStatus(

@@ -1,6 +1,6 @@
-import { Line } from "@/types";
-import { GameStateRef, SceneType, StatusRef, YTStateRef } from "./type";
+import { GameStateRef, MapData, SceneType, StatusRef, YTStateRef } from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
+import { CreateMap } from "./createTypingWord";
 
 class YTState {
   play(
@@ -75,8 +75,20 @@ class YTState {
     }
   }
 
-  seek(target: any, statusRef: React.RefObject<StatusRef>, isRetrySkip: boolean) {
+  seek(
+    target: any,
+    statusRef: React.RefObject<StatusRef>,
+    isRetrySkip: boolean,
+    map: CreateMap,
+    scene: SceneType,
+  ) {
     const time = target.getCurrentTime();
+
+    if (scene === "replay" || scene === "practice") {
+      const newCount = seekTimeIndex(time, map.mapData);
+      console.log(newCount);
+      statusRef.current!.status.count = newCount;
+    }
 
     if (isRetrySkip && time === 0) {
       statusRef.current!.status.count = 0;
@@ -94,11 +106,11 @@ class YTState {
   }
 }
 
-function seekTimeIndex(time: number, mapData: Line[]) {
+function seekTimeIndex(time: number, mapData: MapData) {
   let count = 0;
 
   for (let i = 0; i < mapData.length; i++) {
-    if (Number(mapData[i]["time"]) - time >= 0) {
+    if (Number(mapData[i]["time"]) > time) {
       count = i - 1;
       break;
     }

@@ -13,7 +13,7 @@ import {
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { useRef } from "react";
 import { useAtom } from "jotai";
-import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/(ts)/retry";
 
 interface EndRetryButtonProps {
@@ -26,6 +26,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const [, setScene] = useAtom(sceneAtom);
+  const [map] = useAtom(mapAtom);
 
   const retry = (playMode: "playing" | "replay") => {
     if (isRetryAlert) {
@@ -33,6 +34,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
     } else {
       proceedRetry(
         playMode,
+        map!,
         statusRef,
         setScene,
         tabStatusRef,
@@ -73,6 +75,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
                   onClose();
                   proceedRetry(
                     "playing",
+                    map!,
                     statusRef,
                     setScene,
                     tabStatusRef,
@@ -102,6 +105,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
             ? () =>
                 proceedRetry(
                   "replay",
+                  map!,
                   statusRef,
                   setScene,
                   tabStatusRef,

@@ -1,8 +1,10 @@
 import { defaultStatusRef } from "../(contexts)/refsProvider";
+import { CreateMap } from "./createTypingWord";
 import { StatusRef } from "./type";
 
 export const proceedRetry = (
   playMode: "playing" | "replay",
+  map: CreateMap,
   statusRef: React.RefObject<StatusRef>,
   setScene: (scene: "playing" | "replay") => void,
   tabStatusRef: React.RefObject<{ resetStatus: () => void } | null>,
@@ -16,6 +18,8 @@ export const proceedRetry = (
 ) => {
   setScene(playMode);
   (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+  statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+
   tabStatusRef.current!.resetStatus();
   playingComboRef.current!.setCombo(0);
   gameStateRef.current!.replayKeyCount = 0;

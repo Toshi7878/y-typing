@@ -178,7 +178,7 @@ export class RomaInput {
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
     const kana = lineWord.nextChar["k"];
     const IS_SUCCESS = nextRomaPattern.some(
-      (pattern) => pattern[0].toLowerCase() === chars["keys"][0],
+      (pattern) => pattern[0] && pattern[0].toLowerCase() === chars["keys"][0],
     );
 
     if (!IS_SUCCESS) {

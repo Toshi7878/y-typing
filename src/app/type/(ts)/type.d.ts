@@ -133,7 +133,7 @@ export interface TypeResult {
   t: number;
 }
 
-export interface LineResultObj {
+export interface LineResultData {
   status?: {
     p?: number;
     tBonus?: number;
@@ -141,7 +141,7 @@ export interface LineResultObj {
     lMiss?: number;
     lRkpm?: number;
     lKpm?: number;
-    lostW?: string;
+    lostW?: string | null;
     lLost?: number;
     combo: number;
     tTime: number;

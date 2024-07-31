@@ -8,7 +8,7 @@ import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydo
 import {
   GameStateRef,
   InputModeType,
-  LineResultObj,
+  LineResultData,
   PlayingRef,
   SceneType,
   Status,
@@ -18,7 +18,7 @@ import {
 
 export const updateReplayStatus = (
   count: number,
-  lineResult: LineResultObj[],
+  lineResult: LineResultData[],
   map: CreateMap,
   rankingScores: number[],
 ) => {
@@ -69,7 +69,7 @@ export const replay = (
   rankingScores: number[],
   scene: SceneType,
 ) => {
-  const lineResult: LineResultObj = gameStateRef.current?.replayData[count - 1];
+  const lineResult: LineResultData = gameStateRef.current?.replayData[count - 1];
   const typeResults = lineResult.typeResult;
 
   if (typeResults.length === 0) {

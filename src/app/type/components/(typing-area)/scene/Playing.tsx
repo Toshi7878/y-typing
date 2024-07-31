@@ -56,6 +56,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       currentPlayingCenterRef!.resetWordLyrics();
 
       (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+      statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+
       tabStatusRef.current!.resetStatus();
       playingComboRef.current?.setCombo(0);
       gameStateRef.current!.replayKeyCount = 0;
@@ -247,6 +249,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
+    statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
 
     if (!ticker.started) {
       ticker.start();

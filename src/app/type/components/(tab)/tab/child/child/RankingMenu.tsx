@@ -1,14 +1,13 @@
 "use client";
 
-import { sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { LineResultObj, SendResultData } from "@/app/type/(ts)/type";
-import { Button, Stack, useDisclosure } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
+import { Button, Stack } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import axios from "axios";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import EndTypingResultModal from "@/app/type/components/(typing-area)/scene/child/child/EndTypingResultModal";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { proceedRetry } from "@/app/type/(ts)/retry";
@@ -22,12 +21,11 @@ const RankingMenu = ({
   setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
   setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
 
   const [scene, setScene] = useAtom(sceneAtom);
   const [, setSpeedData] = useAtom(speedAtom);
+  const [map] = useAtom(mapAtom);
   const params = useParams();
   const mapId = params.id as string;
 
@@ -35,7 +33,7 @@ const RankingMenu = ({
     queryKey: ["replayData", Number(userId), Number(mapId)],
     queryFn: async () => {
       const response = await axios.get<{
-        lineResult: LineResultObj[];
+        lineResult: LineResultData[];
         status: SendResultData["status"];
       }>(`${process.env.NEXT_PUBLIC_API_URL}/api/replay`, {
         params: {
@@ -54,6 +52,7 @@ const RankingMenu = ({
       if (scene === "end") {
         proceedRetry(
           "replay",
+          map!,
           statusRef,
           setScene,
           tabStatusRef,

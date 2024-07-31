@@ -1,7 +1,7 @@
 "use client";
 import { inputModeAtom, mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
-import { LineData, LineResultObj, TypeResult } from "@/app/type/(ts)/type";
+import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
 import {
   Modal,
   ModalOverlay,
@@ -24,7 +24,7 @@ import { memo } from "react";
 interface EndTypingResultModalProps {
   isOpen: boolean;
   onClose: () => void;
-  typingLineResults?: LineResultObj[];
+  typingLineResults?: LineResultData[];
 }
 
 function EndTypingResultModal({ isOpen, onClose, typingLineResults }: EndTypingResultModalProps) {
