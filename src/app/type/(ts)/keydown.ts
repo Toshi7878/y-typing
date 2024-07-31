@@ -611,7 +611,6 @@ export class Miss {
 
     statusRef.current!.lineStatus.typeResult.push({
       c: failKey,
-      is: false,
       t: Math.round(lineTime * 1000) / 1000,
     });
   }

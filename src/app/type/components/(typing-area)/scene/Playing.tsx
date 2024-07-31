@@ -44,7 +44,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
-  const [scene, setScene] = useAtom(sceneAtom);
+  const [scene] = useAtom(sceneAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
@@ -78,6 +78,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           : skippedTime - 1 + (1 - speedData.playSpeed);
 
       playerRef.current.seekTo(seekTime);
+      gameStateRef.current!.isRetrySkip = false;
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -233,7 +234,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         inputMode,
         ref as React.RefObject<PlayingRef>,
         scene,
-        setScene,
       );
     ticker.add(updateFunction);
 

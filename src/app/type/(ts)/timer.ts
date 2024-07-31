@@ -41,7 +41,6 @@ export const updateTimer = (
   inputMode: string,
   playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
-  setScene: React.Dispatch<React.SetStateAction<SceneType>>,
 ) => {
   const ytCurrentTime = playerRef.current.getCurrentTime();
   ytStateRef.current!.currentTime = ytCurrentTime;
@@ -154,7 +153,6 @@ export const updateTimer = (
       nextLine,
       playingRef,
       scene,
-      setScene,
     );
   }
 };
@@ -180,7 +178,6 @@ export const lineUpdate = (
   nextLine: LineData,
   playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
-  setScene: React.Dispatch<React.SetStateAction<SceneType>>,
 ) => {
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
