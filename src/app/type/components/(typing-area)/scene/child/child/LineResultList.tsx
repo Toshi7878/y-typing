@@ -2,7 +2,7 @@
 import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
-import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
+import { LineResultData, TypeResult } from "@/app/type/(ts)/type";
 import {
   Box,
   Text,
