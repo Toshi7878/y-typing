@@ -8,7 +8,7 @@ import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./child/ReadyPracticeButton";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import EndTypingResultModal from "./child/child/EndTypingResultModal";
+import EndTypingResultModal from "./child/EndTypingResultModal";
 
 function Ready() {
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -73,8 +73,6 @@ function Ready() {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
-
-      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 }

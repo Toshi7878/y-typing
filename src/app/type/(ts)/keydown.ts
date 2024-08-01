@@ -648,18 +648,7 @@ export function isTyped({ event, lineWord }: TypingEvent) {
   return IS_TYPE && HAS_FOCUS && KANA;
 }
 
-const disableKeys = [
-  "Home",
-  "End",
-  "PageUp",
-  "PageDown",
-  "CapsLock",
-  "Backquote",
-  "Tab",
-  "F3",
-  "Backspace",
-  "Space",
-];
+const disableKeys = ["Home", "End", "PageUp", "PageDown", "CapsLock", "Backquote", "F3", "Space"];
 
 const keyWhiteList = ["F5"];
 
@@ -743,6 +732,13 @@ export function shortcutKey(
       break;
     case "Backspace":
       event.preventDefault();
+      break;
+
+    case "Tab":
+      event.preventDefault();
+      if (scene === "replay" || scene === "practice") {
+        playingRef.current!.openLineList();
+      }
       break;
   }
 }

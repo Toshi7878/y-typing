@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
@@ -23,6 +23,7 @@ import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
 import { updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
+import EndTypingResultModal from "./child/EndTypingResultModal";
 export const ticker = new Ticker();
 
 const Playing = forwardRef<PlayingRef>((props, ref) => {
@@ -49,6 +50,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useImperativeHandle(ref, () => ({
     retry: () => {
@@ -138,6 +140,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         });
       }
     },
+
+    openLineList: () => {
+      if (!isOpen) {
+        onOpen();
+      } else {
+        onClose();
+      }
+    },
   }));
 
   useEffect(() => {
@@ -145,7 +155,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       setRef("playingRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData, inputMode]);
+  }, [speedData, inputMode, isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -284,6 +294,15 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playingTotalTimeRef={playingTotalTimeRef}
       />
       {map!.mapData[0].options?.eternalCSS && <style>{map!.mapData[0].options?.eternalCSS}</style>}
+      {isOpen && (
+        <EndTypingResultModal
+          isOpen={isOpen}
+          onClose={onClose}
+          typingLineResults={
+            scene === "replay" ? gameStateRef.current?.replayData : statusRef.current?.status.result
+          }
+        />
+      )}
     </Box>
   );
 });

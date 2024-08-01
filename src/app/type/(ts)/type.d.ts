@@ -45,6 +45,7 @@ export interface PlayingRef {
   gamePause: () => void;
   setRealTimeSpeed: (speed: number) => void;
   inputModeChange: (inputMode: InputModeType) => void;
+  openLineList: () => void;
 }
 
 export interface WordType {

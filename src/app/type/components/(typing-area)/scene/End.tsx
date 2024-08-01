@@ -11,7 +11,7 @@ import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
 import EndRetryButton from "./child/EndRetryButton";
-import EndTypingResultModal from "./child/child/EndTypingResultModal";
+import EndTypingResultModal from "./child/EndTypingResultModal";
 
 const End = () => {
   const { data: session } = useSession();
