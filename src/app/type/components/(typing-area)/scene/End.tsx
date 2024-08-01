@@ -188,9 +188,9 @@ const End = () => {
           isOpen={isOpen}
           onClose={onClose}
           typingLineResults={
-            scene === "replay"
-              ? gameStateRef.current?.replay.replayData
-              : statusRef.current?.status.result
+            gameStateRef.current!.replay.replayData.length
+              ? gameStateRef.current!.replay.replayData
+              : statusRef.current!.status.result
           }
         />
       )}

@@ -133,7 +133,7 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
                     ),
                 )}
                 <Text as="span" wordBreak="break-all">
-                  {lineResult.status?.lostW || lineTypeWord}
+                  {lineResult.status?.lostW !== null ? lineResult.status?.lostW : lineTypeWord}
                 </Text>
               </Box>
             </CardBody>
