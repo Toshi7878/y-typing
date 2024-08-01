@@ -78,6 +78,7 @@ export interface GameStateRef {
   replay: {
     replayData: LineResultObj[];
     replayKeyCount: number;
+    isSkip: boolean;
   };
   practice: {
     isPracticeMode: boolean;

@@ -40,6 +40,7 @@ export const defaultGameStateRef = {
   replay: {
     replayData: [],
     replayKeyCount: 0,
+    isSkip: false,
   },
   practice: {
     isPracticeMode: false,

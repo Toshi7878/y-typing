@@ -55,13 +55,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
 
       if (event.data === 3) {
         // seek時の処理
-        ytState.seek(
-          event.target,
-          refs.statusRef,
-          refs.gameStateRef.current!.isRetrySkip,
-          map!,
-          scene,
-        );
+        ytState.seek(event.target, refs.statusRef, refs.gameStateRef, map!, scene);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
         console.log("未スタート -1");

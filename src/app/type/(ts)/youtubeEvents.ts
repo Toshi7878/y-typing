@@ -80,17 +80,24 @@ class YTState {
   seek(
     target: any,
     statusRef: React.RefObject<StatusRef>,
-    isRetrySkip: boolean,
+    gameStateRef: React.RefObject<GameStateRef>,
     map: CreateMap,
     scene: SceneType,
   ) {
     const time = target.getCurrentTime();
 
     if (scene === "replay" || scene === "practice") {
+      const isSkip = gameStateRef.current!.replay.isSkip;
+
+      if (isSkip) {
+        return;
+      }
       const newCount = seekTimeIndex(time, map.mapData);
       console.log(newCount);
       statusRef.current!.status.count = newCount;
     }
+
+    const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
     if (isRetrySkip && time === 0) {
       statusRef.current!.status.count = 0;

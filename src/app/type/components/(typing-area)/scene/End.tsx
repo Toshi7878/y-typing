@@ -2,7 +2,7 @@ import { Box, Button, HStack, Stack, useDisclosure, useToast } from "@chakra-ui/
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, speedAtom, tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { mapIdAtom, sceneAtom, speedAtom, tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
@@ -21,6 +21,7 @@ const End = () => {
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
+  const [scene] = useAtom(sceneAtom);
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -186,7 +187,11 @@ const End = () => {
         <EndTypingResultModal
           isOpen={isOpen}
           onClose={onClose}
-          typingLineResults={statusRef.current!.status.result}
+          typingLineResults={
+            scene === "replay"
+              ? gameStateRef.current?.replay.replayData
+              : statusRef.current?.status.result
+          }
         />
       )}
     </Box>

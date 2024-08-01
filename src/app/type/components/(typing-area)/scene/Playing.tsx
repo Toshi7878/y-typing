@@ -83,6 +83,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       playerRef.current.seekTo(seekTime);
       gameStateRef.current!.isRetrySkip = false;
+      gameStateRef.current!.replay.isSkip = true;
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
