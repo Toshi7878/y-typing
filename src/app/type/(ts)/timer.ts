@@ -249,13 +249,13 @@ export const lineUpdate = (
   } else if (scene === "replay") {
     const newStatus = updateReplayStatus(
       count,
-      gameStateRef.current!.replayData,
+      gameStateRef.current!.replay.replayData,
       map,
       rankingScores,
     );
     tabStatusRef.current!.setStatus(newStatus);
     if (count > 0) {
-      const lineResult = gameStateRef.current!.replayData[count - 1];
+      const lineResult = gameStateRef.current!.replay.replayData[count - 1];
       playingComboRef.current?.setCombo(lineResult.status!.combo as number);
       statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
     }
