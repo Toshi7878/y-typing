@@ -69,13 +69,13 @@ export const replay = (
   rankingScores: number[],
   scene: SceneType,
 ) => {
-  const lineResult: LineResultData = gameStateRef.current?.replayData[count - 1];
+  const lineResult: LineResultData = gameStateRef.current!.replay.replayData[count - 1];
   const typeResults = lineResult.typeResult;
 
   if (typeResults.length === 0) {
     return;
   }
-  const keyCount = gameStateRef.current?.replayKeyCount!;
+  const keyCount = gameStateRef.current!.replay.replayKeyCount!;
 
   const typeData = typeResults[keyCount];
 
@@ -131,7 +131,7 @@ export const replay = (
         } else {
           const newStatus = updateReplayStatus(
             count,
-            gameStateRef.current!.replayData,
+            gameStateRef.current!.replay.replayData,
             map,
             rankingScores,
           );
@@ -166,7 +166,7 @@ export const replay = (
       }
     }
 
-    gameStateRef.current!.replayKeyCount++;
+    gameStateRef.current!.replay.replayKeyCount++;
   }
 };
 
@@ -175,12 +175,12 @@ export const lineReplayUpdate = (
   playingRef: React.RefObject<PlayingRef>,
   count: number,
 ) => {
-  const lineResult = gameStateRef.current?.replayData[count - 1];
+  const lineResult = gameStateRef.current!.replay.replayData[count - 1];
   const lineInputMode = lineResult.status.mode;
   const speed = lineResult.status.sp;
 
   playingRef.current?.inputModeChange(lineInputMode);
   playingRef.current?.setRealTimeSpeed(speed);
 
-  gameStateRef.current!.replayKeyCount = 0;
+  gameStateRef.current!.replay.replayKeyCount = 0;
 };
