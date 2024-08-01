@@ -90,6 +90,7 @@ class YTState {
       const isSkip = gameStateRef.current!.replay.isSkip;
 
       if (isSkip) {
+        gameStateRef.current!.replay.isSkip = false;
         return;
       }
       const newCount = seekTimeIndex(time, map.mapData);
