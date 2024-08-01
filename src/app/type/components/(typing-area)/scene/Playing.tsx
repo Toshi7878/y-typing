@@ -62,7 +62,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       tabStatusRef.current!.resetStatus();
       playingComboRef.current?.setCombo(0);
-      gameStateRef.current!.replayKeyCount = 0;
+      gameStateRef.current!.replay.replayKeyCount = 0;
       setNotify("Retry");
       gameStateRef.current!.isRetrySkip = true;
       playerRef.current.seekTo(0);
@@ -172,7 +172,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         if (
           count - 1 == lineWord.lineCount &&
           isTyped({ event, lineWord: cloneLineWord }) &&
-          scene === "playing"
+          scene !== "replay"
         ) {
           event.preventDefault();
           const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
@@ -299,7 +299,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           isOpen={isOpen}
           onClose={onClose}
           typingLineResults={
-            scene === "replay" ? gameStateRef.current?.replayData : statusRef.current?.status.result
+            scene === "replay"
+              ? gameStateRef.current?.replay.replayData
+              : statusRef.current?.status.result
           }
         />
       )}

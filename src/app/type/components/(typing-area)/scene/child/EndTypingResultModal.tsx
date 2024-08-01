@@ -23,10 +23,12 @@ function EndTypingResultDrawer({ isOpen, onClose, typingLineResults }: EndTyping
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
       <DrawerContent backgroundColor="rgba(255, 255, 255, 0.8)">
-        <DrawerHeader>タイピングリザルト</DrawerHeader>
+        <DrawerHeader fontSize="md" py={2}>
+          タイピングリザルト
+        </DrawerHeader>
         <DrawerCloseButton />
         <DrawerBody>
-          <LineResultList typingLineResults={typingLineResults} />
+          <LineResultList typingLineResults={typingLineResults!} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

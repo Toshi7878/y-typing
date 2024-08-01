@@ -14,7 +14,7 @@ export const Scene = () => {
   const [, setTabIndex] = useAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
 
-  const isPlayed = scene === "playing" || scene === "replay";
+  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   useEffect(() => {
     if (isPlayed) {

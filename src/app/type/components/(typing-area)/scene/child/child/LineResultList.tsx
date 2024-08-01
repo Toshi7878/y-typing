@@ -1,5 +1,5 @@
 "use client";
-import { inputModeAtom, mapAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
 import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
@@ -17,25 +17,28 @@ import { useAtom } from "jotai";
 import { memo } from "react";
 
 interface LineResultListProps {
-  typingLineResults?: LineResultData[];
+  typingLineResults: LineResultData[];
 }
 
 function LineResultList({ typingLineResults }: LineResultListProps) {
   const [map] = useAtom(mapAtom);
   const [inputMode] = useAtom(inputModeAtom);
+  const [scene] = useAtom(sceneAtom);
+  const [speedData] = useAtom(speedAtom);
   const { playerRef } = useRefs();
   let lineCount = 0;
   return (
     <>
-      {map!.words.map((line: LineData, index: number) => {
-        if (!map?.words[index].notes.k) {
+      {typingLineResults.map((lineResult: LineResultData, index: number) => {
+        const line = map!.words[index];
+
+        if (!line.notes.k) {
           return null;
         }
 
         lineCount++;
-        const lineResult = typingLineResults?.[index];
 
-        const lineInputMode = lineResult?.status?.mode ?? inputMode;
+        const lineInputMode = lineResult.status?.mode ?? inputMode;
         const lineKanaWord = line.word.map((w) => w["k"]).join("");
         const lineTypeWord =
           lineInputMode === "roma" ? line.word.map((w) => w["r"][0]).join("") : lineKanaWord;
@@ -45,11 +48,15 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
 
         const maxLinePoint = line.notes.r * CHAR_POINT;
 
-        const kpm = lineResult?.status?.lKpm ?? 0;
-        const rkpm = lineResult?.status?.lRkpm ?? 0;
-        const point = lineResult?.status?.p ?? 0;
-        const lMiss = lineResult?.status?.lMiss ?? 0;
-        const tBonus = lineResult?.status?.tBonus ?? 0;
+        const kpm = lineResult.status?.lKpm;
+        const rkpm = lineResult.status?.lRkpm;
+        const point = lineResult.status?.p;
+        const lMiss = lineResult.status?.lMiss;
+        const tBonus = lineResult.status?.tBonus;
+
+        const seekTime =
+          Number(map!.mapData[index]["time"]) - (scene === "replay" ? 0 : 1 / speedData.playSpeed);
+
         return (
           <Card
             key={index}
@@ -59,15 +66,25 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
             cursor="pointer"
             backgroundColor="rgba(255, 255, 255, 0.7)"
             _hover={{ boxShadow: "md", bg: "gray.100" }}
-            onClick={() => playerRef.current.seekTo(map!.mapData[index]["time"])}
+            onClick={() => {
+              if (scene === "replay") {
+                playerRef.current.seekTo(seekTime);
+              } else {
+                playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
+              }
+            }}
           >
             <CardHeader py={1}>
               <Box>
                 <span data-list-number={index}>
-                  {lineCount}/{map.lineLength}
+                  {lineCount}/{map!.lineLength}
                 </span>{" "}
                 (
-                <Tooltip label="ライン打鍵数" placement="top" fontSize="sm">
+                <Tooltip
+                  label={`ライン打鍵数${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
+                  placement="top"
+                  fontSize="sm"
+                >
                   <span className="line-notes">{lineNotes}打</span>
                 </Tooltip>
                 ÷{" "}
@@ -75,18 +92,22 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
                   <span className="line-time">{lineTime.toFixed(1)}秒</span>
                 </Tooltip>
                 ={" "}
-                <Tooltip label="要求打鍵速度" placement="top" fontSize="sm">
+                <Tooltip
+                  label={`要求打鍵速度${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
+                  placement="top"
+                  fontSize="sm"
+                >
                   <span className="line-kpm">{lineKpm}kpm</span>
                 </Tooltip>
                 )
               </Box>
             </CardHeader>
             <CardBody py={1} className="text-xl word-font">
-              <Box className="kana-word ">
+              <Box className="kana-word">
                 <Box>{lineKanaWord}</Box>
               </Box>
               <Box className="word-result  outline-text text-white uppercase ml-1">
-                {lineResult?.typeResult?.map(
+                {lineResult.typeResult?.map(
                   (type: TypeResult, index: number) =>
                     type.c && (
                       <Tooltip
@@ -111,13 +132,18 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
                       </Tooltip>
                     ),
                 )}
-                {lineResult ? lineResult.status?.lostW : lineTypeWord}
+                <Text as="span" wordBreak="break-all">
+                  {lineResult.status?.lostW || lineTypeWord}
+                </Text>
               </Box>
             </CardBody>
             <CardFooter py={1} className="ml-1 font-bold font-mono text-xl">
               <Stack>
                 <Box>
-                  kpm:{kpm}, rkpm:{rkpm}, miss:{lMiss}, point:{point}
+                  <Tooltip label={`rkpm:${rkpm}`} placement="top" fontSize="sm">
+                    <span>kpm:{kpm}</span>
+                  </Tooltip>
+                  , miss:{lMiss}, point:{point}
                   {tBonus ? `+${tBonus}` : ""}/{maxLinePoint}
                 </Box>
               </Stack>

@@ -6,6 +6,7 @@ import { sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import PlayingBottomBadge from "./child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
 
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;
@@ -22,7 +23,7 @@ const PlayingBottom = function ({
   const [scene] = useAtom(sceneAtom);
   const [speedData] = useAtom(speedAtom);
 
-  const isPlayed = scene === "playing" || scene === "replay";
+  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   return (
     <Box mx="8">
@@ -39,11 +40,32 @@ const PlayingBottom = function ({
           badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
           kbdText="F10"
           onClick={() => playingRef.current?.realtimeSpeedChange()}
+          isPauseDisabled={true}
         />
+        {scene !== "playing" && (
+          <>
+            <PlayingLineSeekBadge
+              badgeText="ライン移動"
+              kbdTextPrev="←"
+              kbdTextNext="→"
+              onClick={() => {}}
+              onClickPrev={() => {}}
+              onClickNext={() => {}}
+            />
+            <PlayingBottomBadge
+              badgeText="ライン一覧"
+              kbdText="Tab"
+              onClick={() => playingRef.current?.openLineList()}
+              isPauseDisabled={false}
+            />
+          </>
+        )}
+
         <PlayingBottomBadge
           badgeText="やり直し"
           kbdText="F4"
           onClick={() => playingRef.current?.retry()}
+          isPauseDisabled={false}
         />
       </HStack>
     </Box>

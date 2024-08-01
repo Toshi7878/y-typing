@@ -2,7 +2,7 @@
 
 import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
-import { Button, Stack } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Button, Stack } from "@chakra-ui/react";
 import axios from "axios";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
@@ -63,7 +63,7 @@ const RankingMenu = ({
       }
       setShowMenu(null);
       setHoveredIndex(null);
-      gameStateRef.current!.replayData = result.data.lineResult;
+      gameStateRef.current!.replay.replayData = result.data.lineResult;
       const defaultSpeed = result.data.status.defaultSpeed;
       new YTSpeedController("setDefaultSpeed", {
         setSpeedData,

@@ -28,7 +28,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const [, setScene] = useAtom(sceneAtom);
   const [map] = useAtom(mapAtom);
 
-  const retry = (playMode: "playing" | "replay") => {
+  const retry = (playMode: "playing" | "replay" | "practice") => {
     if (isRetryAlert) {
       onOpen();
     } else {
@@ -101,7 +101,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         variant="outline"
         borderColor="black"
         onClick={
-          gameStateRef.current?.replayData.length
+          gameStateRef.current?.replay.replayData.length
             ? () =>
                 proceedRetry(
                   "replay",
@@ -116,7 +116,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
             : () => retry("playing")
         }
       >
-        {gameStateRef.current?.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
+        {gameStateRef.current?.replay.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
       </Button>
     </>
   );

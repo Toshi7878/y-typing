@@ -105,7 +105,7 @@ const End = () => {
     status.score > 0 &&
     status.score >= bestScoreRef.current &&
     speedData.defaultSpeed >= 1 &&
-    gameStateRef.current!.replayData.length === 0;
+    gameStateRef.current!.replay.replayData.length === 0;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -113,7 +113,9 @@ const End = () => {
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
             <Box textAlign="left" className="text-3xl" mx={2}>
-              {gameStateRef.current!.replayData.length > 0 ? (
+              {gameStateRef.current!.practice.isPracticeMode ? (
+                <>練習モード終了</>
+              ) : gameStateRef.current!.replay.replayData.length > 0 ? (
                 <>リプレイ再生終了</>
               ) : !session ? (
                 <>

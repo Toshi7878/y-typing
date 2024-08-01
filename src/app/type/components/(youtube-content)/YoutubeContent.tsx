@@ -39,11 +39,6 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleStop = useCallback(() => {
-    ytState.stop(setScene);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleEnd = useCallback(() => {
     ytState.end(setScene, refs.playerRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps

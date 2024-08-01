@@ -37,8 +37,14 @@ export const defaultYTStateRef = {
 };
 export const defaultGameStateRef = {
   isRetrySkip: false,
-  replayData: [],
-  replayKeyCount: 0,
+  replay: {
+    replayData: [],
+    replayKeyCount: 0,
+  },
+  practice: {
+    isPracticeMode: false,
+    setLineCount: 0,
+  },
 };
 export interface RefsContextType {
   playerRef: any;

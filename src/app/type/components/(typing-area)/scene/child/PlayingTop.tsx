@@ -17,7 +17,7 @@ function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) 
 
   const playingComboRef = useRef(null);
 
-  const isPlayed = scene === "playing" || scene === "replay";
+  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   return (
     <Box mx="8">
