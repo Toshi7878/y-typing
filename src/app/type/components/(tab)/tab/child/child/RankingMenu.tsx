@@ -98,7 +98,7 @@ const RankingMenu = ({
         size="sm"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
         onClick={handleReplayClick}
-        isDisabled={scene === "playing"}
+        isDisabled={scene === "playing" || scene === "replay"}
       >
         リプレイ再生
       </Button>
