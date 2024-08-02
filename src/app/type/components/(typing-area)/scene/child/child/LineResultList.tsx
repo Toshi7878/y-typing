@@ -25,7 +25,7 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
   const [inputMode] = useAtom(inputModeAtom);
   const [scene] = useAtom(sceneAtom);
   const [speedData] = useAtom(speedAtom);
-  const { playerRef } = useRefs();
+  const { playerRef, gameStateRef } = useRefs();
   let lineCount = 0;
   return (
     <>
@@ -71,6 +71,7 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
                 playerRef.current.seekTo(seekTime);
               } else {
                 playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
+                gameStateRef.current!.practice.setLineCount = index;
               }
             }}
           >

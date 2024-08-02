@@ -100,21 +100,13 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         fontSize="2xl"
         variant="outline"
         borderColor="black"
-        onClick={
-          gameStateRef.current?.replay.replayData.length
-            ? () =>
-                proceedRetry(
-                  "replay",
-                  map!,
-                  statusRef,
-                  setScene,
-                  tabStatusRef,
-                  playingComboRef,
-                  gameStateRef,
-                  playerRef,
-                )
-            : () => retry("playing")
-        }
+        onClick={() => {
+          const playMode = gameStateRef.current?.practice.isPracticeMode ? "practice" : "playing";
+          const finalPlayMode = gameStateRef.current?.replay.replayData.length
+            ? "replay"
+            : playMode;
+          retry(finalPlayMode);
+        }}
       >
         {gameStateRef.current?.replay.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
       </Button>

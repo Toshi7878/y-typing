@@ -24,6 +24,7 @@ import { Ticker } from "@pixi/ticker";
 import { updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
 import EndTypingResultModal from "./child/EndTypingResultModal";
+import { updateReplayStatus } from "@/app/type/(ts)/replay";
 export const ticker = new Ticker();
 
 const Playing = forwardRef<PlayingRef>((props, ref) => {
@@ -52,16 +53,20 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [rankingScores] = useAtom(rankingScoresAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  console.log(map);
+  //forwardRefやめる（あとで
   useImperativeHandle(ref, () => ({
     retry: () => {
       const currentPlayingCenterRef = playingCenterRef.current; // 追加
       currentPlayingCenterRef!.resetWordLyrics();
 
-      (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-      statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+      if (scene !== "practice") {
+        tabStatusRef.current!.resetStatus();
+        playingComboRef.current?.setCombo(0);
+        (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
-      tabStatusRef.current!.resetStatus();
-      playingComboRef.current?.setCombo(0);
+        statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+      }
       gameStateRef.current!.replay.replayKeyCount = 0;
       setNotify("Retry");
       gameStateRef.current!.isRetrySkip = true;
@@ -149,6 +154,97 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         onClose();
       }
     },
+
+    prevLine: () => {
+      const setLineCount = gameStateRef.current!.practice.setLineCount;
+
+      const count = statusRef.current!.status.count;
+
+      let n = setLineCount !== count ? -1 : 0;
+
+      while (!map!.typingLineNumbers.includes(count + n) && count + n >= map!.startLine) {
+        n--;
+      }
+
+      if (count < map!.startLine) {
+        return;
+      }
+
+      const prevCount = count + n;
+      gameStateRef.current!.practice.setLineCount = prevCount - 1;
+
+      const prevTime =
+        count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - 1 / speedData.playSpeed : 0;
+
+      playerRef.current.seekTo(prevTime);
+      if (ticker.started) {
+        ticker.stop();
+      }
+      updateTimer(
+        map!,
+        playerRef,
+        ytStateRef,
+        speedData,
+        totalTimeProgressRef,
+        playingTotalTimeRef,
+        playingLineTimeRef,
+        playingCenterRef,
+        lineProgressRef,
+        skipGuideRef,
+        statusRef,
+        tabStatusRef,
+        gameStateRef,
+        rankingScores,
+        playingComboRef,
+        inputMode,
+        ref as React.RefObject<PlayingRef>,
+        scene,
+      );
+    },
+
+    nextLine: () => {
+      const setLineCount = gameStateRef.current!.practice.setLineCount;
+      const count = statusRef.current!.status.count;
+      let n = setLineCount !== count ? 1 : 2;
+
+      if (count - setLineCount > 1) {
+        n--;
+      }
+
+      if (
+        setLineCount > 0 &&
+        count + 1 - setLineCount <= 1 &&
+        Number(map!.mapData[setLineCount + 1]["time"]) -
+          Number(map!.mapData[setLineCount]["time"]) <=
+          1
+      ) {
+        n += 2;
+      }
+
+      while (!map!.typingLineNumbers.includes(count + n) && map!.mapData.length - 1 > count + n) {
+        n++;
+      }
+
+      if (map!.mapData.length - 2 < count + n) {
+        return;
+      }
+
+      const nextCount = count + n;
+
+      const nextTime =
+        count > 0 ? Number(map!.mapData[nextCount]["time"]) - 1 / speedData.playSpeed : 0;
+
+      gameStateRef.current!.practice.setLineCount = nextCount - 1;
+      playerRef.current.seekTo(nextTime);
+    },
+
+    practiceSetLine: () => {
+      const setLineCount = gameStateRef.current!.practice.setLineCount;
+
+      const seekTime = Number(map!.mapData[setLineCount]["time"]) - 1 / speedData.playSpeed;
+
+      playerRef.current.seekTo(seekTime);
+    },
   }));
 
   useEffect(() => {
@@ -203,9 +299,56 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               scene,
             );
 
-            tabStatusRef.current!.setStatus(success.newStatus);
             playingCenterRef.current!.setLineWord(result.newLineWord);
             playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+
+            if (!result.newLineWord.nextChar["k"] && scene === "practice") {
+              const combo = playingComboRef.current?.getCombo();
+              const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
+              const mode = statusRef.current!.lineStatus.lineStartInputMode;
+              const sp = statusRef.current!.lineStatus.lineStartSpeed;
+              const typeResult = statusRef.current!.lineStatus.typeResult;
+              const lResult = statusRef.current!.status.result[count - 1];
+              const lMiss = statusRef.current!.lineStatus.lineMiss;
+              const lineScore = success.newStatus.point + success.newStatus.timeBonus + lMiss * 5;
+              const oldLineScore =
+                lResult.status.p + lResult.status.tBonus + lResult.status.lMiss * 5;
+
+              const isUpdateResult = lineScore >= oldLineScore;
+
+              if (isUpdateResult) {
+                statusRef.current!.status.result[count - 1] = {
+                  status: {
+                    p: success.newStatus.point,
+                    tBonus: success.newStatus.timeBonus,
+                    lType: statusRef.current!.lineStatus.lineType,
+                    lMiss,
+                    lRkpm: typeSpeed.lineRkpm,
+                    lKpm: typeSpeed.lineKpm,
+                    lostW: "",
+                    lLost: 0,
+                    combo,
+                    tTime,
+                    mode,
+                    sp,
+                  },
+                  typeResult,
+                };
+              }
+              const newStatus = updateReplayStatus(
+                map!.words.length - 1,
+                statusRef.current!.status.result,
+                map!,
+                rankingScores,
+              );
+              tabStatusRef.current!.setStatus({
+                ...newStatus,
+                point: success.newStatus.point,
+                timeBonus: success.newStatus.timeBonus,
+              });
+            } else {
+              tabStatusRef.current!.setStatus(success.newStatus);
+            }
           } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
             const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineTime);
             tabStatusRef.current!.setStatus(miss.newStatus);

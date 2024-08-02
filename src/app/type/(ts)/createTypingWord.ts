@@ -382,6 +382,7 @@ export class CreateMap {
 
   startLine: number;
   lineLength: number;
+  typingLineNumbers: number[];
   defaultLineResultData: LineResultData[];
   totalNotes: LineData["notes"];
   speedDifficulty: SpeedDifficulty;
@@ -399,6 +400,7 @@ export class CreateMap {
     this.startLine = result.startLine;
 
     this.lineLength = result.lineLength;
+    this.typingLineNumbers = result.typingLineNumbers;
 
     this.defaultLineResultData = result.defaultLineResultData;
     this.totalNotes = this.calculateTotalNotes(result.words);
@@ -411,6 +413,7 @@ export class CreateMap {
   private create(wordRomaMap: string[][], data: MapData) {
     const words: LineData[] = [];
     const defaultLineResultData: LineResultData[] = [];
+    const typingLineNumbers: number[] = [];
     const inputMode = (localStorage.getItem("inputMode") ?? "roma") as InputModeType;
     const validatedInputMode = ["roma", "kana", "flick"].includes(inputMode) ? inputMode : "roma";
     let startLine = 0;
@@ -424,6 +427,7 @@ export class CreateMap {
           startLine = i;
         }
         lineLength++;
+        typingLineNumbers.push(i);
         const remainTime = +data[i + 1]["time"] - +time;
 
         const createLineWord = new TypingWord(wordRomaMap[i] as [string, ...string[]]);
@@ -477,7 +481,7 @@ export class CreateMap {
       }
     }
 
-    return { words, startLine, lineLength, defaultLineResultData };
+    return { words, startLine, lineLength, defaultLineResultData, typingLineNumbers };
   }
 
   private calcLineKpm(notes: LineData["notes"], remainTime: number) {

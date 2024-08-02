@@ -46,6 +46,9 @@ export interface PlayingRef {
   setRealTimeSpeed: (speed: number) => void;
   inputModeChange: (inputMode: InputModeType) => void;
   openLineList: () => void;
+  prevLine: () => void;
+  nextLine: () => void;
+  practiceSetLine: () => void;
 }
 
 export interface WordType {

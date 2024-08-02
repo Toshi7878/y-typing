@@ -182,7 +182,7 @@ export const lineUpdate = (
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
 
-  if (scene === "playing") {
+  if (scene === "playing" || scene === "practice") {
     const lineWord = currentPlayingCenterRef!.getLineWord();
     const typeSpeed = new CalcTypeSpeed(
       "timer",
@@ -212,40 +212,60 @@ export const lineUpdate = (
       const sp = statusRef.current!.lineStatus.lineStartSpeed;
       const typeResult = statusRef.current!.lineStatus.typeResult;
       const combo = playingComboRef.current?.getCombo();
+      const lMiss = statusRef.current!.lineStatus.lineMiss;
 
-      if (map.words[count - 1].kpm.r > 0) {
-        statusRef.current!.status.result[count - 1] = {
-          status: {
-            p: status!.point,
-            tBonus: status!.timeBonus,
-            lType: statusRef.current!.lineStatus.lineType,
-            lMiss: statusRef.current!.lineStatus.lineMiss,
-            lRkpm: typeSpeed.lineRkpm,
-            lKpm: typeSpeed.lineKpm,
-            lostW: lineResult.lostW,
-            lLost: lineResult.lostLen,
-            combo,
-            tTime,
-            mode,
-            sp,
-          },
-          typeResult,
-        };
-      } else {
-        //間奏ライン
-        statusRef.current!.status.result[count - 1] = {
-          status: {
-            combo,
-            tTime,
-            mode,
-            sp,
-          },
-          typeResult,
-        };
+      const lineScore = status!.point + status!.timeBonus + lMiss * 5;
+
+      const lResult = statusRef.current!.status.result[count - 1];
+      const oldLineScore = lResult.status.p + lResult.status.tBonus + lResult.status.lMiss * 5;
+
+      const isUpdateResult = lineScore >= oldLineScore || scene === "playing";
+
+      if (isUpdateResult) {
+        if (map.words[count - 1].kpm.r > 0) {
+          statusRef.current!.status.result[count - 1] = {
+            status: {
+              p: status!.point,
+              tBonus: status!.timeBonus,
+              lType: statusRef.current!.lineStatus.lineType,
+              lMiss,
+              lRkpm: typeSpeed.lineRkpm,
+              lKpm: typeSpeed.lineKpm,
+              lostW: lineResult.lostW,
+              lLost: lineResult.lostLen,
+              combo,
+              tTime,
+              mode,
+              sp,
+            },
+            typeResult,
+          };
+        } else {
+          //間奏ライン
+          statusRef.current!.status.result[count - 1] = {
+            status: {
+              combo,
+              tTime,
+              mode,
+              sp,
+            },
+            typeResult,
+          };
+        }
       }
     }
 
-    tabStatusRef.current!.setStatus(lineResult.newStatus);
+    if (scene === "playing") {
+      tabStatusRef.current!.setStatus(lineResult.newStatus);
+    } else if (scene === "practice") {
+      const newStatus = updateReplayStatus(
+        map!.words.length - 1,
+        statusRef.current!.status.result,
+        map,
+        rankingScores,
+      );
+      tabStatusRef.current!.setStatus(newStatus);
+    }
   } else if (scene === "replay") {
     const newStatus = updateReplayStatus(
       count,

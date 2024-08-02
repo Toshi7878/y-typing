@@ -682,9 +682,15 @@ export function shortcutKey(
       event.preventDefault();
       break;
     case "ArrowRight":
+      if (scene === "replay" || scene === "practice") {
+        playingRef.current!.nextLine();
+      }
       event.preventDefault();
       break;
     case "ArrowLeft":
+      if (scene === "replay" || scene === "practice") {
+        playingRef.current!.prevLine();
+      }
       event.preventDefault();
       break;
     case skip:
@@ -731,14 +737,17 @@ export function shortcutKey(
       event.preventDefault();
       break;
     case "Backspace":
+      if (scene === "replay" || scene === "practice") {
+        playingRef.current!.practiceSetLine();
+      }
       event.preventDefault();
       break;
 
     case "Tab":
-      event.preventDefault();
       if (scene === "replay" || scene === "practice") {
         playingRef.current!.openLineList();
       }
+      event.preventDefault();
       break;
   }
 }

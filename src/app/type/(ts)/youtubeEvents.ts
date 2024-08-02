@@ -27,24 +27,22 @@ class YTState {
       }
     }
 
+    if (scene === "playing" || scene === "replay" || scene === "practice") {
+      if (!ticker.started) {
+        ticker.start();
+      }
+    }
     const isPaused = YTStateRef.current!.isPaused;
 
     if (isPaused) {
       YTStateRef.current!.isPaused = false;
-      if (!ticker.started) {
-        ticker.start();
-      }
+
       setNotify("▶");
     }
   }
 
-  end(setScene: React.Dispatch<React.SetStateAction<SceneType>>, playerRef: React.RefObject<any>) {
+  end(playerRef: React.RefObject<any>) {
     console.log("プレイ終了");
-    // setScene("end");
-
-    // if (ticker.started) {
-    //   ticker.stop();
-    // }
 
     playerRef.current.seekTo(0);
     playerRef.current.stopVideo();
@@ -102,9 +100,6 @@ class YTState {
 
     if (isRetrySkip && time === 0) {
       statusRef.current!.status.count = 0;
-      if (!ticker.started) {
-        ticker.start();
-      }
     }
     console.log("シーク");
   }
