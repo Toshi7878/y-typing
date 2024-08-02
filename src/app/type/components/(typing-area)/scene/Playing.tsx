@@ -173,8 +173,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       const prevCount = count + n;
       gameStateRef.current!.practice.setLineCount = prevCount - 1;
 
-      const prevTime =
-        count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - 1 / speedData.playSpeed : 0;
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+
+      const prevTime = count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - seekBuffer : 0;
 
       playerRef.current.seekTo(prevTime);
       if (ticker.started) {
@@ -231,8 +232,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       const nextCount = count + n;
 
-      const nextTime =
-        count > 0 ? Number(map!.mapData[nextCount]["time"]) - 1 / speedData.playSpeed : 0;
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
 
       gameStateRef.current!.practice.setLineCount = nextCount - 1;
       gameStateRef.current!.replay.isSkip = true;
@@ -242,7 +243,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     practiceSetLine: () => {
       const setLineCount = gameStateRef.current!.practice.setLineCount;
 
-      const seekTime = Number(map!.mapData[setLineCount]["time"]) - 1 / speedData.playSpeed;
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+
+      const seekTime = Number(map!.mapData[setLineCount]["time"]) - seekBuffer;
 
       playerRef.current.seekTo(seekTime);
     },
