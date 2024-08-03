@@ -37,6 +37,7 @@ export const defaultYTStateRef = {
 };
 export const defaultGameStateRef = {
   isRetrySkip: false,
+  retryCount: 1,
   replay: {
     replayData: [],
     replayKeyCount: 0,

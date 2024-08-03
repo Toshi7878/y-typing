@@ -76,6 +76,7 @@ export interface Status {
 
 export interface GameStateRef {
   isRetrySkip: boolean;
+  retryCount: number;
   replay: {
     replayData: LineResultData[];
     replayKeyCount: number;

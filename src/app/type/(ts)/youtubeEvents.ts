@@ -7,7 +7,7 @@ class YTState {
     scene: SceneType,
     setScene: React.Dispatch<React.SetStateAction<SceneType>>,
     YTStateRef: React.RefObject<YTStateRef>,
-    setNotify: React.Dispatch<React.SetStateAction<string>>,
+    setNotify: React.Dispatch<React.SetStateAction<symbol>>,
     playerRef: React.RefObject<any>,
     gameStateRef: React.RefObject<GameStateRef>,
   ) {
@@ -37,7 +37,7 @@ class YTState {
     if (isPaused) {
       YTStateRef.current!.isPaused = false;
 
-      setNotify("▶");
+      setNotify(Symbol("▶"));
     }
   }
 
@@ -60,7 +60,7 @@ class YTState {
 
   pause(
     YTStateRef: React.RefObject<YTStateRef>,
-    setNotify: React.Dispatch<React.SetStateAction<string>>,
+    setNotify: React.Dispatch<React.SetStateAction<symbol>>,
   ) {
     console.log("一時停止");
 
@@ -71,7 +71,7 @@ class YTState {
     const isPaused = YTStateRef.current!.isPaused;
     if (!isPaused) {
       YTStateRef.current!.isPaused = true;
-      setNotify("ll");
+      setNotify(Symbol("ll"));
     }
   }
 

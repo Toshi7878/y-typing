@@ -17,7 +17,7 @@ import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
 import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
-import { YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
+import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
@@ -65,9 +65,19 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
         statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+
+        if (scene === "playing") {
+          const status = tabStatusRef.current?.getStatus();
+          if (status?.type) {
+            gameStateRef.current!.retryCount++;
+          }
+          setNotify(Symbol(`Retry(${gameStateRef.current!.retryCount})`));
+        } else if (scene === "replay") {
+          setNotify(Symbol(`Retry`));
+        }
       }
       gameStateRef.current!.replay.replayKeyCount = 0;
-      setNotify("Retry");
+
       gameStateRef.current!.isRetrySkip = true;
       playerRef.current.seekTo(0);
       if (ticker.started) {
@@ -91,7 +101,13 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
-      new YTSpeedController("change", { speedData, setSpeedData, playerRef: playerRef.current });
+      const newSpeed = realtimeChange({
+        speedData,
+        setSpeedData,
+        playerRef: playerRef.current,
+      });
+
+      setNotify(Symbol(newSpeed.toFixed(2)));
     },
     setRealTimeSpeed: (speed: number) => {
       new YTSpeedController("setSpeed", {
@@ -115,10 +131,10 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       if (changeInputMode === "kana") {
         setInputMode("kana");
-        setNotify("KanaMode");
+        setNotify(Symbol("KanaMode"));
       } else {
         setInputMode("roma");
-        setNotify("Romaji");
+        setNotify(Symbol("Romaji"));
         const lineWord = playingCenterRef.current!.getLineWord();
 
         if (lineWord.nextChar["k"]) {
@@ -418,7 +434,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       }
 
       currentPlayingCenterRef!.resetWordLyrics();
-      setNotify("");
 
       if (scene !== "end" && scene !== "playing") {
         // eslint-disable-next-line react-hooks/exhaustive-deps

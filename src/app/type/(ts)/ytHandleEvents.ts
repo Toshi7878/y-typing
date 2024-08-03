@@ -18,8 +18,6 @@ export class YTSpeedController {
       this.speedUp({ setSpeedData, playerRef });
     } else if (changeName === "down") {
       this.speedDown({ setSpeedData, playerRef });
-    } else if (changeName === "change") {
-      this.realtimeChange({ speedData, setSpeedData, playerRef });
     } else if (changeName === "setSpeed") {
       this.speedChange(speedData!.defaultSpeed, setSpeed!, { setSpeedData, playerRef });
     } else if (changeName === "setDefaultSpeed") {
@@ -48,17 +46,19 @@ export class YTSpeedController {
     setSpeedData({ defaultSpeed: defaultSpeed, playSpeed: playSpeed });
     playerRef.setPlaybackRate(playSpeed);
   }
+}
 
-  realtimeChange({ speedData, setSpeedData, playerRef }: UpdateProps) {
-    const playSpeed = speedData?.defaultSpeed!;
-    const realtimeSpeed = speedData?.playSpeed!;
-    const newRealTimeSpeed = realtimeSpeed + 0.25 <= 2 ? realtimeSpeed + 0.25 : playSpeed;
+export function realtimeChange({ speedData, setSpeedData, playerRef }: UpdateProps) {
+  const playSpeed = speedData?.defaultSpeed!;
+  const realtimeSpeed = speedData?.playSpeed!;
+  const newRealTimeSpeed = realtimeSpeed + 0.25 <= 2 ? realtimeSpeed + 0.25 : playSpeed;
 
-    setSpeedData({
-      ...speedData!,
-      playSpeed: newRealTimeSpeed,
-    });
+  setSpeedData({
+    ...speedData!,
+    playSpeed: newRealTimeSpeed,
+  });
 
-    playerRef.setPlaybackRate(newRealTimeSpeed);
-  }
+  playerRef.setPlaybackRate(newRealTimeSpeed);
+
+  return newRealTimeSpeed;
 }
