@@ -72,8 +72,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             gameStateRef.current!.retryCount++;
           }
           setNotify(Symbol(`Retry(${gameStateRef.current!.retryCount})`));
-        } else if (scene === "replay") {
-          setNotify(Symbol(`Retry`));
         }
       }
       gameStateRef.current!.replay.replayKeyCount = 0;
