@@ -11,7 +11,7 @@ interface PlayingBottomBadgeProps {
 
 const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
   const [notify] = useAtom(playingNotifyAtom);
-  const isDisabled = notify === "ll" && props.isPauseDisabled;
+  const isDisabled = notify.description === "ll" && props.isPauseDisabled;
 
   return (
     <HStack>
