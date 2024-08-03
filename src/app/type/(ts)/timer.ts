@@ -211,13 +211,14 @@ export const lineUpdate = (
       const mode = statusRef.current!.lineStatus.lineStartInputMode;
       const sp = statusRef.current!.lineStatus.lineStartSpeed;
       const typeResult = statusRef.current!.lineStatus.typeResult;
-      const combo = playingComboRef.current?.getCombo();
+      const combo = playingComboRef.current!.getCombo();
       const lMiss = statusRef.current!.lineStatus.lineMiss;
 
       const lineScore = status!.point + status!.timeBonus + lMiss * 5;
 
       const lResult = statusRef.current!.status.result[count - 1];
-      const oldLineScore = lResult.status.p + lResult.status.tBonus + lResult.status.lMiss * 5;
+      const oldLineScore =
+        lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
       const isUpdateResult = lineScore >= oldLineScore || scene === "playing";
 
