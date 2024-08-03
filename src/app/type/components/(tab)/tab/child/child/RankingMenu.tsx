@@ -76,19 +76,26 @@ const RankingMenu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
   return (
-    <Stack className="rounded-md" position="absolute" zIndex="9999" bg="white" boxShadow="md" p={2}>
+    <Stack
+      className="rounded-md sm:top-[-50px]"
+      position="absolute"
+      zIndex="9999"
+      bg="white"
+      boxShadow="md"
+      p={2}
+    >
       <Button
         as="a"
         href={`/user/${userId}`}
         variant="unstyled"
-        size="sm"
+        size="md"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
       >
         ユーザーページへ
       </Button>
       <Button
         variant="unstyled" // ボタンのスタイルを変更
-        size="sm"
+        size="md"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
         onClick={handleReplayClick}
         isDisabled={scene === "playing" || scene === "replay"}
