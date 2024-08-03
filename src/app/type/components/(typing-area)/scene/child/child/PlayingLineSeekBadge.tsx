@@ -45,7 +45,7 @@ const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
 const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
   const [notify] = useAtom(playingNotifyAtom);
 
-  const isDisabled = notify === "ll";
+  const isDisabled = notify.description === "ll";
 
   return (
     <HStack>
