@@ -5,6 +5,8 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 
 interface RankingTrProps {
+  sessionUserId: number | undefined;
+  rankingUserId: number;
   rank: number;
   name: string;
   score: number;
@@ -79,7 +81,8 @@ const RankingTr = (props: RankingTrProps) => {
       <Tr
         _hover={{ backgroundColor: "gray.100" }}
         backgroundColor={props.isHighlighted ? "gray.100" : "transparent"}
-        className="cursor-pointer"
+        className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
+        style={{ color: props.sessionUserId === props.rankingUserId ? "green" : "inherit" }}
         onClick={props.handleShowMenu}
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}

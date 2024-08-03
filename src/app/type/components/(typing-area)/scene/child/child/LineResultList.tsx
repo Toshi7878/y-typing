@@ -1,5 +1,11 @@
 "use client";
-import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import {
+  inputModeAtom,
+  lineSelectIndexAtom,
+  mapAtom,
+  sceneAtom,
+  speedAtom,
+} from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
 import { LineResultData, TypeResult } from "@/app/type/(ts)/type";
@@ -14,7 +20,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { memo } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 
 interface LineResultListProps {
   typingLineResults: LineResultData[];
@@ -26,6 +32,52 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
   const [scene] = useAtom(sceneAtom);
   const [speedData] = useAtom(speedAtom);
   const { playerRef, gameStateRef } = useRefs();
+
+  const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
+  const cardRefs = useRef<HTMLDivElement[]>([]);
+
+  const scrollToCard = (newIndex: number) => {
+    const card = cardRefs.current[newIndex];
+    const scrollHeight = cardRefs.current[1].parentElement!.scrollHeight;
+
+    if (card) {
+      cardRefs.current[1].parentElement!.scrollTop =
+        (scrollHeight * (newIndex - 3)) / map!.typingLineNumbers.length;
+    }
+  };
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp") {
+        setLineSelectIndex((prev) => {
+          const newIndex = Math.max(1, prev - 1);
+          return newIndex;
+        });
+      } else if (event.key === "ArrowDown") {
+        setLineSelectIndex((prev) => {
+          const newIndex = Math.min(prev + 1, map!.typingLineNumbers.length);
+          return newIndex;
+        });
+      } else if (event.key === "Enter") {
+        const card = cardRefs.current[lineSelectIndex + 1];
+        if (card) {
+          card.click();
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [map, lineSelectIndex],
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    scrollToCard(lineSelectIndex); // 初期表示時にスクロール
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleKeyDown, lineSelectIndex]);
   let lineCount = 0;
   return (
     <>
@@ -62,9 +114,15 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
             key={index}
             p={4}
             mb={4}
+            ref={(el) => {
+              if (el) cardRefs.current[index] = el;
+            }}
+            size={"sm"}
             boxShadow="sm"
             cursor="pointer"
-            backgroundColor="rgba(255, 255, 255, 0.7)"
+            backgroundColor={
+              lineSelectIndex === lineCount ? "gray.500" : "rgba(255, 255, 255, 0.7)"
+            }
             _hover={{ boxShadow: "md", bg: "gray.100" }}
             onClick={() => {
               if (scene === "replay") {

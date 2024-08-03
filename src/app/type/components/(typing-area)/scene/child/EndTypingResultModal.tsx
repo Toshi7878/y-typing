@@ -8,7 +8,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
 } from "@chakra-ui/react";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import LineResultList from "./child/LineResultList";
 
 interface EndTypingResultDrawerProps {
@@ -18,16 +18,28 @@ interface EndTypingResultDrawerProps {
 }
 
 function EndTypingResultDrawer({ isOpen, onClose, typingLineResults }: EndTypingResultDrawerProps) {
+  const [drawerHeight, setDrawerHeight] = useState("100vh");
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setDrawerHeight(`${window.innerHeight}px`);
+    };
+
+    window.addEventListener("resize", updateHeight);
+    updateHeight();
+
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
   console.log("drawer Open");
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
-      <DrawerContent backgroundColor="rgba(255, 255, 255, 0.8)">
+      <DrawerContent height={drawerHeight} backgroundColor="rgba(255, 255, 255, 0.8)">
         <DrawerHeader fontSize="md" py={2}>
           タイピングリザルト
         </DrawerHeader>
-        <DrawerCloseButton />
-        <DrawerBody>
+        <DrawerCloseButton tabIndex={-1} autoFocus={false} />
+        <DrawerBody overflowY="auto" position="relative">
           <LineResultList typingLineResults={typingLineResults!} />
         </DrawerBody>
       </DrawerContent>

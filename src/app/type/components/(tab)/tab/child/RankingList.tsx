@@ -113,6 +113,8 @@ const RankingList = () => {
           return (
             <React.Fragment key={index}>
               <RankingTr
+                sessionUserId={Number(session?.user?.id)}
+                rankingUserId={Number(user.userId)}
                 rank={index + 1}
                 name={user.user.name}
                 score={user.score}

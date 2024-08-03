@@ -16,6 +16,7 @@ export const mapIdAtom = atom<number>(0);
 export const rankingScoresAtom = atom<number[]>([]);
 export const kpmAtom = atom<number>(0);
 
+export const lineSelectIndexAtom = atom<number>(1);
 export const speedAtom = atom<Speed>({
   defaultSpeed: 1,
   playSpeed: 1,

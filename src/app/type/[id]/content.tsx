@@ -11,6 +11,7 @@ import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import {
   inputModeAtom,
+  lineSelectIndexAtom,
   mapAtom,
   mapIdAtom,
   rankingScoresAtom,
@@ -22,7 +23,7 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../(ts)/type";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   useEffect(() => {
@@ -46,6 +47,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setRankingScores] = useAtom(rankingScoresAtom);
   const [, setSpeedData] = useAtom(speedAtom);
   const [, setInputMode] = useAtom(inputModeAtom);
+  const [, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -76,6 +78,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: ["mapData", id] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
+      setLineSelectIndex(1);
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
 
       setInputMode(inputMode);

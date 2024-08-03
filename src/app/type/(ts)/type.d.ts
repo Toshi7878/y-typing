@@ -1,5 +1,3 @@
-import { LineResultObj } from "../components/(typing-area)/scene/Playing";
-
 export type InputModeType = "roma" | "kana" | "flick";
 export type SceneType = "ready" | "playing" | "end" | "replay" | "practice";
 
@@ -79,13 +77,14 @@ export interface Status {
 export interface GameStateRef {
   isRetrySkip: boolean;
   replay: {
-    replayData: LineResultObj[];
+    replayData: LineResultData[];
     replayKeyCount: number;
     isSkip: boolean;
   };
   practice: {
     isPracticeMode: boolean;
     setLineCount: number;
+    loadResultData: LineResultData[];
   };
 }
 
@@ -102,7 +101,7 @@ export interface StatusRef {
     totalLatency: number;
     completeCount: number;
     failureCount: number;
-    result: LineResultObj[];
+    result: LineResultData[];
   };
   lineStatus: {
     lineType: number;
@@ -123,7 +122,7 @@ export interface YTStateRef {
 
 export interface SendResultData {
   mapId: number;
-  lineResult: LineResultObj;
+  lineResult: LineResultData;
   status: {
     kanaType: number;
     romaType: number;

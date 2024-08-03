@@ -53,7 +53,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [rankingScores] = useAtom(rankingScoresAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log(map);
   //forwardRefやめる（あとで
   useImperativeHandle(ref, () => ({
     retry: () => {
@@ -307,7 +306,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
             playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
 
             if (!result.newLineWord.nextChar["k"] && scene === "practice") {
-              const combo = playingComboRef.current?.getCombo();
+              const combo = playingComboRef.current!.getCombo();
               const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
               const mode = statusRef.current!.lineStatus.lineStartInputMode;
               const sp = statusRef.current!.lineStatus.lineStartSpeed;
@@ -316,7 +315,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               const lMiss = statusRef.current!.lineStatus.lineMiss;
               const lineScore = success.newStatus.point + success.newStatus.timeBonus + lMiss * 5;
               const oldLineScore =
-                lResult.status.p + lResult.status.tBonus + lResult.status.lMiss * 5;
+                lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
               const isUpdateResult = lineScore >= oldLineScore;
 

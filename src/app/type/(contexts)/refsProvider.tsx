@@ -45,6 +45,7 @@ export const defaultGameStateRef = {
   practice: {
     isPracticeMode: false,
     setLineCount: 0,
+    loadResultData: [],
   },
 };
 export interface RefsContextType {
