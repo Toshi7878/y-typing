@@ -49,7 +49,7 @@ export async function actions(data: SendResultData) {
     return {
       id: null,
       message: validatedFields.error.errors[0].message,
-      status: 400, // ステータスコードを追加
+      status: 400,
     };
   }
   try {

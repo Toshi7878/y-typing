@@ -105,7 +105,8 @@ const End = () => {
     status.score > 0 &&
     status.score >= bestScoreRef.current &&
     speedData.defaultSpeed >= 1 &&
-    gameStateRef.current!.replay.replayData.length === 0;
+    gameStateRef.current!.replay.replayData.length === 0 &&
+    !gameStateRef.current!.practice.isPracticeMode;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />

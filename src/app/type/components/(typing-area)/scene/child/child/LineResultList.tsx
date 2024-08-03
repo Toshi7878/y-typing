@@ -59,7 +59,7 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
           return newIndex;
         });
       } else if (event.key === "Enter") {
-        const card = cardRefs.current[lineSelectIndex + 1];
+        const card = cardRefs.current[lineSelectIndex];
         if (card) {
           card.click();
         }
