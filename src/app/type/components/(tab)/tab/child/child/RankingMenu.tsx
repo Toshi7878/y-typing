@@ -77,12 +77,13 @@ const RankingMenu = ({
   }, [refetch]);
   return (
     <Stack
-      className="rounded-md sm:top-[-50px]"
+      className="rounded-md" // smサイズ以上のときは通常の位置に表示
       position="absolute"
       zIndex="9999"
       bg="white"
       boxShadow="md"
       p={2}
+      top={{ base: "-60px", md: "auto" }} // タブレットサイズ以下のときはtop-50で表示
     >
       <Button
         as="a"
