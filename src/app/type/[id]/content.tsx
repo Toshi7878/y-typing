@@ -14,6 +14,7 @@ import {
   lineSelectIndexAtom,
   mapAtom,
   mapIdAtom,
+  playingNotifyAtom,
   rankingScoresAtom,
   sceneAtom,
   speedAtom,
@@ -48,6 +49,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setSpeedData] = useAtom(speedAtom);
   const [, setInputMode] = useAtom(inputModeAtom);
   const [, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
+  const [, setNotify] = useAtom(playingNotifyAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -78,6 +80,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: ["mapData", id] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
+      setNotify(Symbol(""));
       setLineSelectIndex(1);
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
 
