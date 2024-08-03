@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import {
   inputModeAtom,
   lineSelectIndexAtom,
+  loadingOverlayAtom,
   mapAtom,
   mapIdAtom,
   playingNotifyAtom,
@@ -23,6 +24,7 @@ import SceneWrapper from "../components/(typing-area)/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../(ts)/type";
+import LoadingOverlayWrapper from "react-loading-overlay-ts";
 
 export const queryClient = new QueryClient();
 
@@ -50,6 +52,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setInputMode] = useAtom(inputModeAtom);
   const [, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
+  const [isLoadingOverlay] = useAtom(loadingOverlayAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -102,31 +105,33 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   };
 
   return (
-    <main
-      className="flex flex-col items-center pt-16"
-      style={{
-        height: "100vh",
-      }}
-    >
-      <Box style={style}>
-        <Flex direction="column">
-          <Flex gap="6">
-            <Box className="">
-              <YouTubeContent
-                className={` w-[600px] ${isLoading ? "invisible" : ""} aspect-video`}
-                videoId={videoId}
-              />
-            </Box>
-            <Box flex={{ base: "8" }} flexDirection="column">
-              <TabContent />
+    <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
+      <main
+        className="flex flex-col items-center pt-16"
+        style={{
+          height: "100vh",
+        }}
+      >
+        <Box style={style}>
+          <Flex direction="column">
+            <Flex gap="6">
+              <Box className="">
+                <YouTubeContent
+                  className={` w-[600px] ${isLoading ? "invisible" : ""} aspect-video`}
+                  videoId={videoId}
+                />
+              </Box>
+              <Box flex={{ base: "8" }} flexDirection="column">
+                <TabContent />
+              </Box>
+            </Flex>
+            <Box className=" mt-5">
+              <SceneWrapper />
             </Box>
           </Flex>
-          <Box className=" mt-5">
-            <SceneWrapper />
-          </Box>
-        </Flex>
-      </Box>
-    </main>
+        </Box>
+      </main>
+    </LoadingOverlayWrapper>
   );
 }
 

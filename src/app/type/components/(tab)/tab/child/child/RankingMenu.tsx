@@ -1,6 +1,11 @@
 "use client";
 
-import { mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import {
+  loadingOverlayAtom,
+  mapAtom,
+  sceneAtom,
+  speedAtom,
+} from "@/app/type/(atoms)/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
 import { Button, Stack } from "@chakra-ui/react";
 import axios from "axios";
@@ -25,6 +30,8 @@ const RankingMenu = ({
 
   const [scene, setScene] = useAtom(sceneAtom);
   const [, setSpeedData] = useAtom(speedAtom);
+  const [, setIsLoadingOverlay] = useAtom(loadingOverlayAtom);
+
   const [map] = useAtom(mapAtom);
   const params = useParams();
   const mapId = params.id as string;
@@ -47,7 +54,9 @@ const RankingMenu = ({
   });
 
   const handleReplayClick = useCallback(async () => {
+    setIsLoadingOverlay(true);
     const result = await refetch();
+    setIsLoadingOverlay(false);
     if (result.data) {
       if (scene === "end") {
         proceedRetry(
@@ -99,7 +108,7 @@ const RankingMenu = ({
         size="md"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
         onClick={handleReplayClick}
-        isDisabled={scene === "playing" || scene === "replay"}
+        isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >
         リプレイ再生
       </Button>

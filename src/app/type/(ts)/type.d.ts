@@ -83,6 +83,7 @@ export interface GameStateRef {
     isSkip: boolean;
   };
   practice: {
+    hasMyRankingData: boolean;
     isPracticeMode: boolean;
     setLineCount: number;
     loadResultData: LineResultData[];

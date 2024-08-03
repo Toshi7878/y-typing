@@ -1,8 +1,10 @@
 "use client";
 
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { Box, Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
+import { useEffect } from "react";
 
 interface RankingTrProps {
   sessionUserId: number | undefined;
@@ -28,6 +30,14 @@ interface RankingTrProps {
   onMouseLeave: () => void;
 }
 const RankingTr = (props: RankingTrProps) => {
+  const { gameStateRef } = useRefs();
+
+  useEffect(() => {
+    if (props.sessionUserId === props.rankingUserId) {
+      gameStateRef.current!.practice.hasMyRankingData = true;
+    }
+  }, []);
+
   const getInputMode = () => {
     let mode = "";
 

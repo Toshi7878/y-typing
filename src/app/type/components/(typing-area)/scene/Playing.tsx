@@ -420,7 +420,10 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
-    statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+    const myResultData = gameStateRef.current!.practice.loadResultData;
+    statusRef.current!.status.result = myResultData.length
+      ? structuredClone(myResultData)
+      : structuredClone(map!.defaultLineResultData);
 
     if (!ticker.started) {
       ticker.start();

@@ -44,6 +44,7 @@ export const defaultGameStateRef = {
     isSkip: false,
   },
   practice: {
+    hasMyRankingData: false,
     isPracticeMode: false,
     setLineCount: 0,
     loadResultData: [],

@@ -11,6 +11,8 @@ const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma"
 
 export const inputModeAtom = atom<InputModeType>(inputMode);
 
+export const loadingOverlayAtom = atom<boolean>(false);
+
 export const playingNotifyAtom = atom<symbol>(Symbol(""));
 export const mapIdAtom = atom<number>(0);
 export const rankingScoresAtom = atom<number[]>([]);

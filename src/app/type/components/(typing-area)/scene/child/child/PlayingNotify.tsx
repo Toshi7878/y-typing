@@ -54,7 +54,11 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
           ) : notify.description === "ll" ? (
             <FaPause className={`${className}`} />
           ) : (
-            <Box className={`${className}`}>{notify.description}</Box>
+            <Box
+              className={`${className} ${notify.description === "Retry" || notify.description === "Practice" ? "opacity-30" : ""}`}
+            >
+              {notify.description}
+            </Box>
           )}
         </motion.div>
       )}

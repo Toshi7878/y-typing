@@ -1,16 +1,19 @@
+import { loadingOverlayAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
 import { Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useCallback } from "react";
 
 const ReadyPracticeButton = () => {
-  const { gameStateRef, playerRef, statusRef } = useRefs();
+  const { gameStateRef, playerRef } = useRefs();
   const { data: session } = useSession();
   const { id } = useParams();
+  const [, setIsLoadingOverlay] = useAtom(loadingOverlayAtom);
 
   const mapId = id;
   const userId = session?.user?.id;
@@ -32,9 +35,14 @@ const ReadyPracticeButton = () => {
   });
 
   const handleClick = useCallback(async () => {
-    const result = await refetch();
-    gameStateRef.current!.practice.isPracticeMode = true;
+    if (gameStateRef.current!.practice.hasMyRankingData) {
+      setIsLoadingOverlay(true);
+      const result = await refetch();
+      gameStateRef.current!.practice.loadResultData = result.data!.lineResult;
+      setIsLoadingOverlay(false);
+    }
 
+    gameStateRef.current!.practice.isPracticeMode = true;
     playerRef.current.playVideo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
