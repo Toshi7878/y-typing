@@ -176,8 +176,8 @@ export const lineReplayUpdate = (
   count: number,
 ) => {
   const lineResult = gameStateRef.current!.replay.replayData[count - 1];
-  const lineInputMode = lineResult.status.mode;
-  const speed = lineResult.status.sp;
+  const lineInputMode = lineResult.status!.mode;
+  const speed = lineResult.status!.sp;
 
   playingRef.current?.inputModeChange(lineInputMode);
   playingRef.current?.setRealTimeSpeed(speed);
