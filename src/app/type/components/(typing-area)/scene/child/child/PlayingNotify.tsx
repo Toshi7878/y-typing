@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"; // 追加
 import { FaPause } from "react-icons/fa6";
 import { FaPlay } from "react-icons/fa6";
 import { useEffect } from "react";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 interface PlayingNotifyProps {
   className?: string;
@@ -14,6 +15,7 @@ interface PlayingNotifyProps {
 const NON_ANIMATED = ["ll", "Replay", "Practice"];
 
 const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
+  const { gameStateRef } = useRefs();
   const [notify, setNotify] = useAtom(playingNotifyAtom);
   const [scene] = useAtom(sceneAtom);
 
@@ -21,7 +23,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     if (scene === "playing") {
       setNotify(Symbol(""));
     } else if (scene === "replay") {
-      setNotify(Symbol("Replay"));
+      setNotify(Symbol(`Replay`));
     } else if (scene === "practice") {
       setNotify(Symbol("Practice"));
     }
@@ -55,9 +57,11 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
             <FaPause className={`${className}`} />
           ) : (
             <Box
-              className={`${className} ${notify.description === "Retry" || notify.description === "Practice" ? "opacity-30" : ""}`}
+              className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}
             >
-              {notify.description}
+              {(notify.description === "Replay"
+                ? `${gameStateRef.current!.replay.userName} `
+                : "") + notify.description}
             </Box>
           )}
         </motion.div>

@@ -42,6 +42,7 @@ export const defaultGameStateRef = {
     replayData: [],
     replayKeyCount: 0,
     isSkip: false,
+    userName: "",
   },
   practice: {
     hasMyRankingData: false,

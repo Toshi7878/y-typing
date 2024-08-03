@@ -19,10 +19,12 @@ import { proceedRetry } from "@/app/type/(ts)/retry";
 
 const RankingMenu = ({
   userId,
+  name,
   setShowMenu,
   setHoveredIndex,
 }: {
   userId: string;
+  name: string;
   setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
   setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
@@ -53,37 +55,41 @@ const RankingMenu = ({
     enabled: false,
   });
 
-  const handleReplayClick = useCallback(async () => {
-    setIsLoadingOverlay(true);
-    const result = await refetch();
-    setIsLoadingOverlay(false);
-    if (result.data) {
-      if (scene === "end") {
-        proceedRetry(
-          "replay",
-          map!,
-          statusRef,
-          setScene,
-          tabStatusRef,
-          playingComboRef,
-          gameStateRef,
-          playerRef,
-        );
+  const handleReplayClick = useCallback(
+    async (name: string) => {
+      setIsLoadingOverlay(true);
+      const result = await refetch();
+      setIsLoadingOverlay(false);
+      if (result.data) {
+        if (scene === "end") {
+          proceedRetry(
+            "replay",
+            map!,
+            statusRef,
+            setScene,
+            tabStatusRef,
+            playingComboRef,
+            gameStateRef,
+            playerRef,
+          );
+        }
+        setShowMenu(null);
+        setHoveredIndex(null);
+        gameStateRef.current!.replay.replayData = result.data.lineResult;
+        gameStateRef.current!.replay.userName = name;
+        const defaultSpeed = result.data.status.defaultSpeed;
+        new YTSpeedController("setDefaultSpeed", {
+          setSpeedData,
+          playerRef: playerRef.current,
+          speed: defaultSpeed,
+          defaultSpeed: defaultSpeed,
+        });
+        playerRef.current.playVideo();
       }
-      setShowMenu(null);
-      setHoveredIndex(null);
-      gameStateRef.current!.replay.replayData = result.data.lineResult;
-      const defaultSpeed = result.data.status.defaultSpeed;
-      new YTSpeedController("setDefaultSpeed", {
-        setSpeedData,
-        playerRef: playerRef.current,
-        speed: defaultSpeed,
-        defaultSpeed: defaultSpeed,
-      });
-      playerRef.current.playVideo();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [refetch],
+  );
   return (
     <Stack
       className="rounded-md" // smサイズ以上のときは通常の位置に表示
@@ -107,7 +113,7 @@ const RankingMenu = ({
         variant="unstyled" // ボタンのスタイルを変更
         size="md"
         _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
-        onClick={handleReplayClick}
+        onClick={() => handleReplayClick(name)}
         isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >
         リプレイ再生

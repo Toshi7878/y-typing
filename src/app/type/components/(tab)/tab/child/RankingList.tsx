@@ -138,6 +138,7 @@ const RankingList = () => {
               {showMenu === index && (
                 <RankingMenu
                   userId={user.userId}
+                  name={user.user.name}
                   setShowMenu={setShowMenu}
                   setHoveredIndex={setHoveredIndex}
                 />

@@ -81,6 +81,7 @@ export interface GameStateRef {
     replayData: LineResultData[];
     replayKeyCount: number;
     isSkip: boolean;
+    userName: string;
   };
   practice: {
     hasMyRankingData: boolean;
