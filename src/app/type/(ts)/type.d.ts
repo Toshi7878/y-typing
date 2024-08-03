@@ -122,7 +122,7 @@ export interface YTStateRef {
 
 export interface SendResultData {
   mapId: number;
-  lineResult: LineResultData;
+  lineResult: LineResultData[];
   status: {
     kanaType: number;
     romaType: number;
