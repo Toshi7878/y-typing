@@ -1,6 +1,6 @@
 "use client";
 
-import { Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 
@@ -52,7 +52,7 @@ const RankingTr = (props: RankingTrProps) => {
   return (
     <Tooltip
       label={
-        <div>
+        <Box fontSize="sm">
           {props.romaType > 0 && <div>ローマ字タイプ数: {props.romaType}</div>}
           {props.kanaType > 0 && <div>かな入力タイプ数: {props.kanaType}</div>}
           {props.flickType > 0 && <div>フリック入力タイプ数: {props.flickType}</div>}
@@ -72,11 +72,11 @@ const RankingTr = (props: RankingTrProps) => {
               second: "2-digit",
             })}
           </div>
-        </div>
+        </Box>
       }
       hasArrow
-      placement="bottom"
-      isOpen={props.isHighlighted || props.isHovered}
+      placement="bottom-end"
+      isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
     >
       <Tr
         _hover={{ backgroundColor: "gray.100" }}

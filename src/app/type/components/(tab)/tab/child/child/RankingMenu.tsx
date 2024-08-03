@@ -76,14 +76,7 @@ const RankingMenu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
   return (
-    <Stack
-      className="rounded-md"
-      position="absolute"
-      zIndex="tooltip"
-      bg="white"
-      boxShadow="md"
-      p={2}
-    >
+    <Stack className="rounded-md" position="absolute" zIndex="9999" bg="white" boxShadow="md" p={2}>
       <Button
         as="a"
         href={`/user/${userId}`}
