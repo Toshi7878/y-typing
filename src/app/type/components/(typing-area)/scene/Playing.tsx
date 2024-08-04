@@ -248,7 +248,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
       const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
 
-      gameStateRef.current!.practice.setLineCount = nextCount - 1;
+      gameStateRef.current!.practice.setLineCount = nextCount;
       gameStateRef.current!.replay.isSkip = true;
       playerRef.current.seekTo(nextTime);
     },
