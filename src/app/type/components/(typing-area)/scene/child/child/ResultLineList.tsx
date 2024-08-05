@@ -27,9 +27,8 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
 
   const scrollToCard = (newIndex: number) => {
     const card = cardRefs.current[newIndex];
-    const scrollHeight = cardRefs.current[1].parentElement!.scrollHeight;
-
     if (modalContentRef.current && card) {
+      const scrollHeight = modalContentRef.current.scrollHeight;
       modalContentRef.current.scrollTop =
         (scrollHeight * (newIndex - 3)) / map!.typingLineNumbers.length;
     }
