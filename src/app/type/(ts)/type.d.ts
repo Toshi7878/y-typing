@@ -32,7 +32,7 @@ export interface RankingListType {
     lost: number;
     maxCombo: number;
     playSpeed: number;
-    sp: number;
+    defaultSpeed: number;
   };
   score: number;
   updatedAt: string;
