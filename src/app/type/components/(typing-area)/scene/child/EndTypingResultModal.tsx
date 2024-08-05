@@ -1,5 +1,4 @@
 "use client";
-import { LineResultData } from "@/app/type/(ts)/type";
 import {
   Drawer,
   DrawerOverlay,

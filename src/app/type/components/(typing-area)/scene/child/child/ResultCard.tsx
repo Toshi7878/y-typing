@@ -69,7 +69,7 @@ function ResultCard({
       p={4}
       mb={4}
       ref={(el) => {
-        if (el) cardRefs.current![index] = el;
+        if (el) cardRefs.current![lineCount] = el;
       }}
       data-seek-time={seekTime}
       data-line-number={lineNumber}
