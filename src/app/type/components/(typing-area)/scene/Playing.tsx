@@ -66,7 +66,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playingComboRef.current?.setCombo(0);
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
-        setLineResults(structuredClone(map!.defaultLineResultData));
+        if (scene !== "replay") {
+          setLineResults(structuredClone(map!.defaultLineResultData));
+        }
 
         if (scene === "playing") {
           const status = tabStatusRef.current?.getStatus();

@@ -15,7 +15,10 @@ export const proceedRetry = (
 ) => {
   setScene(playMode);
   (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-  setLineResults(structuredClone(map!.defaultLineResultData));
+
+  if (playMode !== "replay") {
+    setLineResults(structuredClone(map!.defaultLineResultData));
+  }
 
   tabStatusRef.current!.resetStatus();
   playingComboRef.current!.setCombo(0);
