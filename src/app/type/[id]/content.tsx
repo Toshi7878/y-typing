@@ -8,7 +8,7 @@ import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
-import { useAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import {
   inputModeAtom,
   lineResultsAtom,
@@ -45,16 +45,17 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
-  const [, setMap] = useAtom(mapAtom);
-  const [, setScene] = useAtom(sceneAtom);
-  const [, setMapId] = useAtom(mapIdAtom);
-  const [, setRankingScores] = useAtom(rankingScoresAtom);
-  const [, setSpeedData] = useAtom(speedAtom);
-  const [, setInputMode] = useAtom(inputModeAtom);
-  const [, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
-  const [, setNotify] = useAtom(playingNotifyAtom);
-  const [, setLineResults] = useAtom(lineResultsAtom);
-  const [isLoadingOverlay] = useAtom(loadingOverlayAtom);
+  const setMap = useSetAtom(mapAtom);
+  const setScene = useSetAtom(sceneAtom);
+  const setMapId = useSetAtom(mapIdAtom);
+  const setRankingScores = useSetAtom(rankingScoresAtom);
+  const setSpeedData = useSetAtom(speedAtom);
+  const setInputMode = useSetAtom(inputModeAtom);
+  const setNotify = useSetAtom(playingNotifyAtom);
+  const setLineResults = useSetAtom(lineResultsAtom);
+  const setLineSelectIndex = useSetAtom(lineSelectIndexAtom);
+
+  const isLoadingOverlay = useAtomValue(loadingOverlayAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
@@ -93,9 +94,8 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       setScene("ready");
       setNotify(Symbol(""));
       setLineResults([]);
-      setLineSelectIndex(1);
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
-
+      setLineSelectIndex(1);
       setInputMode(inputMode);
       setRankingScores([]);
       setSpeedData({

@@ -8,7 +8,7 @@ import {
   speedAtom,
   tabIndexAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
@@ -20,13 +20,13 @@ import EndTypingResultModal from "./child/EndTypingResultModal";
 
 const End = () => {
   const { data: session } = useSession();
-  const [, setTabIndex] = useAtom(tabIndexAtom);
+  const setTabIndex = useSetAtom(tabIndexAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
-  const [mapId] = useAtom(mapIdAtom);
-  const [speedData] = useAtom(speedAtom);
-  const [lineResults] = useAtom(lineResultsAtom);
+  const mapId = useAtomValue(mapIdAtom);
+  const speedData = useAtomValue(speedAtom);
+  const lineResults = useAtomValue(lineResultsAtom);
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);

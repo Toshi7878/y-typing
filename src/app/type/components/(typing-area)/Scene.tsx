@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
-import { useAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { mapAtom, sceneAtom, tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
 import { Card } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
 
 export const Scene = () => {
-  const [scene] = useAtom(sceneAtom);
-  const [map] = useAtom(mapAtom);
+  const scene = useAtomValue(sceneAtom);
+  const map = useAtomValue(mapAtom);
 
-  const [, setTabIndex] = useAtom(tabIndexAtom);
+  const setTabIndex = useSetAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";

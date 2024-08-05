@@ -12,7 +12,7 @@ import {
   sceneAtom,
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import PlayingBottom from "./child/PlayingBottom";
 import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
@@ -40,18 +40,18 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     setRef,
   } = useRefs();
 
-  const [map] = useAtom(mapAtom);
+  const map = useAtomValue(mapAtom);
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
   const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
   const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
-  const [scene] = useAtom(sceneAtom);
-  const [, setNotify] = useAtom(playingNotifyAtom);
+  const scene = useAtomValue(sceneAtom);
+  const setNotify = useSetAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
-  const [rankingScores] = useAtom(rankingScoresAtom);
+  const rankingScores = useAtomValue(rankingScoresAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [lineResults, setLineResults] = useAtom(lineResultsAtom);
 

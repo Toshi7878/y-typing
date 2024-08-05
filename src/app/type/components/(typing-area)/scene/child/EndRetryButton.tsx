@@ -12,7 +12,7 @@ import {
 
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { useRef } from "react";
-import { useAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { lineResultsAtom, mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/(ts)/retry";
 
@@ -23,11 +23,11 @@ interface EndRetryButtonProps {
 const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
-  const [, setLineResults] = useAtom(lineResultsAtom);
+  const setLineResults = useSetAtom(lineResultsAtom);
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
-  const [, setScene] = useAtom(sceneAtom);
-  const [map] = useAtom(mapAtom);
+  const setScene = useSetAtom(sceneAtom);
+  const map = useAtomValue(mapAtom);
 
   const retry = (playMode: "playing" | "replay" | "practice") => {
     if (isRetryAlert) {

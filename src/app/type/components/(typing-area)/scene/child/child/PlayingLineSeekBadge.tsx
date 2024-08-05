@@ -1,6 +1,6 @@
 import { playingNotifyAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Badge, HStack, Kbd } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 
 interface PlayingLineSeekBadgeProps {
@@ -43,7 +43,7 @@ const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
 `;
 
 const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
-  const [notify] = useAtom(playingNotifyAtom);
+  const notify = useAtomValue(playingNotifyAtom);
 
   const isDisabled = notify.description === "ll";
 

@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "../../(ts)/youtubeEvents";
 import { useRefs } from "../../(contexts)/refsProvider"; // 変更
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { mapAtom, playingNotifyAtom, sceneAtom } from "../../(atoms)/gameRenderAtoms";
 
 interface YouTubeProps {
@@ -15,9 +15,9 @@ interface YouTubeProps {
 const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
   console.log("YouTube");
   const [scene, setScene] = useAtom(sceneAtom);
-  const [, setNotify] = useAtom(playingNotifyAtom);
+  const setNotify = useSetAtom(playingNotifyAtom);
   const refs = useRefs();
-  const [map] = useAtom(mapAtom);
+  const map = useAtomValue(mapAtom);
 
   const handleReady = useCallback(
     (event: { target: any }) => {

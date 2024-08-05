@@ -10,7 +10,7 @@ import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { RankingListType } from "@/app/type/(ts)/type";
 import RankingTr from "./child/RankingTr";
 import RankingMenu from "./child/RankingMenu";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { rankingScoresAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 const RankingList = () => {
@@ -19,8 +19,8 @@ const RankingList = () => {
   const { bestScoreRef } = useRefs();
   const [showMenu, setShowMenu] = useState<number | null>(null); // showMenuの状態をインデックスに変更
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [, setRankingScores] = useAtom(rankingScoresAtom);
-  const [scene] = useAtom(sceneAtom);
+  const setRankingScores = useSetAtom(rankingScoresAtom);
+  const scene = useAtomValue(sceneAtom);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

@@ -5,7 +5,7 @@ import PlayingCombo from "./child/PlayingCombo";
 import PlayingLineTime, { PlayingLineTimeRef } from "./child/PlayingLineTime";
 import PlayingNotify from "./child/PlayingNotify";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useRef } from "react";
 
 interface PlayingTopProps {
@@ -13,7 +13,7 @@ interface PlayingTopProps {
   PlayingRemainTimeRef: React.RefObject<PlayingLineTimeRef>;
 }
 function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) {
-  const [scene] = useAtom(sceneAtom);
+  const scene = useAtomValue(sceneAtom);
 
   const playingComboRef = useRef(null);
 

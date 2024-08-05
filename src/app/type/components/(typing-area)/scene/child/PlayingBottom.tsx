@@ -3,7 +3,7 @@ import PlayingLineProgress from "./child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "./child/PlayingSkipGuide";
 import PlayingTotalTime, { PlayingTotalTimeRef } from "./child/PlayingTotalTime";
 import { sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import PlayingBottomBadge from "./child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
@@ -20,8 +20,8 @@ const PlayingBottom = function ({
   playingTotalTimeRef,
 }: PlayingBottomRef) {
   const { playingRef } = useRefs();
-  const [scene] = useAtom(sceneAtom);
-  const [speedData] = useAtom(speedAtom);
+  const scene = useAtomValue(sceneAtom);
+  const speedData = useAtomValue(speedAtom);
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 

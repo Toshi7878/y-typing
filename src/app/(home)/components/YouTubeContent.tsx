@@ -1,15 +1,15 @@
 "use client";
 
 import YouTube from "react-youtube";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
 
 interface YouTubeContentProps {
   className: string;
 }
 const YouTubeContent = function YouTubeContent({ className }: YouTubeContentProps) {
-  const [videoId] = useAtom(videoIdAtom);
-  const [previewTime] = useAtom(previewTimeAtom);
+  const videoId = useAtomValue(videoIdAtom);
+  const previewTime = useAtomValue(previewTimeAtom);
 
   if (!videoId) {
     return null;

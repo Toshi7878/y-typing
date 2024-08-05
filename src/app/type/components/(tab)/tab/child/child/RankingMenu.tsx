@@ -10,7 +10,7 @@ import {
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
 import { Button, Stack } from "@chakra-ui/react";
 import axios from "axios";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -32,11 +32,11 @@ const RankingMenu = ({
   const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
 
   const [scene, setScene] = useAtom(sceneAtom);
-  const [, setSpeedData] = useAtom(speedAtom);
-  const [, setIsLoadingOverlay] = useAtom(loadingOverlayAtom);
-  const [, setLineResults] = useAtom(lineResultsAtom);
+  const setSpeedData = useSetAtom(speedAtom);
+  const setIsLoadingOverlay = useSetAtom(loadingOverlayAtom);
+  const setLineResults = useSetAtom(lineResultsAtom);
 
-  const [map] = useAtom(mapAtom);
+  const map = useAtomValue(mapAtom);
   const params = useParams();
   const mapId = params.id as string;
 

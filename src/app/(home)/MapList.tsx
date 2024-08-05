@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "./atoms/atoms";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
@@ -41,7 +41,7 @@ async function getMapList(): Promise<GetMapList[]> {
 function MapList() {
   const router = useRouter();
   const [videoId, setVideoId] = useAtom(videoIdAtom);
-  const [, setPreviewTime] = useAtom(previewTimeAtom);
+  const setPreviewTime = useSetAtom(previewTimeAtom);
   const { data: mapList = [], isLoading } = useQuery({
     queryKey: ["mapList"],
     queryFn: getMapList,

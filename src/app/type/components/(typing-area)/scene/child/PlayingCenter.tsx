@@ -5,7 +5,7 @@ import type { NextLyricsType, WordType } from "@/app/type/(ts)/type";
 import PlayingWord from "./child/PlayingWord";
 import NextLyrics from "./child/PlayingNextLyrics";
 import { inputModeAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;
@@ -35,7 +35,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   const [lineWord, setLineWord] = useState(structuredClone(defaultLineWord));
   const [lyrics, setLyrics] = useState("");
   const [nextLyrics, setNextLyrics] = useState(structuredClone(defaultNextLyrics));
-  const [inputMode] = useAtom(inputModeAtom);
+  const inputMode = useAtomValue(inputModeAtom);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),

@@ -13,7 +13,7 @@ import {
 
 import { mapAtom, rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 import StatusValue from "./child/child/StatusValue";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
@@ -31,8 +31,8 @@ interface TabStatusProps {
 }
 
 const TabStatus = forwardRef((props: TabStatusProps, ref) => {
-  const [map] = useAtom(mapAtom);
-  const [rankingScores] = useAtom(rankingScoresAtom);
+  const map = useAtomValue(mapAtom);
+  const rankingScores = useAtomValue(rankingScoresAtom);
 
   const { setRef } = useRefs();
 

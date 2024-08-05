@@ -1,6 +1,6 @@
 import { playingNotifyAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Badge, HStack, Kbd } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
 interface PlayingBottomBadgeProps {
   badgeText: string;
@@ -10,7 +10,7 @@ interface PlayingBottomBadgeProps {
 }
 
 const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
-  const [notify] = useAtom(playingNotifyAtom);
+  const notify = useAtomValue(playingNotifyAtom);
   const isDisabled = notify.description === "ll" && props.isPauseDisabled;
 
   return (

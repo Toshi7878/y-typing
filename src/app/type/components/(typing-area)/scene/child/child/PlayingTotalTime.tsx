@@ -1,6 +1,6 @@
 import { mapAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 interface TotalTimeProps {
@@ -22,8 +22,8 @@ const formatTime = (time: number): string => {
 const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
   ({ className = "" }, ref) => {
     const [currentTimeSSMM, setCurrentTimeSSMM] = useState(0);
-    const [map] = useAtom(mapAtom);
-    const [speedData] = useAtom(speedAtom);
+    const map = useAtomValue(mapAtom);
+    const speedData = useAtomValue(speedAtom);
 
     useImperativeHandle(ref, () => ({
       getCurrentTime: () => currentTimeSSMM,

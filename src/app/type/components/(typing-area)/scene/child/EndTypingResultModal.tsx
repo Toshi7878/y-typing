@@ -9,7 +9,7 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import LineResultList from "./child/LineResultList";
+import ResultLineList from "./child/ResultLineList";
 
 interface EndTypingResultDrawerProps {
   isOpen: boolean;
@@ -39,7 +39,7 @@ function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) 
         </DrawerHeader>
         <DrawerCloseButton tabIndex={-1} autoFocus={false} />
         <DrawerBody overflowY="auto" position="relative">
-          <LineResultList />
+          <ResultLineList />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
