@@ -30,7 +30,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
     if (modalContentRef.current && card) {
       const scrollHeight = modalContentRef.current.scrollHeight;
       modalContentRef.current.scrollTop =
-        (scrollHeight * (newIndex - 3)) / map!.typingLineNumbers.length;
+        (scrollHeight * (newIndex - 2)) / map!.typingLineNumbers.length;
     }
   };
 
