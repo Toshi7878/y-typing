@@ -73,14 +73,13 @@ const RankingTr = (props: RankingTrProps) => {
           <div>rkpm: {props.rkpm}</div>
           {props.defaultSpeed > 1 && <div>倍速: ×{props.defaultSpeed.toFixed(2)}</div>}
           <div>
-            登録日時:{" "}
+            日時:{" "}
             {new Date(props.updatedAt).toLocaleString("ja-JP", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
               hour: "2-digit",
               minute: "2-digit",
-              second: "2-digit",
             })}
           </div>
         </Box>
