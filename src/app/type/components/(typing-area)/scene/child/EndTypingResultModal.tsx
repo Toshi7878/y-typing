@@ -14,10 +14,9 @@ import LineResultList from "./child/LineResultList";
 interface EndTypingResultDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  typingLineResults?: LineResultData[];
 }
 
-function EndTypingResultDrawer({ isOpen, onClose, typingLineResults }: EndTypingResultDrawerProps) {
+function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
   const [drawerHeight, setDrawerHeight] = useState("100vh");
 
   useEffect(() => {
@@ -40,7 +39,7 @@ function EndTypingResultDrawer({ isOpen, onClose, typingLineResults }: EndTyping
         </DrawerHeader>
         <DrawerCloseButton tabIndex={-1} autoFocus={false} />
         <DrawerBody overflowY="auto" position="relative">
-          <LineResultList typingLineResults={typingLineResults!} />
+          <LineResultList />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

@@ -18,7 +18,7 @@ import {
 
 export const updateReplayStatus = (
   count: number,
-  lineResult: LineResultData[],
+  lineResults: LineResultData[],
   map: CreateMap,
   rankingScores: number[],
 ) => {
@@ -39,13 +39,13 @@ export const updateReplayStatus = (
   }
 
   for (let i = 0; i <= count - 1; i++) {
-    newStatus.score += (lineResult[i].status?.p ?? 0) + (lineResult[i].status?.tBonus ?? 0);
-    newStatus.type += lineResult[i].status?.lType ?? 0;
-    newStatus.miss += lineResult[i].status?.lMiss ?? 0;
-    newStatus.lost += lineResult[i].status?.lLost ?? 0;
-    newStatus.line -= lineResult[i].status?.lType != null ? 1 : 0;
+    newStatus.score += (lineResults[i].status?.p ?? 0) + (lineResults[i].status?.tBonus ?? 0);
+    newStatus.type += lineResults[i].status?.lType ?? 0;
+    newStatus.miss += lineResults[i].status?.lMiss ?? 0;
+    newStatus.lost += lineResults[i].status?.lLost ?? 0;
+    newStatus.line -= lineResults[i].status?.lType != null ? 1 : 0;
   }
-  const totalTypeTime = lineResult[count - 1].status?.tTime;
+  const totalTypeTime = lineResults[count - 1].status?.tTime;
   newStatus.kpm = totalTypeTime ? Math.round((newStatus.type / totalTypeTime!) * 60) : 0;
   newStatus.rank = getRank(rankingScores, newStatus.score);
 
@@ -54,7 +54,9 @@ export const updateReplayStatus = (
 
 export const replay = (
   count: number,
+  lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
+
   playingRef: React.RefObject<PlayingRef>,
   map: CreateMap,
   lineTime: number,
@@ -69,7 +71,7 @@ export const replay = (
   rankingScores: number[],
   scene: SceneType,
 ) => {
-  const lineResult: LineResultData = gameStateRef.current!.replay.replayData[count - 1];
+  const lineResult: LineResultData = lineResults[count - 1];
   const typeResults = lineResult.typeResult;
 
   if (typeResults.length === 0) {
@@ -129,12 +131,7 @@ export const replay = (
           tabStatusRef.current!.setStatus(success.newStatus);
           playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
         } else {
-          const newStatus = updateReplayStatus(
-            count,
-            gameStateRef.current!.replay.replayData,
-            map,
-            rankingScores,
-          );
+          const newStatus = updateReplayStatus(count, lineResults, map, rankingScores);
           newStatus.point = lineResult.status!.p as number;
           newStatus.timeBonus = lineResult.status!.tBonus as number;
 
@@ -171,11 +168,12 @@ export const replay = (
 };
 
 export const lineReplayUpdate = (
+  lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
   playingRef: React.RefObject<PlayingRef>,
   count: number,
 ) => {
-  const lineResult = gameStateRef.current!.replay.replayData[count - 1];
+  const lineResult = lineResults[count - 1];
   const lineInputMode = lineResult.status!.mode;
   const speed = lineResult.status!.sp;
 

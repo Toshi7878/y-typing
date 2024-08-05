@@ -13,6 +13,7 @@ import {
   GameStateRef,
   InputModeType,
   LineData,
+  LineResultData,
   PlayingRef,
   SceneType,
   Speed,
@@ -24,6 +25,8 @@ import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
 
 export const updateTimer = (
   map: CreateMap,
+  lineResults: LineResultData[],
+  setLineResults: React.Dispatch<React.SetStateAction<LineResultData[]>>,
   playerRef: React.RefObject<any>,
   ytStateRef: React.RefObject<YTStateRef>,
   speedData: Speed,
@@ -69,6 +72,7 @@ export const updateTimer = (
     if (count && lineTime) {
       replay(
         count,
+        lineResults,
         gameStateRef,
         playingRef,
         map,
@@ -134,6 +138,8 @@ export const updateTimer = (
   ) {
     lineUpdate(
       playerRef,
+      lineResults,
+      setLineResults,
       map,
       statusRef,
       ytStateRef,
@@ -159,6 +165,8 @@ export const updateTimer = (
 
 export const lineUpdate = (
   playerRef: React.RefObject<any>,
+  lineResults: LineResultData[],
+  setLineResults: React.Dispatch<React.SetStateAction<LineResultData[]>>,
   map: CreateMap,
   statusRef: React.RefObject<StatusRef>,
   ytStateRef: React.RefObject<YTStateRef>,
@@ -216,15 +224,16 @@ export const lineUpdate = (
 
       const lineScore = status!.point + status!.timeBonus + lMiss * 5;
 
-      const lResult = statusRef.current!.status.result[count - 1];
+      const lResult = lineResults[count - 1];
       const oldLineScore =
         lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
       const isUpdateResult = lineScore >= oldLineScore || scene === "playing";
 
       if (isUpdateResult) {
+        const newLineResults = [...lineResults];
         if (map.words[count - 1].kpm.r > 0) {
-          statusRef.current!.status.result[count - 1] = {
+          newLineResults[count - 1] = {
             status: {
               p: status!.point,
               tBonus: status!.timeBonus,
@@ -243,7 +252,7 @@ export const lineUpdate = (
           };
         } else {
           //間奏ライン
-          statusRef.current!.status.result[count - 1] = {
+          newLineResults[count - 1] = {
             status: {
               combo,
               tTime,
@@ -253,30 +262,22 @@ export const lineUpdate = (
             typeResult,
           };
         }
+
+        setLineResults(newLineResults);
       }
     }
 
     if (scene === "playing") {
       tabStatusRef.current!.setStatus(lineResult.newStatus);
     } else if (scene === "practice") {
-      const newStatus = updateReplayStatus(
-        map!.words.length - 1,
-        statusRef.current!.status.result,
-        map,
-        rankingScores,
-      );
+      const newStatus = updateReplayStatus(map!.words.length - 1, lineResults, map, rankingScores);
       tabStatusRef.current!.setStatus(newStatus);
     }
   } else if (scene === "replay") {
-    const newStatus = updateReplayStatus(
-      count,
-      gameStateRef.current!.replay.replayData,
-      map,
-      rankingScores,
-    );
+    const newStatus = updateReplayStatus(count, lineResults, map, rankingScores);
     tabStatusRef.current!.setStatus(newStatus);
     if (count > 0) {
-      const lineResult = gameStateRef.current!.replay.replayData[count - 1];
+      const lineResult = lineResults[count - 1];
       playingComboRef.current?.setCombo(lineResult.status!.combo as number);
       statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
     }
@@ -327,7 +328,7 @@ export const lineUpdate = (
     }
 
     if (scene === "replay") {
-      lineReplayUpdate(gameStateRef, playingRef, statusRef.current!.status.count);
+      lineReplayUpdate(lineResults, gameStateRef, playingRef, statusRef.current!.status.count);
     }
   }
 };

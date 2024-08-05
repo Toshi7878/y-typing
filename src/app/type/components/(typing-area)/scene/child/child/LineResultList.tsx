@@ -1,6 +1,7 @@
 "use client";
 import {
   inputModeAtom,
+  lineResultsAtom,
   lineSelectIndexAtom,
   mapAtom,
   sceneAtom,
@@ -20,18 +21,15 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-interface LineResultListProps {
-  typingLineResults: LineResultData[];
-}
-
-function LineResultList({ typingLineResults }: LineResultListProps) {
+function LineResultList() {
   const [map] = useAtom(mapAtom);
   const [inputMode] = useAtom(inputModeAtom);
   const [scene] = useAtom(sceneAtom);
   const [speedData] = useAtom(speedAtom);
   const { playerRef, gameStateRef } = useRefs();
+  const [lineResults] = useAtom(lineResultsAtom);
 
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const cardRefs = useRef<HTMLDivElement[]>([]);
@@ -51,17 +49,22 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
       if (event.key === "ArrowUp") {
         setLineSelectIndex((prev) => {
           const newIndex = Math.max(1, prev - 1);
+          scrollToCard(newIndex);
           return newIndex;
         });
       } else if (event.key === "ArrowDown") {
         setLineSelectIndex((prev) => {
           const newIndex = Math.min(prev + 1, map!.typingLineNumbers.length);
+          scrollToCard(newIndex);
           return newIndex;
         });
       } else if (event.key === "Enter") {
         const card = cardRefs.current[lineSelectIndex];
+        const seekTime = Number(card.dataset.seekTime);
+        const lineNumber = Number(card.dataset.lineNumber);
+        const index = Number(card.dataset.count);
         if (card) {
-          card.click();
+          handleCardClick(lineNumber, seekTime, index);
         }
       }
     },
@@ -71,17 +74,28 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    scrollToCard(lineSelectIndex); // 初期表示時にスクロール
+    scrollToCard(lineSelectIndex);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleKeyDown, lineSelectIndex]);
+  }, [handleKeyDown]);
+
   let lineCount = 0;
+
+  const handleCardClick = (lineNumber: number, seekTime: number, index: number) => {
+    if (scene === "replay") {
+      playerRef.current.seekTo(seekTime);
+    } else {
+      playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
+      gameStateRef.current!.practice.setLineCount = index;
+    }
+    setLineSelectIndex(lineNumber);
+  };
   return (
     <>
-      {typingLineResults.map((lineResult: LineResultData, index: number) => {
+      {lineResults.map((lineResult: LineResultData, index: number) => {
         const line = map!.words[index];
 
         if (!line.notes.k) {
@@ -109,6 +123,7 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
         const seekTime =
           Number(map!.mapData[index]["time"]) - (scene === "replay" ? 0 : 1 / speedData.playSpeed);
 
+        const lineNumber = lineCount;
         return (
           <Card
             key={index}
@@ -117,21 +132,17 @@ function LineResultList({ typingLineResults }: LineResultListProps) {
             ref={(el) => {
               if (el) cardRefs.current[index] = el;
             }}
+            data-seek-time={seekTime}
+            data-line-number={lineNumber}
+            data-count={index}
             size={"sm"}
             boxShadow="sm"
             cursor="pointer"
-            backgroundColor={
-              lineSelectIndex === lineCount ? "gray.500" : "rgba(255, 255, 255, 0.7)"
-            }
-            _hover={{ boxShadow: "md", bg: "gray.100" }}
-            onClick={() => {
-              if (scene === "replay") {
-                playerRef.current.seekTo(seekTime);
-              } else {
-                playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
-                gameStateRef.current!.practice.setLineCount = index;
-              }
-            }}
+            backgroundColor="transparent"
+            border="2px solid"
+            borderColor={lineSelectIndex === lineCount ? "gray.500" : "transparent"}
+            _hover={{ borderColor: "gray.500" }}
+            onClick={() => handleCardClick(lineNumber, seekTime, index)}
           >
             <CardHeader py={1}>
               <Box>

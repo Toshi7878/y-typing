@@ -2,7 +2,12 @@ import { Box, Button, HStack, Stack, useDisclosure, useToast } from "@chakra-ui/
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
-import { mapIdAtom, speedAtom, tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import {
+  lineResultsAtom,
+  mapIdAtom,
+  speedAtom,
+  tabIndexAtom,
+} from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
@@ -21,6 +26,7 @@ const End = () => {
   const toast = useToast();
   const [mapId] = useAtom(mapIdAtom);
   const [speedData] = useAtom(speedAtom);
+  const [lineResults] = useAtom(lineResultsAtom);
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
@@ -50,7 +56,7 @@ const End = () => {
     };
     const sendData = {
       mapId: mapId,
-      lineResult: statusRef.current!.status.result,
+      lineResult: lineResults,
       status: sendStatus,
       score,
     };
@@ -105,7 +111,7 @@ const End = () => {
     status.score > 0 &&
     status.score >= bestScoreRef.current &&
     speedData.defaultSpeed >= 1 &&
-    gameStateRef.current!.replay.replayData.length === 0 &&
+    gameStateRef.current!.replay.userName === "" &&
     !gameStateRef.current!.practice.isPracticeMode;
   return (
     <Box display="flex" flexDirection="column">
@@ -116,7 +122,7 @@ const End = () => {
             <Box textAlign="left" className="text-3xl" mx={2}>
               {gameStateRef.current!.practice.isPracticeMode ? (
                 <>練習モード終了</>
-              ) : gameStateRef.current!.replay.replayData.length > 0 ? (
+              ) : gameStateRef.current!.replay.userName !== "" ? (
                 <>リプレイ再生終了</>
               ) : !session ? (
                 <>
@@ -183,17 +189,7 @@ const End = () => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
-      {isOpen && (
-        <EndTypingResultModal
-          isOpen={isOpen}
-          onClose={onClose}
-          typingLineResults={
-            gameStateRef.current!.replay.replayData.length
-              ? gameStateRef.current!.replay.replayData
-              : statusRef.current!.status.result
-          }
-        />
-      )}
+      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 };

@@ -11,6 +11,7 @@ import { CreateMap } from "../(ts)/createTypingWord";
 import { useAtom } from "jotai";
 import {
   inputModeAtom,
+  lineResultsAtom,
   lineSelectIndexAtom,
   loadingOverlayAtom,
   mapAtom,
@@ -52,6 +53,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const [, setInputMode] = useAtom(inputModeAtom);
   const [, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const [, setNotify] = useAtom(playingNotifyAtom);
+  const [, setLineResults] = useAtom(lineResultsAtom);
   const [isLoadingOverlay] = useAtom(loadingOverlayAtom);
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
@@ -61,13 +63,19 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       setMapId(Number(id));
 
       if (id === "1") {
-        setMap(new CreateMap(testMap));
+        const test = new CreateMap(testMap);
+        setMap(test);
+        setLineResults(test.defaultLineResultData);
+
         return;
       }
 
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      setMap(new CreateMap(data.mapData));
+      const map = new CreateMap(data.mapData);
+      setMap(map);
+      setLineResults(map.defaultLineResultData);
+
       return;
     },
 
@@ -84,6 +92,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
       setNotify(Symbol(""));
+      setLineResults([]);
       setLineSelectIndex(1);
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
 

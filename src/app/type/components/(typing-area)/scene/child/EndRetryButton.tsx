@@ -13,7 +13,7 @@ import {
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { useRef } from "react";
 import { useAtom } from "jotai";
-import { mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { lineResultsAtom, mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/(ts)/retry";
 
 interface EndRetryButtonProps {
@@ -23,6 +23,7 @@ interface EndRetryButtonProps {
 const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
+  const [, setLineResults] = useAtom(lineResultsAtom);
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const [, setScene] = useAtom(sceneAtom);
@@ -34,6 +35,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
     } else {
       proceedRetry(
         playMode,
+        setLineResults,
         map!,
         statusRef,
         setScene,
@@ -75,6 +77,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
                   onClose();
                   proceedRetry(
                     "playing",
+                    setLineResults,
                     map!,
                     statusRef,
                     setScene,
@@ -102,13 +105,11 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         borderColor="black"
         onClick={() => {
           const playMode = gameStateRef.current?.practice.isPracticeMode ? "practice" : "playing";
-          const finalPlayMode = gameStateRef.current?.replay.replayData.length
-            ? "replay"
-            : playMode;
+          const finalPlayMode = gameStateRef.current?.replay.userName !== "" ? "replay" : playMode;
           retry(finalPlayMode);
         }}
       >
-        {gameStateRef.current?.replay.replayData.length ? "もう一度リプレイ" : "もう一度プレイ"}
+        {gameStateRef.current?.replay.userName !== "" ? "もう一度リプレイ" : "もう一度プレイ"}
       </Button>
     </>
   );

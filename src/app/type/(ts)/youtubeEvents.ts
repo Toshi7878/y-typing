@@ -18,7 +18,7 @@ class YTState {
         YTStateRef.current.movieEndTime = playerRef.current.getDuration();
       }
 
-      if (gameStateRef.current!.replay.replayData.length > 0) {
+      if (gameStateRef.current!.replay.userName !== "") {
         setScene("replay");
       } else if (gameStateRef.current!.practice.isPracticeMode) {
         setScene("practice");

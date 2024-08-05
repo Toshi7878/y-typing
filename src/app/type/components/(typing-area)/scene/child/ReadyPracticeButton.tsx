@@ -1,4 +1,4 @@
-import { loadingOverlayAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { lineResultsAtom, loadingOverlayAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
 import { Button } from "@chakra-ui/react";
@@ -14,6 +14,7 @@ const ReadyPracticeButton = () => {
   const { data: session } = useSession();
   const { id } = useParams();
   const [, setIsLoadingOverlay] = useAtom(loadingOverlayAtom);
+  const [, setLineResults] = useAtom(lineResultsAtom);
 
   const mapId = id;
   const userId = session?.user?.id;
@@ -38,8 +39,8 @@ const ReadyPracticeButton = () => {
     if (gameStateRef.current!.practice.hasMyRankingData) {
       setIsLoadingOverlay(true);
       const result = await refetch();
-      gameStateRef.current!.practice.loadResultData = result.data!.lineResult;
       setIsLoadingOverlay(false);
+      setLineResults(result.data!.lineResult);
     }
 
     gameStateRef.current!.practice.isPracticeMode = true;

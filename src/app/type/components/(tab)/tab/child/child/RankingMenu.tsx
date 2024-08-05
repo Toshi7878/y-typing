@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  lineResultsAtom,
   loadingOverlayAtom,
   mapAtom,
   sceneAtom,
@@ -33,6 +34,7 @@ const RankingMenu = ({
   const [scene, setScene] = useAtom(sceneAtom);
   const [, setSpeedData] = useAtom(speedAtom);
   const [, setIsLoadingOverlay] = useAtom(loadingOverlayAtom);
+  const [, setLineResults] = useAtom(lineResultsAtom);
 
   const [map] = useAtom(mapAtom);
   const params = useParams();
@@ -64,6 +66,7 @@ const RankingMenu = ({
         if (scene === "end") {
           proceedRetry(
             "replay",
+            setLineResults,
             map!,
             statusRef,
             setScene,
@@ -75,8 +78,9 @@ const RankingMenu = ({
         }
         setShowMenu(null);
         setHoveredIndex(null);
-        gameStateRef.current!.replay.replayData = result.data.lineResult;
+        setLineResults(result.data.lineResult);
         gameStateRef.current!.replay.userName = name;
+
         const defaultSpeed = result.data.status.defaultSpeed;
         new YTSpeedController("setDefaultSpeed", {
           setSpeedData,

@@ -15,6 +15,7 @@ interface RankingTrProps {
   type: number;
   kpm: number;
   rkpm: number;
+  defaultSpeed: number;
   romaType: number;
   kanaType: number;
   flickType: number;
@@ -36,6 +37,7 @@ const RankingTr = (props: RankingTrProps) => {
     if (props.sessionUserId === props.rankingUserId) {
       gameStateRef.current!.practice.hasMyRankingData = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getInputMode = () => {
@@ -70,7 +72,7 @@ const RankingTr = (props: RankingTrProps) => {
           <div>ロスト数: {props.lost}</div>
           <div>最大コンボ: {props.maxCombo}</div>
           <div>rkpm: {props.rkpm}</div>
-          {props.playSpeed > 1 && <div>倍速: {props.playSpeed.toFixed(2)}</div>}
+          {props.defaultSpeed > 1 && <div>倍速: {props.defaultSpeed.toFixed(2)}</div>}
           <div>
             登録日時:{" "}
             {new Date(props.updatedAt).toLocaleString("ja-JP", {

@@ -1,9 +1,10 @@
 import { defaultStatusRef } from "../(contexts)/refsProvider";
 import { CreateMap } from "./createTypingWord";
-import { GameStateRef, StatusRef } from "./type";
+import { GameStateRef, LineResultData, StatusRef } from "./type";
 
 export const proceedRetry = (
   playMode: "playing" | "replay" | "practice",
+  setLineResults: React.Dispatch<React.SetStateAction<LineResultData[]>>,
   map: CreateMap,
   statusRef: React.RefObject<StatusRef>,
   setScene: (scene: "playing" | "replay" | "practice") => void,
@@ -14,7 +15,7 @@ export const proceedRetry = (
 ) => {
   setScene(playMode);
   (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-  statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+  setLineResults(structuredClone(map!.defaultLineResultData));
 
   tabStatusRef.current!.resetStatus();
   playingComboRef.current!.setCombo(0);

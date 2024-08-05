@@ -529,7 +529,7 @@ export class Success {
       rankingScores,
     );
 
-    if (scene === "playing") {
+    if (scene !== "replay") {
       statusRef.current!.lineStatus.typeResult.push({
         c: successKey,
         is: true,

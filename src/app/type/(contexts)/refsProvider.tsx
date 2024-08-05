@@ -17,7 +17,6 @@ export const defaultStatusRef: StatusRef = {
     totalLatency: 0,
     completeCount: 0,
     failureCount: 0,
-    result: [],
   },
   lineStatus: {
     lineType: 0,
@@ -39,6 +38,7 @@ export const defaultGameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   replay: {
+    isReplayMode: false,
     replayData: [],
     replayKeyCount: 0,
     isSkip: false,

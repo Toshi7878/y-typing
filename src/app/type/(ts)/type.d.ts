@@ -32,6 +32,7 @@ export interface RankingListType {
     lost: number;
     maxCombo: number;
     playSpeed: number;
+    sp: number;
   };
   score: number;
   updatedAt: string;
@@ -78,7 +79,6 @@ export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
   replay: {
-    replayData: LineResultData[];
     replayKeyCount: number;
     isSkip: boolean;
     userName: string;
@@ -87,7 +87,6 @@ export interface GameStateRef {
     hasMyRankingData: boolean;
     isPracticeMode: boolean;
     setLineCount: number;
-    loadResultData: LineResultData[];
   };
 }
 
@@ -104,7 +103,6 @@ export interface StatusRef {
     totalLatency: number;
     completeCount: number;
     failureCount: number;
-    result: LineResultData[];
   };
   lineStatus: {
     lineType: number;

@@ -5,6 +5,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
+  lineResultsAtom,
   mapAtom,
   playingNotifyAtom,
   rankingScoresAtom,
@@ -52,6 +53,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const [rankingScores] = useAtom(rankingScoresAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [lineResults, setLineResults] = useAtom(lineResultsAtom);
 
   //forwardRefやめる（あとで
   useImperativeHandle(ref, () => ({
@@ -64,7 +66,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playingComboRef.current?.setCombo(0);
         (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
-        statusRef.current!.status.result = structuredClone(map!.defaultLineResultData);
+        setLineResults(structuredClone(map!.defaultLineResultData));
 
         if (scene === "playing") {
           const status = tabStatusRef.current?.getStatus();
@@ -194,26 +196,26 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (ticker.started) {
         ticker.stop();
       }
-      updateTimer(
-        map!,
-        playerRef,
-        ytStateRef,
-        speedData,
-        totalTimeProgressRef,
-        playingTotalTimeRef,
-        playingLineTimeRef,
-        playingCenterRef,
-        lineProgressRef,
-        skipGuideRef,
-        statusRef,
-        tabStatusRef,
-        gameStateRef,
-        rankingScores,
-        playingComboRef,
-        inputMode,
-        ref as React.RefObject<PlayingRef>,
-        scene,
-      );
+      // updateTimer(
+      //   map!,
+      //   playerRef,
+      //   ytStateRef,
+      //   speedData,
+      //   totalTimeProgressRef,
+      //   playingTotalTimeRef,
+      //   playingLineTimeRef,
+      //   playingCenterRef,
+      //   lineProgressRef,
+      //   skipGuideRef,
+      //   statusRef,
+      //   tabStatusRef,
+      //   gameStateRef,
+      //   rankingScores,
+      //   playingComboRef,
+      //   inputMode,
+      //   ref as React.RefObject<PlayingRef>,
+      //   scene,
+      // );
     },
 
     nextLine: () => {
@@ -325,16 +327,17 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
               const mode = statusRef.current!.lineStatus.lineStartInputMode;
               const sp = statusRef.current!.lineStatus.lineStartSpeed;
               const typeResult = statusRef.current!.lineStatus.typeResult;
-              const lResult = statusRef.current!.status.result[count - 1];
+              const lResult = lineResults[count - 1];
               const lMiss = statusRef.current!.lineStatus.lineMiss;
               const lineScore = success.newStatus.point + success.newStatus.timeBonus + lMiss * 5;
               const oldLineScore =
                 lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
               const isUpdateResult = lineScore >= oldLineScore;
+              const newLineResults = [...lineResults];
 
               if (isUpdateResult) {
-                statusRef.current!.status.result[count - 1] = {
+                newLineResults[count - 1] = {
                   status: {
                     p: success.newStatus.point,
                     tBonus: success.newStatus.timeBonus,
@@ -351,10 +354,11 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
                   },
                   typeResult,
                 };
+                setLineResults(newLineResults);
               }
               const newStatus = updateReplayStatus(
                 map!.words.length - 1,
-                statusRef.current!.status.result,
+                newLineResults,
                 map!,
                 rankingScores,
               );
@@ -384,12 +388,14 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores, speedData, scene]);
+  }, [inputMode, rankingScores, speedData, scene, lineResults]);
 
   useEffect(() => {
     const updateFunction = () =>
       updateTimer(
         map!,
+        lineResults,
+        setLineResults,
         playerRef,
         ytStateRef,
         speedData,
@@ -414,16 +420,12 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       ticker.remove(updateFunction);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData, rankingScores, inputMode, map, scene]);
+  }, [speedData, rankingScores, inputMode, map, scene, lineResults]);
 
   useEffect(() => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
-    const myResultData = gameStateRef.current!.practice.loadResultData;
-    statusRef.current!.status.result = myResultData.length
-      ? structuredClone(myResultData)
-      : structuredClone(map!.defaultLineResultData);
 
     if (!ticker.started) {
       ticker.start();
@@ -457,17 +459,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playingTotalTimeRef={playingTotalTimeRef}
       />
       {map!.mapData[0].options?.eternalCSS && <style>{map!.mapData[0].options?.eternalCSS}</style>}
-      {isOpen && (
-        <EndTypingResultModal
-          isOpen={isOpen}
-          onClose={onClose}
-          typingLineResults={
-            scene === "replay"
-              ? gameStateRef.current?.replay.replayData
-              : statusRef.current?.status.result
-          }
-        />
-      )}
+      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 });
