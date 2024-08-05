@@ -12,7 +12,11 @@ import { useAtom, useAtomValue } from "jotai";
 import { memo, useCallback, useEffect, useRef } from "react";
 import ResultCard from "./ResultCard";
 
-function ResultLineList() {
+interface ResultLineListProps {
+  modalContentRef: React.RefObject<HTMLDivElement>;
+}
+
+function ResultLineList({ modalContentRef }: ResultLineListProps) {
   const map = useAtomValue(mapAtom);
   const scene = useAtomValue(sceneAtom);
   const { playerRef, gameStateRef } = useRefs();
@@ -25,8 +29,8 @@ function ResultLineList() {
     const card = cardRefs.current[newIndex];
     const scrollHeight = cardRefs.current[1].parentElement!.scrollHeight;
 
-    if (card) {
-      cardRefs.current[1].parentElement!.scrollTop =
+    if (modalContentRef.current && card) {
+      modalContentRef.current.scrollTop =
         (scrollHeight * (newIndex - 3)) / map!.typingLineNumbers.length;
     }
   };

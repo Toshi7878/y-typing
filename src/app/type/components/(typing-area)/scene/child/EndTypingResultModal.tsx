@@ -8,7 +8,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
 } from "@chakra-ui/react";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import ResultLineList from "./child/ResultLineList";
 
 interface EndTypingResultDrawerProps {
@@ -18,6 +18,7 @@ interface EndTypingResultDrawerProps {
 
 function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
   const [drawerHeight, setDrawerHeight] = useState("100vh");
+  const modalContentRef = useRef(null);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -38,8 +39,8 @@ function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) 
           タイピングリザルト
         </DrawerHeader>
         <DrawerCloseButton tabIndex={-1} autoFocus={false} />
-        <DrawerBody overflowY="auto" position="relative">
-          <ResultLineList />
+        <DrawerBody overflowY="auto" position="relative" ref={modalContentRef}>
+          <ResultLineList modalContentRef={modalContentRef} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
