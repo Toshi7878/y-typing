@@ -78,7 +78,6 @@ function ResultCard({
       boxShadow="md"
       cursor="pointer"
       bg={lineSelectIndex === lineCount ? "gray.400" : ""}
-      _hover={{ bg: "gray.400" }}
       onMouseEnter={() => handleCardHover(lineNumber)}
       onClick={() => handleCardClick(lineNumber, seekTime, index)}
     >
