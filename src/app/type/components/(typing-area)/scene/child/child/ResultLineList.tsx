@@ -69,7 +69,9 @@ function ResultLineList() {
   }, [handleKeyDown]);
 
   useEffect(() => {
-    scrollToCard(lineSelectIndex);
+    if (lineSelectIndex > 1) {
+      scrollToCard(lineSelectIndex);
+    }
 
     return () => {
       // setLineSelectIndex()
