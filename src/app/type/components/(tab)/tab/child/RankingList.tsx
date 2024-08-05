@@ -128,7 +128,6 @@ const RankingList = () => {
                 miss={user.status.miss}
                 lost={user.status.lost}
                 maxCombo={user.status.maxCombo}
-                playSpeed={user.status.playSpeed}
                 updatedAt={user.updatedAt}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}

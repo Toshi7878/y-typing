@@ -22,7 +22,6 @@ interface RankingTrProps {
   miss: number;
   lost: number;
   maxCombo: number;
-  playSpeed: number;
   updatedAt: string;
   isHighlighted: boolean;
   isHovered: boolean;
