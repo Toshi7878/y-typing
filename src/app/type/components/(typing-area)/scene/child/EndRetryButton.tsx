@@ -15,12 +15,14 @@ import { useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { lineResultsAtom, mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/(ts)/retry";
+import { PlayMode } from "@/app/type/(ts)/type";
 
 interface EndRetryButtonProps {
+  retryMode: PlayMode;
   isRetryAlert: boolean;
 }
 
-const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
+const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const setLineResults = useSetAtom(lineResultsAtom);
@@ -29,7 +31,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
   const setScene = useSetAtom(sceneAtom);
   const map = useAtomValue(mapAtom);
 
-  const retry = (playMode: "playing" | "replay" | "practice") => {
+  const retry = (playMode: PlayMode) => {
     if (isRetryAlert) {
       onOpen();
     } else {
@@ -45,6 +47,12 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
         playerRef,
       );
     }
+  };
+
+  const getButtonText = () => {
+    if (retryMode === "practice") return "練習モード";
+    if (gameStateRef.current?.replay.userName) return "もう一度リプレイ";
+    return "もう一度プレイ";
   };
 
   return (
@@ -76,7 +84,7 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
                 onClick={() => {
                   onClose();
                   proceedRetry(
-                    "playing",
+                    retryMode,
                     setLineResults,
                     map!,
                     statusRef,
@@ -98,18 +106,16 @@ const EndRetryButton = ({ isRetryAlert }: EndRetryButtonProps) => {
 
       <Button
         size="2xl"
-        px={12}
+        px={20}
         py={6}
         fontSize="2xl"
         variant="outline"
         borderColor="black"
         onClick={() => {
-          const playMode = gameStateRef.current?.practice.isPracticeMode ? "practice" : "playing";
-          const finalPlayMode = gameStateRef.current?.replay.userName !== "" ? "replay" : playMode;
-          retry(finalPlayMode);
+          retry(retryMode);
         }}
       >
-        {gameStateRef.current?.replay.userName !== "" ? "もう一度リプレイ" : "もう一度プレイ"}
+        {getButtonText()}
       </Button>
     </>
   );

@@ -1,4 +1,5 @@
 export type InputModeType = "roma" | "kana" | "flick";
+export type PlayMode = "playing" | "replay" | "practice";
 export type SceneType = "ready" | "playing" | "end" | "replay" | "practice";
 
 export type MapData = {

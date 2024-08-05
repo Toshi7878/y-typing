@@ -106,13 +106,15 @@ const End = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
+  const isPlayingMode =
+    gameStateRef.current!.replay.userName === "" && !gameStateRef.current!.practice.isPracticeMode;
+
   const isDisplayRankingButton =
     session &&
     status.score > 0 &&
     status.score >= bestScoreRef.current &&
     speedData.defaultSpeed >= 1 &&
-    gameStateRef.current!.replay.userName === "" &&
-    !gameStateRef.current!.practice.isPracticeMode;
+    isPlayingMode;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
@@ -176,11 +178,19 @@ const End = () => {
                 結果をXにポスト
               </Button>
             </HStack>
-            <Box display="flex" justifyContent="flex-end" mx="12" mt="12">
+            <HStack spacing={14} justifyContent="flex-end" mx="12" mt="12">
+              {isPlayingMode && (
+                <EndRetryButton
+                  retryMode="practice"
+                  isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
+                />
+              )}
+
               <EndRetryButton
+                retryMode={gameStateRef.current!.replay.userName !== "" ? "replay" : "playing"}
                 isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
               />
-            </Box>
+            </HStack>
           </Stack>
         </form>
       </Box>
@@ -189,6 +199,7 @@ const End = () => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
+
       {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
