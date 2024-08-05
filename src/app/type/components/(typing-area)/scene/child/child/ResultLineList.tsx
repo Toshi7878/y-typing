@@ -9,7 +9,7 @@ import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { LineResultData } from "@/app/type/(ts)/type";
 
 import { useAtom, useAtomValue } from "jotai";
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
 
 interface ResultLineListProps {
@@ -25,14 +25,14 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const cardRefs = useRef<HTMLDivElement[]>([]);
 
-  const scrollToCard = (newIndex: number) => {
+  const scrollToCard = useCallback((newIndex: number) => {
     const card = cardRefs.current[newIndex];
     if (modalContentRef.current && card) {
       const scrollHeight = modalContentRef.current.scrollHeight;
       modalContentRef.current.scrollTop =
         (scrollHeight * (newIndex - 2)) / map!.typingLineNumbers.length;
     }
-  };
+  }, []);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -59,7 +59,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [map, lineSelectIndex],
+    [lineSelectIndex],
   );
 
   useEffect(() => {
@@ -76,9 +76,6 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
       scrollToCard(lineSelectIndex);
     }
 
-    return () => {
-      // setLineSelectIndex()
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -105,10 +102,9 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
-  return (
-    <>
-      {lineResults.map((lineResult: LineResultData, index: number) => {
+  const memoizedResultCards = useMemo(
+    () =>
+      lineResults.map((lineResult: LineResultData, index: number) => {
         const lineData = map!.words[index];
 
         if (!lineData.notes.k) {
@@ -129,9 +125,11 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
             handleCardHover={handleCardHover}
           />
         );
-      })}
-    </>
+      }),
+    [lineResults, lineSelectIndex, handleCardClick, handleCardHover],
   );
+
+  return <>{memoizedResultCards}</>;
 }
 
-export default memo(ResultLineList);
+export default ResultLineList;
