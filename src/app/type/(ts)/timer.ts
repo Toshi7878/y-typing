@@ -371,6 +371,6 @@ export function setNewLine(
   }
 
   if (scene === "replay") {
-    lineReplayUpdate(lineResults, gameStateRef, playingRef, statusRef.current!.status.count);
+    lineReplayUpdate(lineResults, gameStateRef, playingRef, currentCount);
   }
 }

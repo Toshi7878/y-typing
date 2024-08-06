@@ -171,9 +171,9 @@ export const lineReplayUpdate = (
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
   playingRef: React.RefObject<PlayingRef>,
-  count: number,
+  newCount: number,
 ) => {
-  const lineResult = lineResults[count - 1];
+  const lineResult = lineResults[newCount];
   const lineInputMode = lineResult.status!.mode;
   const speed = lineResult.status!.sp;
 
