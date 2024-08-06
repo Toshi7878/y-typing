@@ -174,65 +174,49 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
 
     prevLine: () => {
-      // const setLineCount = gameStateRef.current!.practice.setLineCount;
-      // const count = statusRef.current!.status.count;
-      // let n = setLineCount !== count ? -1 : 0;
-      // while (!map!.typingLineNumbers.includes(count + n) && count + n >= map!.startLine) {
-      //   n--;
-      // }
-      // if (count < map!.startLine) {
-      //   return;
-      // }
-      // const prevCount = count + n;
-      // gameStateRef.current!.practice.setLineCount = prevCount - 1;
-      // setLineSelectIndex(prevCount);
-      // const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
-      // const prevTime = count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - seekBuffer : 0;
-      // playerRef.current.seekTo(prevTime);
-      // if (ticker.started) {
-      //   ticker.stop();
-      // }
+      const count = statusRef.current!.status.count;
+      const prevCount = structuredClone(map!.typingLineNumbers)
+        .reverse()
+        .find((num) => num < count);
+
+      if (prevCount === undefined) {
+        return;
+      }
+
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
+      setLineSelectIndex(prevCount);
+      gameStateRef.current!.isSeekedLine = true;
+      if (ticker.started) {
+        ticker.stop();
+      }
+      playerRef.current.seekTo(prevTime);
     },
 
     nextLine: () => {
-      // const setLineCount = gameStateRef.current!.practice.setLineCount;
-      // const count = statusRef.current!.status.count;
-      // let n = setLineCount !== count ? 1 : 2;
-      // if (count - setLineCount > 1) {
-      //   n--;
-      // }
-      // if (
-      //   setLineCount > 0 &&
-      //   count + 1 - setLineCount <= 1 &&
-      //   Number(map!.mapData[setLineCount + 1]["time"]) -
-      //     Number(map!.mapData[setLineCount]["time"]) <=
-      //     1
-      // ) {
-      //   n += 2;
-      // }
-      // while (!map!.typingLineNumbers.includes(count + n) && map!.mapData.length - 1 > count + n) {
-      //   n++;
-      // }
-      // if (map!.mapData.length - 2 < count + n) {
-      //   return;
-      // }
-      // const nextCount = count + n;
-      // const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
-      // const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
-      // setLineSelectIndex(nextCount - 1);
-      // gameStateRef.current!.replay.isSkip = true;
-      // playerRef.current.seekTo(nextTime);
+      const count = statusRef.current!.status.count;
+      const nextCount = map!.typingLineNumbers.find((num) => num > count);
+
+      if (nextCount === undefined) {
+        return;
+      }
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
+      setLineSelectIndex(nextCount);
+      gameStateRef.current!.isSeekedLine = true;
+      if (ticker.started) {
+        ticker.stop();
+      }
+      playerRef.current.seekTo(nextTime);
     },
 
     practiceSetLine: () => {
-      const setLineCount = lineSelectIndex;
-
       gameStateRef.current!.isSeekedLine = true;
 
-      if (setLineCount) {
+      if (lineSelectIndex) {
         const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
 
-        const seekTime = Number(map!.mapData[setLineCount]["time"]) - seekBuffer;
+        const seekTime = Number(map!.mapData[lineSelectIndex]["time"]) - seekBuffer;
 
         playerRef.current.seekTo(seekTime);
       }
@@ -404,6 +388,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       ticker.start();
     }
 
+    if (scene === "practice") {
+      onOpen();
+    }
     return () => {
       if (ticker.started) {
         ticker.stop();
