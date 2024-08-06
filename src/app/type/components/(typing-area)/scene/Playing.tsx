@@ -101,7 +101,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       playerRef.current.seekTo(seekTime);
       gameStateRef.current!.isRetrySkip = false;
-      gameStateRef.current!.isSkip = true;
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -227,6 +226,8 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
     practiceSetLine: () => {
       const setLineCount = lineSelectIndex;
+
+      gameStateRef.current!.isSeekedLine = true;
 
       if (setLineCount) {
         const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;

@@ -106,7 +106,6 @@ class YTState {
     const time = target.getCurrentTime();
 
     if (scene === "replay" || scene === "practice") {
-      const isSkip = gameStateRef.current!.isSkip;
       const isSeekedLine = gameStateRef.current!.isSeekedLine;
 
       if (isSeekedLine) {
@@ -131,11 +130,6 @@ class YTState {
         if (ticker.started) {
           ticker.stop();
         }
-      }
-      if (isSkip) {
-        gameStateRef.current!.isSkip = false;
-
-        return;
       }
     }
 
