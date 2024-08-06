@@ -174,6 +174,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
 
     prevLine: () => {
+      if (playerRef.current.getPlayerState() !== 1) {
+        return;
+      }
       const count = statusRef.current!.status.count;
       const prevCount = structuredClone(map!.typingLineNumbers)
         .reverse()
@@ -191,9 +194,13 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         ticker.stop();
       }
       playerRef.current.seekTo(prevTime);
+      setNotify(Symbol(`◁`));
     },
 
     nextLine: () => {
+      if (playerRef.current.getPlayerState() !== 1) {
+        return;
+      }
       const count = statusRef.current!.status.count;
       const nextCount = map!.typingLineNumbers.find((num) => num > count);
 
@@ -208,6 +215,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         ticker.stop();
       }
       playerRef.current.seekTo(nextTime);
+      setNotify(Symbol(`▷`));
     },
 
     practiceSetLine: () => {

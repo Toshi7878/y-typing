@@ -187,7 +187,13 @@ const End = () => {
               )}
 
               <EndRetryButton
-                retryMode={gameStateRef.current!.replay.userName !== "" ? "replay" : "playing"}
+                retryMode={
+                  gameStateRef.current!.practice.isPracticeMode
+                    ? "practice"
+                    : gameStateRef.current!.replay.userName !== ""
+                      ? "replay"
+                      : "playing"
+                }
                 isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
               />
             </HStack>
