@@ -31,7 +31,7 @@ const PlayingBottom = function ({
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
         <PlayingTotalTime className="text-2xl font-mono" ref={playingTotalTimeRef} />
       </HStack>
-      <PlayingLineProgress ref={totalTimeProgressRef} />
+      <PlayingLineProgress ref={totalTimeProgressRef} id="total_progress" />
       <HStack
         justify="space-between"
         className={`mx-3 mt-2 mb-4 font-bold ${isPlayed ? "" : "invisible"}`}

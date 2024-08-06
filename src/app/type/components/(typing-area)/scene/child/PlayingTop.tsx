@@ -29,7 +29,7 @@ function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) 
         <PlayingNotify className="text-3xl" />
         <PlayingLineTime className="text-3xl" ref={PlayingRemainTimeRef} />
       </HStack>
-      <PlayingLineProgress ref={lineProgressRef} />
+      <PlayingLineProgress ref={lineProgressRef} id="line_progress" />
     </Box>
   );
 }

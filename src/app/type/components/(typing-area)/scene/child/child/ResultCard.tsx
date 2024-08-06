@@ -1,6 +1,5 @@
 "use client";
 import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
 import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
 import {
@@ -13,7 +12,7 @@ import {
   Tooltip,
   Stack,
 } from "@chakra-ui/react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { memo } from "react";
 
 interface ResultCardProps {
@@ -22,9 +21,8 @@ interface ResultCardProps {
   lineCount: number;
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
-  lineSelectIndex: number;
+  lineSelectIndex: number | null;
   handleCardClick: (lineNumber: number, seekTime: number, index: number) => void;
-  handleCardHover: (lineNumber: number) => void;
 }
 
 function ResultCard({
@@ -35,7 +33,6 @@ function ResultCard({
   cardRefs,
   lineSelectIndex,
   handleCardClick,
-  handleCardHover,
 }: ResultCardProps) {
   const map = useAtomValue(mapAtom);
   const inputMode = useAtomValue(inputModeAtom);
@@ -47,7 +44,7 @@ function ResultCard({
   const lineTypeWord =
     lineInputMode === "roma" ? lineData.word.map((w) => w["r"][0]).join("") : lineKanaWord;
   const lineNotes = lineInputMode === "roma" ? lineData.notes.r : lineData.notes.k;
-  const lineTime = Number(map!.words[index + 1].time) - (index === 0 ? 0 : Number(lineData.time));
+  const lineTime = Number(map!.mapData[index + 1].time) - (index === 0 ? 0 : Number(lineData.time));
   const lineKpm = lineInputMode === "roma" ? lineData.kpm.r : lineData.kpm.k;
 
   const maxLinePoint = lineData.notes.r * CHAR_POINT;
@@ -77,8 +74,11 @@ function ResultCard({
       size={"sm"}
       boxShadow="md"
       cursor="pointer"
-      bg={lineSelectIndex === lineCount ? "gray.400" : ""}
-      onMouseEnter={() => handleCardHover(lineNumber)}
+      bg={lineSelectIndex === lineCount ? "gray.300" : ""}
+      outline={lineSelectIndex === lineCount ? "2px solid blue" : "1px solid transparent"}
+      _hover={{
+        bg: lineSelectIndex === lineCount ? "gray.300" : "gray.100",
+      }}
       onClick={() => handleCardClick(lineNumber, seekTime, index)}
     >
       <CardHeader py={1}>

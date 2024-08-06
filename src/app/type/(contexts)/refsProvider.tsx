@@ -3,6 +3,8 @@ import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
 
 export const defaultStatusRef: StatusRef = {
   status: {
@@ -37,18 +39,15 @@ export const defaultYTStateRef = {
 export const defaultGameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
+  isSkip: false,
+  isSeekedLine: false,
   replay: {
-    isReplayMode: false,
-    replayData: [],
     replayKeyCount: 0,
-    isSkip: false,
     userName: "",
   },
   practice: {
     hasMyRankingData: false,
     isPracticeMode: false,
-    setLineCount: 0,
-    loadResultData: [],
   },
 };
 export interface RefsContextType {
@@ -61,6 +60,9 @@ export interface RefsContextType {
   statusRef: React.RefObject<StatusRef>;
   ytStateRef: React.RefObject<YTStateRef>;
   gameStateRef: React.RefObject<GameStateRef>;
+  lineProgressRef: React.RefObject<HTMLProgressElement>;
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
+  playingCenterRef: React.RefObject<PlayingCenterRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
@@ -75,6 +77,9 @@ const RefsContext = createContext<RefsContextType>({
   statusRef: { current: structuredClone(defaultStatusRef) },
   ytStateRef: { current: structuredClone(defaultYTStateRef) },
   gameStateRef: { current: structuredClone(defaultGameStateRef) },
+  lineProgressRef: { current: null },
+  playingLineTimeRef: { current: null },
+  playingCenterRef: { current: null },
 
   setRef: (ref: HTMLElement | any) => {},
 });
@@ -88,6 +93,9 @@ export const RefsProvider = ({ children }) => {
   const statusRef = useRef<StatusRef>(structuredClone(defaultStatusRef));
   const ytStateRef = useRef<YTStateRef>(structuredClone(defaultYTStateRef));
   const gameStateRef = useRef<GameStateRef>(structuredClone(defaultGameStateRef));
+  const lineProgressRef = useRef(null);
+  const playingLineTimeRef = useRef(null);
+  const playingCenterRef = useRef(null);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
@@ -103,6 +111,15 @@ export const RefsProvider = ({ children }) => {
       case "playingComboRef":
         playingComboRef.current = ref;
         break;
+      case "lineProgressRef":
+        lineProgressRef.current = ref;
+        break;
+      case "playingLineTimeRef":
+        playingLineTimeRef.current = ref;
+        break;
+      case "playingCenterRef":
+        playingCenterRef.current = ref;
+        break;
     }
   };
 
@@ -114,6 +131,9 @@ export const RefsProvider = ({ children }) => {
         statusRef,
         playingRef,
         playingComboRef,
+        lineProgressRef,
+        playingCenterRef,
+        playingLineTimeRef,
         bestScoreRef,
         tabStatusRef,
         lineCountRef,
@@ -134,6 +154,9 @@ export const useRefs = () => {
     bestScoreRef: context.bestScoreRef,
     tabStatusRef: context.tabStatusRef,
     playingComboRef: context.playingComboRef,
+    lineProgressRef: context.lineProgressRef,
+    playingLineTimeRef: context.playingLineTimeRef,
+    playingCenterRef: context.playingCenterRef,
     playingRef: context.playingRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,

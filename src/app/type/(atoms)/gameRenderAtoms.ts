@@ -20,7 +20,7 @@ export const kpmAtom = atom<number>(0);
 
 export const lineResultsAtom = atom<LineResultData[]>([]);
 
-export const lineSelectIndexAtom = atom<number>(1);
+export const lineSelectIndexAtom = atom<number | null>(null);
 export const speedAtom = atom<Speed>({
   defaultSpeed: 1,
   playSpeed: 1,

@@ -6,6 +6,7 @@ import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
   lineResultsAtom,
+  lineSelectIndexAtom,
   mapAtom,
   playingNotifyAtom,
   rankingScoresAtom,
@@ -54,6 +55,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const rankingScores = useAtomValue(rankingScoresAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [lineResults, setLineResults] = useAtom(lineResultsAtom);
+  const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
 
   //forwardRefやめる（あとで
   useImperativeHandle(ref, () => ({
@@ -87,9 +89,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       }
     },
     pressSkip: () => {
-      const nextLine = map!.words[statusRef.current!.status.count];
+      const nextLine = map!.mapData[statusRef.current!.status.count];
       const skippedTime = gameStateRef.current!.isRetrySkip
-        ? Number(map!.words[map!.startLine]["time"])
+        ? Number(map!.mapData[map!.startLine]["time"])
         : Number(nextLine["time"]);
 
       const seekTime =
@@ -99,7 +101,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
 
       playerRef.current.seekTo(seekTime);
       gameStateRef.current!.isRetrySkip = false;
-      gameStateRef.current!.replay.isSkip = true;
+      gameStateRef.current!.isSkip = true;
       skipGuideRef.current?.setSkipGuide?.("");
     },
     realtimeSpeedChange: () => {
@@ -152,9 +154,9 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       }
 
       const count = statusRef.current!.status.count;
-      const nextLine = map!.words[count];
+      const nextLine = map!.mapData[count];
       const nextKpm =
-        (inputMode === "roma" ? map!.words[count].kpm["r"] : map!.words[count].kpm["k"]) *
+        (inputMode === "roma" ? map!.mapData[count].kpm["r"] : map!.mapData[count].kpm["k"]) *
         speedData.playSpeed;
       if (nextKpm) {
         playingCenterRef.current!.setNextLyrics({
@@ -173,98 +175,66 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
 
     prevLine: () => {
-      const setLineCount = gameStateRef.current!.practice.setLineCount;
-
-      const count = statusRef.current!.status.count;
-
-      let n = setLineCount !== count ? -1 : 0;
-
-      while (!map!.typingLineNumbers.includes(count + n) && count + n >= map!.startLine) {
-        n--;
-      }
-
-      if (count < map!.startLine) {
-        return;
-      }
-
-      const prevCount = count + n;
-      gameStateRef.current!.practice.setLineCount = prevCount - 1;
-
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
-
-      const prevTime = count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - seekBuffer : 0;
-
-      playerRef.current.seekTo(prevTime);
-      if (ticker.started) {
-        ticker.stop();
-      }
-      // updateTimer(
-      //   map!,
-      //   playerRef,
-      //   ytStateRef,
-      //   speedData,
-      //   totalTimeProgressRef,
-      //   playingTotalTimeRef,
-      //   playingLineTimeRef,
-      //   playingCenterRef,
-      //   lineProgressRef,
-      //   skipGuideRef,
-      //   statusRef,
-      //   tabStatusRef,
-      //   gameStateRef,
-      //   rankingScores,
-      //   playingComboRef,
-      //   inputMode,
-      //   ref as React.RefObject<PlayingRef>,
-      //   scene,
-      // );
+      // const setLineCount = gameStateRef.current!.practice.setLineCount;
+      // const count = statusRef.current!.status.count;
+      // let n = setLineCount !== count ? -1 : 0;
+      // while (!map!.typingLineNumbers.includes(count + n) && count + n >= map!.startLine) {
+      //   n--;
+      // }
+      // if (count < map!.startLine) {
+      //   return;
+      // }
+      // const prevCount = count + n;
+      // gameStateRef.current!.practice.setLineCount = prevCount - 1;
+      // setLineSelectIndex(prevCount);
+      // const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      // const prevTime = count - 1 > 0 ? Number(map!.mapData[prevCount]["time"]) - seekBuffer : 0;
+      // playerRef.current.seekTo(prevTime);
+      // if (ticker.started) {
+      //   ticker.stop();
+      // }
     },
 
     nextLine: () => {
-      const setLineCount = gameStateRef.current!.practice.setLineCount;
-      const count = statusRef.current!.status.count;
-      let n = setLineCount !== count ? 1 : 2;
-
-      if (count - setLineCount > 1) {
-        n--;
-      }
-
-      if (
-        setLineCount > 0 &&
-        count + 1 - setLineCount <= 1 &&
-        Number(map!.mapData[setLineCount + 1]["time"]) -
-          Number(map!.mapData[setLineCount]["time"]) <=
-          1
-      ) {
-        n += 2;
-      }
-
-      while (!map!.typingLineNumbers.includes(count + n) && map!.mapData.length - 1 > count + n) {
-        n++;
-      }
-
-      if (map!.mapData.length - 2 < count + n) {
-        return;
-      }
-
-      const nextCount = count + n;
-
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
-      const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
-
-      gameStateRef.current!.practice.setLineCount = nextCount;
-      gameStateRef.current!.replay.isSkip = true;
-      playerRef.current.seekTo(nextTime);
+      // const setLineCount = gameStateRef.current!.practice.setLineCount;
+      // const count = statusRef.current!.status.count;
+      // let n = setLineCount !== count ? 1 : 2;
+      // if (count - setLineCount > 1) {
+      //   n--;
+      // }
+      // if (
+      //   setLineCount > 0 &&
+      //   count + 1 - setLineCount <= 1 &&
+      //   Number(map!.mapData[setLineCount + 1]["time"]) -
+      //     Number(map!.mapData[setLineCount]["time"]) <=
+      //     1
+      // ) {
+      //   n += 2;
+      // }
+      // while (!map!.typingLineNumbers.includes(count + n) && map!.mapData.length - 1 > count + n) {
+      //   n++;
+      // }
+      // if (map!.mapData.length - 2 < count + n) {
+      //   return;
+      // }
+      // const nextCount = count + n;
+      // const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      // const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
+      // setLineSelectIndex(nextCount - 1);
+      // gameStateRef.current!.replay.isSkip = true;
+      // playerRef.current.seekTo(nextTime);
     },
 
     practiceSetLine: () => {
-      const setLineCount = gameStateRef.current!.practice.setLineCount;
+      const setLineCount = lineSelectIndex;
 
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      if (setLineCount) {
+        const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
 
-      const seekTime = Number(map!.mapData[setLineCount]["time"]) - seekBuffer;
+        const seekTime = Number(map!.mapData[setLineCount]["time"]) - seekBuffer;
 
-      playerRef.current.seekTo(seekTime);
+        playerRef.current.seekTo(seekTime);
+      }
     },
   }));
 
@@ -273,7 +243,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       setRef("playingRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData, inputMode, isOpen]);
+  }, [speedData, inputMode, isOpen, lineSelectIndex]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -284,7 +254,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (!ytStateRef.current?.isPaused) {
         //ライン切り替えギリギリのタイミングは処理されないようにしてみる(切り替えバグが起こるので)
         const count = statusRef.current!.status.count;
-        const prevLine = map!.words[count - 1];
+        const prevLine = map!.mapData[count - 1];
         const lineTime = playerRef.current.getCurrentTime() - Number(prevLine.time);
 
         if (
@@ -299,7 +269,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
           const status = tabStatusRef.current!.getStatus();
 
           if (result.successKey) {
-            const currentLine = map!.words[count];
+            const currentLine = map!.mapData[count];
             const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
             const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
 
@@ -359,7 +329,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
                 setLineResults(newLineResults);
               }
               const newStatus = updateReplayStatus(
-                map!.words.length - 1,
+                map!.mapData.length - 1,
                 newLineResults,
                 map!,
                 rankingScores,

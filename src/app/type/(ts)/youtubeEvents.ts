@@ -1,6 +1,20 @@
-import { GameStateRef, MapData, SceneType, StatusRef, YTStateRef } from "./type";
+import {
+  GameStateRef,
+  InputModeType,
+  LineData,
+  LineResultData,
+  MapData,
+  PlayingRef,
+  SceneType,
+  Speed,
+  StatusRef,
+  YTStateRef,
+} from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
 import { CreateMap } from "./createTypingWord";
+import { setNewLine } from "./timer";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
 
 class YTState {
   play(
@@ -81,19 +95,48 @@ class YTState {
     gameStateRef: React.RefObject<GameStateRef>,
     map: CreateMap,
     scene: SceneType,
+    inputMode: InputModeType,
+    speedData: Speed,
+    playingRef: React.RefObject<PlayingRef>,
+    playingCenterRef: React.RefObject<PlayingCenterRef>,
+    playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
+    lineProgressRef: React.RefObject<HTMLProgressElement>, // 修正箇所
+    lineResults: LineResultData[],
   ) {
     const time = target.getCurrentTime();
 
     if (scene === "replay" || scene === "practice") {
-      const isSkip = gameStateRef.current!.replay.isSkip;
+      const isSkip = gameStateRef.current!.isSkip;
+      const isSeekedLine = gameStateRef.current!.isSeekedLine;
 
+      if (isSeekedLine) {
+        gameStateRef.current!.isSeekedLine = false;
+        const newCount = getLineCount(time, map.mapData);
+        console.log(newCount);
+        statusRef.current!.status.count = newCount;
+        setNewLine(
+          newCount,
+          scene,
+          statusRef,
+          map,
+          inputMode,
+          speedData,
+          playingLineTimeRef,
+          playingCenterRef,
+          lineProgressRef,
+          lineResults,
+          gameStateRef,
+          playingRef,
+        );
+        if (ticker.started) {
+          ticker.stop();
+        }
+      }
       if (isSkip) {
-        gameStateRef.current!.replay.isSkip = false;
+        gameStateRef.current!.isSkip = false;
+
         return;
       }
-      const newCount = seekTimeIndex(time, map.mapData);
-      console.log(newCount);
-      statusRef.current!.status.count = newCount;
     }
 
     const isRetrySkip = gameStateRef.current!.isRetrySkip;
@@ -111,21 +154,9 @@ class YTState {
   }
 }
 
-function seekTimeIndex(time: number, mapData: MapData) {
-  let count = 0;
-
-  for (let i = 0; i < mapData.length; i++) {
-    if (Number(mapData[i]["time"]) > time) {
-      count = i - 1;
-      break;
-    }
-  }
-
-  if (count < 0) {
-    count = 0;
-  }
-
-  return count;
+export function getLineCount(time: number, mapData: LineData[]): number {
+  const index = mapData.findIndex((line) => line.time >= time);
+  return Math.max(index);
 }
 
 export const ytState = new YTState();

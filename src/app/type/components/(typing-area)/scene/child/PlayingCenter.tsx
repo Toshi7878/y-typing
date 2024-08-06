@@ -1,11 +1,12 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import PlayingLyrics from "./child/PlayingLyrics";
 import type { NextLyricsType, WordType } from "@/app/type/(ts)/type";
 import PlayingWord from "./child/PlayingWord";
 import NextLyrics from "./child/PlayingNextLyrics";
 import { inputModeAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtomValue } from "jotai";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;
@@ -36,6 +37,14 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   const [lyrics, setLyrics] = useState("");
   const [nextLyrics, setNextLyrics] = useState(structuredClone(defaultNextLyrics));
   const inputMode = useAtomValue(inputModeAtom);
+  const { setRef } = useRefs();
+
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("playingCenterRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),

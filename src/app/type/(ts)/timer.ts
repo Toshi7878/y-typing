@@ -22,6 +22,7 @@ import {
 } from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
 import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
+import { getLineCount } from "./youtubeEvents";
 
 export const updateTimer = (
   map: CreateMap,
@@ -51,9 +52,9 @@ export const updateTimer = (
   const ytConstantTime = ytCurrentTime / speedData.playSpeed;
 
   const count = statusRef.current!.status.count;
-  const prevLine = map.words[count - 1];
-  const currentLine = map.words[count];
-  const nextLine = map.words[count + 1];
+  const prevLine = map.mapData[count - 1];
+  const currentLine = map.mapData[count];
+  const nextLine = map.mapData[count + 1];
   const remainTime = (Number(currentLine.time) - Number(ytCurrentTime)) / speedData.playSpeed;
   const currentTotalTimeProgress = totalTimeProgressRef.current;
   const currentLineProgress = lineProgressRef.current;
@@ -112,7 +113,7 @@ export const updateTimer = (
 
     if (
       isRetrySkip &&
-      Number(map.words[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
+      Number(map.mapData[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
     ) {
       gameStateRef.current!.isRetrySkip = false;
     }
@@ -232,7 +233,7 @@ export const lineUpdate = (
 
       if (isUpdateResult) {
         const newLineResults = [...lineResults];
-        if (map.words[count - 1].kpm.r > 0) {
+        if (map.mapData[count - 1].kpm.r > 0) {
           newLineResults[count - 1] = {
             status: {
               p: status!.point,
@@ -270,7 +271,12 @@ export const lineUpdate = (
     if (scene === "playing") {
       tabStatusRef.current!.setStatus(lineResult.newStatus);
     } else if (scene === "practice") {
-      const newStatus = updateReplayStatus(map!.words.length - 1, lineResults, map, rankingScores);
+      const newStatus = updateReplayStatus(
+        map!.mapData.length - 1,
+        lineResults,
+        map,
+        rankingScores,
+      );
       tabStatusRef.current!.setStatus(newStatus);
     }
   } else if (scene === "replay") {
@@ -289,46 +295,82 @@ export const lineUpdate = (
 
     return;
   } else if (nextLine) {
-    statusRef.current!.status.count += 1;
-    statusRef.current!.lineStatus = structuredClone({
-      ...defaultStatusRef.lineStatus,
-      lineStartSpeed: speedData.playSpeed,
-      lineStartInputMode: inputMode,
-    });
-    playingLineTimeRef.current?.setLineKpm(0);
-    statusRef.current!.lineStatus.latency = 0;
-    currentPlayingCenterRef!.setLineWord({
-      correct: { k: "", r: "" },
-      nextChar: [...structuredClone(map.words[count].word)][0],
-      word: [...structuredClone(map.words[count].word)].slice(1),
-      lineCount: count,
-    });
-
-    currentPlayingCenterRef!.setLyrics(currentLine["lyrics"]);
-
-    const nextKpm =
-      (inputMode === "roma" ? map.words[count + 1].kpm["r"] : map.words[count + 1].kpm["k"]) *
-      speedData.playSpeed;
-    if (nextKpm) {
-      currentPlayingCenterRef!.setNextLyrics({
-        lyrics: nextLine["lyrics"],
-        kpm: nextKpm.toFixed(0),
-      });
+    if (scene === "playing") {
+      statusRef.current!.status.count += 1;
     } else {
-      currentPlayingCenterRef!.setNextLyrics({
-        lyrics: "",
-        kpm: "",
-      });
+      statusRef.current!.status.count = getLineCount(ytCurrentTime, map.mapData);
     }
-
-    if (lineProgressRef.current) {
-      const progressElement = lineProgressRef.current as HTMLProgressElement;
-
-      progressElement.max = Number(nextLine["time"]) - Number(currentLine["time"]);
-    }
-
-    if (scene === "replay") {
-      lineReplayUpdate(lineResults, gameStateRef, playingRef, statusRef.current!.status.count);
-    }
+    setNewLine(
+      statusRef.current!.status.count,
+      scene,
+      statusRef,
+      map,
+      inputMode,
+      speedData,
+      playingLineTimeRef,
+      playingCenterRef,
+      lineProgressRef,
+      lineResults,
+      gameStateRef,
+      playingRef,
+    );
   }
 };
+
+export function setNewLine(
+  newCount: number,
+  scene: SceneType,
+  statusRef: React.RefObject<StatusRef>,
+  map: CreateMap,
+  inputMode: InputModeType,
+  speedData: Speed,
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
+  playingCenterRef: React.RefObject<PlayingCenterRef>,
+  lineProgressRef: React.RefObject<HTMLProgressElement>,
+  lineResults: LineResultData[],
+  gameStateRef: React.RefObject<GameStateRef>,
+  playingRef: React.RefObject<PlayingRef>,
+) {
+  const currentCount = newCount ? newCount - 1 : 0;
+  statusRef.current!.lineStatus = structuredClone({
+    ...defaultStatusRef.lineStatus,
+    lineStartSpeed: speedData.playSpeed,
+    lineStartInputMode: inputMode,
+  });
+  playingLineTimeRef.current?.setLineKpm(0);
+  statusRef.current!.lineStatus.latency = 0;
+  playingCenterRef.current!.setLineWord({
+    correct: { k: "", r: "" },
+    nextChar: [...structuredClone(map.mapData[currentCount].word)][0],
+    word: [...structuredClone(map.mapData[currentCount].word)].slice(1),
+    lineCount: currentCount,
+  });
+
+  playingCenterRef.current!.setLyrics(map.mapData[currentCount]["lyrics"]);
+
+  const nextKpm =
+    (inputMode === "roma" ? map.mapData[newCount].kpm["r"] : map.mapData[newCount].kpm["k"]) *
+    speedData.playSpeed;
+  if (nextKpm) {
+    playingCenterRef.current!.setNextLyrics({
+      lyrics: map.mapData[newCount]["lyrics"],
+      kpm: nextKpm.toFixed(0),
+    });
+  } else {
+    playingCenterRef.current!.setNextLyrics({
+      lyrics: "",
+      kpm: "",
+    });
+  }
+
+  if (lineProgressRef.current) {
+    const progressElement = lineProgressRef.current as HTMLProgressElement;
+
+    progressElement.max =
+      Number(map.mapData[newCount]["time"]) - Number(map.mapData[currentCount]["time"]);
+  }
+
+  if (scene === "replay") {
+    lineReplayUpdate(lineResults, gameStateRef, playingRef, statusRef.current!.status.count);
+  }
+}

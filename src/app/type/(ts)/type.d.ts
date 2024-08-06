@@ -13,11 +13,14 @@ export type TypeChank = { k: string; r: string[]; p: number };
 export type SpeedDifficulty = { median: { r: number; k: number }; max: { r: number; k: number } };
 
 export interface LineData {
-  time: string; //後でここは配列に変更する;
+  time: number; //後でここは配列に変更する;
   word: TypeChank[];
   lyrics: string; //後でここは配列に変更する;
   kpm: { k: number; r: number };
   notes: { k: number; r: number };
+  lineCount?: number;
+  kanaWord: string;
+  options?: MapData["options"];
 }
 
 export interface RankingListType {
@@ -79,15 +82,15 @@ export interface Status {
 export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
+  isSkip: boolean;
+  isSeekedLine: boolean;
   replay: {
     replayKeyCount: number;
-    isSkip: boolean;
     userName: string;
   };
   practice: {
     hasMyRankingData: boolean;
     isPracticeMode: boolean;
-    setLineCount: number;
   };
 }
 

@@ -377,8 +377,7 @@ export class TypingWord {
 }
 
 export class CreateMap {
-  mapData: MapData;
-  words: LineData[];
+  mapData: LineData[];
 
   startLine: number;
   lineLength: number;
@@ -394,9 +393,7 @@ export class CreateMap {
 
     const result = this.create(wordRomaMap, data);
 
-    this.mapData = data;
-
-    this.words = result.words;
+    this.mapData = result.words;
     this.startLine = result.startLine;
 
     this.lineLength = result.lineLength;
@@ -406,12 +403,12 @@ export class CreateMap {
     this.totalNotes = this.calculateTotalNotes(result.words);
     this.speedDifficulty = this.calculateSpeedDifficulty(result.words);
 
-    this.movieTotalTime = +this.words[result.words.length - 1].time;
+    this.movieTotalTime = +this.mapData[result.words.length - 1].time;
     this.currentTimeBarFrequency = this.movieTotalTime / 1700;
   }
 
   private create(wordRomaMap: string[][], data: MapData) {
-    const words: LineData[] = [];
+    const mapData: LineData[] = [];
     const defaultLineResultData: LineResultData[] = [];
     const typingLineNumbers: number[] = [];
     const inputMode = (localStorage.getItem("inputMode") ?? "roma") as InputModeType;
@@ -421,6 +418,8 @@ export class CreateMap {
     for (let i = 0; i < data.length; i++) {
       const time = data[i]["time"];
       const lyrics = data[i]["lyrics"];
+      const kanaWord = data[i]["word"];
+      const options = data[i]["options"];
 
       if (wordRomaMap[i].length && lyrics !== "end") {
         if (startLine == 0) {
@@ -435,12 +434,15 @@ export class CreateMap {
         const word: LineData["word"] = createLineWord.word;
         const notes: LineData["notes"] = this.calcLineNotes(word);
         const kpm: LineData["kpm"] = this.calcLineKpm(notes, remainTime);
-        words.push({
-          time,
+        mapData.push({
+          time: Number(time),
           lyrics,
           word,
           kpm,
           notes,
+          kanaWord,
+          lineCount: lineLength,
+          options,
         });
 
         defaultLineResultData.push({
@@ -461,12 +463,14 @@ export class CreateMap {
           typeResult: [],
         });
       } else {
-        words.push({
-          time,
+        mapData.push({
+          time: Number(time),
           lyrics,
           word: [{ k: "", r: [""], p: 0 }],
+          kanaWord,
           kpm: { k: 0, r: 0 },
           notes: { k: 0, r: 0 },
+          options,
         });
 
         defaultLineResultData.push({
@@ -481,7 +485,7 @@ export class CreateMap {
       }
     }
 
-    return { words, startLine, lineLength, defaultLineResultData, typingLineNumbers };
+    return { words: mapData, startLine, lineLength, defaultLineResultData, typingLineNumbers };
   }
 
   private calcLineKpm(notes: LineData["notes"], remainTime: number) {

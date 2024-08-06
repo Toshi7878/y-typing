@@ -106,7 +106,7 @@ export const replay = (
           inputMode === "roma"
             ? new RomaInput({ chars, lineWord })
             : new KanaInput({ chars, lineWord });
-        const currentLine = map!.words[count];
+        const currentLine = map!.mapData[count];
         const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
 
         if (result.newLineWord.nextChar["k"]) {

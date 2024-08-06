@@ -1,5 +1,6 @@
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { Box } from "@chakra-ui/react";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 interface PlayingLineTimeProps {
   className?: string;
@@ -16,6 +17,15 @@ const PlayingLineTime = forwardRef<PlayingLineTimeRef, PlayingLineTimeProps>(
   ({ className = "" }, ref) => {
     const [remainTime, setRemainTime] = useState(0);
     const [lineKpm, setLineKpm] = useState(0);
+
+    const { setRef } = useRefs();
+
+    useEffect(() => {
+      if (ref && "current" in ref) {
+        setRef("playingLineTimeRef", ref.current!);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useImperativeHandle(ref, () => ({
       getRemainTime: () => remainTime,
