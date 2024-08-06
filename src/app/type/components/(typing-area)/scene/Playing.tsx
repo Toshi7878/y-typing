@@ -177,7 +177,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
       if (playerRef.current.getPlayerState() !== 1) {
         return;
       }
-      const count = statusRef.current!.status.count;
+      const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
       const prevCount = structuredClone(map!.typingLineNumbers)
         .reverse()
         .find((num) => num < count);
