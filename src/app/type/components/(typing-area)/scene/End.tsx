@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Stack, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
@@ -8,7 +8,7 @@ import {
   speedAtom,
   tabIndexAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./child/PlayingTop";
@@ -16,12 +16,16 @@ import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
 import EndRetryButton from "./child/EndRetryButton";
-import EndTypingResultModal from "./child/EndTypingResultModal";
 
-const End = () => {
+interface EndProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const End = ({ isOpen, onOpen, onClose }: EndProps) => {
   const { data: session } = useSession();
   const setTabIndex = useSetAtom(tabIndexAtom);
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
   const mapId = useAtomValue(mapIdAtom);
@@ -205,8 +209,6 @@ const End = () => {
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
-
-      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 };

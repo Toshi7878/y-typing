@@ -4,12 +4,14 @@ import End from "./scene/End";
 import { useAtomValue, useSetAtom } from "jotai";
 import { mapAtom, sceneAtom, tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
-import { Card } from "@chakra-ui/react";
+import { Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
+import EndTypingResultModal from "./scene/child/EndTypingResultModal";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
   const map = useAtomValue(mapAtom);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const setTabIndex = useSetAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
@@ -26,9 +28,19 @@ export const Scene = () => {
   if (scene === "ready") {
     return <Ready />;
   } else if (isPlayed && map) {
-    return <Playing ref={playingRef} />;
+    return (
+      <>
+        <Playing ref={playingRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
+      </>
+    );
   } else if (scene === "end") {
-    return <End />;
+    return (
+      <>
+        <End isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
+      </>
+    );
   }
 };
 

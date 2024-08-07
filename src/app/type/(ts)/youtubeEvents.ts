@@ -45,6 +45,8 @@ class YTState {
       if (!ticker.started) {
         ticker.start();
       }
+
+      gameStateRef.current!.isSeekedLine = false;
     }
     const isPaused = YTStateRef.current!.isPaused;
 

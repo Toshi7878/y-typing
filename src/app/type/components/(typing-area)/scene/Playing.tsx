@@ -1,4 +1,4 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
@@ -25,11 +25,15 @@ import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
 import { updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
-import EndTypingResultModal from "./child/EndTypingResultModal";
 import { updateReplayStatus } from "@/app/type/(ts)/replay";
 export const ticker = new Ticker();
 
-const Playing = forwardRef<PlayingRef>((props, ref) => {
+interface PlayingProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose }, ref) => {
   const {
     playerRef,
     playingComboRef,
@@ -53,7 +57,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
   const rankingScores = useAtomValue(rankingScoresAtom);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [lineResults, setLineResults] = useAtom(lineResultsAtom);
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
 
@@ -174,7 +177,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
 
     prevLine: () => {
-      if (playerRef.current.getPlayerState() !== 1) {
+      if (gameStateRef.current!.isSeekedLine) {
         return;
       }
       const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
@@ -198,7 +201,7 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
     },
 
     nextLine: () => {
-      if (playerRef.current.getPlayerState() !== 1) {
+      if (gameStateRef.current!.isSeekedLine) {
         return;
       }
       const count = statusRef.current!.status.count;
@@ -427,7 +430,6 @@ const Playing = forwardRef<PlayingRef>((props, ref) => {
         playingTotalTimeRef={playingTotalTimeRef}
       />
       {map!.mapData[0].options?.eternalCSS && <style>{map!.mapData[0].options?.eternalCSS}</style>}
-      {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
     </Box>
   );
 });
