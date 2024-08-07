@@ -44,10 +44,10 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     <AnimatePresence onExitComplete={handleExitComplete}>
       {notify.description && (
         <motion.div
-          key={Date.now()} // 追加: 毎回新しいkeyを生成
+          key={Date.now()}
           initial={{ opacity: 1 }}
           animate={{ opacity: NON_ANIMATED.includes(notify.description) ? 1 : 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.5 }}
           exit={{ opacity: 0 }} // 追加: fadeoutアニメーション
           className="absolute left-1/2 transform -translate-x-[140px]"
         >

@@ -95,7 +95,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
       setNotify(Symbol(""));
       setLineResults([]);
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
-      setLineSelectIndex(1);
+      setLineSelectIndex(null);
       setInputMode(inputMode);
       setRankingScores([]);
       setSpeedData({

@@ -22,7 +22,7 @@ interface ResultCardProps {
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
   lineSelectIndex: number | null;
-  handleCardClick: (lineNumber: number, seekTime: number, index: number) => void;
+  handleCardClick: (seekTime: number, index: number) => void;
 }
 
 function ResultCard({
@@ -74,12 +74,12 @@ function ResultCard({
       size={"sm"}
       boxShadow="md"
       cursor="pointer"
-      bg={lineSelectIndex === lineCount ? "gray.300" : ""}
-      outline={lineSelectIndex === lineCount ? "2px solid blue" : "1px solid transparent"}
+      bg={lineSelectIndex === lineNumber ? "gray.300" : ""}
+      outline={lineSelectIndex === lineNumber ? "2px solid blue" : "1px solid transparent"}
       _hover={{
-        bg: lineSelectIndex === lineCount ? "gray.300" : "gray.100",
+        bg: lineSelectIndex === lineNumber ? "gray.300" : "gray.100",
       }}
-      onClick={() => handleCardClick(lineNumber, seekTime, index)}
+      onClick={() => handleCardClick(seekTime, lineNumber)}
     >
       <CardHeader py={1}>
         <Box>
@@ -109,11 +109,11 @@ function ResultCard({
           )
         </Box>
       </CardHeader>
-      <CardBody py={1} className="text-xl word-font">
+      <CardBody py={1} className="text-md word-font">
         <Box className="kana-word">
           <Box>{lineKanaWord}</Box>
         </Box>
-        <Box className="word-result  outline-text text-white uppercase ml-1">
+        <Box className="word-result outline-text text-white uppercase ml-1" letterSpacing="0.1em">
           {lineResult.typeResult?.map(
             (type: TypeResult, index: number) =>
               type.c && (

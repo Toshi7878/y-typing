@@ -46,7 +46,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   let lineCount = 0;
 
   const handleCardClick = useCallback(
-    (lineNumber: number, seekTime: number) => {
+    (seekTime: number, lineNumber: number) => {
       gameStateRef.current!.isSeekedLine = true;
       if (scene === "replay") {
         playerRef.current.seekTo(seekTime);

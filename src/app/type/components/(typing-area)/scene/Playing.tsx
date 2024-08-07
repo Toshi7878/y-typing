@@ -191,7 +191,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
 
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
       const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
-      setLineSelectIndex(prevCount);
+      setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
       gameStateRef.current!.isSeekedLine = true;
       if (ticker.started) {
         ticker.stop();
@@ -212,7 +212,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       }
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
       const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
-      setLineSelectIndex(nextCount);
+      setLineSelectIndex(map!.typingLineNumbers.indexOf(nextCount) + 1);
       gameStateRef.current!.isSeekedLine = true;
       if (ticker.started) {
         ticker.stop();
@@ -224,13 +224,16 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
     practiceSetLine: () => {
       gameStateRef.current!.isSeekedLine = true;
 
-      if (lineSelectIndex) {
-        const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
-
-        const seekTime = Number(map!.mapData[lineSelectIndex]["time"]) - seekBuffer;
-
-        playerRef.current.seekTo(seekTime);
+      if (!lineSelectIndex) {
+        return;
       }
+      const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
+
+      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+
+      const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
+
+      playerRef.current.seekTo(seekTime);
     },
   }));
 
