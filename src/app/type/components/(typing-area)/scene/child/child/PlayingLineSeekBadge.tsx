@@ -13,22 +13,11 @@ interface PlayingLineSeekBadgeProps {
 }
 
 const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
-  transition: all 0.2s;
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
-
-  &:hover {
-    ${(props) =>
-      !props.isDisabled &&
-      `
-      background-color: var(--chakra-colors-gray-200);
-      outline:1px;
-    `}
-  }
 `;
 
 const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
-  transition: all 0.2s;
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
 

@@ -25,6 +25,13 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         borderRadius="3xl"
         onClick={isDisabled ? undefined : props.onClick} // onClickを無効化
         opacity={isDisabled ? 0.5 : 1} // 半透明にする
+        _hover={
+          isDisabled
+            ? {}
+            : {
+                transform: "scale(1.05)",
+              }
+        }
       >
         {props.badgeText}
       </Badge>

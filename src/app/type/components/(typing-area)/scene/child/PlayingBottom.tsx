@@ -36,12 +36,23 @@ const PlayingBottom = function ({
         justify="space-between"
         className={`mx-3 mt-2 mb-4 font-bold ${isPlayed ? "" : "invisible"}`}
       >
-        <PlayingBottomBadge
-          badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
-          kbdText="F10"
-          onClick={() => playingRef.current?.realtimeSpeedChange()}
-          isPauseDisabled={true}
-        />
+        {scene === "practice" ? (
+          <PlayingLineSeekBadge
+            badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
+            kbdTextPrev="F9"
+            kbdTextNext="F10"
+            onClick={() => {}}
+            onClickPrev={() => {}}
+            onClickNext={() => {}}
+          />
+        ) : (
+          <PlayingBottomBadge
+            badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
+            kbdText="F10"
+            onClick={() => playingRef.current?.realtimeSpeedChange()}
+            isPauseDisabled={true}
+          />
+        )}
         {scene !== "playing" && (
           <>
             <PlayingLineSeekBadge
