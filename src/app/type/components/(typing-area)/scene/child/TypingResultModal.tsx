@@ -15,7 +15,7 @@ interface EndTypingResultDrawerProps {
   onClose: () => void;
 }
 
-function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
+function TypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
   const [drawerHeight, setDrawerHeight] = useState("100vh");
   const modalContentRef = useRef(null);
 
@@ -46,4 +46,4 @@ function EndTypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) 
   );
 }
 
-export default memo(EndTypingResultDrawer);
+export default memo(TypingResultDrawer);

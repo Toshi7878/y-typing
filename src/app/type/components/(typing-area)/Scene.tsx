@@ -6,7 +6,7 @@ import { mapAtom, sceneAtom, tabIndexAtom } from "../../(atoms)/gameRenderAtoms"
 import Ready from "./scene/Ready";
 import { Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
-import EndTypingResultModal from "./scene/child/EndTypingResultModal";
+import TypingResultDrawer from "./scene/child/TypingResultModal";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
@@ -31,14 +31,14 @@ export const Scene = () => {
     return (
       <>
         <Playing ref={playingRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
+        {isOpen && <TypingResultDrawer isOpen={isOpen} onClose={onClose} />}
       </>
     );
   } else if (scene === "end") {
     return (
       <>
-        <End isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        {isOpen && <EndTypingResultModal isOpen={isOpen} onClose={onClose} />}
+        <End onOpen={onOpen} />
+        {isOpen && <TypingResultDrawer isOpen={isOpen} onClose={onClose} />}
       </>
     );
   }

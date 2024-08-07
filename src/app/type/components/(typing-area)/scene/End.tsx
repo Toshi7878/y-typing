@@ -18,12 +18,10 @@ import { useSession } from "next-auth/react";
 import EndRetryButton from "./child/EndRetryButton";
 
 interface EndProps {
-  isOpen: boolean;
   onOpen: () => void;
-  onClose: () => void;
 }
 
-const End = ({ isOpen, onOpen, onClose }: EndProps) => {
+const End = ({ onOpen }: EndProps) => {
   const { data: session } = useSession();
   const setTabIndex = useSetAtom(tabIndexAtom);
 
