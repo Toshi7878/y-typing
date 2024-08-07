@@ -41,32 +41,41 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
   return (
-    <AnimatePresence onExitComplete={handleExitComplete}>
-      {notify.description && (
-        <motion.div
-          key={Date.now()}
-          initial={{ opacity: 1 }}
-          animate={{ opacity: NON_ANIMATED.includes(notify.description) ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
-          exit={{ opacity: 0 }} // 追加: fadeoutアニメーション
-          className="absolute left-1/2 transform -translate-x-[140px]"
+    <Box className="absolute left-1/2 transform -translate-x-[140px]">
+      {notify.description && NON_ANIMATED.includes(notify.description) ? (
+        <Box
+          className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}
         >
-          {notify.description === "▶" ? (
-            <FaPlay className={`${className}`} />
-          ) : notify.description === "ll" ? (
+          {notify.description === "ll" ? (
             <FaPause className={`${className}`} />
+          ) : notify.description === "Replay" ? (
+            `${gameStateRef.current!.replay.userName} Replay`
           ) : (
-            <Box
-              className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}
-            >
-              {(notify.description === "Replay"
-                ? `${gameStateRef.current!.replay.userName} `
-                : "") + notify.description}
-            </Box>
+            notify.description
           )}
-        </motion.div>
+        </Box>
+      ) : (
+        <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
+          {notify.description && (
+            <motion.div
+              key={Date.now()}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              exit={{ opacity: 0 }} // 追加: fadeoutアニメーション
+            >
+              <Box className={`${className}`}>
+                {notify.description === "▶" ? (
+                  <FaPlay className={`${className}`} />
+                ) : (
+                  notify.description
+                )}
+              </Box>
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
-    </AnimatePresence>
+    </Box>
   );
 };
 
