@@ -52,6 +52,7 @@ export interface PlayingRef {
   prevLine: () => void;
   nextLine: () => void;
   practiceSetLine: () => void;
+  changePracticeMode: () => void;
 }
 
 export interface WordType {

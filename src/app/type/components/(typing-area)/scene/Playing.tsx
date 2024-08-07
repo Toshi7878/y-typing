@@ -52,7 +52,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
   const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
   const playingCenterRef = useRef<PlayingCenterRef>(null);
   const skipGuideRef = useRef<SkipGuideRef>(null);
-  const scene = useAtomValue(sceneAtom);
+  const [scene, setScene] = useAtom(sceneAtom);
   const setNotify = useSetAtom(playingNotifyAtom);
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const [inputMode, setInputMode] = useAtom(inputModeAtom);
@@ -234,6 +234,14 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
 
       playerRef.current.seekTo(seekTime);
+    },
+
+    changePracticeMode: () => {
+      const confirmMessage = "練習モードに移動しますか？";
+      if (window.confirm(confirmMessage)) {
+        gameStateRef.current!.practice.isPracticeMode = true;
+        setScene("practice");
+      }
     },
   }));
 

@@ -16,7 +16,7 @@ export const proceedRetry = (
   setScene(playMode);
   (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
-  if (playMode !== "replay") {
+  if (playMode === "playing") {
     setLineResults(structuredClone(map!.defaultLineResultData));
   }
 

@@ -24,6 +24,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
 
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const cardRefs = useRef<HTMLDivElement[]>([]);
+  const isManualScrollRef = useRef(false);
 
   const scrollToCard = useCallback((newIndex: number) => {
     const card = cardRefs.current[newIndex];
@@ -36,9 +37,11 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   }, []);
 
   useEffect(() => {
-    if (lineSelectIndex) {
+    if (lineSelectIndex && isManualScrollRef.current === false) {
       scrollToCard(lineSelectIndex);
     }
+
+    isManualScrollRef.current = false;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lineSelectIndex]);
@@ -53,6 +56,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
       } else {
         playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
       }
+      isManualScrollRef.current = true;
       setLineSelectIndex(lineNumber);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
