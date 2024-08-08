@@ -434,7 +434,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores, speedData, scene, lineResults]);
+  }, [inputMode, rankingScores, speedData, scene, lineResults, isOpen]);
 
   useEffect(() => {
     const updateFunction = () =>
