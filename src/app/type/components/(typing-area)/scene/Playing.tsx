@@ -433,6 +433,8 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
         }
       } else if (event.key === "Escape") {
         playingRef.current?.gamePause();
+      } else if (event.code === "Tab") {
+        playingRef.current?.openLineList();
       }
     };
 

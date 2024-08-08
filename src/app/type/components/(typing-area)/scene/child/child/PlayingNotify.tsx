@@ -37,7 +37,9 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
   };
 
   useEffect(() => {
-    playModeNotify();
+    if (scene !== "playing") {
+      playModeNotify();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
   return (
