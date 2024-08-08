@@ -129,10 +129,10 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             right={0}
             top={0}
             bottom={0}
-            width="25px"
-            bg="blue.500"
+            width="50px"
+            borderLeft="2px solid rgba(0, 0, 0, 0.1)"
             cursor="pointer"
-            zIndex="9999"
+            zIndex="100"
             onMouseEnter={() => {
               if (!isHovering) {
                 setIsHovering(true);

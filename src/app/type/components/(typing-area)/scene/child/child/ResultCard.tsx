@@ -81,7 +81,7 @@ function ResultCard({
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >
-      <CardHeader py={1}>
+      <CardHeader py={0}>
         <Box>
           <span data-list-number={index}>
             {lineCount}/{map!.lineLength}
@@ -109,7 +109,7 @@ function ResultCard({
           )
         </Box>
       </CardHeader>
-      <CardBody py={1} className="text-md word-font">
+      <CardBody py={0} className="text-md word-font">
         <Box className="kana-word">
           <Box>{lineKanaWord}</Box>
         </Box>
@@ -144,13 +144,17 @@ function ResultCard({
           </Text>
         </Box>
       </CardBody>
-      <CardFooter py={1} className="ml-1 font-bold font-mono text-xl">
+      <CardFooter py={0} className="ml-1 font-semibold text-lg">
         <Stack>
           <Box>
+            miss:{lMiss},{" "}
             <Tooltip label={`rkpm:${rkpm}`} placement="top" fontSize="sm">
-              <span>kpm:{kpm}</span>
+              <span>
+                kpm:
+                {kpm}
+              </span>
             </Tooltip>
-            , miss:{lMiss}, point:{point}
+            , point:{point}
             {tBonus ? `+${tBonus}` : ""}/{maxLinePoint}
           </Box>
         </Stack>
