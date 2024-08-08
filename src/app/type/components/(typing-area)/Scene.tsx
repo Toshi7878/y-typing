@@ -11,7 +11,7 @@ import {
 import Ready from "./scene/Ready";
 import { Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
-import TypingResultDrawer from "./scene/child/TypingResultModal";
+import ResultDrawer from "./scene/child/ResultDrawer";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
@@ -47,14 +47,14 @@ export const Scene = () => {
     return (
       <>
         <Playing ref={playingRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        {isOpen && <TypingResultDrawer isOpen={isOpen} onClose={onClose} />}
+        {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
       </>
     );
   } else if (scene === "end") {
     return (
       <>
         <End onOpen={onOpen} />
-        {isOpen && <TypingResultDrawer isOpen={isOpen} onClose={onClose} />}
+        {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
       </>
     );
   }

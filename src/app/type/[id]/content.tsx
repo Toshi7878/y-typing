@@ -129,7 +129,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             right={0}
             top={0}
             bottom={0}
-            width="20px"
+            width="25px"
             bg="blue.500"
             cursor="pointer"
             zIndex="9999"

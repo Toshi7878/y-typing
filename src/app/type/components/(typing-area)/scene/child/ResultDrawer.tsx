@@ -10,12 +10,12 @@ import {
 import { memo, useEffect, useRef, useState } from "react";
 import ResultLineList from "./child/ResultLineList";
 
-interface EndTypingResultDrawerProps {
+interface ResultDrawerProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-function TypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
+function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
   const [drawerHeight, setDrawerHeight] = useState("100vh");
   const modalContentRef = useRef(null);
 
@@ -37,7 +37,7 @@ function TypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
         <DrawerHeader fontSize="md" py={2}>
           タイピングリザルト
         </DrawerHeader>
-        <DrawerCloseButton tabIndex={-1} autoFocus={false} />
+        <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} />
         <DrawerBody overflowY="auto" position="relative" ref={modalContentRef}>
           <ResultLineList modalContentRef={modalContentRef} />
         </DrawerBody>
@@ -46,4 +46,4 @@ function TypingResultDrawer({ isOpen, onClose }: EndTypingResultDrawerProps) {
   );
 }
 
-export default memo(TypingResultDrawer);
+export default memo(ResultDrawer);
