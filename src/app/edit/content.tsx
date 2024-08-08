@@ -42,6 +42,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const dispatch = useDispatch();
   const { id } = useParams();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {

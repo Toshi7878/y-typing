@@ -8,9 +8,10 @@ import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../(ts)/createTypingWord";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   inputModeAtom,
+  isHoverDrawerLabelAtom,
   lineResultsAtom,
   lineSelectIndexAtom,
   loadingOverlayAtom,
@@ -42,7 +43,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 
 function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
-
+  const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
+  const scene = useAtomValue(sceneAtom);
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const setMap = useSetAtom(mapAtom);
@@ -121,6 +123,23 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
           height: "100vh",
         }}
       >
+        {(scene === "practice" || scene === "replay") && (
+          <Box
+            position="fixed"
+            right={0}
+            top={0}
+            bottom={0}
+            width="20px"
+            bg="blue.500"
+            cursor="pointer"
+            zIndex="9999"
+            onMouseEnter={() => {
+              if (!isHovering) {
+                setIsHovering(true);
+              }
+            }}
+          />
+        )}
         <Box style={style}>
           <Flex direction="column">
             <Flex gap="6">

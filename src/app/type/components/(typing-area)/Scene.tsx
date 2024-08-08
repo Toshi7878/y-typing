@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
-import { useAtomValue, useSetAtom } from "jotai";
-import { mapAtom, sceneAtom, tabIndexAtom } from "../../(atoms)/gameRenderAtoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  isHoverDrawerLabelAtom,
+  mapAtom,
+  sceneAtom,
+  tabIndexAtom,
+} from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
 import { Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
@@ -12,7 +17,18 @@ export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
   const map = useAtomValue(mapAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
 
+  useEffect(() => {
+    if (isHovering) {
+      onOpen();
+    }
+
+    if (isOpen) {
+      setIsHovering(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHovering, isOpen]);
   const setTabIndex = useSetAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
 

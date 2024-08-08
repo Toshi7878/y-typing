@@ -50,14 +50,17 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
 
   const handleCardClick = useCallback(
     (seekTime: number, lineNumber: number) => {
-      gameStateRef.current!.isSeekedLine = true;
-      if (scene === "replay") {
-        playerRef.current.seekTo(seekTime);
+      if (scene !== "end") {
+        gameStateRef.current!.isSeekedLine = true;
+        if (scene === "replay") {
+          playerRef.current.seekTo(seekTime);
+        } else {
+          playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
+        }
+        isManualScrollRef.current = true;
+        setLineSelectIndex(lineNumber);
       } else {
-        playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
       }
-      isManualScrollRef.current = true;
-      setLineSelectIndex(lineNumber);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [scene],

@@ -20,6 +20,8 @@ export const kpmAtom = atom<number>(0);
 
 export const lineResultsAtom = atom<LineResultData[]>([]);
 
+export const isHoverDrawerLabelAtom = atom<boolean>(false);
+
 export const lineSelectIndexAtom = atom<number | null>(null);
 export const speedAtom = atom<Speed>({
   defaultSpeed: 1,
