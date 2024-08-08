@@ -55,7 +55,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
           )}
         </Box>
       ) : (
-        <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
+        <AnimatePresence onExitComplete={handleExitComplete}>
           {notify.description && (
             <motion.div
               key={Date.now()}
