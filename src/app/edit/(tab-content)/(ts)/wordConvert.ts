@@ -1,4 +1,4 @@
-const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠"];
+const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠", "ゔ"];
 const addSymbol: string[] = [
   ",",
   ".",
