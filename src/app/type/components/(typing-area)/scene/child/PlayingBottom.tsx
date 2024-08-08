@@ -42,8 +42,8 @@ const PlayingBottom = function ({
             kbdTextPrev="F9"
             kbdTextNext="F10"
             onClick={() => {}}
-            onClickPrev={() => {}}
-            onClickNext={() => {}}
+            onClickPrev={() => playingRef.current!.practiceSpeedDown()}
+            onClickNext={() => playingRef.current!.practiceSpeedUp()}
           />
         ) : (
           <PlayingBottomBadge
@@ -60,8 +60,8 @@ const PlayingBottom = function ({
               kbdTextPrev="←"
               kbdTextNext="→"
               onClick={() => {}}
-              onClickPrev={() => {}}
-              onClickNext={() => {}}
+              onClickPrev={() => playingRef.current!.prevLine()}
+              onClickNext={() => playingRef.current!.nextLine()}
             />
             <PlayingBottomBadge
               badgeText="ライン一覧"

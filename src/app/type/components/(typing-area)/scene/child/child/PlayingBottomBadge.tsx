@@ -1,6 +1,8 @@
 import { playingNotifyAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Badge, HStack, Kbd } from "@chakra-ui/react";
-import { useAtom, useAtomValue } from "jotai";
+import styled from "@emotion/styled";
+
+import { useAtomValue } from "jotai";
 
 interface PlayingBottomBadgeProps {
   badgeText: string;
@@ -8,34 +10,63 @@ interface PlayingBottomBadgeProps {
   isPauseDisabled: boolean;
   onClick: () => void;
 }
+const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
+  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
+  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
+  transition: transform 0.1s ease-in-out;
 
+  &:hover {
+    ${(props) =>
+      !props.isDisabled &&
+      `
+  background-color: var(--chakra-colors-gray-100);
+  transform: scale(1.20);
+`}
+  }
+`;
+
+const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
+  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
+  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
+  transition: transform 0.1s ease-in-out;
+
+  &:hover {
+    ${(props) =>
+      !props.isDisabled &&
+      `
+  background-color: var(--chakra-colors-gray-100);
+  transform: scale(1.05);
+`}
+  }
+`;
 const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
   const notify = useAtomValue(playingNotifyAtom);
   const isDisabled = notify.description === "ll" && props.isPauseDisabled;
 
   return (
     <HStack>
-      <Badge
+      <StyledBadge
         py={1}
         px={4}
-        fontSize="md"
+        isDisabled={isDisabled}
+        fontSize="lg"
         as="button"
         cursor="pointer"
         border="1px solid black" // 黒い枠線を追加
         borderRadius="3xl"
         onClick={isDisabled ? undefined : props.onClick} // onClickを無効化
         opacity={isDisabled ? 0.5 : 1} // 半透明にする
-        _hover={
-          isDisabled
-            ? {}
-            : {
-                transform: "scale(1.05)",
-              }
-        }
       >
         {props.badgeText}
-      </Badge>
-      <Kbd fontSize="lg">{props.kbdText}</Kbd>
+      </StyledBadge>
+      <StyledKbd
+        isDisabled={isDisabled}
+        fontSize="xl"
+        border="1px solid"
+        onClick={isDisabled ? undefined : props.onClick} // onClickを無効化
+      >
+        {props.kbdText}
+      </StyledKbd>
     </HStack>
   );
 };

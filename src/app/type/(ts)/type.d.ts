@@ -52,6 +52,9 @@ export interface PlayingRef {
   prevLine: () => void;
   nextLine: () => void;
   practiceSetLine: () => void;
+  practiceSpeedUp: () => void;
+  practiceSpeedDown: () => void;
+
   changePracticeMode: () => void;
 }
 

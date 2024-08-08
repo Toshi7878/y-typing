@@ -1,6 +1,6 @@
 import { playingNotifyAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { Badge, HStack, Kbd } from "@chakra-ui/react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 
 interface PlayingLineSeekBadgeProps {
@@ -15,20 +15,20 @@ interface PlayingLineSeekBadgeProps {
 const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
-`;
-
-const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
-  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
+  transition: transform 0.1s ease-in-out;
 
   &:hover {
     ${(props) =>
       !props.isDisabled &&
       `
       background-color: var(--chakra-colors-gray-100);
-      transform: scale(1.05);
+      transform: scale(1.20);
     `}
   }
+`;
+
+const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
+  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
 `;
 
 const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
@@ -39,7 +39,8 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
   return (
     <HStack>
       <StyledKbd
-        fontSize="lg"
+        fontSize="xl"
+        border="1px solid"
         onClick={isDisabled ? undefined : props.onClickPrev}
         isDisabled={isDisabled}
       >
@@ -48,9 +49,8 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
       <StyledBadge
         py={1}
         px={4}
-        fontSize="md"
-        as="button"
-        border="1px solid black"
+        fontSize="lg"
+        border="1px solid var(--chakra-colors-gray-200)"
         borderRadius="3xl"
         onClick={isDisabled ? undefined : props.onClick}
         isDisabled={isDisabled}
@@ -58,7 +58,8 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         {props.badgeText}
       </StyledBadge>
       <StyledKbd
-        fontSize="lg"
+        fontSize="xl"
+        border="1px solid"
         onClick={isDisabled ? undefined : props.onClickNext}
         isDisabled={isDisabled}
       >

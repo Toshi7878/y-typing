@@ -706,6 +706,9 @@ export function shortcutKey(
       event.preventDefault();
       break;
     case "F9": //F9で低速(練習モード)
+      if (scene === "practice") {
+        playingRef.current!.practiceSpeedDown();
+      }
       event.preventDefault();
       break;
     case "F10":
@@ -715,6 +718,8 @@ export function shortcutKey(
           op: "speedChange",
           t: Math.round(lineTime * 1000) / 1000,
         });
+      } else if (scene === "practice") {
+        playingRef.current!.practiceSpeedUp();
       }
       event.preventDefault();
       break;
