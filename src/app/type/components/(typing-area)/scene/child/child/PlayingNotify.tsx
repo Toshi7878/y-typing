@@ -41,13 +41,13 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
   return (
-    <Box className="absolute left-1/2 transform -translate-x-[140px]">
+    <Box className={`${className} absolute left-1/2 transform -translate-x-[155px]`}>
       {notify.description && NON_ANIMATED.includes(notify.description) ? (
         <Box
           className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}
         >
           {notify.description === "ll" ? (
-            <FaPause className={`${className}`} />
+            <FaPause />
           ) : notify.description === "Replay" ? (
             `${gameStateRef.current!.replay.userName} Replay`
           ) : (
@@ -64,13 +64,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
               transition={{ duration: 0.5 }}
               exit={{ opacity: 0 }} // 追加: fadeoutアニメーション
             >
-              <Box className={`${className}`}>
-                {notify.description === "▶" ? (
-                  <FaPlay className={`${className}`} />
-                ) : (
-                  notify.description
-                )}
-              </Box>
+              <Box>{notify.description === "▶" ? <FaPlay /> : notify.description}</Box>
             </motion.div>
           )}
         </AnimatePresence>

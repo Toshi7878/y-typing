@@ -39,8 +39,8 @@ const PlayingBottom = function ({
         {scene === "practice" ? (
           <PlayingLineSeekBadge
             badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
-            kbdTextPrev="F9"
-            kbdTextNext="F10"
+            kbdTextPrev="F9-"
+            kbdTextNext="+F10"
             onClick={() => {}}
             onClickPrev={() => playingRef.current!.practiceSpeedDown()}
             onClickNext={() => playingRef.current!.practiceSpeedUp()}
@@ -76,7 +76,7 @@ const PlayingBottom = function ({
           badgeText="やり直し"
           kbdText="F4"
           onClick={() => playingRef.current?.retry()}
-          isPauseDisabled={false}
+          isPauseDisabled={true}
         />
       </HStack>
     </Box>

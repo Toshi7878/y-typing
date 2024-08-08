@@ -52,10 +52,10 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         fontSize="lg"
         as="button"
         cursor="pointer"
-        border="1px solid black" // 黒い枠線を追加
+        border="1px solid black"
         borderRadius="3xl"
-        onClick={isDisabled ? undefined : props.onClick} // onClickを無効化
-        opacity={isDisabled ? 0.5 : 1} // 半透明にする
+        onClick={isDisabled ? undefined : props.onClick}
+        opacity={isDisabled ? 0.5 : 1}
       >
         {props.badgeText}
       </StyledBadge>
@@ -63,7 +63,7 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         isDisabled={isDisabled}
         fontSize="xl"
         border="1px solid"
-        onClick={isDisabled ? undefined : props.onClick} // onClickを無効化
+        onClick={isDisabled ? undefined : props.onClick}
       >
         {props.kbdText}
       </StyledKbd>

@@ -23,9 +23,10 @@ import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvent
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
-import { updateTimer } from "@/app/type/(ts)/timer";
+import { setNewLine, updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
 import { updateReplayStatus } from "@/app/type/(ts)/replay";
+import { getLineCount } from "@/app/type/(ts)/youtubeEvents";
 export const ticker = new Ticker();
 
 interface PlayingProps {
@@ -177,7 +178,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
     },
 
     prevLine: () => {
-      if (gameStateRef.current!.isSeekedLine) {
+      if (isOpen && gameStateRef.current!.isSeekedLine) {
         return;
       }
       const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
@@ -192,16 +193,37 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
       const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
       setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
-      gameStateRef.current!.isSeekedLine = true;
       if (ticker.started) {
         ticker.stop();
       }
+
+      if (!isOpen) {
+        const newCount = getLineCount(prevTime, map!.mapData);
+        statusRef.current!.status.count = newCount;
+        setNewLine(
+          newCount,
+          scene,
+          statusRef,
+          map!,
+          inputMode,
+          speedData,
+          playingLineTimeRef,
+          playingCenterRef,
+          lineProgressRef,
+          lineResults,
+          gameStateRef,
+          playingRef,
+        );
+      } else {
+        gameStateRef.current!.isSeekedLine = true;
+      }
+
       playerRef.current.seekTo(prevTime);
       setNotify(Symbol(`◁`));
     },
 
     nextLine: () => {
-      if (gameStateRef.current!.isSeekedLine) {
+      if (isOpen && gameStateRef.current!.isSeekedLine) {
         return;
       }
       const count = statusRef.current!.status.count;
@@ -212,21 +234,43 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       }
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
       const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
+
       setLineSelectIndex(map!.typingLineNumbers.indexOf(nextCount) + 1);
-      gameStateRef.current!.isSeekedLine = true;
+      // gameStateRef.current!.isSeekedLine = true;
       if (ticker.started) {
         ticker.stop();
+      }
+
+      if (!isOpen) {
+        const newCount = getLineCount(nextTime, map!.mapData);
+        statusRef.current!.status.count = newCount;
+        setNewLine(
+          newCount,
+          scene,
+          statusRef,
+          map!,
+          inputMode,
+          speedData,
+          playingLineTimeRef,
+          playingCenterRef,
+          lineProgressRef,
+          lineResults,
+          gameStateRef,
+          playingRef,
+        );
+      } else {
+        gameStateRef.current!.isSeekedLine = true;
       }
       playerRef.current.seekTo(nextTime);
       setNotify(Symbol(`▷`));
     },
 
     practiceSetLine: () => {
-      gameStateRef.current!.isSeekedLine = true;
-
       if (!lineSelectIndex) {
         return;
       }
+      gameStateRef.current!.isSeekedLine = true;
+
       const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
 
       const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;

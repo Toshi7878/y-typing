@@ -26,7 +26,7 @@ function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) 
         className={`mx-1 font-bold mt-3 mb-1 font-mono ${isPlayed ? "" : "invisible"}`}
       >
         <PlayingCombo className="text-3xl" ref={playingComboRef} />
-        <PlayingNotify className="text-3xl" />
+        <PlayingNotify className="text-3xl text-center" />
         <PlayingLineTime className="text-3xl" ref={PlayingRemainTimeRef} />
       </HStack>
       <PlayingLineProgress ref={lineProgressRef} id="line_progress" />
