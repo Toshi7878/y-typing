@@ -55,14 +55,14 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
           )}
         </Box>
       ) : (
-        <AnimatePresence onExitComplete={handleExitComplete}>
+        <AnimatePresence mode="popLayout" onExitComplete={handleExitComplete}>
           {notify.description && (
             <motion.div
               key={Date.now()}
               initial={{ opacity: 1 }}
               animate={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              exit={{ opacity: 0 }} // 追加: fadeoutアニメーション
+              exit={{ opacity: 0 }}
             >
               <Box>{notify.description === "▶" ? <FaPlay /> : notify.description}</Box>
             </motion.div>

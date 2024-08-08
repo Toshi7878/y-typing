@@ -280,18 +280,26 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       playerRef.current.seekTo(seekTime);
     },
     practiceSpeedUp: () => {
-      new YTSpeedController("up", {
+      const result = new YTSpeedController("up", {
         speedData,
         setSpeedData,
         playerRef: playerRef!.current,
       });
+
+      if (result.result) {
+        setNotify(Symbol(result.result!.toFixed(2)));
+      }
     },
     practiceSpeedDown: () => {
-      new YTSpeedController("down", {
+      const result = new YTSpeedController("down", {
         speedData,
         setSpeedData,
         playerRef: playerRef!.current,
       });
+
+      if (result.result) {
+        setNotify(Symbol(result.result!.toFixed(2)));
+      }
     },
 
     changePracticeMode: () => {
