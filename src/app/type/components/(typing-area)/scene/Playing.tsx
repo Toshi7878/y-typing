@@ -412,7 +412,16 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
             tabStatusRef.current!.setStatus(miss.newStatus);
           }
         } else {
-          shortcutKey(event, skipGuideRef, playingRef, statusRef, inputMode, lineTime, scene);
+          shortcutKey(
+            event,
+            skipGuideRef,
+            playingRef,
+            statusRef,
+            inputMode,
+            lineTime,
+            scene,
+            isOpen,
+          );
         }
       } else if (event.key === "Escape") {
         playingRef.current?.gamePause();

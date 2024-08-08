@@ -660,11 +660,12 @@ export function shortcutKey(
   inputMode: InputModeType,
   lineTime: number,
   scene: SceneType,
+  isOpen: boolean,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
 
-  if (disableKeys.includes(event.code)) {
+  if (disableKeys.includes(event.code) || (event.ctrlKey && event.code == "KeyF" && !isOpen)) {
     event.preventDefault();
   } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
     return;
