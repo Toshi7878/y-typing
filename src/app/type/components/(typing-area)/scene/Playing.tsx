@@ -114,7 +114,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
         playerRef: playerRef.current,
       });
 
-      setNotify(Symbol(newSpeed.toFixed(2)));
+      setNotify(Symbol(`${newSpeed.toFixed(2)}x`));
     },
     setRealTimeSpeed: (speed: number) => {
       new YTSpeedController("setSpeed", {
@@ -287,7 +287,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       });
 
       if (result.result) {
-        setNotify(Symbol(result.result!.toFixed(2)));
+        setNotify(Symbol(`${result.result!.toFixed(2)}x`));
       }
     },
     practiceSpeedDown: () => {
@@ -298,7 +298,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       });
 
       if (result.result) {
-        setNotify(Symbol(result.result!.toFixed(2)));
+        setNotify(Symbol(`${result.result!.toFixed(2)}x`));
       }
     },
 
