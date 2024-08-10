@@ -327,6 +327,10 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       if (!ytStateRef.current?.isPaused) {
         //ライン切り替えギリギリのタイミングは処理されないようにしてみる(切り替えバグが起こるので)
         const count = statusRef.current!.status.count;
+
+        if (count - 1 < 0) {
+          return;
+        }
         const prevLine = map!.mapData[count - 1];
         const lineTime = playerRef.current.getCurrentTime() - Number(prevLine.time);
 

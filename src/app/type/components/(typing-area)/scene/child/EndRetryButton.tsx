@@ -110,7 +110,11 @@ const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
         py={6}
         fontSize="2xl"
         variant="outline"
-        borderColor="black"
+        borderColor={"type.card.borderColor"}
+        color={"type.card.color"}
+        _hover={{
+          bg: "type.card.hover.bg",
+        }}
         onClick={() => {
           retry(retryMode);
         }}
