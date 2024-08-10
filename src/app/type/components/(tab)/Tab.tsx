@@ -51,11 +51,11 @@ export default function TabContent({ className }: TabContentProps) {
 
       <TabPanels>
         <TabPanel px={0}>
-          <TabStatus ref={tabStatusRef} height={"250px"} />
+          <TabStatus ref={tabStatusRef} height={"207px"} />
         </TabPanel>
 
         <TabPanel px={0}>
-          <TabRanking height={"250px"} />
+          <TabRanking height={"207px"} />
         </TabPanel>
       </TabPanels>
     </Tabs>

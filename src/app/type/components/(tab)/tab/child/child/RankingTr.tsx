@@ -89,8 +89,8 @@ const RankingTr = (props: RankingTrProps) => {
       isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
     >
       <Tr
-        _hover={{ backgroundColor: "gray.100" }}
-        backgroundColor={props.isHighlighted ? "gray.100" : "transparent"}
+        _hover={{ backgroundColor: "type.card.hover.bg" }}
+        backgroundColor={props.isHighlighted ? "type.card.hover.bg" : "transparent"}
         className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
         color={
           props.sessionUserId === props.rankingUserId

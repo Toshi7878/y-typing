@@ -17,7 +17,7 @@ const RankingList = () => {
   const { id } = useParams();
   const { data: session } = useSession();
   const { bestScoreRef } = useRefs();
-  const [showMenu, setShowMenu] = useState<number | null>(null); // showMenuの状態をインデックスに変更
+  const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const setRankingScores = useSetAtom(rankingScoresAtom);
   const scene = useAtomValue(sceneAtom);
@@ -44,6 +44,13 @@ const RankingList = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showMenu]);
+
+  useEffect(() => {
+    return () => {
+      setShowMenu(null);
+      setHoveredIndex(null);
+    };
+  }, []);
 
   const { data, error, isLoading } = useQuery<RankingListType[]>({
     queryKey: ["userRanking", id],

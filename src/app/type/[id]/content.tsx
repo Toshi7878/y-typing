@@ -121,7 +121,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
       <Box
-        className="flex flex-col items-center pt-16"
+        className="flex flex-col items-center pt-14"
         style={{
           height: "100vh",
         }}
@@ -149,7 +149,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             <Flex gap="6">
               <Box className="">
                 <YouTubeContent
-                  className={` w-[600px] ${isLoading ? "invisible" : ""} aspect-video`}
+                  className={` w-[512px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
                   videoId={videoId}
                 />
               </Box>

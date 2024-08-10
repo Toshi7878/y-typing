@@ -93,14 +93,16 @@ function MapList() {
           size="lg"
         >
           <CardBody
+            color={"color"}
             bg="home.card.bg"
-            className="flex items-start rounded-lg"
-            style={{ padding: 0 }}
+            borderRadius="md"
+            className="flex items-start"
+            style={{ padding: 0, border: "none" }}
           >
             <Box className="relative group">
               <Image
                 alt={map.title}
-                className="cover rounded-lg"
+                className="cover rounded-md"
                 style={{ aspectRatio: "16/9" }}
                 loading="lazy"
                 layout={"responsive"}
@@ -109,13 +111,15 @@ function MapList() {
                 height={120}
               />
               <Box
-                className={`cursor-pointer rounded-lg absolute inset-0 flex items-center justify-center ${
+                className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
                   videoId === map.videoId ? "opacity-100" : "opacity-0"
                 } group-hover:opacity-100 transition-opacity duration-300`}
                 style={{
                   backgroundColor:
                     videoId === map.videoId ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.3)",
+                  border: "none",
                 }}
+                borderRadius="lg"
                 data-preview-time={map.previewTime}
                 data-video-id={map.videoId}
                 onClick={previewYouTube}

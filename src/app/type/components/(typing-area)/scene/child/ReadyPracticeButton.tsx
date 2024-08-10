@@ -49,13 +49,16 @@ const ReadyPracticeButton = () => {
   }, [refetch]);
   return (
     <Button
-      variant={"outline"}
-      borderColor="black"
+      variant="outline"
+      borderColor={"type.card.borderColor"}
       color={"type.card.color"}
       px={16}
       py={6}
-      size={"xl"}
+      size="xl"
       className="text-3xl"
+      _hover={{
+        bg: "type.card.hover.bg",
+      }}
       onClick={handleClick}
     >
       練習モードで開始

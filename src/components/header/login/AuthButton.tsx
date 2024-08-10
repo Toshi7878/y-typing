@@ -1,4 +1,4 @@
-import { signIn, signOut } from "@/lib/auth";
+"use client";
 import { Button } from "@chakra-ui/react";
 
 import React from "react";
@@ -23,9 +23,15 @@ export function SignIn({
   );
 }
 
-export function SignOut({ name }: { name: string }) {
+export function SignOut() {
   return (
-    <form action={handleSignOut}>
+    <form
+      action={async () => {
+        await handleSignOut();
+
+        window.location.reload();
+      }}
+    >
       <Button type="submit">ログアウト</Button>
     </form>
   );

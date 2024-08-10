@@ -13,6 +13,10 @@ const sodaTheme = {
       bg: "white",
     },
 
+    menu: {
+      bg: "white",
+      color: "black",
+    },
     home: {
       card: {
         bg: "#CBD5E0",
@@ -21,7 +25,7 @@ const sodaTheme = {
       },
     },
     type: {
-      card: { bg: "#bee3f8", color: "pink" },
+      card: { bg: "#bee3f8", color: "pink", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
 
       tab: {
         ranking: {
@@ -47,20 +51,26 @@ const sodaTheme = {
 
 const darkTheme = {
   colors: {
-    background: "#1A202C",
-    color: "#E2E8F0",
-    header: {
-      bg: "#2D3748",
+    background: "#212529",
+    color: "white",
+
+    menu: {
+      bg: "white",
+      color: "black",
     },
+    header: {
+      bg: "#375a7f",
+    },
+
     home: {
       card: {
-        bg: "#4A5568",
-        link: "#4FD1C5",
+        bg: "#2b3035",
+        link: "#00bd7e",
         hover: "0 10px 15px -3px rgba(79, 209, 197, 0.3), 0 4px 6px -2px rgba(79, 209, 197, 0.2)",
       },
     },
     type: {
-      card: { bg: "#2C5282", color: "#E2E8F0" },
+      card: { bg: "#2b3035", color: "#FFF", borderColor: "#FFF", hover: { bg: "#f5f5f55b" } },
       tab: {
         ranking: {
           myrank: {

@@ -27,7 +27,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
       refs.setRef("playerRef", player);
       ytState.ready(refs, dispatch, ytTitle);
     },
-    [refs, dispatch, ytTitle]
+    [refs, dispatch, ytTitle],
   );
 
   const handlePlay = useCallback(() => {
@@ -62,7 +62,7 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
         console.log("未スタート -1");
       }
     },
-    [dispatch, mapData, playerState.isStarted]
+    [dispatch, mapData, playerState.isStarted],
   );
 
   const HEIGHT = "216px";

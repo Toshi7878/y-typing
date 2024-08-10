@@ -17,7 +17,7 @@ function RadioCard(props) {
         cursor="pointer"
         borderWidth="1px"
         boxShadow="md"
-        borderColor="black"
+        borderColor="type.card.borderColor"
         className="font-bold select-none"
         _hover={{
           bg: "type.ready.radio.hover.bg",
@@ -26,7 +26,7 @@ function RadioCard(props) {
         _checked={{
           bg: "type.ready.radio.selected.bg",
           color: "type.ready.radio.selected.color",
-          borderColor: "teal.600",
+          borderColor: "type.card.borderColor",
           _hover: {
             bg: "teal.600",
           },

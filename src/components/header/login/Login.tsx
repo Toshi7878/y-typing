@@ -1,5 +1,4 @@
 import { SignIn, SignOut } from "./AuthButton";
-import { auth } from "../../../lib/auth";
 import { Avatar, AvatarBadge, Box, MenuItem } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
@@ -49,7 +48,7 @@ export default function Login() {
             </HStack>
           </MenuButton>
           <MenuList className="p-0">
-            <SignOut name={session.user.name ?? ""} />
+            <SignOut />
             <CheckName name={session.user.name ?? ""} />
           </MenuList>
         </Menu>

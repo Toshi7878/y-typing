@@ -15,7 +15,7 @@ const TabRanking = (props: TabRankingProps) => {
       boxShadow="lg"
       color={"type.card.color"}
     >
-      <CardBody className="text-3xl font-bold w-full">
+      <CardBody className="text-3xl font-bold w-full" pt={2}>
         <Box overflowY="auto" minH={props.height}>
           <Table variant="simple" className="ranking-table" size="sm">
             <Thead>

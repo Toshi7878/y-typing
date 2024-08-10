@@ -24,7 +24,8 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
       boxShadow="lg" // シャドウを追加
     >
       <HStack
-        style={{ border: "1px solid black" }}
+        borderColor={"type.card.borderColor"}
+        style={{ border: "1px solid" }}
         px={8}
         py={6}
         className="rounded-lg"

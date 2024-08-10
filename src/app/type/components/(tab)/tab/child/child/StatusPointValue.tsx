@@ -1,3 +1,4 @@
+import { Text } from "@chakra-ui/react";
 import { memo } from "react";
 
 interface PointStatusValueProps {
@@ -7,10 +8,10 @@ interface PointStatusValueProps {
 const PointStatusValue = ({ value, timeBonusValue }: PointStatusValueProps) => {
   return (
     <>
-      <span className="value">
+      <Text as="span" fontSize="4xl" className="value">
         {value.toString()}
-        {timeBonusValue > 0 && `+${timeBonusValue.toString()}`}
-      </span>
+        <small>{timeBonusValue > 0 && `+${timeBonusValue.toString()}`}</small>
+      </Text>
     </>
   );
 };
