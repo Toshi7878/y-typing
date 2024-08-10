@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   useMediaQuery,
+  useTheme,
 } from "@chakra-ui/react"; // Card, CardBodyを追加
 
 import { mapAtom, rankingScoresAtom } from "@/app/type/(atoms)/gameRenderAtoms";
@@ -33,6 +34,7 @@ interface TabStatusProps {
 const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const map = useAtomValue(mapAtom);
   const rankingScores = useAtomValue(rankingScoresAtom);
+  const theme = useTheme();
 
   const { setRef } = useRefs();
 
@@ -111,7 +113,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       left: 0;
       height: 2px;
       width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "80px")};
-      background-color: black;
+      background-color: ${theme.colors.type.card.color};
     }
   `;
 
