@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Button,
   Input,
+  Box,
 } from "@chakra-ui/react";
 import { IoMdAdd } from "react-icons/io";
 import { extractYouTubeVideoId } from "./extractYTId";
@@ -54,9 +55,9 @@ export default function NewMap() {
 
   return (
     <>
-      <span className="p-1 bg-gray-300 rounded cursor-pointer" onClick={onOpen}>
+      <Box className="p-1 bg-gray-300 rounded cursor-pointer" onClick={onOpen}>
         <IoMdAdd />
-      </span>
+      </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

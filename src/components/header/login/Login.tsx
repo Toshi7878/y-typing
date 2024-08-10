@@ -1,6 +1,6 @@
 import { SignIn, SignOut } from "./AuthButton";
 import { auth } from "../../../lib/auth";
-import { Avatar, AvatarBadge, MenuItem } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Box, MenuItem } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
 import { BsDiscord } from "react-icons/bs";
@@ -40,7 +40,9 @@ export default function Login() {
         <Menu>
           <MenuButton as={"button"} className="hover:bg-slate-400">
             <HStack spacing="3">
-              <div suppressHydrationWarning={true}>{session.user.name}</div>
+              <Box suppressHydrationWarning={true} color={"color"}>
+                {session.user.name}
+              </Box>
               <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
                 {!session.user.image && <AvatarBadge boxSize="1.25em" bg="gray.300" />}
               </Avatar>

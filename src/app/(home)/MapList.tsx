@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardBody, Box, Spinner } from "@chakra-ui/react";
+import { Card, CardBody, Box, Spinner, useTheme, Text } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
@@ -40,6 +40,8 @@ async function getMapList(): Promise<GetMapList[]> {
 
 function MapList() {
   const router = useRouter();
+  const theme = useTheme();
+
   const [videoId, setVideoId] = useAtom(videoIdAtom);
   const setPreviewTime = useSetAtom(previewTimeAtom);
   const { data: mapList = [], isLoading } = useQuery({
@@ -82,11 +84,19 @@ function MapList() {
       {mapList.map((map) => (
         <Card
           key={map.id}
-          className="rounded-lg transition-shadow duration-300 hover:shadow-lg hover:shadow-teal-500/50"
           maxW="2xl"
+          borderRadius="lg"
+          transition="box-shadow 0.3s"
+          _hover={{
+            boxShadow: theme.colors.home.card.hover,
+          }}
           size="lg"
         >
-          <CardBody className="flex items-start bg-slate-300 rounded-lg" style={{ padding: 0 }}>
+          <CardBody
+            bg="home.card.bg"
+            className="flex items-start rounded-lg"
+            style={{ padding: 0 }}
+          >
             <Box className="relative group">
               <Image
                 alt={map.title}
@@ -124,15 +134,19 @@ function MapList() {
               onClick={handleLinkClick(`/type/${map.id}`, router)}
               className="pl-3 pt-2 w-full text-xs sm:text-sm md:text-md lg:text-lg flex flex-col justify-start h-full"
             >
-              <div className="text-teal-700 hover:underline font-bold">{map.title}</div>
+              <Box color={"home.card.link"} className="hover:underline font-bold">
+                {map.title}
+              </Box>
 
               <small>
                 <Link
-                  className="text-teal-700 hover:underline"
+                  className="hover:underline"
                   href={`/user/${map.user.id}`}
                   onClick={handleLinkClick(`/user/${map.user.id}`, router)}
                 >
-                  {map.user.name}
+                  <Text as="span" color={"home.card.link"}>
+                    {map.user.name}
+                  </Text>
                 </Link>
 
                 <span className="text-xs">

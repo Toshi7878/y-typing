@@ -22,7 +22,7 @@ import { resetMapData, setMapData } from "./(redux)/mapDataSlice";
 import NProgress from "nprogress";
 import { resetUndoRedoData } from "./(redux)/undoredoSlice";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from "../customTheme";
+import { getTheme } from "../customTheme";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -30,7 +30,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
     NProgress.done();
   }, []);
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={getTheme("dark")}>
       <QueryClientProvider client={queryClient}>
         <Provider store={editStore}>
           <ContentInner mapInfo={mapInfo} />

@@ -1,5 +1,5 @@
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { Box } from "@chakra-ui/react";
+import { Box, useTheme } from "@chakra-ui/react";
 import React, { forwardRef, memo, useEffect } from "react";
 
 interface PlayingLineProgressProps {
@@ -8,6 +8,8 @@ interface PlayingLineProgressProps {
 const PlayingLineProgress = forwardRef<HTMLProgressElement, PlayingLineProgressProps>(
   (props, ref) => {
     const { setRef } = useRefs();
+    const theme = useTheme();
+
     useEffect(() => {
       if (props.id === "line_progress") {
         if (ref && "current" in ref) {
@@ -18,13 +20,21 @@ const PlayingLineProgress = forwardRef<HTMLProgressElement, PlayingLineProgressP
     }, []);
 
     return (
-      <Box>
-        <progress
-          id={props.id}
-          ref={ref as React.LegacyRef<HTMLProgressElement>}
-          className="w-full"
-        />
-      </Box>
+      <>
+        <Box>
+          <progress
+            id={props.id}
+            ref={ref as React.LegacyRef<HTMLProgressElement>}
+            className="w-full"
+          />
+        </Box>
+        <style>
+          {`#${props.id}::-webkit-progress-value {
+            background: ${theme.colors.type.progress.bg};
+              border-radius: 5px;
+            }`}
+        </style>
+      </>
     );
   },
 );

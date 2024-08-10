@@ -28,7 +28,7 @@ import NProgress from "nprogress";
 import { InputModeType } from "../(ts)/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from "@/app/customTheme";
+import { getTheme } from "@/app/customTheme";
 export const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -36,7 +36,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
     NProgress.done();
   }, []);
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={getTheme("dark")}>
       <QueryClientProvider client={queryClient}>
         <ContentInner mapInfo={mapInfo} />
       </QueryClientProvider>
