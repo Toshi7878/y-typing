@@ -190,7 +190,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
         return;
       }
 
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
       const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
       setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
       if (ticker.started) {
@@ -232,7 +232,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       if (nextCount === undefined) {
         return;
       }
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
       const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
 
       setLineSelectIndex(map!.typingLineNumbers.indexOf(nextCount) + 1);
@@ -273,7 +273,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
 
       const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
 
-      const seekBuffer = scene === "practice" ? 1 / speedData.playSpeed : 0;
+      const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
 
       const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
 
@@ -366,7 +366,11 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
             playingCenterRef.current!.setLineWord(result.newLineWord);
             playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
 
-            if (!result.newLineWord.nextChar["k"] && scene === "practice") {
+            if (
+              scene === "practice" &&
+              speedData.playSpeed >= 1 &&
+              !result.newLineWord.nextChar["k"]
+            ) {
               const combo = playingComboRef.current!.getCombo();
               const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
               const mode = statusRef.current!.lineStatus.lineStartInputMode;

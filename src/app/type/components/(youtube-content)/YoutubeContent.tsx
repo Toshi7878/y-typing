@@ -113,7 +113,10 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
         opts={{
           width: "100%",
           height: "100%",
-          playerVars: { enablejsapi: 1 },
+          playerVars: {
+            enablejsapi: 1,
+            controls: 0,
+          },
         }}
         onReady={handleReady}
         onPlay={handlePlay}

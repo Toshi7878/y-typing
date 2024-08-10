@@ -5,7 +5,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { AnimatePresence, motion } from "framer-motion"; // 追加
 import { FaPause } from "react-icons/fa6";
 import { FaPlay } from "react-icons/fa6";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 interface PlayingNotifyProps {
@@ -18,6 +18,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
   const { gameStateRef } = useRefs();
   const [notify, setNotify] = useAtom(playingNotifyAtom);
   const scene = useAtomValue(sceneAtom);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const playModeNotify = () => {
     if (scene === "playing") {
@@ -28,9 +29,28 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
       setNotify(Symbol("Practice"));
     }
   };
+
+  useEffect(() => {
+    if (notify.description && !NON_ANIMATED.includes(notify.description)) {
+      // 1秒後にhandleExitCompleteを強制的に実行
+      timerRef.current = setTimeout(() => {
+        handleExitComplete();
+      }, 800);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notify.description]);
+
   const handleExitComplete = () => {
     // exitアニメーション完了時の処理をここに記述
-
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     if (!NON_ANIMATED.includes(notify.description!)) {
       playModeNotify();
     }
@@ -43,7 +63,9 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
   return (
-    <Box className={`${className} absolute left-1/2 transform -translate-x-[155px]`}>
+    <Box
+      className={`${className} absolute left-1/2 transform -translate-x-[155px] whitespace-nowrap`}
+    >
       {notify.description && NON_ANIMATED.includes(notify.description) ? (
         <Box
           className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}

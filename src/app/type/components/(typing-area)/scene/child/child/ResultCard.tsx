@@ -56,7 +56,7 @@ function ResultCard({
   const tBonus = lineResult.status?.tBonus;
 
   const seekTime =
-    Number(map!.mapData[index]["time"]) - (scene === "replay" ? 0 : 1 / speedData.playSpeed);
+    Number(map!.mapData[index]["time"]) - (scene === "replay" ? 0 : 1 * speedData.playSpeed);
 
   const lineNumber = lineCount;
 

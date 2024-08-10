@@ -229,7 +229,8 @@ export const lineUpdate = (
       const oldLineScore =
         lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
-      const isUpdateResult = lineScore >= oldLineScore || scene === "playing";
+      const isUpdateResult =
+        (speedData.playSpeed >= 1 && lineScore >= oldLineScore) || scene === "playing";
 
       if (isUpdateResult) {
         const newLineResults = [...lineResults];
