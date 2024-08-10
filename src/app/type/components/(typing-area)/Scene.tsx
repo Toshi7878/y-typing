@@ -64,7 +64,13 @@ function SceneWrapper() {
   console.log("SceneWrapper");
 
   return (
-    <Card className="typing-card" variant={"filled"} bg="blue.100" boxShadow="lg">
+    <Card
+      className="typing-card"
+      variant={"filled"}
+      bg="type.card.bg"
+      color={"type.card.color"}
+      boxShadow="lg"
+    >
       <Scene />
     </Card>
   );

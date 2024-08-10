@@ -33,6 +33,7 @@ export default function TabContent({ className }: TabContentProps) {
         <Tab
           width="200px"
           opacity={tabIndex === 0 ? 1 : 0.5}
+          color={"color"}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ステータス
@@ -41,6 +42,7 @@ export default function TabContent({ className }: TabContentProps) {
         <Tab
           width="200px"
           opacity={tabIndex === 1 ? 1 : 0.5}
+          color={"color"}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ランキング

@@ -4,7 +4,7 @@ import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
 import { Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useCallback } from "react";
@@ -51,6 +51,7 @@ const ReadyPracticeButton = () => {
     <Button
       variant={"outline"}
       borderColor="black"
+      color={"type.card.color"}
       px={16}
       py={6}
       size={"xl"}

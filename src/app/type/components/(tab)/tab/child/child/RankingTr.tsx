@@ -92,7 +92,11 @@ const RankingTr = (props: RankingTrProps) => {
         _hover={{ backgroundColor: "gray.100" }}
         backgroundColor={props.isHighlighted ? "gray.100" : "transparent"}
         className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
-        style={{ color: props.sessionUserId === props.rankingUserId ? "green" : "inherit" }}
+        color={
+          props.sessionUserId === props.rankingUserId
+            ? "type.tab.ranking.myrank.color"
+            : "type.tab.ranking.color"
+        }
         onClick={props.handleShowMenu}
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}

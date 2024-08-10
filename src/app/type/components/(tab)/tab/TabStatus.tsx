@@ -121,7 +121,13 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   `;
 
   return (
-    <Card className="tab-card" variant={"filled"} bg="blue.100" boxShadow="lg">
+    <Card
+      className="tab-card"
+      variant={"filled"}
+      bg="type.card.bg"
+      boxShadow="lg"
+      color={"type.card.color"}
+    >
       <CardBody className="">
         <TableContainer>
           <Table

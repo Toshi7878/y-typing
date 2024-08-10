@@ -27,7 +27,8 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../(ts)/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-
+import { ChakraProvider } from "@chakra-ui/react";
+import { theme } from "@/app/customTheme";
 export const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -35,9 +36,11 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
     NProgress.done();
   }, []);
   return (
-    <QueryClientProvider client={queryClient}>
-      <ContentInner mapInfo={mapInfo} />
-    </QueryClientProvider>
+    <ChakraProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <ContentInner mapInfo={mapInfo} />
+      </QueryClientProvider>
+    </ChakraProvider>
   );
 }
 
@@ -117,11 +120,12 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   return (
     <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
-      <main
+      <Box
         className="flex flex-col items-center pt-16"
         style={{
           height: "100vh",
         }}
+        bg={"background"}
       >
         {(scene === "practice" || scene === "replay") && (
           <Box
@@ -158,7 +162,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             </Box>
           </Flex>
         </Box>
-      </main>
+      </Box>
     </LoadingOverlayWrapper>
   );
 }

@@ -5,9 +5,10 @@ import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
 import { BsDiscord } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
+import { useSession } from "next-auth/react";
 
-export default async function Login() {
-  const session = await auth();
+export default function Login() {
+  const { data: session } = useSession();
 
   if (!session?.user) {
     return (

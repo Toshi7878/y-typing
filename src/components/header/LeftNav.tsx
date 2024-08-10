@@ -4,6 +4,7 @@ import { NavItem } from "@/types";
 import { Link } from "@chakra-ui/next-js";
 import { usePathname, useRouter } from "next/navigation";
 import { handleLinkClick } from "@/app/nprogress";
+import { Box, Text } from "@chakra-ui/react";
 
 interface LeftNavProps {
   items: NavItem[];
@@ -15,8 +16,8 @@ export default function LeftNav({ items }: LeftNavProps) {
 
   console.log(pathname);
   return (
-    <div className="flex items-center md:gap-10">
-      <span>
+    <Box className="flex items-center md:gap-10">
+      <Text as="span" color={"color"}>
         <Link
           href={"/"}
           onClick={pathname === "/" ? undefined : handleLinkClick(`/`, router)}
@@ -24,7 +25,7 @@ export default function LeftNav({ items }: LeftNavProps) {
         >
           Y-Typing
         </Link>
-      </span>
+      </Text>
       <nav className="md:flex gap-6 hidden">
         {/* {items?.map((item, index) => {
           return (
@@ -38,6 +39,6 @@ export default function LeftNav({ items }: LeftNavProps) {
           );
         })} */}
       </nav>
-    </div>
+    </Box>
   );
 }
