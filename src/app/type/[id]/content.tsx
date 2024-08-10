@@ -121,7 +121,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
       <Box
-        className="flex flex-col items-center pt-14"
+        className="flex flex-col items-center pt-16"
         style={{
           height: "100vh",
         }}
