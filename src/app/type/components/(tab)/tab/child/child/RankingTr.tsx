@@ -1,7 +1,7 @@
 "use client";
 
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { Box, Td, Tooltip, Tr } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Td, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 import { useEffect } from "react";
@@ -31,6 +31,7 @@ interface RankingTrProps {
 }
 const RankingTr = (props: RankingTrProps) => {
   const { gameStateRef } = useRefs();
+  const theme = useTheme();
 
   useEffect(() => {
     if (props.sessionUserId === props.rankingUserId) {
@@ -62,6 +63,15 @@ const RankingTr = (props: RankingTrProps) => {
   };
   return (
     <Tooltip
+      bg={"type.card.bg"}
+      color={"color"}
+      borderWidth="1px"
+      borderStyle="solid"
+      borderColor={"type.card.borderColor"}
+      css={{
+        "--popper-arrow-bg": theme.colors.type.card.bg,
+        "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
+      }}
       label={
         <Box fontSize="sm">
           {props.romaType > 0 && <div>ローマ字タイプ数: {props.romaType}</div>}
