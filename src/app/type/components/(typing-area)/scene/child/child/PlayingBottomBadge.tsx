@@ -19,7 +19,6 @@ const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
     ${(props) =>
       !props.isDisabled &&
       `
-  background-color: var(--chakra-colors-gray-100);
   transform: scale(1.20);
 `}
   }
@@ -27,14 +26,12 @@ const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
 
 const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
   transition: transform 0.1s ease-in-out;
 
   &:hover {
     ${(props) =>
       !props.isDisabled &&
       `
-  background-color: var(--chakra-colors-gray-100);
   transform: scale(1.05);
 `}
   }
@@ -52,17 +49,22 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         fontSize="lg"
         as="button"
         cursor="pointer"
-        border="1px solid black"
         borderRadius="3xl"
         onClick={isDisabled ? undefined : props.onClick}
         opacity={isDisabled ? 0.5 : 1}
+        bg={"background"}
+        color={"color"}
+        border={"type.card.border"}
       >
         {props.badgeText}
       </StyledBadge>
       <StyledKbd
         isDisabled={isDisabled}
         fontSize="xl"
-        border="1px solid"
+        bg={"background"}
+        color={"color"}
+        border={"type.card.border"}
+        opacity={isDisabled ? 0.5 : 0.8}
         onClick={isDisabled ? undefined : props.onClick}
       >
         {props.kbdText}

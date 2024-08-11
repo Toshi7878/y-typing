@@ -43,6 +43,8 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         border="1px solid"
         onClick={isDisabled ? undefined : props.onClickPrev}
         isDisabled={isDisabled}
+        bg={"background"}
+        color={"color"}
       >
         {props.kbdTextPrev}
       </StyledKbd>
@@ -62,6 +64,8 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         border="1px solid"
         onClick={isDisabled ? undefined : props.onClickNext}
         isDisabled={isDisabled}
+        bg={"background"}
+        color={"color"}
       >
         {props.kbdTextNext}
       </StyledKbd>
