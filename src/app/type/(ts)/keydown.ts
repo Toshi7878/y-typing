@@ -703,7 +703,7 @@ export function shortcutKey(
       event.preventDefault();
       break;
     case "F7":
-      playingRef.current!.changePracticeMode();
+      playingRef.current!.changePlayMode();
       event.preventDefault();
       break;
     case "F9": //F9で低速(練習モード)

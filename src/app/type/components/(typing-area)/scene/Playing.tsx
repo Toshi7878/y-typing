@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import PlayingTop from "./child/PlayingTop";
 import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
+import { defaultGameStateRef, defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
   inputModeAtom,
   lineResultsAtom,
@@ -302,11 +302,22 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       }
     },
 
-    changePracticeMode: () => {
-      const confirmMessage = "練習モードに移動しますか？";
-      if (window.confirm(confirmMessage)) {
-        gameStateRef.current!.practice.isPracticeMode = true;
-        setScene("practice");
+    changePlayMode: () => {
+      if (scene === "playing") {
+        const confirmMessage = "練習モードに移動しますか？";
+        if (window.confirm(confirmMessage)) {
+          gameStateRef.current!.practice.isPracticeMode = true;
+          setScene("practice");
+        }
+      } else {
+        const confirmMessage = "本番モードに移動しますか？了承すると初めから再生されます。";
+        if (window.confirm(confirmMessage)) {
+          gameStateRef.current!.practice = structuredClone(defaultGameStateRef.practice);
+          gameStateRef.current!.replay = structuredClone(defaultGameStateRef.replay);
+          setScene("playing");
+          playingRef.current!.retry();
+          setNotify(Symbol(""));
+        }
       }
     },
   }));
@@ -316,7 +327,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       setRef("playingRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData, inputMode, isOpen, lineSelectIndex]);
+  }, [speedData, inputMode, isOpen, lineSelectIndex, scene]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

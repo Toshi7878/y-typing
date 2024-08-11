@@ -54,8 +54,7 @@ export interface PlayingRef {
   practiceSetLine: () => void;
   practiceSpeedUp: () => void;
   practiceSpeedDown: () => void;
-
-  changePracticeMode: () => void;
+  changePlayMode: () => void;
 }
 
 export interface WordType {
