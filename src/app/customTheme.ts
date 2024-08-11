@@ -71,6 +71,12 @@ const darkTheme = {
     },
     type: {
       card: { bg: "#2b3035", color: "#FFF", borderColor: "#FFF", hover: { bg: "#f5f5f55b" } },
+      word: {
+        correct: "#3182ce",
+        next: "#FFF",
+        word: "#FFF",
+        completed: "#4fd1c5",
+      },
       tab: {
         ranking: {
           myrank: {
