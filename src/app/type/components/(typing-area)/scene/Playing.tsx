@@ -315,6 +315,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
           gameStateRef.current!.practice = structuredClone(defaultGameStateRef.practice);
           gameStateRef.current!.replay = structuredClone(defaultGameStateRef.replay);
           setScene("playing");
+          onClose();
           playingRef.current!.retry();
           setNotify(Symbol(""));
         }

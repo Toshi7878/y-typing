@@ -14,22 +14,18 @@ interface PlayingLineSeekBadgeProps {
 
 const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
   transition: transform 0.1s ease-in-out;
 
   &:hover {
     ${(props) =>
       !props.isDisabled &&
       `
-      background-color: var(--chakra-colors-gray-100);
       transform: scale(1.20);
     `}
   }
 `;
 
-const StyledBadge = styled(Badge)<{ isDisabled: boolean }>`
-  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
-`;
+const StyledBadge = styled(Badge)<{ isDisabled: boolean }>``;
 
 const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
   const notify = useAtomValue(playingNotifyAtom);
@@ -40,11 +36,14 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
     <HStack>
       <StyledKbd
         fontSize="xl"
-        border="1px solid"
         onClick={isDisabled ? undefined : props.onClickPrev}
         isDisabled={isDisabled}
         bg={"background"}
         color={"color"}
+        borderColor={"type.card.borderColor"}
+        borderWidth="1px"
+        borderStyle="solid"
+        opacity={isDisabled ? 0.5 : 0.8}
       >
         {props.kbdTextPrev}
       </StyledKbd>
@@ -52,8 +51,13 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         py={1}
         px={4}
         fontSize="lg"
-        border="1px solid var(--chakra-colors-gray-200)"
         borderRadius="3xl"
+        opacity={isDisabled ? 0.5 : 1}
+        bg={"type.card.bg"}
+        color={"color"}
+        borderWidth="1px"
+        borderStyle="solid"
+        borderColor={"type.card.borderColor"}
         onClick={isDisabled ? undefined : props.onClick}
         isDisabled={isDisabled}
       >
@@ -61,11 +65,14 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
       </StyledBadge>
       <StyledKbd
         fontSize="xl"
-        border="1px solid"
         onClick={isDisabled ? undefined : props.onClickNext}
         isDisabled={isDisabled}
         bg={"background"}
         color={"color"}
+        borderColor={"type.card.borderColor"}
+        borderWidth="1px"
+        borderStyle="solid"
+        opacity={isDisabled ? 0.5 : 0.8}
       >
         {props.kbdTextNext}
       </StyledKbd>
