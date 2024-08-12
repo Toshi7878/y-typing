@@ -111,11 +111,9 @@ interface ThemeColors {
             bg: string;
           };
           hover: {
-            bg: string;
             color: string;
           };
           selected: {
-            bg: string;
             color: string;
           };
         };

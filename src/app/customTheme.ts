@@ -59,8 +59,8 @@ const sodaTheme: ThemeColors = {
           flick: {
             bg: "#59e04d",
           },
-          hover: { bg: "#4FD1C5", color: "black" },
-          selected: { bg: "#2C7A7B", color: "white" },
+          hover: { color: "black" },
+          selected: { color: "white" },
         },
       },
 
@@ -121,8 +121,8 @@ const darkTheme: ThemeColors = {
           flick: {
             bg: "#59e04d",
           },
-          hover: { bg: "#319795", color: "white" },
-          selected: { bg: "#2C7A7B", color: "white" },
+          hover: { color: "white" },
+          selected: { color: "white" },
         },
       },
       progress: {
