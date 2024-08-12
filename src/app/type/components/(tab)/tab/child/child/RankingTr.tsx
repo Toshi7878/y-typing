@@ -63,13 +63,13 @@ const RankingTr = (props: RankingTrProps) => {
   };
   return (
     <Tooltip
-      bg={"type.card.bg"}
+      bg={"background"}
       color={"color"}
       borderWidth="1px"
       borderStyle="solid"
       borderColor={"type.card.borderColor"}
       css={{
-        "--popper-arrow-bg": theme.colors.type.card.bg,
+        "--popper-arrow-bg": theme.colors.background,
         "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
       }}
       label={
