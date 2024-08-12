@@ -12,10 +12,10 @@ export default function RightNav() {
   const changeTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setTheme("dark");
-      localStorage.setItem("theme", "dark");
+      localStorage.setItem("chakra-ui-color-mode", "dark");
     } else {
       setTheme("light");
-      localStorage.setItem("theme", "light");
+      localStorage.setItem("chakra-ui-color-mode", "light");
     }
   };
 

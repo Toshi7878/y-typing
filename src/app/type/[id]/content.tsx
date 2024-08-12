@@ -27,23 +27,17 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../(ts)/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { ChakraProvider } from "@chakra-ui/react";
-import { getTheme } from "@/app/customTheme";
-import { themeAtom } from "@/components/header/atom/atoms";
+
 export const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
-  const theme = useAtomValue(themeAtom);
-
   useEffect(() => {
     NProgress.done();
   }, []);
   return (
-    <ChakraProvider theme={getTheme(theme)}>
-      <QueryClientProvider client={queryClient}>
-        <ContentInner mapInfo={mapInfo} />
-      </QueryClientProvider>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ContentInner mapInfo={mapInfo} />
+    </QueryClientProvider>
   );
 }
 
@@ -124,6 +118,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   return (
     <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
       <Box
+        as="main"
         className="flex flex-col items-center pt-16"
         style={{
           height: "100vh",
