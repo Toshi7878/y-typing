@@ -7,6 +7,7 @@ const config: ThemeConfig = {
 };
 
 const sodaTheme: ThemeColors = {
+  colorMode: "light",
   colors: {
     background: "white",
     color: "black",
@@ -61,6 +62,8 @@ const sodaTheme: ThemeColors = {
 };
 
 const darkTheme: ThemeColors = {
+  colorMode: "light",
+
   colors: {
     background: "#212529",
     color: "white",
