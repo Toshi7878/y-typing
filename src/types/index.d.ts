@@ -52,8 +52,8 @@ export interface Tag {
 }
 
 interface ThemeColors {
-  colorMode: string;
   colors: {
+    colorMode: string;
     background: string;
     color: string;
     menu: {

@@ -7,8 +7,8 @@ const config: ThemeConfig = {
 };
 
 const sodaTheme: ThemeColors = {
-  colorMode: "light",
   colors: {
+    colorMode: "light",
     background: "white",
     color: "black",
     header: {
@@ -62,9 +62,8 @@ const sodaTheme: ThemeColors = {
 };
 
 const darkTheme: ThemeColors = {
-  colorMode: "light",
-
   colors: {
+    colorMode: "light",
     background: "#212529",
     color: "white",
 
