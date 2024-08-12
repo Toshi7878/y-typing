@@ -226,7 +226,10 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
       if (isOpen && gameStateRef.current!.isSeekedLine) {
         return;
       }
-      const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
+      const seekCount = lineSelectIndex ? map!.typingLineNumbers[lineSelectIndex - 1] : null;
+      const seekAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
+
+      const count = statusRef.current!.status.count + seekAdjust;
       const nextCount = map!.typingLineNumbers.find((num) => num > count);
 
       if (nextCount === undefined) {

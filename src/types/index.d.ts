@@ -78,7 +78,7 @@ interface ThemeColors {
           bg: string;
         };
       };
-      word?: {
+      word: {
         correct: string;
         next: string;
         word: string;

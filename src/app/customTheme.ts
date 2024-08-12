@@ -27,7 +27,12 @@ const sodaTheme: ThemeColors = {
     },
     type: {
       card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
-
+      word: {
+        correct: "#3182ce",
+        next: "#FFF",
+        word: "#FFF",
+        completed: "#4fd1c5",
+      },
       tab: {
         ranking: {
           myrank: {
