@@ -22,10 +22,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={fonts.rubik.variable}>
-        <Providers>
-          <Header />
-          {children}
-        </Providers>
+        <Header />
+        {children}
       </body>
     </html>
   );
