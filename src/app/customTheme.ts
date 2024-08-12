@@ -28,10 +28,10 @@ const sodaTheme: ThemeColors = {
     type: {
       card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
       word: {
-        correct: "#3182ce",
+        correct: "#1aa3ff",
         next: "#FFF",
         word: "#FFF",
-        completed: "#4fd1c5",
+        completed: "#50e3c2",
       },
       tab: {
         ranking: {
