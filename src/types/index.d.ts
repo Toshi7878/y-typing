@@ -91,6 +91,10 @@ interface ThemeColors {
           };
         };
       };
+      tooltip?: {
+        bg: string;
+        color: string;
+      };
       ready: {
         radio: {
           hover: {

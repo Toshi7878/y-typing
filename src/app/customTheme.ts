@@ -41,6 +41,11 @@ const sodaTheme: ThemeColors = {
         },
       },
 
+      tooltip: {
+        bg: "",
+        color: "",
+      },
+
       ready: {
         radio: {
           hover: { bg: "#4FD1C5", color: "black" },
