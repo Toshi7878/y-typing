@@ -2,13 +2,12 @@ import { ThemeColors } from "@/types";
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
-  initialColorMode: "light",
-  useSystemColorMode: false,
+  initialColorMode: "system",
+  useSystemColorMode: true,
 };
 
 const sodaTheme: ThemeColors = {
   colors: {
-    colorMode: "light",
     background: "white",
     color: "black",
     header: {
@@ -63,7 +62,6 @@ const sodaTheme: ThemeColors = {
 
 const darkTheme: ThemeColors = {
   colors: {
-    colorMode: "light",
     background: "#212529",
     color: "white",
 

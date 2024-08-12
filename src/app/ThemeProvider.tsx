@@ -13,7 +13,7 @@ export const ThemeProvider = ({ children }: { colorMode?: any; children: React.R
 
   return (
     <>
-      <ColorModeScript initialColorMode={theme.colors.colorMode} />
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
 
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </>

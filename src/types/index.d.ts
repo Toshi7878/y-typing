@@ -53,7 +53,6 @@ export interface Tag {
 
 interface ThemeColors {
   colors: {
-    colorMode: string;
     background: string;
     color: string;
     menu: {
