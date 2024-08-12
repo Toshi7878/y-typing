@@ -3,7 +3,7 @@ import React, { CSSProperties, useEffect } from "react";
 import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/(tab)/Tab";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -56,6 +56,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const setNotify = useSetAtom(playingNotifyAtom);
   const setLineResults = useSetAtom(lineResultsAtom);
   const setLineSelectIndex = useSetAtom(lineSelectIndexAtom);
+  const theme = useTheme();
 
   const isLoadingOverlay = useAtomValue(loadingOverlayAtom);
 
@@ -132,7 +133,8 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             top={0}
             bottom={0}
             width="50px"
-            borderLeft="2px solid rgba(0, 0, 0, 0.1)"
+            borderLeft="2px solid"
+            borderColor={theme.colors.type.card.borderColor}
             cursor="pointer"
             zIndex="100"
             onMouseEnter={() => {

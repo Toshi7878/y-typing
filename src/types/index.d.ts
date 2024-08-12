@@ -55,9 +55,12 @@ interface ThemeColors {
   colors: {
     background: string;
     color: string;
-    menu: {
+    popup: {
       bg: string;
       color: string;
+      hover: {
+        bg: string;
+      };
     };
     header: {
       bg: string;
@@ -83,6 +86,7 @@ interface ThemeColors {
         next: string;
         word: string;
         completed: string;
+        error: string;
       };
       tab: {
         ranking: {
@@ -97,6 +101,15 @@ interface ThemeColors {
       };
       ready: {
         radio: {
+          roma: {
+            bg: string;
+          };
+          kana: {
+            bg: string;
+          };
+          flick: {
+            bg: string;
+          };
           hover: {
             bg: string;
             color: string;

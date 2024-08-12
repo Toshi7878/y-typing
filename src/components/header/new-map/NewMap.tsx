@@ -60,7 +60,7 @@ export default function NewMap() {
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={"popup.bg"} color={"popup.color"}>
           <ModalHeader>譜面新規作成ウィンドウ</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

@@ -11,6 +11,7 @@ import {
   CardFooter,
   Tooltip,
   Stack,
+  useTheme,
 } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
@@ -38,6 +39,7 @@ function ResultCard({
   const inputMode = useAtomValue(inputModeAtom);
   const scene = useAtomValue(sceneAtom);
   const speedData = useAtomValue(speedAtom);
+  const theme = useTheme();
 
   const lineInputMode = lineResult.status?.mode ?? inputMode;
   const lineKanaWord = lineData.word.map((w) => w["k"]).join("");
@@ -54,6 +56,7 @@ function ResultCard({
   const point = lineResult.status?.p;
   const lMiss = lineResult.status?.lMiss;
   const tBonus = lineResult.status?.tBonus;
+  const lostWord = lineResult.status?.lostW;
 
   const seekTime =
     Number(map!.mapData[index]["time"]) - (scene === "replay" ? 0 : 1 * speedData.playSpeed);
@@ -132,7 +135,13 @@ function ResultCard({
                   <Text
                     as="span"
                     _hover={{ bg: "gray.300" }}
-                    color={type.is ? "teal.500" : "red.500"}
+                    color={
+                      type.is
+                        ? lostWord === ""
+                          ? theme.colors.type.word.completed
+                          : theme.colors.type.word.correct
+                        : theme.colors.type.word.error
+                    }
                   >
                     {type.c.replace(/ /g, "ˍ")}
                   </Text>
@@ -140,7 +149,7 @@ function ResultCard({
               ),
           )}
           <Text as="span" wordBreak="break-all">
-            {lineResult.status?.lostW !== null ? lineResult.status?.lostW : lineTypeWord}
+            {lostWord !== null ? lostWord : lineTypeWord}
           </Text>
         </Box>
       </CardBody>

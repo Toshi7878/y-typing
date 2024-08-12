@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +8,7 @@ import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { RankingListType } from "@/app/type/(ts)/type";
 import RankingTr from "./child/RankingTr";
 import RankingMenu from "./child/RankingMenu";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { rankingScoresAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 
 const RankingList = () => {

@@ -31,6 +31,18 @@ progress::-webkit-progress-bar {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.input-mode-outline-text {
+  text-shadow:
+    0.5px 0.5px 0px rgba(0, 0, 0, 0.5),
+    -0.5px 0.5px 0px rgba(0, 0, 0, 0.5),
+    0.5px -0.5px 0px rgba(0, 0, 0, 0.5),
+    -0.5px -0.5px 0px rgba(0, 0, 0, 0.5),
+    0.5px 0px 0px rgba(0, 0, 0, 0.5),
+    0px 0.5px 0px rgba(0, 0, 0, 0.5),
+    -0.5px 0px 0px rgba(0, 0, 0, 0.5),
+    0px -0.5px 0px rgba(0, 0, 0, 0.5);
+}
+
 .outline-text {
   text-shadow:
     1px 1px 0px #000000,

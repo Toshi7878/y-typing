@@ -1,4 +1,4 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
 import TabStatus from "./tab/TabStatus";
 import TabRanking from "./tab/TabRanking";
 import { useAtom } from "jotai";
@@ -11,6 +11,7 @@ interface TabContentProps {
 export default function TabContent({ className }: TabContentProps) {
   console.log("Tab");
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
+  const theme = useTheme();
 
   const tabStatusRef = useRef(null);
 
@@ -33,7 +34,7 @@ export default function TabContent({ className }: TabContentProps) {
         <Tab
           width="200px"
           opacity={tabIndex === 0 ? 1 : 0.5}
-          color={"color"}
+          color={theme.colors.color}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ステータス
@@ -42,7 +43,7 @@ export default function TabContent({ className }: TabContentProps) {
         <Tab
           width="200px"
           opacity={tabIndex === 1 ? 1 : 0.5}
-          color={"color"}
+          color={theme.colors.color}
           _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
         >
           ランキング

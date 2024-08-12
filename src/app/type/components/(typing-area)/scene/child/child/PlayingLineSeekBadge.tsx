@@ -1,5 +1,5 @@
 import { playingNotifyAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { Badge, HStack, Kbd } from "@chakra-ui/react";
+import { Badge, HStack, Kbd, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 
@@ -31,6 +31,7 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
   const notify = useAtomValue(playingNotifyAtom);
 
   const isDisabled = notify.description === "ll";
+  const theme = useTheme();
 
   return (
     <HStack>
@@ -38,9 +39,9 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="xl"
         onClick={isDisabled ? undefined : props.onClickPrev}
         isDisabled={isDisabled}
-        bg={"background"}
-        color={"color"}
-        borderColor={"type.card.borderColor"}
+        bg={theme.colors.background}
+        color={theme.colors.color}
+        borderColor={theme.colors.type.card.borderColor}
         borderWidth="1px"
         borderStyle="solid"
         opacity={isDisabled ? 0.5 : 0.8}
@@ -53,11 +54,11 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="lg"
         borderRadius="3xl"
         opacity={isDisabled ? 0.5 : 1}
-        bg={"type.card.bg"}
-        color={"color"}
+        bg={theme.colors.type.card.bg}
+        color={theme.colors.color}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={"type.card.borderColor"}
+        borderColor={theme.colors.type.card.borderColor}
         onClick={isDisabled ? undefined : props.onClick}
         isDisabled={isDisabled}
       >
@@ -67,9 +68,9 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="xl"
         onClick={isDisabled ? undefined : props.onClickNext}
         isDisabled={isDisabled}
-        bg={"background"}
-        color={"color"}
-        borderColor={"type.card.borderColor"}
+        bg={theme.colors.background}
+        color={theme.colors.color}
+        borderColor={theme.colors.type.card.borderColor}
         borderWidth="1px"
         borderStyle="solid"
         opacity={isDisabled ? 0.5 : 0.8}

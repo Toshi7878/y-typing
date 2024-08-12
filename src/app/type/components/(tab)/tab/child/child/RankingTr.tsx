@@ -1,7 +1,7 @@
 "use client";
 
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { Box, Td, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Td, Text, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 import { useEffect } from "react";
@@ -40,36 +40,68 @@ const RankingTr = (props: RankingTrProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getInputMode = () => {
-    let mode = "";
+  const romaColor = theme.colors.type.ready.radio.roma.bg;
+  const kanaColor = theme.colors.type.ready.radio.kana.bg;
+  const flickColor = theme.colors.type.ready.radio.flick.bg;
 
+  const getInputMode = () => {
     if (props.romaType && props.kanaType) {
       if (props.romaType >= props.kanaType) {
-        mode = "ローマ字&かな";
+        return (
+          <>
+            <Text as="span" color={romaColor} className="input-mode-outline-text">
+              ローマ字
+            </Text>
+            <Text as="span" color={theme.colors.type.card.color}>
+              ・
+            </Text>
+            <Text as="span" color={kanaColor} className="input-mode-outline-text">
+              かな
+            </Text>
+          </>
+        );
       } else {
-        mode = "かな&ローマ字";
+        return (
+          <>
+            <Text as="span" color={kanaColor} className="input-mode-outline-text">
+              かな
+            </Text>
+            <Text as="span" color={theme.colors.type.card.color}>
+              ・
+            </Text>
+            <Text as="span" color={romaColor} className="input-mode-outline-text">
+              ローマ字
+            </Text>
+          </>
+        );
       }
     } else {
       if (props.romaType) {
-        mode = "ローマ字";
+        return (
+          <Text as="span" color={romaColor} className="input-mode-outline-text">
+            ローマ字
+          </Text>
+        );
       }
-
       if (props.kanaType) {
-        mode = "かな";
+        return (
+          <Text as="span" color={kanaColor} className="input-mode-outline-text">
+            かな
+          </Text>
+        );
       }
     }
-
-    return mode;
+    return null;
   };
   return (
     <Tooltip
-      bg={"background"}
-      color={"color"}
+      bg={theme.colors.popup.bg}
+      color={theme.colors.popup.color}
       borderWidth="1px"
       borderStyle="solid"
-      borderColor={"type.card.borderColor"}
+      borderColor={theme.colors.type.card.borderColor}
       css={{
-        "--popper-arrow-bg": theme.colors.background,
+        "--popper-arrow-bg": theme.colors.popup.bg,
         "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
       }}
       label={
@@ -99,13 +131,13 @@ const RankingTr = (props: RankingTrProps) => {
       isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
     >
       <Tr
-        _hover={{ backgroundColor: "type.card.hover.bg" }}
-        backgroundColor={props.isHighlighted ? "type.card.hover.bg" : "transparent"}
+        _hover={{ backgroundColor: theme.colors.type.card.hover.bg }}
+        backgroundColor={props.isHighlighted ? theme.colors.type.card.hover.bg : "transparent"}
         className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
         color={
           props.sessionUserId === props.rankingUserId
-            ? "type.tab.ranking.myrank.color"
-            : "type.tab.ranking.color"
+            ? theme.colors.type.tab.ranking.myrank.color
+            : theme.colors.type.tab.ranking.color
         }
         onClick={props.handleShowMenu}
         onMouseEnter={props.onMouseEnter}

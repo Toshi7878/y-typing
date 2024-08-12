@@ -1,7 +1,7 @@
 import { lineResultsAtom, loadingOverlayAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
-import { Button } from "@chakra-ui/react";
+import { Button, useTheme } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSetAtom } from "jotai";
@@ -15,6 +15,7 @@ const ReadyPracticeButton = () => {
   const { id } = useParams();
   const setIsLoadingOverlay = useSetAtom(loadingOverlayAtom);
   const setLineResults = useSetAtom(lineResultsAtom);
+  const theme = useTheme();
 
   const mapId = id;
   const userId = session?.user?.id;
@@ -50,14 +51,14 @@ const ReadyPracticeButton = () => {
   return (
     <Button
       variant="outline"
-      borderColor={"type.card.borderColor"}
-      color={"type.card.color"}
+      borderColor={theme.colors.type.card.borderColor}
+      color={theme.colors.type.card.color}
       px={16}
       py={6}
       size="xl"
       className="text-3xl"
       _hover={{
-        bg: "type.card.hover.bg",
+        bg: theme.colors.type.card.hover.bg,
       }}
       onClick={handleClick}
     >

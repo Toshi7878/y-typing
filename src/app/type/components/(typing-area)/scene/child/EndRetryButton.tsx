@@ -8,6 +8,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Box,
+  useTheme,
 } from "@chakra-ui/react";
 
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
@@ -26,6 +27,7 @@ const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const setLineResults = useSetAtom(lineResultsAtom);
+  const theme = useTheme();
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const setScene = useSetAtom(sceneAtom);
@@ -110,10 +112,10 @@ const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
         py={6}
         fontSize="2xl"
         variant="outline"
-        borderColor={"type.card.borderColor"}
-        color={"type.card.color"}
+        borderColor={theme.colors.type.card.borderColor}
+        color={theme.colors.type.card.color}
         _hover={{
-          bg: "type.card.hover.bg",
+          bg: theme.colors.type.card.hover.bg,
         }}
         onClick={() => {
           retry(retryMode);

@@ -1,5 +1,3 @@
-"use client";
-
 import {
   lineResultsAtom,
   loadingOverlayAtom,
@@ -8,7 +6,7 @@ import {
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/(ts)/type";
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Stack, useTheme } from "@chakra-ui/react";
 import axios from "axios";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
@@ -30,6 +28,7 @@ const RankingMenu = ({
   setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
+  const theme = useTheme();
 
   const [scene, setScene] = useAtom(sceneAtom);
   const setSpeedData = useSetAtom(speedAtom);
@@ -90,8 +89,8 @@ const RankingMenu = ({
         });
         playerRef.current.playVideo();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [refetch],
   );
   return (
@@ -99,8 +98,8 @@ const RankingMenu = ({
       className="rounded-md" // smサイズ以上のときは通常の位置に表示
       position="absolute"
       zIndex="9999"
-      bg={"menu.bg"}
-      color={"menu.color"}
+      bg={theme.colors.popup.bg}
+      color={theme.colors.popup.color}
       boxShadow="md"
       p={2}
       top={{ base: "-60px", md: "auto" }} // タブレットサイズ以下のときはtop-50で表示
@@ -110,14 +109,14 @@ const RankingMenu = ({
         href={`/user/${userId}`}
         variant="unstyled"
         size="md"
-        _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
+        _hover={{ backgroundColor: theme.colors.popup.hover.bg }} // ホバー時の背景色を追加
       >
         ユーザーページへ
       </Button>
       <Button
         variant="unstyled" // ボタンのスタイルを変更
         size="md"
-        _hover={{ backgroundColor: "gray.200" }} // ホバー時の背景色を追加
+        _hover={{ backgroundColor: theme.colors.popup.hover.bg }} // ホバー時の背景色を追加
         onClick={() => handleReplayClick(name)}
         isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >

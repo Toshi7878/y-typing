@@ -14,9 +14,10 @@ const sodaTheme: ThemeColors = {
       bg: "white",
     },
 
-    menu: {
+    popup: {
       bg: "white",
       color: "black",
+      hover: { bg: "gray.200" },
     },
     home: {
       card: {
@@ -26,12 +27,13 @@ const sodaTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
+      card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "gray.200" } },
       word: {
         correct: "#1aa3ff",
         next: "#FFF",
         word: "#FFF",
         completed: "#50e3c2",
+        error: "red.500",
       },
       tab: {
         ranking: {
@@ -48,6 +50,15 @@ const sodaTheme: ThemeColors = {
 
       ready: {
         radio: {
+          roma: {
+            bg: "#00b5d8",
+          },
+          kana: {
+            bg: "#de781f",
+          },
+          flick: {
+            bg: "#59e04d",
+          },
           hover: { bg: "#4FD1C5", color: "black" },
           selected: { bg: "#2C7A7B", color: "white" },
         },
@@ -65,9 +76,12 @@ const darkTheme: ThemeColors = {
     background: "#212529",
     color: "white",
 
-    menu: {
-      bg: "white",
-      color: "black",
+    popup: {
+      bg: "#212529",
+      color: "white",
+      hover: {
+        bg: "#f5f5f55b",
+      },
     },
     header: {
       bg: "#212529",
@@ -87,6 +101,7 @@ const darkTheme: ThemeColors = {
         next: "#FFF",
         word: "#FFF",
         completed: "#4fd1c5",
+        error: "red.500",
       },
       tab: {
         ranking: {
@@ -97,6 +112,15 @@ const darkTheme: ThemeColors = {
       },
       ready: {
         radio: {
+          roma: {
+            bg: "#00b5d8",
+          },
+          kana: {
+            bg: "#de781f",
+          },
+          flick: {
+            bg: "#59e04d",
+          },
           hover: { bg: "#319795", color: "white" },
           selected: { bg: "#2C7A7B", color: "white" },
         },

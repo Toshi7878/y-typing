@@ -16,6 +16,11 @@ export const ThemeProvider = ({ children }: { colorMode?: any; children: React.R
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
 
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
+      <style>
+        {`#nprogress .bar {
+          background:${theme.colors.type.progress.bg};
+      }`}
+      </style>
     </>
   );
 };
