@@ -665,7 +665,11 @@ export function shortcutKey(
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
 
-  if (disableKeys.includes(event.code) || (event.ctrlKey && event.code == "KeyF" && !isOpen)) {
+  if (
+    disableKeys.includes(event.code) ||
+    (event.ctrlKey && event.code == "KeyF" && !isOpen) ||
+    event.altKey
+  ) {
     event.preventDefault();
   } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
     return;
