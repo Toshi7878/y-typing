@@ -18,7 +18,7 @@ const TabRanking = (props: TabRankingProps) => {
       color={theme.colors.type.card.color}
     >
       <CardBody className="text-3xl font-bold w-full" pt={2}>
-        <Box overflowY="auto" minH={props.height}>
+        <Box overflowY="scroll" minH={props.height} maxH={props.height}>
           <Table
             variant="simple"
             className="ranking-table"
@@ -27,9 +27,13 @@ const TabRanking = (props: TabRankingProps) => {
               "th, td": {
                 borderColor: theme.colors.type.card.color,
               },
+              "tr, td": {
+                paddingY: "0.5rem", // smとmdの間のサイズに調整
+                fontSize: "1rem", // smとmdの間のフォントサイズに調整
+              },
             }}
           >
-            <Thead>
+            <Thead position="sticky" top={0} pt={2} zIndex={1} bg={theme.colors.type.card.bg}>
               <Tr>
                 <Th width="5%" color={theme.colors.type.card.color}>
                   順位

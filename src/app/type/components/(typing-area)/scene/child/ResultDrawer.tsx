@@ -6,6 +6,7 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerCloseButton,
+  useTheme,
 } from "@chakra-ui/react";
 import { memo, useEffect, useRef, useState } from "react";
 import ResultLineList from "./child/ResultLineList";
@@ -18,6 +19,7 @@ interface ResultDrawerProps {
 function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
   const [drawerHeight, setDrawerHeight] = useState("100vh");
   const modalContentRef = useRef(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const updateHeight = () => {
@@ -33,11 +35,11 @@ function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
-      <DrawerContent height={drawerHeight} backgroundColor="rgba(255, 255, 255, 0.8)">
-        <DrawerHeader fontSize="md" py={2}>
+      <DrawerContent height={drawerHeight} backgroundColor={`${theme.colors.background}dd`}>
+        <DrawerHeader fontSize="md" py={2} color={theme.colors.color}>
           タイピングリザルト
         </DrawerHeader>
-        <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} />
+        <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} color={theme.colors.color} />
         <DrawerBody overflowY="auto" position="relative" ref={modalContentRef}>
           <ResultLineList modalContentRef={modalContentRef} />
         </DrawerBody>

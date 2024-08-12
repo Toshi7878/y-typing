@@ -77,10 +77,18 @@ function ResultCard({
       size={"sm"}
       boxShadow="md"
       cursor="pointer"
-      bg={lineSelectIndex === lineNumber ? "gray.300" : ""}
-      outline={lineSelectIndex === lineNumber ? "2px solid blue" : "1px solid transparent"}
+      bg={theme.colors.type.card.bg}
+      color={theme.colors.type.card.color}
+      outline={
+        lineSelectIndex === lineNumber
+          ? `3px solid ${theme.colors.type.word.correct}`
+          : "1px solid transparent"
+      }
       _hover={{
-        bg: lineSelectIndex === lineNumber ? "gray.300" : "gray.100",
+        outline:
+          lineSelectIndex === lineNumber
+            ? `3px solid ${theme.colors.type.word.correct}`
+            : `1px solid ${theme.colors.type.card.borderColor}`,
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >
@@ -94,11 +102,23 @@ function ResultCard({
             label={`ライン打鍵数${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
             placement="top"
             fontSize="sm"
+            bg={theme.colors.popup.bg}
+            color={theme.colors.popup.color}
+            border="1px solid"
+            borderColor={theme.colors.type.card.borderColor}
           >
             <span className="line-notes">{lineNotes}打</span>
           </Tooltip>
           ÷{" "}
-          <Tooltip label="ライン時間" placement="top" fontSize="sm">
+          <Tooltip
+            label="ライン時間"
+            placement="top"
+            fontSize="sm"
+            bg={theme.colors.popup.bg}
+            color={theme.colors.popup.color}
+            border="1px solid"
+            borderColor={theme.colors.type.card.borderColor}
+          >
             <span className="line-time">{lineTime.toFixed(1)}秒</span>
           </Tooltip>
           ={" "}
@@ -106,6 +126,10 @@ function ResultCard({
             label={`要求打鍵速度${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
             placement="top"
             fontSize="sm"
+            bg={theme.colors.popup.bg}
+            color={theme.colors.popup.color}
+            border="1px solid"
+            borderColor={theme.colors.type.card.borderColor}
           >
             <span className="line-kpm">{lineKpm}kpm</span>
           </Tooltip>
@@ -126,10 +150,13 @@ function ResultCard({
                   placement="top"
                   fontSize="sm"
                   hasArrow
-                  border="1px solid white"
+                  bg={theme.colors.popup.bg}
+                  color={theme.colors.popup.color}
+                  border="1px solid"
+                  borderColor={theme.colors.type.card.borderColor}
                   css={{
-                    "--popper-arrow-bg": "var(--chakra-colors-gray-700)",
-                    "--popper-arrow-shadow-color": "white",
+                    "--popper-arrow-bg": theme.colors.popup.bg,
+                    "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
                   }}
                 >
                   <Text
@@ -157,14 +184,35 @@ function ResultCard({
         <Stack>
           <Box>
             miss:{lMiss},{" "}
-            <Tooltip label={`rkpm:${rkpm}`} placement="top" fontSize="sm">
-              <span>
+            <Tooltip
+              label={`rkpm:${rkpm}`}
+              placement="top"
+              fontSize="sm"
+              bg={theme.colors.popup.bg}
+              color={theme.colors.popup.color}
+              border="1px solid"
+              borderColor={theme.colors.type.card.borderColor}
+            >
+              <Text as="span">
                 kpm:
                 {kpm}
-              </span>
+              </Text>
             </Tooltip>
-            , point:{point}
-            {tBonus ? `+${tBonus}` : ""}/{maxLinePoint}
+            ,{" "}
+            <Tooltip
+              label={`Point: ${point}, Bonus:${tBonus}`}
+              placement="top"
+              fontSize="sm"
+              bg={theme.colors.popup.bg}
+              color={theme.colors.popup.color}
+              border="1px solid"
+              borderColor={theme.colors.type.card.borderColor}
+            >
+              <Text as="span">
+                point:{point}
+                {tBonus ? `+${tBonus}` : ""}/{maxLinePoint}
+              </Text>
+            </Tooltip>
           </Box>
         </Stack>
       </CardFooter>

@@ -53,7 +53,7 @@ export interface Tag {
 
 interface ThemeColors {
   colors: {
-    background: string;
+    background: `#${string}`;
     color: string;
     popup: {
       bg: string;
@@ -102,13 +102,13 @@ interface ThemeColors {
       ready: {
         radio: {
           roma: {
-            bg: string;
+            bg: `#${string}`;
           };
           kana: {
-            bg: string;
+            bg: `#${string}`;
           };
           flick: {
-            bg: string;
+            bg: `#${string}`;
           };
           hover: {
             color: string;

@@ -8,7 +8,7 @@ const config: ThemeConfig = {
 
 const sodaTheme: ThemeColors = {
   colors: {
-    background: "white",
+    background: "#FFFFFF",
     color: "black",
     header: {
       bg: "white",
@@ -33,7 +33,7 @@ const sodaTheme: ThemeColors = {
         next: "#FFF",
         word: "#FFF",
         completed: "#50e3c2",
-        error: "red.500",
+        error: "#e53e3e",
       },
       tab: {
         ranking: {
@@ -101,7 +101,7 @@ const darkTheme: ThemeColors = {
         next: "#FFF",
         word: "#FFF",
         completed: "#4fd1c5",
-        error: "red.500",
+        error: "#e53e3e",
       },
       tab: {
         ranking: {
