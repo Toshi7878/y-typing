@@ -1,7 +1,11 @@
 import { atom } from "jotai";
 
-const storedTheme = localStorage.getItem("theme");
-const theme: "light" | "dark" =
-  storedTheme === "light" || storedTheme === "dark" ? storedTheme : "light";
+const getInitialTheme = (): "light" | "dark" => {
+  if (typeof window !== "undefined") {
+    const storedTheme = localStorage.getItem("theme");
+    return storedTheme === "light" || storedTheme === "dark" ? storedTheme : "light";
+  }
+  return "light";
+};
 
-export const themeAtom = atom<"light" | "dark">(theme ? theme : "light");
+export const themeAtom = atom<"light" | "dark">(getInitialTheme());
