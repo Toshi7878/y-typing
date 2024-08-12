@@ -7,6 +7,7 @@ import "@/app/nprogress.css";
 // export const runtime = "edge";
 
 import type { Metadata } from "next";
+import { ColorModeScript, theme } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Y-Typing",
@@ -21,6 +22,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={fonts.rubik.variable}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
         <Header />
         {children}
       </body>
