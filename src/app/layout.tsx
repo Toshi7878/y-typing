@@ -1,6 +1,5 @@
 import "./globals.css";
 import Header from "@/components/header/Header";
-import { Providers } from "./providers";
 
 import { fonts } from "./fonts";
 import "@/app/nprogress.css";
