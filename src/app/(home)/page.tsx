@@ -3,11 +3,15 @@ import { Box, ChakraProvider } from "@chakra-ui/react";
 import Content from "./Content";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getTheme } from "../customTheme";
+import { themeAtom } from "@/components/header/atom/atoms";
+import { useAtomValue } from "jotai";
 const queryClient = new QueryClient();
 
 export default function Home() {
+  const theme = useAtomValue(themeAtom);
+
   return (
-    <ChakraProvider theme={getTheme("dark")}>
+    <ChakraProvider theme={getTheme(theme)}>
       <QueryClientProvider client={queryClient}>
         <Box
           bg={"background"}

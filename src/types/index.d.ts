@@ -50,3 +50,62 @@ export interface Tag {
   className: string;
   [key: string]: string;
 }
+
+interface ThemeColors {
+  colors: {
+    background: string;
+    color: string;
+    menu: {
+      bg: string;
+      color: string;
+    };
+    header: {
+      bg: string;
+    };
+    home: {
+      card: {
+        bg: string;
+        link: string;
+        hover: string;
+      };
+    };
+    type: {
+      card: {
+        bg: string;
+        color: string;
+        borderColor: string;
+        hover: {
+          bg: string;
+        };
+      };
+      word?: {
+        correct: string;
+        next: string;
+        word: string;
+        completed: string;
+      };
+      tab: {
+        ranking: {
+          myrank: {
+            color: string;
+          };
+        };
+      };
+      ready: {
+        radio: {
+          hover: {
+            bg: string;
+            color: string;
+          };
+          selected: {
+            bg: string;
+            color: string;
+          };
+        };
+      };
+      progress: {
+        bg: string;
+      };
+    };
+  };
+}

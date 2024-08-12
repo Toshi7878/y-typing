@@ -29,14 +29,17 @@ import { InputModeType } from "../(ts)/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { ChakraProvider } from "@chakra-ui/react";
 import { getTheme } from "@/app/customTheme";
+import { themeAtom } from "@/components/header/atom/atoms";
 export const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
+  const theme = useAtomValue(themeAtom);
+
   useEffect(() => {
     NProgress.done();
   }, []);
   return (
-    <ChakraProvider theme={getTheme("dark")}>
+    <ChakraProvider theme={getTheme(theme)}>
       <QueryClientProvider client={queryClient}>
         <ContentInner mapInfo={mapInfo} />
       </QueryClientProvider>

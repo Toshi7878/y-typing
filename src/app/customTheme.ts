@@ -1,14 +1,15 @@
+import { ThemeColors } from "@/types";
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
-  useSystemColorMode: false,
+  useSystemColorMode: true,
 };
 
-const sodaTheme = {
+const sodaTheme: ThemeColors = {
   colors: {
     background: "white",
-    color: "pink",
+    color: "black",
     header: {
       bg: "white",
     },
@@ -25,7 +26,7 @@ const sodaTheme = {
       },
     },
     type: {
-      card: { bg: "#bee3f8", color: "pink", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
+      card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "#f5f5f55b" } },
 
       tab: {
         ranking: {
@@ -49,7 +50,7 @@ const sodaTheme = {
   },
 };
 
-const darkTheme = {
+const darkTheme: ThemeColors = {
   colors: {
     background: "#212529",
     color: "white",
@@ -59,7 +60,7 @@ const darkTheme = {
       color: "black",
     },
     header: {
-      bg: "#375a7f",
+      bg: "#212529",
     },
 
     home: {
@@ -102,5 +103,12 @@ export const getTheme = (colorMode: "light" | "dark") => {
   return extendTheme({
     config,
     colors: themeColors,
+    styles: {
+      global: {
+        "body, *": {
+          transition: "background-color 0.5s ease",
+        },
+      },
+    },
   });
 };
