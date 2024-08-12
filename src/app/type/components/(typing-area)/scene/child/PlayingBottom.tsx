@@ -51,6 +51,7 @@ const PlayingBottom = function ({
             kbdText="F10"
             onClick={() => playingRef.current?.realtimeSpeedChange()}
             isPauseDisabled={true}
+            isKbdHidden={scene === "replay" ? true : false}
           />
         )}
         {scene !== "playing" && (
@@ -68,6 +69,7 @@ const PlayingBottom = function ({
               kbdText="Tab"
               onClick={() => playingRef.current?.openLineList()}
               isPauseDisabled={false}
+              isKbdHidden={false}
             />
           </>
         )}
@@ -77,6 +79,7 @@ const PlayingBottom = function ({
           kbdText="F4"
           onClick={() => playingRef.current?.retry()}
           isPauseDisabled={true}
+          isKbdHidden={false}
         />
       </HStack>
     </Box>

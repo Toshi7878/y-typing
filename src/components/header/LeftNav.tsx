@@ -1,10 +1,10 @@
 "use client";
 
 import { NavItem } from "@/types";
-import { Link } from "@chakra-ui/next-js";
 import { usePathname, useRouter } from "next/navigation";
 import { handleLinkClick } from "@/app/nprogress";
 import { Box, Text } from "@chakra-ui/react";
+import Link from "next/link";
 
 interface LeftNavProps {
   items: NavItem[];
