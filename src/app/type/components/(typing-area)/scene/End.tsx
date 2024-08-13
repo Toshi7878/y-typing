@@ -150,7 +150,7 @@ const End = ({ onOpen }: EndProps) => {
             <Box textAlign="left" className="text-3xl" mx={2}>
               {speedData.defaultSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
             </Box>
-            <HStack justifyContent="space-around" className="end-main-buttons">
+            <HStack justifyContent="space-around" id="end_main_buttons">
               {isDisplayRankingButton && <EndUploadButton responseStatus={state.status} />}
               <Button
                 className="cursor-pointer"
@@ -180,13 +180,7 @@ const End = ({ onOpen }: EndProps) => {
                 結果をXにポスト
               </Button>
             </HStack>
-            <HStack
-              spacing={14}
-              justifyContent="flex-end"
-              mx="12"
-              mt="12"
-              className="end-sub-buttons"
-            >
+            <HStack spacing={14} justifyContent="flex-end" mx="12" mt="12" id="end_sub_buttons">
               {isPlayingMode && (
                 <EndRetryButton
                   retryMode="practice"
