@@ -27,7 +27,10 @@ const PlayingBottom = function ({
 
   return (
     <Box mx="8">
-      <HStack justify="space-between" className={`mx-2 font-bold ${isPlayed ? "" : "invisible"}`}>
+      <HStack
+        justify="space-between"
+        className={`mx-2 font-bold ${isPlayed ? "" : "invisible"} bottom-card-text`}
+      >
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
         <PlayingTotalTime className="text-2xl font-mono" ref={playingTotalTimeRef} />
       </HStack>
