@@ -48,6 +48,9 @@ export const Scene = () => {
       <>
         <Playing ref={playingRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
         {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
+        {map!.mapData[0].options?.eternalCSS && (
+          <style>{map!.mapData[0].options?.eternalCSS}</style>
+        )}
       </>
     );
   } else if (scene === "end") {
@@ -55,6 +58,7 @@ export const Scene = () => {
       <>
         <End onOpen={onOpen} />
         {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
+        <style>{map!.mapData[0].options?.eternalCSS}</style>
       </>
     );
   }

@@ -540,7 +540,6 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(({ isOpen, onOpen, onClose 
         totalTimeProgressRef={totalTimeProgressRef}
         playingTotalTimeRef={playingTotalTimeRef}
       />
-      {map!.mapData[0].options?.eternalCSS && <style>{map!.mapData[0].options?.eternalCSS}</style>}
     </Box>
   );
 });
