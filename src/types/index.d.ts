@@ -54,7 +54,8 @@ export interface Tag {
 interface ThemeColors {
   colors: {
     background: `#${string}`;
-    color: string;
+    color: `#${string}`;
+
     popup: {
       bg: string;
       color: string;
@@ -64,6 +65,11 @@ interface ThemeColors {
     };
     header: {
       bg: string;
+      color: string;
+      hover: {
+        color: string;
+        bg: string;
+      };
     };
     home: {
       card: {

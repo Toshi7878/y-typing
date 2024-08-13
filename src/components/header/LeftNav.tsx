@@ -1,10 +1,10 @@
 "use client";
 
-import { NavItem } from "@/types";
+import { NavItem, ThemeColors } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
 import { handleLinkClick } from "@/app/nprogress";
-import { Box, Text } from "@chakra-ui/react";
-import Link from "next/link";
+import { Box, Text, useTheme } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
 
 interface LeftNavProps {
   items: NavItem[];
@@ -13,19 +13,30 @@ interface LeftNavProps {
 export default function LeftNav({ items }: LeftNavProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const theme: ThemeColors = useTheme();
 
   console.log(pathname);
   return (
-    <Box className="flex items-center md:gap-10">
-      <Text as="span" color={"color"}>
-        <Link
-          href={"/"}
-          onClick={pathname === "/" ? undefined : handleLinkClick(`/`, router)}
-          className="md:flex items-center space-x-2 font-extrabold text-xl"
-        >
-          Y-Typing
-        </Link>
-      </Text>
+    <Box className="flex md:gap-x-10">
+      <Link
+        href={"/"}
+        onClick={
+          pathname === "/" ? () => (window.location.href = "/") : handleLinkClick(`/`, router)
+        }
+        className="text-2xl relative top-[-2.5px]"
+        color={theme.colors.color}
+        _hover={{
+          color: theme.colors.header.hover.color,
+          bg: theme.colors.header.hover.bg,
+        }}
+      >
+        <Text as="span" fontWeight="bold">
+          Y
+        </Text>
+        <Text as="span" fontWeight="bold">
+          Typing
+        </Text>
+      </Link>
       <nav className="md:flex gap-6 hidden">
         {/* {items?.map((item, index) => {
           return (

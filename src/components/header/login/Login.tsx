@@ -1,18 +1,26 @@
 import { SignIn, SignOut } from "./AuthButton";
-import { Avatar, AvatarBadge, Box, MenuItem } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Box, MenuItem, useTheme } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
 import { BsDiscord } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { useSession } from "next-auth/react";
+import { ThemeColors } from "@/types";
 
 export default function Login() {
   const { data: session } = useSession();
+  const theme: ThemeColors = useTheme();
 
   if (!session?.user) {
     return (
       <Menu>
-        <MenuButton as={Button} variant="link" fontSize="sm">
+        <MenuButton
+          as={Button}
+          variant="link"
+          fontSize="xs"
+          color={theme.colors.header.color}
+          _hover={{ color: theme.colors.header.hover.color }}
+        >
           ログイン
         </MenuButton>
         <MenuList>
@@ -39,7 +47,7 @@ export default function Login() {
         <Menu>
           <MenuButton as={"button"} className="hover:bg-slate-400">
             <HStack spacing="3">
-              <Box suppressHydrationWarning={true} color={"color"}>
+              <Box suppressHydrationWarning={true} color={theme.colors.header.color}>
                 {session.user.name}
               </Box>
               <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>

@@ -30,7 +30,7 @@ export default function TabContent({ className }: TabContentProps) {
       variant="line"
       colorScheme="black" // ここで色を指定します
     >
-      <TabList height="33px" px="8" borderBottom="1px solid lightgray">
+      <TabList height="33px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
         <Tab
           width="200px"
           opacity={tabIndex === 0 ? 1 : 0.5}

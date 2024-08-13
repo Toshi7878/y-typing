@@ -12,14 +12,16 @@ import {
   Button,
   Input,
   Box,
+  useTheme,
 } from "@chakra-ui/react";
-import { IoMdAdd } from "react-icons/io";
+import { MdAddBox } from "react-icons/md";
 import { extractYouTubeVideoId } from "./extractYTId";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
+import { ThemeColors } from "@/types";
 
 const schema = z.object({
   URL: z
@@ -31,6 +33,7 @@ const schema = z.object({
 export default function NewMap() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+  const theme: ThemeColors = useTheme();
 
   const methods = useForm({
     resolver: zodResolver(schema),
@@ -55,8 +58,15 @@ export default function NewMap() {
 
   return (
     <>
-      <Box className="p-1 bg-gray-300 rounded cursor-pointer" onClick={onOpen}>
-        <IoMdAdd />
+      <Box
+        color={theme.colors.header.color}
+        _hover={{
+          color: theme.colors.header.hover.color,
+        }}
+        className="cursor-pointer text-xl"
+        onClick={onOpen}
+      >
+        <MdAddBox />
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

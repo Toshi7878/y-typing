@@ -9,9 +9,15 @@ const config: ThemeConfig = {
 const sodaTheme: ThemeColors = {
   colors: {
     background: "#FFFFFF",
-    color: "black",
+    color: "#000000",
+
     header: {
       bg: "white",
+      color: "black",
+      hover: {
+        color: "black",
+        bg: "#00000010",
+      },
     },
 
     popup: {
@@ -74,7 +80,7 @@ const sodaTheme: ThemeColors = {
 const darkTheme: ThemeColors = {
   colors: {
     background: "#212529",
-    color: "white",
+    color: "#FFFFFF",
 
     popup: {
       bg: "#212529",
@@ -84,7 +90,12 @@ const darkTheme: ThemeColors = {
       },
     },
     header: {
-      bg: "#212529",
+      bg: "#375a7f",
+      color: "#cccccc",
+      hover: {
+        color: "#FFFFFF",
+        bg: "#00bd7e30",
+      },
     },
 
     home: {

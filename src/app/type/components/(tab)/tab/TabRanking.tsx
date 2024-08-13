@@ -18,7 +18,28 @@ const TabRanking = (props: TabRankingProps) => {
       color={theme.colors.type.card.color}
     >
       <CardBody className="text-3xl font-bold w-full" pt={2}>
-        <Box overflowY="scroll" minH={props.height} maxH={props.height}>
+        <Box
+          overflowY="scroll"
+          minH={props.height}
+          maxH={props.height}
+          sx={{
+            "&::-webkit-scrollbar": {
+              width: "12px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: theme.colors.type.card.borderColor,
+              borderRadius: "10px", // スクロールバーの角を丸くする
+              border: "2px solid transparent", // スクロールバーの内側にスペースを作る
+              backgroundClip: "content-box", // 背景をクリップ
+            },
+            // "&::-webkit-scrollbar-track": {
+            //   background: theme.colors.background, // スクロールバーのトラックの色を設定
+            // },
+            "&::-webkit-scrollbar-corner": {
+              background: "pink", // スクロールバーのコーナーの色を設定
+            },
+          }}
+        >
           <Table
             variant="simple"
             className="ranking-table"
