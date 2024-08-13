@@ -23,7 +23,7 @@ const PlayingWord = memo(({ correct, nextChar, word, className, id = "" }: WordP
             ? theme.colors.type.word.completed
             : theme.colors.type.word.correct
         }
-        className="word-correct"
+        className={remainWord.length === 0 ? "word-completed" : "word-correct"}
       >
         {correct}
       </Text>
