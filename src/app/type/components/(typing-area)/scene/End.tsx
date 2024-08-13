@@ -123,7 +123,7 @@ const End = ({ onOpen }: EndProps) => {
       <Box flex="1" className="text-center mx-6">
         <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
           <Stack display="flex" spacing={8}>
-            <Box textAlign="left" className="text-3xl" mx={2}>
+            <Box textAlign="left" className="text-3xl" mx={2} id="end-text">
               {gameStateRef.current!.practice.isPracticeMode ? (
                 <>練習モード終了</>
               ) : gameStateRef.current!.replay.userName !== "" ? (
