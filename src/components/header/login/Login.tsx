@@ -50,9 +50,9 @@ export default function Login() {
               <Box suppressHydrationWarning={true} color={theme.colors.header.color}>
                 {session.user.name}
               </Box>
-              <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
+              {/* <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
                 {!session.user.image && <AvatarBadge boxSize="1.25em" bg="gray.300" />}
-              </Avatar>
+              </Avatar> */}
             </HStack>
           </MenuButton>
           <MenuList className="p-0">
