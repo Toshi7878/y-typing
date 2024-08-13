@@ -730,7 +730,7 @@ export function shortcutKey(
       break;
     case "KanaMode":
     case "Romaji":
-      if (scene === "playing") {
+      if (scene !== "replay") {
         if (inputMode === "roma") {
           playingRef.current!.inputModeChange("kana");
           statusRef.current!.lineStatus.typeResult.push({
