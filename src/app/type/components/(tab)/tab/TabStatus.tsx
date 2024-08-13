@@ -149,7 +149,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
                         {capitalizeFirstLetter(label)}
                       </Label>
 
-                      <UnderlinedSpan label={label}>
+                      <UnderlinedSpan label={label} className="status-underline">
                         <StatusValue value={status[label]} />
                       </UnderlinedSpan>
                     </TdStyled>
@@ -165,7 +165,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
                     <TdStyled key={label} id={label}>
                       <Label label={label}>{capitalizeFirstLetter(label)}</Label>
 
-                      <UnderlinedSpan label={label}>
+                      <UnderlinedSpan label={label} className="status-underline">
                         {label === "point" ? (
                           <PointStatusValue
                             value={status[label]}
