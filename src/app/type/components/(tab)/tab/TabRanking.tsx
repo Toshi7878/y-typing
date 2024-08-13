@@ -54,7 +54,7 @@ const TabRanking = (props: TabRankingProps) => {
               },
             }}
           >
-            <Thead position="sticky" top={0} pt={2} zIndex={1}>
+            <Thead position="sticky" top={0} pt={2} zIndex={1} className="ranking-thead">
               <Tr>
                 <Th width="5%" color={theme.colors.type.card.color}>
                   順位
