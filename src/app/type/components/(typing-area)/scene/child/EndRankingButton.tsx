@@ -32,7 +32,6 @@ const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
       variant="solid"
       py={12}
       width="450px"
-      colorScheme="blue"
       border="1px"
       borderColor="black"
       bg={theme.colors.type.progress.bg}

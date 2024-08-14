@@ -1,10 +1,8 @@
 "use client";
-import { Card, CardBody, Box, Spinner, useTheme, Text } from "@chakra-ui/react";
+import { Card, CardBody, Box, Spinner, useTheme, Text, Tooltip } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Link from "next/link";
 import { useAtom, useSetAtom } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "./atoms/atoms";
 import { FaPlay } from "react-icons/fa";
@@ -12,6 +10,8 @@ import { FaPause } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { handleLinkClick } from "../nprogress";
 import { ja } from "date-fns/locale";
+import { Image, Link } from "@chakra-ui/next-js";
+import ImageWithFallback from "./components/ThumbnailImage";
 
 interface GetMapList {
   id: number;
@@ -100,15 +100,10 @@ function MapList() {
             style={{ padding: 0, border: "none" }}
           >
             <Box className="relative group">
-              <Image
+              <ImageWithFallback
                 alt={map.title}
-                className="cover rounded-md"
-                style={{ aspectRatio: "16/9" }}
-                loading="lazy"
-                layout={"responsive"}
-                src={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
-                width={220}
-                height={120}
+                fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
+                src={`https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`}
               />
               <Box
                 className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
@@ -137,31 +132,40 @@ function MapList() {
               href={`/type/${map.id}`}
               onClick={handleLinkClick(`/type/${map.id}`, router)}
               className="pl-3 pt-2 w-full text-xs sm:text-sm md:text-md lg:text-lg flex flex-col justify-start h-full"
+              _hover={{ textDecoration: "none" }} // 追加: ホバー時の下線を無効化する
             >
-              <Box color={"home.card.link"} className="hover:underline font-bold">
-                {map.title}
-              </Box>
-
-              <small>
-                <Link
+              <Tooltip label={map.title} placement="top" whiteSpace="normal" hasArrow>
+                <Box
+                  color={"home.card.link"}
+                  fontWeight="bold"
                   className="hover:underline"
+                  maxW="100%"
+                  overflow="hidden" // 追加: はみ出した部分を隠す
+                  textOverflow="ellipsis" // 追加: はみ出した部分を省略記号にする
+                  whiteSpace="nowrap" // 追加: テキストを1行にする
+                >
+                  {map.title}
+                </Box>
+              </Tooltip>
+
+              <Text as="small">
+                <Link
                   href={`/user/${map.user.id}`}
                   onClick={handleLinkClick(`/user/${map.user.id}`, router)}
+                  color={"home.card.link"}
                 >
-                  <Text as="span" color={"home.card.link"}>
-                    {map.user.name}
-                  </Text>
+                  {map.user.name}
                 </Link>
 
-                <span className="text-xs">
+                <Text as="span" fontSize="xs">
                   {" "}
                   -{" "}
                   {formatDistanceToNowStrict(new Date(map.updatedAt), {
                     addSuffix: true,
                     locale: ja,
                   })}
-                </span>
-              </small>
+                </Text>
+              </Text>
             </Link>
           </CardBody>
         </Card>
