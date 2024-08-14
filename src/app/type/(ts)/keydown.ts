@@ -9,7 +9,7 @@ import {
   StatusRef,
   WordType,
 } from "./type";
-import { CreateMap } from "./createTypingWord";
+import { CHAR_POINT, CreateMap } from "./createTypingWord";
 import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
 import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
 import { CODE_TO_KANA, KEY_TO_KANA } from "./const/kanaKeyMap";
@@ -149,6 +149,11 @@ const OptimisationWhiteList = ["っっ", "っん", "っい", "っう"];
 
 const kana_mode_convert_rule_before = ["←", "↓", "↑", "→", "『", "』"];
 const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ", "「", "」"];
+
+const zCommands = {
+  "...": { k: "...", r: ["z."], p: CHAR_POINT * 3 },
+  "..": { k: "..", r: ["z,"], p: CHAR_POINT * 2 },
+};
 
 export interface CharsType {
   keys: string[];
