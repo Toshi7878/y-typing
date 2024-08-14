@@ -134,7 +134,21 @@ function MapList() {
               className="pl-3 pt-2 w-full text-xs sm:text-sm md:text-md lg:text-lg flex flex-col justify-start h-full"
               _hover={{ textDecoration: "none" }} // 追加: ホバー時の下線を無効化する
             >
-              <Tooltip label={map.title} placement="top" whiteSpace="normal" hasArrow>
+              <Tooltip
+                label={map.title}
+                placement="top"
+                whiteSpace="normal"
+                hasArrow
+                bg={theme.colors.popup.bg}
+                color={theme.colors.popup.color}
+                borderWidth="1px"
+                borderStyle="solid"
+                borderColor={theme.colors.type.card.borderColor}
+                css={{
+                  "--popper-arrow-bg": theme.colors.popup.bg,
+                  "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
+                }}
+              >
                 <Box
                   color={"home.card.link"}
                   fontWeight="bold"
