@@ -1,15 +1,21 @@
-import { SignIn, SignOut } from "./AuthButton";
-import { Avatar, AvatarBadge, Box, MenuItem, useTheme } from "@chakra-ui/react";
-import { Menu, MenuButton, MenuList, Button, HStack } from "@chakra-ui/react";
+import { SignIn } from "./AuthButton";
+import { MenuDivider, MenuItem, useTheme } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, Button } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
 import { BsDiscord } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { ThemeColors } from "@/types";
+import { handleSignOut } from "./authAction";
 
 export default function Login() {
   const { data: session } = useSession();
   const theme: ThemeColors = useTheme();
+
+  const submitSignOut = async () => {
+    await handleSignOut();
+    window.location.reload();
+  };
 
   if (!session?.user) {
     return (
@@ -20,18 +26,27 @@ export default function Login() {
           fontSize="xs"
           color={theme.colors.header.color}
           _hover={{ color: theme.colors.header.hover.color }}
+          _active={{ color: theme.colors.header.hover.color }}
         >
           ログイン
         </MenuButton>
-        <MenuList>
-          <MenuItem _hover={{ bg: "#7289DA", color: "white" }}>
+        <MenuList bg={theme.colors.background}>
+          <MenuItem
+            _hover={{ bg: "#7289DA", color: "white" }}
+            bg={theme.colors.background}
+            color={theme.colors.color}
+          >
             <SignIn
               provider="discord"
               buttonText={"Discordでログイン"}
               icon={<BsDiscord size="1.5em" />}
             />
           </MenuItem>
-          <MenuItem _hover={{ bg: "#DB4437", color: "white" }}>
+          <MenuItem
+            _hover={{ bg: "#DB4437", color: "white" }}
+            bg={theme.colors.background}
+            color={theme.colors.color}
+          >
             <SignIn
               provider="google"
               buttonText={"Googleでログイン"}
@@ -43,24 +58,61 @@ export default function Login() {
     );
   } else {
     return (
-      <div>
-        <Menu>
-          <MenuButton as={"button"} className="hover:bg-slate-400">
-            <HStack spacing="3">
-              <Box suppressHydrationWarning={true} color={theme.colors.header.color}>
-                {session.user.name}
-              </Box>
-              {/* <Avatar size="sm" name={session.user.name ?? ""} src={session.user.image ?? ""}>
-                {!session.user.image && <AvatarBadge boxSize="1.25em" bg="gray.300" />}
-              </Avatar> */}
-            </HStack>
+      <>
+        <Menu placement="bottom">
+          <MenuButton
+            as={Button}
+            variant="link"
+            fontSize="sm"
+            fontWeight="medium"
+            color={theme.colors.header.color}
+            _hover={{
+              color: theme.colors.header.hover.color,
+            }}
+            _active={{ color: theme.colors.header.hover.color }}
+          >
+            {session.user.name}
           </MenuButton>
-          <MenuList className="p-0">
-            <SignOut />
-            <CheckName name={session.user.name ?? ""} />
+          <MenuList bg={theme.colors.background} minW="fit-content">
+            <MenuItem
+              fontSize="sm"
+              bg={theme.colors.background}
+              _hover={{
+                bg: "gray.600",
+              }}
+              color={theme.colors.color}
+            >
+              TestMenu1
+            </MenuItem>
+            <MenuItem
+              fontSize="sm"
+              bg={theme.colors.background}
+              _hover={{
+                bg: "gray.600",
+              }}
+              color={theme.colors.color}
+            >
+              TestMenu2
+            </MenuItem>
+            <MenuDivider />
+
+            <form action={submitSignOut}>
+              <MenuItem
+                type="submit"
+                fontSize="sm"
+                bg={theme.colors.background}
+                _hover={{
+                  bg: "gray.600",
+                }}
+                color={theme.colors.color}
+              >
+                ログアウト
+              </MenuItem>
+            </form>
           </MenuList>
         </Menu>
-      </div>
+        <CheckName name={session.user.name ?? ""} />
+      </>
     );
   }
 }

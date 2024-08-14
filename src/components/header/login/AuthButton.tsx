@@ -32,7 +32,9 @@ export function SignOut() {
         window.location.reload();
       }}
     >
-      <Button type="submit">ログアウト</Button>
+      <Button type="submit" variant="unstyled" colorScheme="red">
+        ログアウト
+      </Button>
     </form>
   );
 }
