@@ -160,15 +160,16 @@ export class WordConvert {
     let result: string[] = [];
 
     for (let i = 0; i < LIST.length; i++) {
-      const IS_ZENKAKU = LIST[i][0].match(/^[^\x01-\x7E\xA1-\xDF]+$/);
+      const IS_ZENKAKU = /^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i][0]);
       const IS_ADD_SYMBOL = this.symbolList.includes(LIST[i][0].slice(0, 1));
       const IS_SYMBOL = nonSymbol.concat(addSymbol).concat(addSymbolAll).includes(LIST[i][0]);
       if (IS_ADD_SYMBOL) {
         //記号
         //半角の後にスペースがある場合はスペース挿入
         if (this.convertMode != "add_symbol_all" && LIST[i][0] == " ") {
-          const IS_HANKAKU = !LIST[i - 1][0].match(/^[^\x01-\x7E\xA1-\xDF]+$/);
-          if (IS_HANKAKU) {
+          const IS_HANKAKU = !/^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i - 1][0]);
+          const IS_NEXT_ZENKAKU = /^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i + 1]?.[0][0] ?? "");
+          if (IS_HANKAKU && !IS_NEXT_ZENKAKU) {
             result.push(LIST[i][0]);
           }
         } else {
