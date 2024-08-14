@@ -49,11 +49,6 @@ const sodaTheme: ThemeColors = {
         },
       },
 
-      tooltip: {
-        bg: "",
-        color: "",
-      },
-
       ready: {
         radio: {
           roma: {
@@ -77,6 +72,10 @@ const sodaTheme: ThemeColors = {
   },
 };
 
+/* 未設定色
+  Endメインボタン
+
+ */
 const darkTheme: ThemeColors = {
   colors: {
     background: "#212529",

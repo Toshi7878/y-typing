@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, useTheme, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
@@ -16,6 +16,7 @@ import PlayingBottom from "./child/PlayingBottom";
 import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
 import EndRetryButton from "./child/EndRetryButton";
+import { ThemeColors } from "@/types";
 
 interface EndProps {
   onOpen: () => void;
@@ -39,6 +40,7 @@ const End = ({ onOpen }: EndProps) => {
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
   const status = tabStatusRef.current!.getStatus();
+  const theme: ThemeColors = useTheme();
 
   const upload = () => {
     const rkpmTime =
@@ -157,10 +159,10 @@ const End = ({ onOpen }: EndProps) => {
                 variant="solid"
                 py={12}
                 width="450px"
-                colorScheme="blue"
+                bg={theme.colors.type.progress.bg}
+                color={theme.colors.type.card.color}
                 border="1px"
                 borderColor="black"
-                _hover={{ bg: "#3a90f3" }}
                 fontSize="3xl"
                 onClick={onOpen}
               >
@@ -171,10 +173,10 @@ const End = ({ onOpen }: EndProps) => {
                 variant="solid"
                 py={12} // ボタンの縦幅を大きくする
                 width="450px" // ボタンの幅を大きくする
-                colorScheme="blue"
+                bg={theme.colors.type.progress.bg}
+                color={theme.colors.type.card.color}
                 border="1px"
                 borderColor="black"
-                _hover={{ bg: "#3a90f3" }}
                 fontSize="3xl" // 文字サイズを大きくする
               >
                 結果をXにポスト
