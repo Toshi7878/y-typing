@@ -1,5 +1,6 @@
 "use client";
-import { Button } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
+import { Button, useTheme } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react"; // forwardRefを追加
 import { useFormStatus } from "react-dom";
@@ -11,6 +12,7 @@ interface UploadButtonProps {
 const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
   const queryClient = useQueryClient();
+  const theme: ThemeColors = useTheme();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -33,9 +35,9 @@ const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
       colorScheme="blue"
       border="1px"
       borderColor="black"
+      bg={theme.colors.type.progress.bg}
       isLoading={pending}
       isDisabled={isDisabled}
-      _hover={{ bg: "#3a90f3" }}
       type="submit"
       fontSize="3xl"
     >
