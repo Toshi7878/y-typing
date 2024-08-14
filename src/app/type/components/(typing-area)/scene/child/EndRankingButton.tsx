@@ -36,6 +36,7 @@ const EndUploadButton = ({ responseStatus }: UploadButtonProps) => {
       border="1px"
       borderColor="black"
       bg={theme.colors.type.progress.bg}
+      color={theme.colors.type.card.color}
       isLoading={pending}
       isDisabled={isDisabled}
       type="submit"
