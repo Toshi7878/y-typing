@@ -3,9 +3,9 @@ import { Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAtom, useSetAtom } from "jotai";
-import { previewTimeAtom, videoIdAtom } from "./atoms/atoms";
+import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
 
-import MapCard from "./components/MapCard";
+import MapCard from "./MapCard";
 
 export interface MapCardInfo {
   id: number;

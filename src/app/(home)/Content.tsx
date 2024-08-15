@@ -1,6 +1,6 @@
 "use client";
 import { Box } from "@chakra-ui/react";
-import MapList from "./MapList";
+import MapList from "./components/MapList";
 import YouTubeContent from "./components/YouTubeContent";
 import { useEffect } from "react";
 import { handleKeyDown } from "./ts/keydown";
