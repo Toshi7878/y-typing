@@ -15,6 +15,7 @@ import { useParams, useRouter } from "next/navigation";
 import { setCanUpload } from "../(redux)/buttonFlagsSlice";
 import { Line } from "@/types";
 import { CreateMap } from "@/app/type/(ts)/createTypingWord";
+import { getThumbnailQuality } from "../(ts)/getThumbailQuality";
 
 export interface SendData {
   title: string;
@@ -30,6 +31,7 @@ export interface SendData {
   totalTime: number;
   romaTotalNotes: number;
   kanaTotalNotes: number;
+  thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
 const TabInfoUpload = forwardRef((props, ref) => {
@@ -43,10 +45,11 @@ const TabInfoUpload = forwardRef((props, ref) => {
   const { playerRef } = useRefs();
   const { id } = useParams();
 
-  const upload = () => {
+  const upload = async () => {
     const map = new CreateMap(mapData);
+    const mapVideoId = playerRef.current.getVideoData().video_id;
     const sendData = {
-      videoId: playerRef.current.getVideoData().video_id,
+      videoId: mapVideoId,
       title: methods.getValues("title"),
       creatorComment: methods.getValues("creatorComment"),
       mapData,
@@ -59,6 +62,7 @@ const TabInfoUpload = forwardRef((props, ref) => {
       totalTime: map.movieTotalTime,
       romaTotalNotes: map.totalNotes.r,
       kanaTotalNotes: map.totalNotes.k,
+      thumbnailQuality: (await getThumbnailQuality(mapVideoId)) as "maxresdefault" | "mqdefault",
     };
 
     const result = actions(sendData, Array.isArray(id) ? id[0] : id || "new");
@@ -111,6 +115,7 @@ const TabInfoUpload = forwardRef((props, ref) => {
     handleStateChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
   return (
     <FormProvider {...methods}>
       <form action={formAction}>

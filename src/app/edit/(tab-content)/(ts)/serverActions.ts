@@ -41,7 +41,7 @@ export async function actions(data: SendData, mapId: string) {
     tags: data.tags,
     mapData: data.mapData,
     videoId: data.videoId,
-    
+    thumbnailQuality: data.thumbnailQuality,
   });
 
   if (!validatedFields.success) {

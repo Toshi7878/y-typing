@@ -14,6 +14,7 @@ export async function GET(request: Request) {
         videoId: true,
         updatedAt: true,
         previewTime: true,
+        thumbnailQuality: true,
         user: {
           select: {
             id: true,

@@ -12,6 +12,7 @@ interface MapLeftThumbnailProps {
   alt: string;
   mapVideoId: string;
   mapPreviewTime: string;
+  thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {

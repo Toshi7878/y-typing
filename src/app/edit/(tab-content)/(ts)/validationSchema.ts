@@ -10,6 +10,7 @@ export const mapSendSchema = z.object({
   title: z.string().min(1, { message: "タイトルは１文字以上必要です" }),
   creatorComment: z.string().optional(),
   tags: z.array(z.string()).min(2, { message: "タグは2つ以上必要です" }),
+  thumbnailQuality: z.enum(["maxresdefault", "mqdefault"]),
   mapData: z
     .array(lineSchema)
     .refine(

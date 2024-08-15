@@ -11,6 +11,11 @@ interface MapCardProps {
 function MapCard({ map }: MapCardProps) {
   const theme = useTheme();
 
+  const src =
+    map.thumbnailQuality === "maxresdefault"
+      ? `https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`
+      : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
+
   return (
     <Card
       key={map.id}
@@ -32,9 +37,10 @@ function MapCard({ map }: MapCardProps) {
         <MapLeftThumbnail
           alt={map.title}
           fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
-          src={`https://i.ytimg.com/vi/${map.videoId}/maxresdefault.jpg`}
+          src={src}
           mapVideoId={map.videoId}
           mapPreviewTime={map.previewTime}
+          thumbnailQuality={map.thumbnailQuality}
         />
         <MapCardRightInfo map={map} />
       </CardBody>
