@@ -2,9 +2,9 @@
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
 import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
-import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
-import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
 
 export const defaultStatusRef: StatusRef = {
   status: {

@@ -10,8 +10,8 @@ import {
   WordType,
 } from "./type";
 import { CHAR_POINT, CreateMap } from "./createTypingWord";
-import { SkipGuideRef } from "../components/(typing-area)/scene/child/child/PlayingSkipGuide";
-import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
+import { SkipGuideRef } from "../components/(typing-area)/scene/playing-child/child/PlayingSkipGuide";
+import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
 import { CODE_TO_KANA, KEY_TO_KANA } from "./const/kanaKeyMap";
 
 const keyboardCharacters = [

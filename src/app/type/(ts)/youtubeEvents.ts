@@ -13,8 +13,8 @@ import {
 import { ticker } from "../components/(typing-area)/scene/Playing";
 import { CreateMap } from "./createTypingWord";
 import { setNewLine } from "./timer";
-import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
 
 class YTState {
   play(

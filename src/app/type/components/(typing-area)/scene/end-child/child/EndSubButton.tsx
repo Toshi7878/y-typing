@@ -17,17 +17,18 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { lineResultsAtom, mapAtom, sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/(ts)/retry";
 import { PlayMode } from "@/app/type/(ts)/type";
+import { ThemeColors } from "@/types";
 
-interface EndRetryButtonProps {
+interface EndSubButtonProps {
   retryMode: PlayMode;
   isRetryAlert: boolean;
 }
 
-const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
+const EndSubButton = ({ isRetryAlert, retryMode }: EndSubButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const setLineResults = useSetAtom(lineResultsAtom);
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
   const setScene = useSetAtom(sceneAtom);
@@ -127,4 +128,4 @@ const EndRetryButton = ({ isRetryAlert, retryMode }: EndRetryButtonProps) => {
   );
 };
 
-export default EndRetryButton;
+export default EndSubButton;

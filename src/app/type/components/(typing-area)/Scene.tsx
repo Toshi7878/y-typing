@@ -11,7 +11,7 @@ import {
 import Ready from "./scene/Ready";
 import { Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
-import ResultDrawer from "./scene/child/ResultDrawer";
+import ResultDrawer from "./scene/result/ResultDrawer";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);

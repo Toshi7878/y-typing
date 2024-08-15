@@ -1,7 +1,7 @@
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { PlayingComboRef } from "../components/(typing-area)/scene/child/child/PlayingCombo";
-import { PlayingLineTimeRef } from "../components/(typing-area)/scene/child/child/PlayingLineTime";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/child/PlayingCenter";
+import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { CreateMap } from "./createTypingWord";
 import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown";

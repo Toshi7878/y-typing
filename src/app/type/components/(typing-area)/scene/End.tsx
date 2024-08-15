@@ -1,6 +1,5 @@
-import { Box, Button, HStack, Stack, useTheme, useToast } from "@chakra-ui/react";
+import { Box, Stack, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
-import EndUploadButton from "./child/EndRankingButton";
 import { actions } from "@/app/type/(ts)/actions";
 import {
   lineResultsAtom,
@@ -11,12 +10,13 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import PlayingTop from "./child/PlayingTop";
-import PlayingBottom from "./child/PlayingBottom";
-import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
+import PlayingTop from "./playing-child/PlayingTop";
+import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
 import { useSession } from "next-auth/react";
-import EndRetryButton from "./child/EndRetryButton";
-import { ThemeColors } from "@/types";
+import EndText from "./end-child/EndText";
+import PlayingBottom from "./playing-child/PlayingBottom";
+import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
+import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 
 interface EndProps {
   onOpen: () => void;
@@ -40,9 +40,8 @@ const End = ({ onOpen }: EndProps) => {
   const totalTimeProgressRef = useRef(null);
   const skipGuideRef = useRef(null);
   const status = tabStatusRef.current!.getStatus();
-  const theme: ThemeColors = useTheme();
 
-  const upload = () => {
+  const upload = (): ReturnType<typeof actions> => {
     const rkpmTime =
       statusRef.current!.status.totalTypeTime - statusRef.current!.status.totalLatency;
 
@@ -110,99 +109,45 @@ const End = ({ onOpen }: EndProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
+  const isPerfect = status.miss === 0 && status.lost === 0;
   const isPlayingMode =
     gameStateRef.current!.replay.userName === "" && !gameStateRef.current!.practice.isPracticeMode;
 
-  const isDisplayRankingButton =
-    session &&
+  const isScoreUpdated = status.score >= bestScoreRef.current;
+
+  const isDisplayRankingButton: boolean =
+    !!session &&
     status.score > 0 &&
-    status.score >= bestScoreRef.current &&
+    (isScoreUpdated || isPerfect) &&
     speedData.defaultSpeed >= 1 &&
     isPlayingMode;
   return (
     <Box display="flex" flexDirection="column">
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
       <Box flex="1" className="text-center mx-6">
-        <form action={status.score >= bestScoreRef.current ? formAction : undefined}>
-          <Stack display="flex" spacing={8}>
-            <Box textAlign="left" className="text-3xl" mx={2} id="end_text">
-              {gameStateRef.current!.practice.isPracticeMode ? (
-                <>練習モード終了</>
-              ) : gameStateRef.current!.replay.userName !== "" ? (
-                <>リプレイ再生終了</>
-              ) : !session ? (
-                <>
-                  スコアは{status.score}
-                  です。ログインをするとランキングに登録することができます。
-                </>
-              ) : bestScoreRef.current === 0 ? (
-                <>初めての記録です！スコアは{status.score}です。</>
-              ) : status.score > bestScoreRef.current ? (
-                <>
-                  おめでとうございます！最高スコアが{bestScoreRef.current}から{status.score}
-                  に更新されました！
-                </>
-              ) : (
-                <>
-                  最高スコアは{bestScoreRef.current}です。記録更新まであと
-                  {bestScoreRef.current - status.score}です。
-                </>
-              )}
-            </Box>
-            <Box textAlign="left" className="text-3xl" mx={2}>
-              {speedData.defaultSpeed < 1 && <>1.00倍速以上でランキング登録できます。</>}
-            </Box>
-            <HStack justifyContent="space-around" id="end_main_buttons">
-              {isDisplayRankingButton && <EndUploadButton responseStatus={state.status} />}
-              <Button
-                className="cursor-pointer"
-                variant="solid"
-                py={12}
-                width="450px"
-                bg={theme.colors.type.progress.bg}
-                color={theme.colors.type.card.color}
-                border="1px"
-                borderColor="black"
-                fontSize="3xl"
-                onClick={onOpen}
-              >
-                詳細リザルトを見る
-              </Button>
-              <Button
-                className="cursor-pointer"
-                variant="solid"
-                py={12} // ボタンの縦幅を大きくする
-                width="450px" // ボタンの幅を大きくする
-                bg={theme.colors.type.progress.bg}
-                color={theme.colors.type.card.color}
-                border="1px"
-                borderColor="black"
-                fontSize="3xl" // 文字サイズを大きくする
-              >
-                結果をXにポスト
-              </Button>
-            </HStack>
-            <HStack spacing={14} justifyContent="flex-end" mx="12" mt="12" id="end_sub_buttons">
-              {isPlayingMode && (
-                <EndRetryButton
-                  retryMode="practice"
-                  isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
-                />
-              )}
-
-              <EndRetryButton
-                retryMode={
-                  gameStateRef.current!.practice.isPracticeMode
-                    ? "practice"
-                    : gameStateRef.current!.replay.userName !== ""
-                      ? "replay"
-                      : "playing"
-                }
-                isRetryAlert={Boolean(isDisplayRankingButton && state.status !== 200)}
-              />
-            </HStack>
-          </Stack>
-        </form>
+        <Stack display="flex" spacing={8}>
+          <EndText
+            isPerfect={isPerfect}
+            gameStateRef={gameStateRef}
+            session={session}
+            status={status}
+            bestScoreRef={bestScoreRef}
+            speedData={speedData}
+          />
+          <EndMainButtonContainer
+            formAction={formAction}
+            isDisplayRankingButton={isDisplayRankingButton}
+            state={state}
+            onOpen={onOpen}
+            isScoreUpdated={isScoreUpdated}
+          />
+          <EndSubButtonContainer
+            isPlayingMode={isPlayingMode}
+            isDisplayRankingButton={isDisplayRankingButton}
+            state={state}
+            gameStateRef={gameStateRef}
+          />
+        </Stack>
       </Box>
       <PlayingBottom
         skipGuideRef={skipGuideRef}

@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import PlayingTop from "./child/PlayingTop";
-import PlayingCenter, { PlayingCenterRef } from "./child/PlayingCenter";
+import PlayingTop from "./playing-child/PlayingTop";
+import PlayingCenter, { PlayingCenterRef } from "./playing-child/PlayingCenter";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { defaultGameStateRef, defaultStatusRef, useRefs } from "@/app/type/(contexts)/refsProvider";
 import {
@@ -14,19 +14,19 @@ import {
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import PlayingBottom from "./child/PlayingBottom";
-import { SkipGuideRef } from "./child/child/PlayingSkipGuide";
+import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
 import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
 import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
 import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
-import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
-import { PlayingTotalTimeRef } from "./child/child/PlayingTotalTime";
+import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
+import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { Ticker } from "@pixi/ticker";
 import { setNewLine, updateTimer } from "@/app/type/(ts)/timer";
 import { romaConvert } from "@/app/type/(ts)/createTypingWord";
 import { updateReplayStatus } from "@/app/type/(ts)/replay";
 import { getLineCount } from "@/app/type/(ts)/youtubeEvents";
+import PlayingBottom from "./playing-child/PlayingBottom";
 export const ticker = new Ticker();
 
 interface PlayingProps {

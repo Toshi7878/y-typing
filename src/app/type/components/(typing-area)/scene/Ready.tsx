@@ -1,13 +1,13 @@
 import { Box, Flex } from "@chakra-ui/react";
-import PlayingTop from "./child/PlayingTop";
+import PlayingTop from "./playing-child/PlayingTop";
 import { useEffect, useRef } from "react";
-import PlayingBottom from "./child/PlayingBottom";
-import ReadyInputModeRadioCards from "./child/ReadyInputModeRadioCards";
-import ReadyPlaySpeed from "./child/ReadyPlaySpeed";
+import ReadyInputModeRadioCards from "./ready-child/ReadyInputModeRadioCards";
+import ReadyPlaySpeed from "./ready-child/ReadyPlaySpeed";
 import "../../../style/fKey.scss";
-import ReadyPracticeButton from "./child/ReadyPracticeButton";
-import { PlayingLineTimeRef } from "./child/child/PlayingLineTime";
+import ReadyPracticeButton from "./ready-child/ReadyPracticeButton";
+import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import PlayingBottom from "./playing-child/PlayingBottom";
 
 function Ready() {
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);

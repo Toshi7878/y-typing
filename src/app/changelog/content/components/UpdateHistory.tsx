@@ -5,7 +5,10 @@ import React from "react";
 const updates = [
   {
     date: "2024-08-16",
-    descriptions: ["0Miss & 0Lostの記録は正確率と最大コンボ数の色が変わるように変更"],
+    descriptions: [
+      "0Miss & 0Lost達成時はスコアに関係なくランキング登録ボタンを設置(スコアが低い場合は確認ダイアログ表示)※登録中のローディングアニメーションが適用されてないバグがある。",
+      "0Miss & 0Lostの記録は正確率と最大コンボ数の色が変わるように変更",
+    ],
   },
   { date: "2024-08-15", descriptions: ["更新履歴ページを追加"] },
 ];
