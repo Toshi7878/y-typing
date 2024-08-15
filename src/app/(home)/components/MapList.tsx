@@ -1,5 +1,5 @@
 "use client";
-import { Spinner } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -38,7 +38,11 @@ function MapList() {
   });
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <Box display="flex" justifyContent="center">
+        <Spinner />
+      </Box>
+    );
   }
 
   return (

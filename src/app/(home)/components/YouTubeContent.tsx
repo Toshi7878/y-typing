@@ -5,9 +5,9 @@ import { useAtomValue } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
 
 interface YouTubeContentProps {
-  className: string;
+  className?: string;
 }
-const YouTubeContent = function YouTubeContent({ className }: YouTubeContentProps) {
+const YouTubeContent = function YouTubeContent({ className = "" }: YouTubeContentProps) {
   const videoId = useAtomValue(videoIdAtom);
   const previewTime = useAtomValue(previewTimeAtom);
 
@@ -16,7 +16,6 @@ const YouTubeContent = function YouTubeContent({ className }: YouTubeContentProp
   }
 
   const onReady = (event: any) => {
-    console.log("ready");
     event.target.seekTo(Number(previewTime));
   };
 

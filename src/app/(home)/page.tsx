@@ -10,8 +10,13 @@ export default function Home() {
     <QueryClientProvider client={queryClient}>
       <Box
         as="main"
+        minH="100vw"
         bg={"background"}
-        className={`flex min-h-screen flex-col items-center justify-between pt-20`}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="space-between"
+        pt={20}
       >
         <Content />
       </Box>

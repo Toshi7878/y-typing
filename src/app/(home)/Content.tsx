@@ -2,7 +2,7 @@
 import { Box } from "@chakra-ui/react";
 import MapList from "./components/MapList";
 import YouTubeContent from "./components/YouTubeContent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { handleKeyDown } from "./ts/keydown";
 import { useAtom } from "jotai";
 import { videoIdAtom } from "./atoms/atoms";
@@ -12,6 +12,15 @@ import NProgress from "nprogress";
 export default function Content() {
   const [videoId, setVideoId] = useAtom(videoIdAtom);
   const router = useRouter(); // 追加
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 480);
+    handleResize(); // 初期値を設定
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => handleKeyDown(event, videoId, setVideoId);
@@ -34,20 +43,19 @@ export default function Content() {
     NProgress.done();
   }, []);
 
-  const isMobile = window.innerWidth <= 480;
-
   return (
     <>
-      <Box className="grid md:grid-cols-1 lg:grid-cols-2 gap-3 mb-10">
+      <Box
+        display="grid"
+        gridTemplateColumns={{ md: "1fr", lg: "repeat(2, 1fr)" }}
+        gap={3}
+        mb={10}
+        w="82vw"
+      >
         <MapList />
       </Box>
-      <Box
-        position="fixed"
-        bottom={isMobile ? "2" : "5"}
-        right={isMobile ? "2" : "5"}
-        backgroundColor="black"
-      >
-        <YouTubeContent className="" />
+      <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
+        <YouTubeContent />
       </Box>
     </>
   );

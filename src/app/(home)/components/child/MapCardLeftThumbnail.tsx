@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
@@ -71,8 +71,13 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     handleImageLoad(src);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
+  const thubnailWidth = { base: 120, sm: 170, xl: 200 };
+  const thubnailHeight = { base: (120 * 9) / 16, sm: (170 * 9) / 16, xl: (200 * 9) / 16 };
+
+  const width = useBreakpointValue(thubnailWidth);
+  const height = useBreakpointValue(thubnailHeight);
   return (
-    <Box className="relative group">
+    <Box className="relative group" width={width}>
       {loading && (
         <Box className="absolute inset-0 flex items-center justify-center">
           <Spinner />
@@ -82,10 +87,10 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         loader={({ src }) => src}
         alt={alt}
         src={imgSrc}
-        width={220}
-        height={120}
-        minW={220}
-        minH={120}
+        width={width}
+        height={height} // 16:9の比率で高さを設定
+        minW={width}
+        minH={height} // 16:9の比率で最小高さを設定
         className="rounded-md"
       />
       <Box

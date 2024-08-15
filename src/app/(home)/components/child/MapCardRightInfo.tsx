@@ -18,7 +18,14 @@ function MapCardRightInfo({ map }: MapCardProps) {
     <Link
       href={`/type/${map.id}`}
       onClick={handleLinkClick(`/type/${map.id}`, router)}
-      className="pl-3 pt-2 text-xs sm:text-sm md:text-md lg:text-lg flex flex-col justify-start h-full"
+      display="flex"
+      flexDirection="column"
+      justifyContent="start"
+      h="full"
+      w="65%"
+      pl={3}
+      pt={2}
+      fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
       _hover={{ textDecoration: "none" }} // 追加: ホバー時の下線を無効化する
     >
       <Tooltip
@@ -40,7 +47,6 @@ function MapCardRightInfo({ map }: MapCardProps) {
           color={"home.card.link"}
           fontWeight="bold"
           className="hover:underline"
-          maxW="440px"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"

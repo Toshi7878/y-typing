@@ -19,7 +19,6 @@ function MapCard({ map }: MapCardProps) {
   return (
     <Card
       key={map.id}
-      maxW="2xl"
       borderRadius="lg"
       transition="box-shadow 0.3s"
       _hover={{
