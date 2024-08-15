@@ -23,8 +23,7 @@ const ImageWithFallback = (props) => {
       height={120}
       minW={220}
       minH={120}
-      className="cover rounded-md"
-      style={{ aspectRatio: "16/9" }}
+      className="rounded-md"
     />
   );
 };
