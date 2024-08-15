@@ -2,7 +2,13 @@ import { Box, Text, UnorderedList, ListItem } from "@chakra-ui/react"; // Unorde
 import React from "react";
 
 // ダミーデータを更新
-const updates = [{ date: "2024-08-15", descriptions: ["更新履歴ページを追加"] }];
+const updates = [
+  {
+    date: "2024-08-16",
+    descriptions: ["0Miss & 0Lostの記録は正確率と最大コンボ数の色が変わるように変更"],
+  },
+  { date: "2024-08-15", descriptions: ["更新履歴ページを追加"] },
+];
 
 const UpdateHistory = () => {
   return (

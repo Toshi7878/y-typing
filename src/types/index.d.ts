@@ -73,6 +73,9 @@ interface ThemeColors {
           myrank: {
             color: string;
           };
+          perfect: {
+            color: string;
+          };
         };
       };
 

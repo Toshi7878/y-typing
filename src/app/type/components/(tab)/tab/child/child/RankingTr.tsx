@@ -1,6 +1,7 @@
 "use client";
 
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { ThemeColors } from "@/types";
 import { Box, Td, Text, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -31,7 +32,7 @@ interface RankingTrProps {
 }
 const RankingTr = (props: RankingTrProps) => {
   const { gameStateRef } = useRefs();
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   useEffect(() => {
     if (props.sessionUserId === props.rankingUserId) {
@@ -44,6 +45,7 @@ const RankingTr = (props: RankingTrProps) => {
   const kanaColor = theme.colors.type.ready.radio.kana.bg;
   const flickColor = theme.colors.type.ready.radio.flick.bg;
 
+  const isPerfect = props.miss === 0 && props.lost === 0;
   const getInputMode = () => {
     if (props.romaType && props.kanaType) {
       if (props.romaType >= props.kanaType) {
@@ -111,7 +113,16 @@ const RankingTr = (props: RankingTrProps) => {
           {props.flickType > 0 && <div>フリック入力タイプ数: {props.flickType}</div>}
           <div>ミス数: {props.miss}</div>
           <div>ロスト数: {props.lost}</div>
-          <div>最大コンボ: {props.maxCombo}</div>
+          <Box>
+            最大コンボ:{" "}
+            <Text
+              as="span"
+              {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
+              className={`${isPerfect ? "outline-text" : ""}`}
+            >
+              {props.maxCombo}
+            </Text>
+          </Box>
           <div>rkpm: {props.rkpm}</div>
           {props.defaultSpeed > 1 && <div>倍速: {props.defaultSpeed.toFixed(2)}x</div>}
           <div>
@@ -134,11 +145,9 @@ const RankingTr = (props: RankingTrProps) => {
         _hover={{ backgroundColor: theme.colors.type.card.hover.bg }}
         backgroundColor={props.isHighlighted ? theme.colors.type.card.hover.bg : "transparent"}
         className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
-        color={
-          props.sessionUserId === props.rankingUserId
-            ? theme.colors.type.tab.ranking.myrank.color
-            : theme.colors.type.tab.ranking.color
-        }
+        {...(props.sessionUserId === props.rankingUserId && {
+          color: theme.colors.type.tab.ranking.myrank.color,
+        })}
         onClick={props.handleShowMenu}
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}
@@ -148,7 +157,12 @@ const RankingTr = (props: RankingTrProps) => {
           {props.name}
         </Td>
         <Td>{props.score}</Td>
-        <Td>{((props.type / (props.miss + props.type)) * 100).toFixed(1) + "%"}</Td>
+        <Td
+          {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
+          className={`${isPerfect ? "outline-text" : ""}`}
+        >
+          {((props.type / (props.miss + props.type)) * 100).toFixed(1) + "%"}
+        </Td>
         <Td>{props.kpm}</Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           {getInputMode()}

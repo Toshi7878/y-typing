@@ -46,6 +46,9 @@ const sodaTheme: ThemeColors = {
           myrank: {
             color: "green",
           },
+          perfect: {
+            color: "#f6ff00",
+          },
         },
       },
 
@@ -117,6 +120,9 @@ const darkTheme: ThemeColors = {
         ranking: {
           myrank: {
             color: "#48BB78",
+          },
+          perfect: {
+            color: "#ffcc22",
           },
         },
       },
