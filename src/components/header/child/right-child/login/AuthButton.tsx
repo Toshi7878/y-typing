@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 import React from "react";
 import { handleSignIn, handleSignOut } from "./authAction";
@@ -15,26 +15,26 @@ export function SignIn({
   icon,
 }: SignInProps & React.ComponentPropsWithRef<typeof Button>) {
   return (
-    <form action={() => handleSignIn(provider)}>
+    <Box as="form" action={() => handleSignIn(provider)}>
       <Button leftIcon={icon} type="submit" variant="">
         {buttonText}
       </Button>
-    </form>
+    </Box>
   );
 }
 
 export function SignOut() {
   return (
-    <form
+    <Box
+      as="form"
       action={async () => {
         await handleSignOut();
-
         window.location.reload();
       }}
     >
       <Button type="submit" variant="unstyled" colorScheme="red">
         ログアウト
       </Button>
-    </form>
+    </Box>
   );
 }

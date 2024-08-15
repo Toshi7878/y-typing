@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { setCanUpload } from "../../(redux)/buttonFlagsSlice";
 import { setCreatorComment, setYtTitle } from "../../(redux)/tabInfoInputSlice";
 import { useSearchParams } from "next/navigation";
-import { extractYouTubeVideoId } from "@/components/header/new-map/extractYTId";
+import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
 import { z } from "zod";
 import { useRefs } from "../../(contexts)/refsProvider";
 import { setIsStarted } from "../../(redux)/ytStateSlice";

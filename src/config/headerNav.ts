@@ -1,10 +1,15 @@
-import { LeftNavConfig } from "@/types";
+import { HeaderMenu, LeftNavConfig } from "@/types";
 
 export const leftNavConfig: LeftNavConfig = {
-  mainNav: [
+  items: [
     {
-      title: "test1",
-      href: "#features",
+      title: "Menu",
+      menuItem: [{ title: "更新履歴", href: "/changelog" }],
     },
   ],
 };
+
+export const loginMenuItem: HeaderMenu[] = [
+  { title: "TestMenu1", href: "/" },
+  { title: "TestMenu2", href: "/" },
+];
