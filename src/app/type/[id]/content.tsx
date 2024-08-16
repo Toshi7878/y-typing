@@ -7,7 +7,7 @@ import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CreateMap } from "../(ts)/createTypingWord";
+import { CreateMap } from "../(ts)/scene-ts/ready/createTypingWord";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   inputModeAtom,

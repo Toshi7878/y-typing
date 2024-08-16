@@ -1,6 +1,6 @@
 import { Box, Stack } from "@chakra-ui/react";
 import React from "react";
-import { actions } from "@/app/type/(ts)/actions";
+import { actions } from "@/app/type/(ts)/scene-ts/end/actions";
 import { lineResultsAtom, mapIdAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtomValue } from "jotai";
 import { useFormState } from "react-dom";

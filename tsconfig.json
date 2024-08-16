@@ -22,6 +22,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/generateIdenticon.js", "src/app/type/(ts)/createTypingWord.ts", "src/app/type/components/(tab)/tab/child/child/StatusKpmValue.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/lib/generateIdenticon.js",
+    "src/app/type/(ts)/scene-ts/ready/createTypingWord.ts",
+    "src/app/type/components/(tab)/tab/child/child/StatusKpmValue.tsx"
+  ],
   "exclude": ["node_modules"]
 }

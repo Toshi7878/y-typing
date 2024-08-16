@@ -34,26 +34,16 @@ const EndText = ({
             です。ログインをするとランキングに登録することができます。
           </>
         ) : bestScoreRef.current === 0 ? (
-<<<<<<< HEAD
           <>初めての記録です！スコアは {status.score} です。</>
-        ) : status.score > bestScoreRef.current ? (
-=======
-          <>初めての記録です！スコアは{status.score}です。</>
         ) : status.score > bestScoreRef.current! ? (
->>>>>>> 595212e9c2203d6108fe4a3e5d52a7ec326d8cc2
           <>
             おめでとうございます！最高スコアが {bestScoreRef.current} から {status.score}{" "}
             に更新されました！
           </>
         ) : (
           <>
-<<<<<<< HEAD
             最高スコアは {bestScoreRef.current} です。記録更新まであと{" "}
-            {bestScoreRef.current - status.score} です。
-=======
-            最高スコアは{bestScoreRef.current}です。記録更新まであと
-            {bestScoreRef.current! - status.score}です。
->>>>>>> 595212e9c2203d6108fe4a3e5d52a7ec326d8cc2
+            {bestScoreRef.current! - status.score} です。
           </>
         )}
       </Text>

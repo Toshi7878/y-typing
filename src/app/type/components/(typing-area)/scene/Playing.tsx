@@ -12,18 +12,17 @@ import {
   speedAtom,
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { isTyped, Miss, shortcutKey, Success, Typing } from "@/app/type/(ts)/keydown";
-import { CalcTypeSpeed } from "@/app/type/(ts)/calcTypeSpeed";
+import { isTyped } from "@/app/type/(ts)/scene-ts/playing/keydown/typing";
 import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 import { Ticker } from "@pixi/ticker";
-import { setNewLine, updateTimer } from "@/app/type/(ts)/timer";
-import { romaConvert } from "@/app/type/(ts)/createTypingWord";
-import { updateReplayStatus } from "@/app/type/(ts)/replay";
+import { setNewLine, updateTimer } from "@/app/type/(ts)/scene-ts/playing/timer";
+import { CreateMap, romaConvert } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import { getLineCount } from "@/app/type/(ts)/youtubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
+import { handleTyping, shortcutKey } from "@/app/type/(ts)/scene-ts/playing/keydown/keydownHandle";
 export const ticker = new Ticker();
 
 interface PlayingProps {
@@ -49,7 +48,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
       setRef,
     } = useRefs();
 
-    const map = useAtomValue(mapAtom);
+    const map = useAtomValue(mapAtom) as CreateMap;
 
     const playingCenterRef = useRef<PlayingCenterRef>(null);
     const [scene, setScene] = useAtom(sceneAtom);
@@ -354,93 +353,26 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
             scene !== "replay"
           ) {
             event.preventDefault();
-            const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-            const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
 
-            const status = tabStatusRef.current!.getStatus();
-
-            if (result.successKey) {
-              const currentLine = map!.mapData[count];
-              const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
-              const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
-
-              const success = new Success(
-                status,
-                statusRef,
-                result.successKey,
-                lineConstantTime,
-                playingComboRef,
-                inputMode,
-                result.updatePoint,
-                result.newLineWord,
-                map!,
-                lineTime,
-                typeSpeed.totalKpm,
-                remainTime,
-                rankingScores,
-                scene,
-              );
-
-              playingCenterRef.current!.setLineWord(result.newLineWord);
-              playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
-
-              if (
-                scene === "practice" &&
-                speedData.playSpeed >= 1 &&
-                !result.newLineWord.nextChar["k"]
-              ) {
-                const combo = playingComboRef.current!.getCombo();
-                const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
-                const mode = statusRef.current!.lineStatus.lineStartInputMode;
-                const sp = statusRef.current!.lineStatus.lineStartSpeed;
-                const typeResult = statusRef.current!.lineStatus.typeResult;
-                const lResult = lineResults[count - 1];
-                const lMiss = statusRef.current!.lineStatus.lineMiss;
-                const lineScore = success.newStatus.point + success.newStatus.timeBonus + lMiss * 5;
-                const oldLineScore =
-                  lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
-
-                const isUpdateResult = lineScore >= oldLineScore;
-                const newLineResults = [...lineResults];
-
-                if (isUpdateResult) {
-                  newLineResults[count - 1] = {
-                    status: {
-                      p: success.newStatus.point,
-                      tBonus: success.newStatus.timeBonus,
-                      lType: statusRef.current!.lineStatus.lineType,
-                      lMiss,
-                      lRkpm: typeSpeed.lineRkpm,
-                      lKpm: typeSpeed.lineKpm,
-                      lostW: "",
-                      lLost: 0,
-                      combo,
-                      tTime,
-                      mode,
-                      sp,
-                    },
-                    typeResult,
-                  };
-                  setLineResults(newLineResults);
-                }
-                const newStatus = updateReplayStatus(
-                  map!.mapData.length - 1,
-                  newLineResults,
-                  map!,
-                  rankingScores,
-                );
-                tabStatusRef.current!.setStatus({
-                  ...newStatus,
-                  point: success.newStatus.point,
-                  timeBonus: success.newStatus.timeBonus,
-                });
-              } else {
-                tabStatusRef.current!.setStatus(success.newStatus);
-              }
-            } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-              const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineTime);
-              tabStatusRef.current!.setStatus(miss.newStatus);
-            }
+            handleTyping({
+              event,
+              cloneLineWord,
+              inputMode,
+              lineTime,
+              speedData,
+              tabStatusRef,
+              map,
+              count,
+              ytStateRef,
+              statusRef,
+              playingComboRef,
+              rankingScores,
+              scene,
+              playingCenterRef,
+              playingLineTimeRef,
+              lineResults,
+              setLineResults,
+            });
           } else {
             shortcutKey(
               event,

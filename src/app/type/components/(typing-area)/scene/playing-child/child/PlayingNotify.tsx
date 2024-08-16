@@ -63,9 +63,7 @@ const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
   return (
-    <Box
-      className={`${className} absolute left-1/2 transform -translate-x-[155px] whitespace-nowrap`}
-    >
+    <Box className={`${className} absolute left-[41%] whitespace-nowrap text-center`}>
       {notify.description && NON_ANIMATED.includes(notify.description) ? (
         <Box
           className={`${className} ${notify.description === "Replay" || notify.description === "Practice" ? "opacity-30" : ""}`}

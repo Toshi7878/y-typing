@@ -1,6 +1,6 @@
 "use client";
 import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
-import { CHAR_POINT } from "@/app/type/(ts)/createTypingWord";
+import { CHAR_POINT } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
 import {
   Box,

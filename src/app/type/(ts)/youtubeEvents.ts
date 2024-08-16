@@ -11,8 +11,8 @@ import {
   YTStateRef,
 } from "./type";
 import { ticker } from "../components/(typing-area)/scene/Playing";
-import { CreateMap } from "./createTypingWord";
-import { setNewLine } from "./timer";
+import { CreateMap } from "./scene-ts/ready/createTypingWord";
+import { setNewLine } from "./scene-ts/playing/timer";
 import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
 

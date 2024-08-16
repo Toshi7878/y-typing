@@ -1,13 +1,13 @@
-import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
-import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
-import { SkipGuideRef } from "../components/(typing-area)/scene/playing-child/child/PlayingSkipGuide";
-import { PlayingTotalTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingTotalTime";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
+import { TabStatusRef } from "../../../components/(tab)/tab/TabStatus";
+import { PlayingComboRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
+import { SkipGuideRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingSkipGuide";
+import { PlayingTotalTimeRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingTotalTime";
+import { PlayingCenterRef } from "../../../components/(typing-area)/scene/playing-child/PlayingCenter";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { defaultStatusRef } from "@/app/type/(contexts)/refsProvider";
 
-import { CreateMap } from "./createTypingWord";
+import { CreateMap } from "../ready/createTypingWord";
 import { LineResult } from "./lineResult";
 import {
   GameStateRef,
@@ -19,10 +19,10 @@ import {
   Speed,
   StatusRef,
   YTStateRef,
-} from "./type";
-import { ticker } from "../components/(typing-area)/scene/Playing";
+} from "../../type";
+import { ticker } from "../../../components/(typing-area)/scene/Playing";
 import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
-import { getLineCount } from "./youtubeEvents";
+import { getLineCount } from "../../youtubeEvents";
 
 export const updateTimer = (
   map: CreateMap,

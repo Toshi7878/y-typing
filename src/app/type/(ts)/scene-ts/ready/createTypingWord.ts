@@ -1,5 +1,5 @@
 import { Line } from "@/types";
-import { ROMA_MAP } from "./const/romaMap";
+import { ROMA_MAP } from "../../const/romaMap";
 import {
   InputModeType,
   LineData,
@@ -8,7 +8,7 @@ import {
   SpeedDifficulty,
   TypeChank,
   WordType,
-} from "./type";
+} from "../../type";
 
 const ZENKAKU_LIST = [
   "０",

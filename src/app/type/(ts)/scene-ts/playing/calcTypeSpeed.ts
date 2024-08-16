@@ -1,4 +1,4 @@
-import { Status, StatusRef } from "./type";
+import { Status, StatusRef } from "../../type";
 
 export class CalcTypeSpeed {
   lineKpm: number;

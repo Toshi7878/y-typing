@@ -1,5 +1,5 @@
 import { defaultStatusRef } from "../(contexts)/refsProvider";
-import { CreateMap } from "./createTypingWord";
+import { CreateMap } from "./scene-ts/ready/createTypingWord";
 import { GameStateRef, LineResultData, StatusRef } from "./type";
 
 export const proceedRetry = (

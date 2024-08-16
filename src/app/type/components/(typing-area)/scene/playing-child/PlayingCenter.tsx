@@ -59,7 +59,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   }));
 
   return (
-    <VStack mx="4" py="2" className="truncate cursor-none" flex={flex}>
+    <VStack mx="4" py="2" className="truncate cursor-none" flex={flex} align="start">
       <Box
         className="word-font outline-text text-white ml-6 mb-2 mt-1 text-[2.75rem]"
         style={{ letterSpacing: "0.1em" }}

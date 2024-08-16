@@ -14,7 +14,7 @@ import { useFormState } from "react-dom";
 import { useParams, useRouter } from "next/navigation";
 import { setCanUpload } from "../(redux)/buttonFlagsSlice";
 import { Line } from "@/types";
-import { CreateMap } from "@/app/type/(ts)/createTypingWord";
+import { CreateMap } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import { getThumbnailQuality } from "../(ts)/getThumbailQuality";
 
 export interface SendData {

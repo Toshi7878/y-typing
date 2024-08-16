@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { CreateMap } from "../(ts)/createTypingWord";
+import { CreateMap } from "../(ts)/scene-ts/ready/createTypingWord";
 import { InputModeType, LineResultData, SceneType, Speed } from "../(ts)/type";
 
 export const mapAtom = atom<CreateMap | null>(null);

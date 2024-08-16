@@ -3,16 +3,14 @@ import {
   HanDakuten,
   InputModeType,
   NormalizeHirakana,
-  PlayingRef,
   SceneType,
   Status,
   StatusRef,
   WordType,
-} from "./type";
-import { CHAR_POINT, CreateMap } from "./createTypingWord";
-import { SkipGuideRef } from "../components/(typing-area)/scene/playing-child/child/PlayingSkipGuide";
-import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
-import { CODE_TO_KANA, KEY_TO_KANA } from "./const/kanaKeyMap";
+} from "../../../type";
+import { CHAR_POINT, CreateMap } from "../../ready/createTypingWord";
+import { PlayingComboRef } from "../../../../components/(typing-area)/scene/playing-child/child/PlayingCombo";
+import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
 
 const keyboardCharacters = [
   "0",
@@ -651,119 +649,4 @@ export function isTyped({ event, lineWord }: TypingEvent) {
   const KANA = lineWord.nextChar["k"];
 
   return IS_TYPE && HAS_FOCUS && KANA;
-}
-
-const disableKeys = ["Home", "End", "PageUp", "PageDown", "CapsLock", "Backquote", "F3", "Space"];
-
-const keyWhiteList = ["F5"];
-
-export function shortcutKey(
-  event: KeyboardEvent,
-  skipGuideRef: React.RefObject<SkipGuideRef>,
-  playingRef: React.RefObject<PlayingRef>,
-  statusRef: React.RefObject<StatusRef>,
-  inputMode: InputModeType,
-  lineTime: number,
-  scene: SceneType,
-  isOpen: boolean,
-) {
-  //間奏スキップ
-  const skip = skipGuideRef.current?.getSkipGuide?.();
-
-  if (
-    disableKeys.includes(event.code) ||
-    (event.ctrlKey && event.code == "KeyF" && !isOpen) ||
-    event.altKey
-  ) {
-    event.preventDefault();
-  } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
-    return;
-  }
-
-  switch (event.code) {
-    case "Escape": //Escでポーズ
-      playingRef.current!.gamePause();
-      event.preventDefault();
-      break;
-    case "ArrowUp":
-      event.preventDefault();
-      break;
-    case "ArrowDown":
-      event.preventDefault();
-      break;
-    case "ArrowRight":
-      if (scene === "replay" || scene === "practice") {
-        playingRef.current!.nextLine();
-      }
-      event.preventDefault();
-      break;
-    case "ArrowLeft":
-      if (scene === "replay" || scene === "practice") {
-        playingRef.current!.prevLine();
-      }
-      event.preventDefault();
-      break;
-    case skip:
-      playingRef.current!.pressSkip();
-      event.preventDefault();
-      break;
-    case "F4":
-      playingRef.current!.retry();
-      event.preventDefault();
-      break;
-    case "F7":
-      playingRef.current!.changePlayMode();
-      event.preventDefault();
-      break;
-    case "F9": //F9で低速(練習モード)
-      if (scene === "practice") {
-        playingRef.current!.practiceSpeedDown();
-      }
-      event.preventDefault();
-      break;
-    case "F10":
-      if (scene === "playing") {
-        playingRef.current!.realtimeSpeedChange();
-        statusRef.current!.lineStatus.typeResult.push({
-          op: "speedChange",
-          t: Math.round(lineTime * 1000) / 1000,
-        });
-      } else if (scene === "practice") {
-        playingRef.current!.practiceSpeedUp();
-      }
-      event.preventDefault();
-      break;
-    case "KanaMode":
-    case "Romaji":
-      if (scene !== "replay") {
-        if (inputMode === "roma") {
-          playingRef.current!.inputModeChange("kana");
-          statusRef.current!.lineStatus.typeResult.push({
-            op: "kana",
-            t: Math.round(lineTime * 1000) / 1000,
-          });
-        } else {
-          playingRef.current!.inputModeChange("roma");
-          statusRef.current!.lineStatus.typeResult.push({
-            op: "roma",
-            t: Math.round(lineTime * 1000) / 1000,
-          });
-        }
-      }
-      event.preventDefault();
-      break;
-    case "Backspace":
-      if (scene === "replay" || scene === "practice") {
-        playingRef.current!.practiceSetLine();
-      }
-      event.preventDefault();
-      break;
-
-    case "Tab":
-      if (scene === "replay" || scene === "practice") {
-        playingRef.current!.openLineList();
-      }
-      event.preventDefault();
-      break;
-  }
 }

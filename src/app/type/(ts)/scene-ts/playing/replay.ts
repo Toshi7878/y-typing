@@ -1,10 +1,10 @@
-import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
-import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
-import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
+import { TabStatusRef } from "../../../components/(tab)/tab/TabStatus";
+import { PlayingComboRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingCombo";
+import { PlayingLineTimeRef } from "../../../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
+import { PlayingCenterRef } from "../../../components/(typing-area)/scene/playing-child/PlayingCenter";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
-import { CreateMap } from "./createTypingWord";
-import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown";
+import { CreateMap } from "../ready/createTypingWord";
+import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown/typing";
 import {
   GameStateRef,
   InputModeType,
@@ -14,7 +14,7 @@ import {
   Status,
   StatusRef,
   YTStateRef,
-} from "./type";
+} from "../../type";
 
 export const updateReplayStatus = (
   count: number,

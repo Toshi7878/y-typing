@@ -3,7 +3,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { resultSendSchema } from "./validationSchema";
-import { SendResultData } from "./type";
+import { SendResultData } from "../../type";
 
 const prisma = new PrismaClient();
 

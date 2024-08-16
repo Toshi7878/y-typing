@@ -1,6 +1,6 @@
-import { InputModeType, Status, StatusRef, WordType } from "./type";
-import { CreateMap } from "./createTypingWord";
-import { getRank } from "./keydown";
+import { InputModeType, Status, StatusRef, WordType } from "../../type";
+import { CreateMap } from "../ready/createTypingWord";
+import { getRank } from "./keydown/typing";
 
 export class LineResult {
   newStatus: Status;
