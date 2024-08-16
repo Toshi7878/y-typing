@@ -1,14 +1,9 @@
-import { Box, Stack, useToast } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
+import { Box, Stack } from "@chakra-ui/react";
+import { useRef } from "react";
 import { actions } from "@/app/type/(ts)/actions";
-import {
-  lineResultsAtom,
-  mapIdAtom,
-  speedAtom,
-  tabIndexAtom,
-} from "@/app/type/(atoms)/gameRenderAtoms";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useFormState } from "react-dom";
+import { lineResultsAtom, mapIdAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { useAtomValue } from "jotai";
+import { useFormState, useFormStatus } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 import PlayingTop from "./playing-child/PlayingTop";
 import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
@@ -24,9 +19,7 @@ interface EndProps {
 
 const End = ({ onOpen }: EndProps) => {
   const { data: session } = useSession();
-  const setTabIndex = useSetAtom(tabIndexAtom);
 
-  const toast = useToast();
   const mapId = useAtomValue(mapIdAtom);
   const speedData = useAtomValue(speedAtom);
   const lineResults = useAtomValue(lineResultsAtom);
@@ -70,44 +63,6 @@ const End = ({ onOpen }: EndProps) => {
   };
 
   const [state, formAction] = useFormState(upload, initialState);
-
-  useEffect(() => {
-    async function handleStateChange() {
-      if (state.status && state.status !== 200) {
-        toast({
-          title: "保存に失敗しました",
-          description: <small>{state.message}</small>,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-          containerStyle: {
-            border: "1px solid",
-
-            borderColor: "gray.200",
-            fontSize: "lg", // サイズを大きくする
-          },
-        });
-      } else if (state.status === 200) {
-        toast({
-          title: state.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-          containerStyle: {
-            border: "1px solid",
-
-            borderColor: "gray.200",
-            fontSize: "lg", // サイズを大きくする
-          },
-        });
-        setTabIndex(1);
-      }
-    }
-    handleStateChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
 
   const isPerfect = status.miss === 0 && status.lost === 0;
   const isPlayingMode =

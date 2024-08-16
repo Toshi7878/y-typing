@@ -1,13 +1,15 @@
+import { GameStateRef, Speed, Status } from "@/app/type/(ts)/type";
 import { Box, Text } from "@chakra-ui/react";
+import { Session } from "next-auth";
 import React from "react";
 
 interface EndTextProps {
   isPerfect: boolean;
-  gameStateRef: React.RefObject<any>;
-  session: any;
-  status: any;
-  bestScoreRef: React.RefObject<any>;
-  speedData: any;
+  gameStateRef: React.RefObject<GameStateRef>;
+  session: Session | null;
+  status: Status;
+  bestScoreRef: React.RefObject<number>;
+  speedData: Speed;
 }
 
 const EndText = ({
@@ -33,7 +35,7 @@ const EndText = ({
           </>
         ) : bestScoreRef.current === 0 ? (
           <>初めての記録です！スコアは{status.score}です。</>
-        ) : status.score > bestScoreRef.current ? (
+        ) : status.score > bestScoreRef.current! ? (
           <>
             おめでとうございます！最高スコアが{bestScoreRef.current}から{status.score}
             に更新されました！
@@ -41,7 +43,7 @@ const EndText = ({
         ) : (
           <>
             最高スコアは{bestScoreRef.current}です。記録更新まであと
-            {bestScoreRef.current - status.score}です。
+            {bestScoreRef.current! - status.score}です。
           </>
         )}
       </Text>

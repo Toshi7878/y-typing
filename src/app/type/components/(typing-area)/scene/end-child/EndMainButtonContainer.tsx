@@ -2,11 +2,12 @@ import { HStack } from "@chakra-ui/react";
 import React from "react";
 import EndUploadButton from "./EndRankingButton";
 import EndMainButton from "./child/EndMainButton";
+import { ActionState } from "@/app/type/(ts)/type";
 
 interface EndMainButtonContainerProps {
   isDisplayRankingButton: boolean;
   isScoreUpdated: boolean;
-  state: any;
+  state: ActionState;
   onOpen: () => void;
   formAction: () => void;
 }
@@ -21,11 +22,7 @@ const EndMainButtonContainer = ({
   return (
     <HStack justifyContent="space-around" id="end_main_buttons">
       {isDisplayRankingButton && (
-        <EndUploadButton
-          responseStatus={state.status}
-          isScoreUpdated={isScoreUpdated}
-          formAction={formAction}
-        />
+        <EndUploadButton isScoreUpdated={isScoreUpdated} formAction={formAction} state={state} />
       )}
 
       <EndMainButton text={"詳細リザルトを見る"} onClick={onOpen} />
