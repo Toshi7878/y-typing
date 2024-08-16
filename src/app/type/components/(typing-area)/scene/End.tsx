@@ -1,5 +1,5 @@
 import { Box, Stack, useToast } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { actions } from "@/app/type/(ts)/actions";
 import {
   lineResultsAtom,
@@ -10,11 +10,9 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import PlayingTop from "./playing-child/PlayingTop";
-import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
+
 import { useSession } from "next-auth/react";
 import EndText from "./end-child/EndText";
-import PlayingBottom from "./playing-child/PlayingBottom";
 import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
 import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 
@@ -32,13 +30,8 @@ const End = ({ onOpen }: EndProps) => {
   const lineResults = useAtomValue(lineResultsAtom);
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
-  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
-  const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
-  const playingTotalTimeRef = useRef(null);
 
   const initialState = { id: null, message: "", status: 0 };
-  const totalTimeProgressRef = useRef(null);
-  const skipGuideRef = useRef(null);
   const status = tabStatusRef.current!.getStatus();
 
   const upload = (): ReturnType<typeof actions> => {
@@ -122,38 +115,30 @@ const End = ({ onOpen }: EndProps) => {
     speedData.defaultSpeed >= 1 &&
     isPlayingMode;
   return (
-    <Box display="flex" flexDirection="column">
-      <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
-      <Box flex="1" className="text-center mx-6">
-        <Stack display="flex" spacing={8}>
-          <EndText
-            isPerfect={isPerfect}
-            gameStateRef={gameStateRef}
-            session={session}
-            status={status}
-            bestScoreRef={bestScoreRef}
-            speedData={speedData}
-          />
-          <EndMainButtonContainer
-            formAction={formAction}
-            isDisplayRankingButton={isDisplayRankingButton}
-            state={state}
-            onOpen={onOpen}
-            isScoreUpdated={isScoreUpdated}
-          />
-          <EndSubButtonContainer
-            isPlayingMode={isPlayingMode}
-            isDisplayRankingButton={isDisplayRankingButton}
-            state={state}
-            gameStateRef={gameStateRef}
-          />
-        </Stack>
-      </Box>
-      <PlayingBottom
-        skipGuideRef={skipGuideRef}
-        totalTimeProgressRef={totalTimeProgressRef}
-        playingTotalTimeRef={playingTotalTimeRef}
-      />
+    <Box flex="1" className="text-center mx-6">
+      <Stack display="flex" spacing={8}>
+        <EndText
+          isPerfect={isPerfect}
+          gameStateRef={gameStateRef}
+          session={session}
+          status={status}
+          bestScoreRef={bestScoreRef}
+          speedData={speedData}
+        />
+        <EndMainButtonContainer
+          formAction={formAction}
+          isDisplayRankingButton={isDisplayRankingButton}
+          state={state}
+          onOpen={onOpen}
+          isScoreUpdated={isScoreUpdated}
+        />
+        <EndSubButtonContainer
+          isPlayingMode={isPlayingMode}
+          isDisplayRankingButton={isDisplayRankingButton}
+          state={state}
+          gameStateRef={gameStateRef}
+        />
+      </Stack>
     </Box>
   );
 };

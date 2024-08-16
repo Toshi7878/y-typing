@@ -9,9 +9,14 @@ import {
   tabIndexAtom,
 } from "../../(atoms)/gameRenderAtoms";
 import Ready from "./scene/Ready";
-import { Card, useDisclosure } from "@chakra-ui/react";
+import { Box, Card, useDisclosure } from "@chakra-ui/react";
 import { PlayingRef } from "../../(ts)/type";
 import ResultDrawer from "./scene/result/ResultDrawer";
+import PlayingTop from "./scene/child/PlayingTop";
+import PlayingBottom from "./scene/child/PlayingBottom";
+import { PlayingLineTimeRef } from "./scene/playing-child/child/PlayingLineTime";
+import { PlayingTotalTimeRef } from "./scene/playing-child/child/PlayingTotalTime";
+import { SkipGuideRef } from "./scene/playing-child/child/PlayingSkipGuide";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
@@ -41,27 +46,50 @@ export const Scene = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
-  if (scene === "ready") {
-    return <Ready />;
-  } else if (isPlayed && map) {
-    return (
-      <>
-        <Playing ref={playingRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
-        {map!.mapData[0].options?.eternalCSS && (
+  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
+  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
+  const skipGuideRef = useRef<SkipGuideRef>(null);
+  return (
+    <Box display="flex" flexDirection="column" className={isPlayed ? "select-none" : ""}>
+      <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
+      {scene === "ready" ? (
+        <Ready />
+      ) : isPlayed && map ? (
+        <>
+          <Playing
+            ref={playingRef}
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            playingTotalTimeRef={playingTotalTimeRef}
+            skipGuideRef={skipGuideRef}
+            totalTimeProgressRef={totalTimeProgressRef}
+          />
+
+          {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
+
+          {map!.mapData[0].options?.eternalCSS && (
+            <style>{map!.mapData[0].options?.eternalCSS}</style>
+          )}
+        </>
+      ) : scene === "end" ? (
+        <>
+          <End onOpen={onOpen} />
+
+          {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
+
           <style>{map!.mapData[0].options?.eternalCSS}</style>
-        )}
-      </>
-    );
-  } else if (scene === "end") {
-    return (
-      <>
-        <End onOpen={onOpen} />
-        {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
-        <style>{map!.mapData[0].options?.eternalCSS}</style>
-      </>
-    );
-  }
+        </>
+      ) : null}
+      <PlayingBottom
+        skipGuideRef={skipGuideRef}
+        totalTimeProgressRef={totalTimeProgressRef}
+        playingTotalTimeRef={playingTotalTimeRef}
+      />
+    </Box>
+  );
 };
 
 function SceneWrapper() {

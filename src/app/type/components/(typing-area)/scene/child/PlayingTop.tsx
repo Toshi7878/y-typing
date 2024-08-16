@@ -1,9 +1,9 @@
 import { Box, HStack } from "@chakra-ui/react";
-import PlayingLineProgress from "./child/PlayingLineProgress";
+import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 
-import PlayingCombo from "./child/PlayingCombo";
-import PlayingLineTime, { PlayingLineTimeRef } from "./child/PlayingLineTime";
-import PlayingNotify from "./child/PlayingNotify";
+import PlayingCombo from "../playing-child/child/PlayingCombo";
+import PlayingLineTime, { PlayingLineTimeRef } from "../playing-child/child/PlayingLineTime";
+import PlayingNotify from "../playing-child/child/PlayingNotify";
 import { sceneAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtomValue } from "jotai";
 import { useRef } from "react";

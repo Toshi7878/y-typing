@@ -1,12 +1,12 @@
 import { Box, HStack } from "@chakra-ui/react";
-import PlayingLineProgress from "./child/PlayingLineProgress";
-import PlayingSkipGuide, { SkipGuideRef } from "./child/PlayingSkipGuide";
-import PlayingTotalTime, { PlayingTotalTimeRef } from "./child/PlayingTotalTime";
+import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
+import PlayingSkipGuide, { SkipGuideRef } from "../playing-child/child/PlayingSkipGuide";
+import PlayingTotalTime, { PlayingTotalTimeRef } from "../playing-child/child/PlayingTotalTime";
 import { sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtomValue } from "jotai";
-import PlayingBottomBadge from "./child/PlayingBottomBadge";
+import PlayingBottomBadge from "../playing-child/child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
+import PlayingLineSeekBadge from "../playing-child/child/PlayingLineSeekBadge";
 
 interface PlayingBottomRef {
   skipGuideRef: React.RefObject<SkipGuideRef>;

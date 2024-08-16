@@ -1,20 +1,12 @@
 import { Box, Flex } from "@chakra-ui/react";
-import PlayingTop from "./playing-child/PlayingTop";
 import { useEffect, useRef } from "react";
 import ReadyInputModeRadioCards from "./ready-child/ReadyInputModeRadioCards";
 import ReadyPlaySpeed from "./ready-child/ReadyPlaySpeed";
 import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./ready-child/ReadyPracticeButton";
-import { PlayingLineTimeRef } from "./playing-child/child/PlayingLineTime";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import PlayingBottom from "./playing-child/PlayingBottom";
 
 function Ready() {
-  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
-  const PlayingRemainTimeRef = useRef<PlayingLineTimeRef>(null);
-  const totalTimeProgressRef = useRef(null);
-  const skipGuideRef = useRef(null);
-  const playingTotalTimeRef = useRef(null);
   const { playerRef } = useRefs();
   const speedUpButtonRef = useRef<HTMLButtonElement>(null);
   const speedDownButtonRef = useRef<HTMLButtonElement>(null);
@@ -51,26 +43,18 @@ function Ready() {
   }, [playerRef]);
 
   return (
-    <Box display="flex" flexDirection="column">
-      <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={PlayingRemainTimeRef} />
-      <Box className="mx-12 mt-2" flex="1">
-        <Box className="font-bold text-2xl">Enterキー / 動画をクリックして開始</Box>
-        <Flex className="text-3xl text-center mt-6" justifyContent={"center"}>
-          <ReadyInputModeRadioCards />
-        </Flex>
-        <Flex className=" text-center mt-10" justifyContent="space-between">
-          <ReadyPlaySpeed
-            speedUpButtonRef={speedUpButtonRef}
-            speedDownButtonRef={speedDownButtonRef}
-          />
-          <ReadyPracticeButton />
-        </Flex>
-      </Box>
-      <PlayingBottom
-        skipGuideRef={skipGuideRef}
-        totalTimeProgressRef={totalTimeProgressRef}
-        playingTotalTimeRef={playingTotalTimeRef}
-      />
+    <Box className="mx-12 mt-2" flex="1">
+      <Box className="font-bold text-2xl">Enterキー / 動画をクリックして開始</Box>
+      <Flex className="text-3xl text-center mt-6" justifyContent={"center"}>
+        <ReadyInputModeRadioCards />
+      </Flex>
+      <Flex className=" text-center mt-10" justifyContent="space-between">
+        <ReadyPlaySpeed
+          speedUpButtonRef={speedUpButtonRef}
+          speedDownButtonRef={speedDownButtonRef}
+        />
+        <ReadyPracticeButton />
+      </Flex>
     </Box>
   );
 }
