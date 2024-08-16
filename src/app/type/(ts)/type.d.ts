@@ -220,3 +220,9 @@ export type NormalizeHirakana =
   | "ほ";
 
 export type HanDakuten = "ぱ" | "ぴ" | "ぷ" | "ぺ" | "ぽ";
+
+export interface ActionState {
+  id: number | null;
+  message: string;
+  status: number;
+}

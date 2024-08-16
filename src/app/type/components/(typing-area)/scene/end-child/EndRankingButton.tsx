@@ -2,7 +2,6 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useRef } from "react"; // useRefを追加
-import { useFormStatus } from "react-dom";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -13,24 +12,32 @@ import {
   Button,
   useDisclosure,
   Box,
+  useToast,
 } from "@chakra-ui/react"; // Chakra UIのコンポーネントをインポート
 import EndMainButton from "./child/EndMainButton";
+import { ActionState } from "@/app/type/(ts)/type";
+import { tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
+import { useSetAtom } from "jotai";
+import { useFormStatus } from "react-dom";
 
 interface UploadButtonProps {
-  responseStatus: number;
   isScoreUpdated: boolean;
   formAction: () => void;
+  state: ActionState;
 }
 
-const EndUploadButton = ({ responseStatus, isScoreUpdated, formAction }: UploadButtonProps) => {
+const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProps) => {
   const { pending } = useFormStatus();
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const setTabIndex = useSetAtom(tabIndexAtom);
+
+  const toast = useToast();
 
   useEffect(() => {
-    if (responseStatus === 200) {
+    if (state.status === 200) {
       setIsDisabled(true);
       queryClient.invalidateQueries({ queryKey: ["userRanking"] });
       onClose();
@@ -38,13 +45,51 @@ const EndUploadButton = ({ responseStatus, isScoreUpdated, formAction }: UploadB
       setIsDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseStatus]);
+  }, [state.status]);
 
   const handleClick = () => {
     if (!isScoreUpdated) {
       onOpen();
     }
   };
+
+  useEffect(() => {
+    function handleStateChange() {
+      if (state.status && state.status !== 200) {
+        toast({
+          title: "保存に失敗しました",
+          description: <small>{state.message}</small>,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-right",
+          containerStyle: {
+            border: "1px solid",
+
+            borderColor: "gray.200",
+            fontSize: "lg", // サイズを大きくする
+          },
+        });
+      } else if (state.status === 200) {
+        toast({
+          title: state.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-right",
+          containerStyle: {
+            border: "1px solid",
+
+            borderColor: "gray.200",
+            fontSize: "lg", // サイズを大きくする
+          },
+        });
+        setTabIndex(1);
+      }
+    }
+    handleStateChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   return (
     <>
