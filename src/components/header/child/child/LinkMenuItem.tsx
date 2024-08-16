@@ -10,18 +10,18 @@ const LinkMenuItem = ({ title, href }: LinkMenuItemProps) => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <MenuItem
-      fontSize="sm"
-      bg={theme.colors.background}
-      _hover={{
-        bg: "gray.600",
-      }}
-      color={theme.colors.color}
-    >
-      <Link href={href} _hover={{ textDecoration: "none" }}>
+    <Link href={href} _hover={{ textDecoration: "none" }}>
+      <MenuItem
+        fontSize="sm"
+        bg={theme.colors.background}
+        _hover={{
+          bg: "gray.600",
+        }}
+        color={theme.colors.color}
+      >
         {title}
-      </Link>
-    </MenuItem>
+      </MenuItem>
+    </Link>
   );
 };
 
