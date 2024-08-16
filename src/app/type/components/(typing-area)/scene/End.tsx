@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-import { Box, Stack, useToast } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-=======
 import { Box, Stack } from "@chakra-ui/react";
-import { useRef } from "react";
->>>>>>> 595212e9c2203d6108fe4a3e5d52a7ec326d8cc2
+import React from "react";
 import { actions } from "@/app/type/(ts)/actions";
 import { lineResultsAtom, mapIdAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtomValue } from "jotai";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
 
 import { useSession } from "next-auth/react";
