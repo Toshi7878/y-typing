@@ -20,13 +20,14 @@ const EndText = ({
   bestScoreRef,
   speedData,
 }: EndTextProps) => {
+  const playMode = gameStateRef.current!.playMode;
   return (
     <Box textAlign="left" fontSize="3xl" mx={2} id="end_text">
-      {isPerfect && <Text as="span">パーフェクト！！</Text>}
+      {isPerfect && playMode === "playing" && <Text as="span">パーフェクト！！</Text>}
       <Text as="span">
-        {gameStateRef.current!.practice.isPracticeMode ? (
+        {playMode === "practice" ? (
           <>練習モード終了</>
-        ) : gameStateRef.current!.replay.userName !== "" ? (
+        ) : playMode === "replay" ? (
           <>リプレイ再生終了</>
         ) : !session ? (
           <>
