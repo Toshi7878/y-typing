@@ -44,7 +44,7 @@ const ReadyPracticeButton = () => {
       setLineResults(result.data!.lineResult);
     }
 
-    gameStateRef.current!.practice.isPracticeMode = true;
+    gameStateRef.current!.playMode = "practice";
     playerRef.current.playVideo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);

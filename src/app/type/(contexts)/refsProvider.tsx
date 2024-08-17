@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
 import { TabStatusRef } from "../components/(tab)/tab/TabStatus";
-import { GameStateRef, PlayingRef, StatusRef, YTStateRef } from "../(ts)/type";
+import { GameStateRef, PlayingRef, PlayMode, StatusRef, YTStateRef } from "../(ts)/type";
 import { PlayingComboRef } from "../components/(typing-area)/scene/playing-child/child/PlayingCombo";
 import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
@@ -40,7 +40,7 @@ export const defaultGameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   isSeekedLine: false,
-  playMode: "playing",
+  playMode: "playing" as PlayMode,
   replay: {
     replayKeyCount: 0,
     userName: "",
