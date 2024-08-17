@@ -183,7 +183,7 @@ function ResultCard({
       <CardFooter py={0} className="ml-1 font-semibold text-lg">
         <Stack>
           <Box>
-            miss:{lMiss},{" "}
+            miss: {lMiss},{" "}
             <Tooltip
               label={`rkpm:${rkpm}`}
               placement="top"
@@ -193,10 +193,7 @@ function ResultCard({
               border="1px solid"
               borderColor={theme.colors.type.card.borderColor}
             >
-              <Text as="span">
-                kpm:
-                {kpm}
-              </Text>
+              <Text as="span">kpm: {kpm}</Text>
             </Tooltip>
             ,{" "}
             <Tooltip
@@ -209,8 +206,8 @@ function ResultCard({
               borderColor={theme.colors.type.card.borderColor}
             >
               <Text as="span">
-                point:{point}
-                {tBonus ? `+${tBonus}` : ""}/{maxLinePoint}
+                point: {point}
+                {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
               </Text>
             </Tooltip>
           </Box>
