@@ -33,7 +33,7 @@ const sodaTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#bee3f8", color: "black", borderColor: "#000", hover: { bg: "gray.200" } },
+      card: { bg: "#bee3f8", color: "#000000", borderColor: "#000000", hover: { bg: "gray.200" } },
       word: {
         correct: "#1aa3ff",
         next: "#FFF",
@@ -108,7 +108,7 @@ const darkTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#2b3035", color: "#FFF", borderColor: "#FFF", hover: { bg: "#f5f5f55b" } },
+      card: { bg: "#2b3035", color: "#FFFFFF", borderColor: "#FFFFFF", hover: { bg: "#f5f5f55b" } },
       word: {
         correct: "#3182ce",
         next: "#FFF",

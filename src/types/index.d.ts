@@ -56,7 +56,7 @@ interface ThemeColors {
       card: {
         bg: string;
         color: string;
-        borderColor: string;
+        borderColor: `#${string}`;
         hover: {
           bg: string;
         };

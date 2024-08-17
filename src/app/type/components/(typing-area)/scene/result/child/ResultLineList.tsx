@@ -25,9 +25,6 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const isManualScrollRef = useRef(false);
-  const lineCountRef = useRef(0);
-  const scoreCountRef = useRef(0);
-
   const scrollToCard = useCallback((newIndex: number) => {
     const card = cardRefs.current[newIndex];
     if (modalContentRef.current && card) {
@@ -66,6 +63,9 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
     [scene],
   );
 
+  let lineCount = 0;
+  let scoreCount = 0;
+
   const memoizedResultCards = useMemo(
     () =>
       lineResults.map((lineResult: LineResultData, index: number) => {
@@ -75,8 +75,9 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
           return null;
         }
 
-        lineCountRef.current++;
-        scoreCountRef.current += lineResult.status!.p! + lineResult.status!.tBonus!;
+        lineCount++;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        scoreCount += lineResult.status!.p! + lineResult.status!.tBonus!;
 
         lineResult;
         return (
@@ -85,8 +86,8 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
             lineResult={lineResult}
             lineData={lineData}
             index={index}
-            lineCount={lineCountRef.current}
-            scoreCount={scoreCountRef.current}
+            lineCount={lineCount}
+            scoreCount={scoreCount}
             cardRefs={cardRefs}
             lineSelectIndex={lineSelectIndex}
             handleCardClick={handleCardClick}

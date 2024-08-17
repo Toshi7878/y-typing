@@ -2,6 +2,7 @@
 import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { CHAR_POINT } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData, TypeResult } from "@/app/type/(ts)/type";
+import { ThemeColors } from "@/types";
 import {
   Box,
   Text,
@@ -41,7 +42,7 @@ function ResultCard({
   const inputMode = useAtomValue(inputModeAtom);
   const scene = useAtomValue(sceneAtom);
   const speedData = useAtomValue(speedAtom);
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const lineInputMode = lineResult.status?.mode ?? inputMode;
   const lineKanaWord = lineData.word.map((w) => w["k"]).join("");
@@ -163,7 +164,7 @@ function ResultCard({
                 >
                   <Text
                     as="span"
-                    _hover={{ bg: "gray.500" }}
+                    _hover={{ bg: `${theme.colors.type.card.borderColor}70` }}
                     color={
                       type.is
                         ? lostWord === ""
@@ -195,7 +196,7 @@ function ResultCard({
               border="1px solid"
               borderColor={theme.colors.type.card.borderColor}
             >
-              <Text as="span" _hover={{ bg: "gray.300" }}>
+              <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
                 kpm: {kpm}
               </Text>
             </Tooltip>
@@ -209,7 +210,7 @@ function ResultCard({
               border="1px solid"
               borderColor={theme.colors.type.card.borderColor}
             >
-              <Text as="span" _hover={{ bg: "gray.300" }}>
+              <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
                 point: {point}
                 {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
               </Text>
