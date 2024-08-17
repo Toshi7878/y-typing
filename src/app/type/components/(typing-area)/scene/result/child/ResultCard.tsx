@@ -200,7 +200,7 @@ function ResultCard({
             </Tooltip>
             ,{" "}
             <Tooltip
-              label={`Point: ${point}, Bonus:${tBonus}`}
+              label={`Point: ${point}, Bonus:${tBonus} = ${Number(point) + Number(tBonus)}`}
               placement="top"
               fontSize="sm"
               bg={theme.colors.popup.bg}

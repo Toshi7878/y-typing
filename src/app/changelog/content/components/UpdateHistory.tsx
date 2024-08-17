@@ -4,6 +4,12 @@ import React from "react";
 // ダミーデータを更新
 const updates = [
   {
+    date: "2024-08-18",
+    descriptions: [
+      "詳細リザルトの取得Point+timeBonus点にカーソルを合わせたときにPointとtimeBonusの合計数値表示を追加",
+    ],
+  },
+  {
     date: "2024-08-17",
     descriptions: [
       "リプレイモード終了時にステータスがリセットされるバグを修正",
