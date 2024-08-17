@@ -1,8 +1,9 @@
 "use client";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, useTheme } from "@chakra-ui/react";
 
 import React from "react";
 import { handleSignIn, handleSignOut } from "./authAction";
+import { ThemeColors } from "@/types";
 
 interface SignInProps {
   provider: string;
@@ -24,6 +25,7 @@ export function SignIn({
 }
 
 export function SignOut() {
+  const theme: ThemeColors = useTheme();
   return (
     <Box
       as="form"
@@ -32,7 +34,13 @@ export function SignOut() {
         window.location.reload();
       }}
     >
-      <Button type="submit" variant="unstyled" colorScheme="red">
+      <Button
+        type="submit"
+        variant="link"
+        fontSize="xs"
+        color={theme.colors.header.color}
+        _hover={{ color: theme.colors.header.hover.color }}
+      >
         ログアウト
       </Button>
     </Box>

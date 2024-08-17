@@ -1,4 +1,4 @@
-import { SignIn } from "./AuthButton";
+import { SignIn, SignOut } from "./AuthButton";
 import { Box, MenuDivider, MenuItem, useTheme } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, Button } from "@chakra-ui/react";
 import { CheckName } from "./CheckName";
@@ -61,40 +61,45 @@ export default function Login() {
   } else {
     return (
       <>
-        <Menu placement="bottom">
-          <MenuButton
-            fontSize="sm"
-            color={theme.colors.header.color}
-            _hover={{
-              color: theme.colors.header.hover.color,
-            }}
-            _active={{ color: theme.colors.header.hover.color }}
-            className="dropdown-toggle"
-          >
-            {session.user.name}
-          </MenuButton>
-          <MenuList bg={theme.colors.background} minW="fit-content">
-            {loginMenuItem.map((item, index) => {
-              return <LinkMenuItem key={index} title={item.title} href={item.href} />;
-            })}
+        {session?.user.name === null ? (
+          <SignOut />
+        ) : (
+          <Menu placement="bottom">
+            <MenuButton
+              fontSize="sm"
+              color={theme.colors.header.color}
+              _hover={{
+                color: theme.colors.header.hover.color,
+              }}
+              _active={{ color: theme.colors.header.hover.color }}
+              className="dropdown-toggle"
+            >
+              {session.user.name}
+            </MenuButton>
+            <MenuList bg={theme.colors.background} minW="fit-content">
+              {loginMenuItem.map((item, index) => {
+                return <LinkMenuItem key={index} title={item.title} href={item.href} />;
+              })}
 
-            <MenuDivider />
+              <MenuDivider />
 
-            <Box as="form" action={submitSignOut}>
-              <MenuItem
-                type="submit"
-                fontSize="sm"
-                bg={theme.colors.background}
-                _hover={{
-                  bg: "gray.600",
-                }}
-                color={theme.colors.color}
-              >
-                ログアウト
-              </MenuItem>
-            </Box>
-          </MenuList>
-        </Menu>
+              <Box as="form" action={submitSignOut}>
+                <MenuItem
+                  type="submit"
+                  fontSize="sm"
+                  bg={theme.colors.background}
+                  _hover={{
+                    bg: "gray.600",
+                  }}
+                  color={theme.colors.color}
+                >
+                  ログアウト
+                </MenuItem>
+              </Box>
+            </MenuList>
+          </Menu>
+        )}
+
         <CheckName name={session.user.name ?? ""} />
       </>
     );

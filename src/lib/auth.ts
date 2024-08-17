@@ -42,7 +42,7 @@ export const config: NextAuthConfig = {
       try {
         const url = new URL(request.url);
         const pathname = url.pathname;
-        if (pathname === "/dashboard/register") {
+        if (pathname === "/user/register") {
           if (!auth?.user?.name) {
             return !!auth;
           } else {
@@ -85,6 +85,16 @@ export const config: NextAuthConfig = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+  },
+  pages: {
+    signIn: "/",
   },
 };
 
