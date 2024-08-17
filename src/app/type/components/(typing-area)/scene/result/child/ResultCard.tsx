@@ -195,7 +195,9 @@ function ResultCard({
               border="1px solid"
               borderColor={theme.colors.type.card.borderColor}
             >
-              <Text as="span">kpm: {kpm}</Text>
+              <Text as="span" _hover={{ bg: "gray.300" }}>
+                kpm: {kpm}
+              </Text>
             </Tooltip>
             ,{" "}
             <Tooltip
@@ -207,7 +209,7 @@ function ResultCard({
               border="1px solid"
               borderColor={theme.colors.type.card.borderColor}
             >
-              <Text as="span">
+              <Text as="span" _hover={{ bg: "gray.300" }}>
                 point: {point}
                 {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
               </Text>
