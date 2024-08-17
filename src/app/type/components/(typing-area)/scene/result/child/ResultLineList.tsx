@@ -25,6 +25,8 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const isManualScrollRef = useRef(false);
+  const lineCountRef = useRef(0);
+  const scoreCountRef = useRef(0);
 
   const scrollToCard = useCallback((newIndex: number) => {
     const card = cardRefs.current[newIndex];
@@ -45,8 +47,6 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lineSelectIndex]);
-
-  let lineCount = 0;
 
   const handleCardClick = useCallback(
     (seekTime: number, lineNumber: number) => {
@@ -75,21 +75,26 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
           return null;
         }
 
-        lineCount++;
+        lineCountRef.current++;
+        scoreCountRef.current += lineResult.status!.p! + lineResult.status!.tBonus!;
+
+        lineResult;
         return (
           <ResultCard
             key={index}
             lineResult={lineResult}
             lineData={lineData}
             index={index}
-            lineCount={lineCount}
+            lineCount={lineCountRef.current}
+            scoreCount={scoreCountRef.current}
             cardRefs={cardRefs}
             lineSelectIndex={lineSelectIndex}
             handleCardClick={handleCardClick}
           />
         );
       }),
-    [lineResults, map, lineCount, lineSelectIndex, handleCardClick],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lineResults, map, lineSelectIndex],
   );
 
   return <>{memoizedResultCards}</>;

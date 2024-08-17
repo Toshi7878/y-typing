@@ -20,6 +20,7 @@ interface ResultCardProps {
   lineResult: LineResultData;
   index: number;
   lineCount: number;
+  scoreCount: number;
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
   lineSelectIndex: number | null;
@@ -30,6 +31,7 @@ function ResultCard({
   lineResult,
   index,
   lineCount,
+  scoreCount,
   lineData,
   cardRefs,
   lineSelectIndex,
@@ -197,7 +199,7 @@ function ResultCard({
             </Tooltip>
             ,{" "}
             <Tooltip
-              label={`Point: ${point}, Bonus:${tBonus} = ${Number(point) + Number(tBonus)}`}
+              label={`sumPoint: ${Number(point) + Number(tBonus)} Score: ${scoreCount}`}
               placement="top"
               fontSize="sm"
               bg={theme.colors.popup.bg}
