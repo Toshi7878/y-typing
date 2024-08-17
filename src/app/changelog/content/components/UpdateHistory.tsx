@@ -6,7 +6,7 @@ const updates = [
   {
     date: "2024-08-18",
     descriptions: [
-      "詳細リザルトの取得Point+timeBonus点にカーソルを合わせたときにPointとtimeBonusの合計数値・その時点でのスコア表示を追加",
+      "詳細リザルトの取得Point+timeBonus点にカーソルを合わせたときに合計Point表示・時点のスコア表示を追加",
     ],
   },
   {
