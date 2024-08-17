@@ -10,6 +10,7 @@ interface EndMainButtonContainerProps {
   state: ActionState;
   onOpen: () => void;
   formAction: () => void;
+  isPlayingMode: boolean;
 }
 
 const EndMainButtonContainer = ({
@@ -18,6 +19,7 @@ const EndMainButtonContainer = ({
   state,
   onOpen,
   formAction,
+  isPlayingMode,
 }: EndMainButtonContainerProps) => {
   return (
     <HStack justifyContent="space-around" id="end_main_buttons">
@@ -26,8 +28,7 @@ const EndMainButtonContainer = ({
       )}
 
       <EndMainButton text={"詳細リザルトを見る"} onClick={onOpen} />
-
-      <EndMainButton text={"結果をXにポスト"} onClick={() => {}} />
+      {isPlayingMode && <EndMainButton text={"結果をXにポスト"} onClick={() => {}} />}
     </HStack>
   );
 };

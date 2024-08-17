@@ -85,6 +85,7 @@ const End = ({ onOpen }: EndProps) => {
           state={state}
           onOpen={onOpen}
           isScoreUpdated={isScoreUpdated}
+          isPlayingMode={isPlayingMode}
         />
         <EndSubButtonContainer
           isPlayingMode={isPlayingMode}
