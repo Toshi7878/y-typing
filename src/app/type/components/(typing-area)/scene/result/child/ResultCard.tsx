@@ -163,7 +163,7 @@ function ResultCard({
                 >
                   <Text
                     as="span"
-                    _hover={{ bg: "gray.300" }}
+                    _hover={{ bg: "gray.500" }}
                     color={
                       type.is
                         ? lostWord === ""
