@@ -64,7 +64,8 @@ export function handleTyping({
 
   if (result.successKey) {
     const currentLine = map!.mapData[count];
-    const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+    const prevLine = map!.mapData[count - 1];
+    const remainTime = Number(currentLine.time) - Number(prevLine.time) - lineConstantTime;
     const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
 
     const success = new Success(
