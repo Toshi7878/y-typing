@@ -79,6 +79,7 @@ const RankingMenu = ({
         setHoveredIndex(null);
         setLineResults(result.data.lineResult);
         gameStateRef.current!.replay.userName = name;
+        gameStateRef.current!.playMode = "replay";
 
         const defaultSpeed = result.data.status.defaultSpeed;
         new YTSpeedController("setDefaultSpeed", {
@@ -95,28 +96,28 @@ const RankingMenu = ({
   );
   return (
     <Stack
-      className="rounded-md" // smサイズ以上のときは通常の位置に表示
+      className="rounded-md"
       position="absolute"
       zIndex="9999"
       bg={theme.colors.popup.bg}
       color={theme.colors.popup.color}
       boxShadow="md"
       p={2}
-      top={{ base: "-60px", md: "auto" }} // タブレットサイズ以下のときはtop-50で表示
+      top={{ base: "-60px", md: "auto" }}
     >
       <Button
         as="a"
         href={`/user/${userId}`}
         variant="unstyled"
         size="md"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }} // ホバー時の背景色を追加
+        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
       >
         ユーザーページへ
       </Button>
       <Button
-        variant="unstyled" // ボタンのスタイルを変更
+        variant="unstyled"
         size="md"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }} // ホバー時の背景色を追加
+        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
         onClick={() => handleReplayClick(name)}
         isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >

@@ -58,8 +58,7 @@ const End = ({ onOpen }: EndProps) => {
   const [state, formAction] = useFormState(upload, initialState);
 
   const isPerfect = status.miss === 0 && status.lost === 0;
-  const isPlayingMode =
-    gameStateRef.current!.replay.userName === "" && !gameStateRef.current!.practice.isPracticeMode;
+  const isPlayingMode = gameStateRef.current!.playMode === "playing";
 
   const isScoreUpdated = status.score >= bestScoreRef.current;
 

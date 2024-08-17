@@ -13,7 +13,7 @@ import {
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { isTyped } from "@/app/type/(ts)/scene-ts/playing/keydown/typing";
-import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
+import { PlayingRef, PlayMode, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 import { Ticker } from "@pixi/ticker";
@@ -307,7 +307,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
         if (scene === "playing") {
           const confirmMessage = "練習モードに移動しますか？";
           if (window.confirm(confirmMessage)) {
-            gameStateRef.current!.practice.isPracticeMode = true;
+            gameStateRef.current!.playMode = "practice";
             setScene("practice");
           }
         } else {
@@ -315,6 +315,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
           if (window.confirm(confirmMessage)) {
             gameStateRef.current!.practice = structuredClone(defaultGameStateRef.practice);
             gameStateRef.current!.replay = structuredClone(defaultGameStateRef.replay);
+            gameStateRef.current!.playMode = "playing";
             setScene("playing");
             onClose();
             playingRef.current!.retry();

@@ -40,13 +40,13 @@ export const defaultGameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   isSeekedLine: false,
+  playMode: "playing",
   replay: {
     replayKeyCount: 0,
     userName: "",
   },
   practice: {
     hasMyRankingData: false,
-    isPracticeMode: false,
   },
 };
 export interface RefsContextType {

@@ -86,13 +86,13 @@ export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
   isSeekedLine: boolean;
+  playMode: PlayMode;
   replay: {
     replayKeyCount: number;
     userName: string;
   };
   practice: {
     hasMyRankingData: boolean;
-    isPracticeMode: boolean;
   };
 }
 
