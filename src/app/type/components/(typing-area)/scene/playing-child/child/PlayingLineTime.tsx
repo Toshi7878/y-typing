@@ -25,7 +25,7 @@ const PlayingLineTime = forwardRef<PlayingLineTimeRef, PlayingLineTimeProps>(
         setRef("playingLineTimeRef", ref.current!);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [remainTime, lineKpm]);
 
     useImperativeHandle(ref, () => ({
       getRemainTime: () => remainTime,

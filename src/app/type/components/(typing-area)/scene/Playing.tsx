@@ -454,13 +454,6 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
         currentPlayingCenterRef!.resetWordLyrics();
         currentTotalTimeProgress!.value = 0;
         currentLineProgress!.value = 0;
-        if (scene !== "end" && scene !== "playing") {
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          tabStatusRef.current!.resetStatus();
-
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
-        }
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
