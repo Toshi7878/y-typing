@@ -18,6 +18,8 @@ export default function Content() {
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 480);
     handleResize(); // 初期値を設定
+    window.getSelection()!.removeAllRanges();
+    NProgress.done();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -38,10 +40,6 @@ export default function Content() {
       setVideoId(null);
     };
   }, [router, setVideoId]);
-
-  useEffect(() => {
-    NProgress.done();
-  }, []);
 
   return (
     <>

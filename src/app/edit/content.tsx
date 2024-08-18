@@ -27,6 +27,7 @@ const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   useEffect(() => {
+    window.getSelection()!.removeAllRanges();
     NProgress.done();
   }, []);
   return (
