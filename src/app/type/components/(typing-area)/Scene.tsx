@@ -4,6 +4,7 @@ import End from "./scene/End";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   isHoverDrawerLabelAtom,
+  lineSelectIndexAtom,
   mapAtom,
   sceneAtom,
   tabIndexAtom,
@@ -17,13 +18,19 @@ import PlayingBottom from "./scene/child/PlayingBottom";
 import { PlayingLineTimeRef } from "./scene/playing-child/child/PlayingLineTime";
 import { PlayingTotalTimeRef } from "./scene/playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./scene/playing-child/child/PlayingSkipGuide";
+import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
   const map = useAtomValue(mapAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
-
+  const lineSelectIndex = useAtomValue(lineSelectIndexAtom);
+  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
+  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
+  const skipGuideRef = useRef<SkipGuideRef>(null);
   useEffect(() => {
     if (isHovering) {
       onOpen();
@@ -37,8 +44,6 @@ export const Scene = () => {
   const setTabIndex = useSetAtom(tabIndexAtom);
   const playingRef = useRef<PlayingRef>(null);
 
-  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
-
   useEffect(() => {
     if (isPlayed) {
       setTabIndex(0);
@@ -46,11 +51,7 @@ export const Scene = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
-  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
-  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
-  const skipGuideRef = useRef<SkipGuideRef>(null);
+  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
   return (
     <Box display="flex" flexDirection="column" className={isPlayed ? "select-none" : ""}>
       <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
@@ -69,6 +70,7 @@ export const Scene = () => {
           />
 
           {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
+          {lineSelectIndex !== null && <PracticeLineCard />}
 
           {map!.mapData[0].options?.eternalCSS && (
             <style>{map!.mapData[0].options?.eternalCSS}</style>
