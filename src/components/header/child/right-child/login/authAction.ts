@@ -2,7 +2,7 @@
 
 import { signIn, signOut } from "@/lib/auth";
 
-export async function handleSignIn(provider: string) {
+export async function handleSignIn(provider: "google" | "discord") {
   await signIn(provider);
 }
 

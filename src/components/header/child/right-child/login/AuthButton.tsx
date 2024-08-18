@@ -2,7 +2,7 @@
 import { Box, Button, useTheme } from "@chakra-ui/react";
 
 import React from "react";
-import { handleSignIn, handleSignOut } from "./authAction";
+import { handleSignOut } from "./authAction";
 import { ThemeColors } from "@/types";
 
 interface SignInProps {
@@ -16,11 +16,7 @@ export function SignIn({
   icon,
 }: SignInProps & React.ComponentPropsWithRef<typeof Button>) {
   return (
-    <Box as="form" action={() => handleSignIn(provider)}>
-      <Button leftIcon={icon} type="submit" variant="">
-        {buttonText}
-      </Button>
-    </Box>
+
   );
 }
 

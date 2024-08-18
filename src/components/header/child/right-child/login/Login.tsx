@@ -6,7 +6,7 @@ import { BsDiscord } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { ThemeColors } from "@/types";
-import { handleSignOut } from "./authAction";
+import { handleSignIn, handleSignOut } from "./authAction";
 import LinkMenuItem from "../../child/LinkMenuItem";
 import { loginMenuItem } from "@/config/headerNav";
 
@@ -33,28 +33,30 @@ export default function Login() {
           ログイン
         </MenuButton>
         <MenuList bg={theme.colors.background}>
-          <MenuItem
-            _hover={{ bg: "#7289DA", color: "white" }}
-            bg={theme.colors.background}
-            color={theme.colors.color}
-          >
-            <SignIn
-              provider="discord"
-              buttonText={"Discordでログイン"}
-              icon={<BsDiscord size="1.5em" />}
-            />
-          </MenuItem>
-          <MenuItem
-            _hover={{ bg: "#DB4437", color: "white" }}
-            bg={theme.colors.background}
-            color={theme.colors.color}
-          >
-            <SignIn
-              provider="google"
-              buttonText={"Googleでログイン"}
-              icon={<BsGoogle size="1.5em" />}
-            />
-          </MenuItem>
+          <Box as="form" action={() => handleSignIn("discord")}>
+            <MenuItem
+              _hover={{ bg: "#7289DA", color: "white" }}
+              bg={theme.colors.background}
+              color={theme.colors.color}
+              type="submit"
+            >
+              <Button leftIcon={<BsDiscord size="1.5em" />} variant="">
+                Discordでログイン
+              </Button>
+            </MenuItem>
+          </Box>
+          <Box as="form" action={() => handleSignIn("google")}>
+            <MenuItem
+              _hover={{ bg: "#DB4437", color: "white" }}
+              bg={theme.colors.background}
+              color={theme.colors.color}
+              type="submit"
+            >
+              <Button leftIcon={<BsGoogle size="1.5em" />} variant="">
+                Googleでログイン
+              </Button>
+            </MenuItem>
+          </Box>
         </MenuList>
       </Menu>
     );
