@@ -31,9 +31,12 @@ function ResultCardHeader({
   return (
     <CardHeader py={0}>
       <Box>
-        <Text as="span" data-list-number={index} mr={2}>
+        <Text as="span" data-list-number={index}>
           {lineCount}/{map!.lineLength}
-        </Text>{" "}
+        </Text>
+        <Text as="span" mx={2}>
+          {"|"}
+        </Text>
         <Tooltip
           label={`ライン打鍵数${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
           placement="top"
@@ -43,7 +46,13 @@ function ResultCardHeader({
           border="1px solid"
           borderColor={theme.colors.type.card.borderColor}
         >
-          <span className="line-notes">{lineNotes}打</span>
+          <Text
+            as="span"
+            _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
+            className="line-notes"
+          >
+            {lineNotes}打
+          </Text>
         </Tooltip>
         ÷{" "}
         <Tooltip
@@ -55,7 +64,13 @@ function ResultCardHeader({
           border="1px solid"
           borderColor={theme.colors.type.card.borderColor}
         >
-          <span className="line-time">{lineTime.toFixed(1)}秒</span>
+          <Text
+            as="span"
+            _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
+            className="line-time"
+          >
+            {lineTime.toFixed(1)}秒
+          </Text>
         </Tooltip>
         ={" "}
         <Tooltip
@@ -67,9 +82,13 @@ function ResultCardHeader({
           border="1px solid"
           borderColor={theme.colors.type.card.borderColor}
         >
-          <span className="line-kpm">
+          <Text
+            as="span"
+            className="line-kpm"
+            _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
+          >
             {lineKpm.toFixed(0)}kpm {lineSpeed > 1 && <>{`(${lineSpeed.toFixed(2)}倍速)`}</>}
-          </span>
+          </Text>
         </Tooltip>
       </Box>
     </CardHeader>

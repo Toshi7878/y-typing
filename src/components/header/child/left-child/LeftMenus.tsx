@@ -12,8 +12,6 @@ function LeftMenus({ items }: LeftMenusProps) {
 
   const theme: ThemeColors = useTheme();
 
-  console.log(pathname);
-
   return (
     <Box as="nav">
       {items?.map((item, index) => {

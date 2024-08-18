@@ -97,7 +97,6 @@ export const updateTimer = (
     Math.abs(Number(currentLine.time) / speedData.playSpeed - ytConstantTime - displayRemainTime) >=
     0.1
   ) {
-    console.log(displayRemainTime);
     const currentPlayingCenterRef = playingCenterRef.current;
 
     const lineWord = currentPlayingCenterRef!.getLineWord();

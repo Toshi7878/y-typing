@@ -99,8 +99,6 @@ export const replay = (
       const status = tabStatusRef.current!.getStatus();
 
       if (isSuccess) {
-        console.log("update replay Success");
-
         const result =
           inputMode === "roma"
             ? new RomaInput({ chars, lineWord })

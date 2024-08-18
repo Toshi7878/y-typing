@@ -9,7 +9,6 @@ import { leftNavConfig } from "@/config/headerNav";
 function LeftNav() {
   const pathname = usePathname();
 
-  console.log(pathname);
   return (
     <Box display="flex" gap={{ base: 0, md: 10 }} alignItems="center">
       <SiteLogo />

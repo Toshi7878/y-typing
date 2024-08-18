@@ -8,8 +8,6 @@ function SiteLogo() {
   const router = useRouter();
   const pathname = usePathname();
   const theme: ThemeColors = useTheme();
-
-  console.log(pathname);
   return (
     <Link
       href={"/"}
