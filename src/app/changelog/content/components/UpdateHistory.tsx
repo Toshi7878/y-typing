@@ -3,6 +3,7 @@ import React from "react";
 
 // ダミーデータを更新
 const updates = [
+  { date: "2024-08-19", descriptions: [`ローマ字入力モードで "..." → "z." ".." → "z," に対応`] },
   {
     date: "2024-08-18",
     descriptions: [

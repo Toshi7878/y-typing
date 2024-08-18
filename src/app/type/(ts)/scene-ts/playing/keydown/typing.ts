@@ -148,15 +148,41 @@ const OptimisationWhiteList = ["っっ", "っん", "っい", "っう"];
 const kana_mode_convert_rule_before = ["←", "↓", "↑", "→", "『", "』"];
 const kana_mode_convert_rule_after = ["ひだり", "した", "うえ", "みぎ", "「", "」"];
 
-const zCommands = {
-  "...": { k: "...", r: ["z."], p: CHAR_POINT * 3 },
+const Z_COMMAND_MAP = {
+  "...": { k: "...", r: ["z.", "z,."], p: CHAR_POINT * 3 },
   "..": { k: "..", r: ["z,"], p: CHAR_POINT * 2 },
 };
+
+class ProcessedLineWord {
+  processedLineWord: WordType;
+
+  constructor({ chars, lineWord }: JudgeType) {
+    this.processedLineWord = this.zCommand({ chars, lineWord });
+  }
+
+  private zCommand({ chars, lineWord }: JudgeType) {
+    let newLineWord = structuredClone(lineWord);
+    if (chars.code == "KeyZ" && !chars.shift) {
+      const doublePeriod = newLineWord.nextChar.k === "." && newLineWord.word[0].k === ".";
+      if (doublePeriod) {
+        const triplePeriod = doublePeriod && newLineWord.word[1].k === ".";
+        if (triplePeriod) {
+          newLineWord.nextChar = structuredClone(Z_COMMAND_MAP["..."]);
+          newLineWord.word.splice(0, 2);
+        } else {
+          newLineWord.nextChar = structuredClone(Z_COMMAND_MAP[".."]);
+          newLineWord.word.splice(0, 1);
+        }
+      }
+    }
+    return newLineWord;
+  }
+}
 
 export interface CharsType {
   keys: string[];
   key: string;
-  code?: string;
+  code: string;
   shift?: boolean;
 }
 
@@ -171,7 +197,8 @@ export class RomaInput {
   failKey: string;
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
-    const result = this.hasRomaPattern(chars, lineWord);
+    const processedLineWord = new ProcessedLineWord({ chars, lineWord }).processedLineWord;
+    const result = this.hasRomaPattern(chars, processedLineWord);
     this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
     this.failKey = result.failKey ?? "";
@@ -219,14 +246,18 @@ export class RomaInput {
 
   private kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: WordType) {
     if (kana.length >= 2 && romaPattern.length) {
-      const IS_SOKUON_YOUON =
-        (kana[0] != "っ" && (romaPattern[0][0] == "x" || romaPattern[0][0] == "l")) ||
-        (kana[0] == "っ" && (char == "u" || romaPattern[0][0] == char));
+      const isSokuonYouon =
+        (kana[0] != "っ" && (romaPattern[0][0] === "x" || romaPattern[0][0] === "l")) ||
+        (kana[0] == "っ" && (char === "u" || romaPattern[0][0] === char));
 
-      if (IS_SOKUON_YOUON) {
+      const isToriplePeriod = kana === "..." && char === ",";
+      if (isSokuonYouon) {
         //促音・拗音のみを入力した場合、かな表示を更新
         newLineWord.correct["k"] += newLineWord.nextChar["k"].slice(0, 1);
         newLineWord.nextChar["k"] = newLineWord.nextChar["k"].slice(1);
+      } else if (isToriplePeriod) {
+        newLineWord.correct["k"] += newLineWord.nextChar["k"].slice(0, 2);
+        newLineWord.nextChar["k"] = newLineWord.nextChar["k"].slice(2);
       }
     }
 

@@ -95,6 +95,7 @@ export const replay = (
       const chars: CharsType = {
         keys: [key],
         key: key,
+        code: `Key${key.toUpperCase()}`,
       };
       const status = tabStatusRef.current!.getStatus();
 
