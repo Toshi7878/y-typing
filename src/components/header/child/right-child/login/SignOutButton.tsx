@@ -5,22 +5,7 @@ import React from "react";
 import { handleSignOut } from "./authAction";
 import { ThemeColors } from "@/types";
 
-interface SignInProps {
-  provider: string;
-  buttonText: string;
-  icon: React.ReactElement;
-}
-export function SignIn({
-  provider,
-  buttonText,
-  icon,
-}: SignInProps & React.ComponentPropsWithRef<typeof Button>) {
-  return (
-
-  );
-}
-
-export function SignOut() {
+export function SignOutButton() {
   const theme: ThemeColors = useTheme();
   return (
     <Box
