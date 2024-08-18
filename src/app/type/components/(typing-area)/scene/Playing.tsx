@@ -364,7 +364,6 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
               tabStatusRef,
               map,
               count,
-              ytStateRef,
               statusRef,
               playingComboRef,
               rankingScores,

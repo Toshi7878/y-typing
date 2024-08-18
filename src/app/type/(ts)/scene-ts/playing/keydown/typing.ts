@@ -512,7 +512,6 @@ export class Success {
     updatePoint: number,
     newLineWord: WordType,
     map: CreateMap,
-    lineTime: number,
     totalTypeSpeed: number,
     remainTime: number,
     rankingScores: number[],
@@ -536,7 +535,7 @@ export class Success {
       statusRef.current!.lineStatus.typeResult.push({
         c: successKey,
         is: true,
-        t: Math.round(lineTime * 1000) / 1000,
+        t: lineConstantTime,
       });
     }
   }
@@ -583,7 +582,7 @@ export class Success {
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(remainTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
-      statusRef.current!.lineStatus.lineClearTime = Math.round(lineConstantTime * 1000) / 1000;
+      statusRef.current!.lineStatus.lineClearTime = lineConstantTime;
       newStatus.score += newStatus.point + timeBonus;
       statusRef.current!.status.completeCount++;
       newStatus.line =
@@ -610,13 +609,13 @@ export class Miss {
     statusRef: React.RefObject<StatusRef>,
     failKey: string,
     playingComboRef: React.RefObject<PlayingComboRef>,
-    lineTime: number,
+    lineConstantTime: number,
   ) {
     this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef);
 
     statusRef.current!.lineStatus.typeResult.push({
       c: failKey,
-      t: Math.round(lineTime * 1000) / 1000,
+      t: lineConstantTime,
     });
   }
 

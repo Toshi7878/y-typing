@@ -56,7 +56,6 @@ export const replay = (
   count: number,
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
-
   playingRef: React.RefObject<PlayingRef>,
   map: CreateMap,
   lineTime: number,
@@ -87,7 +86,7 @@ export const replay = (
 
   const keyTime = typeData.t;
 
-  if (lineTime >= keyTime) {
+  if (lineConstantTime >= keyTime) {
     const key = typeData.c;
     const isSuccess = typeData.is;
     const option = typeData.op;
@@ -121,7 +120,6 @@ export const replay = (
             result.updatePoint,
             result.newLineWord,
             map!,
-            lineTime,
             typeSpeed.totalKpm,
             remainTime,
             rankingScores,
@@ -144,7 +142,7 @@ export const replay = (
         playingCenterRef.current!.setLineWord(result.newLineWord);
       } else {
         console.log("update replay failed");
-        const miss = new Miss(status, statusRef, key, playingComboRef, lineTime);
+        const miss = new Miss(status, statusRef, key, playingComboRef, lineConstantTime);
         tabStatusRef.current!.setStatus(miss.newStatus);
       }
     } else if (option) {

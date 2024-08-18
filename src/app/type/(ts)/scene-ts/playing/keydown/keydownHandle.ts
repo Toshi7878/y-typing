@@ -28,7 +28,6 @@ interface HandleTypingParams {
   tabStatusRef: RefObject<TabStatusRef>;
   map: CreateMap;
   count: number;
-  ytStateRef: RefObject<YTStateRef>;
   statusRef: RefObject<StatusRef>;
   playingComboRef: RefObject<PlayingComboRef>;
   rankingScores: number[];
@@ -47,7 +46,6 @@ export function handleTyping({
   tabStatusRef,
   map,
   count,
-  ytStateRef,
   statusRef,
   playingComboRef,
   rankingScores,
@@ -78,7 +76,6 @@ export function handleTyping({
       result.updatePoint,
       result.newLineWord,
       map!,
-      lineTime,
       typeSpeed.totalKpm,
       remainTime,
       rankingScores,
@@ -138,7 +135,7 @@ export function handleTyping({
       tabStatusRef.current!.setStatus(success.newStatus);
     }
   } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-    const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineTime);
+    const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineConstantTime);
     tabStatusRef.current!.setStatus(miss.newStatus);
   }
 }
