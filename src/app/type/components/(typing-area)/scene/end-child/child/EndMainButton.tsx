@@ -1,22 +1,22 @@
 import { ThemeColors } from "@/types";
 import { Button, useTheme } from "@chakra-ui/react";
 import React from "react";
+import { useFormStatus } from "react-dom";
 
 interface EndMainButtonProps {
   text: string;
   onClick?: () => void;
   isDisabled?: boolean;
-  pending?: boolean;
   type?: "button" | "submit" | "reset";
 }
 const EndMainButton = ({
   text,
   onClick = () => {},
   isDisabled = false,
-  pending = false,
   type = "button",
 }: EndMainButtonProps) => {
   const theme: ThemeColors = useTheme();
+  const { pending } = useFormStatus();
 
   return (
     <Button

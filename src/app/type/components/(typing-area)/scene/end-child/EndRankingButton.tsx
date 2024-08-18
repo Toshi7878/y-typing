@@ -18,7 +18,7 @@ import EndMainButton from "./child/EndMainButton";
 import { ActionState } from "@/app/type/(ts)/type";
 import { tabIndexAtom } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useSetAtom } from "jotai";
-import { useFormStatus } from "react-dom";
+import AlertDialogButton from "./child/AlertDialogButton";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
@@ -27,7 +27,6 @@ interface UploadButtonProps {
 }
 
 const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProps) => {
-  const { pending } = useFormStatus();
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
@@ -107,9 +106,7 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
                 キャンセル
               </Button>
               <Box as="form" action={formAction}>
-                <Button colorScheme="red" type="submit" isLoading={pending} ml={3}>
-                  ランキングに登録
-                </Button>
+                <AlertDialogButton />
               </Box>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -119,7 +116,6 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
         <EndMainButton
           text={isDisabled ? "ランキング登録完了" : "ランキング登録"}
           isDisabled={isDisabled}
-          pending={pending}
           type={isScoreUpdated ? "submit" : "button"}
           onClick={handleClick}
         />
