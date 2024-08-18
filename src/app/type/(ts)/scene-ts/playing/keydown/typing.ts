@@ -258,6 +258,8 @@ export class RomaInput {
       } else if (isToriplePeriod) {
         newLineWord.correct["k"] += newLineWord.nextChar["k"].slice(0, 2);
         newLineWord.nextChar["k"] = newLineWord.nextChar["k"].slice(2);
+        newLineWord.nextChar["p"] = CHAR_POINT;
+        this.updatePoint = CHAR_POINT * 2;
       }
     }
 
