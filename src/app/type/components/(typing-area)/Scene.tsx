@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";

@@ -41,7 +41,7 @@ function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
         </DrawerHeader>
         <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} color={theme.colors.color} />
         <DrawerBody overflowY="auto" position="relative" ref={modalContentRef}>
-          <ResultLineList modalContentRef={modalContentRef} />
+          <ResultLineList modalContentRef={modalContentRef} onClose={onClose} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

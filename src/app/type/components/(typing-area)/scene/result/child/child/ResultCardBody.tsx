@@ -47,6 +47,7 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
                         : theme.colors.type.word.correct
                       : theme.colors.type.word.error
                   }
+                  wordBreak="break-all"
                 >
                   {type.c.replace(/ /g, "ˍ")}
                 </Text>

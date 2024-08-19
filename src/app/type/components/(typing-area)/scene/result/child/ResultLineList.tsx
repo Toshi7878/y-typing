@@ -14,9 +14,10 @@ import ResultCard from "./ResultCard";
 
 interface ResultLineListProps {
   modalContentRef: React.RefObject<HTMLDivElement>;
+  onClose: () => void;
 }
 
-function ResultLineList({ modalContentRef }: ResultLineListProps) {
+function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
   const map = useAtomValue(mapAtom);
   const scene = useAtomValue(sceneAtom);
   const { playerRef, gameStateRef } = useRefs();
@@ -48,6 +49,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
   const handleCardClick = useCallback(
     (seekTime: number, lineNumber: number) => {
       if (scene !== "end") {
+        onClose();
         gameStateRef.current!.isSeekedLine = true;
         if (scene === "replay") {
           playerRef.current.seekTo(seekTime);
@@ -60,7 +62,7 @@ function ResultLineList({ modalContentRef }: ResultLineListProps) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [scene],
+    [scene, onClose],
   );
 
   let lineCount = 0;

@@ -4,7 +4,7 @@ import { ThemeColors } from "@/types";
 import { Box, Text, CardFooter, Tooltip, Stack, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
 interface ResultCardFooterProps {
-  scoreCount: number;
+  scoreCount?: number;
   point: number;
   tBonus: number;
   maxLinePoint: number;
@@ -44,7 +44,7 @@ function ResultCardFooter({
           </Tooltip>
           ,{" "}
           <Tooltip
-            label={`sumPoint: ${Number(point) + Number(tBonus)} Score: ${scoreCount}`}
+            label={`sumPoint: ${Number(point) + Number(tBonus)}${scoreCount ? ` Score: ${scoreCount}` : ""}`}
             placement="top"
             fontSize="sm"
             bg={theme.colors.popup.bg}
