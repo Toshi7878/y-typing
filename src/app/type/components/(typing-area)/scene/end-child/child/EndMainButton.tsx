@@ -33,6 +33,9 @@ const EndMainButton = ({
       isDisabled={isDisabled}
       isLoading={pending}
       type={type}
+      _hover={{
+        bg: theme.colors.type.progress.hover.bg,
+      }}
     >
       {text}
     </Button>

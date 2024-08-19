@@ -100,6 +100,9 @@ interface ThemeColors {
       };
       progress: {
         bg: string;
+        hover: {
+          bg: string;
+        };
       };
     };
   };

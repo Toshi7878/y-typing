@@ -70,6 +70,9 @@ const sodaTheme: ThemeColors = {
 
       progress: {
         bg: "#4d97e6",
+        hover: {
+          bg: "#4ebafd",
+        },
       },
     },
   },
@@ -143,6 +146,9 @@ const darkTheme: ThemeColors = {
       },
       progress: {
         bg: "#3182CE",
+        hover: {
+          bg: "#4ebafd",
+        },
       },
     },
   },
