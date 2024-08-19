@@ -72,7 +72,7 @@ export const Scene = () => {
           />
 
           {isOpen && <ResultDrawer isOpen={isOpen} onClose={onClose} />}
-          {lineSelectIndex !== null && <PracticeLineCard />}
+          {lineSelectIndex !== null && scene === "practice" && <PracticeLineCard />}
 
           {map!.mapData[0].options?.eternalCSS && (
             <style>{map!.mapData[0].options?.eternalCSS}</style>
