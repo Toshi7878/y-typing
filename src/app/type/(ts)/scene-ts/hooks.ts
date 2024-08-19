@@ -35,7 +35,7 @@ export function useInteractJS(position: Partial<typeof initPosition> = initPosit
       })
       .resizable({
         // resize from all edges and corners
-        edges: { left: true, right: true, bottom: true, top: true },
+        edges: { left: false, right: false, bottom: false, top: false },
         preserveAspectRatio: false,
         inertia: false,
       })

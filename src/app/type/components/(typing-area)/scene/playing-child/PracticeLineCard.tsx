@@ -1,5 +1,4 @@
-import React from "react";
-import { Box, Card, useTheme } from "@chakra-ui/react";
+import { Card, useTheme } from "@chakra-ui/react";
 import { useInteractJS } from "@/app/type/(ts)/scene-ts/hooks";
 import { ThemeColors } from "@/types";
 import ResultCardBody from "../result/child/child/ResultCardBody";
@@ -14,10 +13,14 @@ import {
 import ResultCardFooter from "../result/child/child/ResultCardFooter";
 import { CHAR_POINT } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import ResultCardHeader from "../result/child/child/ResultCardHeader";
+import { useRefs } from "@/app/type/(contexts)/refsProvider";
+import { useRef } from "react";
 
 const PracticeLineCard = () => {
   const interact = useInteractJS();
   const map = useAtomValue(mapAtom);
+  const { playingRef } = useRefs();
+
   const lineResults = useAtomValue(lineResultsAtom);
   const speedData = useAtomValue(speedAtom);
   const lineSelectIndex = useAtomValue(lineSelectIndexAtom);
@@ -27,6 +30,7 @@ const PracticeLineCard = () => {
   const index = map!.typingLineNumbers[(lineSelectIndex! - 1) as number];
   const lineData = map!.mapData[index];
   const theme: ThemeColors = useTheme();
+  const isDraggingRef = useRef(false);
 
   // mapのLineデータ
   const maxLinePoint = lineData.notes.r * CHAR_POINT;
@@ -64,6 +68,16 @@ const PracticeLineCard = () => {
       color={theme.colors.type.card.color}
       outline={`1px solid ${theme.colors.type.card.borderColor}`}
       boxShadow={"lg"}
+      _hover={{
+        bg: theme.colors.type.card.hover.bg,
+      }}
+      onMouseDown={() => (isDraggingRef.current = false)}
+      onMouseMove={() => (isDraggingRef.current = true)}
+      onClick={() => {
+        if (!isDraggingRef.current) {
+          playingRef.current?.practiceSetLine();
+        }
+      }}
     >
       <ResultCardHeader
         index={index}

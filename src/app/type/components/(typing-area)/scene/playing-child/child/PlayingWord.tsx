@@ -1,6 +1,5 @@
 import { Box, Text, useTheme } from "@chakra-ui/react";
 import React, { memo } from "react";
-import "../../../../../style/type.scss";
 
 interface WordProps {
   correct: string;
