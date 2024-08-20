@@ -161,12 +161,35 @@ class ProcessedLineWord {
     this.newLineWord = lineWord;
     this.updatePoint = 0;
     this.newLineWord = this.zCommand({ chars, lineWord: this.newLineWord });
-    this.newLineWord = this.nwu_nwhu({ chars, lineWord: this.newLineWord });
+    this.newLineWord = this.keyW({ chars, lineWord: this.newLineWord });
+    this.newLineWord = this.keyX({ chars, lineWord: this.newLineWord });
   }
 
-  private nwu_nwhu({ chars, lineWord }: JudgeType) {
+  private keyX({ chars, lineWord }: JudgeType) {
+    let newLineWord = structuredClone(lineWord);
+    if (chars.code == "KeyX") {
+      //んん nxnの対応
+      const isNNRoute =
+        newLineWord.nextChar.k === "ん" &&
+        newLineWord.correct.r.slice(-1) === "n" &&
+        newLineWord.nextChar.r[0] === "n";
+      const isNextXN = newLineWord.word[0].k === "ん";
+
+      if (isNNRoute && isNextXN) {
+        newLineWord.correct.k += "ん";
+        this.updatePoint = newLineWord.nextChar.p;
+        newLineWord.nextChar = newLineWord.word[0];
+        newLineWord.word.splice(0, 1);
+        return newLineWord;
+      }
+    }
+    return newLineWord;
+  }
+
+  private keyW({ chars, lineWord }: JudgeType) {
     let newLineWord = structuredClone(lineWord);
     if (chars.code == "KeyW") {
+      //んう nwu nwhuの対応
       const isNNRoute =
         newLineWord.nextChar.k === "ん" &&
         newLineWord.correct.r.slice(-1) === "n" &&
