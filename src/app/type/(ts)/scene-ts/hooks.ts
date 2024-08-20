@@ -64,7 +64,9 @@ export function useInteractJS(position: Partial<typeof initPosition> = initPosit
   };
 
   const disable = () => {
-    interact(interactRef.current as unknown as HTMLElement).unset();
+    if (interactRef.current) {
+      interact(interactRef.current as unknown as HTMLElement).unset();
+    }
   };
 
   useEffect(() => {

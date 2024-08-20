@@ -28,7 +28,7 @@ const sodaTheme: ThemeColors = {
     home: {
       card: {
         bg: "#CBD5E0",
-        link: "#0f766e",
+        link: "#00bc8c",
         hover: "0 10px 15px -3px rgba(20, 184, 166, 0.5), 0 4px 6px -2px rgba(20, 184, 166, 0.3)",
       },
     },
@@ -111,7 +111,7 @@ const darkTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#2b3035", color: "#FFFFFF", borderColor: "#FFFFFF", hover: { bg: "#f5f5f55b" } },
+      card: { bg: "#2b3035", color: "#FFFFFF", borderColor: "#FFFFFF", hover: { bg: "#74777a" } },
       word: {
         correct: "#3182ce",
         next: "#FFF",
