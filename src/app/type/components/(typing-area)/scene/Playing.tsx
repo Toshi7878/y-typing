@@ -13,7 +13,7 @@ import {
 } from "@/app/type/(atoms)/gameRenderAtoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { isTyped } from "@/app/type/(ts)/scene-ts/playing/keydown/typing";
-import { PlayingRef, PlayMode, StatusRef } from "@/app/type/(ts)/type";
+import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
 import { Ticker } from "@pixi/ticker";

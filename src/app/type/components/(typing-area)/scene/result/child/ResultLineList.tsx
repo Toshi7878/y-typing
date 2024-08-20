@@ -11,6 +11,14 @@ import { LineResultData } from "@/app/type/(ts)/type";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
+import { Ticker } from "@pixi/ticker";
+const ticker = new Ticker();
+
+const handleResultCardReplay = () => {
+  const date = new Date().getTime(); // 修正: new Date() に変更
+
+  console.log(date);
+};
 
 interface ResultLineListProps {
   modalContentRef: React.RefObject<HTMLDivElement>;
@@ -59,6 +67,9 @@ function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
         isManualScrollRef.current = true;
         setLineSelectIndex(lineNumber);
       } else {
+        ticker.add(handleResultCardReplay);
+        ticker.start();
+        console.log("End Card Click!");
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

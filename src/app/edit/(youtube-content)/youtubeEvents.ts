@@ -1,4 +1,3 @@
-import { Ticker } from "@pixi/ticker";
 import { timer } from "./timer";
 import { setIsPlaying, setIsReady, setIsStarted } from "../(redux)/ytStateSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
@@ -7,7 +6,7 @@ import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "@/types";
-const ticker = new Ticker();
+import { ticker } from "@/app/type/components/(typing-area)/scene/Playing";
 
 class YTState {
   play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
