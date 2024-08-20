@@ -173,7 +173,7 @@ class ProcessedLineWord {
         newLineWord.nextChar.k === "ん" &&
         newLineWord.correct.r.slice(-1) === "n" &&
         newLineWord.nextChar.r[0] === "n";
-      const isNextXN = newLineWord.word[0].k === "ん";
+      const isNextXN = newLineWord.word[0]!.k === "ん";
 
       if (isNNRoute && isNextXN) {
         newLineWord.correct.k += "ん";
@@ -194,7 +194,7 @@ class ProcessedLineWord {
         newLineWord.nextChar.k === "ん" &&
         newLineWord.correct.r.slice(-1) === "n" &&
         newLineWord.nextChar.r[0] === "n";
-      const isNextWuWhu = newLineWord.word[0].k === "う";
+      const isNextWuWhu = newLineWord.word[0]!.k === "う";
 
       if (isNNRoute && isNextWuWhu) {
         newLineWord.correct.k += "ん";
@@ -210,7 +210,7 @@ class ProcessedLineWord {
   private zCommand({ chars, lineWord }: JudgeType) {
     let newLineWord = structuredClone(lineWord);
     if (chars.code == "KeyZ" && !chars.shift) {
-      const doublePeriod = newLineWord.nextChar.k === "." && newLineWord.word[0].k === ".";
+      const doublePeriod = newLineWord.nextChar.k === "." && newLineWord.word[0]!.k === ".";
       if (doublePeriod) {
         const triplePeriod = doublePeriod && newLineWord.word[1]?.k === ".";
         if (triplePeriod) {
