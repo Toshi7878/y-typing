@@ -3,6 +3,13 @@ import React from "react";
 
 // ダミーデータを更新
 const updates = [
+  {
+    date: "2024-08-21",
+    descriptions: [
+      `"ん"の入力に2打鍵を要するパターン(nn xn n')の時に配点が10Pointになっていた問題を修正。`,
+      `ローマ字入力で"んう"の入力パターン(nwu nwhu)に対応`,
+    ],
+  },
   { date: "2024-08-20", descriptions: ["練習モードで選択中のライン表示を追加"] },
   { date: "2024-08-19", descriptions: [`ローマ字入力モードで "..." → "z." ".." → "z," に対応`] },
   {

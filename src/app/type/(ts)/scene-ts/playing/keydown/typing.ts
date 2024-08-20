@@ -154,10 +154,34 @@ const Z_COMMAND_MAP = {
 };
 
 class ProcessedLineWord {
-  processedLineWord: WordType;
+  newLineWord: WordType;
+  updatePoint: number;
 
   constructor({ chars, lineWord }: JudgeType) {
-    this.processedLineWord = this.zCommand({ chars, lineWord });
+    this.newLineWord = lineWord;
+    this.updatePoint = 0;
+    this.newLineWord = this.zCommand({ chars, lineWord: this.newLineWord });
+    this.newLineWord = this.nwu_nwhu({ chars, lineWord: this.newLineWord });
+  }
+
+  private nwu_nwhu({ chars, lineWord }: JudgeType) {
+    let newLineWord = structuredClone(lineWord);
+    if (chars.code == "KeyW") {
+      const isNNRoute =
+        newLineWord.nextChar.k === "ん" &&
+        newLineWord.correct.r.slice(-1) === "n" &&
+        newLineWord.nextChar.r[0] === "n";
+      const isNextWuWhu = newLineWord.word[0].k === "う";
+
+      if (isNNRoute && isNextWuWhu) {
+        newLineWord.correct.k += "ん";
+        this.updatePoint = newLineWord.nextChar.p;
+        newLineWord.nextChar = newLineWord.word[0];
+        newLineWord.word.splice(0, 1);
+        return newLineWord;
+      }
+    }
+    return newLineWord;
   }
 
   private zCommand({ chars, lineWord }: JudgeType) {
@@ -165,7 +189,7 @@ class ProcessedLineWord {
     if (chars.code == "KeyZ" && !chars.shift) {
       const doublePeriod = newLineWord.nextChar.k === "." && newLineWord.word[0].k === ".";
       if (doublePeriod) {
-        const triplePeriod = doublePeriod && newLineWord.word[1].k === ".";
+        const triplePeriod = doublePeriod && newLineWord.word[1]?.k === ".";
         if (triplePeriod) {
           newLineWord.nextChar = structuredClone(Z_COMMAND_MAP["..."]);
           newLineWord.word.splice(0, 2);
@@ -196,9 +220,9 @@ export class RomaInput {
   successKey: string;
   failKey: string;
   constructor({ chars, lineWord }: JudgeType) {
-    this.updatePoint = 0;
-    const processedLineWord = new ProcessedLineWord({ chars, lineWord }).processedLineWord;
-    const result = this.hasRomaPattern(chars, processedLineWord);
+    const processed = new ProcessedLineWord({ chars, lineWord });
+    this.updatePoint = processed.updatePoint;
+    const result = this.hasRomaPattern(chars, processed.newLineWord);
     this.newLineWord = result.newLineWord as WordType;
     this.successKey = result.successKey;
     this.failKey = result.failKey ?? "";

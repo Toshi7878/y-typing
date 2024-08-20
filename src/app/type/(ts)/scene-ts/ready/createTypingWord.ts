@@ -1,4 +1,3 @@
-import { Line } from "@/types";
 import { ROMA_MAP } from "../../const/romaMap";
 import {
   InputModeType,
@@ -358,6 +357,8 @@ export class TypingWord {
           if (IS_N) {
             lineWord[lineWord.length - 2]["r"][i] = lineWord[lineWord.length - 2]["r"][i] + "n";
             lineWord[lineWord.length - 2]["r"].push("n'");
+            lineWord[lineWord.length - 2]["p"] =
+              CHAR_POINT * lineWord[lineWord.length - 2]["r"][i].length;
           }
         }
 
