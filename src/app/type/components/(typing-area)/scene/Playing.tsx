@@ -225,18 +225,29 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
           return;
         }
         const seekCount = lineSelectIndex ? map!.typingLineNumbers[lineSelectIndex - 1] : null;
-        const seekAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
+        const seekCountAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
 
-        const count = statusRef.current!.status.count + seekAdjust;
+        const count = statusRef.current!.status.count + seekCountAdjust;
         const nextCount = map!.typingLineNumbers.find((num) => num > count);
 
         if (nextCount === undefined) {
           return;
         }
-        const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
-        const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
 
-        setLineSelectIndex(map!.typingLineNumbers.indexOf(nextCount) + 1);
+        const prevLineTime =
+          (nextCount > 1
+            ? map!.mapData[nextCount]["time"] - map!.mapData[nextCount - 1]["time"]
+            : 0) / speedData.playSpeed;
+
+        // console.log(`count: ${nextCount}, prevLineTime:${prevLineTime}`);
+
+        const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * speedData.playSpeed : 0;
+        const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
+        // const finalNextTime =
+        //   prevLineTime < 1 ? Number(map!.mapData[nextCount - 1]["time"]) : nextTime; // 追加
+        const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
+
+        setLineSelectIndex(typingLineCount);
         // gameStateRef.current!.isSeekedLine = true;
         if (ticker.started) {
           ticker.stop();
