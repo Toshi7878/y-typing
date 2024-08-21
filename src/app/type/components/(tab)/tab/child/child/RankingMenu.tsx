@@ -44,7 +44,7 @@ const RankingMenu = ({
     queryFn: async () => {
       const response = await axios.get<{
         lineResult: LineResultData[];
-        status: SendResultData["status"];
+        defaultSpeed: SendResultData["status"]["defaultSpeed"];
       }>(`${process.env.NEXT_PUBLIC_API_URL}/api/replay`, {
         params: {
           mapId: mapId,
@@ -81,7 +81,7 @@ const RankingMenu = ({
         gameStateRef.current!.replay.userName = name;
         gameStateRef.current!.playMode = "replay";
 
-        const defaultSpeed = result.data.status.defaultSpeed;
+        const defaultSpeed = result.data.defaultSpeed;
         new YTSpeedController("setDefaultSpeed", {
           setSpeedData,
           playerRef: playerRef.current,

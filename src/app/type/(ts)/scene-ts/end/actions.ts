@@ -19,17 +19,18 @@ const send = async (data: SendResultData, userId: number) => {
     const updatedResult = await prisma.result.update({
       where: { id: existingResult.id },
       data: {
-        ...data,
         lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
+        ...data.status,
       },
     });
     return updatedResult.id; // 更新されたマップのIDを返す
   } else {
     const newResult = await prisma.result.create({
       data: {
-        ...data,
+        mapId: data.mapId,
         userId,
         lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
+        ...data.status,
       },
     });
     return newResult.id; // 新しく作成されたマップのIDを返す

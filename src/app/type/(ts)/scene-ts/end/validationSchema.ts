@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const statusSchema = z.object({
+  score: z.number(),
   kanaType: z.number(),
   romaType: z.number(),
   flickType: z.number(),
@@ -9,6 +10,7 @@ export const statusSchema = z.object({
   maxCombo: z.number(),
   kpm: z.number(),
   rkpm: z.number(),
+  romaKpm: z.number(),
   defaultSpeed: z.number(),
 });
 

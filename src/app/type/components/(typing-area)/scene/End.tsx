@@ -31,8 +31,8 @@ const End = ({ onOpen }: EndProps) => {
     const rkpmTime =
       statusRef.current!.status.totalTypeTime - statusRef.current!.status.totalLatency;
 
-    const score = status.score;
     const sendStatus = {
+      score: status.score,
       romaType: statusRef.current!.status.romaType,
       kanaType: statusRef.current!.status.kanaType,
       flickType: statusRef.current!.status.flickType,
@@ -41,13 +41,13 @@ const End = ({ onOpen }: EndProps) => {
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
+      romaKpm: status.kpm,
       defaultSpeed: speedData.defaultSpeed,
     };
     const sendData = {
       mapId: mapId,
       lineResult: lineResults,
       status: sendStatus,
-      score,
     };
 
     const result = actions(sendData);

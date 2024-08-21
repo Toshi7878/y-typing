@@ -130,6 +130,7 @@ export interface SendResultData {
   mapId: number;
   lineResult: LineResultData[];
   status: {
+    score: number;
     kanaType: number;
     romaType: number;
     flickType: number;
@@ -140,7 +141,6 @@ export interface SendResultData {
     kpm: number;
     defaultSpeed: number;
   };
-  score: number;
 }
 export interface TypeResult {
   is?: boolean;
