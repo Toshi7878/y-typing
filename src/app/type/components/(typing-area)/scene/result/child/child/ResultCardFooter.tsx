@@ -25,41 +25,39 @@ function ResultCardFooter({
   const theme: ThemeColors = useTheme();
 
   return (
-    <CardFooter py={0} className="ml-1 font-semibold text-lg">
-      <Stack>
-        <Box>
-          miss: {lMiss},{" "}
-          <Tooltip
-            label={`rkpm:${rkpm}`}
-            placement="top"
-            fontSize="sm"
-            bg={theme.colors.popup.bg}
-            color={theme.colors.popup.color}
-            border="1px solid"
-            borderColor={theme.colors.type.card.borderColor}
-          >
-            <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
-              kpm: {kpm}
-            </Text>
-          </Tooltip>
-          ,{" "}
-          <Tooltip
-            label={`sumPoint: ${Number(point) + Number(tBonus)}${scoreCount ? ` Score: ${scoreCount}` : ""}`}
-            placement="top"
-            fontSize="sm"
-            bg={theme.colors.popup.bg}
-            color={theme.colors.popup.color}
-            border="1px solid"
-            borderColor={theme.colors.type.card.borderColor}
-          >
-            <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
-              point: {point}
-              {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
-            </Text>
-          </Tooltip>
-        </Box>
-      </Stack>
-    </CardFooter>
+    <Stack>
+      <Box>
+        miss: {lMiss},{" "}
+        <Tooltip
+          label={`rkpm:${rkpm}`}
+          placement="top"
+          fontSize="sm"
+          bg={theme.colors.popup.bg}
+          color={theme.colors.popup.color}
+          border="1px solid"
+          borderColor={theme.colors.type.card.borderColor}
+        >
+          <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
+            kpm: {kpm}
+          </Text>
+        </Tooltip>
+        ,{" "}
+        <Tooltip
+          label={`sumPoint: ${Number(point) + Number(tBonus)}${scoreCount ? ` Score: ${scoreCount}` : ""}`}
+          placement="top"
+          fontSize="sm"
+          bg={theme.colors.popup.bg}
+          color={theme.colors.popup.color}
+          border="1px solid"
+          borderColor={theme.colors.type.card.borderColor}
+        >
+          <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
+            point: {point}
+            {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
+          </Text>
+        </Tooltip>
+      </Box>
+    </Stack>
   );
 }
 

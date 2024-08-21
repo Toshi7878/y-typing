@@ -14,7 +14,7 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
   const theme: ThemeColors = useTheme();
 
   return (
-    <CardBody py={0} className="text-md word-font">
+    <>
       <Box className="kana-word">
         <Box>{lineKanaWord}</Box>
       </Box>
@@ -58,7 +58,7 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
           {lostWord !== null ? lostWord : lineTypeWord}
         </Text>
       </Box>
-    </CardBody>
+    </>
   );
 }
 

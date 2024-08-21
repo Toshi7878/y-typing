@@ -3,7 +3,7 @@ import { inputModeAtom, mapAtom, sceneAtom, speedAtom } from "@/app/type/(atoms)
 import { CHAR_POINT } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData } from "@/app/type/(ts)/type";
 import { ThemeColors } from "@/types";
-import { Card, useTheme } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
 import ResultCardHeader from "./child/ResultCardHeader";
@@ -92,30 +92,36 @@ function ResultCard({
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >
-      <ResultCardHeader
-        index={index}
-        lineCount={lineCount}
-        lineNotes={lineNotes}
-        lineInputMode={lineInputMode}
-        lineTime={lineTime}
-        lineKpm={lineKpm}
-        lineSpeed={lineSpeed}
-      />
-      <ResultCardBody
-        lineKanaWord={lineKanaWord}
-        typeResult={lineResult.typeResult}
-        lineTypeWord={lineTypeWord}
-        lostWord={lostWord!}
-      />
-      <ResultCardFooter
-        scoreCount={scoreCount}
-        point={point!}
-        tBonus={tBonus!}
-        maxLinePoint={maxLinePoint}
-        lMiss={lMiss!}
-        kpm={kpm!}
-        rkpm={rkpm!}
-      />
+      <CardHeader py={0}>
+        <ResultCardHeader
+          index={index}
+          lineCount={lineCount}
+          lineNotes={lineNotes}
+          lineInputMode={lineInputMode}
+          lineTime={lineTime}
+          lineKpm={lineKpm}
+          lineSpeed={lineSpeed}
+        />
+      </CardHeader>
+      <CardBody py={0} className="text-md word-font">
+        <ResultCardBody
+          lineKanaWord={lineKanaWord}
+          typeResult={lineResult.typeResult}
+          lineTypeWord={lineTypeWord}
+          lostWord={lostWord!}
+        />
+      </CardBody>
+      <CardFooter py={0} className="ml-1 font-semibold text-lg">
+        <ResultCardFooter
+          scoreCount={scoreCount}
+          point={point!}
+          tBonus={tBonus!}
+          maxLinePoint={maxLinePoint}
+          lMiss={lMiss!}
+          kpm={kpm!}
+          rkpm={rkpm!}
+        />
+      </CardFooter>
     </Card>
   );
 }

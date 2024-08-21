@@ -1,4 +1,4 @@
-import { Card, useTheme } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
 import { useInteractJS } from "@/app/type/(ts)/scene-ts/hooks";
 import { ThemeColors } from "@/types";
 import ResultCardBody from "../result/child/child/ResultCardBody";
@@ -14,7 +14,7 @@ import ResultCardFooter from "../result/child/child/ResultCardFooter";
 import { CHAR_POINT } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
 import ResultCardHeader from "../result/child/child/ResultCardHeader";
 import { useRefs } from "@/app/type/(contexts)/refsProvider";
-import { useRef } from "react";
+import { useState } from "react";
 
 const PracticeLineCard = () => {
   const interact = useInteractJS();
@@ -30,7 +30,7 @@ const PracticeLineCard = () => {
   const index = map!.typingLineNumbers[(lineSelectIndex! - 1) as number];
   const lineData = map!.mapData[index];
   const theme: ThemeColors = useTheme();
-  const isDraggingRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   // mapのLineデータ
   const maxLinePoint = lineData.notes.r * CHAR_POINT;
@@ -71,38 +71,44 @@ const PracticeLineCard = () => {
       _hover={{
         bg: theme.colors.type.card.hover.bg,
       }}
-      onMouseDown={() => (isDraggingRef.current = false)}
-      onMouseMove={() => (isDraggingRef.current = true)}
+      cursor={isDragging ? "move" : "pointer"}
+      onMouseDown={() => setIsDragging(false)}
+      onMouseMove={() => setIsDragging(true)}
       onClick={() => {
-        if (!isDraggingRef.current) {
+        if (!isDragging) {
           playingRef.current?.practiceSetLine();
         }
       }}
     >
-      <ResultCardHeader
-        index={index}
-        lineCount={lineSelectIndex!}
-        lineNotes={lineNotes}
-        lineInputMode={lineInputMode}
-        lineTime={lineTime}
-        lineKpm={lineKpm}
-        lineSpeed={lineSpeed}
-      />
-
-      <ResultCardBody
-        lineKanaWord={lineKanaWord}
-        typeResult={lineResult.typeResult}
-        lineTypeWord={lineTypeWord}
-        lostWord={lostWord!}
-      />
-      <ResultCardFooter
-        point={point!}
-        tBonus={tBonus!}
-        maxLinePoint={maxLinePoint}
-        lMiss={lMiss!}
-        kpm={kpm!}
-        rkpm={rkpm!}
-      />
+      <CardHeader py={0}>
+        <ResultCardHeader
+          index={index}
+          lineCount={lineSelectIndex!}
+          lineNotes={lineNotes}
+          lineInputMode={lineInputMode}
+          lineTime={lineTime}
+          lineKpm={lineKpm}
+          lineSpeed={lineSpeed}
+        />
+      </CardHeader>
+      <CardBody py={0} className="text-md word-font">
+        <ResultCardBody
+          lineKanaWord={lineKanaWord}
+          typeResult={lineResult.typeResult}
+          lineTypeWord={lineTypeWord}
+          lostWord={lostWord!}
+        />
+      </CardBody>
+      <CardFooter py={0} className="ml-1 font-semibold text-lg">
+        <ResultCardFooter
+          point={point!}
+          tBonus={tBonus!}
+          maxLinePoint={maxLinePoint}
+          lMiss={lMiss!}
+          kpm={kpm!}
+          rkpm={rkpm!}
+        />
+      </CardFooter>
     </Card>
   );
 };

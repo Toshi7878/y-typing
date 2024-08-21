@@ -32,6 +32,9 @@ export function useInteractJS(position: Partial<typeof initPosition> = initPosit
     interact(interactRef.current as unknown as HTMLElement)
       .draggable({
         inertia: false,
+        cursorChecker: (action, interactable, element, interacting) => {
+          return interacting ? "move" : "pointer"; // カーソルを変更
+        },
       })
       .resizable({
         // resize from all edges and corners
