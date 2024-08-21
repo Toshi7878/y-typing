@@ -12,12 +12,22 @@ model Result {
   id             Int @id @default(autoincrement())
   mapId          Int
   userId         Int
-  score          Int @default(0)
   lineResult     Json
   status         Json
+  score          Int @default(0)
+  defaultSpeed   Float @default(1)
+  kpm            Int @default(0)
+  rkpm           Int @default(0)
+  romaKpm        Int @default(0)
+  romaType       Int @default(0)
+  kanaType       Int @default(0)
+  flickType      Int @default(0)
+  miss           Int @default(0)
+  lost           Int @default(0)
+  maxCombo       Int @default(0)
   updatedAt      DateTime @default(now()) @updatedAt
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade) // 追加されたリレーション
+  map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
 }
 
 
