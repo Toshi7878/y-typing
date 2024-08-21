@@ -9,8 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "migrate-status": "ts-node --esm scripts/migrateStatus.ts"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
@@ -80,6 +79,5 @@
     "prisma": "^5.17.0",
     "storybook": "^8.1.9",
     "typescript": "^5"
-  },
-  "type": "module"
+  }
 }

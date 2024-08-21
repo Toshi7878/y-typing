@@ -103,9 +103,9 @@ const RankingList = () => {
     <>
       {data &&
         data.map((user: RankingListType, index: number) => {
-          const romaType = user.status.romaType;
-          const kanaType = user.status.kanaType;
-          const flickType = user.status.flickType;
+          const romaType = user.romaType;
+          const kanaType = user.kanaType;
+          const flickType = user.flickType;
           const type = romaType + kanaType + flickType;
           const handleShowMenu = () => {
             if (showMenu === index) {
@@ -124,15 +124,15 @@ const RankingList = () => {
                 name={user.user.name}
                 score={user.score}
                 type={type}
-                kpm={user.status.kpm}
-                rkpm={user.status.rkpm}
-                defaultSpeed={user.status.defaultSpeed}
+                kpm={user.kpm}
+                rkpm={user.rkpm}
+                defaultSpeed={user.defaultSpeed}
                 romaType={romaType}
                 kanaType={kanaType}
                 flickType={flickType}
-                miss={user.status.miss}
-                lost={user.status.lost}
-                maxCombo={user.status.maxCombo}
+                miss={user.miss}
+                lost={user.lost}
+                maxCombo={user.maxCombo}
                 updatedAt={user.updatedAt}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}

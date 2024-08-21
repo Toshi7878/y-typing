@@ -32,9 +32,6 @@
     "src/app/type/(ts)/scene-ts/ready/createTypingWord.ts",
     "src/app/type/components/(tab)/tab/child/child/StatusKpmValue.tsx"
   ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  },
+
   "exclude": ["node_modules"]
 }

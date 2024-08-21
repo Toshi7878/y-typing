@@ -14,8 +14,17 @@ export async function GET(request: Request) {
       select: {
         mapId: false,
         userId: true,
-        status: true,
         score: true,
+        defaultSpeed: true,
+        kpm: true,
+        rkpm: true,
+        romaKpm: true,
+        romaType: true,
+        kanaType: true,
+        flickType: true,
+        miss: true,
+        lost: true,
+        maxCombo: true,
         lineResult: false, // lineResultを追加
         updatedAt: true,
         user: {

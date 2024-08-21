@@ -13,7 +13,6 @@ model Result {
   mapId          Int
   userId         Int
   lineResult     Json
-  status         Json
   score          Int @default(0)
   defaultSpeed   Float @default(1)
   kpm            Int @default(0)

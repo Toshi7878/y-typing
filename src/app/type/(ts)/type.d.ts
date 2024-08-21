@@ -26,18 +26,17 @@ export interface LineData {
 export interface RankingListType {
   userId: string;
   user: { name: string };
-  status: {
-    romaType: number;
-    kanaType: number;
-    flickType: number;
-    kpm: number;
-    rkpm: number;
-    miss: number;
-    lost: number;
-    maxCombo: number;
-    playSpeed: number;
-    defaultSpeed: number;
-  };
+  romaType: number;
+  kanaType: number;
+  flickType: number;
+  kpm: number;
+  rkpm: number;
+  romaKpm: number;
+  miss: number;
+  lost: number;
+  maxCombo: number;
+  playSpeed: number;
+  defaultSpeed: number;
   score: number;
   updatedAt: string;
 }
