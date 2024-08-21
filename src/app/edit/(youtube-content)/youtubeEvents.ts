@@ -6,7 +6,7 @@ import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "@/types";
-import { ticker } from "@/app/type/components/(typing-area)/scene/Playing";
+import { ticker } from "@/app/type/(ts)/youtubeEvents";
 
 class YTState {
   play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
