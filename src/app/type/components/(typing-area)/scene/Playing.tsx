@@ -239,16 +239,12 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
             ? map!.mapData[nextCount]["time"] - map!.mapData[nextCount - 1]["time"]
             : 0) / speedData.playSpeed;
 
-        // console.log(`count: ${nextCount}, prevLineTime:${prevLineTime}`);
-
         const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * speedData.playSpeed : 0;
         const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
-        // const finalNextTime =
-        //   prevLineTime < 1 ? Number(map!.mapData[nextCount - 1]["time"]) : nextTime; // 追加
+
         const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
 
         setLineSelectIndex(typingLineCount);
-        // gameStateRef.current!.isSeekedLine = true;
         if (ticker.started) {
           ticker.stop();
         }
