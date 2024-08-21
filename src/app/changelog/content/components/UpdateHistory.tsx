@@ -48,7 +48,7 @@ const UpdateHistory = () => {
   return (
     <Box>
       {updates.map((update, index) => (
-        <Box key={index} mb={4}>
+        <Box key={index} mb={12} gap={2}>
           <Text fontWeight="bold">{update.date}</Text>
           <UnorderedList>
             {update.descriptions.map((desc, i) => (
