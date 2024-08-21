@@ -16,14 +16,12 @@ import { isTyped } from "@/app/type/(ts)/scene-ts/playing/keydown/typing";
 import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
-import { Ticker } from "@pixi/ticker";
 import { setNewLine, updateTimer } from "@/app/type/(ts)/scene-ts/playing/timer";
 import { CreateMap, romaConvert } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
-import { getLineCount } from "@/app/type/(ts)/youtubeEvents";
+import { getLineCount, ticker } from "@/app/type/(ts)/youtubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
 import { handleTyping, shortcutKey } from "@/app/type/(ts)/scene-ts/playing/keydown/keydownHandle";
-export const ticker = new Ticker();
 
 interface PlayingProps {
   isOpen: boolean;

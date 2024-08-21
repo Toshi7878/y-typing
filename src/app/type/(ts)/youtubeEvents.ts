@@ -3,19 +3,18 @@ import {
   InputModeType,
   LineData,
   LineResultData,
-  MapData,
   PlayingRef,
   SceneType,
   Speed,
   StatusRef,
   YTStateRef,
 } from "./type";
-import { ticker } from "../components/(typing-area)/scene/Playing";
 import { CreateMap } from "./scene-ts/ready/createTypingWord";
 import { setNewLine } from "./scene-ts/playing/timer";
 import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
-
+import { Ticker } from "@pixi/ticker";
+export const ticker = new Ticker();
 class YTState {
   play(
     scene: SceneType,

@@ -20,9 +20,8 @@ import {
   StatusRef,
   YTStateRef,
 } from "../../type";
-import { ticker } from "../../../components/(typing-area)/scene/Playing";
 import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
-import { getLineCount } from "../../youtubeEvents";
+import { getLineCount, ticker } from "../../youtubeEvents";
 
 export const updateTimer = (
   map: CreateMap,
