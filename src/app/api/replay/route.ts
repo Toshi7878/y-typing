@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       },
       select: {
         lineResult: true,
-        status: true,
+        defaultSpeed: true,
       },
     });
 
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       lineResult: result.lineResult,
-      status: result.status,
+      defaultSpeed: result.defaultSpeed,
     });
   } catch (error) {
     console.error("リプレイデータの取得中にエラーが発生しました:", error);
