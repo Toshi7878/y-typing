@@ -6,8 +6,8 @@ import { setYtTitle } from "../(redux)/tabInfoInputSlice";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "@/types";
-import { ticker } from "@/app/type/(ts)/youtubeEvents";
-
+import { Ticker } from "@pixi/ticker";
+export const ticker = new Ticker();
 class YTState {
   play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
     console.log("再生 1");
