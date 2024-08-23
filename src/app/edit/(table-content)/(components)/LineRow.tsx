@@ -8,7 +8,7 @@ import { handleKeydown } from "../../(ts)/windowKeyDown";
 import { useRefs } from "../../(contexts)/refsProvider";
 import { addLine, updateLine } from "../../(redux)/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "../../(redux)/lineIndexSlice";
-import { timer } from "../../(youtube-content)/timer";
+import { timer } from "../../(youtube-content)/editTimer";
 import { setTabIndex } from "../../(redux)/tabIndexSlice";
 import LineOptionModal from "./LineOptionModal";
 import { Line } from "@/types";

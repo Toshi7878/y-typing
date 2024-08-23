@@ -10,11 +10,11 @@ import {
   YTStateRef,
 } from "./type";
 import { CreateMap } from "./scene-ts/ready/createTypingWord";
-import { setNewLine } from "./scene-ts/playing/timer";
+import { setNewLine } from "./scene-ts/playing/typeTimer";
 import { PlayingLineTimeRef } from "../components/(typing-area)/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/(typing-area)/scene/playing-child/PlayingCenter";
 import { Ticker } from "@pixi/ticker";
-export const ticker = new Ticker();
+export const typeTicker = new Ticker();
 class YTState {
   play(
     scene: SceneType,
@@ -43,8 +43,8 @@ class YTState {
     }
 
     if (scene === "playing" || scene === "replay" || scene === "practice") {
-      if (!ticker.started) {
-        ticker.start();
+      if (!typeTicker.started) {
+        typeTicker.start();
       }
 
       gameStateRef.current!.isSeekedLine = false;
@@ -70,8 +70,8 @@ class YTState {
 
     setScene("end");
 
-    if (ticker.started) {
-      ticker.stop();
+    if (typeTicker.started) {
+      typeTicker.stop();
     }
   }
 
@@ -81,8 +81,8 @@ class YTState {
   ) {
     console.log("一時停止");
 
-    if (ticker.started) {
-      ticker.stop();
+    if (typeTicker.started) {
+      typeTicker.stop();
     }
 
     const isPaused = YTStateRef.current!.isPaused;
@@ -130,8 +130,8 @@ class YTState {
           gameStateRef,
           playingRef,
         );
-        if (ticker.started) {
-          ticker.stop();
+        if (typeTicker.started) {
+          typeTicker.stop();
         }
       }
     }

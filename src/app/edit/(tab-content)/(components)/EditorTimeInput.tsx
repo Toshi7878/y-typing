@@ -1,7 +1,7 @@
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Input } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRef } from "react";
-import { timer } from "../../(youtube-content)/timer";
+import { timer } from "../../(youtube-content)/editTimer";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
 import { z } from "zod";

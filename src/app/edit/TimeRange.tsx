@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { timer } from "./(youtube-content)/timer";
+import { timer } from "./(youtube-content)/editTimer";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./(redux)/store";
 import { useForm } from "react-hook-form";
@@ -33,7 +33,7 @@ const TimeRange = () => {
         document.activeElement.blur();
       }
     },
-    [dispatch, playerRef, setValue]
+    [dispatch, playerRef, setValue],
   );
 
   useEffect(() => {

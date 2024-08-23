@@ -21,7 +21,7 @@ import {
   YTStateRef,
 } from "../../type";
 import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
-import { getLineCount, ticker } from "../../youtubeEvents";
+import { getLineCount, typeTicker } from "../../youtubeEvents";
 
 export const updateTimer = (
   map: CreateMap,
@@ -291,7 +291,7 @@ export const lineUpdate = (
 
   if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieEndTime) {
     playerRef.current.stopVideo();
-    ticker.stop();
+    typeTicker.stop();
 
     return;
   } else if (nextLine) {

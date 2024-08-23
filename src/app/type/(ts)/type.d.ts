@@ -137,6 +137,7 @@ export interface SendResultData {
     miss: number;
     lost: number;
     rkpm: number;
+    romaKpm: number; //かな入力・フリック入力の場合もローマ字換算でkpmを計算
     maxCombo: number;
     kpm: number;
     defaultSpeed: number;

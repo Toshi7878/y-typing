@@ -1,4 +1,4 @@
-import { timer } from "./timer";
+import { timer } from "./editTimer";
 import { setIsPlaying, setIsReady, setIsStarted } from "../(redux)/ytStateSlice";
 import { setTabIndex } from "../(redux)/tabIndexSlice";
 import { setTimeIndex } from "../(redux)/lineIndexSlice";
@@ -7,15 +7,15 @@ import { Action, Dispatch } from "@reduxjs/toolkit";
 import { RefsContextType } from "../(contexts)/refsProvider";
 import { Line } from "@/types";
 import { Ticker } from "@pixi/ticker";
-export const ticker = new Ticker();
+export const editTicker = new Ticker();
 class YTState {
   play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
     console.log("再生 1");
 
     if (!isStarted) {
-      ticker.add(() => timer.update(playerRef));
+      editTicker.add(() => timer.update(playerRef));
     }
-    ticker.start();
+    editTicker.start();
     dispatch(setIsPlaying(true));
     dispatch(setIsStarted(true));
     dispatch(setTabIndex(1));
@@ -23,7 +23,7 @@ class YTState {
 
   end(dispatch: Dispatch<Action>) {
     console.log("プレイ終了");
-    ticker.stop();
+    editTicker.stop();
     dispatch(setIsPlaying(false));
   }
 
@@ -35,7 +35,7 @@ class YTState {
   pause(dispatch: Dispatch<Action>) {
     console.log("一時停止");
 
-    ticker.stop();
+    editTicker.stop();
     dispatch(setIsPlaying(false));
   }
 

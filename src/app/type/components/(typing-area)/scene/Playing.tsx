@@ -16,9 +16,9 @@ import { isTyped } from "@/app/type/(ts)/scene-ts/playing/keydown/typing";
 import { PlayingRef, StatusRef } from "@/app/type/(ts)/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/(ts)/ytHandleEvents";
 
-import { setNewLine, updateTimer } from "@/app/type/(ts)/scene-ts/playing/timer";
+import { setNewLine, updateTimer } from "@/app/type/(ts)/scene-ts/playing/typeTimer";
 import { CreateMap, romaConvert } from "@/app/type/(ts)/scene-ts/ready/createTypingWord";
-import { getLineCount, ticker } from "@/app/type/(ts)/youtubeEvents";
+import { getLineCount, typeTicker } from "@/app/type/(ts)/youtubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
 import { handleTyping, shortcutKey } from "@/app/type/(ts)/scene-ts/playing/keydown/keydownHandle";
@@ -84,8 +84,8 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
 
         gameStateRef.current!.isRetrySkip = true;
         playerRef.current.seekTo(0);
-        if (ticker.started) {
-          ticker.stop();
+        if (typeTicker.started) {
+          typeTicker.stop();
         }
       },
       pressSkip: () => {
@@ -189,8 +189,8 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
         const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
         const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
         setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
-        if (ticker.started) {
-          ticker.stop();
+        if (typeTicker.started) {
+          typeTicker.stop();
         }
 
         if (!isOpen) {
@@ -243,8 +243,8 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
         const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
 
         setLineSelectIndex(typingLineCount);
-        if (ticker.started) {
-          ticker.stop();
+        if (typeTicker.started) {
+          typeTicker.stop();
         }
 
         if (!isOpen) {
@@ -429,10 +429,10 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
           ref as React.RefObject<PlayingRef>,
           scene,
         );
-      ticker.add(updateFunction);
+      typeTicker.add(updateFunction);
 
       return () => {
-        ticker.remove(updateFunction);
+        typeTicker.remove(updateFunction);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [speedData, rankingScores, inputMode, map, scene, lineResults]);
@@ -444,16 +444,16 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
 
       currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
 
-      if (!ticker.started) {
-        ticker.start();
+      if (!typeTicker.started) {
+        typeTicker.start();
       }
 
       if (scene === "practice") {
         onOpen();
       }
       return () => {
-        if (ticker.started) {
-          ticker.stop();
+        if (typeTicker.started) {
+          typeTicker.stop();
         }
 
         currentPlayingCenterRef!.resetWordLyrics();
