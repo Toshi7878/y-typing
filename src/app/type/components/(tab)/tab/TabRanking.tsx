@@ -32,12 +32,6 @@ const TabRanking = (props: TabRankingProps) => {
               border: "2px solid transparent", // スクロールバーの内側にスペースを作る
               backgroundClip: "content-box", // 背景をクリップ
             },
-            // "&::-webkit-scrollbar-track": {
-            //   background: theme.colors.background, // スクロールバーのトラックの色を設定
-            // },
-            "&::-webkit-scrollbar-corner": {
-              background: "pink", // スクロールバーのコーナーの色を設定
-            },
           }}
         >
           <Table

@@ -1,4 +1,4 @@
-import { InputModeType, Status, StatusRef, WordType } from "../../type";
+import { InputModeType, SceneType, Status, StatusRef, WordType } from "../../type";
 import { CreateMap } from "../ready/createTypingWord";
 import { getRank } from "./keydown/typing";
 
@@ -10,12 +10,12 @@ export class LineResult {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-
     lineWord: WordType,
     inputMode: InputModeType,
     map: CreateMap,
     totalTypeSpeed: number,
     rankingScores: number[],
+    scene: SceneType,
   ) {
     this.lostLen = lineWord.nextChar["k"]
       ? lineWord.nextChar["p"] / 10 + lineWord.word.map((w) => w["r"][0]).join("").length
@@ -29,6 +29,7 @@ export class LineResult {
       map,
       totalTypeSpeed,
       rankingScores,
+      scene,
     );
 
     this.lostW = this.setLostWord(lineWord, inputMode);
@@ -42,8 +43,13 @@ export class LineResult {
     map: CreateMap,
     totalTypeSpeed: number,
     rankingScores: number[],
+    scene: SceneType,
   ) {
     const newStatus = { ...status };
+    if (scene === "playing" && statusRef.current) {
+      statusRef.current.status.kanaToRomaConvertCount += lineWord.correct.r.length;
+      console.log(`convertCount: ${statusRef.current.status.kanaToRomaConvertCount}`);
+    }
 
     newStatus.timeBonus = 0;
 

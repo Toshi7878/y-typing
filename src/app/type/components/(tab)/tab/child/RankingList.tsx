@@ -126,6 +126,7 @@ const RankingList = () => {
                 type={type}
                 kpm={user.kpm}
                 rkpm={user.rkpm}
+                romaKpm={user.romaKpm}
                 defaultSpeed={user.defaultSpeed}
                 romaType={romaType}
                 kanaType={kanaType}

@@ -28,8 +28,9 @@ const End = ({ onOpen }: EndProps) => {
   const status = tabStatusRef.current!.getStatus();
 
   const upload = (): ReturnType<typeof actions> => {
-    const rkpmTime =
-      statusRef.current!.status.totalTypeTime - statusRef.current!.status.totalLatency;
+    const totalTypeTime = statusRef.current!.status.totalTypeTime;
+    const rkpmTime = totalTypeTime - statusRef.current!.status.totalLatency;
+    const kanaToRomaConvertCount = statusRef.current!.status.kanaToRomaConvertCount;
 
     const sendStatus = {
       score: status.score,
@@ -41,7 +42,7 @@ const End = ({ onOpen }: EndProps) => {
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
-      romaKpm: status.kpm,
+      romaKpm: Math.round((kanaToRomaConvertCount / rkpmTime) * 60),
       defaultSpeed: speedData.defaultSpeed,
     };
     const sendData = {

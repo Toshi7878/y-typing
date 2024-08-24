@@ -207,6 +207,7 @@ export const lineUpdate = (
       map,
       typeSpeed.totalKpm,
       rankingScores,
+      scene,
     );
 
     if (count > 0) {

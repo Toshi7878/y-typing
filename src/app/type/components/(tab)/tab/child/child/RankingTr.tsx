@@ -16,6 +16,7 @@ interface RankingTrProps {
   type: number;
   kpm: number;
   rkpm: number;
+  romaKpm: number;
   defaultSpeed: number;
   romaType: number;
   kanaType: number;
@@ -46,6 +47,7 @@ const RankingTr = (props: RankingTrProps) => {
   const flickColor = theme.colors.type.ready.radio.flick.bg;
 
   const isPerfect = props.miss === 0 && props.lost === 0;
+  const isKanaFlickTyped = props.kanaType > 0 || props.flickType > 0;
   const getInputMode = () => {
     if (props.romaType && props.kanaType) {
       if (props.romaType >= props.kanaType) {
@@ -124,6 +126,9 @@ const RankingTr = (props: RankingTrProps) => {
             </Text>
           </Box>
           <div>rkpm: {props.rkpm}</div>
+          {isKanaFlickTyped && props.kpm !== props.romaKpm && (
+            <div>ローマ字換算kpm: {props.romaKpm}</div>
+          )}
           {props.defaultSpeed > 1 && <div>倍速: {props.defaultSpeed.toFixed(2)}x</div>}
           <div>
             日時:{" "}
