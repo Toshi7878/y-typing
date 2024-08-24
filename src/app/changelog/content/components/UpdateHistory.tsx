@@ -4,6 +4,10 @@ import React from "react";
 // ダミーデータを更新
 const updates = [
   {
+    date: "2024-08-24",
+    descriptions: [`ランキングの新規登録時にエラーが発生していた問題を修正`],
+  },
+  {
     date: "2024-08-21",
     descriptions: [`練習モードでタイムが短いラインの前後で→キーが正常に動作しない問題を修正`],
   },
