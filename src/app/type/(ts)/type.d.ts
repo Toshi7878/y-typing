@@ -102,6 +102,7 @@ export interface StatusRef {
     kanaType: number;
     flickType: number;
     rkpm: number;
+    kanaToRomaConvertCount: number;
     maxCombo: number;
     missCombo: number;
     totalTypeTime: number;

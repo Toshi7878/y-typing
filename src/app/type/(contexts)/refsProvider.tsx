@@ -13,6 +13,7 @@ export const defaultStatusRef: StatusRef = {
     kanaType: 0,
     flickType: 0,
     rkpm: 0,
+    kanaToRomaConvertCount: 0,
     maxCombo: 0,
     missCombo: 0,
     totalTypeTime: 0,
