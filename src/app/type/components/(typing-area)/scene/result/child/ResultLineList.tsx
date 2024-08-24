@@ -12,13 +12,6 @@ import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
 import { Ticker } from "@pixi/ticker";
-const ticker = new Ticker();
-
-const handleResultCardReplay = () => {
-  const date = new Date().getTime(); // 修正: new Date() に変更
-
-  console.log(date);
-};
 
 interface ResultLineListProps {
   modalContentRef: React.RefObject<HTMLDivElement>;
@@ -67,9 +60,46 @@ function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
         isManualScrollRef.current = true;
         setLineSelectIndex(lineNumber);
       } else {
-        ticker.add(handleResultCardReplay);
-        ticker.start();
-        console.log("End Card Click!");
+        let nextTypedCount = 0;
+        const typedElements = cardRefs.current[lineNumber].querySelectorAll(
+          ".typed",
+        ) as NodeListOf<HTMLElement>;
+
+        const lastTypedChildClassList = typedElements[typedElements.length - 1].classList;
+
+        if (lastTypedChildClassList[lastTypedChildClassList.length - 1] === "invisible") {
+          console.log("再生中");
+          return;
+        }
+        for (let i = 0; i < typedElements.length; i++) {
+          typedElements[i].classList.add("invisible");
+        }
+        const date = new Date().getTime();
+        const handleTick = () => handleResultCardReplay(date, typedElements);
+
+        const ticker = new Ticker();
+        const handleResultCardReplay = (date: number, typedElements: NodeListOf<HTMLElement>) => {
+          const currentTime = (new Date().getTime() - date) / 1000;
+          const nextCharElement = typedElements[nextTypedCount];
+
+          if (typedElements.length - 1 < nextTypedCount) {
+            ticker.stop();
+            ticker.remove(handleTick);
+            return;
+          }
+
+          const nextTime = nextCharElement.dataset.time;
+
+          if (currentTime > Number(nextTime)) {
+            nextCharElement.classList.remove("invisible");
+            nextTypedCount++;
+          }
+        };
+
+        if (!ticker.started) {
+          ticker.add(handleTick);
+          ticker.start();
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

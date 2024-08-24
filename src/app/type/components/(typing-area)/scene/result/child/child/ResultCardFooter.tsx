@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeColors } from "@/types";
-import { Box, Text, CardFooter, Tooltip, Stack, useTheme } from "@chakra-ui/react";
+import { Box, Text, Tooltip, Stack, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
 interface ResultCardFooterProps {
   scoreCount?: number;
