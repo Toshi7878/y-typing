@@ -28,7 +28,7 @@ const sodaTheme: ThemeColors = {
     home: {
       card: {
         bg: "#CBD5E0",
-        link: "#00bc8c",
+        link: "#0d9388",
         hover: "0 10px 15px -3px rgba(20, 184, 166, 0.5), 0 4px 6px -2px rgba(20, 184, 166, 0.3)",
       },
     },
