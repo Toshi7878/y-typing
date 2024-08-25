@@ -9,6 +9,8 @@ import { ThemeColors } from "@/types";
 interface TabContentProps {
   className?: string;
 }
+
+const tabLists = ["ステータス", "ランキング"];
 export default function TabContent({ className }: TabContentProps) {
   console.log("Tab");
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
@@ -32,23 +34,19 @@ export default function TabContent({ className }: TabContentProps) {
       colorScheme="black" // ここで色を指定します
     >
       <TabList height="33px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
-        <Tab
-          width="200px"
-          opacity={tabIndex === 0 ? 1 : 0.5}
-          color={theme.colors.color}
-          _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
-        >
-          ステータス
-        </Tab>
-
-        <Tab
-          width="200px"
-          opacity={tabIndex === 1 ? 1 : 0.5}
-          color={theme.colors.color}
-          _hover={{ bg: "rgba(0, 0, 0, 0.1)" }} // ホバー時の背景色を追加
-        >
-          ランキング
-        </Tab>
+        {tabLists.map((tabName, index) => {
+          return (
+            <Tab
+              key={index}
+              width="200px"
+              opacity={tabIndex === index ? 1 : 0.5}
+              color={theme.colors.color}
+              _hover={{ bg: "rgba(0, 0, 0, 0.1)" }}
+            >
+              {tabName}
+            </Tab>
+          );
+        })}
       </TabList>
 
       <TabPanels>

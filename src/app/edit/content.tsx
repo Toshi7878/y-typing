@@ -73,24 +73,29 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   }, []);
 
   return (
-    <Box
-      as="main"
-      bg={theme.colors.background}
-      className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14"
-    >
-      <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
-        <Box as="section" className="flex flex-col lg:flex-row w-full ">
+    <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
+      <Box
+        as="main"
+        bg={theme.colors.background}
+        display="flex"
+        minHeight="100vh"
+        paddingX={{ base: 0, md: 14 }}
+        flexDirection="column"
+        alignItems="center"
+        paddingTop={14}
+      >
+        <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
           <YouTubeContent className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" videoId={videoId} />
-          <TabContent className="w-full border-black" />
+          <TabContent />
         </Box>
-        <Box as="section" className="w-full mt-2">
+        <Box as="section" width="100%" mt={2}>
           <TimeRange />
         </Box>
-        <Box as="section" className="w-full mt-3">
+        <Box as="section" width="100%" mt={3}>
           <TableContent />
         </Box>
-      </LoadingOverlayWrapper>
-    </Box>
+      </Box>
+    </LoadingOverlayWrapper>
   );
 }
 

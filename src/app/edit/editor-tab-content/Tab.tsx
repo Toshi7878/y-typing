@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
 
 import TabEditor from "./tab-panels/TabEditor";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,16 +10,20 @@ import { RootState } from "../redux/store";
 import { useRefs } from "../edit-contexts/refsProvider";
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
+import { ThemeColors } from "@/types";
 
 interface TabContentProps {
   className?: string;
 }
+
+const tabLists = ["情報 & 保存", "エディター", "設定"];
 export default function TabContent({ className }: TabContentProps) {
   console.log("Tab");
 
   const editorTabRef = useRef(null);
 
   const { setRef } = useRefs();
+  const theme: ThemeColors = useTheme();
 
   useEffect(() => {
     setRef("editorTab", editorTabRef.current);
@@ -44,19 +48,26 @@ export default function TabContent({ className }: TabContentProps) {
     <Tabs
       index={tabIndex}
       onChange={(index) => dispatch(setTabIndex(index))}
-      border="1px solid"
       className={className}
       isFitted
       size="sm"
       position="relative"
       variant="line"
+      width="100%"
     >
-      <TabList height="24px" borderBottom="1px solid lightgray">
-        <Tab borderRight="1px solid lightgray">情報 & 保存</Tab>
-        <Tab borderRight="1px solid lightgray" isDisabled={isDisabled}>
-          エディター
-        </Tab>
-        <Tab borderRight="1px solid lightgray">設定</Tab>
+      <TabList height="33px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
+        {tabLists.map((tabName, index) => {
+          return (
+            <Tab
+              key={index}
+              opacity={tabIndex === index ? 1 : 0.5}
+              color={theme.colors.color}
+              _hover={{ bg: "rgba(0, 0, 0, 0.1)" }}
+            >
+              {tabName}
+            </Tab>
+          );
+        })}
       </TabList>
 
       <TabPanels>
