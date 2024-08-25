@@ -43,11 +43,11 @@ function ResultCardHeader({
         bg={theme.colors.popup.bg}
         color={theme.colors.popup.color}
         border="1px solid"
-        borderColor={theme.colors.type.card.borderColor}
+        borderColor={theme.colors.card.borderColor}
       >
         <Text
           as="span"
-          _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
+          _hover={{ bg: `${theme.colors.card.borderColor}30` }}
           className="line-notes"
         >
           {lineNotes}打
@@ -61,13 +61,9 @@ function ResultCardHeader({
         bg={theme.colors.popup.bg}
         color={theme.colors.popup.color}
         border="1px solid"
-        borderColor={theme.colors.type.card.borderColor}
+        borderColor={theme.colors.card.borderColor}
       >
-        <Text
-          as="span"
-          _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
-          className="line-time"
-        >
+        <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }} className="line-time">
           {lineTime.toFixed(1)}秒
         </Text>
       </Tooltip>
@@ -79,13 +75,9 @@ function ResultCardHeader({
         bg={theme.colors.popup.bg}
         color={theme.colors.popup.color}
         border="1px solid"
-        borderColor={theme.colors.type.card.borderColor}
+        borderColor={theme.colors.card.borderColor}
       >
-        <Text
-          as="span"
-          className="line-kpm"
-          _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}
-        >
+        <Text as="span" className="line-kpm" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
           {lineKpm.toFixed(0)}kpm {lineSpeed > 1 && <>{`(${lineSpeed.toFixed(2)}倍速)`}</>}
         </Text>
       </Tooltip>

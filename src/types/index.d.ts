@@ -52,15 +52,15 @@ interface ThemeColors {
         hover: string;
       };
     };
-    type: {
-      card: {
+    card: {
+      bg: string;
+      color: string;
+      borderColor: `#${string}`;
+      hover: {
         bg: string;
-        color: string;
-        borderColor: `#${string}`;
-        hover: {
-          bg: string;
-        };
       };
+    };
+    type: {
       word: {
         correct: string;
         next: string;

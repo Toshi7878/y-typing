@@ -31,17 +31,17 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
                 bg={theme.colors.popup.bg}
                 color={theme.colors.popup.color}
                 border="1px solid"
-                borderColor={theme.colors.type.card.borderColor}
+                borderColor={theme.colors.card.borderColor}
                 css={{
                   "--popper-arrow-bg": theme.colors.popup.bg,
-                  "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
+                  "--popper-arrow-shadow-color": theme.colors.card.borderColor,
                 }}
               >
                 <Text
                   as="span"
                   className="typed"
                   data-time={type.t}
-                  _hover={{ bg: `${theme.colors.type.card.borderColor}70` }}
+                  _hover={{ bg: `${theme.colors.card.borderColor}70` }}
                   color={
                     type.is
                       ? lostWord === ""

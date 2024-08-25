@@ -51,14 +51,14 @@ const ReadyPracticeButton = () => {
   return (
     <Button
       variant="outline"
-      borderColor={theme.colors.type.card.borderColor}
-      color={theme.colors.type.card.color}
+      borderColor={theme.colors.card.borderColor}
+      color={theme.colors.card.color}
       px={16}
       py={6}
       size="xl"
       className="text-3xl"
       _hover={{
-        bg: theme.colors.type.card.hover.bg,
+        bg: theme.colors.card.hover.bg,
       }}
       onClick={handleClick}
     >

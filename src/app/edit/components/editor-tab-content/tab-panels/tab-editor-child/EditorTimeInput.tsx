@@ -1,13 +1,14 @@
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRef } from "react";
-import { timer } from "../../../ts/youtube-ts/editTimer";
-import { RootState } from "../../../redux/store";
+
 import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRefs } from "../../../edit-contexts/refsProvider";
 import { Line } from "@/types";
+import { RootState } from "@/app/edit/redux/store";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 
 const schema = z.object({
   time: z.string().min(1),

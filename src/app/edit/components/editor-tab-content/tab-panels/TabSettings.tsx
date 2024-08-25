@@ -14,7 +14,7 @@ const TabSettings = (props: any) => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Card bg={theme.colors.type.card.bg}>
+    <Card bg={theme.colors.card.bg}>
       <CardHeader>
         <Heading size="md">設定</Heading>
       </CardHeader>

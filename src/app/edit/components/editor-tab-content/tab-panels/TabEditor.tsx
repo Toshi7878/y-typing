@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
-import { ButtonEvents } from "../../ts/tab/editor/buttonEvent";
 import { useDispatch, useSelector } from "react-redux";
-import { TextAreaEvents } from "../../ts/tab/editor/textAreaEvent";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { RootState } from "../../redux/store";
-import { setCanUpload, setIsLoadingWordConvertBtn } from "../../redux/buttonFlagsSlice";
 import EditorTimeInput from "./tab-editor-child/EditorTimeInput";
 import EditorSettingModal from "./tab-editor-child/EditorSettingModal";
-import { addHistory } from "../../redux/undoredoSlice";
-import { setSelectedIndex } from "../../redux/lineIndexSlice";
-import { setLastAddedTime } from "../../redux/mapDataSlice";
 import { Line } from "@/types";
+import { RootState } from "@/app/edit/redux/store";
+import { setSelectedIndex } from "@/app/edit/redux/lineIndexSlice";
+import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
+import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
+import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
+import { setCanUpload, setIsLoadingWordConvertBtn } from "@/app/edit/redux/buttonFlagsSlice";
+import { addHistory } from "@/app/edit/redux/undoredoSlice";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 // 後でリファクタリング

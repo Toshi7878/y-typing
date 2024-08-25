@@ -136,7 +136,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             bottom={0}
             width="50px"
             borderLeft="2px solid"
-            borderColor={theme.colors.type.card.borderColor}
+            borderColor={theme.colors.card.borderColor}
             cursor="pointer"
             zIndex="100"
             onMouseEnter={() => {

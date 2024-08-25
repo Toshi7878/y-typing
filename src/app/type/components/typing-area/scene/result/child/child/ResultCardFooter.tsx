@@ -35,9 +35,9 @@ function ResultCardFooter({
           bg={theme.colors.popup.bg}
           color={theme.colors.popup.color}
           border="1px solid"
-          borderColor={theme.colors.type.card.borderColor}
+          borderColor={theme.colors.card.borderColor}
         >
-          <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
+          <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
             kpm: {kpm}
           </Text>
         </Tooltip>
@@ -49,9 +49,9 @@ function ResultCardFooter({
           bg={theme.colors.popup.bg}
           color={theme.colors.popup.color}
           border="1px solid"
-          borderColor={theme.colors.type.card.borderColor}
+          borderColor={theme.colors.card.borderColor}
         >
-          <Text as="span" _hover={{ bg: `${theme.colors.type.card.borderColor}30` }}>
+          <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
             point: {point}
             {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
           </Text>

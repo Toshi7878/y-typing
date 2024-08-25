@@ -13,9 +13,9 @@ const TabRanking = (props: TabRankingProps) => {
     <Card
       className="tab-card"
       variant="filled"
-      bg={theme.colors.type.card.bg}
+      bg={theme.colors.card.bg}
       boxShadow="lg"
-      color={theme.colors.type.card.color}
+      color={theme.colors.card.color}
     >
       <CardBody className="text-3xl font-bold w-full" pt={2}>
         <Box
@@ -27,7 +27,7 @@ const TabRanking = (props: TabRankingProps) => {
               width: "12px",
             },
             "&::-webkit-scrollbar-thumb": {
-              background: theme.colors.type.card.borderColor,
+              background: theme.colors.card.borderColor,
               borderRadius: "10px", // スクロールバーの角を丸くする
               border: "2px solid transparent", // スクロールバーの内側にスペースを作る
               backgroundClip: "content-box", // 背景をクリップ
@@ -40,7 +40,7 @@ const TabRanking = (props: TabRankingProps) => {
             size="sm"
             sx={{
               "th, td": {
-                borderColor: theme.colors.type.card.color,
+                borderColor: theme.colors.card.color,
               },
               "tr, td": {
                 paddingY: "0.5rem", // smとmdの間のサイズに調整
@@ -50,25 +50,25 @@ const TabRanking = (props: TabRankingProps) => {
           >
             <Thead position="sticky" top={0} pt={2} zIndex={1} className="ranking-thead">
               <Tr>
-                <Th width="5%" color={theme.colors.type.card.color}>
+                <Th width="5%" color={theme.colors.card.color}>
                   順位
                 </Th>
-                <Th width="15%" color={theme.colors.type.card.color}>
+                <Th width="15%" color={theme.colors.card.color}>
                   名前
                 </Th>
-                <Th width="10%" color={theme.colors.type.card.color}>
+                <Th width="10%" color={theme.colors.card.color}>
                   Score
                 </Th>
-                <Th width="5%" color={theme.colors.type.card.color}>
+                <Th width="5%" color={theme.colors.card.color}>
                   正確率
                 </Th>
-                <Th width="5%" color={theme.colors.type.card.color}>
+                <Th width="5%" color={theme.colors.card.color}>
                   kpm
                 </Th>
-                <Th width="10%" color={theme.colors.type.card.color}>
+                <Th width="10%" color={theme.colors.card.color}>
                   モード
                 </Th>
-                <Th width="10%" color={theme.colors.type.card.color}>
+                <Th width="10%" color={theme.colors.card.color}>
                   時間
                 </Th>
               </Tr>

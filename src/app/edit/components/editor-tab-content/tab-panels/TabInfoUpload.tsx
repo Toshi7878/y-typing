@@ -3,19 +3,19 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Stack, useToast } from "@chakra-ui/react";
 
 import { useEffect } from "react";
-import { useRefs } from "../../edit-contexts/refsProvider";
 import InfoInput from "./tab-info-child/InfoInput";
 import InfoGenreTag from "./tab-info-child/InfoGenreTag";
 import UploadButton from "./tab-info-child/UploadButton";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { actions } from "../../ts/tab/info-upload/serverActions";
 import { useFormState } from "react-dom";
 import { useParams, useRouter } from "next/navigation";
-import { setCanUpload } from "../../redux/buttonFlagsSlice";
 import { Line } from "@/types";
 import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
-import { getThumbnailQuality } from "../../ts/tab/info-upload/getThumbailQuality";
+import { RootState } from "@/app/edit/redux/store";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQuality";
+import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
+import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 
 export interface SendData {
   title: string;

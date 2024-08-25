@@ -56,7 +56,7 @@ const RankingTr = (props: RankingTrProps) => {
             <Text as="span" color={romaColor} className="input-mode-outline-text">
               ローマ字
             </Text>
-            <Text as="span" color={theme.colors.type.card.color}>
+            <Text as="span" color={theme.colors.card.color}>
               ・
             </Text>
             <Text as="span" color={kanaColor} className="input-mode-outline-text">
@@ -70,7 +70,7 @@ const RankingTr = (props: RankingTrProps) => {
             <Text as="span" color={kanaColor} className="input-mode-outline-text">
               かな
             </Text>
-            <Text as="span" color={theme.colors.type.card.color}>
+            <Text as="span" color={theme.colors.card.color}>
               ・
             </Text>
             <Text as="span" color={romaColor} className="input-mode-outline-text">
@@ -103,10 +103,10 @@ const RankingTr = (props: RankingTrProps) => {
       color={theme.colors.popup.color}
       borderWidth="1px"
       borderStyle="solid"
-      borderColor={theme.colors.type.card.borderColor}
+      borderColor={theme.colors.card.borderColor}
       css={{
         "--popper-arrow-bg": theme.colors.popup.bg,
-        "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
+        "--popper-arrow-shadow-color": theme.colors.card.borderColor,
       }}
       label={
         <Box fontSize="sm">
@@ -147,8 +147,8 @@ const RankingTr = (props: RankingTrProps) => {
       isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
     >
       <Tr
-        _hover={{ backgroundColor: theme.colors.type.card.hover.bg }}
-        backgroundColor={props.isHighlighted ? theme.colors.type.card.hover.bg : "transparent"}
+        _hover={{ backgroundColor: theme.colors.card.hover.bg }}
+        backgroundColor={props.isHighlighted ? theme.colors.card.hover.bg : "transparent"}
         className={`cursor-pointer ${props.sessionUserId === props.rankingUserId ? "my-result" : ""}`}
         {...(props.sessionUserId === props.rankingUserId && {
           color: theme.colors.type.tab.ranking.myrank.color,

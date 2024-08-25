@@ -64,12 +64,12 @@ const PracticeLineCard = () => {
         ...interact.style,
         height: "fit-content",
       }}
-      bg={theme.colors.type.card.bg}
-      color={theme.colors.type.card.color}
-      outline={`1px solid ${theme.colors.type.card.borderColor}`}
+      bg={theme.colors.card.bg}
+      color={theme.colors.card.color}
+      outline={`1px solid ${theme.colors.card.borderColor}`}
       boxShadow={"lg"}
       _hover={{
-        bg: theme.colors.type.card.hover.bg,
+        bg: theme.colors.card.hover.bg,
       }}
       cursor={isDragging ? "move" : "pointer"}
       onMouseDown={() => setIsDragging(false)}
