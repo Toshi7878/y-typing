@@ -1,6 +1,6 @@
 "use client";
 import React, { CSSProperties, useEffect } from "react";
-import YouTubeContent from "../components/type-youtube-content/YoutubeContent";
+import TypeYouTubeContent from "../components/type-youtube-content/YoutubeContent";
 import { useParams } from "next/navigation";
 import TabContent from "../components/type-tab-content/Tab";
 import { Box, Flex, useTheme } from "@chakra-ui/react";
@@ -150,7 +150,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
           <Flex direction="column">
             <Flex gap="6">
               <Box className="">
-                <YouTubeContent
+                <TypeYouTubeContent
                   className={` w-[512px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
                   videoId={videoId}
                 />

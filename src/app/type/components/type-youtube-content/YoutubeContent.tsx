@@ -14,12 +14,12 @@ import {
   speedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 
-interface YouTubeProps {
+interface TypeYouTubeProps {
   className: string;
   videoId: string;
 }
 
-const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
+const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeYouTubeProps) {
   console.log("YouTube");
   const [scene, setScene] = useAtom(sceneAtom);
   const setNotify = useSetAtom(playingNotifyAtom);
@@ -131,4 +131,4 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   return memoizedYouTube;
 };
 
-export default YouTubeContent;
+export default TypeYouTubeContent;
