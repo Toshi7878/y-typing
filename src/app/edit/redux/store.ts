@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import YTStateReducer from "./ytStateSlice";
-import tabIndexReducer from "./tabIndexSlice";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
 import buttonFlagsReducer from "./buttonFlagsSlice";
@@ -11,7 +10,6 @@ import genreTagReducer from "./GenreTagSlice";
 const editStore = configureStore({
   reducer: {
     ytState: YTStateReducer,
-    tabIndex: tabIndexReducer,
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,
     btnFlags: buttonFlagsReducer,

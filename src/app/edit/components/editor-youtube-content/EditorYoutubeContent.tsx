@@ -5,7 +5,9 @@ import YouTube from "react-youtube";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
-import { ytState } from "../../ts/youtube-ts/youtubeEvents";
+import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
+import { editTabIndexAtom } from "../../edit-atom/editAtom";
+import { useSetAtom } from "jotai";
 
 interface EditorYouTubeProps {
   className: string;
@@ -14,6 +16,8 @@ interface EditorYouTubeProps {
 
 const EditorYouTubeContent = function YouTubeContent({ className, videoId }: EditorYouTubeProps) {
   console.log("YouTube");
+  const setTabIndex = useSetAtom(editTabIndexAtom);
+
   const dispatch = useDispatch();
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -27,12 +31,14 @@ const EditorYouTubeContent = function YouTubeContent({ className, videoId }: Edi
       refs.setRef("playerRef", player);
       ytState.ready(refs, dispatch, ytTitle);
     },
-    [refs, dispatch, ytTitle],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ytTitle],
   );
 
   const handlePlay = useCallback(() => {
-    ytState.play(refs.playerRef, dispatch, playerState.isStarted);
-  }, [dispatch, refs.playerRef, playerState.isStarted]);
+    ytState.play(refs.playerRef, dispatch, setTabIndex, playerState.isStarted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerState.isStarted]);
 
   const handlePause = useCallback(() => {
     ytState.pause(dispatch);

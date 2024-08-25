@@ -9,7 +9,7 @@ import { setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
 import "@/app/edit/style/editor.scss";
 import { Box, HStack } from "@chakra-ui/react";
 import { useRefs } from "./edit-contexts/refsProvider";
-import { YTSpeedController } from "./ts/youtube-ts/ytHandleEvents";
+import { YTSpeedController } from "./ts/youtube-ts/editYtHandleEvents";
 const TimeRange = () => {
   console.log("range");
 

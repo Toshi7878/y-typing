@@ -11,10 +11,13 @@ import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
-import { setTabIndex } from "@/app/edit/redux/tabIndexSlice";
+import { editTabIndexAtom } from "@/app/edit/edit-atom/editAtom";
+import { useSetAtom } from "jotai";
 
 export default function LineRow() {
   console.log("Table");
+  const setTabIndex = useSetAtom(editTabIndexAtom);
+
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
@@ -131,7 +134,7 @@ export default function LineRow() {
           `}
           onClick={() => {
             selectLine(index);
-            dispatch(setTabIndex(1));
+            setTabIndex(1);
           }}
         >
           <Td

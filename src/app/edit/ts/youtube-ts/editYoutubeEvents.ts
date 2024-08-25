@@ -1,15 +1,21 @@
 import { timer } from "./editTimer";
 import { setIsPlaying, setIsReady, setIsStarted } from "../../redux/ytStateSlice";
-import { setTabIndex } from "../../redux/tabIndexSlice";
 import { setTimeIndex } from "../../redux/lineIndexSlice";
 import { setYtTitle } from "../../redux/tabInfoInputSlice";
-import { Action, Dispatch } from "@reduxjs/toolkit";
+import { Action } from "@reduxjs/toolkit";
 import { RefsContextType } from "../../edit-contexts/refsProvider";
 import { Line } from "@/types";
 import { Ticker } from "@pixi/ticker";
+import { EditTabIndex } from "../type";
+import { Dispatch } from "react";
 export const editTicker = new Ticker();
 class YTState {
-  play(playerRef: RefsContextType["playerRef"], dispatch: Dispatch<Action>, isStarted: boolean) {
+  play(
+    playerRef: RefsContextType["playerRef"],
+    dispatch: Dispatch<Action>,
+    setTabIndex: Dispatch<EditTabIndex>,
+    isStarted: boolean,
+  ) {
     console.log("再生 1");
 
     if (!isStarted) {
@@ -18,7 +24,7 @@ class YTState {
     editTicker.start();
     dispatch(setIsPlaying(true));
     dispatch(setIsStarted(true));
-    dispatch(setTabIndex(1));
+    setTabIndex(1);
   }
 
   end(dispatch: Dispatch<Action>) {

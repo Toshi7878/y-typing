@@ -1,7 +1,7 @@
 // class WordReplace {
 
 import { Action, Dispatch } from "@reduxjs/toolkit";
-import { YTSpeedController } from "./youtube-ts/ytHandleEvents";
+import { YTSpeedController } from "./youtube-ts/editYtHandleEvents";
 import { RootState } from "../redux/store";
 import { RefsContextType } from "../edit-contexts/refsProvider";
 import { mapDataRedo, mapDataUndo, updateLine } from "../redux/mapDataSlice";

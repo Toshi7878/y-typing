@@ -14,3 +14,5 @@ export interface EditorSendData {
   kanaTotalNotes: number;
   thumbnailQuality: "maxresdefault" | "mqdefault";
 }
+
+export type EditTabIndex = 0 | 1 | 2;

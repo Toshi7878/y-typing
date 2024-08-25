@@ -4,14 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
 
 import TabEditor from "./tab-panels/TabEditor";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
 import { ThemeColors } from "@/types";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { RootState } from "../../redux/store";
-import { setTabIndex } from "../../redux/tabIndexSlice";
+import { editTabIndexAtom } from "../../edit-atom/editAtom";
+import { useAtom } from "jotai";
+import { EditTabIndex } from "../../ts/type";
 
 interface EditorTabContentProps {
   className?: string;
@@ -22,7 +24,8 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
   console.log("Tab");
 
   const editorTabRef = useRef(null);
-
+  const [tabIndex, setTabIndex] = useAtom(editTabIndexAtom);
+  const [isDisabled, setIsDisabled] = useState(true);
   const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
 
@@ -30,12 +33,6 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
     setRef("editorTab", editorTabRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorTabRef]);
-
-  const dispatch = useDispatch();
-  const tabIndex: number = useSelector(
-    (state: { tabIndex: { value: number } }) => state.tabIndex.value,
-  );
-  const [isDisabled, setIsDisabled] = useState(true);
 
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   useEffect(() => {
@@ -48,7 +45,7 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
   return (
     <Tabs
       index={tabIndex}
-      onChange={(index) => dispatch(setTabIndex(index))}
+      onChange={(index) => setTabIndex(index as EditTabIndex)}
       className={className}
       isFitted
       size="sm"
