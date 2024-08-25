@@ -1,4 +1,6 @@
 "use client";
+import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
+import { setLineOption } from "@/app/edit/redux/mapDataSlice";
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Modal,
@@ -17,8 +19,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setLineOption } from "../../redux/mapDataSlice";
-import { setCanUpload } from "../../redux/buttonFlagsSlice";
 
 export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lineOptions }) {
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");

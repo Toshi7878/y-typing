@@ -4,10 +4,10 @@ import YouTube from "react-youtube";
 import { useAtomValue } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
 
-interface YouTubeContentProps {
+interface HomeYouTubeContentProps {
   className?: string;
 }
-const YouTubeContent = function YouTubeContent({ className = "" }: YouTubeContentProps) {
+const HomeYouTubeContent = function YouTubeContent({ className = "" }: HomeYouTubeContentProps) {
   const videoId = useAtomValue(videoIdAtom);
   const previewTime = useAtomValue(previewTimeAtom);
 
@@ -45,4 +45,4 @@ const YouTubeContent = function YouTubeContent({ className = "" }: YouTubeConten
   );
 };
 
-export default YouTubeContent;
+export default HomeYouTubeContent;

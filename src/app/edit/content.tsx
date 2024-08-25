@@ -15,9 +15,9 @@ import NProgress from "nprogress";
 import { resetUndoRedoData } from "./redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import YouTubeContent from "../(home)/components/YouTubeContent";
-import EditorTable from "./components/editor-table-content/TableContent";
+import EditorTable from "./components/editor-table-content/EditorTable";
 import EditorTabContent from "./components/editor-tab-content/EditorTab";
+import EditorYouTubeContent from "./components/editor-youtube-content/EditorYoutubeContent";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -85,7 +85,10 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
         paddingTop={14}
       >
         <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
-          <YouTubeContent className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" />
+          <EditorYouTubeContent
+            className="md:mr-5 md:min-w-[384px] md:min-h-[216px]"
+            videoId={videoId}
+          />
           <EditorTabContent />
         </Box>
         <Box as="section" width="100%" mt={2}>

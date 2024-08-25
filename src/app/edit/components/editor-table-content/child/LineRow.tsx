@@ -3,15 +3,15 @@ import { Tr, Td, Button, useDisclosure } from "@chakra-ui/react";
 import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "../../redux/store";
-import { handleKeydown } from "../../ts/windowKeyDown";
-import { useRefs } from "../../edit-contexts/refsProvider";
-import { addLine, updateLine } from "../../redux/mapDataSlice";
-import { setSelectedIndex, setTimeIndex } from "../../redux/lineIndexSlice";
-import { timer } from "../../ts/youtube-ts/editTimer";
-import { setTabIndex } from "../../redux/tabIndexSlice";
 import LineOptionModal from "./LineOptionModal";
 import { Line } from "@/types";
+import { RootState } from "@/app/edit/redux/store";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
+import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
+import { setSelectedIndex, setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
+import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
+import { setTabIndex } from "@/app/edit/redux/tabIndexSlice";
 
 export default function LineRow() {
   console.log("Table");

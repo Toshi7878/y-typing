@@ -7,12 +7,12 @@ import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/youtubeEvents";
 
-interface YouTubeProps {
+interface EditorYouTubeProps {
   className: string;
   videoId: string;
 }
 
-const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubeProps) {
+const EditorYouTubeContent = function YouTubeContent({ className, videoId }: EditorYouTubeProps) {
   console.log("YouTube");
   const dispatch = useDispatch();
 
@@ -85,4 +85,4 @@ const YouTubeContent = function YouTubeContent({ className, videoId }: YouTubePr
   );
 };
 
-export default YouTubeContent;
+export default EditorYouTubeContent;
