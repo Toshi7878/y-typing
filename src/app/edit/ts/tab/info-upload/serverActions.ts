@@ -2,13 +2,13 @@
 
 import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { SendData } from "../../../editor-tab-content/tab-panels/TabInfoUpload";
 import { mapSendSchema } from "./validationSchema";
 import { revalidatePath } from "next/cache";
+import { EditorSendData } from "../../type";
 
 const prisma = new PrismaClient();
 
-const createMap = async (data: SendData, userId: number) => {
+const createMap = async (data: EditorSendData, userId: number) => {
   const newMap = await prisma.map.create({
     data: {
       ...data,
@@ -19,7 +19,7 @@ const createMap = async (data: SendData, userId: number) => {
   return newMap.id; // 新しく作成されたマップのIDを返す
 };
 
-const updateMap = async (data: SendData, mapId: number) => {
+const updateMap = async (data: EditorSendData, mapId: number) => {
   const updatedMap = await prisma.map.update({
     where: {
       id: mapId,
@@ -32,7 +32,7 @@ const updateMap = async (data: SendData, mapId: number) => {
   return updatedMap.id; // 更新されたマップのIDを返す
 };
 
-export async function actions(data: SendData, mapId: string) {
+export async function actions(data: EditorSendData, mapId: string) {
   const session = await auth();
 
   const validatedFields = mapSendSchema.safeParse({

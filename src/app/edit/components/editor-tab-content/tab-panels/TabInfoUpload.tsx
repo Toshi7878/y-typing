@@ -17,23 +17,6 @@ import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQu
 import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 
-export interface SendData {
-  title: string;
-  creatorComment: string;
-  tags: string[];
-  mapData: Line[];
-  videoId: string;
-  previewTime: string;
-  romaKpmMedian: number;
-  romaKpmMax: number;
-  kanaKpmMedian: number;
-  kanaKpmMax: number;
-  totalTime: number;
-  romaTotalNotes: number;
-  kanaTotalNotes: number;
-  thumbnailQuality: "maxresdefault" | "mqdefault";
-}
-
 const TabInfoUpload = () => {
   const dispatch = useDispatch();
   const initialState = { id: null, message: "", status: 0 };
