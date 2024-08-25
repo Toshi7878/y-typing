@@ -11,20 +11,22 @@ import { deleteTags, setTags } from "@/app/edit/redux/GenreTagSlice";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { Tag } from "@/types";
+import { useAtomValue } from "jotai";
+import { isEditYouTubeReadyAtom } from "@/app/edit/edit-atom/editAtom";
 
 const InfoGenreTag = () => {
   const { tags } = useSelector((state: RootState) => state.genreTag);
   const dispatch = useDispatch();
+  const isYouTubeReady = useAtomValue(isEditYouTubeReadyAtom);
   const { playerRef } = useRefs();
   const [ytTitle, setYtTitle] = useState("動画タイトル");
-  const isReady = useSelector((state: RootState) => state.ytState.isReady);
 
   useEffect(() => {
     if (playerRef.current) {
       setYtTitle(playerRef.current.getVideoData().title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
+  }, [isYouTubeReady]);
 
   const suggestions = [
     { id: "1", text: "公式MV", className: "" },

@@ -17,7 +17,7 @@ import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import EditorTable from "./components/editor-table-content/EditorTable";
 import EditorTabContent from "./components/editor-tab-content/EditTab";
-import EditorYouTubeContent from "./components/editor-youtube-content/EditorYoutubeContent";
+import EditYouTube from "./components/editor-youtube-content/EditYoutube";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -85,10 +85,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
         paddingTop={14}
       >
         <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
-          <EditorYouTubeContent
-            className="md:mr-5 md:min-w-[384px] md:min-h-[216px]"
-            videoId={videoId}
-          />
+          <EditYouTube className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" videoId={videoId} />
           <EditorTabContent />
         </Box>
         <Box as="section" width="100%" mt={2}>

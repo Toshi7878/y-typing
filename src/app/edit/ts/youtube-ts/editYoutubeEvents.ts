@@ -1,5 +1,4 @@
 import { timer } from "./editTimer";
-import { setIsPlaying, setIsReady, setIsStarted } from "../../redux/ytStateSlice";
 import { setTimeIndex } from "../../redux/lineIndexSlice";
 import { setYtTitle } from "../../redux/tabInfoInputSlice";
 import { Action } from "@reduxjs/toolkit";
@@ -12,37 +11,35 @@ export const editTicker = new Ticker();
 class YTState {
   play(
     playerRef: RefsContextType["playerRef"],
-    dispatch: Dispatch<Action>,
+    setIsYTPlaying: Dispatch<boolean>,
     setTabIndex: Dispatch<EditTabIndex>,
-    isStarted: boolean,
+    setIsYTStarted: Dispatch<boolean>,
   ) {
     console.log("再生 1");
 
-    if (!isStarted) {
-      editTicker.add(() => timer.update(playerRef));
-    }
+    editTicker.add(() => timer.update(playerRef));
     editTicker.start();
-    dispatch(setIsPlaying(true));
-    dispatch(setIsStarted(true));
+    setIsYTPlaying(true);
+    setIsYTStarted(true);
     setTabIndex(1);
   }
 
-  end(dispatch: Dispatch<Action>) {
+  end(setIsYTPlaying: Dispatch<boolean>) {
     console.log("プレイ終了");
     editTicker.stop();
-    dispatch(setIsPlaying(false));
+    setIsYTPlaying(false);
   }
 
-  stop(dispatch: Dispatch<Action>) {
+  stop(setIsYTPlaying: Dispatch<boolean>) {
     console.log("動画停止");
-    dispatch(setIsPlaying(false));
+    setIsYTPlaying(false);
   }
 
-  pause(dispatch: Dispatch<Action>) {
+  pause(setIsYTPlaying: Dispatch<boolean>) {
     console.log("一時停止");
 
     editTicker.stop();
-    dispatch(setIsPlaying(false));
+    setIsYTPlaying(false);
   }
 
   seek(event: any, dispatch: Dispatch<Action>, mapData: Line[]) {
@@ -55,8 +52,6 @@ class YTState {
   ready(refs: RefsContextType, dispatch: Dispatch<Action>, title: string) {
     console.log("ready");
     const videoData = refs.playerRef!.current!.getVideoData();
-
-    dispatch(setIsReady(true));
 
     if (videoData && !title) {
       const { title } = videoData;

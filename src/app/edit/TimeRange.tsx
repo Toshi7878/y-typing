@@ -9,8 +9,8 @@ import "@/app/edit/style/editor.scss";
 import { Box, Button, HStack, Input, Text } from "@chakra-ui/react";
 import { useRefs } from "./edit-contexts/refsProvider";
 import { YTSpeedController } from "./ts/youtube-ts/editYtHandleEvents";
-import { useAtom } from "jotai";
-import { editSpeedAtom } from "./edit-atom/editAtom";
+import { useAtom, useAtomValue } from "jotai";
+import { editSpeedAtom, isEditYouTubeStartedAtom } from "./edit-atom/editAtom";
 const TimeRange = () => {
   console.log("range");
 
@@ -18,10 +18,10 @@ const TimeRange = () => {
   const { register, setValue } = useForm();
 
   const { playerRef } = useRefs();
-  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   const [isDisabled, setIsDisabled] = useState(true);
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const [speed, setSpeed] = useAtom(editSpeedAtom);
+  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
 
   const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const time = Number(e.target.value);
@@ -36,7 +36,7 @@ const TimeRange = () => {
   }, []);
 
   useEffect(() => {
-    if (isStarted) {
+    if (isYTStarted) {
       setIsDisabled(false);
       const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
@@ -47,7 +47,7 @@ const TimeRange = () => {
       setIsDisabled(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStarted]);
+  }, [isYTStarted]);
 
   useEffect(() => {
     const updateRangeValue = (currentTime: string) => {
