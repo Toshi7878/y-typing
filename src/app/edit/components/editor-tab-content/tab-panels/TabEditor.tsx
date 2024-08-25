@@ -11,12 +11,13 @@ import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { setCanUpload, setIsLoadingWordConvertBtn } from "@/app/edit/redux/buttonFlagsSlice";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { EditorSettingsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
   editLineLyricsAtom,
   editLineSelectedNumberAtom as editSelectedLineCountAtom,
   editLineWordAtom,
+  isEditYouTubePlayingAtom,
 } from "@/app/edit/edit-atom/editAtom";
 
 // 後でリファクタリング
@@ -31,6 +32,7 @@ const TabEditor = forwardRef((props, ref) => {
   const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
   const [word, setWord] = useAtom(editLineWordAtom);
   const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
+  const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
 
   const setLineFunctions: SetLineFunctions = { setLyrics, setWord, setLyricsText };
   const dispatch = useDispatch();
@@ -78,7 +80,7 @@ const TabEditor = forwardRef((props, ref) => {
   };
 
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-    const timeOffset = editorSettingRef.current!.getTimeOffset();
+    const timeOffset = isYTPlaying ? editorSettingRef.current!.getTimeOffset() : 0;
     const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
     const addLyrics = lyricsText;
 
