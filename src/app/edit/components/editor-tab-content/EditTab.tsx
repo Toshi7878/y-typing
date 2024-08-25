@@ -48,7 +48,7 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
       variant="line"
       width="100%"
     >
-      <TabList height="33px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
+      <TabList height="25px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
         {tabLists.map((tabName, index) => {
           return (
             <Tab
@@ -64,14 +64,14 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
       </TabList>
 
       <TabPanels>
-        <TabPanel px={0}>
+        <TabPanel px={0} pb={0} pt={2}>
           <TabInfoUpload />
         </TabPanel>
 
-        <TabPanel px={0}>
+        <TabPanel px={0} pb={0} pt={2}>
           <TabEditor ref={editorTabRef} />
         </TabPanel>
-        <TabPanel px={0}>
+        <TabPanel px={0} pb={0} pt={2}>
           <TabSettings />
         </TabPanel>
       </TabPanels>

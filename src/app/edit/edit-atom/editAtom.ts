@@ -18,7 +18,7 @@ export const editLineLyricsAtom = atom<string>("");
 export const editLineWordAtom = atom<string>("");
 export const editLineTimeAtom = atom<number | null>(null);
 export const editLineSelectedNumberAtom = atom<number | null>(null);
-export const editTimeCountAtom = atom<number | null>(null);
+export const editTimeCountAtom = atom<number>(0);
 
 export const editAddLyricsTextBoxAtom = atom<string>("");
 export const editTimeRangeValue = atom<number>(0);

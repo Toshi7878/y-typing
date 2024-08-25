@@ -14,7 +14,7 @@ import NProgress from "nprogress";
 import { resetUndoRedoData } from "./redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import EditorTable from "./components/editor-table-content/EditorTable";
+import EditTable from "./components/editor-table-content/EditTable";
 import EditorTabContent from "./components/editor-tab-content/EditTab";
 import EditYouTube from "./components/editor-youtube-content/EditYouTube";
 import { useSetAtom } from "jotai";
@@ -89,17 +89,20 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
         paddingX={{ base: 0, md: 14 }}
         flexDirection="column"
         alignItems="center"
-        paddingTop={14}
+        paddingTop="55px"
       >
         <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
-          <EditYouTube className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" videoId={videoId} />
+          <EditYouTube
+            className="mt-1 md:mr-5 md:min-w-[416px] md:max-h-[234px]"
+            videoId={videoId}
+          />
           <EditorTabContent />
         </Box>
-        <Box as="section" width="100%" mt={2}>
+        <Box as="section" width="100%" my={1}>
           <TimeRange />
         </Box>
-        <Box as="section" width="100%" mt={3}>
-          <EditorTable />
+        <Box as="section" width="100%" mt={0}>
+          <EditTable />
         </Box>
       </Box>
     </LoadingOverlayWrapper>

@@ -14,7 +14,7 @@ export interface Line {
   time: string;
   lyrics: string;
   word: string;
-  lineNumber?: number;
+  selectedLineCount?: number;
   options?: { eternalCSS?: string; changeCSS?: string };
 }
 
@@ -102,6 +102,21 @@ interface ThemeColors {
         bg: string;
         hover: {
           bg: string;
+        };
+      };
+    };
+
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: `#${string}`;
+        };
+        selectedLine: {
+          bg: `#${string}`;
+          outlineColor: `#${string}`;
+        };
+        errorLine: {
+          bg: `#${string}`;
         };
       };
     };

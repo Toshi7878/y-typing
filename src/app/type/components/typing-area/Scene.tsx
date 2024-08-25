@@ -12,7 +12,7 @@ import {
   tabIndexAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import Ready from "./scene/Ready";
-import { Box, Card, useDisclosure } from "@chakra-ui/react";
+import { Box, Card, useDisclosure, useTheme } from "@chakra-ui/react";
 import { PlayingRef } from "../../ts/type";
 import ResultDrawer from "./scene/result/ResultDrawer";
 import PlayingTop from "./scene/child/PlayingTop";
@@ -21,6 +21,7 @@ import { PlayingLineTimeRef } from "./scene/playing-child/child/PlayingLineTime"
 import { PlayingTotalTimeRef } from "./scene/playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./scene/playing-child/child/PlayingSkipGuide";
 import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
+import { ThemeColors } from "@/types";
 
 export const Scene = () => {
   const scene = useAtomValue(sceneAtom);
@@ -98,13 +99,14 @@ export const Scene = () => {
 
 function SceneWrapper() {
   console.log("SceneWrapper");
+  const theme: ThemeColors = useTheme();
 
   return (
     <Card
       className="typing-card"
       variant={"filled"}
-      bg="type.card.bg"
-      color={"type.card.color"}
+      bg={theme.colors.card.bg}
+      color={theme.colors.card.color}
       boxShadow="lg"
     >
       <Scene />

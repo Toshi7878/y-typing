@@ -1,18 +1,17 @@
 "use client";
-import { Tr, Td, Button, useDisclosure } from "@chakra-ui/react";
+import { Tr, Td, Button, useDisclosure, useTheme } from "@chakra-ui/react";
 import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LineOptionModal from "./LineOptionModal";
-import { Line } from "@/types";
+import { Line, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
-  editLineSelectedNumberAtom,
-  editLineTimeAtom,
+  editLineSelectedNumberAtom as editLineSelectedCountAtom,
   editSpeedAtom,
   editTabIndexAtom,
   editTimeCountAtom,
@@ -31,7 +30,7 @@ export default function LineRow() {
   const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
   const [speed, setSpeed] = useAtom(editSpeedAtom);
   const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
-  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
+  const [lineSelectedCount, setLineSelectedCount] = useAtom(editLineSelectedCountAtom);
   const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
 
@@ -39,6 +38,7 @@ export default function LineRow() {
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
+  const theme: ThemeColors = useTheme();
   const keydownHandler = useCallback(
     (event: KeyboardEvent) =>
       handleKeydown(
@@ -50,7 +50,7 @@ export default function LineRow() {
         speed,
         setSpeed,
         isYTPlaying,
-        setLineNumber,
+        setLineSelectedCount,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refs, undoredoState, mapData, speed],
@@ -110,19 +110,17 @@ export default function LineRow() {
   }, [isYTStarted]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
-    setLineNumber(index);
+    setLineSelectedCount(index);
   };
   useEffect(() => {
     const updateTimeBg = () => {
       if (timeCount !== null) {
-        if (
-          mapData[timeCount + 1] &&
-          Number(timer.currentTime) >= Number(mapData[timeCount + 1]["time"])
-        ) {
-          setTimeCount(timeCount);
+        const nextLine = mapData[timeCount + 1];
+        if (nextLine && Number(timer.currentTime) >= Number(nextLine["time"])) {
+          setTimeCount(timeCount + 1);
         }
       } else {
-        setTimeCount(null);
+        setTimeCount(0);
       }
     };
 
@@ -145,16 +143,29 @@ export default function LineRow() {
           key={index}
           id={`line_${index}`}
           data-line-index={index}
-          className={`cursor-pointer relative ${
-            lineNumber === index
-              ? "selected-line bg-cyan-300 outline outline-2 outline-black"
-              : " hover:bg-cyan-400/35"
-          } ${timeCount === index && lineNumber !== index ? " bg-teal-400/35" : ""} ${
-            endAfterLineIndex < index && line.lyrics !== "end" ? " bg-red-400/35" : ""
+          cursor="pointer"
+          position="relative"
+          bg={
+            lineSelectedCount === index
+              ? theme.colors.edit.mapTable.selectedLine.bg
+              : timeCount === index && lineSelectedCount !== index
+                ? theme.colors.edit.mapTable.currentTimeLine.bg
+                : endAfterLineIndex < index && line.lyrics !== "end"
+                  ? theme.colors.edit.mapTable.errorLine.bg
+                  : "transparent"
           }
-          `}
+          color={theme.colors.color}
+          outline={lineSelectedCount === index ? "1px solid" : "none"}
+          outlineColor={lineSelectedCount === index ? theme.colors.color : "none"}
+          _hover={{
+            bg:
+              lineSelectedCount !== index
+                ? `${theme.colors.edit.mapTable.selectedLine.bg}50`
+                : theme.colors.edit.mapTable.selectedLine.bg,
+          }}
           onClick={() => {
             selectLine(index);
+
             setTabIndex(1);
           }}
         >
@@ -171,7 +182,7 @@ export default function LineRow() {
             <Button
               disabled={mapData.length - 1 === index}
               variant={line.options ? "solid" : "outline"}
-              colorScheme={`${lineNumber === index ? "green" : "green"}`}
+              colorScheme={`${lineSelectedCount === index ? "green" : "green"}`}
               size="sm"
               onClick={() => {
                 if (mapData.length - 1 !== index) {

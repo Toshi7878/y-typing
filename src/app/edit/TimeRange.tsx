@@ -56,7 +56,7 @@ const TimeRange = () => {
   }, []);
 
   return (
-    <Box display="grid" gridTemplateColumns="1fr auto" gap="1rem">
+    <Box display="grid" gridTemplateColumns="1fr auto" gap-y="1px">
       <input
         min="0"
         max={rangeMaxValue}
@@ -68,11 +68,10 @@ const TimeRange = () => {
         className="range-color w-full bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
         disabled={isDisabled}
       />
-      <HStack justify="center" className="w-[130px]">
+      <HStack justify="center" className="w-[170px]">
         <Box>
           <Button
-            type="button"
-            className="text-cyan-400 cursor-pointer"
+            cursor="pointer"
             variant="unstyled"
             onClick={() =>
               new YTSpeedController("down", { setSpeed, playerRef: playerRef.current })
@@ -94,9 +93,8 @@ const TimeRange = () => {
         </Box>
         <Box>
           <Button
-            type="button"
             variant="unstyled"
-            className="text-cyan-400 cursor-pointer"
+            cursor="pointer"
             onClick={() => new YTSpeedController("up", { setSpeed, playerRef: playerRef.current })}
           >
             <Box className="relative">

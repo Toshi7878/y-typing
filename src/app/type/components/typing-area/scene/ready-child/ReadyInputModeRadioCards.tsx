@@ -3,6 +3,7 @@ import { inputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { InputModeType } from "@/app/type/ts/type";
 import { Box, HStack, useRadio, useRadioGroup, UseRadioProps, useTheme } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
+import { ThemeColors } from "@/types";
 
 interface RadioCardProps extends UseRadioProps {
   option: InputModeType;
@@ -10,7 +11,7 @@ interface RadioCardProps extends UseRadioProps {
 }
 function RadioCard({ option, children, ...props }: RadioCardProps) {
   const { getInputProps, getRadioProps } = useRadio(props);
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const input = getInputProps();
   const checkbox = getRadioProps();
@@ -18,6 +19,7 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
   const kanaBg = theme.colors.type.ready.radio.kana.bg;
   const flickBg = theme.colors.type.ready.radio.flick.bg;
   const selectedBg = option === "roma" ? romaBg : option === "kana" ? kanaBg : flickBg;
+
   return (
     <Box as="label" minW="33.33%">
       <input {...input} />
@@ -26,16 +28,16 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
         cursor="pointer"
         borderWidth="1px"
         boxShadow="md"
-        borderColor="type.card.borderColor"
+        borderColor={theme.colors.card.borderColor}
         className="font-bold select-none"
         _hover={{
           bg: `${selectedBg}80`,
-          color: "type.ready.radio.hover.color",
+          color: theme.colors.type.ready.radio.hover.color,
         }}
         _checked={{
           bg: selectedBg,
-          color: "type.ready.radio.selected.color",
-          borderColor: "type.card.borderColor",
+          color: theme.colors.type.ready.radio.selected.color,
+          borderColor: theme.colors.card.borderColor,
           _hover: {
             bg: selectedBg,
           },

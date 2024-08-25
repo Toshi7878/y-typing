@@ -75,6 +75,20 @@ const sodaTheme: ThemeColors = {
         },
       },
     },
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: "#3cd3bf80",
+        },
+        selectedLine: {
+          bg: "#3bd3ec",
+          outlineColor: "#000000",
+        },
+        errorLine: {
+          bg: "#f5727535",
+        },
+      },
+    },
   },
 };
 
@@ -148,6 +162,20 @@ const darkTheme: ThemeColors = {
         bg: "#3182CE",
         hover: {
           bg: "#4ebafd",
+        },
+      },
+    },
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: "#3cd3bf35",
+        },
+        selectedLine: {
+          bg: "#00a3c4",
+          outlineColor: "#000000",
+        },
+        errorLine: {
+          bg: "#f5727535",
         },
       },
     },

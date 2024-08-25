@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Input, Box, Textarea, Flex, Button, Card, CardBody, useTheme } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
@@ -16,7 +15,7 @@ import { useAtom } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
   editLineLyricsAtom,
-  editLineSelectedNumberAtom,
+  editLineSelectedNumberAtom as editSelectedLineCountAtom,
   editLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
 
@@ -28,7 +27,7 @@ const TabEditor = forwardRef((props, ref) => {
   const timeInputRef = useRef<TimeInputRef | null>(null);
   const editorSettingRef = useRef<EditorSettingsRef | null>(null);
 
-  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
+  const [selectedLineCount, setSelectedLineCount] = useAtom(editSelectedLineCountAtom);
   const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
   const [word, setWord] = useAtom(editLineWordAtom);
   const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
@@ -50,20 +49,21 @@ const TabEditor = forwardRef((props, ref) => {
   const lineInit = () => {
     setLyrics("");
     setWord("");
-    setLineNumber(null);
+    setSelectedLineCount(null);
 
     timeInputRef.current!.clearTime();
   };
 
   useEffect(() => {
-    if (lineNumber !== null && mapData[lineNumber]) {
-      const line = mapData[lineNumber];
+    if (selectedLineCount !== null && mapData[selectedLineCount]) {
+      const line = mapData[selectedLineCount];
 
       setLyrics(line.lyrics || "");
       setWord(line.word || "");
       timeInputRef.current!.selectedTime();
     }
-  }, [lineNumber, mapData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLineCount, mapData]);
 
   const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
     const lastLineTime = Number(mapData[endAfterLineIndex]["time"]);
@@ -107,7 +107,11 @@ const TabEditor = forwardRef((props, ref) => {
     dispatch(
       addHistory({
         type: "update",
-        data: { old: mapData[lineNumber!], new: { time, lyrics, word }, lineNumber },
+        data: {
+          old: mapData[selectedLineCount!],
+          new: { time, lyrics, word },
+          lineNumber: selectedLineCount,
+        },
       }),
     );
 
@@ -115,7 +119,7 @@ const TabEditor = forwardRef((props, ref) => {
       time,
       lyrics,
       word,
-      lineNumber: lineNumber ?? undefined,
+      selectedLineCount: selectedLineCount ?? undefined,
     });
     lineInit();
   };
@@ -129,8 +133,11 @@ const TabEditor = forwardRef((props, ref) => {
   };
 
   const deleteLine = (mapData: RootState["mapData"]["value"]) => {
-    if (lineNumber) {
-      ButtonEvents.deleteLine(dispatch, { ...mapData[lineNumber], lineNumber });
+    if (selectedLineCount) {
+      ButtonEvents.deleteLine(dispatch, {
+        ...mapData[selectedLineCount],
+        selectedLineCount: selectedLineCount,
+      });
     }
     lineInit();
   };
@@ -150,8 +157,8 @@ const TabEditor = forwardRef((props, ref) => {
   const updateButtonRef = useRef<HTMLButtonElement | null>(null);
   const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const isLastLineSelected = lineNumber === endAfterLineIndex;
-  const isNotSelect = !lineNumber || lineNumber === 0;
+  const isLastLineSelected = selectedLineCount === endAfterLineIndex;
+  const isNotSelect = !selectedLineCount || selectedLineCount === 0;
   const buttonConfigs = {
     add: {
       isDisabled: !isTimeInputValid,
@@ -245,7 +252,7 @@ const TabEditor = forwardRef((props, ref) => {
 
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
-      <CardBody>
+      <CardBody py={4}>
         <form className="flex flex-col gap-y-1">
           <Box display="flex" alignItems="center">
             <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
@@ -260,7 +267,7 @@ const TabEditor = forwardRef((props, ref) => {
               variant="filled"
               opacity={1}
               _disabled={{ opacity: 1 }}
-              value={lineNumber ?? ""}
+              value={selectedLineCount ?? ""}
             />
             <Input placeholder="ワード" size="sm" autoComplete="off" value={word} />
           </Box>

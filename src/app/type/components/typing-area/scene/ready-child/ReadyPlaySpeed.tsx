@@ -1,9 +1,10 @@
 import { speedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
-import { Box, Button, HStack, Tooltip } from "@chakra-ui/react";
+import { Box, Button, HStack, Tooltip, useTheme } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React from "react";
+import { ThemeColors } from "@/types";
 
 interface ReadyPlaySpeedProps {
   speedUpButtonRef: React.RefObject<HTMLButtonElement>;
@@ -12,6 +13,7 @@ interface ReadyPlaySpeedProps {
 const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
   const [speedData, setSpeedData] = useAtom(speedAtom);
   const { playerRef } = useRefs();
+  const theme: ThemeColors = useTheme();
 
   return (
     <Tooltip
@@ -24,7 +26,7 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
       boxShadow="lg" // シャドウを追加
     >
       <HStack
-        borderColor={"type.card.borderColor"}
+        borderColor={theme.colors.card.borderColor}
         style={{ border: "1px solid" }}
         px={8}
         py={6}

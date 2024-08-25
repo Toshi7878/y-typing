@@ -7,7 +7,7 @@ import LineRow from "./child/LineRow";
 import { useEffect, useRef } from "react";
 import { useRefs } from "../../edit-contexts/refsProvider";
 
-export default function EditorTable() {
+export default function EditTable() {
   const tbodyRef = useRef(null);
 
   const { setRef } = useRefs();

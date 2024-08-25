@@ -19,7 +19,7 @@ export class ButtonEvents {
         time: line.time,
         lyrics: line.lyrics,
         word: line.word,
-        lineNumber: line.lineNumber,
+        selectedLineCount: line.selectedLineCount,
       }),
     );
   }
@@ -35,7 +35,7 @@ export class ButtonEvents {
   }
 
   static deleteLine(dispatch: Dispatch<any>, line: Line) {
-    dispatch(deleteLine(line.lineNumber));
+    dispatch(deleteLine(line.selectedLineCount));
     dispatch(setCanUpload(true));
     dispatch(addHistory({ type: "delete", data: line }));
   }

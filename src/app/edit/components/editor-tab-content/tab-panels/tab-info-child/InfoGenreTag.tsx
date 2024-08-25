@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Box, Flex, Stack, Badge } from "@chakra-ui/react";
+import { Box, Flex, Stack, Badge, Text, FormLabel } from "@chakra-ui/react";
 
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
@@ -60,14 +60,7 @@ const InfoGenreTag = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap="5">
-      <Box fontWeight="bold">
-        <span>
-          {tags.length}
-          {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`} タグ
-        </span>
-      </Box>
-
-      <div
+      <Flex
         {...(tags.length !== 0
           ? {
               onDrop: (event) => {
@@ -78,30 +71,39 @@ const InfoGenreTag = () => {
               },
             }
           : {})}
+        alignItems="center" // 追加: Flexアイテムを中央揃え
       >
-        <ReactTags
-          tags={tags}
-          suggestions={suggestions}
-          separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
-          placeholder={`${tags.length <= 1 ? "タグを2つ以上追加してください" : `タグを追加`}`}
-          handleDelete={handleDelete}
-          handleAddition={handleAddition}
-          allowUnique
-          allowDragDrop={false}
-          inputFieldPosition="inline"
-          maxTags={TAG_MAX_LEN}
-          handleInputChange={(value, event) => {
-            //@ts-ignore
-            if (event.nativeEvent.inputType === "insertFromDrop") {
-              if (tags.length < TAG_MAX_LEN) {
-                handleAddition({ id: value, text: value, className: "" });
-                event.target.value = "";
+        <FormLabel mb="0" width="150px" fontWeight="bold">
+          <Text as="span">
+            タグ {tags.length}
+            {tags.length <= 1 ? `/${TAG_MIN_LEN}` : `/${TAG_MAX_LEN}`}
+          </Text>
+        </FormLabel>
+        <Box width={"100%"}>
+          <ReactTags
+            tags={tags}
+            suggestions={suggestions}
+            separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
+            placeholder={`${tags.length <= 1 ? "タグを2つ以上追加してください" : `タグを追加`}`}
+            handleDelete={handleDelete}
+            handleAddition={handleAddition}
+            allowUnique
+            allowDragDrop={false}
+            inputFieldPosition="inline"
+            maxTags={TAG_MAX_LEN}
+            handleInputChange={(value, event) => {
+              //@ts-ignore
+              if (event.nativeEvent.inputType === "insertFromDrop") {
+                if (tags.length < TAG_MAX_LEN) {
+                  handleAddition({ id: value, text: value, className: "" });
+                  event.target.value = "";
+                }
               }
-            }
-          }}
-          inline={false}
-        />
-      </div>
+            }}
+            inline={false}
+          />
+        </Box>
+      </Flex>
       <Flex direction="column" wrap="wrap">
         <Stack direction="row" spacing={3} wrap="wrap">
           {[

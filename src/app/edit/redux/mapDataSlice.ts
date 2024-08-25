@@ -68,11 +68,11 @@ export const mapDataSlice = createSlice({
     },
 
     updateLine: (state, action) => {
-      const { lineNumber, time, lyrics, word } = action.payload;
+      const { selectedLineCount, time, lyrics, word } = action.payload;
 
       const newValue = [...state.value];
 
-      newValue[Number(lineNumber)] = { time, lyrics, word };
+      newValue[selectedLineCount] = { time, lyrics, word };
 
       state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },

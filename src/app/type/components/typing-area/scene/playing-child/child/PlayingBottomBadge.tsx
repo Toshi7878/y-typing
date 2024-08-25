@@ -1,5 +1,6 @@
 import { playingNotifyAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { Badge, HStack, Kbd } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
+import { Badge, HStack, Kbd, useTheme } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 
 import { useAtomValue } from "jotai";
@@ -43,6 +44,7 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
   const scene = useAtomValue(sceneAtom);
   const isDisabled = notify.description === "ll" && props.isPauseDisabled;
   const isHidden = scene === "ready" || scene === "end";
+  const theme: ThemeColors = useTheme();
 
   return (
     <HStack hidden={isHidden}>
@@ -57,11 +59,11 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         onClick={isDisabled || props.isKbdHidden ? undefined : props.onClick}
         borderRadius="3xl"
         opacity={isDisabled ? 0.5 : 1}
-        bg={"type.card.bg"}
+        bg={theme.colors.card.bg}
         color={"color"}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={"type.card.borderColor"}
+        borderColor={theme.colors.card.borderColor}
       >
         {props.badgeText}
       </StyledBadge>
@@ -72,7 +74,7 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         bg={"background"}
         color={"color"}
         className="bottom-card-kbd"
-        borderColor={"type.card.borderColor"}
+        borderColor={theme.colors.card.borderColor}
         borderWidth="1px"
         borderStyle="solid"
         opacity={isDisabled ? 0.5 : 0.8}

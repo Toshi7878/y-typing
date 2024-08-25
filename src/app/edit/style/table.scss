@@ -4,3 +4,7 @@
   position: absolute;
   margin: -15px;
 }
+
+table * {
+  transition: none; // transitionを無効化
+}

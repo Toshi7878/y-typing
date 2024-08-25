@@ -89,7 +89,7 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
       videoId={videoId}
       opts={{
         width: "100%",
-        height: HEIGHT,
+        height: "100%",
         playerVars: { enablejsapi: 1 },
       }}
       onReady={handleReady}
