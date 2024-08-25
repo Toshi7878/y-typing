@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from "react-hook-form";
-import { Input, Box, Textarea, Flex, Button } from "@chakra-ui/react";
+import { Input, Box, Textarea, Flex, Button, Card, CardBody, useTheme } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import EditorTimeInput from "./tab-editor-child/EditorTimeInput";
 import EditorSettingModal from "./tab-editor-child/EditorSettingModal";
-import { Line } from "@/types";
+import { Line, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { setSelectedIndex } from "@/app/edit/redux/lineIndexSlice";
 import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
@@ -20,6 +20,7 @@ import { addHistory } from "@/app/edit/redux/undoredoSlice";
 const TabEditor = forwardRef((props, ref) => {
   // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
+  const theme: ThemeColors = useTheme();
   const timeInputRef = useRef<{
     clearTime: () => void;
     getTime: () => number;
@@ -263,60 +264,64 @@ const TabEditor = forwardRef((props, ref) => {
   }));
 
   return (
-    <form className="flex flex-col gap-y-1">
-      <Box display="flex" alignItems="center">
-        <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
-        <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
-      </Box>
-      <Box display="flex" alignItems="center">
-        <Input
-          placeholder="No."
-          size="sm"
-          width="90px"
-          disabled
-          variant="filled"
-          opacity={1}
-          _disabled={{ opacity: 1 }}
-          {...register("lineNumber")}
-        />
-        <Input placeholder="ワード" size="sm" autoComplete="off" {...register("word")} />
-      </Box>
-      <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
-        <Flex gap="5">
-          {Object.values(buttonConfigs).map((config, index) => (
-            <Button
-              key={index}
-              ref={config.ref ? config.ref : undefined}
-              isDisabled={config.isDisabled}
-              isLoading={config.isLoading}
-              variant="outline"
+    <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
+      <CardBody>
+        <form className="flex flex-col gap-y-1">
+          <Box display="flex" alignItems="center">
+            <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
+            <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
+          </Box>
+          <Box display="flex" alignItems="center">
+            <Input
+              placeholder="No."
               size="sm"
-              height="35px"
-              className="w-[16%] xl:w-[12%] lg:w-[19%] md:w-[19%]"
-              colorScheme={config.colorScheme}
-              _hover={{ bg: `${config.colorScheme}.100` }}
-              onClick={config.onClick}
-            >
-              {config.text}
-            </Button>
-          ))}
-          <EditorSettingModal ref={editorSettingRef} />
-        </Flex>
-      </Box>
-      <Box display="flex" alignItems="center">
-        <Textarea
-          placeholder="ここから歌詞をまとめて追加できます"
-          size="lg"
-          style={{ height: "110px" }}
-          {...register("addLyrics")}
-          onPaste={() => {
-            const convertOption = editorSettingRef.current!.getWordConvertOption();
-            TextAreaEvents.paste(setValue, dispatch, convertOption);
-          }}
-          onChange={(e) => setAddLyrics(e)}
-        />
-      </Box>
-    </form>
+              width="90px"
+              disabled
+              variant="filled"
+              opacity={1}
+              _disabled={{ opacity: 1 }}
+              {...register("lineNumber")}
+            />
+            <Input placeholder="ワード" size="sm" autoComplete="off" {...register("word")} />
+          </Box>
+          <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
+            <Flex gap="5">
+              {Object.values(buttonConfigs).map((config, index) => (
+                <Button
+                  key={index}
+                  ref={config.ref ? config.ref : undefined}
+                  isDisabled={config.isDisabled}
+                  isLoading={config.isLoading}
+                  variant="outline"
+                  size="sm"
+                  height="35px"
+                  className="w-[16%] xl:w-[12%] lg:w-[19%] md:w-[19%]"
+                  colorScheme={config.colorScheme}
+                  _hover={{ bg: `${config.colorScheme}.100` }}
+                  onClick={config.onClick}
+                >
+                  {config.text}
+                </Button>
+              ))}
+              <EditorSettingModal ref={editorSettingRef} />
+            </Flex>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <Textarea
+              placeholder="ここから歌詞をまとめて追加できます"
+              size="lg"
+              style={{ height: "110px" }}
+              {...register("addLyrics")}
+              onPaste={() => {
+                const convertOption = editorSettingRef.current!.getWordConvertOption();
+                TextAreaEvents.paste(setValue, dispatch, convertOption);
+              }}
+              onChange={(e) => setAddLyrics(e)}
+            />
+          </Box>
+        </form>
+      </CardBody>
+    </Card>
   );
 });
 

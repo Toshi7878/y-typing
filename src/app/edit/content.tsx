@@ -16,7 +16,7 @@ import { resetUndoRedoData } from "./redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import EditorTable from "./components/editor-table-content/EditorTable";
-import EditorTabContent from "./components/editor-tab-content/EditorTab";
+import EditorTabContent from "./components/editor-tab-content/EditTab";
 import EditorYouTubeContent from "./components/editor-youtube-content/EditorYoutubeContent";
 const queryClient = new QueryClient();
 
