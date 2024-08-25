@@ -1,6 +1,6 @@
 import { useForm, FormProvider } from "react-hook-form";
 
-import { Stack, useToast } from "@chakra-ui/react";
+import { Card, CardBody, Stack, useTheme, useToast } from "@chakra-ui/react";
 
 import { useEffect } from "react";
 import InfoInput from "./tab-info-child/InfoInput";
@@ -9,13 +9,13 @@ import UploadButton from "./tab-info-child/UploadButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormState } from "react-dom";
 import { useParams, useRouter } from "next/navigation";
-import { Line } from "@/types";
 import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQuality";
 import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
+import { ThemeColors } from "@/types";
 
 const TabInfoUpload = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const TabInfoUpload = () => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const { tags } = useSelector((state: RootState) => state.genreTag);
   const toast = useToast();
+  const theme: ThemeColors = useTheme();
 
   const { playerRef } = useRefs();
   const { id } = useParams();
@@ -100,15 +101,19 @@ const TabInfoUpload = () => {
   }, [state]);
 
   return (
-    <FormProvider {...methods}>
-      <form action={formAction}>
-        <Stack display="flex" flexDirection="column" gap="6">
-          <InfoInput />
-          <InfoGenreTag />
-          <UploadButton responseStatus={state.status} />
-        </Stack>
-      </form>
-    </FormProvider>
+    <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
+      <CardBody>
+        <FormProvider {...methods}>
+          <form action={formAction}>
+            <Stack display="flex" flexDirection="column" gap="6">
+              <InfoInput />
+              <InfoGenreTag />
+              <UploadButton responseStatus={state.status} />
+            </Stack>
+          </form>
+        </FormProvider>
+      </CardBody>
+    </Card>
   );
 };
 

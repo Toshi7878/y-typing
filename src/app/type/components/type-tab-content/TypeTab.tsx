@@ -6,12 +6,12 @@ import { tabIndexAtom } from "../../type-atoms/gameRenderAtoms";
 import { useEffect, useRef } from "react";
 import { ThemeColors } from "@/types";
 
-interface TabContentProps {
+interface TypeTabContentProps {
   className?: string;
 }
 
 const tabLists = ["ステータス", "ランキング"];
-export default function TabContent({ className }: TabContentProps) {
+export default function TypeTabContent({ className }: TypeTabContentProps) {
   console.log("Tab");
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
   const theme: ThemeColors = useTheme();

@@ -20,6 +20,7 @@ import StatusValue from "./child/StatusValue";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Status } from "@/app/type/ts/type";
 import PointStatusValue from "./child/StatusPointValue";
+import { ThemeColors } from "@/types";
 
 export interface TabStatusRef {
   getStatus: () => Status;
@@ -34,7 +35,7 @@ interface TabStatusProps {
 const TabStatus = forwardRef((props: TabStatusProps, ref) => {
   const map = useAtomValue(mapAtom);
   const rankingScores = useAtomValue(rankingScoresAtom);
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const { setRef } = useRefs();
 

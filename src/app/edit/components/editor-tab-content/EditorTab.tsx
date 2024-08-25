@@ -72,14 +72,14 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
       </TabList>
 
       <TabPanels>
-        <TabPanel>
+        <TabPanel px={0}>
           <TabInfoUpload />
         </TabPanel>
 
         <TabPanel>
           <TabEditor ref={editorTabRef} />
         </TabPanel>
-        <TabPanel>
+        <TabPanel px={0}>
           <TabSettings />
         </TabPanel>
       </TabPanels>

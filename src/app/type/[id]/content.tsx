@@ -1,8 +1,8 @@
 "use client";
 import React, { CSSProperties, useEffect } from "react";
-import TypeYouTubeContent from "../components/type-youtube-content/YoutubeContent";
+import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeContent";
 import { useParams } from "next/navigation";
-import TabContent from "../components/type-tab-content/Tab";
+import TypeTabContent from "../components/type-tab-content/TypeTab";
 import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
@@ -156,7 +156,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
                 />
               </Box>
               <Box flex={{ base: "8" }} flexDirection="column">
-                <TabContent />
+                <TypeTabContent />
               </Box>
             </Flex>
             <Box className=" mt-5">
