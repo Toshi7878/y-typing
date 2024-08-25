@@ -2,10 +2,10 @@
 
 import React, { useCallback } from "react";
 import YouTube from "react-youtube";
-import { ytState } from "../ts/youtube-ts/youtubeEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { useRefs } from "../edit-contexts/refsProvider"; // 変更
+import { RootState } from "../../redux/store";
+import { useRefs } from "../../edit-contexts/refsProvider";
+import { ytState } from "../../ts/youtube-ts/youtubeEvents";
 
 interface YouTubeProps {
   className: string;

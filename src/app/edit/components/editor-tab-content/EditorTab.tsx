@@ -5,19 +5,20 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/re
 
 import TabEditor from "./tab-panels/TabEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { setTabIndex } from "../redux/tabIndexSlice";
-import { RootState } from "../redux/store";
-import { useRefs } from "../edit-contexts/refsProvider";
+
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
 import { ThemeColors } from "@/types";
+import { useRefs } from "../../edit-contexts/refsProvider";
+import { RootState } from "../../redux/store";
+import { setTabIndex } from "../../redux/tabIndexSlice";
 
-interface TabContentProps {
+interface EditorTabContentProps {
   className?: string;
 }
 
 const tabLists = ["情報 & 保存", "エディター", "設定"];
-export default function TabContent({ className }: TabContentProps) {
+export default function EditorTabContent({ className }: EditorTabContentProps) {
   console.log("Tab");
 
   const editorTabRef = useRef(null);

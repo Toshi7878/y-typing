@@ -5,9 +5,9 @@ import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
 import "@/app/edit/style/table.scss";
 import LineRow from "./child/LineRow";
 import { useEffect, useRef } from "react";
-import { useRefs } from "../edit-contexts/refsProvider";
+import { useRefs } from "../../edit-contexts/refsProvider";
 
-export default function TableContent() {
+export default function EditorTable() {
   const tbodyRef = useRef(null);
 
   const { setRef } = useRefs();
