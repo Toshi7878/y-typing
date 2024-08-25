@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { timer } from "./(youtube-content)/editTimer";
+import { timer } from "./ts/youtube-ts/editTimer";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./(redux)/store";
+import { RootState } from "./redux/store";
 import { useForm } from "react-hook-form";
-import { setTimeIndex } from "./(redux)/lineIndexSlice";
-import "./(style)/editor.scss";
+import { setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
+import "@/app/edit/style/editor.scss";
 import { Box, HStack } from "@chakra-ui/react";
-import { YTSpeedController } from "./(youtube-content)/ytHandleEvents";
-import { useRefs } from "./(contexts)/refsProvider";
+import { useRefs } from "./edit-contexts/refsProvider";
+import { YTSpeedController } from "./ts/youtube-ts/ytHandleEvents";
 const TimeRange = () => {
   console.log("range");
 

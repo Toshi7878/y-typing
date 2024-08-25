@@ -1,28 +1,23 @@
 "use client";
 import React, { useEffect, useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import editStore, { RootState } from "./(redux)/store";
-import TabContent from "./(tab-content)/Tab";
-import TableContent from "./(table-content)/TableContent";
+import editStore, { RootState } from "./redux/store";
+import TabContent from "./editor-tab-content/Tab";
+import TableContent from "./editor-table-content/TableContent";
 import TimeRange from "./TimeRange";
-import YouTubeContent from "./(youtube-content)/YoutubeContent";
-import {
-  resetYtData,
-  setCreatorComment,
-  setVideoId,
-  setYtTitle,
-} from "./(redux)/tabInfoInputSlice";
-import { resetTags, setTags } from "./(redux)/GenreTagSlice";
+import YouTubeContent from "./editor-youtube-content/YoutubeContent";
+import { resetYtData, setCreatorComment, setVideoId, setYtTitle } from "./redux/tabInfoInputSlice";
+import { resetTags, setTags } from "./redux/GenreTagSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { resetMapData, setMapData } from "./(redux)/mapDataSlice";
+import { resetMapData, setMapData } from "./redux/mapDataSlice";
 import NProgress from "nprogress";
-import { resetUndoRedoData } from "./(redux)/undoredoSlice";
-import { ChakraProvider } from "@chakra-ui/react";
-import { getTheme } from "../customTheme";
+import { resetUndoRedoData } from "./redux/undoredoSlice";
+import { Box, useTheme } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -31,13 +26,11 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
     NProgress.done();
   }, []);
   return (
-    <ChakraProvider theme={getTheme("dark")}>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={editStore}>
-          <ContentInner mapInfo={mapInfo} />
-        </Provider>
-      </QueryClientProvider>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={editStore}>
+        <ContentInner mapInfo={mapInfo} />
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
@@ -45,6 +38,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
+  const theme: ThemeColors = useTheme();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
 
   const { data, error, isLoading } = useQuery({
@@ -79,20 +73,24 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   }, []);
 
   return (
-    <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
-      <main className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14">
-        <section className="flex flex-col lg:flex-row w-full ">
+    <Box
+      as="main"
+      bg={theme.colors.background}
+      className="flex min-h-screen sm:px-0 flex-col items-center pt-14 md:px-14"
+    >
+      <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
+        <Box as="section" className="flex flex-col lg:flex-row w-full ">
           <YouTubeContent className="md:mr-5 md:min-w-[384px] md:min-h-[216px]" videoId={videoId} />
           <TabContent className="w-full border-black" />
-        </section>
-        <section className="w-full mt-2">
+        </Box>
+        <Box as="section" className="w-full mt-2">
           <TimeRange />
-        </section>
-        <section className="w-full mt-3">
+        </Box>
+        <Box as="section" className="w-full mt-3">
           <TableContent />
-        </section>
-      </main>
-    </LoadingOverlayWrapper>
+        </Box>
+      </LoadingOverlayWrapper>
+    </Box>
   );
 }
 

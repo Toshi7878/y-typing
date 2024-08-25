@@ -1,13 +1,13 @@
 "use client";
 import React, { CSSProperties, useEffect } from "react";
-import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
+import YouTubeContent from "../components/type-youtube-content/YoutubeContent";
 import { useParams } from "next/navigation";
-import TabContent from "../components/(tab)/Tab";
+import TabContent from "../components/type-tab-content/Tab";
 import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CreateMap } from "../(ts)/scene-ts/ready/createTypingWord";
+import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   inputModeAtom,
@@ -21,11 +21,11 @@ import {
   rankingScoresAtom,
   sceneAtom,
   speedAtom,
-} from "../(atoms)/gameRenderAtoms";
-import SceneWrapper from "../components/(typing-area)/Scene";
+} from "../type-atoms/gameRenderAtoms";
+import SceneWrapper from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
-import { InputModeType } from "../(ts)/type";
+import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 
 export const queryClient = new QueryClient();

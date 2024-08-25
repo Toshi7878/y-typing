@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import InfoTabProvider from "./(contexts)/InfoTabProvider";
-import { RefsProvider } from "./(contexts)/refsProvider";
+import InfoTabProvider from "./edit-contexts/InfoTabProvider";
+import { RefsProvider } from "./edit-contexts/refsProvider";
 import { useSearchParams } from "next/navigation";
 import Content from "./content";
 

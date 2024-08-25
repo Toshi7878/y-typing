@@ -1,5 +1,5 @@
 import React, { cache } from "react";
-import { RefsProvider } from "../(contexts)/refsProvider";
+import { RefsProvider } from "../type-contexts/refsProvider";
 import Content from "./content";
 import { GetInfoData } from "@/types/api";
 import { auth } from "@/lib/auth";
