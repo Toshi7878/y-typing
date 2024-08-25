@@ -9,16 +9,20 @@ import {
   InputLeftAddon,
   InputGroup,
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/edit/redux/store";
-import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
-import { setCreatorComment, setYtTitle } from "@/app/edit/redux/tabInfoInputSlice";
 import { useSearchParams } from "next/navigation";
 import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
 import { z } from "zod";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { setIsStarted } from "@/app/edit/redux/ytStateSlice";
+import {
+  editCreatorCommentAtom,
+  editMapTitleAtom,
+  editVideoIdAtom,
+  isEditYouTubeStartedAtom,
+} from "@/app/edit/edit-atom/editAtom";
+import { useAtom, useSetAtom } from "jotai";
 
 const videoIdSchema = z
   .string()
@@ -31,25 +35,14 @@ const InfoInput = () => {
   const { playerRef } = useRefs();
 
   const [canChangeVideo, setCanChangeVideo] = useState(false);
-  const { register, setValue, watch } = methods;
-  const title = watch("title");
-  const ytTitle = useSelector((state: RootState) => state.tabInfoInput.title);
-  const creatorComment = useSelector((state: RootState) => state.tabInfoInput.creatorComment);
+  const setIsYTStarted = useSetAtom(isEditYouTubeStartedAtom);
+  const [videoId, setVideoId] = useAtom(editVideoIdAtom);
+  const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
+  const [creatorComment, setCreatorComment] = useAtom(editCreatorCommentAtom);
   const searchParams = useSearchParams();
 
-  const videoIdFromState = useSelector((state: RootState) => state.tabInfoInput.videoId);
-  const videoId = searchParams.get("new") || videoIdFromState;
-  useEffect(() => {
-    setValue("title", ytTitle);
-  }, [ytTitle]);
-
-  useEffect(() => {
-    setValue("creatorComment", creatorComment);
-  }, [creatorComment]);
-
-  useEffect(() => {
-    setValue("url", `${videoIdFromState}`);
-  }, [videoIdFromState]);
+  // const videoIdFromState = useSelector((state: RootState) => state.tabInfoInput.videoId);
+  // const videoId = searchParams.get("new") || videoIdFromState;
 
   const handleVideoIdChange = (newVideoId: string) => {
     if (videoIdSchema.safeParse(newVideoId).success && videoId !== newVideoId) {
@@ -71,8 +64,8 @@ const InfoInput = () => {
             placeholder="YouTube URL(動画URLをそのまま貼り付けできます)"
             size="sm"
             maxLength={11} // YouTubeのID11文字に制限
-            {...register("url", { value: `${videoId}` })}
             fontWeight="bold"
+            value={videoId}
             onPaste={async (e) => {
               const url = await navigator.clipboard.readText();
               const inputElement = e.target as HTMLInputElement;
@@ -91,8 +84,7 @@ const InfoInput = () => {
             cursor={canChangeVideo ? "" : "not-allowed"}
             onClick={() => {
               if (canChangeVideo) {
-                // dispatch(setIsReady(false));
-                dispatch(setIsStarted(false));
+                setIsYTStarted(false);
                 playerRef.current.cueVideoById({ videoId: methods.getValues("url") });
               }
             }}
@@ -108,14 +100,14 @@ const InfoInput = () => {
         </FormLabel>
 
         <Input
-          isInvalid={title === ""}
+          isInvalid={mapTitle === ""}
           placeholder="曲名 / アーティスト【アニメ名OP】など"
           size="sm"
-          {...register("title", { value: ytTitle })}
           fontWeight="bold"
+          value={mapTitle}
           onChange={(e) => {
             dispatch(setCanUpload(true));
-            dispatch(setYtTitle(e.target.value));
+            setMapTitle(e.target.value);
           }}
         />
       </Flex>
@@ -126,10 +118,10 @@ const InfoInput = () => {
         <Input
           placeholder="譜面の情報や感想など、なんでもコメントOKです"
           size="sm"
-          {...register("creatorComment")}
+          value={creatorComment}
           onChange={(e) => {
             dispatch(setCanUpload(true));
-            dispatch(setCreatorComment(e.target.value));
+            setCreatorComment(e.target.value);
           }}
         />
       </Flex>

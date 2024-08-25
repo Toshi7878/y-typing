@@ -1,18 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
-
 import TabEditor from "./tab-panels/TabEditor";
-import { useSelector } from "react-redux";
-
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
 import { ThemeColors } from "@/types";
 import { useRefs } from "../../edit-contexts/refsProvider";
-import { RootState } from "../../redux/store";
-import { editTabIndexAtom } from "../../edit-atom/editAtom";
-import { useAtom } from "jotai";
+import { editTabIndexAtom, isEditYouTubeStartedAtom } from "../../edit-atom/editAtom";
+import { useAtom, useAtomValue } from "jotai";
 import { EditTabIndex } from "../../ts/type";
 
 interface EditorTabContentProps {
@@ -25,6 +20,7 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
 
   const editorTabRef = useRef(null);
   const [tabIndex, setTabIndex] = useAtom(editTabIndexAtom);
+  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
   const [isDisabled, setIsDisabled] = useState(true);
   const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
@@ -34,13 +30,12 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorTabRef]);
 
-  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   useEffect(() => {
-    if (isStarted && isDisabled) {
+    if (isYTStarted && isDisabled) {
       setIsDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStarted]);
+  }, [isYTStarted]);
 
   return (
     <Tabs

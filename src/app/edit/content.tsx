@@ -3,7 +3,6 @@ import React, { useEffect, useLayoutEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import editStore, { RootState } from "./redux/store";
 import TimeRange from "./TimeRange";
-import { resetYtData, setCreatorComment, setVideoId, setYtTitle } from "./redux/tabInfoInputSlice";
 import { resetTags, setTags } from "./redux/GenreTagSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
@@ -17,7 +16,9 @@ import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import EditorTable from "./components/editor-table-content/EditorTable";
 import EditorTabContent from "./components/editor-tab-content/EditTab";
-import EditYouTube from "./components/editor-youtube-content/EditYoutube";
+import EditYouTube from "./components/editor-youtube-content/EditYouTube";
+import { useSetAtom } from "jotai";
+import { editCreatorCommentAtom, editMapTitleAtom, editVideoIdAtom } from "./edit-atom/editAtom";
 const queryClient = new QueryClient();
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
@@ -40,6 +41,9 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { id } = useParams();
   const theme: ThemeColors = useTheme();
   const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
+  const setVideoId = useSetAtom(editVideoIdAtom);
+  const setMapTitle = useSetAtom(editMapTitleAtom);
+  const setCreatorComment = useSetAtom(editCreatorCommentAtom);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -58,17 +62,20 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
 
   useLayoutEffect(() => {
     if (id) {
-      dispatch(setVideoId(videoId));
-      dispatch(setYtTitle(title));
-      dispatch(setCreatorComment(creatorComment));
-      dispatch(setTags(tags));
-    } else {
-      dispatch(resetMapData());
-      dispatch(resetTags());
-      dispatch(resetYtData());
-      dispatch(resetUndoRedoData());
+      setVideoId(videoId ?? "");
+      setMapTitle(title ?? "");
+      setCreatorComment(creatorComment ?? "");
+      dispatch(setTags(tags ?? []));
     }
 
+    return () => {
+      setVideoId("");
+      setMapTitle("");
+      setCreatorComment("");
+      dispatch(resetMapData());
+      dispatch(resetTags());
+      dispatch(resetUndoRedoData());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

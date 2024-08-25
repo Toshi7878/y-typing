@@ -7,6 +7,7 @@ import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
 import {
+  editMapTitleAtom,
   editTabIndexAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeReadyAtom,
@@ -19,27 +20,25 @@ interface EditorYouTubeProps {
   videoId: string;
 }
 
-const EditYouTube = function YouTubeContent({ className, videoId }: EditorYouTubeProps) {
+const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   console.log("YouTube");
   const setTabIndex = useSetAtom(editTabIndexAtom);
   const setIsReady = useSetAtom(isEditYouTubeReadyAtom);
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
   const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
   const dispatch = useDispatch();
-
+  const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const refs = useRefs();
-  const ytTitle = useSelector((state: RootState) => state.tabInfoInput.title);
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs, dispatch, ytTitle);
-      setIsReady(true);
+      ytState.ready(refs, setMapTitle, setIsReady, mapTitle);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [ytTitle],
+    [mapTitle],
   );
 
   const handlePlay = useCallback(() => {

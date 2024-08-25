@@ -9,6 +9,8 @@ import { Line } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
+import { useAtomValue } from "jotai";
+import { isEditYouTubePlayingAtom } from "@/app/edit/edit-atom/editAtom";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -34,7 +36,8 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
   } = methods;
 
   const [maxTime, setMaxTime] = useState("0");
-  const isPlaying = useSelector((state: RootState) => state.ytState.isPlaying);
+  const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+
   const { playerRef } = useRefs();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
@@ -60,7 +63,7 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
 
   useEffect(() => {
     if (maxTime === "0") {
-      if (isPlaying) {
+      if (setIsYTPlaying) {
         const duration = playerRef.current?.getDuration().toFixed(3);
         if (duration !== undefined) {
           setMaxTime(duration);
@@ -69,7 +72,8 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
         setMaxTime(mapData[mapData.length - 1]["time"]);
       }
     }
-  }, [mapData, maxTime, playerRef, isPlaying]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapData, maxTime, setIsYTPlaying]);
 
   useImperativeHandle(ref, () => ({
     clearTime: () => {

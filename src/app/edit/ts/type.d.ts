@@ -15,4 +15,16 @@ export interface EditorSendData {
   thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
+export interface TimeInputRef {
+  clearTime: () => void;
+  getTime: () => number;
+  selectedTime: () => void;
+  undoAdd: (time: Line["time"]) => void;
+}
+
+export interface EditorSettingsRef {
+  getTimeOffset: () => number;
+  getWordConvertOption: () => string;
+  getVolume: () => number;
+}
 export type EditTabIndex = 0 | 1 | 2;

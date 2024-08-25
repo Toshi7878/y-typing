@@ -49,13 +49,18 @@ class YTState {
     dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
   }
 
-  ready(refs: RefsContextType, dispatch: Dispatch<Action>, title: string) {
+  ready(
+    refs: RefsContextType,
+    setMapTitle: Dispatch<string>,
+    setIsReady: Dispatch<boolean>,
+    title: string,
+  ) {
     console.log("ready");
     const videoData = refs.playerRef!.current!.getVideoData();
-
+    setIsReady(true);
     if (videoData && !title) {
       const { title } = videoData;
-      dispatch(setYtTitle(title));
+      setMapTitle(title);
     }
     refs.playerRef.current.setVolume(refs.editorTabRef.current?.getVolume());
   }

@@ -1,6 +1,6 @@
 // class WordReplace {
 
-import { Action, Dispatch } from "@reduxjs/toolkit";
+import { Action } from "@reduxjs/toolkit";
 import { YTSpeedController } from "./youtube-ts/editYtHandleEvents";
 import { RootState } from "../redux/store";
 import { RefsContextType } from "../edit-contexts/refsProvider";
@@ -8,7 +8,8 @@ import { mapDataRedo, mapDataUndo, updateLine } from "../redux/mapDataSlice";
 import { addHistory, redo, undo } from "../redux/undoredoSlice";
 import { setSelectedIndex } from "../redux/lineIndexSlice";
 import { setCanUpload } from "../redux/buttonFlagsSlice";
-import { Line } from "@/types";
+import { Line, YouTubeSpeed } from "@/types";
+import { Dispatch } from "react";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
@@ -173,10 +174,12 @@ class WordReplace {
 export const handleKeydown = (
   event: KeyboardEvent,
   refs: RefsContextType,
-  dispatch: Dispatch<Action>,
-  ytState: RootState["ytState"],
   undoredoState: RootState["undoRedo"],
+  dispatch: Dispatch<Action>,
   mapData: RootState["mapData"]["value"],
+  speed: YouTubeSpeed,
+  setSpeed: Dispatch<YouTubeSpeed>,
+  isYTPlaying: boolean,
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -226,7 +229,7 @@ export const handleKeydown = (
         {
           const time = player.getCurrentTime();
 
-          player.seekTo(time - 3 * ytState.speed);
+          player.seekTo(time - 3 * speed);
 
           event.preventDefault();
         }
@@ -237,7 +240,7 @@ export const handleKeydown = (
         {
           const time = player.getCurrentTime();
 
-          player.seekTo(time + 3 * ytState.speed);
+          player.seekTo(time + 3 * speed);
 
           event.preventDefault();
         }
@@ -261,7 +264,7 @@ export const handleKeydown = (
             dispatch(mapDataUndo(undoredoState.present));
             if (undoredoState.present.type === "add") {
               refs.editorTabRef.current?.undoAddLyrics(data);
-              refs.playerRef.current.seekTo(Number(data.time) - 3 * ytState.speed);
+              refs.playerRef.current.seekTo(Number(data.time) - 3 * speed);
             }
 
             dispatch(undo());
@@ -316,7 +319,7 @@ export const handleKeydown = (
         break;
 
       case "Escape":
-        if (!ytState.isPlaying) {
+        if (!isYTPlaying) {
           player.playVideo();
         } else {
           player.pauseVideo();
@@ -329,14 +332,14 @@ export const handleKeydown = (
       case "F9":
         console.log("F9");
 
-        new YTSpeedController("down", { dispatch, playerRef: player });
+        new YTSpeedController("down", { setSpeed, playerRef: player });
 
         event.preventDefault();
 
         break;
 
       case "F10":
-        new YTSpeedController("up", { dispatch, playerRef: player });
+        new YTSpeedController("up", { setSpeed, playerRef: player });
 
         event.preventDefault();
 

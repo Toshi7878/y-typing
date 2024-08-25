@@ -13,29 +13,27 @@ import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { setCanUpload, setIsLoadingWordConvertBtn } from "@/app/edit/redux/buttonFlagsSlice";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
+import { EditorSettingsRef, TimeInputRef } from "@/app/edit/ts/type";
+import { useAtom } from "jotai";
+import {
+  editLineLyricsAtom,
+  editLineSelectedNumberAtom,
+  editLineTimeAtom,
+  editLineWordAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
-/* eslint-disable react-hooks/exhaustive-deps */
 // 後でリファクタリング
 
 const TabEditor = forwardRef((props, ref) => {
-  // console.log("Editor");
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
   const theme: ThemeColors = useTheme();
-  const timeInputRef = useRef<{
-    clearTime: () => void;
-    getTime: () => number;
-    selectedTime: () => void;
-    undoAdd: (time: Line["time"]) => void;
-  } | null>(null);
-  const editorSettingRef = useRef<{
-    getTimeOffset: () => number;
-    getWordConvertOption: () => string;
-    getVolume: () => number;
-  } | null>(null);
+  const timeInputRef = useRef<TimeInputRef | null>(null);
+  const editorSettingRef = useRef<EditorSettingsRef | null>(null);
 
-  const methods = useForm();
-  const { register, setValue, watch } = methods;
-  const lineNumber = Number(watch("lineNumber"));
+  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
+  const [lineTime, setLineTime] = useAtom(editLineTimeAtom);
+  const [lineLyrics, setLineLyrics] = useAtom(editLineLyricsAtom);
+  const [lineWord, setLineWord] = useAtom(editLineWordAtom);
 
   const dispatch = useDispatch();
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
@@ -52,9 +50,12 @@ const TabEditor = forwardRef((props, ref) => {
   );
 
   const lineInit = () => {
-    setValue("lyrics", "");
-    setValue("word", "");
-    setValue("lineNumber", "");
+    setLineLyrics("");
+    setLineWord("");
+    setLineNumber(null);
+    // setValue("lyrics", "");
+    // setValue("word", "");
+    // setValue("lineNumber", "");
     timeInputRef.current!.clearTime();
     dispatch(setSelectedIndex(null));
   };
@@ -62,9 +63,9 @@ const TabEditor = forwardRef((props, ref) => {
   useEffect(() => {
     if (selectedIndex !== null && mapData[selectedIndex]) {
       const line = mapData[selectedIndex];
-      setValue("lyrics", line.lyrics || "");
-      setValue("word", line.word || "");
-      setValue("lineNumber", selectedIndex.toString());
+      // setValue("lyrics", line.lyrics || "");
+      // setValue("word", line.word || "");
+      // setValue("lineNumber", selectedIndex.toString());
       timeInputRef.current!.selectedTime();
     }
   }, [selectedIndex, setValue, mapData]);

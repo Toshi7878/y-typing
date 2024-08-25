@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import mapDataReducer from "./mapDataSlice";
 import lineIndexReducer from "./lineIndexSlice";
 import buttonFlagsReducer from "./buttonFlagsSlice";
-import tabInfoReducer from "./tabInfoInputSlice";
 import undoRedoReducer from "./undoredoSlice"; // 追加
 import genreTagReducer from "./GenreTagSlice";
 
@@ -11,7 +10,6 @@ const editStore = configureStore({
     mapData: mapDataReducer,
     lineIndex: lineIndexReducer,
     btnFlags: buttonFlagsReducer,
-    tabInfoInput: tabInfoReducer,
     undoRedo: undoRedoReducer,
     genreTag: genreTagReducer,
   },

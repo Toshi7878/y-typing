@@ -11,8 +11,13 @@ import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { setSelectedIndex, setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
-import { editTabIndexAtom } from "@/app/edit/edit-atom/editAtom";
-import { useSetAtom } from "jotai";
+import {
+  editSpeedAtom,
+  editTabIndexAtom,
+  isEditYouTubePlayingAtom,
+  isEditYouTubeStartedAtom,
+} from "@/app/edit/edit-atom/editAtom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 export default function LineRow() {
   console.log("Table");
@@ -22,18 +27,22 @@ export default function LineRow() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
   const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
-  const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
+  const [speed, setSpeed] = useAtom(editSpeedAtom);
+  const [isYTPlaying, setIsYTPlaying] = useAtom(isEditYouTubePlayingAtom);
+
+  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
+
   const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
-  const playerState = useSelector((state: RootState) => state.ytState);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
   const keydownHandler = useCallback(
     (event: KeyboardEvent) =>
-      handleKeydown(event, refs, dispatch, playerState, undoredoState, mapData),
-    [dispatch, playerState, refs, undoredoState, mapData],
+      handleKeydown(event, refs, undoredoState, dispatch, mapData, speed, setSpeed, isYTPlaying),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [refs, undoredoState, mapData, speed],
   );
 
   useEffect(() => {
@@ -68,7 +77,7 @@ export default function LineRow() {
   }, [lastAddedTime]);
 
   useEffect(() => {
-    if (isStarted) {
+    if (isYTStarted) {
       const duration = refs.playerRef.current?.getDuration();
 
       if (duration) {
@@ -87,7 +96,7 @@ export default function LineRow() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStarted]);
+  }, [isYTStarted]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
     dispatch(setSelectedIndex(index));
