@@ -14,7 +14,7 @@ export interface Line {
   time: string;
   lyrics: string;
   word: string;
-  lineNumber?: string;
+  lineNumber?: number;
   options?: { eternalCSS?: string; changeCSS?: string };
 }
 

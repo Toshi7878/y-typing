@@ -6,7 +6,6 @@ import { RootState } from "../redux/store";
 import { RefsContextType } from "../edit-contexts/refsProvider";
 import { mapDataRedo, mapDataUndo, updateLine } from "../redux/mapDataSlice";
 import { addHistory, redo, undo } from "../redux/undoredoSlice";
-import { setSelectedIndex } from "../redux/lineIndexSlice";
 import { setCanUpload } from "../redux/buttonFlagsSlice";
 import { Line, YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
@@ -180,6 +179,7 @@ export const handleKeydown = (
   speed: YouTubeSpeed,
   setSpeed: Dispatch<YouTubeSpeed>,
   isYTPlaying: boolean,
+  setLineNumber: Dispatch<number>,
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -194,12 +194,12 @@ export const handleKeydown = (
           const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
           if (selectedLine) {
-            const lineIndex = Number((selectedLine as HTMLElement).dataset.lineIndex);
+            const lineNumber = Number((selectedLine as HTMLElement).dataset.lineIndex);
 
-            const prevLine = mapData[lineIndex - 1];
+            const prevLine = mapData[lineNumber - 1];
             if (prevLine) {
               player.seekTo(prevLine["time"]);
-              dispatch(setSelectedIndex(lineIndex - 1));
+              setLineNumber(lineNumber - 1);
             }
           }
         }
@@ -212,12 +212,12 @@ export const handleKeydown = (
           const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
           if (selectedLine) {
-            const lineIndex = Number((selectedLine as HTMLElement).dataset.lineIndex);
+            const lineNumber = Number((selectedLine as HTMLElement).dataset.lineIndex);
 
-            const nextLine = mapData[lineIndex + 1];
+            const nextLine = mapData[lineNumber + 1];
             if (nextLine) {
               player.seekTo(nextLine["time"]);
-              dispatch(setSelectedIndex(lineIndex + 1));
+              setLineNumber(lineNumber - 1);
             }
           }
         }

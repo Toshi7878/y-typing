@@ -1,10 +1,16 @@
 import { UseFormSetValue } from "react-hook-form";
 import { ButtonEvents } from "./buttonEvent";
-import { Dispatch } from "@reduxjs/toolkit";
 import { setIsLoadingWordConvertBtn } from "../../../redux/buttonFlagsSlice";
 import { Line } from "@/types";
+import { Dispatch } from "react";
+import { Action } from "@reduxjs/toolkit";
+import { SetLineFunctions } from "../../type";
 export class TextAreaEvents {
-  static async paste(setValue: UseFormSetValue<any>, dispatch: Dispatch, convertOption: string) {
+  static async paste(
+    setLineFunctions: SetLineFunctions,
+    dispatch: Dispatch<Action>,
+    convertOption: string,
+  ) {
     setTimeout(() => {
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.scrollTop = 0;
@@ -12,31 +18,29 @@ export class TextAreaEvents {
       }
     });
     const text = await navigator.clipboard.readText();
-    TextAreaEvents.setTopLyrics(setValue, text, dispatch, convertOption);
+    TextAreaEvents.setTopLyrics(setLineFunctions, text, dispatch, convertOption);
   }
 
   static async setTopLyrics(
-    setValue: UseFormSetValue<any>,
+    setLineFunctions: SetLineFunctions,
     addLyrics: string,
-    dispatch: Dispatch,
+    dispatch: Dispatch<Action>,
     convertOption: string,
   ) {
     const lines = addLyrics.split("\n");
-    const lyrics = lines[0].replace(/\r$/, "");
+    const topLine = lines[0].replace(/\r$/, "");
 
-    if (lyrics) {
-      setValue("lyrics", lyrics);
-      dispatch(setIsLoadingWordConvertBtn(true));
-      await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
-      dispatch(setIsLoadingWordConvertBtn(false));
-    }
+    setLineFunctions.setLyrics(topLine);
+    dispatch(setIsLoadingWordConvertBtn(true));
+    await ButtonEvents.lyricsConvert(topLine, setLineFunctions, convertOption);
+    dispatch(setIsLoadingWordConvertBtn(false));
   }
 
   static deleteTopLyrics(
-    setValue: UseFormSetValue<any>,
+    setLineFunctions: SetLineFunctions,
     lyrics: string,
     addLyrics: string,
-    dispatch: Dispatch,
+    dispatch: Dispatch<Action>,
     convertOption: string,
   ) {
     const lines = addLyrics?.split("\n") || [];
@@ -44,20 +48,20 @@ export class TextAreaEvents {
 
     const newText = lines.slice(1).join("\n");
     if (lyrics === topLine) {
-      setValue("addLyrics", newText);
+      setLineFunctions.setLyricsText(newText);
     }
-    TextAreaEvents.setTopLyrics(setValue, newText, dispatch, convertOption);
+    TextAreaEvents.setTopLyrics(setLineFunctions, newText, dispatch, convertOption);
   }
 
-  static undoTopLyrics(setValue: UseFormSetValue<any>, undoLine: Line, addLyrics: string) {
+  static undoTopLyrics(setLineFunctions: SetLineFunctions, undoLine: Line, addLyrics: string) {
     const lyrics = undoLine.lyrics;
     const word = undoLine.word;
 
     const lines = addLyrics?.split("\n") || [];
     lines.unshift(lyrics);
     const newText = lines.join("\n");
-    setValue("addLyrics", newText);
-    setValue("lyrics", lyrics || "");
-    setValue("word", word || "");
+    setLineFunctions.setLyricsText(newText);
+    setLineFunctions.setLyrics(lyrics || "");
+    setLineFunctions.setWord(word || "");
   }
 }

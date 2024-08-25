@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+
 export interface EditorSendData {
   title: string;
   creatorComment: string;
@@ -28,3 +30,9 @@ export interface EditorSettingsRef {
   getVolume: () => number;
 }
 export type EditTabIndex = 0 | 1 | 2;
+
+export interface SetLineFunctions {
+  setLyrics: Dispatch<string>;
+  setWord: Dispatch<string>;
+  setLyricsText: Dispatch<string>;
+}

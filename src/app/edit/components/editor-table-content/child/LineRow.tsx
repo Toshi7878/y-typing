@@ -9,11 +9,13 @@ import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
-import { setSelectedIndex, setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
+  editLineSelectedNumberAtom,
+  editLineTimeAtom,
   editSpeedAtom,
   editTabIndexAtom,
+  editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeStartedAtom,
 } from "@/app/edit/edit-atom/editAtom";
@@ -28,19 +30,28 @@ export default function LineRow() {
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
   const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
   const [speed, setSpeed] = useAtom(editSpeedAtom);
-  const [isYTPlaying, setIsYTPlaying] = useAtom(isEditYouTubePlayingAtom);
-
+  const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
+  const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
 
-  const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
-  const timeIndex = useSelector((state: RootState) => state.lineIndex.timeIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
   const keydownHandler = useCallback(
     (event: KeyboardEvent) =>
-      handleKeydown(event, refs, undoredoState, dispatch, mapData, speed, setSpeed, isYTPlaying),
+      handleKeydown(
+        event,
+        refs,
+        undoredoState,
+        dispatch,
+        mapData,
+        speed,
+        setSpeed,
+        isYTPlaying,
+        setLineNumber,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refs, undoredoState, mapData, speed],
   );
@@ -99,19 +110,19 @@ export default function LineRow() {
   }, [isYTStarted]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
-    dispatch(setSelectedIndex(index));
+    setLineNumber(index);
   };
   useEffect(() => {
     const updateTimeBg = () => {
-      if (timeIndex !== null) {
+      if (timeCount !== null) {
         if (
-          mapData[timeIndex + 1] &&
-          Number(timer.currentTime) >= Number(mapData[timeIndex + 1]["time"])
+          mapData[timeCount + 1] &&
+          Number(timer.currentTime) >= Number(mapData[timeCount + 1]["time"])
         ) {
-          dispatch(setTimeIndex(timeIndex + 1));
+          setTimeCount(timeCount);
         }
       } else {
-        dispatch(setTimeIndex(0));
+        setTimeCount(null);
       }
     };
 
@@ -119,7 +130,8 @@ export default function LineRow() {
     return () => {
       timer.removeListener(updateTimeBg);
     };
-  }, [timeIndex, mapData, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeCount, mapData]);
   const clickTimeCell = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
     const time = Number(event.currentTarget.textContent);
     refs.playerRef.current.seekTo(time);
@@ -134,10 +146,10 @@ export default function LineRow() {
           id={`line_${index}`}
           data-line-index={index}
           className={`cursor-pointer relative ${
-            selectedIndex === index
+            lineNumber === index
               ? "selected-line bg-cyan-300 outline outline-2 outline-black"
               : " hover:bg-cyan-400/35"
-          } ${timeIndex === index && selectedIndex !== index ? " bg-teal-400/35" : ""} ${
+          } ${timeCount === index && lineNumber !== index ? " bg-teal-400/35" : ""} ${
             endAfterLineIndex < index && line.lyrics !== "end" ? " bg-red-400/35" : ""
           }
           `}
@@ -159,7 +171,7 @@ export default function LineRow() {
             <Button
               disabled={mapData.length - 1 === index}
               variant={line.options ? "solid" : "outline"}
-              colorScheme={`${selectedIndex === index ? "green" : "green"}`}
+              colorScheme={`${lineNumber === index ? "green" : "green"}`}
               size="sm"
               onClick={() => {
                 if (mapData.length - 1 !== index) {

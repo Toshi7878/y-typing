@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useForm } from "react-hook-form";
 import { Input, Box, Textarea, Flex, Button, Card, CardBody, useTheme } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
@@ -7,18 +6,17 @@ import EditorTimeInput from "./tab-editor-child/EditorTimeInput";
 import EditorSettingModal from "./tab-editor-child/EditorSettingModal";
 import { Line, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
-import { setSelectedIndex } from "@/app/edit/redux/lineIndexSlice";
 import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { setCanUpload, setIsLoadingWordConvertBtn } from "@/app/edit/redux/buttonFlagsSlice";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
-import { EditorSettingsRef, TimeInputRef } from "@/app/edit/ts/type";
+import { EditorSettingsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
 import { useAtom } from "jotai";
 import {
+  editAddLyricsTextBoxAtom,
   editLineLyricsAtom,
   editLineSelectedNumberAtom,
-  editLineTimeAtom,
   editLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
 
@@ -31,12 +29,12 @@ const TabEditor = forwardRef((props, ref) => {
   const editorSettingRef = useRef<EditorSettingsRef | null>(null);
 
   const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
-  const [lineTime, setLineTime] = useAtom(editLineTimeAtom);
-  const [lineLyrics, setLineLyrics] = useAtom(editLineLyricsAtom);
-  const [lineWord, setLineWord] = useAtom(editLineWordAtom);
+  const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
+  const [word, setWord] = useAtom(editLineWordAtom);
+  const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
 
+  const setLineFunctions: SetLineFunctions = { setLyrics, setWord, setLyricsText };
   const dispatch = useDispatch();
-  const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const endAfterLineIndex =
     mapData.length -
@@ -50,25 +48,22 @@ const TabEditor = forwardRef((props, ref) => {
   );
 
   const lineInit = () => {
-    setLineLyrics("");
-    setLineWord("");
+    setLyrics("");
+    setWord("");
     setLineNumber(null);
-    // setValue("lyrics", "");
-    // setValue("word", "");
-    // setValue("lineNumber", "");
+
     timeInputRef.current!.clearTime();
-    dispatch(setSelectedIndex(null));
   };
 
   useEffect(() => {
-    if (selectedIndex !== null && mapData[selectedIndex]) {
-      const line = mapData[selectedIndex];
-      // setValue("lyrics", line.lyrics || "");
-      // setValue("word", line.word || "");
-      // setValue("lineNumber", selectedIndex.toString());
+    if (lineNumber !== null && mapData[lineNumber]) {
+      const line = mapData[lineNumber];
+
+      setLyrics(line.lyrics || "");
+      setWord(line.word || "");
       timeInputRef.current!.selectedTime();
     }
-  }, [selectedIndex, setValue, mapData]);
+  }, [lineNumber, mapData]);
 
   const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
     const lastLineTime = Number(mapData[endAfterLineIndex]["time"]);
@@ -85,9 +80,7 @@ const TabEditor = forwardRef((props, ref) => {
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
     const timeOffset = editorSettingRef.current!.getTimeOffset();
     const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
-    const lyrics = isShiftKey ? "" : methods.getValues("lyrics");
-    const word = isShiftKey ? "" : methods.getValues("word");
-    const addLyrics = methods.getValues("addLyrics");
+    const addLyrics = lyricsText;
 
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
     dispatch(setLastAddedTime(time));
@@ -98,20 +91,23 @@ const TabEditor = forwardRef((props, ref) => {
     }
     const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-    TextAreaEvents.deleteTopLyrics(setValue, lyricsCopy, addLyrics, dispatch, convertOption);
+    TextAreaEvents.deleteTopLyrics(
+      setLineFunctions,
+      lyricsCopy,
+      addLyrics,
+      dispatch,
+      convertOption,
+    );
   };
 
   const update = (mapData: RootState["mapData"]["value"]) => {
     const time = timeValidate(timeInputRef.current!.getTime(), mapData).toFixed(3);
-    const lyrics: string = methods.getValues("lyrics");
-    const word: string = methods.getValues("word");
-    const lineNumber: string = methods.getValues("lineNumber");
 
     dispatch(setCanUpload(true));
     dispatch(
       addHistory({
         type: "update",
-        data: { old: mapData[parseInt(lineNumber)], new: { time, lyrics, word }, lineNumber },
+        data: { old: mapData[lineNumber!], new: { time, lyrics, word }, lineNumber },
       }),
     );
 
@@ -119,39 +115,34 @@ const TabEditor = forwardRef((props, ref) => {
       time,
       lyrics,
       word,
-      lineNumber,
+      lineNumber: lineNumber ?? undefined,
     });
     lineInit();
   };
 
   const wordConvert = async () => {
-    const lyrics = methods.getValues("lyrics");
     const convertOption = editorSettingRef.current!.getWordConvertOption();
 
     dispatch(setIsLoadingWordConvertBtn(true));
-    await ButtonEvents.lyricsConvert(lyrics, setValue, convertOption);
+    await ButtonEvents.lyricsConvert(lyrics, setLineFunctions, convertOption);
     dispatch(setIsLoadingWordConvertBtn(false));
   };
 
   const deleteLine = (mapData: RootState["mapData"]["value"]) => {
-    const lineNumber: string = methods.getValues("lineNumber");
     if (lineNumber) {
-      ButtonEvents.deleteLine(dispatch, { ...mapData[parseInt(lineNumber)], lineNumber });
+      ButtonEvents.deleteLine(dispatch, { ...mapData[lineNumber], lineNumber });
     }
     lineInit();
   };
 
   const setAddLyrics = (e: React.ChangeEvent<HTMLTextAreaElement> | null) => {
-    const lyrics = methods.getValues("lyrics");
-
-    const lines = (
-      e ? (e.target as HTMLTextAreaElement).value : methods.getValues("addLyrics")
-    ).split("\n");
+    setLyricsText(e!.target.value);
+    const lines = (e ? (e.target as HTMLTextAreaElement).value : lyricsText).split("\n");
     const topLyrics = lines[0].replace(/\r$/, "");
     if (topLyrics !== lyrics) {
       const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-      TextAreaEvents.setTopLyrics(setValue, topLyrics, dispatch, convertOption);
+      TextAreaEvents.setTopLyrics(setLineFunctions, topLyrics, dispatch, convertOption);
     }
   };
 
@@ -229,9 +220,7 @@ const TabEditor = forwardRef((props, ref) => {
       deleteButtonRef.current!.click();
     },
     undoAddLyrics: (undoLine: Line) => {
-      const addLyrics = methods.getValues("addLyrics");
-
-      TextAreaEvents.undoTopLyrics(setValue, undoLine, addLyrics);
+      TextAreaEvents.undoTopLyrics(setLineFunctions, undoLine, lyricsText);
       timeInputRef.current!.undoAdd(undoLine.time);
     },
 
@@ -243,20 +232,10 @@ const TabEditor = forwardRef((props, ref) => {
       lineInit();
     },
 
-    // setSelectLine: (selectedIndex: number) => {
-    //   const line = mapData[selectedIndex];
-    //   setValue("lyrics", line.lyrics || "");
-    //   setValue("word", line.word || "");
-    //   setValue("lineNumber", selectedIndex.toString());
-    //   timeInputRef.current!.selectedTime();
-    // },
-
     redoAddLyrics: (redoLine: Line) => {
-      const lyrics = redoLine.lyrics;
-      const addLyrics = methods.getValues("addLyrics");
       const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-      TextAreaEvents.deleteTopLyrics(setValue, lyrics, addLyrics, dispatch, convertOption);
+      TextAreaEvents.deleteTopLyrics(setLineFunctions, lyrics, lyricsText, dispatch, convertOption);
     },
 
     getVolume: () => {
@@ -270,7 +249,7 @@ const TabEditor = forwardRef((props, ref) => {
         <form className="flex flex-col gap-y-1">
           <Box display="flex" alignItems="center">
             <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
-            <Input placeholder="歌詞" size="sm" autoComplete="off" {...register("lyrics")} />
+            <Input placeholder="歌詞" size="sm" autoComplete="off" value={lyrics} />
           </Box>
           <Box display="flex" alignItems="center">
             <Input
@@ -281,9 +260,9 @@ const TabEditor = forwardRef((props, ref) => {
               variant="filled"
               opacity={1}
               _disabled={{ opacity: 1 }}
-              {...register("lineNumber")}
+              value={lineNumber ?? ""}
             />
-            <Input placeholder="ワード" size="sm" autoComplete="off" {...register("word")} />
+            <Input placeholder="ワード" size="sm" autoComplete="off" value={word} />
           </Box>
           <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
             <Flex gap="5">
@@ -312,10 +291,10 @@ const TabEditor = forwardRef((props, ref) => {
               placeholder="ここから歌詞をまとめて追加できます"
               size="lg"
               style={{ height: "110px" }}
-              {...register("addLyrics")}
+              value={lyricsText}
               onPaste={() => {
                 const convertOption = editorSettingRef.current!.getWordConvertOption();
-                TextAreaEvents.paste(setValue, dispatch, convertOption);
+                TextAreaEvents.paste(setLineFunctions, dispatch, convertOption);
               }}
               onChange={(e) => setAddLyrics(e)}
             />

@@ -1,7 +1,4 @@
 import { timer } from "./editTimer";
-import { setTimeIndex } from "../../redux/lineIndexSlice";
-import { setYtTitle } from "../../redux/tabInfoInputSlice";
-import { Action } from "@reduxjs/toolkit";
 import { RefsContextType } from "../../edit-contexts/refsProvider";
 import { Line } from "@/types";
 import { Ticker } from "@pixi/ticker";
@@ -42,11 +39,11 @@ class YTState {
     setIsYTPlaying(false);
   }
 
-  seek(event: any, dispatch: Dispatch<Action>, mapData: Line[]) {
+  seek(event: any, setTimeCount: Dispatch<number>, mapData: Line[]) {
     console.log("シーク");
 
     const time = event.target.getCurrentTime()!;
-    dispatch(setTimeIndex(seekTimeIndex(time, mapData)));
+    setTimeCount(getCount(time, mapData));
   }
 
   ready(
@@ -66,7 +63,7 @@ class YTState {
   }
 }
 
-function seekTimeIndex(time: number, mapData: Line[]) {
+function getCount(time: number, mapData: Line[]) {
   let count = 0;
 
   for (let i = 0; i < mapData.length; i++) {

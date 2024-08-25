@@ -2,13 +2,14 @@
 
 import React, { useCallback } from "react";
 import YouTube from "react-youtube";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
 import {
   editMapTitleAtom,
   editTabIndexAtom,
+  editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeReadyAtom,
   isEditYouTubeStartedAtom,
@@ -25,8 +26,8 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   const setTabIndex = useSetAtom(editTabIndexAtom);
   const setIsReady = useSetAtom(isEditYouTubeReadyAtom);
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
+  const setTimeCount = useSetAtom(editTimeCountAtom);
   const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
-  const dispatch = useDispatch();
   const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const refs = useRefs();
@@ -67,7 +68,7 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
 
       if (event.data === 3) {
         // seek時の処理
-        ytState.seek(event, dispatch, mapData);
+        ytState.seek(event, setTimeCount, mapData);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
         if (!isYTStarted) {

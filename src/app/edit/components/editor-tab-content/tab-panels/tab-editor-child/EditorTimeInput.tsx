@@ -9,8 +9,12 @@ import { Line } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
-import { useAtomValue } from "jotai";
-import { isEditYouTubePlayingAtom } from "@/app/edit/edit-atom/editAtom";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  editLineSelectedNumberAtom,
+  editLineTimeAtom,
+  isEditYouTubePlayingAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -37,10 +41,10 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
 
   const [maxTime, setMaxTime] = useState("0");
   const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
 
   const { playerRef } = useRefs();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const selectedIndex = useSelector((state: RootState) => state.lineIndex.selectedIndex);
 
   useEffect(() => {
     onFormStateChange(isValid);
@@ -81,8 +85,8 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
     },
     getTime: () => Number(methods.getValues("time")),
     selectedTime: () => {
-      if (selectedIndex !== null) {
-        const selectedTime = mapData[selectedIndex]?.["time"];
+      if (lineNumber !== null) {
+        const selectedTime = mapData[lineNumber]?.["time"];
         setValue("time", selectedTime, { shouldValidate: true });
       }
     },
