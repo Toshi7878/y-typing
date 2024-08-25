@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { timer } from "./ts/youtube-ts/editTimer";
@@ -7,9 +6,11 @@ import { RootState } from "./redux/store";
 import { useForm } from "react-hook-form";
 import { setTimeIndex } from "@/app/edit/redux/lineIndexSlice";
 import "@/app/edit/style/editor.scss";
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, Text } from "@chakra-ui/react";
 import { useRefs } from "./edit-contexts/refsProvider";
 import { YTSpeedController } from "./ts/youtube-ts/editYtHandleEvents";
+import { useAtom } from "jotai";
+import { editSpeedAtom } from "./edit-atom/editAtom";
 const TimeRange = () => {
   console.log("range");
 
@@ -20,21 +21,19 @@ const TimeRange = () => {
   const isStarted = useSelector((state: RootState) => state.ytState.isStarted);
   const [isDisabled, setIsDisabled] = useState(true);
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
-  const speed = useSelector((state: RootState) => state.ytState.speed);
+  const [speed, setSpeed] = useAtom(editSpeedAtom);
 
-  const handleRangeChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const time = Number(e.target.value);
-      setValue("range", time.toFixed(3));
-      if (playerRef.current) {
-        playerRef.current.seekTo(time);
-      }
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-      }
-    },
-    [dispatch, playerRef, setValue],
-  );
+  const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = Number(e.target.value);
+    setValue("range", time.toFixed(3));
+    if (playerRef.current) {
+      playerRef.current.seekTo(time);
+    }
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isStarted) {
@@ -47,6 +46,7 @@ const TimeRange = () => {
     } else {
       setIsDisabled(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStarted]);
 
   useEffect(() => {
@@ -58,12 +58,14 @@ const TimeRange = () => {
     return () => {
       timer.removeListener(updateRangeValue);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Box display="grid" gridTemplateColumns="1fr auto" gap="1rem">
-      <input
+      <Input
         min="0"
+        variant="unstyled"
         max={rangeMaxValue}
         step="0.1"
         id="time-range"
@@ -75,31 +77,42 @@ const TimeRange = () => {
       />
       <HStack justify="center" className="w-[130px]">
         <Box>
-          <button
+          <Button
             type="button"
             className="text-cyan-400 cursor-pointer"
+            variant="unstyled"
             onClick={() =>
-              new YTSpeedController("down", { dispatch, playerRef: playerRef.current })
+              new YTSpeedController("down", { setSpeed, playerRef: playerRef.current })
             }
           >
-            <div className="relative">
-              -<small className="f-key">F9</small>
-            </div>
-          </button>
+            <Box className="relative">
+              -
+              <Text as="span" className="f-key">
+                F9
+              </Text>
+            </Box>
+          </Button>
         </Box>
         <Box>
-          <span id="speed">{speed.toFixed(2)}</span>倍速
+          <Text as="span" id="speed">
+            {speed.toFixed(2)}
+          </Text>
+          倍速
         </Box>
         <Box>
-          <button
+          <Button
             type="button"
+            variant="unstyled"
             className="text-cyan-400 cursor-pointer"
-            onClick={() => new YTSpeedController("up", { dispatch, playerRef: playerRef.current })}
+            onClick={() => new YTSpeedController("up", { setSpeed, playerRef: playerRef.current })}
           >
-            <div className="relative">
-              +<small className="f-key">F10</small>
-            </div>
-          </button>
+            <Box className="relative">
+              +
+              <Text as="span" className="f-key">
+                F10
+              </Text>
+            </Box>
+          </Button>
         </Box>
       </HStack>
     </Box>

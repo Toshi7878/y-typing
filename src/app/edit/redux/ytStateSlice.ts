@@ -6,7 +6,6 @@ export const YTStateSlice = createSlice({
     isReady: false,
     isStarted: false,
     isPlaying: false,
-    speed: 1,
   },
   reducers: {
     setIsReady: (state, action) => {
@@ -18,12 +17,9 @@ export const YTStateSlice = createSlice({
     setIsStarted: (state, action) => {
       state.isStarted = action.payload;
     },
-    setSpeed: (state, action) => {
-      state.speed = action.payload;
-    },
   },
 });
 
-export const { setIsReady, setIsPlaying, setIsStarted, setSpeed } = YTStateSlice.actions;
+export const { setIsReady, setIsPlaying, setIsStarted } = YTStateSlice.actions;
 
 export default YTStateSlice.reducer;
