@@ -16,6 +16,8 @@ import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQu
 import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { ThemeColors } from "@/types";
+import { editCreatorCommentAtom, editMapTitleAtom } from "@/app/edit/edit-atom/editAtom";
+import { useAtomValue } from "jotai";
 
 const TabInfoUpload = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const TabInfoUpload = () => {
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const { tags } = useSelector((state: RootState) => state.genreTag);
+  const mapTitle = useAtomValue(editMapTitleAtom);
+  const creatorComment = useAtomValue(editCreatorCommentAtom);
   const toast = useToast();
   const theme: ThemeColors = useTheme();
 
@@ -34,8 +38,8 @@ const TabInfoUpload = () => {
     const mapVideoId = playerRef.current.getVideoData().video_id;
     const sendData = {
       videoId: mapVideoId,
-      title: methods.getValues("title"),
-      creatorComment: methods.getValues("creatorComment"),
+      title: mapTitle,
+      creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),
       previewTime: mapData[map.startLine]["time"],

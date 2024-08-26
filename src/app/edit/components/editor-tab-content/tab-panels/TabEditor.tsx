@@ -164,7 +164,7 @@ const TabEditor = forwardRef((props, ref) => {
   const buttonConfigs = {
     add: {
       isDisabled: !isTimeInputValid,
-      colorScheme: "teal",
+      colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg,
       ref: addButtonRef,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         add(mapData, e.shiftKey);
@@ -182,7 +182,7 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: updateButtonRef,
 
-      colorScheme: "cyan",
+      colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
       onClick: () => {
         update(mapData);
       },
@@ -197,7 +197,7 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled: isLastLineSelected,
       ref: undefined,
       isLoading: isLoadingWordConvertBtn,
-      colorScheme: "blue",
+      colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
       onClick: wordConvert,
       text: "読み変換",
     },
@@ -205,7 +205,7 @@ const TabEditor = forwardRef((props, ref) => {
       isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: deleteButtonRef,
 
-      colorScheme: "red",
+      colorScheme: theme.colors.edit.mapTable.errorLine.bg,
       onClick: () => {
         deleteLine(mapData);
       },
@@ -258,7 +258,13 @@ const TabEditor = forwardRef((props, ref) => {
         <form className="flex flex-col gap-y-1">
           <Box display="flex" alignItems="center">
             <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
-            <Input placeholder="歌詞" size="sm" autoComplete="off" value={lyrics} />
+            <Input
+              placeholder="歌詞"
+              size="sm"
+              autoComplete="off"
+              value={lyrics}
+              onChange={(e) => setLyrics(e.target.value)}
+            />
           </Box>
           <Box display="flex" alignItems="center">
             <Input
@@ -271,7 +277,13 @@ const TabEditor = forwardRef((props, ref) => {
               _disabled={{ opacity: 1 }}
               value={selectedLineCount ?? ""}
             />
-            <Input placeholder="ワード" size="sm" autoComplete="off" value={word} />
+            <Input
+              placeholder="ワード"
+              size="sm"
+              autoComplete="off"
+              value={word}
+              onChange={(e) => setWord(e.target.value)}
+            />
           </Box>
           <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
             <Flex gap="5">
@@ -285,9 +297,10 @@ const TabEditor = forwardRef((props, ref) => {
                   size="sm"
                   height="35px"
                   className="w-[16%] xl:w-[12%] lg:w-[19%] md:w-[19%]"
-                  colorScheme={config.colorScheme}
-                  _hover={{ bg: `${config.colorScheme}.100` }}
+                  _hover={{ bg: `${config.colorScheme}80` }}
+                  borderColor={config.colorScheme}
                   onClick={config.onClick}
+                  sx={{ colorScheme: config.colorScheme }}
                 >
                   {config.text}
                 </Button>

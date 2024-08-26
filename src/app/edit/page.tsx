@@ -3,7 +3,8 @@ import React from "react";
 import InfoTabProvider from "./edit-contexts/InfoTabProvider";
 import { RefsProvider } from "./edit-contexts/refsProvider";
 import { useSearchParams } from "next/navigation";
-import Content from "./content";
+import Content from "./Content";
+import ColorStyle from "./ColorStyle";
 
 // あとでやる
 //ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
@@ -15,6 +16,7 @@ export default function Home() {
     <InfoTabProvider>
       <RefsProvider>
         <Content mapInfo={{ videoId }} />
+        <ColorStyle />
       </RefsProvider>
     </InfoTabProvider>
   );

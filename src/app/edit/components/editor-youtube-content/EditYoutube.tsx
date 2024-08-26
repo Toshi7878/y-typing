@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import YouTube from "react-youtube";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
@@ -15,6 +15,7 @@ import {
   isEditYouTubeStartedAtom,
 } from "../../edit-atom/editAtom";
 import { useAtom, useSetAtom } from "jotai";
+import { useParams } from "next/navigation";
 
 interface EditorYouTubeProps {
   className: string;
@@ -23,6 +24,7 @@ interface EditorYouTubeProps {
 
 const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   console.log("YouTube");
+  const dispatch = useDispatch();
   const setTabIndex = useSetAtom(editTabIndexAtom);
   const setIsReady = useSetAtom(isEditYouTubeReadyAtom);
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
@@ -31,15 +33,17 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const refs = useRefs();
+  const { id } = useParams();
 
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
       refs.setRef("playerRef", player);
-      ytState.ready(refs, setMapTitle, setIsReady, mapTitle);
+      const isNewMap = id ? false : true;
+      ytState.ready(refs, setMapTitle, setIsReady, dispatch, isNewMap);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapTitle],
+    [],
   );
 
   const handlePlay = useCallback(() => {

@@ -78,14 +78,14 @@ const sodaTheme: ThemeColors = {
     edit: {
       mapTable: {
         currentTimeLine: {
-          bg: "#3cd3bf80",
+          bg: "#3cd3bf",
         },
         selectedLine: {
           bg: "#3bd3ec",
           outlineColor: "#000000",
         },
         errorLine: {
-          bg: "#f5727535",
+          bg: "#f57275",
         },
       },
     },

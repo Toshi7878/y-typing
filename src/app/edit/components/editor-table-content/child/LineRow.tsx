@@ -88,26 +88,30 @@ export default function LineRow() {
   }, [lastAddedTime]);
 
   useEffect(() => {
-    if (isYTPlaying) {
+    if (isYTStarted) {
       const duration = refs.playerRef.current?.getDuration();
 
       if (duration) {
-        if (mapData[mapData.length - 1].lyrics !== "end") {
-          dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
-        } else {
-          dispatch(
-            updateLine({
-              time: duration.toFixed(3),
-              lyrics: "end",
-              word: "",
-              selectedLineCount: mapData.length - 1,
-            }),
-          );
+        for (let i = mapData.length - 1; i >= 0; i--) {
+          if (mapData[i].lyrics === "end") {
+            dispatch(
+              updateLine({
+                time: duration.toFixed(3),
+                lyrics: "end",
+                word: "",
+                selectedLineCount: i,
+              }),
+            );
+
+            return;
+          }
         }
+
+        dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isYTPlaying]);
+  }, [isYTStarted]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
     setLineSelectedCount(index);
@@ -149,9 +153,9 @@ export default function LineRow() {
             lineSelectedCount === index
               ? theme.colors.edit.mapTable.selectedLine.bg
               : timeCount === index && lineSelectedCount !== index
-                ? theme.colors.edit.mapTable.currentTimeLine.bg
+                ? `${theme.colors.edit.mapTable.currentTimeLine.bg}80`
                 : endAfterLineIndex < index && line.lyrics !== "end"
-                  ? theme.colors.edit.mapTable.errorLine.bg
+                  ? `${theme.colors.edit.mapTable.errorLine.bg}35`
                   : "transparent"
           }
           color={theme.colors.color}

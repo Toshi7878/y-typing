@@ -4,6 +4,8 @@ import { Line } from "@/types";
 import { Ticker } from "@pixi/ticker";
 import { EditTabIndex } from "../type";
 import { Dispatch } from "react";
+import { Action } from "@reduxjs/toolkit";
+import { updateLine } from "../../redux/mapDataSlice";
 export const editTicker = new Ticker();
 class YTState {
   play(
@@ -50,14 +52,27 @@ class YTState {
     refs: RefsContextType,
     setMapTitle: Dispatch<string>,
     setIsReady: Dispatch<boolean>,
-    title: string,
+    dispatch: Dispatch<Action>,
+    isNewMap: boolean,
   ) {
     console.log("ready");
     const videoData = refs.playerRef!.current!.getVideoData();
     setIsReady(true);
-    if (videoData && !title) {
-      const { title } = videoData;
-      setMapTitle(title);
+
+    if (isNewMap) {
+      if (videoData) {
+        const { title } = videoData;
+        setMapTitle(title);
+      }
+      const duration = refs.playerRef.current?.getDuration();
+      dispatch(
+        updateLine({
+          time: duration.toFixed(3),
+          lyrics: "end",
+          word: "",
+          selectedLineCount: 1,
+        }),
+      );
     }
     refs.playerRef.current.setVolume(refs.editorTabRef.current?.getVolume());
   }

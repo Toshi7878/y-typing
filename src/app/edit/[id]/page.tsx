@@ -1,7 +1,7 @@
 import React from "react";
 import InfoTabProvider from "../edit-contexts/InfoTabProvider";
 import { RefsProvider } from "../edit-contexts/refsProvider";
-import Content from "../content";
+import Content from "../Content";
 import { GetInfoData } from "@/types/api";
 
 async function getMapInfo(id: string): Promise<GetInfoData> {
