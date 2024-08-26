@@ -110,36 +110,88 @@ const RankingTr = (props: RankingTrProps) => {
       }}
       label={
         <Box fontSize="sm">
-          {props.romaType > 0 && <div>ローマ字タイプ数: {props.romaType}</div>}
-          {props.kanaType > 0 && <div>かな入力タイプ数: {props.kanaType}</div>}
-          {props.flickType > 0 && <div>フリック入力タイプ数: {props.flickType}</div>}
-          <div>ミス数: {props.miss}</div>
-          <div>ロスト数: {props.lost}</div>
+          {props.romaType > 0 && (
+            <Box>
+              <Text as="span">ローマ字タイプ数</Text>:{" "}
+              <Text as="span" fontSize="md" fontWeight="bold">
+                {props.romaType}
+              </Text>
+            </Box>
+          )}
+          {props.kanaType > 0 && (
+            <Box>
+              <Text as="span">かな入力タイプ数</Text>:{" "}
+              <Text as="span" fontSize="md" fontWeight="bold">
+                {props.kanaType}
+              </Text>
+            </Box>
+          )}
+          {props.flickType > 0 && (
+            <Box>
+              <Text as="span">フリック入力タイプ数</Text>:{" "}
+              <Text as="span" fontSize="md" fontWeight="bold">
+                {props.flickType}
+              </Text>
+            </Box>
+          )}
+          <Box>
+            ミス数:{" "}
+            <Text as="span" fontSize="md" fontWeight="bold">
+              {props.miss}
+            </Text>
+          </Box>
+          <Box>
+            ロスト数:{" "}
+            <Text as="span" fontSize="md" fontWeight="bold">
+              {props.lost}
+            </Text>
+          </Box>
           <Box>
             最大コンボ:{" "}
             <Text
               as="span"
               {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
               className={`${isPerfect ? "outline-text" : ""}`}
+              fontSize="md"
+              fontWeight="bold"
             >
               {props.maxCombo}
             </Text>
           </Box>
-          <div>rkpm: {props.rkpm}</div>
+          <Box>
+            rkpm:{" "}
+            <Text as="span" fontSize="md" fontWeight="bold">
+              {props.rkpm}
+            </Text>
+          </Box>
           {isKanaFlickTyped && props.kpm !== props.romaKpm && (
-            <div>ローマ字換算kpm: {props.romaKpm}</div>
+            <Box>
+              <Text as="span">ローマ字換算kpm</Text>:{" "}
+              <Text as="span" fontSize="md" fontWeight="bold">
+                {props.romaKpm}
+              </Text>
+            </Box>
           )}
-          {props.defaultSpeed > 1 && <div>倍速: {props.defaultSpeed.toFixed(2)}x</div>}
-          <div>
+          {props.defaultSpeed > 1 && (
+            <Box>
+              倍速:{" "}
+              <Text as="span" fontSize="md" fontWeight="bold">
+                {props.defaultSpeed.toFixed(2)}x
+              </Text>
+            </Box>
+          )}
+          <Box>
             日時:{" "}
-            {new Date(props.updatedAt).toLocaleString("ja-JP", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </div>
+            <Text as="span" fontSize="md">
+              {new Date(props.updatedAt).toLocaleString("ja-JP", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+          </Box>
         </Box>
       }
       hasArrow

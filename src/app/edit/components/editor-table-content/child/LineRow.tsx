@@ -88,7 +88,7 @@ export default function LineRow() {
   }, [lastAddedTime]);
 
   useEffect(() => {
-    if (isYTStarted) {
+    if (isYTPlaying) {
       const duration = refs.playerRef.current?.getDuration();
 
       if (duration) {
@@ -100,14 +100,14 @@ export default function LineRow() {
               time: duration.toFixed(3),
               lyrics: "end",
               word: "",
-              lineNumber: (mapData.length - 1).toString(),
+              selectedLineCount: mapData.length - 1,
             }),
           );
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isYTStarted]);
+  }, [isYTPlaying]);
 
   const selectLine = (index: SetStateAction<number | null>) => {
     setLineSelectedCount(index);

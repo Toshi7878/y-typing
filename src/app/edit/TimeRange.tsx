@@ -65,7 +65,7 @@ const TimeRange = () => {
         type="range"
         ref={rangeRef}
         onChange={handleRangeChange}
-        className="range-color w-full bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+        className="w-full cursor-pointer"
         disabled={isDisabled}
       />
       <HStack justify="center" className="w-[170px]">
