@@ -6,7 +6,11 @@ import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
 import { ThemeColors } from "@/types";
 import { useRefs } from "../../edit-contexts/refsProvider";
-import { editTabIndexAtom, isEditYouTubeStartedAtom } from "../../edit-atom/editAtom";
+import {
+  isEditYouTubeStartedAtom,
+  useSetTabIndexAtom,
+  useTabIndexAtom,
+} from "../../edit-atom/editAtom";
 import { useAtom, useAtomValue } from "jotai";
 import { EditTabIndex } from "../../ts/type";
 
@@ -19,7 +23,9 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
   console.log("Tab");
 
   const editorTabRef = useRef(null);
-  const [tabIndex, setTabIndex] = useAtom(editTabIndexAtom);
+  const tabIndex = useTabIndexAtom();
+  const setTabIndex = useSetTabIndexAtom();
+
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
   const [isDisabled, setIsDisabled] = useState(true);
   const { setRef } = useRefs();

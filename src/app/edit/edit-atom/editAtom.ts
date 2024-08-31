@@ -1,8 +1,18 @@
-import { atom } from "jotai";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { EditTabIndex } from "../ts/type";
 import { YouTubeSpeed } from "@/types";
+import { getEditAtomStore } from "../components/EditProvider";
 
-export const editTabIndexAtom = atom<EditTabIndex>(0);
+const editTabIndexAtom = atom<EditTabIndex>(0);
+const editAtomStore = getEditAtomStore();
+
+export const useTabIndexAtom = () => {
+  return useAtomValue(editTabIndexAtom, { store: editAtomStore });
+};
+
+export const useSetTabIndexAtom = () => {
+  return useSetAtom(editTabIndexAtom, { store: editAtomStore });
+};
 
 export const editSpeedAtom = atom<YouTubeSpeed>(1);
 

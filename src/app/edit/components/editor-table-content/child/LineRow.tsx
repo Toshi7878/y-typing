@@ -13,17 +13,16 @@ import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   editLineSelectedNumberAtom as editLineSelectedCountAtom,
   editSpeedAtom,
-  editTabIndexAtom,
   editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeStartedAtom,
+  useSetTabIndexAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
 export default function LineRow() {
   console.log("Table");
-  const setTabIndex = useSetAtom(editTabIndexAtom);
-
+  const setTabIndex = useSetTabIndexAtom();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);

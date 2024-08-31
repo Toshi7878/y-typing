@@ -8,11 +8,11 @@ import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
 import {
   editMapTitleAtom,
-  editTabIndexAtom,
   editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeReadyAtom,
   isEditYouTubeStartedAtom,
+  useSetTabIndexAtom,
 } from "../../edit-atom/editAtom";
 import { useAtom, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
@@ -26,7 +26,7 @@ interface EditorYouTubeProps {
 const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   console.log("YouTube");
   const dispatch = useDispatch();
-  const setTabIndex = useSetAtom(editTabIndexAtom);
+  const setTabIndex = useSetTabIndexAtom();
   const setIsReady = useSetAtom(isEditYouTubeReadyAtom);
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
   const setTimeCount = useSetAtom(editTimeCountAtom);

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useLayoutEffect } from "react";
-import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
-import editStore, { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 import TimeRange from "./TimeRange";
 import { resetTags, setTags } from "../redux/GenreTagSlice";
 import { useParams } from "next/navigation";
