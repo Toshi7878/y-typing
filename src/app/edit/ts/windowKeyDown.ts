@@ -145,7 +145,7 @@ class WordReplace {
             else return match;
           });
 
-          setCanUpload(true);
+          this.setCanUpload(true);
           this.dispatch(
             addHistory({
               type: "update",

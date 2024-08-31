@@ -248,7 +248,13 @@ const TabEditor = forwardRef((props, ref) => {
     redoAddLyrics: (redoLine: Line) => {
       const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-      TextAreaEvents.deleteTopLyrics(setLineFunctions, lyrics, lyricsText, dispatch, convertOption);
+      TextAreaEvents.deleteTopLyrics(
+        setLineFunctions,
+        lyrics,
+        lyricsText,
+        setIsLoadWordConvert,
+        convertOption,
+      );
     },
 
     getVolume: () => {

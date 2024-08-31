@@ -45,7 +45,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
 
   const [optionsData, setOptionsData] = useState<IndexDBOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const mapData = useSelector((state: RootState) => state.mapData!.value);
   const { playerRef } = useRefs();
   const fileInputRef = useRef<HTMLInputElement>(null); // useRefを使用してfileInputRefを定義
 
