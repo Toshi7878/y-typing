@@ -1,9 +1,26 @@
+import React, { cache } from "react";
 import Content from "./content";
-import { Metadata } from "next";
-import { getMapInfo } from "@/lib/server-fetcher/getMapInfo";
-import TypeProvider from "./TypeProvider";
+import { GetInfoData } from "@/types/api";
 import { auth } from "@/lib/auth";
 import { SessionProvider } from "next-auth/react";
+import { Metadata } from "next";
+import { RefsProvider } from "../type-contexts/refsProvider";
+
+const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
+  if (id === "1") {
+    return { videoId: "8iuYxdXFPbc", title: "君が代" };
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {
+    cache: "no-cache",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return response.json();
+});
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const mapInfo = await getMapInfo(params.id);
@@ -14,14 +31,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const mapInfo = await getMapInfo(params.id);
   const session = await auth();
+  const mapInfo = await getMapInfo(params.id);
 
   return (
     <SessionProvider session={session}>
-      <TypeProvider>
+      <RefsProvider>
         <Content mapInfo={mapInfo} />
-      </TypeProvider>
+      </RefsProvider>
     </SessionProvider>
   );
 }
