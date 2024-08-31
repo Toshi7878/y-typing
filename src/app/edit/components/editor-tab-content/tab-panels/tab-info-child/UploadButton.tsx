@@ -1,28 +1,24 @@
 "use client";
 import { Button } from "@chakra-ui/react";
 
-import { RootState } from "@/app/edit/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useFormStatus } from "react-dom";
-import { useTagsAtom } from "@/app/edit/edit-atom/editAtom";
+import { useCanUploadAtom, useSetCanUploadAtom, useTagsAtom } from "@/app/edit/edit-atom/editAtom";
 interface UploadButtonProps {
   responseStatus: number;
 }
 const UploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
   const tags = useTagsAtom();
-
-  const canUpload = useSelector((state: RootState) => state.btnFlags!.canUpload);
-
+  const canUpload = useCanUploadAtom();
+  const setCanUpload = useSetCanUploadAtom();
   const isUpButtonDisabled = tags.length < 2 || !canUpload;
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (responseStatus !== 200) {
     } else {
-      dispatch(setCanUpload(false));
+      setCanUpload(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseStatus]);

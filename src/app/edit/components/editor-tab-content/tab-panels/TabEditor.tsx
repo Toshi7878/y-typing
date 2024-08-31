@@ -8,7 +8,6 @@ import { RootState } from "@/app/edit/redux/store";
 import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
-import { setCanUpload, setIsLoadingWordConvertBtn } from "@/app/edit/redux/buttonFlagsSlice";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { EditorSettingsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
 import { useAtom, useAtomValue } from "jotai";
@@ -18,6 +17,9 @@ import {
   editLineSelectedNumberAtom as editSelectedLineCountAtom,
   editLineWordAtom,
   isEditYouTubePlayingAtom,
+  useSetCanUploadAtom,
+  useIsLoadWordConvertAtom,
+  useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
 
 // 後でリファクタリング
@@ -44,9 +46,11 @@ const TabEditor = forwardRef((props, ref) => {
       .slice()
       .reverse()
       .findIndex((line) => line.lyrics === "end");
-  const isLoadingWordConvertBtn = useSelector(
-    (state: RootState) => state.btnFlags.isLoadingWordConvertBtn,
-  );
+
+  const isLoadWordConvert = useIsLoadWordConvertAtom();
+  const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
+
+  const setCanUpload = useSetCanUploadAtom();
 
   const lineInit = () => {
     setLyrics("");
@@ -105,7 +109,7 @@ const TabEditor = forwardRef((props, ref) => {
   const update = (mapData: RootState["mapData"]["value"]) => {
     const time = timeValidate(timeInputRef.current!.getTime(), mapData).toFixed(3);
 
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
     dispatch(
       addHistory({
         type: "update",
@@ -129,9 +133,9 @@ const TabEditor = forwardRef((props, ref) => {
   const wordConvert = async () => {
     const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-    dispatch(setIsLoadingWordConvertBtn(true));
+    setIsLoadWordConvert(true);
     await ButtonEvents.lyricsConvert(lyrics, setLineFunctions, convertOption);
-    dispatch(setIsLoadingWordConvertBtn(false));
+    setIsLoadWordConvert(false);
   };
 
   const deleteLine = (mapData: RootState["mapData"]["value"]) => {
@@ -196,7 +200,7 @@ const TabEditor = forwardRef((props, ref) => {
     wordConvert: {
       isDisabled: isLastLineSelected,
       ref: undefined,
-      isLoading: isLoadingWordConvertBtn,
+      isLoading: isLoadWordConvert,
       colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
       onClick: wordConvert,
       text: "読み変換",

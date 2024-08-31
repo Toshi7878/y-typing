@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useLayoutEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch } from "react-redux";
 import TimeRange from "./TimeRange";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
@@ -14,6 +13,7 @@ import { ThemeColors } from "@/types";
 import EditTable from "./editor-table-content/EditTable";
 import EditorTabContent from "./editor-tab-content/EditTab";
 import {
+  useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
   useSetMapTitleAtom,
   useSetTagsAtom,
@@ -27,7 +27,7 @@ function Content() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const theme: ThemeColors = useTheme();
-  const isLrcConverting = useSelector((state: RootState) => state.btnFlags.isLrcConverting);
+  const isLrcConverting = useIsLrcConvertingAtom();
   const setVideoId = useSetVideoIdAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();

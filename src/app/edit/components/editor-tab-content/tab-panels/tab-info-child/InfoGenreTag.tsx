@@ -5,17 +5,21 @@ import { Box, Flex, Stack, Badge, Text, FormLabel } from "@chakra-ui/react";
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
 import "@/app/edit/style/reactTags.scss";
-import { useDispatch } from "react-redux";
-import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { Tag } from "@/types";
 import { useAtomValue } from "jotai";
-import { isEditYouTubeReadyAtom, useSetTagsAtom, useTagsAtom } from "@/app/edit/edit-atom/editAtom";
+import {
+  isEditYouTubeReadyAtom,
+  useSetCanUploadAtom,
+  useSetTagsAtom,
+  useTagsAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
 const InfoGenreTag = () => {
   const tags = useTagsAtom();
   const setTags = useSetTagsAtom();
-  const dispatch = useDispatch();
+  const setCanUpload = useSetCanUploadAtom();
+
   const isYouTubeReady = useAtomValue(isEditYouTubeReadyAtom);
   const { playerRef } = useRefs();
   const [ytTitle, setYtTitle] = useState("動画タイトル"); // あとで無くす
@@ -37,12 +41,8 @@ const InfoGenreTag = () => {
     // 他の提案タグを追加
   ];
 
-  const toggleBadge = (label: string) => {
-    dispatch(setCanUpload(true));
-  };
-
   const handleDelete = (index: number) => {
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
     const deleteTag = tags[index];
     setTags({ type: "delete", payload: deleteTag });
   };
@@ -54,7 +54,7 @@ const InfoGenreTag = () => {
     const isTagAdded = tags.some((tags) => tags.id === tag.id);
 
     if (!isTagAdded) {
-      dispatch(setCanUpload(true));
+      setCanUpload(true);
       setTags({ type: "add", payload: tag });
     }
   };

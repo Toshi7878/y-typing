@@ -14,12 +14,12 @@ import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQuality";
 import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
-import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { ThemeColors } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
   useMapTitleAtom,
+  useSetCanUploadAtom,
   useTagsAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
@@ -28,8 +28,8 @@ const TabInfoUpload = () => {
   const tags = useTagsAtom();
   const { data: session } = useSession();
   const mapCreatorId = useCreatorIdAtom();
+  const setCanUpload = useSetCanUploadAtom();
 
-  const dispatch = useDispatch();
   const initialState = { id: null, message: "", status: 0 };
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -102,7 +102,7 @@ const TabInfoUpload = () => {
           },
         });
 
-        dispatch(setCanUpload(false));
+        setCanUpload(false);
 
         if (!id) {
           router.push(`/edit/${state.id}`);

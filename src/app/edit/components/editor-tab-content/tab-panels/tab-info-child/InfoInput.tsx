@@ -9,9 +9,7 @@ import {
   InputLeftAddon,
   InputGroup,
 } from "@chakra-ui/react";
-import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useSearchParams } from "next/navigation";
 import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
 import { z } from "zod";
@@ -20,6 +18,7 @@ import {
   isEditYouTubeStartedAtom,
   useCreatorCommentAtom,
   useMapTitleAtom,
+  useSetCanUploadAtom,
   useSetCreatorCommentAtom,
   useSetMapTitleAtom,
   useVideoIdAtom,
@@ -33,21 +32,17 @@ const videoIdSchema = z
 
 const InfoInput = () => {
   const methods = useFormContext();
-  const dispatch = useDispatch();
   const { playerRef } = useRefs();
 
   const [canChangeVideo, setCanChangeVideo] = useState(false);
   const setIsYTStarted = useSetAtom(isEditYouTubeStartedAtom);
+  const setCanUpload = useSetCanUploadAtom();
+  const setMapTitle = useSetMapTitleAtom();
+  const setCreatorComment = useSetCreatorCommentAtom();
   const videoId = useVideoIdAtom();
   const mapTitle = useMapTitleAtom();
-  const setMapTitle = useSetMapTitleAtom();
   const creatorComment = useCreatorCommentAtom();
-  const setCreatorComment = useSetCreatorCommentAtom();
-
   const searchParams = useSearchParams();
-
-  // const videoIdFromState = useSelector((state: RootState) => state.tabInfoInput.videoId);
-  // const videoId = searchParams.get("new") || videoIdFromState;
 
   const handleVideoIdChange = (newVideoId: string) => {
     if (videoIdSchema.safeParse(newVideoId).success && videoId !== newVideoId) {
@@ -111,7 +106,7 @@ const InfoInput = () => {
           fontWeight="bold"
           value={mapTitle}
           onChange={(e) => {
-            dispatch(setCanUpload(true));
+            setCanUpload(true);
             setMapTitle(e.target.value);
           }}
         />
@@ -125,7 +120,7 @@ const InfoInput = () => {
           size="sm"
           value={creatorComment}
           onChange={(e) => {
-            dispatch(setCanUpload(true));
+            setCanUpload(true);
             setCreatorComment(e.target.value);
           }}
         />

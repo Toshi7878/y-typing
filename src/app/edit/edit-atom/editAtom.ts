@@ -103,3 +103,33 @@ export const editTimeCountAtom = atom<number>(0);
 
 export const editAddLyricsTextBoxAtom = atom<string>("");
 export const editTimeRangeValue = atom<number>(0);
+
+const editIsLoadWordConvertAtom = atom<boolean>(false);
+
+export const useIsLoadWordConvertAtom = () => {
+  return useAtomValue(editIsLoadWordConvertAtom, { store: editAtomStore });
+};
+
+export const useSetIsLoadWordConvertAtom = () => {
+  return useSetAtom(editIsLoadWordConvertAtom, { store: editAtomStore });
+};
+
+const editIsLrcConverting = atom<boolean>(false);
+
+export const useIsLrcConvertingAtom = () => {
+  return useAtomValue(editIsLrcConverting, { store: editAtomStore });
+};
+
+export const useSetIsLrcConvertingAtom = () => {
+  return useSetAtom(editIsLrcConverting, { store: editAtomStore });
+};
+
+const editCanUpload = atom<boolean>(false);
+
+export const useCanUploadAtom = () => {
+  return useAtomValue(editCanUpload, { store: editAtomStore });
+};
+
+export const useSetCanUploadAtom = () => {
+  return useSetAtom(editCanUpload, { store: editAtomStore });
+};
