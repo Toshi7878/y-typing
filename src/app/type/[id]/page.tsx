@@ -5,7 +5,7 @@ import TypeProvider from "./TypeProvider";
 import { GetInfoData } from "@/types/api";
 import { cache } from "react";
 
-export const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
+const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
   if (id === "1") {
     return { videoId: "8iuYxdXFPbc", title: "君が代" };
   }
