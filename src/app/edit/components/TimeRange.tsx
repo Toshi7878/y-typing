@@ -18,7 +18,7 @@ const TimeRange = () => {
   const { playerRef } = useRefs();
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
-  const [speed, setSpeed] = useAtom(editSpeedAtom); //0.25 or 2.00 の場合片方のボタンをdisabledにする
+  const [speed, setSpeed] = useAtom(editSpeedAtom); //0.25 or 2.00 場合片方のボタンをdisabledにする
   const theme: ThemeColors = useTheme();
 
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);

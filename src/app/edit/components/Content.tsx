@@ -18,7 +18,7 @@ import EditorTabContent from "./editor-tab-content/EditTab";
 import { useSetAtom } from "jotai";
 import { editCreatorCommentAtom, editMapTitleAtom, editVideoIdAtom } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
-import EditYouTube from "./editor-youtube-content/EditYouTube";
+import EditYouTube from "./editor-youtube-content/EditYoutube";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
