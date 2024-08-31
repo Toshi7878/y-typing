@@ -24,6 +24,10 @@ const InfoGenreTag = () => {
     if (playerRef.current) {
       setYtTitle(playerRef.current.getVideoData().title);
     }
+
+    return () => {
+      setYtTitle("");
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYouTubeReady]);
 
