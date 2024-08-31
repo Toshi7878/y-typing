@@ -51,6 +51,7 @@ function Content() {
   useLayoutEffect(() => {
     return () => {
       if (id) {
+        //新規作成譜面に移動したら初期化
         setVideoId("");
         setMapTitle("");
         setCreatorComment("");
