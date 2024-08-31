@@ -1,5 +1,6 @@
 import { GetInfoData } from "@/types/api";
 import { cache } from "react";
+import "server-only";
 
 export const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
   if (id === "1") {
