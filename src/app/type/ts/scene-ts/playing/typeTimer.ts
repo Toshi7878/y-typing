@@ -51,13 +51,17 @@ export const updateTimer = (
   const ytConstantTime = ytCurrentTime / speedData.playSpeed;
 
   const count = statusRef.current!.status.count;
-  const prevLine = map.mapData[count - 1];
-  const currentLine = map.mapData[count];
-  const nextLine = map.mapData[count + 1];
-  const remainTime = (Number(currentLine.time) - Number(ytCurrentTime)) / speedData.playSpeed;
+  const currentLine = map.mapData[count - 1];
+  const nextLine = map.mapData[count];
+  const afterLine = map.mapData[count + 1];
+  const movieDuration = ytStateRef.current!.movieDuration;
+  const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
+
+  const remainTime = (nextLineTime - ytCurrentTime) / speedData.playSpeed;
   const currentTotalTimeProgress = totalTimeProgressRef.current;
   const currentLineProgress = lineProgressRef.current;
-  const lineTime = prevLine && count ? ytCurrentTime - Number(prevLine["time"]) : ytCurrentTime;
+  const lineTime =
+    currentLine && count ? ytCurrentTime - Number(currentLine["time"]) : ytCurrentTime;
   const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
   currentLineProgress!.value = lineTime;
 
@@ -92,10 +96,7 @@ export const updateTimer = (
   }
 
   const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
-  if (
-    Math.abs(Number(currentLine.time) / speedData.playSpeed - ytConstantTime - displayRemainTime) >=
-    0.1
-  ) {
+  if (Math.abs(nextLineTime / speedData.playSpeed - ytConstantTime - displayRemainTime) >= 0.1) {
     const currentPlayingCenterRef = playingCenterRef.current;
 
     if (!currentPlayingCenterRef) {
@@ -136,10 +137,7 @@ export const updateTimer = (
     }
   }
 
-  if (
-    ytCurrentTime >= Number(currentLine["time"]) ||
-    ytCurrentTime >= ytStateRef.current!.movieDuration
-  ) {
+  if (ytCurrentTime >= nextLineTime || ytCurrentTime >= ytStateRef.current!.movieDuration) {
     lineUpdate(
       playerRef,
       lineResults,
@@ -159,8 +157,8 @@ export const updateTimer = (
       rankingScores,
       lineConstantTime,
       count,
-      currentLine,
       nextLine,
+      afterLine,
       playingRef,
       scene,
     );

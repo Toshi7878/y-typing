@@ -36,6 +36,7 @@ interface HandleTypingParams {
   playingLineTimeRef: RefObject<PlayingLineTimeRef>;
   lineResults: LineResultData[];
   setLineResults: (results: LineResultData[]) => void;
+  ytStateRef: RefObject<YTStateRef>;
 }
 export function handleTyping({
   event,
@@ -54,6 +55,7 @@ export function handleTyping({
   playingLineTimeRef,
   lineResults,
   setLineResults,
+  ytStateRef,
 }: HandleTypingParams) {
   const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
   const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
@@ -61,9 +63,12 @@ export function handleTyping({
   const status = tabStatusRef.current!.getStatus();
 
   if (result.successKey) {
-    const currentLine = map!.mapData[count];
-    const prevLine = map!.mapData[count - 1];
-    const remainTime = Number(currentLine.time) - Number(prevLine.time) - lineConstantTime;
+    const nextLine = map!.mapData[count];
+    const currentLine = map!.mapData[count - 1];
+    const movieDuration = ytStateRef.current!.movieDuration;
+    const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
+
+    const remainTime = nextLineTime - currentLine.time - lineConstantTime;
     const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
 
     const success = new Success(

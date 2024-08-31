@@ -383,6 +383,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
               playingLineTimeRef,
               lineResults,
               setLineResults,
+              ytStateRef,
             });
           } else {
             shortcutKey(
