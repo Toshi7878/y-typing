@@ -50,12 +50,14 @@ function Content() {
 
   useLayoutEffect(() => {
     return () => {
-      setVideoId("");
-      setMapTitle("");
-      setCreatorComment("");
-      dispatch(resetMapData());
-      setTags({ type: "reset" });
-      dispatch(resetUndoRedoData());
+      if (id) {
+        setVideoId("");
+        setMapTitle("");
+        setCreatorComment("");
+        dispatch(resetMapData());
+        setTags({ type: "reset" });
+        dispatch(resetUndoRedoData());
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
