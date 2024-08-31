@@ -18,7 +18,7 @@ const InfoGenreTag = () => {
   const dispatch = useDispatch();
   const isYouTubeReady = useAtomValue(isEditYouTubeReadyAtom);
   const { playerRef } = useRefs();
-  const [ytTitle, setYtTitle] = useState("動画タイトル");
+  const [ytTitle, setYtTitle] = useState("動画タイトル"); // あとで無くす
 
   useEffect(() => {
     if (playerRef.current) {
