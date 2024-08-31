@@ -14,7 +14,7 @@ const schema = z.object({
 
 const InfoTabContext = createContext<UseFormReturn<MovieInfoFormSchema> | null>(null);
 
-export const InfoTabProvider: React.FC<InfoTabProviderProps> = ({ children }) => {
+const InfoTabProvider: React.FC<InfoTabProviderProps> = ({ children }) => {
   const methods = useForm<MovieInfoFormSchema>({
     defaultValues: {
       url: "",

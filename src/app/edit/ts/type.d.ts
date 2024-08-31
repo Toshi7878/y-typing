@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 
+export type SetTagsType = "set" | "add" | "delete" | "reset";
 export interface EditorSendData {
   title: string;
   creatorComment: string;

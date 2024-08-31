@@ -7,6 +7,13 @@ import editStore from "../redux/store";
 import { Provider as ReduxProvider } from "react-redux";
 import { createStore, Provider as JotaiProvider } from "jotai";
 import { GetInfoData } from "@/types/api";
+import {
+  editCreatorCommentAtom,
+  editCreatorIdAtom,
+  editMapTitleAtom,
+  editTagsAtom,
+  editVideoIdAtom,
+} from "../edit-atom/editAtom";
 
 const queryClient = new QueryClient();
 const editAtomStore = createStore();
@@ -20,7 +27,16 @@ interface EditProviderProps {
 
 const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
   if (mapInfo) {
-    // editAtomStore.set(title,mapInfo.title)
+    editAtomStore.set(editMapTitleAtom, mapInfo.title);
+    editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
+    editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
+    editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
+    editAtomStore.set(editTagsAtom, {
+      type: "set",
+      payload: mapInfo.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
+    });
+  } else {
+    editAtomStore.set(editCreatorIdAtom, null);
   }
   return (
     <InfoTabProvider>

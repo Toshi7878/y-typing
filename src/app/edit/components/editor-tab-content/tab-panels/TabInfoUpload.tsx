@@ -16,17 +16,26 @@ import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQu
 import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { ThemeColors } from "@/types";
-import { editCreatorCommentAtom, editMapTitleAtom } from "@/app/edit/edit-atom/editAtom";
-import { useAtomValue } from "jotai";
+import {
+  useCreatorCommentAtom,
+  useCreatorIdAtom,
+  useMapTitleAtom,
+  useTagsAtom,
+} from "@/app/edit/edit-atom/editAtom";
+import { useSession } from "next-auth/react";
 
 const TabInfoUpload = () => {
+  const tags = useTagsAtom();
+  const { data: session } = useSession();
+  const mapCreatorId = useCreatorIdAtom();
+
   const dispatch = useDispatch();
   const initialState = { id: null, message: "", status: 0 };
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const { tags } = useSelector((state: RootState) => state.genreTag);
-  const mapTitle = useAtomValue(editMapTitleAtom);
-  const creatorComment = useAtomValue(editCreatorCommentAtom);
+
+  const mapTitle = useMapTitleAtom();
+  const creatorComment = useCreatorCommentAtom();
   const toast = useToast();
   const theme: ThemeColors = useTheme();
 
@@ -104,6 +113,7 @@ const TabInfoUpload = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
+  const myUserId = session?.user?.id;
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
       <CardBody>
@@ -112,7 +122,10 @@ const TabInfoUpload = () => {
             <Stack display="flex" flexDirection="column" gap="6">
               <InfoInput />
               <InfoGenreTag />
-              <UploadButton responseStatus={state.status} />
+
+              {myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId) ? (
+                <UploadButton responseStatus={state.status} />
+              ) : null}
             </Stack>
           </form>
         </FormProvider>

@@ -59,7 +59,17 @@ export async function actions(data: EditorSendData, mapId: string) {
       // リストの再検証をトリガー(更新されるようになる)
       revalidatePath("/api/map-list");
     } else {
-      newMapId = await updateMap(data, Number(mapId));
+      const mapCreatorId = await prisma.map.findUnique({
+        where: { id: Number(mapId) },
+        select: {
+          creatorId: true,
+        },
+      });
+      if (mapCreatorId?.creatorId === userId) {
+        newMapId = await updateMap(data, Number(mapId));
+      } else {
+        return { id: null, message: "この譜面を保存する権限がありません", status: 403 };
+      }
     }
 
     return {

@@ -1,13 +1,9 @@
 "use server";
-
 import { GetInfoData } from "@/types/api";
 import "server-only";
+import { cache } from "react";
 
-export async function getMapInfo(id: string): Promise<GetInfoData> {
-  if (id === "1") {
-    return { videoId: "8iuYxdXFPbc", title: "君が代" };
-  }
-
+export const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`);
 
   if (!response.ok) {
@@ -15,4 +11,4 @@ export async function getMapInfo(id: string): Promise<GetInfoData> {
   }
 
   return response.json();
-}
+});

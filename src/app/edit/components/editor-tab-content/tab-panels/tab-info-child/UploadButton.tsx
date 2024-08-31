@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useFormStatus } from "react-dom";
+import { useTagsAtom } from "@/app/edit/edit-atom/editAtom";
 interface UploadButtonProps {
   responseStatus: number;
 }
 const UploadButton = ({ responseStatus }: UploadButtonProps) => {
   const { pending } = useFormStatus();
-  const { tags } = useSelector((state: RootState) => state.genreTag);
-  const canUpload = useSelector((state: RootState) => state.btnFlags.canUpload);
+  const tags = useTagsAtom();
+
+  const canUpload = useSelector((state: RootState) => state.btnFlags!.canUpload);
 
   const isUpButtonDisabled = tags.length < 2 || !canUpload;
   const dispatch = useDispatch();

@@ -7,23 +7,23 @@ import { RootState } from "../../redux/store";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
 import {
-  editMapTitleAtom,
   editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeReadyAtom,
   isEditYouTubeStartedAtom,
+  useSetMapTitleAtom,
   useSetTabIndexAtom,
+  useVideoIdAtom,
 } from "../../edit-atom/editAtom";
 import { useAtom, useSetAtom } from "jotai";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import NProgress from "nprogress";
 
 interface EditorYouTubeProps {
   className: string;
-  videoId: string;
 }
 
-const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
+const EditYouTube = function ({ className }: EditorYouTubeProps) {
   console.log("YouTube");
   const dispatch = useDispatch();
   const setTabIndex = useSetTabIndexAtom();
@@ -31,7 +31,10 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
   const setTimeCount = useSetAtom(editTimeCountAtom);
   const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
-  const setMapTitle = useSetAtom(editMapTitleAtom);
+  const setMapTitle = useSetMapTitleAtom();
+  const videoId = useVideoIdAtom();
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const refs = useRefs();
@@ -88,7 +91,7 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   return (
     <YouTube
       className={className}
-      videoId={videoId}
+      videoId={videoId ? videoId : newVideoId}
       opts={{
         width: "100%",
         height: "100%",

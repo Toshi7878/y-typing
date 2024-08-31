@@ -17,12 +17,14 @@ import { extractYouTubeVideoId } from "@/components/header/child/right-child/new
 import { z } from "zod";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import {
-  editCreatorCommentAtom,
-  editMapTitleAtom,
-  editVideoIdAtom,
   isEditYouTubeStartedAtom,
+  useCreatorCommentAtom,
+  useMapTitleAtom,
+  useSetCreatorCommentAtom,
+  useSetMapTitleAtom,
+  useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 
 const videoIdSchema = z
   .string()
@@ -36,9 +38,12 @@ const InfoInput = () => {
 
   const [canChangeVideo, setCanChangeVideo] = useState(false);
   const setIsYTStarted = useSetAtom(isEditYouTubeStartedAtom);
-  const [videoId, setVideoId] = useAtom(editVideoIdAtom);
-  const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
-  const [creatorComment, setCreatorComment] = useAtom(editCreatorCommentAtom);
+  const videoId = useVideoIdAtom();
+  const mapTitle = useMapTitleAtom();
+  const setMapTitle = useSetMapTitleAtom();
+  const creatorComment = useCreatorCommentAtom();
+  const setCreatorComment = useSetCreatorCommentAtom();
+
   const searchParams = useSearchParams();
 
   // const videoIdFromState = useSelector((state: RootState) => state.tabInfoInput.videoId);

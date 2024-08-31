@@ -3,6 +3,8 @@ import Content from "../components/Content";
 import EditProvider from "../components/EditProvider";
 import { getMapInfo } from "@/lib/server-fetcher/getMapInfo";
 import { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/lib/auth";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const mapInfo = await getMapInfo(params.id);
@@ -13,10 +15,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 export default async function Page({ params }: { params: { id: string } }) {
   const mapInfo = await getMapInfo(params.id);
+  const session = await auth();
 
   return (
-    <EditProvider mapInfo={mapInfo}>
-      <Content mapInfo={mapInfo} />
-    </EditProvider>
+    <SessionProvider session={session}>
+      <EditProvider mapInfo={mapInfo}>
+        <Content />
+      </EditProvider>
+    </SessionProvider>
   );
 }

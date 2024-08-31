@@ -27,7 +27,6 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { typeTicker } from "../ts/youtubeEvents";
 
 export const queryClient = new QueryClient();
 
@@ -67,14 +66,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     queryKey: ["mapData", id],
     queryFn: async () => {
       setMapId(Number(id));
-
-      if (id === "1") {
-        const test = new CreateMap(testMap);
-        setMap(test);
-        setLineResults(test.defaultLineResultData);
-
-        return;
-      }
 
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
@@ -169,43 +160,5 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     </LoadingOverlayWrapper>
   );
 }
-
-const testMap = [
-  {
-    time: "0",
-    word: "",
-    lyrics: "",
-  },
-  {
-    time: "13.325",
-    word: "きみがよは",
-    lyrics: "君が代は",
-  },
-  {
-    time: "23.508",
-    word: "ちよにやちよに",
-    lyrics: "千代に八千代に",
-  },
-  {
-    time: "34.313",
-    word: "さざれいしの",
-    lyrics: "さざれ石の",
-  },
-  {
-    time: "45.164",
-    word: "いわおとなりて",
-    lyrics: "巌となりて",
-  },
-  {
-    time: "55.831",
-    word: "こけのむすまで",
-    lyrics: "苔のむすまで",
-  },
-  {
-    time: "82.461",
-    word: "",
-    lyrics: "end",
-  },
-];
 
 export default Content;

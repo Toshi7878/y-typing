@@ -5,17 +5,16 @@ import { Box, Flex, Stack, Badge, Text, FormLabel } from "@chakra-ui/react";
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
 import "@/app/edit/style/reactTags.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/edit/redux/store";
-import { deleteTags, setTags } from "@/app/edit/redux/GenreTagSlice";
+import { useDispatch } from "react-redux";
 import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { Tag } from "@/types";
 import { useAtomValue } from "jotai";
-import { isEditYouTubeReadyAtom } from "@/app/edit/edit-atom/editAtom";
+import { isEditYouTubeReadyAtom, useSetTagsAtom, useTagsAtom } from "@/app/edit/edit-atom/editAtom";
 
 const InfoGenreTag = () => {
-  const { tags } = useSelector((state: RootState) => state.genreTag);
+  const tags = useTagsAtom();
+  const setTags = useSetTagsAtom();
   const dispatch = useDispatch();
   const isYouTubeReady = useAtomValue(isEditYouTubeReadyAtom);
   const { playerRef } = useRefs();
@@ -40,7 +39,8 @@ const InfoGenreTag = () => {
 
   const handleDelete = (index: number) => {
     dispatch(setCanUpload(true));
-    dispatch(deleteTags(tags.filter((_, i) => i !== index)));
+    const deleteTag = tags[index];
+    setTags({ type: "delete", payload: deleteTag });
   };
 
   const handleAddition = (tag: Tag) => {
@@ -51,7 +51,7 @@ const InfoGenreTag = () => {
 
     if (!isTagAdded) {
       dispatch(setCanUpload(true));
-      dispatch(setTags(tag));
+      setTags({ type: "add", payload: tag });
     }
   };
 
