@@ -42,9 +42,8 @@ class YTState {
   }
 
   seek(event: any, setTimeCount: Dispatch<number>, mapData: Line[]) {
-    console.log("シーク");
-
     const time = event.target.getCurrentTime()!;
+    console.log(`シークtime: ${time}`);
     setTimeCount(getCount(time, mapData));
   }
 
@@ -65,6 +64,7 @@ class YTState {
         setMapTitle(title);
       }
       const duration = refs.playerRef.current?.getDuration();
+
       dispatch(
         updateLine({
           time: duration.toFixed(3),

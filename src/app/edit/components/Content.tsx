@@ -1,41 +1,26 @@
 "use client";
 import React, { useEffect, useLayoutEffect } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import editStore, { RootState } from "./redux/store";
+import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
+import editStore, { RootState } from "../redux/store";
 import TimeRange from "./TimeRange";
-import { resetTags, setTags } from "./redux/GenreTagSlice";
+import { resetTags, setTags } from "../redux/GenreTagSlice";
 import { useParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { GetInfoData } from "@/types/api";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { resetMapData, setMapData } from "./redux/mapDataSlice";
-import NProgress from "nprogress";
-import { resetUndoRedoData } from "./redux/undoredoSlice";
+import { resetMapData, setMapData } from "../redux/mapDataSlice";
+import { resetUndoRedoData } from "../redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import EditTable from "./components/editor-table-content/EditTable";
-import EditorTabContent from "./components/editor-tab-content/EditTab";
-import EditYouTube from "./components/editor-youtube-content/EditYouTube";
+import EditTable from "./editor-table-content/EditTable";
+import EditorTabContent from "./editor-tab-content/EditTab";
+import EditYouTube from "./editor-youtube-content/EditYouTube";
 import { useSetAtom } from "jotai";
-import { editCreatorCommentAtom, editMapTitleAtom, editVideoIdAtom } from "./edit-atom/editAtom";
-const queryClient = new QueryClient();
+import { editCreatorCommentAtom, editMapTitleAtom, editVideoIdAtom } from "../edit-atom/editAtom";
+import ColorStyle from "./ColorStyle";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
-  useEffect(() => {
-    window.getSelection()!.removeAllRanges();
-    NProgress.done();
-  }, []);
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={editStore}>
-        <ContentInner mapInfo={mapInfo} />
-      </Provider>
-    </QueryClientProvider>
-  );
-}
-
-function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -79,6 +64,10 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    window.getSelection()!.removeAllRanges();
+  }, []);
+
   return (
     <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
       <Box
@@ -105,6 +94,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
           <EditTable />
         </Box>
       </Box>
+      <ColorStyle />
     </LoadingOverlayWrapper>
   );
 }

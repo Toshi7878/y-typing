@@ -1,28 +1,34 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { timer } from "./ts/youtube-ts/editTimer";
+import { timer } from "../ts/youtube-ts/editTimer";
 import "@/app/edit/style/editor.scss";
 import { Box, Button, HStack, Text, useTheme } from "@chakra-ui/react";
-import { useRefs } from "./edit-contexts/refsProvider";
-import { YTSpeedController } from "./ts/youtube-ts/editYtHandleEvents";
+import { useRefs } from "../edit-contexts/refsProvider";
+import { YTSpeedController } from "../ts/youtube-ts/editYtHandleEvents";
 import { useAtom, useAtomValue } from "jotai";
-import { editSpeedAtom, isEditYouTubeStartedAtom } from "./edit-atom/editAtom";
+import {
+  editSpeedAtom,
+  isEditYouTubeReadyAtom,
+  isEditYouTubeStartedAtom,
+} from "../edit-atom/editAtom";
 import { ThemeColors } from "@/types";
 const TimeRange = () => {
   console.log("range");
 
   const { playerRef } = useRefs();
-  const [isDisabled, setIsDisabled] = useState(true);
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
-  const [speed, setSpeed] = useAtom(editSpeedAtom);
+  const [speed, setSpeed] = useAtom(editSpeedAtom); //0.25 or 2.00 の場合片方のボタンをdisabledにする
   const theme: ThemeColors = useTheme();
 
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
+  const isYTReady = useAtomValue(isEditYouTubeReadyAtom);
 
   const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const time = Number(e.target.value);
     rangeRef.current!.value = e.target.value;
+    playerRef.current.playVideo();
+
     if (playerRef.current) {
       playerRef.current.seekTo(time);
     }
@@ -38,16 +44,23 @@ const TimeRange = () => {
 
   useEffect(() => {
     if (isYTStarted) {
-      setIsDisabled(false);
       const duration = playerRef.current?.getDuration().toFixed(3);
       if (duration !== undefined) {
         setRangeMaxValue(duration);
       }
-    } else {
-      setIsDisabled(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTStarted]);
+
+  useEffect(() => {
+    if (isYTReady) {
+      const duration = playerRef.current?.getDuration().toFixed(3);
+      if (duration !== undefined) {
+        setRangeMaxValue(duration);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isYTReady]);
 
   useEffect(() => {
     const updateRangeValue = (currentTime: string) => {
@@ -74,7 +87,6 @@ const TimeRange = () => {
         ref={rangeRef}
         onChange={handleRangeChange}
         className="w-full cursor-pointer"
-        disabled={isDisabled}
       />
       <HStack justify="center" className="w-[170px]">
         <Box>

@@ -1,8 +1,9 @@
 import React from "react";
 import InfoTabProvider from "../edit-contexts/InfoTabProvider";
 import { RefsProvider } from "../edit-contexts/refsProvider";
-import Content from "../Content";
+import Content from "../components/Content";
 import { GetInfoData } from "@/types/api";
+import EditProvider from "../components/EditProvider";
 
 async function getMapInfo(id: string): Promise<GetInfoData> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {
@@ -18,10 +19,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const mapInfo = await getMapInfo(params.id);
 
   return (
-    <InfoTabProvider>
-      <RefsProvider>
-        <Content mapInfo={mapInfo} />
-      </RefsProvider>
-    </InfoTabProvider>
+    <EditProvider>
+      <Content mapInfo={mapInfo} />
+    </EditProvider>
   );
 }

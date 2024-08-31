@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import YouTube from "react-youtube";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -16,6 +16,7 @@ import {
 } from "../../edit-atom/editAtom";
 import { useAtom, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
+import NProgress from "nprogress";
 
 interface EditorYouTubeProps {
   className: string;
@@ -30,7 +31,8 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
   const setTimeCount = useSetAtom(editTimeCountAtom);
   const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
-  const [mapTitle, setMapTitle] = useAtom(editMapTitleAtom);
+  const setMapTitle = useSetAtom(editMapTitleAtom);
+
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const refs = useRefs();
   const { id } = useParams();
@@ -38,6 +40,7 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
+      NProgress.done();
       refs.setRef("playerRef", player);
       const isNewMap = id ? false : true;
       ytState.ready(refs, setMapTitle, setIsReady, dispatch, isNewMap);
@@ -75,9 +78,6 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
         ytState.seek(event, setTimeCount, mapData);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
-        if (!isYTStarted) {
-          event.target.seekTo(0);
-        }
         console.log("未スタート -1");
       }
     },

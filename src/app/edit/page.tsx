@@ -1,10 +1,7 @@
 "use client";
-import React from "react";
-import InfoTabProvider from "./edit-contexts/InfoTabProvider";
-import { RefsProvider } from "./edit-contexts/refsProvider";
 import { useSearchParams } from "next/navigation";
-import Content from "./Content";
-import ColorStyle from "./ColorStyle";
+import Content from "./components/Content";
+import EditProvider from "./components/EditProvider";
 
 // あとでやる
 //ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
@@ -13,11 +10,8 @@ export default function Home() {
   const videoId = searchParams.get("new") || "";
 
   return (
-    <InfoTabProvider>
-      <RefsProvider>
-        <Content mapInfo={{ videoId }} />
-        <ColorStyle />
-      </RefsProvider>
-    </InfoTabProvider>
+    <EditProvider>
+      <Content mapInfo={{ videoId }} />
+    </EditProvider>
   );
 }

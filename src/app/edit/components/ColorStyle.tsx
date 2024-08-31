@@ -1,11 +1,14 @@
+"use client";
+
 import { ThemeColors } from "@/types";
 import { useTheme } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 
 const ColorStyle = () => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <style>{`
+    <style id="color_style">{`
         #time-range {
   -webkit-appearance: none;
   appearance: none;
@@ -70,4 +73,4 @@ const ColorStyle = () => {
   );
 };
 
-export default ColorStyle;
+export default dynamic(() => Promise.resolve(ColorStyle), { ssr: false });

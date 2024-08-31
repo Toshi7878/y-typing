@@ -153,7 +153,7 @@ export default function LineRow() {
             lineSelectedCount === index
               ? theme.colors.edit.mapTable.selectedLine.bg
               : timeCount === index && lineSelectedCount !== index
-                ? `${theme.colors.edit.mapTable.currentTimeLine.bg}80`
+                ? `${theme.colors.edit.mapTable.currentTimeLine.bg}40`
                 : endAfterLineIndex < index && line.lyrics !== "end"
                   ? `${theme.colors.edit.mapTable.errorLine.bg}35`
                   : "transparent"

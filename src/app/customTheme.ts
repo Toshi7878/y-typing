@@ -168,14 +168,14 @@ const darkTheme: ThemeColors = {
     edit: {
       mapTable: {
         currentTimeLine: {
-          bg: "#3cd3bf35",
+          bg: "#3cd3bf",
         },
         selectedLine: {
           bg: "#00a3c4",
           outlineColor: "#000000",
         },
         errorLine: {
-          bg: "#f5727535",
+          bg: "#f57275",
         },
       },
     },
