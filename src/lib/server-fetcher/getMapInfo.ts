@@ -9,9 +9,7 @@ export const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
     return { videoId: "8iuYxdXFPbc", title: "君が代" };
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {
-    cache: "no-cache",
-  });
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch data");
