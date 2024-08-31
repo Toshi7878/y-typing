@@ -100,7 +100,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
 
         const seekTime =
           nextLine["lyrics"] === "end"
-            ? ytStateRef.current!.movieEndTime - 2
+            ? ytStateRef.current!.movieDuration - 2
             : skippedTime - 1 + (1 - speedData.playSpeed);
 
         playerRef.current.seekTo(seekTime);
@@ -213,6 +213,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
             lineResults,
             gameStateRef,
             playingRef,
+            ytStateRef,
           );
         } else {
           gameStateRef.current!.isSeekedLine = true;
@@ -267,6 +268,7 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
             lineResults,
             gameStateRef,
             playingRef,
+            ytStateRef,
           );
         } else {
           gameStateRef.current!.isSeekedLine = true;

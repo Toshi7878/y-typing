@@ -32,16 +32,15 @@ export const defaultStatusRef: StatusRef = {
   },
 };
 
-export const defaultYTStateRef = {
+export const defaultYTStateRef: YTStateRef = {
   isPaused: false,
   currentTime: 0,
-  movieEndTime: 0,
+  movieDuration: 0,
 };
 export const defaultGameStateRef: GameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   isSeekedLine: false,
-  movieDuration: null,
   playMode: "playing" as PlayMode,
   replay: {
     replayKeyCount: 0,

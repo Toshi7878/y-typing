@@ -85,7 +85,6 @@ export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
   isSeekedLine: boolean;
-  movieDuration: number | null;
   playMode: PlayMode;
   replay: {
     replayKeyCount: number;
@@ -125,7 +124,7 @@ export interface StatusRef {
 export interface YTStateRef {
   isPaused: boolean;
   currentTime: number;
-  movieEndTime: number;
+  movieDuration: number;
 }
 
 export interface SendResultData {

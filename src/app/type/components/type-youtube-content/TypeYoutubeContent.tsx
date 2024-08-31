@@ -88,6 +88,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
           playingLineTimeRef,
           lineProgressRef,
           lineResults,
+          ytStateRef,
         );
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など

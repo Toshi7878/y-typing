@@ -138,7 +138,7 @@ export const updateTimer = (
 
   if (
     ytCurrentTime >= Number(currentLine["time"]) ||
-    ytCurrentTime >= ytStateRef.current!.movieEndTime
+    ytCurrentTime >= ytStateRef.current!.movieDuration
   ) {
     lineUpdate(
       playerRef,
@@ -294,7 +294,7 @@ export const lineUpdate = (
     }
   }
 
-  if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieEndTime) {
+  if (currentLine["lyrics"] === "end" || ytCurrentTime >= ytStateRef.current!.movieDuration) {
     playerRef.current.stopVideo();
     typeTicker.stop();
 
@@ -373,7 +373,7 @@ export function setNewLine(
   if (lineProgressRef.current) {
     const progressElement = lineProgressRef.current as HTMLProgressElement;
     const nextTime = Number(map.mapData[newCount]["time"]);
-    const movieDuration = ytStateRef.current!.movieEndTime;
+    const movieDuration = ytStateRef.current!.movieDuration;
 
     progressElement.max =
       (nextTime > movieDuration ? movieDuration : nextTime) -

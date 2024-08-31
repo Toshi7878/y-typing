@@ -28,7 +28,7 @@ class YTState {
 
     if (scene === "ready") {
       if (YTStateRef.current) {
-        YTStateRef.current.movieEndTime = playerRef.current.getDuration();
+        YTStateRef.current.movieDuration = playerRef.current.getDuration();
       }
 
       const playMode = gameStateRef.current!.playMode;
@@ -105,6 +105,7 @@ class YTState {
     playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
     lineProgressRef: React.RefObject<HTMLProgressElement>, // 修正箇所
     lineResults: LineResultData[],
+    ytStateRef: React.RefObject<YTStateRef>,
   ) {
     const time = target.getCurrentTime();
 
@@ -129,6 +130,7 @@ class YTState {
           lineResults,
           gameStateRef,
           playingRef,
+          ytStateRef,
         );
         if (typeTicker.started) {
           typeTicker.stop();
