@@ -1,3 +1,5 @@
+"use server";
+
 import { GetInfoData } from "@/types/api";
 import { cache } from "react";
 import "server-only";
