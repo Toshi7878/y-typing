@@ -85,6 +85,7 @@ export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
   isSeekedLine: boolean;
+  movieDuration: number | null;
   playMode: PlayMode;
   replay: {
     replayKeyCount: number;
