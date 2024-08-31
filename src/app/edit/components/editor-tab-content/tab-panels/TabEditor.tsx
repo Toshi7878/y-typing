@@ -90,7 +90,7 @@ const TabEditor = forwardRef((props, ref) => {
 
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
     dispatch(setLastAddedTime(time));
-    ButtonEvents.addLine(dispatch, { time, lyrics, word });
+    ButtonEvents.addLine(dispatch, setCanUpload, { time, lyrics, word });
 
     if (!isShiftKey) {
       lineInit();
@@ -101,7 +101,7 @@ const TabEditor = forwardRef((props, ref) => {
       setLineFunctions,
       lyricsCopy,
       addLyrics,
-      dispatch,
+      setIsLoadWordConvert,
       convertOption,
     );
   };
@@ -140,7 +140,7 @@ const TabEditor = forwardRef((props, ref) => {
 
   const deleteLine = (mapData: RootState["mapData"]["value"]) => {
     if (selectedLineCount) {
-      ButtonEvents.deleteLine(dispatch, {
+      ButtonEvents.deleteLine(dispatch, setCanUpload, {
         ...mapData[selectedLineCount],
         selectedLineCount: selectedLineCount,
       });
@@ -155,7 +155,7 @@ const TabEditor = forwardRef((props, ref) => {
     if (topLyrics !== lyrics) {
       const convertOption = editorSettingRef.current!.getWordConvertOption();
 
-      TextAreaEvents.setTopLyrics(setLineFunctions, topLyrics, dispatch, convertOption);
+      TextAreaEvents.setTopLyrics(setLineFunctions, topLyrics, setIsLoadWordConvert, convertOption);
     }
   };
 
@@ -320,7 +320,7 @@ const TabEditor = forwardRef((props, ref) => {
               value={lyricsText}
               onPaste={() => {
                 const convertOption = editorSettingRef.current!.getWordConvertOption();
-                TextAreaEvents.paste(setLineFunctions, dispatch, convertOption);
+                TextAreaEvents.paste(setLineFunctions, setIsLoadWordConvert, convertOption);
               }}
               onChange={(e) => setAddLyrics(e)}
             />

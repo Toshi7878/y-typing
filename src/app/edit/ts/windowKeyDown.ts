@@ -6,23 +6,25 @@ import { RootState } from "../redux/store";
 import { RefsContextType } from "../edit-contexts/refsProvider";
 import { mapDataRedo, mapDataUndo, updateLine } from "../redux/mapDataSlice";
 import { addHistory, redo, undo } from "../redux/undoredoSlice";
-import { setCanUpload } from "../redux/buttonFlagsSlice";
 import { Line, YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
   dispatch: Dispatch<Action>;
+  setCanUpload: Dispatch<boolean>;
   newWord: string;
 
   constructor(
     mapData: RootState["mapData"]["value"],
     tbodyRef: RefsContextType["tbodyRef"],
     dispatch: Dispatch<Action>,
+    setCanUpload: Dispatch<boolean>,
   ) {
     this.mapData = mapData;
     this.tbodyRef = tbodyRef;
     this.dispatch = dispatch;
+    this.setCanUpload = setCanUpload;
     this.newWord = "";
   }
 
@@ -143,7 +145,7 @@ class WordReplace {
             else return match;
           });
 
-          this.dispatch(setCanUpload(true));
+          setCanUpload(true);
           this.dispatch(
             addHistory({
               type: "update",
@@ -180,6 +182,7 @@ export const handleKeydown = (
   setSpeed: Dispatch<YouTubeSpeed>,
   isYTPlaying: boolean,
   setLineNumber: Dispatch<number>,
+  setCanUpload: Dispatch<boolean>,
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -313,7 +316,7 @@ export const handleKeydown = (
 
       case "KeyF":
         if (event.ctrlKey && event.shiftKey) {
-          new WordReplace(mapData, refs.tbodyRef, dispatch).wordSearchReplace();
+          new WordReplace(mapData, refs.tbodyRef, dispatch, setCanUpload).wordSearchReplace();
           event.preventDefault();
         }
         break;

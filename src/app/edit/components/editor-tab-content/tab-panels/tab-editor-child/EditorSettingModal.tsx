@@ -33,12 +33,14 @@ import { db, IndexDBOption } from "@/lib/db";
 import { RootState } from "@/app/edit/redux/store";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { setCanUpload, setIsLrcConverting } from "@/app/edit/redux/buttonFlagsSlice";
 import { ImportFile } from "@/app/edit/ts/tab/settings/importFile";
+import { useSetCanUploadAtom, useSetIsLrcConvertingAtom } from "@/app/edit/edit-atom/editAtom";
 
 export default forwardRef(function EditorSettingModal(props, ref) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const setCanUpload = useSetCanUploadAtom();
+  const setIsLrcConverting = useSetIsLrcConvertingAtom();
   const toast = useToast();
 
   const [optionsData, setOptionsData] = useState<IndexDBOption>();
@@ -94,7 +96,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
     }
 
     const times = mapData.map((item) => item.time);
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
 
     dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
     dispatch(allAdjustTime(adjustTime));
@@ -276,7 +278,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                           onChange={async (e) => {
                             const file = e.target.files![0];
                             try {
-                              dispatch(setIsLrcConverting(true));
+                              setIsLrcConverting(true);
 
                               const importFile = new ImportFile();
                               await importFile.open(file, selectedConvertOption, dispatch, mapData);
@@ -292,7 +294,7 @@ export default forwardRef(function EditorSettingModal(props, ref) {
                                 position: "bottom-right",
                               });
                             } finally {
-                              dispatch(setIsLrcConverting(false));
+                              setIsLrcConverting(false);
                             }
                           }}
                         />

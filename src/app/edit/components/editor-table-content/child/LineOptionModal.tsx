@@ -1,5 +1,5 @@
 "use client";
-import { setCanUpload } from "@/app/edit/redux/buttonFlagsSlice";
+import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { setLineOption } from "@/app/edit/redux/mapDataSlice";
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
@@ -24,10 +24,11 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");
   const [eternalCSS, setEternalCSS] = useState(lineOptions?.eternalCSS || "");
   const dispatch = useDispatch();
+  const setCanUpload = useSetCanUploadAtom();
 
   const handleBtnClick = () => {
     dispatch(setLineOption({ options: { changeCSS, eternalCSS }, number: optionModalIndex }));
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
     onClose();
   };
   return (

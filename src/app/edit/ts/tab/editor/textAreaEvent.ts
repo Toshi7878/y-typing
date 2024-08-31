@@ -1,6 +1,4 @@
-import { UseFormSetValue } from "react-hook-form";
 import { ButtonEvents } from "./buttonEvent";
-import { setIsLoadingWordConvertBtn } from "../../../redux/buttonFlagsSlice";
 import { Line } from "@/types";
 import { Dispatch } from "react";
 import { Action } from "@reduxjs/toolkit";
@@ -8,7 +6,7 @@ import { SetLineFunctions } from "../../type";
 export class TextAreaEvents {
   static async paste(
     setLineFunctions: SetLineFunctions,
-    dispatch: Dispatch<Action>,
+    setIsLoadWordConvert: Dispatch<boolean>,
     convertOption: string,
   ) {
     setTimeout(() => {
@@ -18,29 +16,29 @@ export class TextAreaEvents {
       }
     });
     const text = await navigator.clipboard.readText();
-    TextAreaEvents.setTopLyrics(setLineFunctions, text, dispatch, convertOption);
+    TextAreaEvents.setTopLyrics(setLineFunctions, text, setIsLoadWordConvert, convertOption);
   }
 
   static async setTopLyrics(
     setLineFunctions: SetLineFunctions,
     addLyrics: string,
-    dispatch: Dispatch<Action>,
+    setIsLoadWordConvert: Dispatch<boolean>,
     convertOption: string,
   ) {
     const lines = addLyrics.split("\n");
     const topLine = lines[0].replace(/\r$/, "");
 
     setLineFunctions.setLyrics(topLine);
-    dispatch(setIsLoadingWordConvertBtn(true));
+    setIsLoadWordConvert(true);
     await ButtonEvents.lyricsConvert(topLine, setLineFunctions, convertOption);
-    dispatch(setIsLoadingWordConvertBtn(false));
+    setIsLoadWordConvert(false);
   }
 
   static deleteTopLyrics(
     setLineFunctions: SetLineFunctions,
     lyrics: string,
     addLyrics: string,
-    dispatch: Dispatch<Action>,
+    setIsLoadWordConvert: Dispatch<boolean>,
     convertOption: string,
   ) {
     const lines = addLyrics?.split("\n") || [];
@@ -50,7 +48,7 @@ export class TextAreaEvents {
     if (lyrics === topLine) {
       setLineFunctions.setLyricsText(newText);
     }
-    TextAreaEvents.setTopLyrics(setLineFunctions, newText, dispatch, convertOption);
+    TextAreaEvents.setTopLyrics(setLineFunctions, newText, setIsLoadWordConvert, convertOption);
   }
 
   static undoTopLyrics(setLineFunctions: SetLineFunctions, undoLine: Line, addLyrics: string) {

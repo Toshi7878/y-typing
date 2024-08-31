@@ -16,6 +16,7 @@ import {
   editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeStartedAtom,
+  useSetCanUploadAtom,
   useSetTabIndexAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useAtom, useAtomValue } from "jotai";
@@ -24,6 +25,7 @@ export default function LineRow() {
   console.log("Table");
   const setTabIndex = useSetTabIndexAtom();
   const dispatch = useDispatch();
+  const setCanUpload = useSetCanUploadAtom();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
   const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
@@ -50,6 +52,7 @@ export default function LineRow() {
         setSpeed,
         isYTPlaying,
         setLineSelectedCount,
+        setCanUpload,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refs, undoredoState, mapData, speed],

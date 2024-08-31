@@ -2,14 +2,14 @@ import { Dispatch } from "react";
 import { addLine, deleteLine, updateLine } from "../../../redux/mapDataSlice";
 import { WordConvert } from "./wordConvert";
 import { addHistory } from "../../../redux/undoredoSlice";
-import { setCanUpload } from "../../../redux/buttonFlagsSlice";
 import { Line } from "@/types";
 import { SetLineFunctions } from "../../type";
+import { Action } from "@reduxjs/toolkit";
 
 export class ButtonEvents {
-  static addLine(dispatch: Dispatch<any>, line: Line) {
+  static addLine(dispatch: Dispatch<Action>, setCanUpload: Dispatch<boolean>, line: Line) {
     dispatch(addLine({ time: line.time, lyrics: line.lyrics, word: line.word }));
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
     dispatch(addHistory({ type: "add", data: line }));
   }
 
@@ -34,9 +34,9 @@ export class ButtonEvents {
     setLineFunctions.setWord(word ?? "");
   }
 
-  static deleteLine(dispatch: Dispatch<any>, line: Line) {
+  static deleteLine(dispatch: Dispatch<Action>, setCanUpload: Dispatch<boolean>, line: Line) {
     dispatch(deleteLine(line.selectedLineCount));
-    dispatch(setCanUpload(true));
+    setCanUpload(true);
     dispatch(addHistory({ type: "delete", data: line }));
   }
 }
