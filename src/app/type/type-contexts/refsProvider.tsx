@@ -37,10 +37,11 @@ export const defaultYTStateRef = {
   currentTime: 0,
   movieEndTime: 0,
 };
-export const defaultGameStateRef = {
+export const defaultGameStateRef: GameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   isSeekedLine: false,
+  movieDuration: null,
   playMode: "playing" as PlayMode,
   replay: {
     replayKeyCount: 0,

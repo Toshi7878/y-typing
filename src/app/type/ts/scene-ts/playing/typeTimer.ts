@@ -318,6 +318,7 @@ export const lineUpdate = (
       lineResults,
       gameStateRef,
       playingRef,
+      ytStateRef,
     );
   }
 };
@@ -335,6 +336,7 @@ export function setNewLine(
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
   playingRef: React.RefObject<PlayingRef>,
+  ytStateRef: React.RefObject<YTStateRef>,
 ) {
   const currentCount = newCount ? newCount - 1 : 0;
   statusRef.current!.lineStatus = structuredClone({
@@ -370,9 +372,12 @@ export function setNewLine(
 
   if (lineProgressRef.current) {
     const progressElement = lineProgressRef.current as HTMLProgressElement;
+    const nextTime = Number(map.mapData[newCount]["time"]);
+    const movieDuration = ytStateRef.current!.movieEndTime;
 
     progressElement.max =
-      Number(map.mapData[newCount]["time"]) - Number(map.mapData[currentCount]["time"]);
+      (nextTime > movieDuration ? movieDuration : nextTime) -
+      Number(map.mapData[currentCount]["time"]);
   }
 
   if (scene === "replay") {

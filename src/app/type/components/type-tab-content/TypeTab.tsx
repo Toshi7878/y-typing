@@ -27,11 +27,10 @@ export default function TypeTabContent({ className }: TypeTabContentProps) {
 
   return (
     <Tabs
-      index={tabIndex} // デフォルトの選択されたタブを設定
-      onChange={(index: number) => setTabIndex(index as 0 | 1)} // 型を 'number' に変更
+      index={tabIndex}
+      onChange={(index: number) => setTabIndex(index as 0 | 1)}
       className={className}
       variant="line"
-      colorScheme="black" // ここで色を指定します
     >
       <TabList height="33px" px="8" borderBottom={`1px solid ${theme.colors.color}aa`}>
         {tabLists.map((tabName, index) => {
