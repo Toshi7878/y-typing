@@ -11,7 +11,7 @@ export const getMapInfo = async (id: string): Promise<GetInfoData> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
   }
 
   return response.json();
