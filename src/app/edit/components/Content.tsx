@@ -15,10 +15,10 @@ import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import EditTable from "./editor-table-content/EditTable";
 import EditorTabContent from "./editor-tab-content/EditTab";
-import EditYouTube from "./editor-youtube-content/EditYouTube";
 import { useSetAtom } from "jotai";
 import { editCreatorCommentAtom, editMapTitleAtom, editVideoIdAtom } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
+import EditYouTube from "./editor-youtube-content/EditYouTube";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { videoId, title, creatorComment, tags } = mapInfo;
