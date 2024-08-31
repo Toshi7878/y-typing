@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import YouTube from "react-youtube";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -84,8 +84,6 @@ const EditYouTube = function ({ className, videoId }: EditorYouTubeProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [mapData, isYTStarted],
   );
-
-  const HEIGHT = "216px";
 
   return (
     <YouTube
