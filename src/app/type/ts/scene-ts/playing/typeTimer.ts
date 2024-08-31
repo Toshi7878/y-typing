@@ -98,6 +98,10 @@ export const updateTimer = (
   ) {
     const currentPlayingCenterRef = playingCenterRef.current;
 
+    if (!currentPlayingCenterRef) {
+      return;
+    }
+
     const lineWord = currentPlayingCenterRef!.getLineWord();
     const status = tabStatusRef.current!.getStatus();
 

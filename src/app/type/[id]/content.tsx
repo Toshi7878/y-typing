@@ -27,6 +27,7 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
+import { typeTicker } from "../ts/youtubeEvents";
 
 export const queryClient = new QueryClient();
 
