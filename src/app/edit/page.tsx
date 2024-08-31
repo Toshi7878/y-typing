@@ -1,21 +1,23 @@
-"use client";
-import React from "react";
-import InfoTabProvider from "./(contexts)/InfoTabProvider";
-import { RefsProvider } from "./(contexts)/refsProvider";
-import { useSearchParams } from "next/navigation";
-import Content from "./content";
+import { SessionProvider } from "next-auth/react";
+import Content from "./components/Content";
+import EditProvider from "./components/EditProvider";
+import { Metadata } from "next";
+import { auth } from "@/lib/auth";
 
+export const metadata: Metadata = {
+  title: `Edit New Map - YTyping`,
+  description: "",
+};
 // あとでやる
 //ローカルDBに直前の{videoid, mapData}をバックアップ保存する機能
-export default function Home() {
-  const searchParams = useSearchParams();
-  const videoId = searchParams.get("new") || "";
+export default async function Home() {
+  const session = await auth();
 
   return (
-    <InfoTabProvider>
-      <RefsProvider>
-        <Content mapInfo={{ videoId }} />
-      </RefsProvider>
-    </InfoTabProvider>
+    <SessionProvider session={session}>
+      <EditProvider>
+        <Content />
+      </EditProvider>
+    </SessionProvider>
   );
 }

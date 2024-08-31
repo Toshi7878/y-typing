@@ -1,13 +1,13 @@
 "use client";
 import React, { CSSProperties, useEffect } from "react";
-import YouTubeContent from "../components/(youtube-content)/YoutubeContent";
+import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeContent";
 import { useParams } from "next/navigation";
-import TabContent from "../components/(tab)/Tab";
+import TypeTabContent from "../components/type-tab-content/TypeTab";
 import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CreateMap } from "../(ts)/scene-ts/ready/createTypingWord";
+import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   inputModeAtom,
@@ -21,11 +21,11 @@ import {
   rankingScoresAtom,
   sceneAtom,
   speedAtom,
-} from "../(atoms)/gameRenderAtoms";
-import SceneWrapper from "../components/(typing-area)/Scene";
+} from "../type-atoms/gameRenderAtoms";
+import SceneWrapper from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import NProgress from "nprogress";
-import { InputModeType } from "../(ts)/type";
+import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 
 export const queryClient = new QueryClient();
@@ -66,14 +66,6 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     queryKey: ["mapData", id],
     queryFn: async () => {
       setMapId(Number(id));
-
-      if (id === "1") {
-        const test = new CreateMap(testMap);
-        setMap(test);
-        setLineResults(test.defaultLineResultData);
-
-        return;
-      }
 
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
@@ -136,7 +128,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
             bottom={0}
             width="50px"
             borderLeft="2px solid"
-            borderColor={theme.colors.type.card.borderColor}
+            borderColor={theme.colors.card.borderColor}
             cursor="pointer"
             zIndex="100"
             onMouseEnter={() => {
@@ -150,13 +142,13 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
           <Flex direction="column">
             <Flex gap="6">
               <Box className="">
-                <YouTubeContent
+                <TypeYouTubeContent
                   className={` w-[512px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
                   videoId={videoId}
                 />
               </Box>
               <Box flex={{ base: "8" }} flexDirection="column">
-                <TabContent />
+                <TypeTabContent />
               </Box>
             </Flex>
             <Box className=" mt-5">
@@ -168,43 +160,5 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
     </LoadingOverlayWrapper>
   );
 }
-
-const testMap = [
-  {
-    time: "0",
-    word: "",
-    lyrics: "",
-  },
-  {
-    time: "13.325",
-    word: "きみがよは",
-    lyrics: "君が代は",
-  },
-  {
-    time: "23.508",
-    word: "ちよにやちよに",
-    lyrics: "千代に八千代に",
-  },
-  {
-    time: "34.313",
-    word: "さざれいしの",
-    lyrics: "さざれ石の",
-  },
-  {
-    time: "45.164",
-    word: "いわおとなりて",
-    lyrics: "巌となりて",
-  },
-  {
-    time: "55.831",
-    word: "こけのむすまで",
-    lyrics: "苔のむすまで",
-  },
-  {
-    time: "82.461",
-    word: "",
-    lyrics: "end",
-  },
-];
 
 export default Content;

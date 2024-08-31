@@ -3,7 +3,7 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import React from "react";
 import { useAtomValue } from "jotai";
-import { themeAtom } from "@/components/header/atom/atoms";
+import { themeAtom } from "@/components/header/atom/headerAtoms";
 import { getTheme } from "./customTheme";
 
 export const ThemeProvider = ({ children }: { colorMode?: any; children: React.ReactNode }) => {

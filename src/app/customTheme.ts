@@ -19,6 +19,7 @@ const sodaTheme: ThemeColors = {
         bg: "#00000010",
       },
     },
+    card: { bg: "#bee3f8", color: "#000000", borderColor: "#000000", hover: { bg: "gray.200" } },
 
     popup: {
       bg: "white",
@@ -33,7 +34,6 @@ const sodaTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#bee3f8", color: "#000000", borderColor: "#000000", hover: { bg: "gray.200" } },
       word: {
         correct: "#1aa3ff",
         next: "#FFF",
@@ -75,6 +75,20 @@ const sodaTheme: ThemeColors = {
         },
       },
     },
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: "#3cd3bf",
+        },
+        selectedLine: {
+          bg: "#3bd3ec",
+          outlineColor: "#000000",
+        },
+        errorLine: {
+          bg: "#f57275",
+        },
+      },
+    },
   },
 };
 
@@ -102,6 +116,7 @@ const darkTheme: ThemeColors = {
         bg: "#00bd7e30",
       },
     },
+    card: { bg: "#2b3035", color: "#FFFFFF", borderColor: "#FFFFFF", hover: { bg: "#74777a" } },
 
     home: {
       card: {
@@ -111,7 +126,6 @@ const darkTheme: ThemeColors = {
       },
     },
     type: {
-      card: { bg: "#2b3035", color: "#FFFFFF", borderColor: "#FFFFFF", hover: { bg: "#74777a" } },
       word: {
         correct: "#3182ce",
         next: "#FFF",
@@ -148,6 +162,20 @@ const darkTheme: ThemeColors = {
         bg: "#3182CE",
         hover: {
           bg: "#4ebafd",
+        },
+      },
+    },
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: "#3cd3bf",
+        },
+        selectedLine: {
+          bg: "#00a3c4",
+          outlineColor: "#000000",
+        },
+        errorLine: {
+          bg: "#f57275",
         },
       },
     },

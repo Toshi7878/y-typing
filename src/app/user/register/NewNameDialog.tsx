@@ -8,9 +8,7 @@ import { useEffect } from "react";
 import { nameSchema } from "./validationSchema";
 import { actions } from "./actions";
 import { useFormState } from "react-dom";
-import { useRouter } from "next/navigation";
 
-// eslint-disable-next-line @next/next/no-async-client-component
 interface FormData {
   newName: string;
 }
@@ -20,7 +18,6 @@ export default function NewNameDialog() {
 
   const [state, formAction] = useFormState(actions, initialState);
   const { data: session, update } = useSession();
-  const router = useRouter();
 
   const toast = useToast();
   const {

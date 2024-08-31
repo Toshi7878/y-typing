@@ -1,7 +1,7 @@
 "use client";
 import { Box } from "@chakra-ui/react";
 import MapList from "./components/MapList";
-import YouTubeContent from "./components/YouTubeContent";
+import HomeYouTubeContent from "./components/HomeYouTubeContent";
 import { useEffect, useState } from "react";
 import { handleKeyDown } from "./ts/keydown";
 import { useAtom } from "jotai";
@@ -53,7 +53,7 @@ export default function Content() {
         <MapList />
       </Box>
       <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
-        <YouTubeContent />
+        <HomeYouTubeContent />
       </Box>
     </>
   );

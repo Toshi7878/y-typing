@@ -37,10 +37,10 @@ function MapCardRightInfo({ map }: MapCardProps) {
         color={theme.colors.popup.color}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={theme.colors.type.card.borderColor}
+        borderColor={theme.colors.card.borderColor}
         css={{
           "--popper-arrow-bg": theme.colors.popup.bg,
-          "--popper-arrow-shadow-color": theme.colors.type.card.borderColor,
+          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
         }}
       >
         <Box

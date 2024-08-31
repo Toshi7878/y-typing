@@ -5,7 +5,7 @@ import NewMap from "./right-child/new-map/NewMap";
 import { useSession } from "next-auth/react";
 import { Box, Switch, useTheme } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { themeAtom } from "../atom/atoms";
+import { themeAtom } from "../atom/headerAtoms";
 import { FaPalette } from "react-icons/fa";
 import { ThemeColors } from "@/types";
 

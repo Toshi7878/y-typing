@@ -14,7 +14,7 @@ export interface Line {
   time: string;
   lyrics: string;
   word: string;
-  lineNumber?: string;
+  selectedLineCount?: number;
   options?: { eternalCSS?: string; changeCSS?: string };
 }
 
@@ -52,15 +52,15 @@ interface ThemeColors {
         hover: string;
       };
     };
-    type: {
-      card: {
+    card: {
+      bg: string;
+      color: string;
+      borderColor: `#${string}`;
+      hover: {
         bg: string;
-        color: string;
-        borderColor: `#${string}`;
-        hover: {
-          bg: string;
-        };
       };
+    };
+    type: {
       word: {
         correct: string;
         next: string;
@@ -105,5 +105,22 @@ interface ThemeColors {
         };
       };
     };
+
+    edit: {
+      mapTable: {
+        currentTimeLine: {
+          bg: `#${string}`;
+        };
+        selectedLine: {
+          bg: `#${string}`;
+          outlineColor: `#${string}`;
+        };
+        errorLine: {
+          bg: `#${string}`;
+        };
+      };
+    };
   };
 }
+
+export type YouTubeSpeed = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
