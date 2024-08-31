@@ -1,8 +1,15 @@
-import React from "react";
+import { auth } from "@/lib/auth";
+import { SessionProvider } from "next-auth/react";
 import { RefsProvider } from "../type-contexts/refsProvider";
 
-const TypeProvider = ({ children }) => {
-  return <RefsProvider>{children}</RefsProvider>;
+const TypeProvider = async ({ children }) => {
+  const session = await auth();
+
+  return (
+    <SessionProvider session={session}>
+      <RefsProvider>{children}</RefsProvider>
+    </SessionProvider>
+  );
 };
 
 export default TypeProvider;
