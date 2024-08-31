@@ -16,6 +16,7 @@ import EditorTabContent from "./editor-tab-content/EditTab";
 import {
   useSetCreatorCommentAtom,
   useSetMapTitleAtom,
+  useSetTagsAtom,
   useSetVideoIdAtom,
 } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
@@ -30,6 +31,7 @@ function Content() {
   const setVideoId = useSetVideoIdAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
+  const setTags = useSetTagsAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -52,7 +54,7 @@ function Content() {
       setMapTitle("");
       setCreatorComment("");
       dispatch(resetMapData());
-      // dispatch(resetTags());
+      setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

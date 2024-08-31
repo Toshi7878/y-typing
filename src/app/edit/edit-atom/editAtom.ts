@@ -47,14 +47,14 @@ export const useSetCreatorCommentAtom = () => {
   return useSetAtom(editCreatorCommentAtom, { store: editAtomStore });
 };
 
-type TagsReducerAction = { type: SetTagsType; payload: Tag | Tag[] };
+type TagsReducerAction = { type: SetTagsType; payload?: Tag | Tag[] };
 const tagsReducer = (state: Tag[], action: TagsReducerAction): Tag[] => {
   switch (action.type) {
     case "set":
       const tags = action.payload as Tag[];
       return tags;
     case "add":
-      if (!Array.isArray(action.payload)) {
+      if (action.payload && !Array.isArray(action.payload)) {
         return [...state, action.payload];
       }
     case "delete":
