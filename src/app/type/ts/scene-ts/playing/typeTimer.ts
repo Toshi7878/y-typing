@@ -60,8 +60,7 @@ export const updateTimer = (
   const remainTime = (nextLineTime - ytCurrentTime) / speedData.playSpeed;
   const currentTotalTimeProgress = totalTimeProgressRef.current;
   const currentLineProgress = lineProgressRef.current;
-  const lineTime =
-    currentLine && count ? ytCurrentTime - Number(currentLine["time"]) : ytCurrentTime;
+  const lineTime = currentLine && count ? ytCurrentTime - currentLine.time : ytCurrentTime;
   const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
   currentLineProgress!.value = lineTime;
 
@@ -115,10 +114,7 @@ export const updateTimer = (
 
     const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
-    if (
-      isRetrySkip &&
-      Number(map.mapData[map.startLine]["time"]) - 3 * speedData.playSpeed <= ytCurrentTime
-    ) {
+    if (isRetrySkip && map.mapData[map.startLine].time - 3 * speedData.playSpeed <= ytCurrentTime) {
       gameStateRef.current!.isRetrySkip = false;
     }
 
@@ -132,8 +128,8 @@ export const updateTimer = (
 
     const currentTotalTime = playingTotalTimeRef.current!.getCurrentTime();
 
-    if (Math.abs(ytCurrentTime - currentTotalTime) >= 1) {
-      playingTotalTimeRef.current?.setCurrentTime(ytCurrentTime);
+    if (Math.abs(ytConstantTime - currentTotalTime) >= 1) {
+      playingTotalTimeRef.current?.setCurrentTime(ytConstantTime);
     }
   }
 
