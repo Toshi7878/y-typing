@@ -28,7 +28,7 @@ export const RefsProvider = ({ children }) => {
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "editorTab":
+      case "editorTabRef":
         editorTabRef.current = ref;
         break;
       case "editorButtonsRef":

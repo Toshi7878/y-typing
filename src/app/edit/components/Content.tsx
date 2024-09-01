@@ -11,7 +11,7 @@ import { resetUndoRedoData } from "../redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import EditTable from "./editor-table-content/EditTable";
-import EditorTabContent from "./editor-tab-content/EditTab";
+import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,

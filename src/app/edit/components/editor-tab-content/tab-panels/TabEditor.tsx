@@ -1,5 +1,5 @@
-import { Box, Card, CardBody, Flex, HStack, useTheme } from "@chakra-ui/react";
-import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { Box, Card, CardBody, Flex, useTheme } from "@chakra-ui/react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { LineEdit, ThemeColors } from "@/types";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 
@@ -24,13 +24,20 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
 
   const editorButtonsRef = useRef<EditorButtonsRef>(null);
 
-  const { editorTimeInputRef } = useRefs();
+  const { editorTimeInputRef, setRef } = useRefs();
   const lyrics = useEditLineLyricsAtom();
   const lyricsText = useEditAddLyricsInputAtom();
   const setLyricsText = useSetEditAddLyricsInputAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const lineInputReducer = useLineInputReducer();
   const convertOption = useEditWordConvertOptionAtom();
+
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("editorTabRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lyricsText, lyrics, convertOption]);
 
   useImperativeHandle(ref, () => ({
     undoAddLyrics: (undoLine: LineEdit) => {

@@ -5,7 +5,6 @@ import TabEditor from "./tab-panels/TabEditor";
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
 import { IndexDBOption, ThemeColors } from "@/types";
-import { useRefs } from "../../edit-contexts/refsProvider";
 import {
   isEditYouTubeStartedAtom,
   useSetEditAddTimeOffsetAtom,
@@ -14,7 +13,7 @@ import {
   useTabIndexAtom,
 } from "../../edit-atom/editAtom";
 import { useAtomValue } from "jotai";
-import { EditTabIndex } from "../../ts/type";
+import { EditorTabRef, EditTabIndex } from "../../ts/type";
 import { db } from "@/lib/db";
 import { DEFAULT_ADD_ADJUST_TIME } from "../../ts/const/editDefaultValues";
 
@@ -26,21 +25,15 @@ const tabLists = ["情報 & 保存", "エディター", "設定"];
 export default function EditorTabContent({ className }: EditorTabContentProps) {
   console.log("Tab");
 
-  const editorTabRef = useRef(null);
+  const editorTabRef = useRef<EditorTabRef>(null);
   const tabIndex = useTabIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
 
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
   const [isDisabled, setIsDisabled] = useState(true);
-  const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const setSelectedConvertOption = useSetEditWordConvertOptionAtom();
   const setAddTimeOffset = useSetEditAddTimeOffsetAtom();
-
-  useEffect(() => {
-    setRef("editorTab", editorTabRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorTabRef]);
 
   useEffect(() => {
     if (isYTStarted && isDisabled) {
