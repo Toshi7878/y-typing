@@ -1,4 +1,5 @@
 import { mapAtom, speedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Box } from "@chakra-ui/react";
 import { useAtom, useAtomValue } from "jotai";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
@@ -21,6 +22,7 @@ const formatTime = (time: number): string => {
 
 const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
   ({ className = "" }, ref) => {
+    const { ytStateRef } = useRefs();
     const [currentTimeSSMM, setCurrentTimeSSMM] = useState(0);
     const map = useAtomValue(mapAtom);
     const speedData = useAtomValue(speedAtom);
@@ -30,10 +32,13 @@ const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
       setCurrentTime: (newCurrentTime: number) => setCurrentTimeSSMM(newCurrentTime),
     }));
 
-    const totalTime = formatTime(map ? map.movieTotalTime / speedData.playSpeed : 0);
+    const movieDuration = ytStateRef.current!.movieDuration;
+    const duration =
+      Number(map?.movieTotalTime) > movieDuration ? movieDuration : map?.movieTotalTime;
+    const totalTime = formatTime(map ? Number(duration) / speedData.playSpeed : 0);
 
     return (
-      <Box className={className}>
+      <Box className={className} id="movie_time">
         <span id="current_time">{formatTime(currentTimeSSMM)}</span> /{" "}
         <span id="total_time">{totalTime}</span>
       </Box>
