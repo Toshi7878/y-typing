@@ -1,6 +1,6 @@
 import { ThemeColors } from "@/types";
 import { Card, CardBody, useTheme } from "@chakra-ui/react";
-import EditorSettingModal from "./tab-settings-child/EditSettings";
+import EditorSettingModal from "./tab-settings-shortcutlist-child/EditSettings";
 
 const TabSettings = () => {
   const theme: ThemeColors = useTheme();

@@ -16,7 +16,7 @@ import EditorButtons from "./tab-editor-child/EditorButtons";
 import EditorLineInput from "./tab-editor-child/EditorLineInput";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
-import AddTimeAdjust from "./tab-settings-child/settings-child/AddTimeAdjust";
+import AddTimeAdjust from "./tab-settings-shortcutlist-child/settings-child/AddTimeAdjust";
 
 const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);

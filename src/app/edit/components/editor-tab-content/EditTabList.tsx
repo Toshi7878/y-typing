@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
 import TabEditor from "./tab-panels/TabEditor";
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
-import TabSettings from "./tab-panels/TabSettings";
+import TabSettings from "./tab-panels/TabSettingsShortcutList";
 import { IndexDBOption, ThemeColors } from "@/types";
 import {
   isEditYouTubeStartedAtom,
