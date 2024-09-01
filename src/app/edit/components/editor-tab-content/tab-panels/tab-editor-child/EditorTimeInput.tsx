@@ -9,10 +9,9 @@ import { Line } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import {
   editLineSelectedNumberAtom,
-  editLineTimeAtom,
   isEditYouTubePlayingAtom,
 } from "@/app/edit/edit-atom/editAtom";
 
@@ -41,7 +40,7 @@ const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function Edito
 
   const [maxTime, setMaxTime] = useState("0");
   const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
-  const [lineNumber, setLineNumber] = useAtom(editLineSelectedNumberAtom);
+  const lineNumber = useAtomValue(editLineSelectedNumberAtom);
 
   const { playerRef } = useRefs();
   const mapData = useSelector((state: RootState) => state.mapData.value);

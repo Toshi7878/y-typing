@@ -251,12 +251,12 @@ export const handleKeydown = (
         break;
 
       case "KeyS":
-        refs.editorTabRef.current!.add();
+        refs.editorButtonsRef.current!.add();
         break;
 
       case "KeyU":
         event.preventDefault();
-        refs.editorTabRef.current!.update();
+        refs.editorButtonsRef.current!.update();
         break;
 
       case "KeyZ":
@@ -303,7 +303,7 @@ export const handleKeydown = (
         break;
 
       case "Delete":
-        refs.editorTabRef.current!.delete();
+        refs.editorButtonsRef.current!.delete();
         event.preventDefault();
 
         break;

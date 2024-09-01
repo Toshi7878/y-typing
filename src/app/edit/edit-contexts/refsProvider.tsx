@@ -1,20 +1,11 @@
 "use client";
-import { Line } from "@/types";
 import React, { createContext, useContext, useRef } from "react";
-
-export interface EditorTab {
-  add: () => void;
-  update: () => void;
-  delete: () => void;
-  undoAddLyrics: (undoLine: Line) => void;
-  setAddLyrics: () => void;
-  redoAddLyrics: (redoLine: Line) => void;
-  lineInit: () => void;
-  getVolume: () => number;
-}
+import { EditorButtonsRef, EditorTabRef } from "../ts/type";
 
 export interface RefsContextType {
-  editorTabRef: React.RefObject<EditorTab>;
+  editorTabRef: React.RefObject<EditorTabRef>;
+  editorButtonsRef: React.RefObject<EditorButtonsRef>;
+  editorSettingsRef: React.RefObject<EditorButtonsRef>;
   tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
@@ -23,12 +14,16 @@ export interface RefsContextType {
 // Start of Selection
 const RefsContext = createContext<RefsContextType>({
   editorTabRef: { current: null },
+  editorButtonsRef: { current: null },
+  editorSettingsRef: { current: null },
   tbodyRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
   const editorTabRef = useRef(null);
+  const editorButtonsRef = useRef(null);
+  const editorSettingsRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
 
@@ -36,6 +31,12 @@ export const RefsProvider = ({ children }) => {
     switch (key) {
       case "editorTab":
         editorTabRef.current = ref;
+        break;
+      case "editorButtonsRef":
+        editorButtonsRef.current = ref;
+        break;
+      case "editorSettingsRef":
+        editorSettingsRef.current = ref;
         break;
       case "tbody":
         tbodyRef.current = ref;
@@ -47,7 +48,9 @@ export const RefsProvider = ({ children }) => {
   };
 
   return (
-    <RefsContext.Provider value={{ editorTabRef, tbodyRef, playerRef, setRef }}>
+    <RefsContext.Provider
+      value={{ editorTabRef, tbodyRef, playerRef, editorButtonsRef, editorSettingsRef, setRef }}
+    >
       {children}
     </RefsContext.Provider>
   );

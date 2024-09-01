@@ -8,7 +8,12 @@ import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
-import { EditorSettingsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
+import {
+  EditorButtonsRef,
+  EditorSettingsRef,
+  SetLineFunctions,
+  TimeInputRef,
+} from "@/app/edit/ts/type";
 import { useAtom, useAtomValue } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
@@ -20,9 +25,13 @@ import {
   useIsLoadWordConvertAtom,
   useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 
-const EditorButtons = forwardRef((props, ref) => {
-  const [isTimeInputValid] = useState(false);
+interface EditorButtonsProps {
+  isTimeInputValid: boolean;
+}
+const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, ref) => {
+  const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const timeInputRef = useRef<TimeInputRef | null>(null);
   const editorSettingRef = useRef<EditorSettingsRef | null>(null);
@@ -48,6 +57,13 @@ const EditorButtons = forwardRef((props, ref) => {
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
 
   const setCanUpload = useSetCanUploadAtom();
+
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("editorButtonsRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const lineInit = () => {
     setLyrics("");
@@ -153,7 +169,7 @@ const EditorButtons = forwardRef((props, ref) => {
   const isNotSelect = !selectedLineCount || selectedLineCount === 0;
   const buttonConfigs = {
     add: {
-      isDisabled: !isTimeInputValid,
+      isDisabled: !props.isTimeInputValid,
       colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg,
       ref: addButtonRef,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -169,7 +185,7 @@ const EditorButtons = forwardRef((props, ref) => {
       isLoading: false,
     },
     update: {
-      isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
+      isDisabled: !props.isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: updateButtonRef,
 
       colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
@@ -192,7 +208,7 @@ const EditorButtons = forwardRef((props, ref) => {
       text: "読み変換",
     },
     delete: {
-      isDisabled: !isTimeInputValid || isNotSelect || isLastLineSelected,
+      isDisabled: !props.isTimeInputValid || isNotSelect || isLastLineSelected,
       ref: deleteButtonRef,
 
       colorScheme: theme.colors.edit.mapTable.errorLine.bg,
@@ -232,7 +248,7 @@ const EditorButtons = forwardRef((props, ref) => {
             variant="outline"
             size="sm"
             height="35px"
-            className="w-[16%] xl:w-[12%] lg:w-[19%] md:w-[19%]"
+            className="w-[16%]  md:w-[18%]"
             _hover={{ bg: `${config.colorScheme}80` }}
             borderColor={config.colorScheme}
             onClick={config.onClick}
