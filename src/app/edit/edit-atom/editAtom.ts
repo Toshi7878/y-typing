@@ -1,11 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import {
-  EditTabIndex,
-  LineInputReducerAction,
-  LineInputReducerActionType,
-  TagsReducerActionType,
-} from "../ts/type";
-import { LineInput, Tag, YouTubeSpeed } from "@/types";
+import { EditTabIndex, LineInputReducerAction, TagsReducerActionType } from "../ts/type";
+import { Tag, YouTubeSpeed } from "@/types";
 import { atomWithReducer } from "jotai/utils"; // 追加
 import { getEditAtomStore } from "../components/EditProvider";
 import { useRefs } from "../edit-contexts/refsProvider";
