@@ -9,6 +9,7 @@ import {
   useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
+import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
 
 const EditorAddLyricsInput = () => {
   const theme: ThemeColors = useTheme();
@@ -19,6 +20,7 @@ const EditorAddLyricsInput = () => {
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const lineInputReducer = useLineInputReducer();
   const setAddLyrics = useSetAddLyrics();
+  const setTopLyricsText = useSetTopLyricsText();
 
   return (
     <Box display="flex" alignItems="center">
@@ -30,7 +32,7 @@ const EditorAddLyricsInput = () => {
         bg={theme.colors.background}
         borderColor={`${theme.colors.card.borderColor}80`}
         onPaste={() => {
-          TextAreaEvents.paste(lineInputReducer, setIsLoadWordConvert, convertOption);
+          TextAreaEvents.paste(setTopLyricsText);
         }}
         onChange={(e) => setAddLyrics(e.target.value)}
       />
