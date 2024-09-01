@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, useTheme } from "@chakra-ui/react";
+import { Box, Card, CardBody, Flex, HStack, useTheme } from "@chakra-ui/react";
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { LineEdit, ThemeColors } from "@/types";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
@@ -16,6 +16,7 @@ import EditorButtons from "./tab-editor-child/EditorButtons";
 import EditorLineInput from "./tab-editor-child/EditorLineInput";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
+import AddTimeAdjust from "./tab-settings-child/settings-child/AddTimeAdjust";
 
 const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
@@ -54,7 +55,12 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
       <CardBody py={4}>
         <Box display="flex" flexDirection="column" gap={1}>
           <EditorLineInput setIsTimeInputValid={setIsTimeInputValid} />
-          <EditorButtons ref={editorButtonsRef} isTimeInputValid={isTimeInputValid} />
+
+          <Flex justifyContent="space-between" alignItems="flex-end">
+            <EditorButtons ref={editorButtonsRef} isTimeInputValid={isTimeInputValid} />
+            <AddTimeAdjust />
+          </Flex>
+
           <EditorAddLyricsInput />
         </Box>
       </CardBody>

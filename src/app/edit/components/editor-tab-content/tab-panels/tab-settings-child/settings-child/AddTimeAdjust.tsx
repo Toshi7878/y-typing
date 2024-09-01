@@ -1,18 +1,14 @@
 "use client";
 import { FormLabel, Input, HStack, Box, useTheme, Tooltip } from "@chakra-ui/react";
-import { IndexDBOption, ThemeColors } from "@/types";
-import { DEFAULT_ADD_ADJUST_TIME } from "@/app/edit/ts/const/editDefaultValues";
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { ThemeColors } from "@/types";
+
 import {
   useEditAddTimeOffsetAtom,
   useSetEditAddTimeOffsetAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { sendIndexedDB } from "@/lib/db";
 
-interface AddTimeAdjustProps {
-  sendIndexedDB: (target: HTMLInputElement) => void;
-}
-
-export default function AddTimeAdjust(props: AddTimeAdjustProps) {
+export default function AddTimeAdjust() {
   const theme: ThemeColors = useTheme();
 
   const addTimeOffset = useEditAddTimeOffsetAtom();
@@ -32,15 +28,17 @@ export default function AddTimeAdjust(props: AddTimeAdjustProps) {
         }}
         hasArrow
         placement="top"
-        label={<Box>再生中に追加ボタンを押した時に、数値分のタイムを調整します</Box>}
+        label={<Box>再生中に追加ボタン(S)を押した時に、数値分のタイムを調整します</Box>}
       >
         <HStack alignItems="baseline">
-          <FormLabel fontSize="sm">追加タイム補正</FormLabel>
+          <FormLabel fontSize="xs" mr={1}>
+            追加タイム補正
+          </FormLabel>
           <Input
             name="time-offset"
             placeholder=""
             type="number"
-            size="md"
+            size="sm"
             step="0.05"
             min="-3"
             max="3"
@@ -50,7 +48,7 @@ export default function AddTimeAdjust(props: AddTimeAdjustProps) {
             value={addTimeOffset}
             onChange={(e) => {
               setAddTimeOffset(Number(e.target.value));
-              props.sendIndexedDB(e.target as HTMLInputElement);
+              sendIndexedDB(e.target as HTMLInputElement);
             }}
           />
         </HStack>

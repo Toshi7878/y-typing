@@ -23,4 +23,8 @@ db.version(11).stores({
   typingOption: "optionName",
 });
 
+export const sendIndexedDB = async (target: HTMLInputElement) => {
+  db.editorOption.put({ optionName: target.name, value: target.value });
+};
+
 export { db };

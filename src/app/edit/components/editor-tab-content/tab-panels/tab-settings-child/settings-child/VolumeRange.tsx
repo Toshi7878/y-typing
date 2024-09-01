@@ -27,7 +27,7 @@ export default function VolumeRange() {
     <HStack alignItems="center">
       <FormLabel fontSize="sm">音量</FormLabel>
 
-      <Slider w="200px" aria-label="slider-ex-1" value={volume} onChange={handleChange}>
+      <Slider w="200px" aria-label="slider-ex-1" value={volume} max={100} onChange={handleChange}>
         <SliderTrack>
           <SliderFilledTrack />
         </SliderTrack>

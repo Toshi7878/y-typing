@@ -219,30 +219,28 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   }));
 
   return (
-    <Box display="grid" gridTemplateColumns="1fr auto" gap="2" alignItems="center">
-      <Flex gap="5">
-        {Object.values(buttonConfigs).map((config, index) => (
-          <Button
-            key={index}
-            ref={config.ref ? config.ref : undefined}
-            isDisabled={config.isDisabled}
-            isLoading={config.isLoading}
-            variant="outline"
-            size="sm"
-            height="35px"
-            className="w-[16%]  md:w-[18%]"
-            color={theme.colors.card.color}
-            bg={theme.colors.background}
-            _hover={{ bg: `${config.colorScheme}80` }}
-            borderColor={config.colorScheme}
-            onClick={config.onClick}
-            sx={{ colorScheme: config.colorScheme }}
-          >
-            {config.text}
-          </Button>
-        ))}
-      </Flex>
-    </Box>
+    <Flex gap="3" className="w-[50%] lg:w-[60%] xl:w-[70%]">
+      {Object.values(buttonConfigs).map((config, index) => (
+        <Button
+          key={index}
+          ref={config.ref ? config.ref : undefined}
+          isDisabled={config.isDisabled}
+          isLoading={config.isLoading}
+          variant="outline"
+          size="sm"
+          height="35px"
+          className="w-[50%] lg:w-[60%] xl:w-[70%]"
+          color={theme.colors.card.color}
+          bg={theme.colors.background}
+          _hover={{ bg: `${config.colorScheme}80` }}
+          borderColor={config.colorScheme}
+          onClick={config.onClick}
+          sx={{ colorScheme: config.colorScheme }}
+        >
+          {config.text}
+        </Button>
+      ))}
+    </Flex>
   );
 });
 

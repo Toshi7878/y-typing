@@ -4,15 +4,19 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/re
 import TabEditor from "./tab-panels/TabEditor";
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettings";
-import { ThemeColors } from "@/types";
+import { IndexDBOption, ThemeColors } from "@/types";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import {
   isEditYouTubeStartedAtom,
+  useSetEditAddTimeOffsetAtom,
+  useSetEditWordConvertOptionAtom,
   useSetTabIndexAtom,
   useTabIndexAtom,
 } from "../../edit-atom/editAtom";
 import { useAtomValue } from "jotai";
 import { EditTabIndex } from "../../ts/type";
+import { db } from "@/lib/db";
+import { DEFAULT_ADD_ADJUST_TIME } from "../../ts/const/editDefaultValues";
 
 interface EditorTabContentProps {
   className?: string;
@@ -30,6 +34,8 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
   const [isDisabled, setIsDisabled] = useState(true);
   const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
+  const setSelectedConvertOption = useSetEditWordConvertOptionAtom();
+  const setAddTimeOffset = useSetEditAddTimeOffsetAtom();
 
   useEffect(() => {
     setRef("editorTab", editorTabRef.current);
@@ -42,6 +48,18 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTStarted]);
+
+  useEffect(() => {
+    db.editorOption.toArray().then((allData) => {
+      const formattedData = allData.reduce((acc, { optionName, value }) => {
+        acc[optionName] = value;
+        return acc;
+      }, {} as IndexDBOption);
+      setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
+      setAddTimeOffset(formattedData["time-offset"] ?? DEFAULT_ADD_ADJUST_TIME);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Tabs

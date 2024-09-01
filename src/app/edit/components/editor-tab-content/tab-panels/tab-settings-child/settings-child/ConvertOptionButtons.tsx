@@ -11,17 +11,18 @@ import {
 } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { ConvertOptionsType } from "@/app/edit/ts/type";
-import { Dispatch, useMemo } from "react";
+import { useMemo } from "react";
 import { addSymbol, addSymbolAll, nonSymbol } from "@/app/edit/ts/tab/editor/wordConvert";
+import {
+  useEditWordConvertOptionAtom,
+  useSetEditWordConvertOptionAtom,
+} from "@/app/edit/edit-atom/editAtom";
+import { sendIndexedDB } from "@/lib/db";
 
-interface ConvertOptionButtonsProps {
-  sendIndexedDB: (target: HTMLInputElement) => void;
-  selectedConvertOption: ConvertOptionsType;
-  setSelectedConvertOption: Dispatch<ConvertOptionsType>;
-}
-
-export default function ConvertOptionButtons(props: ConvertOptionButtonsProps) {
+export default function ConvertOptionButtons() {
   const theme: ThemeColors = useTheme();
+  const setSelectedConvertOption = useSetEditWordConvertOptionAtom();
+  const selectedConvertOption = useEditWordConvertOptionAtom();
 
   const options = useMemo(
     () => [
@@ -67,7 +68,10 @@ export default function ConvertOptionButtons(props: ConvertOptionButtonsProps) {
     <HStack alignItems="baseline">
       <FormLabel fontSize="sm">読み変換</FormLabel>
 
-      <RadioGroup onChange={props.setSelectedConvertOption} value={props.selectedConvertOption}>
+      <RadioGroup
+        onChange={(nextValue: string) => setSelectedConvertOption(nextValue as ConvertOptionsType)}
+        value={selectedConvertOption}
+      >
         <Stack direction="row">
           {options.map((option) => (
             <Tooltip
@@ -86,19 +90,17 @@ export default function ConvertOptionButtons(props: ConvertOptionButtonsProps) {
               label={option.tooltipLabel}
             >
               <Button
-                variant={props.selectedConvertOption === option.value ? "solid" : "outline"}
+                variant={selectedConvertOption === option.value ? "solid" : "outline"}
                 size="sm"
                 width="150px"
                 height="50px"
                 name="word-convert-option"
-                bg={
-                  props.selectedConvertOption === option.value ? undefined : theme.colors.background
-                }
+                bg={selectedConvertOption === option.value ? undefined : theme.colors.background}
                 colorScheme={option.colorScheme}
                 value={option.value}
                 onClick={(e) => {
-                  props.setSelectedConvertOption(option.value as ConvertOptionsType);
-                  props.sendIndexedDB(e.target as HTMLInputElement);
+                  setSelectedConvertOption(option.value as ConvertOptionsType);
+                  sendIndexedDB(e.target as HTMLInputElement);
                 }}
               >
                 {option.label}

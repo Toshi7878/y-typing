@@ -22,7 +22,7 @@ export default function TotalTimeAdjust() {
   const setCanUpload = useSetCanUploadAtom();
   const toast = useToast();
   const theme: ThemeColors = useTheme();
-  const [totalAdjustValue, setTotalAdjustValue] = useState(0);
+  const [totalAdjustValue, setTotalAdjustValue] = useState<string>("");
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
 
@@ -34,7 +34,12 @@ export default function TotalTimeAdjust() {
     const times = mapData.map((item) => item.time);
     setCanUpload(true);
 
-    dispatch(addHistory({ type: "allAdjustTime", data: { times, totalAdjustValue } }));
+    dispatch(
+      addHistory({
+        type: "allAdjustTime",
+        data: { times, totalAdjustValue: Number(totalAdjustValue) },
+      }),
+    );
     dispatch(allAdjustTime(totalAdjustValue));
     toast({
       title: "タイムを調整しました",
@@ -71,7 +76,7 @@ export default function TotalTimeAdjust() {
         }}
         hasArrow
         placement="top"
-        label={<Box>実行ボタンを押すと、全体のタイムが増減します</Box>}
+        label={<Box>数値を入力後、実行ボタンを押すと、全体のタイムが数値分増減します</Box>}
       >
         <HStack alignItems="baseline">
           <FormLabel fontSize="sm">全体タイム調整</FormLabel>
@@ -86,7 +91,7 @@ export default function TotalTimeAdjust() {
             bg={theme.colors.background}
             borderColor={`${theme.colors.card.borderColor}60`}
             value={totalAdjustValue}
-            onChange={(e) => setTotalAdjustValue(Number(e.target.value))}
+            onChange={(e) => setTotalAdjustValue(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
