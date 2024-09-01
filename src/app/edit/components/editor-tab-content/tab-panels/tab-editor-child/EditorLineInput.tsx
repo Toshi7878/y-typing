@@ -1,7 +1,6 @@
 import { Input, Box, useTheme } from "@chakra-ui/react";
 import { Dispatch, useRef } from "react";
 import { ThemeColors } from "@/types";
-
 import EditorTimeInput from "./EditorTimeInput";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
 import {
@@ -11,6 +10,7 @@ import {
   useSetEditLineLyricsAtom,
   useSetEditLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useAddRubyTagEvent } from "@/app/edit/ts/windowKeyDown";
 
 interface EditorLineInputProps {
   setIsTimeInputValid: Dispatch<boolean>;
@@ -25,6 +25,7 @@ const EditorLineInput = (props: EditorLineInputProps) => {
   const setLyrics = useSetEditLineLyricsAtom();
   const word = useEditLineWordAtom();
   const setWord = useSetEditLineWordAtom();
+  const handleEnterAddRuby = useAddRubyTagEvent();
 
   return (
     <>
@@ -38,6 +39,7 @@ const EditorLineInput = (props: EditorLineInputProps) => {
           onChange={(e) => setLyrics(e.target.value)}
           bg={theme.colors.background}
           borderColor={`${theme.colors.card.borderColor}60`}
+          onKeyDown={handleEnterAddRuby}
         />
       </Box>
       <Box display="flex" alignItems="center">

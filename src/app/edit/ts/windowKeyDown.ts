@@ -1,5 +1,3 @@
-// class WordReplace {
-
 import { Action } from "@reduxjs/toolkit";
 import { YTSpeedController } from "./youtube-ts/editYtHandleEvents";
 import { RootState } from "../redux/store";
@@ -9,6 +7,7 @@ import { addHistory, redo, undo } from "../redux/undoredoSlice";
 import { LineEdit, YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
 import { LineInputReducerAction } from "./type";
+import { useSetEditLineLyricsAtom } from "../edit-atom/editAtom";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
@@ -363,3 +362,31 @@ export const handleKeydown = (
     }
   }
 };
+
+export function useAddRubyTagEvent() {
+  const setLyrics = useSetEditLineLyricsAtom();
+
+  return (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const lyrics = event.currentTarget.value;
+      const start = event.currentTarget.selectionStart;
+      const end = event.currentTarget.selectionEnd;
+
+      if (end === null || start === null || end - start < 1) {
+        return false;
+      }
+
+      const addRubyTagLyrics = `${lyrics.slice(0, start)}<ruby>${lyrics.slice(start, end)}<rt></rt></ruby>${lyrics.slice(end, lyrics.length)}`;
+
+      setLyrics(addRubyTagLyrics);
+      setTimeout(() => {
+        const target = event.target as HTMLInputElement;
+        target.focus();
+        target.setSelectionRange(
+          addRubyTagLyrics.search("<rt></rt></ruby>") + 4,
+          addRubyTagLyrics.search("<rt></rt></ruby>") + 4,
+        );
+      });
+    }
+  };
+}
