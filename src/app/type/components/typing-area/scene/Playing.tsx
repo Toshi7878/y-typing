@@ -445,11 +445,15 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
     }, [speedData, rankingScores, inputMode, map, scene, lineResults]);
 
     useEffect(() => {
-      const currentPlayingCenterRef = playingCenterRef.current; // 追加
+      const currentPlayingCenterRef = playingCenterRef.current;
       const currentTotalTimeProgress = totalTimeProgressRef.current;
       const currentLineProgress = lineProgressRef.current;
 
-      currentTotalTimeProgress!.max = map?.movieTotalTime ?? 0;
+      const movieDuration = ytStateRef.current!.movieDuration;
+      const duration =
+        Number(map?.movieTotalTime) > movieDuration ? movieDuration : map?.movieTotalTime;
+
+      currentTotalTimeProgress!.max = duration ?? 0;
 
       if (!typeTicker.started) {
         typeTicker.start();
