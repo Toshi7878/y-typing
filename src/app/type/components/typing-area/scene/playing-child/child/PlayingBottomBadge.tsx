@@ -73,10 +73,10 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         fontSize="xl"
         bg={"background"}
         color={"color"}
-        className="bottom-card-kbd"
         borderColor={theme.colors.card.borderColor}
         borderWidth="1px"
         borderStyle="solid"
+        className="bottom-card-kbd"
         opacity={isDisabled ? 0.5 : 0.8}
         onClick={isDisabled ? undefined : props.onClick}
       >

@@ -22,7 +22,7 @@ import {
   useSetTabIndexAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useAtom, useAtomValue } from "jotai";
-import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
+import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
 
 function LineRow() {
   const setTabIndex = useSetTabIndexAtom();
@@ -38,7 +38,8 @@ function LineRow() {
   const lineInputReducer = useLineInputReducer();
   const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
-  const setAddLyrics = useSetAddLyrics();
+  const setTopLyricsText = useSetTopLyricsText();
+
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
@@ -56,10 +57,9 @@ function LineRow() {
         speed,
         setSpeed,
         isYTPlaying,
-        setLineSelectedCount,
         setCanUpload,
         lineInputReducer,
-        setAddLyrics,
+        setTopLyricsText,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refs, undoredoState, mapData, speed],

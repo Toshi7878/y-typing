@@ -24,6 +24,7 @@ import {
   useEditWordConvertOptionAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
 
 interface EditorButtonsProps {
   isTimeInputValid: boolean;
@@ -42,6 +43,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
   const addTimeOffset = useEditAddTimeOffsetAtom();
   const convertOption = useEditWordConvertOptionAtom();
+  const setTopLyricsText = useSetTopLyricsText();
 
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -55,7 +57,6 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
 
   const isLoadWordConvert = useIsLoadWordConvertAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
-
   const setCanUpload = useSetCanUploadAtom();
 
   useEffect(() => {
@@ -92,14 +93,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       lineInputReducer({ type: "reset" });
     }
 
-    TextAreaEvents.deleteTopLyrics(
-      lineInputReducer,
-      setLyricsText,
-      lyricsCopy,
-      addLyrics,
-      setIsLoadWordConvert,
-      convertOption,
-    );
+    TextAreaEvents.deleteTopLyrics(setLyricsText, lyricsCopy, addLyrics, setTopLyricsText);
   };
 
   const update = (mapData: RootState["mapData"]["value"]) => {

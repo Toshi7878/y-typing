@@ -181,10 +181,9 @@ export const handleKeydown = (
   speed: YouTubeSpeed,
   setSpeed: Dispatch<YouTubeSpeed>,
   isYTPlaying: boolean,
-  setLineNumber: Dispatch<number>,
   setCanUpload: Dispatch<boolean>,
   lineInputReducer: Dispatch<LineInputReducerAction>,
-  setAddLyrics: Dispatch<string | null>,
+  setTopLyricsText: Dispatch<undefined>,
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -321,7 +320,7 @@ export const handleKeydown = (
         break;
 
       case "KeyQ":
-        setAddLyrics(null);
+        setTopLyricsText(undefined);
         event.preventDefault();
 
         break;

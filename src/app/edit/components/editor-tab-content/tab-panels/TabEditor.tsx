@@ -10,13 +10,13 @@ import {
   useEditWordConvertOptionAtom,
   useLineInputReducer,
   useSetEditAddLyricsInputAtom,
-  useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import EditorButtons from "./tab-editor-child/EditorButtons";
 import EditorLineInput from "./tab-editor-child/EditorLineInput";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
 import AddTimeAdjust from "./tab-settings-shortcutlist-child/settings-child/AddTimeAdjust";
+import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
 
 const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
@@ -28,9 +28,9 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const lyrics = useEditLineLyricsAtom();
   const lyricsText = useEditAddLyricsInputAtom();
   const setLyricsText = useSetEditAddLyricsInputAtom();
-  const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const lineInputReducer = useLineInputReducer();
   const convertOption = useEditWordConvertOptionAtom();
+  const setTopLyricsText = useSetTopLyricsText();
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -46,14 +46,7 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
     },
 
     redoAddLyrics: () => {
-      TextAreaEvents.deleteTopLyrics(
-        lineInputReducer,
-        setLyricsText,
-        lyrics,
-        lyricsText,
-        setIsLoadWordConvert,
-        convertOption,
-      );
+      TextAreaEvents.deleteTopLyrics(setLyricsText, lyrics, lyricsText, setTopLyricsText);
     },
   }));
 
