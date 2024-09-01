@@ -1,11 +1,11 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { Input } from "@chakra-ui/react";
+import { Input, useTheme } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRef } from "react";
 
 import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LineEdit } from "@/types";
+import { LineEdit, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
@@ -26,6 +26,8 @@ interface EditorTimeInputProps {
 
 const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
   function EditorTimeInput({ onFormStateChange }, ref) {
+    const theme: ThemeColors = useTheme();
+
     const methods = useForm({
       mode: "all",
       resolver: zodResolver(schema),
@@ -113,6 +115,8 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
           size="sm"
           width="90px"
           type="number"
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
           {...register("time")}
           onChange={(e) => {
             if (Number(e.target.value) >= Number(maxTime)) {

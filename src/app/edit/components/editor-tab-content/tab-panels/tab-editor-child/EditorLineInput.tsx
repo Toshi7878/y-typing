@@ -36,6 +36,8 @@ const EditorLineInput = (props: EditorLineInputProps) => {
           autoComplete="off"
           value={lyrics}
           onChange={(e) => setLyrics(e.target.value)}
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
         />
       </Box>
       <Box display="flex" alignItems="center">
@@ -45,6 +47,8 @@ const EditorLineInput = (props: EditorLineInputProps) => {
           width="90px"
           disabled
           variant="filled"
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
           opacity={1}
           _disabled={{ opacity: 1 }}
           value={selectedLineCount ?? ""}
@@ -53,6 +57,8 @@ const EditorLineInput = (props: EditorLineInputProps) => {
           placeholder="ワード"
           size="sm"
           autoComplete="off"
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
           value={word}
           onChange={(e) => setWord(e.target.value)}
         />

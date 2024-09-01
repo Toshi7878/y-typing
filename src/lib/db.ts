@@ -1,9 +1,5 @@
+import { IndexDBOption } from "@/types";
 import Dexie, { type EntityTable } from "dexie";
-interface IndexDBOption {
-  id: number;
-  optionName: string;
-  value: string | number | boolean;
-}
 
 const db = new Dexie("AppDB") as Dexie & {
   editorOption: EntityTable<
@@ -27,5 +23,4 @@ db.version(11).stores({
   typingOption: "optionName",
 });
 
-export type { IndexDBOption };
 export { db };

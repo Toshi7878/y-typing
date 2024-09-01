@@ -8,6 +8,7 @@ import {
   Button,
   InputLeftAddon,
   InputGroup,
+  useTheme,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -24,6 +25,7 @@ import {
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSetAtom } from "jotai";
+import { ThemeColors } from "@/types";
 
 const videoIdSchema = z
   .string()
@@ -33,7 +35,7 @@ const videoIdSchema = z
 const InfoInput = () => {
   const methods = useFormContext();
   const { playerRef } = useRefs();
-
+  const theme: ThemeColors = useTheme();
   const [canChangeVideo, setCanChangeVideo] = useState(false);
   const setIsYTStarted = useSetAtom(isEditYouTubeStartedAtom);
   const setCanUpload = useSetCanUploadAtom();
@@ -66,6 +68,8 @@ const InfoInput = () => {
             maxLength={11} // YouTubeのID11文字に制限
             fontWeight="bold"
             value={videoId}
+            bg={theme.colors.background}
+            borderColor={`${theme.colors.card.borderColor}60`}
             onPaste={async (e) => {
               const url = await navigator.clipboard.readText();
               const inputElement = e.target as HTMLInputElement;
@@ -104,6 +108,8 @@ const InfoInput = () => {
           placeholder="曲名 / アーティスト【アニメ名OP】など"
           size="sm"
           fontWeight="bold"
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
           value={mapTitle}
           onChange={(e) => {
             setCanUpload(true);
@@ -119,6 +125,8 @@ const InfoInput = () => {
           placeholder="譜面の情報や感想など、なんでもコメントOKです"
           size="sm"
           value={creatorComment}
+          bg={theme.colors.background}
+          borderColor={`${theme.colors.card.borderColor}60`}
           onChange={(e) => {
             setCanUpload(true);
             setCreatorComment(e.target.value);

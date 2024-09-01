@@ -1,48 +1,26 @@
 "use client";
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  HStack,
-  RadioGroup,
-  Stack,
-  VStack,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  useToast,
-  Box,
-} from "@chakra-ui/react";
-
-import { Controller, useForm } from "react-hook-form";
-
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { allAdjustTime } from "@/app/edit/redux/mapDataSlice";
-import { db, IndexDBOption } from "@/lib/db";
+import { VStack } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { useSelector } from "react-redux";
+import { db } from "@/lib/db";
 import { RootState } from "@/app/edit/redux/store";
-import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { ImportFile } from "@/app/edit/ts/tab/settings/importFile";
-import { useSetCanUploadAtom, useSetIsLrcConvertingAtom } from "@/app/edit/edit-atom/editAtom";
 import { EditSettingsRef } from "@/app/edit/ts/type";
+import { IndexDBOption } from "@/types";
+import LrcConvertButton from "./settings-child/LrcConvertButton";
+import ConvertOptionButtons from "./settings-child/ConvertOptionButtons";
+import VolumeRange from "./settings-child/VolumeRange";
+import AddTimeAdjust from "./settings-child/AddTimeAdjust";
+import { DEFAULT_ADJUST_TIME, DEFAULT_VOLUME } from "@/app/edit/ts/const/defaultValues";
+import TotalTimeAdjust from "./settings-child/TotalTimeAdjust";
 
 export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props, ref) {
-  const dispatch = useDispatch();
-  const setCanUpload = useSetCanUploadAtom();
-  const setIsLrcConverting = useSetIsLrcConvertingAtom();
-  const toast = useToast();
-
   const [optionsData, setOptionsData] = useState<IndexDBOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
   const mapData = useSelector((state: RootState) => state.mapData!.value);
-  const { playerRef, setRef } = useRefs();
-  const fileInputRef = useRef<HTMLInputElement>(null); // useRefを使用してfileInputRefを定義
+  const { setRef } = useRefs();
 
-  const DEFAULT_ADJUST_TIME = -0.16;
-  const DEFAULT_VOLUME = 50;
   useEffect(() => {
     db.editorOption.toArray().then((allData) => {
       const formattedData = allData.reduce((acc, { optionName, value }) => {
@@ -67,13 +45,7 @@ export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props,
   }, [optionsData, mapData]);
 
   const methods = useForm();
-  const { register } = methods;
-
-  const options = [
-    { colorScheme: "green", label: "記号なし(一部除く)", value: "non_symbol" },
-    { colorScheme: "yellow", label: "記号あり(一部)", value: "add_symbol" },
-    { colorScheme: "red", label: "記号あり(すべて)", value: "add_symbol_all" },
-  ];
+  const { register, control, getValues } = methods;
 
   useImperativeHandle(ref, () => ({
     getTimeOffset: () => Number(methods.getValues("time-offset")),
@@ -85,195 +57,13 @@ export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props,
     db.editorOption.put({ optionName: target.name, value: target.value });
   };
 
-  const allTimeAdjust = () => {
-    const adjustTime = Number(methods.getValues("all-time-adjust"));
-
-    if (!adjustTime) {
-      return;
-    }
-
-    const times = mapData.map((item) => item.time);
-    setCanUpload(true);
-
-    dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
-    dispatch(allAdjustTime(adjustTime));
-    toast({
-      title: "タイムを調整しました",
-      description: (
-        <Box as="small">
-          全体のタイムが{adjustTime}秒調整されました。
-          <br />
-          Ctrl + Zで前のタイムに戻ることができます。
-        </Box>
-      ),
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-      position: "bottom-right",
-      containerStyle: {
-        border: "1px solid",
-
-        borderColor: "gray.200",
-        fontSize: "lg",
-      },
-    });
-  };
-
   return (
-    <form>
-      <VStack align="start" spacing={4}>
-        <FormControl>
-          <HStack alignItems="baseline">
-            <FormLabel fontSize="sm">追加タイム調整</FormLabel>
-
-            <Input
-              {...register("time-offset", {
-                value: optionsData?.["time-offset"] ?? DEFAULT_ADJUST_TIME,
-              })}
-              name="time-offset"
-              placeholder=""
-              type="number"
-              size="md"
-              step="0.05"
-              min="-3"
-              max="3"
-              className="max-w-[70px]"
-              onChange={(e) => sendIndexedDB(e.target as HTMLInputElement)}
-            />
-
-            <FormLabel fontSize="xs" color="gray.500">
-              追加ボタンを押した時に、数値分のタイムを調整します
-            </FormLabel>
-          </HStack>
-        </FormControl>
-
-        <FormControl>
-          <HStack alignItems="baseline">
-            <FormLabel fontSize="sm">全体タイム調整</FormLabel>
-
-            <Input
-              {...register("all-time-adjust")}
-              placeholder=""
-              type="number"
-              size="md"
-              step="0.05"
-              min="-3"
-              max="3"
-              className="max-w-[70px]"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  allTimeAdjust();
-                }
-              }}
-            />
-
-            <Button colorScheme="yellow" variant={"outline"} onClick={allTimeAdjust}>
-              実行
-            </Button>
-            <FormLabel fontSize="xs" color="gray.500">
-              実行ボタンを押すと、全体のタイムが増減します
-            </FormLabel>
-          </HStack>
-        </FormControl>
-
-        <FormControl>
-          <HStack alignItems="center">
-            <FormLabel fontSize="sm">音量</FormLabel>
-
-            <Controller
-              name="volume-range"
-              control={methods.control}
-              defaultValue={DEFAULT_VOLUME}
-              render={({ field }) => (
-                <Slider
-                  w="200px"
-                  aria-label="slider-ex-1"
-                  {...field}
-                  onChange={(value) => {
-                    field.onChange(value);
-                    playerRef.current.setVolume(value);
-                    db.editorOption.put({ optionName: "volume-range", value });
-                  }}
-                >
-                  <SliderTrack>
-                    <SliderFilledTrack />
-                  </SliderTrack>
-                  <SliderThumb />
-                </Slider>
-              )}
-            />
-          </HStack>
-        </FormControl>
-
-        <FormControl mt={4}>
-          <HStack alignItems="baseline">
-            <FormLabel fontSize="sm">読み変換</FormLabel>
-
-            <RadioGroup onChange={setSelectedConvertOption} value={selectedConvertOption}>
-              <Stack direction="row">
-                {options.map((option) => (
-                  <Button
-                    key={option.label}
-                    variant={selectedConvertOption === option.value ? "solid" : "outline"}
-                    size="sm"
-                    width="150px"
-                    height="50px"
-                    name="word-convert-option"
-                    colorScheme={option.colorScheme}
-                    value={option.value}
-                    onClick={(e) => {
-                      setSelectedConvertOption(option.value);
-                      sendIndexedDB(e.target as HTMLInputElement);
-                    }}
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </Stack>
-            </RadioGroup>
-          </HStack>
-        </FormControl>
-
-        <FormControl>
-          <HStack alignItems="baseline">
-            <FormLabel fontSize="sm">譜面インポート</FormLabel>
-
-            <input
-              type="file"
-              hidden
-              ref={fileInputRef}
-              accept=".lrc,.json" // lrcファイルとjsonファイルのみを許可)
-              onChange={async (e) => {
-                const file = e.target.files![0];
-                try {
-                  setIsLrcConverting(true);
-
-                  const importFile = new ImportFile();
-                  await importFile.open(file, selectedConvertOption, dispatch, mapData);
-                  e.target.value = "";
-                } catch (error) {
-                  console.error("ファイルの処理中にエラーが発生しました:", error);
-                  toast({
-                    title: "エラー",
-                    description: "ファイルの処理中にエラーが発生しました。",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                    position: "bottom-right",
-                  });
-                } finally {
-                  setIsLrcConverting(false);
-                }
-              }}
-            />
-
-            <Button colorScheme="teal" size="sm" onClick={() => fileInputRef.current?.click()}>
-              lrcファイルを開く
-            </Button>
-          </HStack>
-        </FormControl>
-      </VStack>
-    </form>
+    <VStack align="start" spacing={4}>
+      <AddTimeAdjust register={register} sendIndexedDB={sendIndexedDB} optionsData={optionsData} />
+      <TotalTimeAdjust register={register} getValues={getValues} />
+      <VolumeRange control={control} />
+      <ConvertOptionButtons sendIndexedDB={sendIndexedDB} />
+      <LrcConvertButton selectedConvertOption={selectedConvertOption} />
+    </VStack>
   );
 });

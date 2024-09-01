@@ -26,6 +26,8 @@ const EditorAddLyricsInput = () => {
         size="lg"
         style={{ height: "110px" }}
         value={lyricsText}
+        bg={theme.colors.background}
+        borderColor={`${theme.colors.card.borderColor}80`}
         onPaste={() => {
           const convertOption = editSettingsRef.current!.getWordConvertOption();
           TextAreaEvents.paste(lineInputReducer, setIsLoadWordConvert, convertOption);
