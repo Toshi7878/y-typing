@@ -27,9 +27,9 @@ import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { ImportFile } from "@/app/edit/ts/tab/settings/importFile";
 import { useSetCanUploadAtom, useSetIsLrcConvertingAtom } from "@/app/edit/edit-atom/editAtom";
-import { EditorSettingModalRef } from "@/app/edit/ts/type";
+import { EditSettingsRef } from "@/app/edit/ts/type";
 
-export default forwardRef<EditorSettingModalRef, unknown>(function EditSettings(props, ref) {
+export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props, ref) {
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
   const setIsLrcConverting = useSetIsLrcConvertingAtom();
@@ -38,7 +38,7 @@ export default forwardRef<EditorSettingModalRef, unknown>(function EditSettings(
   const [optionsData, setOptionsData] = useState<IndexDBOption>();
   const [selectedConvertOption, setSelectedConvertOption] = useState("");
   const mapData = useSelector((state: RootState) => state.mapData!.value);
-  const { playerRef } = useRefs();
+  const { playerRef, setRef } = useRefs();
   const fileInputRef = useRef<HTMLInputElement>(null); // useRefを使用してfileInputRefを定義
 
   const DEFAULT_ADJUST_TIME = -0.16;
@@ -58,6 +58,13 @@ export default forwardRef<EditorSettingModalRef, unknown>(function EditSettings(
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (ref && "current" in ref) {
+      setRef("editSettingsRef", ref.current!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionsData, mapData]);
 
   const methods = useForm();
   const { register } = methods;

@@ -14,6 +14,7 @@ import {
   editLineSelectedNumberAtom,
   isEditYouTubePlayingAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { EditorTimeInputRef } from "@/app/edit/ts/type";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -22,95 +23,104 @@ const schema = z.object({
 interface EditorTimeInputProps {
   onFormStateChange: (isValid: boolean) => void;
 }
-const EditorTimeInput = forwardRef<unknown, EditorTimeInputProps>(function EditorTimeInput(
-  { onFormStateChange },
-  ref,
-) {
-  const methods = useForm({
-    mode: "all",
-    resolver: zodResolver(schema),
-    criteriaMode: "all",
-  });
-  const {
-    register,
-    setValue,
-    formState: { isValid },
-    trigger,
-  } = methods;
 
-  const [maxTime, setMaxTime] = useState("0");
-  const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
-  const lineNumber = useAtomValue(editLineSelectedNumberAtom);
+const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
+  function EditorTimeInput({ onFormStateChange }, ref) {
+    const methods = useForm({
+      mode: "all",
+      resolver: zodResolver(schema),
+      criteriaMode: "all",
+    });
+    const {
+      register,
+      setValue,
+      formState: { isValid },
+      trigger,
+    } = methods;
 
-  const { playerRef } = useRefs();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+    const [maxTime, setMaxTime] = useState("0");
+    const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+    const lineNumber = useAtomValue(editLineSelectedNumberAtom);
 
-  useEffect(() => {
-    onFormStateChange(isValid);
-  }, [isValid, onFormStateChange]);
+    const { playerRef, setRef } = useRefs();
+    const mapData = useSelector((state: RootState) => state.mapData.value);
 
-  const updateTimeValue = useCallback(
-    (currentTime: string) => {
-      setValue("time", currentTime, { shouldValidate: true });
-    },
-    [setValue],
-  );
-
-  useEffect(() => {
-    timer.addListener(updateTimeValue);
-
-    return () => {
-      timer.removeListener(updateTimeValue);
-    };
-  }, [updateTimeValue]);
-
-  useEffect(() => {
-    if (maxTime === "0") {
-      if (setIsYTPlaying) {
-        const duration = playerRef.current?.getDuration().toFixed(3);
-        if (duration !== undefined) {
-          setMaxTime(duration);
-        }
-      } else if (mapData.length >= 3) {
-        setMaxTime(mapData[mapData.length - 1]["time"]);
+    useEffect(() => {
+      if (ref && "current" in ref) {
+        setRef("editorTimeInputRef", ref.current!);
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapData, maxTime, setIsYTPlaying]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mapData, lineNumber, maxTime, setIsYTPlaying]);
 
-  useImperativeHandle(ref, () => ({
-    clearTime: () => {
-      setValue("time", "", { shouldValidate: true });
-    },
-    getTime: () => Number(methods.getValues("time")),
-    selectedTime: () => {
-      if (lineNumber !== null) {
-        const selectedTime = mapData[lineNumber]?.["time"];
-        setValue("time", selectedTime, { shouldValidate: true });
-      }
-    },
-    undoAdd: (time: Line["time"]) => {
-      setValue("time", time, { shouldValidate: true });
-    },
-  }));
+    useEffect(() => {
+      onFormStateChange(isValid);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isValid]);
 
-  return (
-    <FormProvider {...methods}>
-      <Input
-        placeholder="Time"
-        size="sm"
-        width="90px"
-        type="number"
-        {...register("time")}
-        onChange={(e) => {
-          if (Number(e.target.value) >= Number(maxTime)) {
-            e.target.value = (Number(maxTime) - 0.001).toFixed(3);
+    const updateTimeValue = useCallback(
+      (currentTime: string) => {
+        setValue("time", currentTime, { shouldValidate: true });
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
+
+    useEffect(() => {
+      timer.addListener(updateTimeValue);
+
+      return () => {
+        timer.removeListener(updateTimeValue);
+      };
+    }, [updateTimeValue]);
+
+    useEffect(() => {
+      if (maxTime === "0") {
+        if (setIsYTPlaying) {
+          const duration = playerRef.current?.getDuration().toFixed(3);
+          if (duration !== undefined) {
+            setMaxTime(duration);
           }
-          trigger("time");
-        }}
-      />
-    </FormProvider>
-  );
-});
+        } else if (mapData.length >= 3) {
+          setMaxTime(mapData[mapData.length - 1]["time"]);
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mapData, maxTime, setIsYTPlaying]);
+
+    useImperativeHandle(ref, () => ({
+      clearTime: () => {
+        setValue("time", "", { shouldValidate: true });
+      },
+      getTime: () => Number(methods.getValues("time")),
+      selectedTime: () => {
+        if (lineNumber !== null) {
+          const selectedTime = mapData[lineNumber]?.["time"];
+          setValue("time", selectedTime, { shouldValidate: true });
+        }
+      },
+      undoAdd: (time: Line["time"]) => {
+        setValue("time", time, { shouldValidate: true });
+      },
+    }));
+
+    return (
+      <FormProvider {...methods}>
+        <Input
+          placeholder="Time"
+          size="sm"
+          width="90px"
+          type="number"
+          {...register("time")}
+          onChange={(e) => {
+            if (Number(e.target.value) >= Number(maxTime)) {
+              e.target.value = (Number(maxTime) - 0.001).toFixed(3);
+            }
+            trigger("time");
+          }}
+        />
+      </FormProvider>
+    );
+  },
+);
 
 export default EditorTimeInput;

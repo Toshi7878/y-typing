@@ -8,12 +8,7 @@ import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
-import {
-  EditorButtonsRef,
-  EditorSettingsRef,
-  SetLineFunctions,
-  TimeInputRef,
-} from "@/app/edit/ts/type";
+import { EditorButtonsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
 import { useAtom, useAtomValue } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
@@ -31,10 +26,9 @@ interface EditorButtonsProps {
   isTimeInputValid: boolean;
 }
 const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, ref) => {
-  const { setRef } = useRefs();
+  const { editSettingsRef, setRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const timeInputRef = useRef<TimeInputRef | null>(null);
-  const editorSettingRef = useRef<EditorSettingsRef | null>(null);
 
   const [selectedLineCount, setSelectedLineCount] = useAtom(editSelectedLineCountAtom);
   const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
@@ -97,7 +91,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-    const timeOffset = isYTPlaying ? editorSettingRef.current!.getTimeOffset() : 0;
+    const timeOffset = isYTPlaying ? editSettingsRef.current!.getTimeOffset() : 0;
     const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
     const addLyrics = lyricsText;
 
@@ -108,7 +102,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     if (!isShiftKey) {
       lineInit();
     }
-    const convertOption = editorSettingRef.current!.getWordConvertOption();
+    const convertOption = editSettingsRef.current!.getWordConvertOption();
 
     TextAreaEvents.deleteTopLyrics(
       setLineFunctions,
@@ -144,7 +138,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const wordConvert = async () => {
-    const convertOption = editorSettingRef.current!.getWordConvertOption();
+    const convertOption = editSettingsRef.current!.getWordConvertOption();
 
     setIsLoadWordConvert(true);
     await ButtonEvents.lyricsConvert(lyrics, setLineFunctions, convertOption);

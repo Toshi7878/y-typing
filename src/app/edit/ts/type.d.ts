@@ -51,8 +51,15 @@ export interface EditorButtonsRef {
   delete: () => void;
 }
 
-export interface EditorSettingModalRef {
+export interface EditSettingsRef {
   getTimeOffset: () => number;
   getWordConvertOption: () => string;
   getVolume: () => number;
+}
+
+export interface EditorTimeInputRef {
+  clearTime: () => void;
+  getTime: () => number;
+  selectedTime: () => void;
+  undoAdd: (time: Line["time"]) => void;
 }

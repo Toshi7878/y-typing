@@ -1,21 +1,22 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { EditorButtonsRef, EditorTabRef } from "../ts/type";
+import { EditorButtonsRef, EditSettingsRef, EditorTabRef } from "../ts/type";
 
 export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTabRef>;
   editorButtonsRef: React.RefObject<EditorButtonsRef>;
-  editorSettingsRef: React.RefObject<EditorButtonsRef>;
+  editorTimeInputRef: React.RefObject<EditorButtonsRef>;
+  editSettingsRef: React.RefObject<EditSettingsRef>;
   tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
-// Start of Selection
 const RefsContext = createContext<RefsContextType>({
   editorTabRef: { current: null },
   editorButtonsRef: { current: null },
-  editorSettingsRef: { current: null },
+  editorTimeInputRef: { current: null },
+  editSettingsRef: { current: null },
   tbodyRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
@@ -23,7 +24,8 @@ const RefsContext = createContext<RefsContextType>({
 export const RefsProvider = ({ children }) => {
   const editorTabRef = useRef(null);
   const editorButtonsRef = useRef(null);
-  const editorSettingsRef = useRef(null);
+  const editorTimeInputRef = useRef(null);
+  const editSettingsRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
 
@@ -35,8 +37,11 @@ export const RefsProvider = ({ children }) => {
       case "editorButtonsRef":
         editorButtonsRef.current = ref;
         break;
-      case "editorSettingsRef":
-        editorSettingsRef.current = ref;
+      case "editorTimeInputRef":
+        editorTimeInputRef.current = ref;
+        break;
+      case "editSettingsRef":
+        editSettingsRef.current = ref;
         break;
       case "tbody":
         tbodyRef.current = ref;
@@ -49,7 +54,15 @@ export const RefsProvider = ({ children }) => {
 
   return (
     <RefsContext.Provider
-      value={{ editorTabRef, tbodyRef, playerRef, editorButtonsRef, editorSettingsRef, setRef }}
+      value={{
+        editorTabRef,
+        tbodyRef,
+        playerRef,
+        editorButtonsRef,
+        editorTimeInputRef,
+        editSettingsRef,
+        setRef,
+      }}
     >
       {children}
     </RefsContext.Provider>
@@ -62,6 +75,9 @@ export const useRefs = () => {
     editorTabRef: context.editorTabRef,
     tbodyRef: context.tbodyRef,
     playerRef: context.playerRef,
+    editorButtonsRef: context.editorButtonsRef,
+    editSettingsRef: context.editSettingsRef,
+    editorTimeInputRef: context.editorTimeInputRef,
     setRef: context.setRef,
   };
 };

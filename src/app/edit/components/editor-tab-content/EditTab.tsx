@@ -11,7 +11,7 @@ import {
   useSetTabIndexAtom,
   useTabIndexAtom,
 } from "../../edit-atom/editAtom";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { EditTabIndex } from "../../ts/type";
 
 interface EditorTabContentProps {
