@@ -15,38 +15,32 @@ import { RootState } from "@/app/edit/redux/store";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { useState } from "react";
 
-interface TotalTimeAdjustProps {
-  register: UseFormRegister<FieldValues>;
-  getValues: (name: string) => FieldValues;
-}
-
-export default function TotalTimeAdjust(props: TotalTimeAdjustProps) {
+export default function TotalTimeAdjust() {
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
   const toast = useToast();
   const theme: ThemeColors = useTheme();
+  const [totalAdjustValue, setTotalAdjustValue] = useState(0);
 
-  const mapData = useSelector((state: RootState) => state.mapData!.value);
+  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   const allTimeAdjust = () => {
-    const adjustTime = Number(props.getValues("all-time-adjust"));
-
-    if (!adjustTime) {
+    if (!totalAdjustValue) {
       return;
     }
 
     const times = mapData.map((item) => item.time);
     setCanUpload(true);
 
-    dispatch(addHistory({ type: "allAdjustTime", data: { times, adjustTime } }));
-    dispatch(allAdjustTime(adjustTime));
+    dispatch(addHistory({ type: "allAdjustTime", data: { times, totalAdjustValue } }));
+    dispatch(allAdjustTime(totalAdjustValue));
     toast({
       title: "タイムを調整しました",
       description: (
         <Box as="small">
-          全体のタイムが{adjustTime}秒調整されました。
+          全体のタイムが {totalAdjustValue} 秒調整されました。
           <br />
           Ctrl + Zで前のタイムに戻ることができます。
         </Box>
@@ -82,7 +76,6 @@ export default function TotalTimeAdjust(props: TotalTimeAdjustProps) {
         <HStack alignItems="baseline">
           <FormLabel fontSize="sm">全体タイム調整</FormLabel>
           <Input
-            {...props.register("all-time-adjust")}
             placeholder=""
             type="number"
             size="md"
@@ -92,6 +85,8 @@ export default function TotalTimeAdjust(props: TotalTimeAdjustProps) {
             className="max-w-[70px]"
             bg={theme.colors.background}
             borderColor={`${theme.colors.card.borderColor}60`}
+            value={totalAdjustValue}
+            onChange={(e) => setTotalAdjustValue(Number(e.target.value))}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();

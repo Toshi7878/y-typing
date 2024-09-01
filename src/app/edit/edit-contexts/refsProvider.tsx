@@ -6,7 +6,6 @@ export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTabRef>;
   editorButtonsRef: React.RefObject<EditorButtonsRef>;
   editorTimeInputRef: React.RefObject<EditorTimeInputRef>;
-  editSettingsRef: React.RefObject<EditSettingsRef>;
   tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;
   setRef: (key: string, ref: HTMLElement | any) => void;
@@ -16,7 +15,6 @@ const RefsContext = createContext<RefsContextType>({
   editorTabRef: { current: null },
   editorButtonsRef: { current: null },
   editorTimeInputRef: { current: null },
-  editSettingsRef: { current: null },
   tbodyRef: { current: null },
   playerRef: null,
   setRef: (ref: HTMLElement | any) => {},
@@ -40,9 +38,6 @@ export const RefsProvider = ({ children }) => {
       case "editorTimeInputRef":
         editorTimeInputRef.current = ref;
         break;
-      case "editSettingsRef":
-        editSettingsRef.current = ref;
-        break;
       case "tbody":
         tbodyRef.current = ref;
         break;
@@ -60,7 +55,6 @@ export const RefsProvider = ({ children }) => {
         playerRef,
         editorButtonsRef,
         editorTimeInputRef,
-        editSettingsRef,
         setRef,
       }}
     >
@@ -76,7 +70,6 @@ export const useRefs = () => {
     tbodyRef: context.tbodyRef,
     playerRef: context.playerRef,
     editorButtonsRef: context.editorButtonsRef,
-    editSettingsRef: context.editSettingsRef,
     editorTimeInputRef: context.editorTimeInputRef,
     setRef: context.setRef,
   };

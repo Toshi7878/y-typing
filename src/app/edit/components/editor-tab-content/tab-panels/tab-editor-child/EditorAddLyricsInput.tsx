@@ -4,17 +4,18 @@ import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 
 import {
   useEditAddLyricsInputAtom,
+  useEditWordConvertOptionAtom,
   useLineInputReducer,
   useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
 
 const EditorAddLyricsInput = () => {
   const theme: ThemeColors = useTheme();
 
-  const { editSettingsRef } = useRefs();
   const lyricsText = useEditAddLyricsInputAtom();
+  const convertOption = useEditWordConvertOptionAtom();
+
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const lineInputReducer = useLineInputReducer();
   const setAddLyrics = useSetAddLyrics();
@@ -29,7 +30,6 @@ const EditorAddLyricsInput = () => {
         bg={theme.colors.background}
         borderColor={`${theme.colors.card.borderColor}80`}
         onPaste={() => {
-          const convertOption = editSettingsRef.current!.getWordConvertOption();
           TextAreaEvents.paste(lineInputReducer, setIsLoadWordConvert, convertOption);
         }}
         onChange={(e) => setAddLyrics(e.target.value)}

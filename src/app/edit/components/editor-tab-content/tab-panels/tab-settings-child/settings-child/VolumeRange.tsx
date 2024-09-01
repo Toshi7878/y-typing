@@ -7,44 +7,33 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from "@chakra-ui/react";
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { useState } from "react";
 import { db } from "@/lib/db";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { DEFAULT_VOLUME } from "@/config/consts";
 
-interface VolumeRangeProps {
-  control: Control<FieldValues>;
-}
-
-export default function VolumeRange(props: VolumeRangeProps) {
+export default function VolumeRange() {
   const { playerRef } = useRefs();
-  const DEFAULT_VOLUME = 50;
+
+  const [volume, setVolume] = useState(DEFAULT_VOLUME);
+
+  const handleChange = (value: number) => {
+    setVolume(value);
+    playerRef.current.setVolume(value);
+    db.editorOption.put({ optionName: "volume-range", value });
+  };
 
   return (
     <HStack alignItems="center">
       <FormLabel fontSize="sm">音量</FormLabel>
 
-      <Controller
-        name="volume-range"
-        control={props.control}
-        defaultValue={DEFAULT_VOLUME}
-        render={({ field }) => (
-          <Slider
-            w="200px"
-            aria-label="slider-ex-1"
-            {...field}
-            onChange={(value) => {
-              field.onChange(value);
-              playerRef.current.setVolume(value);
-              db.editorOption.put({ optionName: "volume-range", value });
-            }}
-          >
-            <SliderTrack>
-              <SliderFilledTrack />
-            </SliderTrack>
-            <SliderThumb />
-          </Slider>
-        )}
-      />
+      <Slider w="200px" aria-label="slider-ex-1" value={volume} onChange={handleChange}>
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+
+        <SliderThumb />
+      </Slider>
     </HStack>
   );
 }

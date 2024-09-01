@@ -1,17 +1,22 @@
 "use client";
 import { FormLabel, Input, HStack, Box, useTheme, Tooltip } from "@chakra-ui/react";
 import { IndexDBOption, ThemeColors } from "@/types";
-import { DEFAULT_ADJUST_TIME } from "@/app/edit/ts/const/defaultValues";
+import { DEFAULT_ADD_ADJUST_TIME } from "@/app/edit/ts/const/editDefaultValues";
 import { FieldValues, UseFormRegister } from "react-hook-form";
+import {
+  useEditAddTimeOffsetAtom,
+  useSetEditAddTimeOffsetAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
 interface AddTimeAdjustProps {
-  register: UseFormRegister<FieldValues>;
-  optionsData: IndexDBOption | undefined;
   sendIndexedDB: (target: HTMLInputElement) => void;
 }
 
 export default function AddTimeAdjust(props: AddTimeAdjustProps) {
   const theme: ThemeColors = useTheme();
+
+  const addTimeOffset = useEditAddTimeOffsetAtom();
+  const setAddTimeOffset = useSetEditAddTimeOffsetAtom();
 
   return (
     <HStack alignItems="baseline">
@@ -27,14 +32,11 @@ export default function AddTimeAdjust(props: AddTimeAdjustProps) {
         }}
         hasArrow
         placement="top"
-        label={<Box>追加ボタンを押した時に、数値分のタイムを調整します</Box>}
+        label={<Box>再生中に追加ボタンを押した時に、数値分のタイムを調整します</Box>}
       >
         <HStack alignItems="baseline">
-          <FormLabel fontSize="sm">追加タイム調整</FormLabel>
+          <FormLabel fontSize="sm">追加タイム補正</FormLabel>
           <Input
-            {...props.register("time-offset", {
-              value: props.optionsData?.["time-offset"] ?? DEFAULT_ADJUST_TIME,
-            })}
             name="time-offset"
             placeholder=""
             type="number"
@@ -45,7 +47,11 @@ export default function AddTimeAdjust(props: AddTimeAdjustProps) {
             className="max-w-[70px]"
             bg={theme.colors.background}
             borderColor={`${theme.colors.card.borderColor}60`}
-            onChange={(e) => props.sendIndexedDB(e.target as HTMLInputElement)}
+            value={addTimeOffset}
+            onChange={(e) => {
+              setAddTimeOffset(Number(e.target.value));
+              props.sendIndexedDB(e.target as HTMLInputElement);
+            }}
           />
         </HStack>
       </Tooltip>

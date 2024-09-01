@@ -20,6 +20,8 @@ import {
   useLineInputReducer,
   useEditAddLyricsInputAtom,
   useSetEditAddLyricsInputAtom,
+  useEditAddTimeOffsetAtom,
+  useEditWordConvertOptionAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 
@@ -27,7 +29,7 @@ interface EditorButtonsProps {
   isTimeInputValid: boolean;
 }
 const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, ref) => {
-  const { editSettingsRef, editorTimeInputRef, setRef } = useRefs();
+  const { editorTimeInputRef, setRef } = useRefs();
   const theme: ThemeColors = useTheme();
 
   const selectedLineCount = useEditLineSelectedCountAtom();
@@ -38,6 +40,8 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   const lyricsText = useEditAddLyricsInputAtom();
   const setLyricsText = useSetEditAddLyricsInputAtom();
   const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+  const addTimeOffset = useEditAddTimeOffsetAtom();
+  const convertOption = useEditWordConvertOptionAtom();
 
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -74,7 +78,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-    const timeOffset = isYTPlaying ? editSettingsRef.current!.getTimeOffset() : 0;
+    const timeOffset = isYTPlaying ? addTimeOffset : 0;
     const time = timeValidate(editorTimeInputRef.current!.getTime() + timeOffset, mapData).toFixed(
       3,
     );
@@ -87,7 +91,6 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     if (!isShiftKey) {
       lineInputReducer({ type: "reset" });
     }
-    const convertOption = editSettingsRef.current!.getWordConvertOption();
 
     TextAreaEvents.deleteTopLyrics(
       lineInputReducer,
@@ -124,8 +127,6 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const wordConvert = async () => {
-    const convertOption = editSettingsRef.current!.getWordConvertOption();
-
     setIsLoadWordConvert(true);
     const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
     setIsLoadWordConvert(false);

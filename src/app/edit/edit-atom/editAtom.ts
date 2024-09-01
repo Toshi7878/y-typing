@@ -1,9 +1,15 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { EditTabIndex, LineInputReducerAction, TagsReducerActionType } from "../ts/type";
+import {
+  ConvertOptionsType,
+  EditTabIndex,
+  LineInputReducerAction,
+  TagsReducerActionType,
+} from "../ts/type";
 import { Tag, YouTubeSpeed } from "@/types";
 import { atomWithReducer } from "jotai/utils"; // 追加
 import { getEditAtomStore } from "../components/EditProvider";
 import { useRefs } from "../edit-contexts/refsProvider";
+import { DEFAULT_ADD_ADJUST_TIME } from "../ts/const/editDefaultValues";
 const editAtomStore = getEditAtomStore();
 
 const editTabIndexAtom = atom<EditTabIndex>(0);
@@ -164,8 +170,6 @@ export const useSetEditAddLyricsInputAtom = () => {
   return useSetAtom(editAddLyricsInputAtom, { store: editAtomStore });
 };
 
-export const editTimeRangeValue = atom<number>(0);
-
 const editIsLoadWordConvertAtom = atom<boolean>(false);
 
 export const useIsLoadWordConvertAtom = () => {
@@ -176,22 +180,42 @@ export const useSetIsLoadWordConvertAtom = () => {
   return useSetAtom(editIsLoadWordConvertAtom, { store: editAtomStore });
 };
 
-const editIsLrcConverting = atom<boolean>(false);
+const editIsLrcConvertingAtom = atom<boolean>(false);
 
 export const useIsLrcConvertingAtom = () => {
-  return useAtomValue(editIsLrcConverting, { store: editAtomStore });
+  return useAtomValue(editIsLrcConvertingAtom, { store: editAtomStore });
 };
 
 export const useSetIsLrcConvertingAtom = () => {
-  return useSetAtom(editIsLrcConverting, { store: editAtomStore });
+  return useSetAtom(editIsLrcConvertingAtom, { store: editAtomStore });
 };
 
-const editCanUpload = atom<boolean>(false);
+const editCanUploadAtom = atom<boolean>(false);
 
 export const useCanUploadAtom = () => {
-  return useAtomValue(editCanUpload, { store: editAtomStore });
+  return useAtomValue(editCanUploadAtom, { store: editAtomStore });
 };
 
 export const useSetCanUploadAtom = () => {
-  return useSetAtom(editCanUpload, { store: editAtomStore });
+  return useSetAtom(editCanUploadAtom, { store: editAtomStore });
+};
+
+const editAddTimeOffsetAtom = atom<number>(DEFAULT_ADD_ADJUST_TIME);
+
+export const useEditAddTimeOffsetAtom = () => {
+  return useAtomValue(editAddTimeOffsetAtom, { store: editAtomStore });
+};
+
+export const useSetEditAddTimeOffsetAtom = () => {
+  return useSetAtom(editAddTimeOffsetAtom, { store: editAtomStore });
+};
+
+const editWordConvertOptionAtom = atom<ConvertOptionsType>("non_symbol");
+
+export const useEditWordConvertOptionAtom = () => {
+  return useAtomValue(editWordConvertOptionAtom, { store: editAtomStore });
+};
+
+export const useSetEditWordConvertOptionAtom = () => {
+  return useSetAtom(editWordConvertOptionAtom, { store: editAtomStore });
 };

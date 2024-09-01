@@ -1,27 +1,24 @@
 "use client";
-import { Flex, VStack } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useSelector } from "react-redux";
+import { HStack, VStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { db } from "@/lib/db";
-import { RootState } from "@/app/edit/redux/store";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { ConvertOptionsType, EditSettingsRef } from "@/app/edit/ts/type";
 import { IndexDBOption } from "@/types";
 import LrcConvertButton from "./settings-child/LrcConvertButton";
 import ConvertOptionButtons from "./settings-child/ConvertOptionButtons";
 import VolumeRange from "./settings-child/VolumeRange";
 import AddTimeAdjust from "./settings-child/AddTimeAdjust";
-import { DEFAULT_ADJUST_TIME, DEFAULT_VOLUME } from "@/app/edit/ts/const/defaultValues";
+import { DEFAULT_ADD_ADJUST_TIME } from "@/app/edit/ts/const/editDefaultValues";
 import TotalTimeAdjust from "./settings-child/TotalTimeAdjust";
+import {
+  useEditWordConvertOptionAtom,
+  useSetEditAddTimeOffsetAtom,
+  useSetEditWordConvertOptionAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
-export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props, ref) {
-  const [optionsData, setOptionsData] = useState<IndexDBOption>();
-  const [selectedConvertOption, setSelectedConvertOption] =
-    useState<ConvertOptionsType>("non_symbol");
-
-  const mapData = useSelector((state: RootState) => state.mapData!.value);
-  const { setRef } = useRefs();
+export default function EditSettings() {
+  const setSelectedConvertOption = useSetEditWordConvertOptionAtom();
+  const selectedConvertOption = useEditWordConvertOptionAtom();
+  const setAddTimeOffset = useSetEditAddTimeOffsetAtom();
 
   useEffect(() => {
     db.editorOption.toArray().then((allData) => {
@@ -29,31 +26,11 @@ export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props,
         acc[optionName] = value;
         return acc;
       }, {} as IndexDBOption);
-      setOptionsData(formattedData);
       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
-      methods.reset({
-        "time-offset": formattedData["time-offset"] ?? DEFAULT_ADJUST_TIME,
-        "volume-range": formattedData["volume-range"] ?? DEFAULT_VOLUME,
-      });
+      setAddTimeOffset(formattedData["time-offset"] ?? DEFAULT_ADD_ADJUST_TIME);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (ref && "current" in ref) {
-      setRef("editSettingsRef", ref.current!);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optionsData, mapData]);
-
-  const methods = useForm();
-  const { register, control, getValues } = methods;
-
-  useImperativeHandle(ref, () => ({
-    getTimeOffset: () => Number(methods.getValues("time-offset")),
-    getWordConvertOption: () => selectedConvertOption,
-    getVolume: () => Number(methods.getValues("volume-range")),
-  }));
 
   const sendIndexedDB = async (target: HTMLInputElement) => {
     db.editorOption.put({ optionName: target.name, value: target.value });
@@ -61,25 +38,21 @@ export default forwardRef<EditSettingsRef, unknown>(function EditSettings(props,
 
   return (
     <VStack align="start" spacing={4}>
-      <Flex width="100%" display="flex" justifyContent="space-between" alignItems="flex-end">
-        <AddTimeAdjust
-          register={register}
-          sendIndexedDB={sendIndexedDB}
-          optionsData={optionsData}
-        />
-
-        <TotalTimeAdjust register={register} getValues={getValues} />
-
-        <VolumeRange control={control} />
-      </Flex>
-      <Flex width="100%" display="flex" justifyContent="space-between" alignItems="flex-end">
+      <HStack spacing={10}>
+        <AddTimeAdjust sendIndexedDB={sendIndexedDB} />
+        <VolumeRange />
+      </HStack>
+      <HStack spacing={10}>
+        <TotalTimeAdjust />
+        <LrcConvertButton selectedConvertOption={selectedConvertOption} />
+      </HStack>
+      <HStack spacing={10}>
         <ConvertOptionButtons
           sendIndexedDB={sendIndexedDB}
           selectedConvertOption={selectedConvertOption}
           setSelectedConvertOption={setSelectedConvertOption}
         />
-        <LrcConvertButton selectedConvertOption={selectedConvertOption} />
-      </Flex>
+      </HStack>
     </VStack>
   );
-});
+}
