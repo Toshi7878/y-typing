@@ -200,7 +200,7 @@ export const handleKeydown = (
           const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
           if (selectedLine) {
-            const prevCount = Number((selectedLine as HTMLElement).dataset.lineIndex) + 1;
+            const prevCount = Number((selectedLine as HTMLElement).dataset.lineIndex) - 1;
             const prevLine = mapData[prevCount];
             if (prevLine) {
               player.seekTo(Number(prevLine.time));

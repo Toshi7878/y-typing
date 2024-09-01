@@ -1,6 +1,6 @@
 "use client";
 import { Tr, Td, Button, useDisclosure, useTheme } from "@chakra-ui/react";
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LineOptionModal from "./LineOptionModal";
@@ -24,8 +24,7 @@ import {
 import { useAtom, useAtomValue } from "jotai";
 import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
 
-export default function LineRow() {
-  console.log("Table");
+function LineRow() {
   const setTabIndex = useSetTabIndexAtom();
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
@@ -160,9 +159,9 @@ export default function LineRow() {
   };
   const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
 
-  return (
-    <>
-      {mapData.map((line, index) => (
+  const renderedRows = useMemo(
+    () =>
+      mapData.map((line, index) => (
         <Tr
           key={index}
           id={`line_${index}`}
@@ -191,6 +190,7 @@ export default function LineRow() {
             selectLine(index);
             setTabIndex(1);
           }}
+          className={lineSelectedCount === index ? "selected-line" : ""}
         >
           <Td
             borderRight="1px solid black"
@@ -219,7 +219,14 @@ export default function LineRow() {
             </Button>
           </Td>
         </Tr>
-      ))}
+      )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex],
+  );
+
+  return (
+    <>
+      {renderedRows}
 
       {isOpen && (
         <LineOptionModal
@@ -232,3 +239,5 @@ export default function LineRow() {
     </>
   );
 }
+
+export default LineRow;
