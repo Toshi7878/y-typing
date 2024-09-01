@@ -4,6 +4,13 @@ import React from "react";
 // ダミーデータを更新
 const updates = [
   {
+    date: "2024-09-1",
+    descriptions: [
+      `譜面のend時間が動画の総時間よりも長い場合、譜面のend時間を動画の総時間に合わせる処理を追加`,
+      ,
+    ],
+  },
+  {
     date: "2024-08-31",
     descriptions: [
       `エディターに適用中のテーマを適用(一部のみ)`,
