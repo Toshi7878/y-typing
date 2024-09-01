@@ -1,5 +1,7 @@
-const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠", "ゔ"];
-const addSymbol: string[] = [
+const convertChar = ["ゔ"];
+
+export const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠"];
+export const addSymbol: string[] = [
   ",",
   ".",
   "、",
@@ -27,7 +29,7 @@ const addSymbol: string[] = [
   "・",
   "￥",
 ];
-const addSymbolAll: string[] = [
+export const addSymbolAll: string[] = [
   '"',
   "＂",
   "[",
@@ -109,7 +111,7 @@ export class WordConvert {
   }
 
   createSymbolList() {
-    let result: string[] = [...nonSymbol];
+    let result: string[] = [...nonSymbol, ...convertChar];
     if (this.convertMode.match("add_symbol")) {
       result = result.concat(addSymbol as string[]);
     }

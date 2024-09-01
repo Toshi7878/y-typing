@@ -86,7 +86,7 @@ function Content() {
             flexDirection={{ base: "column", lg: "row" }}
             width="100%"
           >
-            <EditYouTube className="mt-1 md:mr-5 md:min-w-[416px] md:max-h-[234px]" />
+            <EditYouTube className="mt-1 md:mr-5 md:min-w-[416px] md:min-h-[234px] md:max-h-[234px]" />
             <EditorTabContent />
           </Box>
           <Box as="section" width="100%" my={1}>

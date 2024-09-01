@@ -15,7 +15,20 @@ export default function AddTimeAdjust(props: AddTimeAdjustProps) {
 
   return (
     <HStack alignItems="baseline">
-      <Tooltip label={<Box>追加ボタンを押した時に、数値分のタイムを調整します</Box>}>
+      <Tooltip
+        bg={theme.colors.popup.bg}
+        color={theme.colors.popup.color}
+        borderWidth="1px"
+        borderStyle="solid"
+        borderColor={theme.colors.card.borderColor}
+        css={{
+          "--popper-arrow-bg": theme.colors.popup.bg,
+          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
+        }}
+        hasArrow
+        placement="top"
+        label={<Box>追加ボタンを押した時に、数値分のタイムを調整します</Box>}
+      >
         <HStack alignItems="baseline">
           <FormLabel fontSize="sm">追加タイム調整</FormLabel>
           <Input

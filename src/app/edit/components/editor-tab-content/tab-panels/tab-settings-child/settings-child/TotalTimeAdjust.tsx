@@ -65,7 +65,20 @@ export default function TotalTimeAdjust(props: TotalTimeAdjustProps) {
 
   return (
     <HStack alignItems="baseline">
-      <Tooltip label={<Box>実行ボタンを押すと、全体のタイムが増減します</Box>}>
+      <Tooltip
+        bg={theme.colors.popup.bg}
+        color={theme.colors.popup.color}
+        borderWidth="1px"
+        borderStyle="solid"
+        borderColor={theme.colors.card.borderColor}
+        css={{
+          "--popper-arrow-bg": theme.colors.popup.bg,
+          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
+        }}
+        hasArrow
+        placement="top"
+        label={<Box>実行ボタンを押すと、全体のタイムが増減します</Box>}
+      >
         <HStack alignItems="baseline">
           <FormLabel fontSize="sm">全体タイム調整</FormLabel>
           <Input

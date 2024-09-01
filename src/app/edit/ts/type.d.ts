@@ -3,6 +3,8 @@ import { Dispatch } from "react";
 
 export type TagsReducerActionType = "set" | "add" | "delete" | "reset";
 export type LineInputReducerActionType = "set" | "reset";
+
+export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
 export interface EditorSendData {
   title: string;
   creatorComment: string;
