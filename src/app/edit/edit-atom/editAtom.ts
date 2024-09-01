@@ -136,10 +136,10 @@ export const useLineInputReducer = () => {
       case "set":
         if (payload) {
           setEditLineWord(payload.word);
-          if (payload.lyrics) {
+          if (typeof payload.lyrics === "string") {
             setEditLineLyrics(payload.lyrics);
           }
-          if (payload.selectCount) {
+          if (typeof payload.selectCount === "number") {
             editorTimeInputRef.current!.selectedTime(payload.selectCount);
             setEditLineCount(payload.selectCount);
           }

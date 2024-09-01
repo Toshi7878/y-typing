@@ -18,14 +18,13 @@ export const useSetAddLyrics = () => {
   const lineInputReducer = useLineInputReducer();
 
   return (newLyricsText: string | null) => {
-    if (newLyricsText) {
+    if (newLyricsText !== null) {
       setLyricsText(newLyricsText);
     }
-    const lines = (newLyricsText ? newLyricsText : lyricsText).split("\n");
+    const lines = (newLyricsText !== null ? newLyricsText : lyricsText).split("\n");
     const topLyrics = lines[0].replace(/\r$/, "");
     if (topLyrics !== lyrics) {
       const convertOption = editSettingsRef.current!.getWordConvertOption();
-
       TextAreaEvents.setTopLyrics(lineInputReducer, topLyrics, setIsLoadWordConvert, convertOption);
     }
   };
