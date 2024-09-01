@@ -200,12 +200,14 @@ export const handleKeydown = (
           const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
           if (selectedLine) {
-            const lineNumber = Number((selectedLine as HTMLElement).dataset.lineIndex);
-
-            const prevLine = mapData[lineNumber - 1];
+            const prevCount = Number((selectedLine as HTMLElement).dataset.lineIndex) + 1;
+            const prevLine = mapData[prevCount];
             if (prevLine) {
-              player.seekTo(prevLine["time"]);
-              setLineNumber(lineNumber - 1);
+              player.seekTo(Number(prevLine.time));
+              lineInputReducer({
+                type: "set",
+                payload: { lyrics: prevLine.lyrics, word: prevLine.word, selectCount: prevCount },
+              });
             }
           }
         }
@@ -218,12 +220,20 @@ export const handleKeydown = (
           const selectedLine = refs.tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
           if (selectedLine) {
-            const lineNumber = Number((selectedLine as HTMLElement).dataset.lineIndex);
+            const nextCount = Number((selectedLine as HTMLElement).dataset.lineIndex) + 1;
 
-            const nextLine = mapData[lineNumber + 1];
+            const nextLine = mapData[nextCount];
+
             if (nextLine) {
-              player.seekTo(nextLine["time"]);
-              setLineNumber(lineNumber - 1);
+              player.seekTo(Number(nextLine.time));
+              lineInputReducer({
+                type: "set",
+                payload: {
+                  lyrics: nextLine.lyrics,
+                  word: nextLine.word,
+                  selectCount: nextCount,
+                },
+              });
             }
           }
         }
