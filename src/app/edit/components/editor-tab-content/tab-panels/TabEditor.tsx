@@ -7,6 +7,7 @@ import { EditorButtonsRef, EditorTabRef } from "@/app/edit/ts/type";
 import {
   useEditAddLyricsInputAtom,
   useEditLineLyricsAtom,
+  useEditWordConvertOptionAtom,
   useLineInputReducer,
   useSetEditAddLyricsInputAtom,
   useSetIsLoadWordConvertAtom,
@@ -22,12 +23,13 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
 
   const editorButtonsRef = useRef<EditorButtonsRef>(null);
 
-  const { editorTimeInputRef, editSettingsRef } = useRefs();
+  const { editorTimeInputRef } = useRefs();
   const lyrics = useEditLineLyricsAtom();
   const lyricsText = useEditAddLyricsInputAtom();
   const setLyricsText = useSetEditAddLyricsInputAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const lineInputReducer = useLineInputReducer();
+  const convertOption = useEditWordConvertOptionAtom();
 
   useImperativeHandle(ref, () => ({
     undoAddLyrics: (undoLine: LineEdit) => {
@@ -36,8 +38,6 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
     },
 
     redoAddLyrics: () => {
-      const convertOption = editSettingsRef.current!.getWordConvertOption();
-
       TextAreaEvents.deleteTopLyrics(
         lineInputReducer,
         setLyricsText,

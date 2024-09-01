@@ -34,12 +34,6 @@ export interface EditorButtonsRef {
   delete: () => void;
 }
 
-export interface EditSettingsRef {
-  getTimeOffset: () => number;
-  getWordConvertOption: () => string;
-  getVolume: () => number;
-}
-
 export interface EditorTimeInputRef {
   clearTime: () => void;
   getTime: () => number;

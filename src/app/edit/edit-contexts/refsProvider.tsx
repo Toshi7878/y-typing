@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { EditorButtonsRef, EditSettingsRef, EditorTabRef, EditorTimeInputRef } from "../ts/type";
+import { EditorButtonsRef, EditorTabRef, EditorTimeInputRef } from "../ts/type";
 
 export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTabRef>;
@@ -23,7 +23,6 @@ export const RefsProvider = ({ children }) => {
   const editorTabRef = useRef(null);
   const editorButtonsRef = useRef(null);
   const editorTimeInputRef = useRef(null);
-  const editSettingsRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
 
