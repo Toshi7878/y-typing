@@ -11,6 +11,7 @@ export default function Home() {
       <Box
         as="main"
         minH="100vw"
+        width={"100vw"}
         bg={"background"}
         display="flex"
         flexDirection="column"

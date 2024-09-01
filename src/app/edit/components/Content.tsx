@@ -79,6 +79,7 @@ function Content() {
           flexDirection="column"
           alignItems="center"
           paddingTop="55px"
+          width={"100vw"}
         >
           <Box
             as="section"

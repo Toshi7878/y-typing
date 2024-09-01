@@ -115,9 +115,8 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
         as="main"
         id="main_content"
         className="flex flex-col items-center pt-16"
-        style={{
-          height: "100vh",
-        }}
+        width={"100vw"}
+        height={"100vh"}
         bg={"background"}
       >
         {(scene === "practice" || scene === "replay") && (
