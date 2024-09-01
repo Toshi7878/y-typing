@@ -8,7 +8,7 @@ import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
-import { EditorButtonsRef, SetLineFunctions, TimeInputRef } from "@/app/edit/ts/type";
+import { EditorButtonsRef, SetLineFunctions } from "@/app/edit/ts/type";
 import { useAtom, useAtomValue } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
@@ -26,9 +26,8 @@ interface EditorButtonsProps {
   isTimeInputValid: boolean;
 }
 const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, ref) => {
-  const { editSettingsRef, setRef } = useRefs();
+  const { editSettingsRef, editorTimeInputRef, setRef } = useRefs();
   const theme: ThemeColors = useTheme();
-  const timeInputRef = useRef<TimeInputRef | null>(null);
 
   const [selectedLineCount, setSelectedLineCount] = useAtom(editSelectedLineCountAtom);
   const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
@@ -64,7 +63,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     setWord("");
     setSelectedLineCount(null);
 
-    timeInputRef.current!.clearTime();
+    editorTimeInputRef.current!.clearTime();
   };
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
 
       setLyrics(line.lyrics || "");
       setWord(line.word || "");
-      timeInputRef.current!.selectedTime();
+      editorTimeInputRef.current!.selectedTime();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLineCount, mapData]);
@@ -92,7 +91,9 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
 
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
     const timeOffset = isYTPlaying ? editSettingsRef.current!.getTimeOffset() : 0;
-    const time = timeValidate(timeInputRef.current!.getTime() + timeOffset, mapData).toFixed(3);
+    const time = timeValidate(editorTimeInputRef.current!.getTime() + timeOffset, mapData).toFixed(
+      3,
+    );
     const addLyrics = lyricsText;
 
     const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
@@ -114,7 +115,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const update = (mapData: RootState["mapData"]["value"]) => {
-    const time = timeValidate(timeInputRef.current!.getTime(), mapData).toFixed(3);
+    const time = timeValidate(editorTimeInputRef.current!.getTime(), mapData).toFixed(3);
 
     setCanUpload(true);
     dispatch(

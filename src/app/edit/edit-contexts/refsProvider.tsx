@@ -1,11 +1,11 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { EditorButtonsRef, EditSettingsRef, EditorTabRef } from "../ts/type";
+import { EditorButtonsRef, EditSettingsRef, EditorTabRef, EditorTimeInputRef } from "../ts/type";
 
 export interface RefsContextType {
   editorTabRef: React.RefObject<EditorTabRef>;
   editorButtonsRef: React.RefObject<EditorButtonsRef>;
-  editorTimeInputRef: React.RefObject<EditorButtonsRef>;
+  editorTimeInputRef: React.RefObject<EditorTimeInputRef>;
   editSettingsRef: React.RefObject<EditSettingsRef>;
   tbodyRef: React.RefObject<HTMLElement>;
   playerRef: any;

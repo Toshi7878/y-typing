@@ -74,7 +74,7 @@ class YTState {
         }),
       );
     }
-    refs.playerRef.current.setVolume(refs.editorTabRef.current?.getVolume());
+    refs.playerRef.current.setVolume(refs.editSettingsRef.current?.getVolume());
   }
 }
 

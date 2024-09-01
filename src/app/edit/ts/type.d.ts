@@ -18,18 +18,6 @@ export interface EditorSendData {
   thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
-export interface TimeInputRef {
-  clearTime: () => void;
-  getTime: () => number;
-  selectedTime: () => void;
-  undoAdd: (time: Line["time"]) => void;
-}
-
-export interface EditorSettingsRef {
-  getTimeOffset: () => number;
-  getWordConvertOption: () => string;
-  getVolume: () => number;
-}
 export type EditTabIndex = 0 | 1 | 2;
 
 export interface SetLineFunctions {
@@ -40,10 +28,8 @@ export interface SetLineFunctions {
 
 export interface EditorTabRef {
   undoAddLyrics: (undoLine: Line) => void;
-  setAddLyrics: () => void;
   redoAddLyrics: (redoLine: Line) => void;
   lineInit: () => void;
-  getVolume: () => number | null;
 }
 export interface EditorButtonsRef {
   add: () => void;

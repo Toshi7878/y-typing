@@ -1,19 +1,12 @@
-import { Input, Box, Textarea, Card, CardBody, useTheme } from "@chakra-ui/react";
+import { Box, Card, CardBody, useTheme } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import EditorTimeInput from "./tab-editor-child/EditorTimeInput";
 import { Line, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 
-import {
-  EditorButtonsRef,
-  EditorSettingsRef,
-  EditorTabRef,
-  SetLineFunctions,
-  TimeInputRef,
-} from "@/app/edit/ts/type";
-import { useAtom } from "jotai";
+import { EditorButtonsRef, EditorTabRef, SetLineFunctions } from "@/app/edit/ts/type";
+import { useAtom, useSetAtom } from "jotai";
 import {
   editAddLyricsTextBoxAtom,
   editLineLyricsAtom,
@@ -22,24 +15,24 @@ import {
   useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import EditorButtons from "./tab-editor-child/EditorButtons";
-
-// 後でリファクタリング
+import EditorLineInput from "./tab-editor-child/EditorLineInput";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
 
 const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
   const theme: ThemeColors = useTheme();
 
-  const timeInputRef = useRef<TimeInputRef | null>(null);
-  const editorSettingRef = useRef<EditorSettingsRef | null>(null);
   const editorButtonsRef = useRef<EditorButtonsRef>(null);
 
+  const { editorTimeInputRef, editSettingsRef } = useRefs();
   const [selectedLineCount, setSelectedLineCount] = useAtom(editSelectedLineCountAtom);
   const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
-  const [word, setWord] = useAtom(editLineWordAtom);
+  const setWord = useSetAtom(editLineWordAtom);
   const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
 
   const setLineFunctions: SetLineFunctions = { setLyrics, setWord, setLyricsText };
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const mapData = useSelector((state: RootState) => state.mapData!.value);
 
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
 
@@ -48,7 +41,7 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
     setWord("");
     setSelectedLineCount(null);
 
-    timeInputRef.current!.clearTime();
+    editorTimeInputRef.current!.clearTime();
   };
 
   useEffect(() => {
@@ -57,30 +50,15 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
 
       setLyrics(line.lyrics || "");
       setWord(line.word || "");
-      timeInputRef.current!.selectedTime();
+      editorTimeInputRef.current!.selectedTime();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLineCount, mapData]);
 
-  const setAddLyrics = (e: React.ChangeEvent<HTMLTextAreaElement> | null) => {
-    setLyricsText(e!.target.value);
-    const lines = (e ? (e.target as HTMLTextAreaElement).value : lyricsText).split("\n");
-    const topLyrics = lines[0].replace(/\r$/, "");
-    if (topLyrics !== lyrics) {
-      const convertOption = editorSettingRef.current!.getWordConvertOption();
-
-      TextAreaEvents.setTopLyrics(setLineFunctions, topLyrics, setIsLoadWordConvert, convertOption);
-    }
-  };
-
   useImperativeHandle(ref, () => ({
     undoAddLyrics: (undoLine: Line) => {
       TextAreaEvents.undoTopLyrics(setLineFunctions, undoLine, lyricsText);
-      timeInputRef.current!.undoAdd(undoLine.time);
-    },
-
-    setAddLyrics: () => {
-      setAddLyrics(null);
+      editorTimeInputRef.current!.undoAdd(undoLine.time);
     },
 
     lineInit: () => {
@@ -88,7 +66,7 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
     },
 
     redoAddLyrics: () => {
-      const convertOption = editorSettingRef.current!.getWordConvertOption();
+      const convertOption = editSettingsRef.current!.getWordConvertOption();
 
       TextAreaEvents.deleteTopLyrics(
         setLineFunctions,
@@ -98,60 +76,16 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
         convertOption,
       );
     },
-
-    getVolume: () => {
-      return editorSettingRef.current?.getVolume() ?? 50;
-    },
   }));
 
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
       <CardBody py={4}>
-        <form className="flex flex-col gap-y-1">
-          <Box display="flex" alignItems="center">
-            <EditorTimeInput ref={timeInputRef} onFormStateChange={setIsTimeInputValid} />
-            <Input
-              placeholder="歌詞"
-              size="sm"
-              autoComplete="off"
-              value={lyrics}
-              onChange={(e) => setLyrics(e.target.value)}
-            />
-          </Box>
-          <Box display="flex" alignItems="center">
-            <Input
-              placeholder="No."
-              size="sm"
-              width="90px"
-              disabled
-              variant="filled"
-              opacity={1}
-              _disabled={{ opacity: 1 }}
-              value={selectedLineCount ?? ""}
-            />
-            <Input
-              placeholder="ワード"
-              size="sm"
-              autoComplete="off"
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-            />
-          </Box>
+        <Box display="flex" flexDirection="column" gap={1}>
+          <EditorLineInput setIsTimeInputValid={setIsTimeInputValid} />
           <EditorButtons ref={editorButtonsRef} isTimeInputValid={isTimeInputValid} />
-          <Box display="flex" alignItems="center">
-            <Textarea
-              placeholder="ここから歌詞をまとめて追加できます"
-              size="lg"
-              style={{ height: "110px" }}
-              value={lyricsText}
-              onPaste={() => {
-                const convertOption = editorSettingRef.current!.getWordConvertOption();
-                TextAreaEvents.paste(setLineFunctions, setIsLoadWordConvert, convertOption);
-              }}
-              onChange={(e) => setAddLyrics(e)}
-            />
-          </Box>
-        </form>
+          <EditorAddLyricsInput />
+        </Box>
       </CardBody>
     </Card>
   );
