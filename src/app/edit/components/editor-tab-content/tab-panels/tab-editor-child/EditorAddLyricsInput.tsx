@@ -1,13 +1,7 @@
 import { Box, Textarea, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
-
-import {
-  useEditAddLyricsInputAtom,
-  useEditWordConvertOptionAtom,
-  useLineInputReducer,
-  useSetIsLoadWordConvertAtom,
-} from "@/app/edit/edit-atom/editAtom";
+import { useEditAddLyricsInputAtom } from "@/app/edit/edit-atom/editAtom";
 import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
 import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
 
@@ -15,10 +9,6 @@ const EditorAddLyricsInput = () => {
   const theme: ThemeColors = useTheme();
 
   const lyricsText = useEditAddLyricsInputAtom();
-  const convertOption = useEditWordConvertOptionAtom();
-
-  const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
-  const lineInputReducer = useLineInputReducer();
   const setAddLyrics = useSetAddLyrics();
   const setTopLyricsText = useSetTopLyricsText();
 
