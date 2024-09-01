@@ -1,6 +1,6 @@
 import { timer } from "./editTimer";
 import { RefsContextType } from "../../edit-contexts/refsProvider";
-import { Line } from "@/types";
+import { LineEdit } from "@/types";
 import { Ticker } from "@pixi/ticker";
 import { EditTabIndex } from "../type";
 import { Dispatch } from "react";
@@ -41,7 +41,7 @@ class YTState {
     setIsYTPlaying(false);
   }
 
-  seek(event: any, setTimeCount: Dispatch<number>, mapData: Line[]) {
+  seek(event: any, setTimeCount: Dispatch<number>, mapData: LineEdit[]) {
     const time = event.target.getCurrentTime()!;
     console.log(`シークtime: ${time}`);
     setTimeCount(getCount(time, mapData));
@@ -78,7 +78,7 @@ class YTState {
   }
 }
 
-function getCount(time: number, mapData: Line[]) {
+function getCount(time: number, mapData: LineEdit[]) {
   let count = 0;
 
   for (let i = 0; i < mapData.length; i++) {

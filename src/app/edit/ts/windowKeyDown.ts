@@ -6,8 +6,9 @@ import { RootState } from "../redux/store";
 import { RefsContextType } from "../edit-contexts/refsProvider";
 import { mapDataRedo, mapDataUndo, updateLine } from "../redux/mapDataSlice";
 import { addHistory, redo, undo } from "../redux/undoredoSlice";
-import { Line, YouTubeSpeed } from "@/types";
+import { LineEdit, YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
+import { LineInputReducerAction } from "./type";
 class WordReplace {
   mapData: RootState["mapData"]["value"];
   tbodyRef: RefsContextType["tbodyRef"];
@@ -183,6 +184,8 @@ export const handleKeydown = (
   isYTPlaying: boolean,
   setLineNumber: Dispatch<number>,
   setCanUpload: Dispatch<boolean>,
+  lineInputReducer: Dispatch<LineInputReducerAction>,
+  setAddLyrics: Dispatch<string | null>,
 ) => {
   const iS_FOCUS_TEXTAREA =
     document.activeElement instanceof HTMLInputElement ||
@@ -262,7 +265,7 @@ export const handleKeydown = (
       case "KeyZ":
         if (event.ctrlKey) {
           if (undoredoState.present) {
-            const data = undoredoState.present.data as Line;
+            const data = undoredoState.present.data as LineEdit;
 
             dispatch(mapDataUndo(undoredoState.present));
             if (undoredoState.present.type === "add") {
@@ -285,7 +288,7 @@ export const handleKeydown = (
             dispatch(mapDataRedo(future));
 
             if (future.type === "add") {
-              const data = future.data as Line;
+              const data = future.data as LineEdit;
               refs.editorTabRef.current?.redoAddLyrics(data);
             }
 
@@ -297,7 +300,7 @@ export const handleKeydown = (
         break;
 
       case "KeyD":
-        refs.editorTabRef.current?.lineInit();
+        lineInputReducer({ type: "reset" });
         event.preventDefault();
 
         break;
@@ -309,7 +312,7 @@ export const handleKeydown = (
         break;
 
       case "KeyQ":
-        refs.editorTabRef.current!.setAddLyrics();
+        setAddLyrics(null);
         event.preventDefault();
 
         break;

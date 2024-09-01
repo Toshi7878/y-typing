@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { Line } from "@/types";
+import { LineEdit } from "@/types";
 
 interface MapDataState {
   lastAddedTime: string;
-  value: Line[];
+  value: LineEdit[];
 }
 
 const initialState: MapDataState = {

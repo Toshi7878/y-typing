@@ -2,38 +2,22 @@ import { Box, Textarea, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 
-import { SetLineFunctions } from "@/app/edit/ts/type";
-import { useAtom, useSetAtom } from "jotai";
 import {
-  editAddLyricsTextBoxAtom,
-  editLineLyricsAtom,
-  editLineWordAtom,
+  useEditAddLyricsInputAtom,
+  useLineInputReducer,
   useSetIsLoadWordConvertAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
 
 const EditorAddLyricsInput = () => {
   const theme: ThemeColors = useTheme();
 
   const { editSettingsRef } = useRefs();
-  const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
-  const setWord = useSetAtom(editLineWordAtom);
-  const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
-
-  const setLineFunctions: SetLineFunctions = { setLyrics, setWord, setLyricsText };
-
+  const lyricsText = useEditAddLyricsInputAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
-
-  const setAddLyrics = (e: React.ChangeEvent<HTMLTextAreaElement> | null) => {
-    setLyricsText(e!.target.value);
-    const lines = (e ? (e.target as HTMLTextAreaElement).value : lyricsText).split("\n");
-    const topLyrics = lines[0].replace(/\r$/, "");
-    if (topLyrics !== lyrics) {
-      const convertOption = editSettingsRef.current!.getWordConvertOption();
-
-      TextAreaEvents.setTopLyrics(setLineFunctions, topLyrics, setIsLoadWordConvert, convertOption);
-    }
-  };
+  const lineInputReducer = useLineInputReducer();
+  const setAddLyrics = useSetAddLyrics();
 
   return (
     <Box display="flex" alignItems="center">
@@ -44,9 +28,9 @@ const EditorAddLyricsInput = () => {
         value={lyricsText}
         onPaste={() => {
           const convertOption = editSettingsRef.current!.getWordConvertOption();
-          TextAreaEvents.paste(setLineFunctions, setIsLoadWordConvert, convertOption);
+          TextAreaEvents.paste(lineInputReducer, setIsLoadWordConvert, convertOption);
         }}
-        onChange={(e) => setAddLyrics(e)}
+        onChange={(e) => setAddLyrics(e.target.value)}
       />
     </Box>
   );

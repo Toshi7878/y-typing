@@ -1,17 +1,16 @@
 import { Input, Box, useTheme } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
-import { Dispatch, useEffect, useRef } from "react";
+import { Dispatch, useRef } from "react";
 import { ThemeColors } from "@/types";
-import { RootState } from "@/app/edit/redux/store";
 
-import { useAtom, useAtomValue } from "jotai";
-import {
-  editLineLyricsAtom,
-  editLineSelectedNumberAtom as editSelectedLineCountAtom,
-  editLineWordAtom,
-} from "@/app/edit/edit-atom/editAtom";
 import EditorTimeInput from "./EditorTimeInput";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
+import {
+  useEditLineLyricsAtom,
+  useEditLineSelectedCountAtom,
+  useEditLineWordAtom,
+  useSetEditLineLyricsAtom,
+  useSetEditLineWordAtom,
+} from "@/app/edit/edit-atom/editAtom";
 
 interface EditorLineInputProps {
   setIsTimeInputValid: Dispatch<boolean>;
@@ -20,24 +19,12 @@ interface EditorLineInputProps {
 const EditorLineInput = (props: EditorLineInputProps) => {
   const theme: ThemeColors = useTheme();
 
-  const timeInputRef = useRef<EditorTimeInputRef | null>(null);
-
-  const selectedLineCount = useAtomValue(editSelectedLineCountAtom);
-  const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
-  const [word, setWord] = useAtom(editLineWordAtom);
-
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-
-  useEffect(() => {
-    if (selectedLineCount !== null && mapData[selectedLineCount]) {
-      const line = mapData[selectedLineCount];
-
-      setLyrics(line.lyrics || "");
-      setWord(line.word || "");
-      timeInputRef.current!.selectedTime();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedLineCount, mapData]);
+  const timeInputRef = useRef<EditorTimeInputRef>(null);
+  const selectedLineCount = useEditLineSelectedCountAtom();
+  const lyrics = useEditLineLyricsAtom();
+  const setLyrics = useSetEditLineLyricsAtom();
+  const word = useEditLineWordAtom();
+  const setWord = useSetEditLineWordAtom();
 
   return (
     <>

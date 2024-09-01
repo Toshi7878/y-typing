@@ -5,14 +5,14 @@ import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRe
 import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Line } from "@/types";
+import { LineEdit } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import { useAtomValue } from "jotai";
 import {
-  editLineSelectedNumberAtom,
   isEditYouTubePlayingAtom,
+  useEditLineSelectedCountAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
 
@@ -40,7 +40,8 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
 
     const [maxTime, setMaxTime] = useState("0");
     const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
-    const lineNumber = useAtomValue(editLineSelectedNumberAtom);
+
+    const lineNumber = useEditLineSelectedCountAtom();
 
     const { playerRef, setRef } = useRefs();
     const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -92,13 +93,15 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
         setValue("time", "", { shouldValidate: true });
       },
       getTime: () => Number(methods.getValues("time")),
-      selectedTime: () => {
-        if (lineNumber !== null) {
-          const selectedTime = mapData[lineNumber]?.["time"];
+      selectedTime: (count) => {
+        if (count !== null) {
+          const selectedTime = mapData[count]?.["time"];
           setValue("time", selectedTime, { shouldValidate: true });
+        } else {
+          setValue("time", "", { shouldValidate: true });
         }
       },
-      undoAdd: (time: Line["time"]) => {
+      undoAdd: (time: LineEdit["time"]) => {
         setValue("time", time, { shouldValidate: true });
       },
     }));

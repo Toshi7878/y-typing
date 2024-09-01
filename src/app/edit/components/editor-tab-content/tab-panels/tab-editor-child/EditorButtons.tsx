@@ -1,24 +1,25 @@
 import { Box, Flex, Button, useTheme } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
 import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
-import { EditorButtonsRef, SetLineFunctions } from "@/app/edit/ts/type";
-import { useAtom, useAtomValue } from "jotai";
+import { EditorButtonsRef } from "@/app/edit/ts/type";
+import { useAtomValue } from "jotai";
 import {
-  editAddLyricsTextBoxAtom,
-  editLineLyricsAtom,
-  editLineSelectedNumberAtom as editSelectedLineCountAtom,
-  editLineWordAtom,
   isEditYouTubePlayingAtom,
   useSetCanUploadAtom,
   useIsLoadWordConvertAtom,
   useSetIsLoadWordConvertAtom,
+  useEditLineSelectedCountAtom,
+  useEditLineLyricsAtom,
+  useEditLineWordAtom,
+  useLineInputReducer,
+  useEditAddLyricsInputAtom,
+  useSetEditAddLyricsInputAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 
@@ -29,13 +30,15 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   const { editSettingsRef, editorTimeInputRef, setRef } = useRefs();
   const theme: ThemeColors = useTheme();
 
-  const [selectedLineCount, setSelectedLineCount] = useAtom(editSelectedLineCountAtom);
-  const [lyrics, setLyrics] = useAtom(editLineLyricsAtom);
-  const [word, setWord] = useAtom(editLineWordAtom);
-  const [lyricsText, setLyricsText] = useAtom(editAddLyricsTextBoxAtom);
+  const selectedLineCount = useEditLineSelectedCountAtom();
+  const lyrics = useEditLineLyricsAtom();
+  const word = useEditLineWordAtom();
+  const lineInputReducer = useLineInputReducer();
+
+  const lyricsText = useEditAddLyricsInputAtom();
+  const setLyricsText = useSetEditAddLyricsInputAtom();
   const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
 
-  const setLineFunctions: SetLineFunctions = { setLyrics, setWord, setLyricsText };
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const endAfterLineIndex =
@@ -57,25 +60,6 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const lineInit = () => {
-    setLyrics("");
-    setWord("");
-    setSelectedLineCount(null);
-
-    editorTimeInputRef.current!.clearTime();
-  };
-
-  useEffect(() => {
-    if (selectedLineCount !== null && mapData[selectedLineCount]) {
-      const line = mapData[selectedLineCount];
-
-      setLyrics(line.lyrics || "");
-      setWord(line.word || "");
-      editorTimeInputRef.current!.selectedTime();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedLineCount, mapData]);
 
   const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
     const lastLineTime = Number(mapData[endAfterLineIndex]["time"]);
@@ -101,12 +85,13 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     ButtonEvents.addLine(dispatch, setCanUpload, { time, lyrics, word });
 
     if (!isShiftKey) {
-      lineInit();
+      lineInputReducer({ type: "reset" });
     }
     const convertOption = editSettingsRef.current!.getWordConvertOption();
 
     TextAreaEvents.deleteTopLyrics(
-      setLineFunctions,
+      lineInputReducer,
+      setLyricsText,
       lyricsCopy,
       addLyrics,
       setIsLoadWordConvert,
@@ -135,15 +120,16 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       word,
       selectedLineCount: selectedLineCount ?? undefined,
     });
-    lineInit();
+    lineInputReducer({ type: "reset" });
   };
 
   const wordConvert = async () => {
     const convertOption = editSettingsRef.current!.getWordConvertOption();
 
     setIsLoadWordConvert(true);
-    await ButtonEvents.lyricsConvert(lyrics, setLineFunctions, convertOption);
+    const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
     setIsLoadWordConvert(false);
+    lineInputReducer({ type: "set", payload: { word } });
   };
 
   const deleteLine = (mapData: RootState["mapData"]["value"]) => {
@@ -153,7 +139,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
         selectedLineCount: selectedLineCount,
       });
     }
-    lineInit();
+    lineInputReducer({ type: "reset" });
   };
 
   const addButtonRef = useRef<HTMLButtonElement | null>(null);

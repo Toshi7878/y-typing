@@ -1,11 +1,10 @@
 import { ButtonEvents } from "./buttonEvent";
-import { Line } from "@/types";
+import { LineEdit } from "@/types";
 import { Dispatch } from "react";
-import { Action } from "@reduxjs/toolkit";
-import { SetLineFunctions } from "../../type";
+import { LineInputReducerAction as LineInputReducer } from "../../type";
 export class TextAreaEvents {
   static async paste(
-    setLineFunctions: SetLineFunctions,
+    lineInputReducer: Dispatch<LineInputReducer>,
     setIsLoadWordConvert: Dispatch<boolean>,
     convertOption: string,
   ) {
@@ -16,26 +15,28 @@ export class TextAreaEvents {
       }
     });
     const text = await navigator.clipboard.readText();
-    TextAreaEvents.setTopLyrics(setLineFunctions, text, setIsLoadWordConvert, convertOption);
+    TextAreaEvents.setTopLyrics(lineInputReducer, text, setIsLoadWordConvert, convertOption);
   }
 
   static async setTopLyrics(
-    setLineFunctions: SetLineFunctions,
+    lineInputReducer: Dispatch<LineInputReducer>,
     addLyrics: string,
     setIsLoadWordConvert: Dispatch<boolean>,
     convertOption: string,
   ) {
     const lines = addLyrics.split("\n");
-    const topLine = lines[0].replace(/\r$/, "");
+    const lyrics = lines[0].replace(/\r$/, "");
 
-    setLineFunctions.setLyrics(topLine);
     setIsLoadWordConvert(true);
-    await ButtonEvents.lyricsConvert(topLine, setLineFunctions, convertOption);
+    const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
     setIsLoadWordConvert(false);
+
+    lineInputReducer({ type: "set", payload: { lyrics, word } });
   }
 
   static deleteTopLyrics(
-    setLineFunctions: SetLineFunctions,
+    lineInputReducer: Dispatch<LineInputReducer>,
+    setLyricsText: Dispatch<string>,
     lyrics: string,
     addLyrics: string,
     setIsLoadWordConvert: Dispatch<boolean>,
@@ -46,20 +47,25 @@ export class TextAreaEvents {
 
     const newText = lines.slice(1).join("\n");
     if (lyrics === topLine) {
-      setLineFunctions.setLyricsText(newText);
+      setLyricsText(newText);
     }
-    TextAreaEvents.setTopLyrics(setLineFunctions, newText, setIsLoadWordConvert, convertOption);
+    TextAreaEvents.setTopLyrics(lineInputReducer, newText, setIsLoadWordConvert, convertOption);
   }
 
-  static undoTopLyrics(setLineFunctions: SetLineFunctions, undoLine: Line, addLyrics: string) {
+  static undoTopLyrics(
+    lineInputReducer: Dispatch<LineInputReducer>,
+    setLyricsText: Dispatch<string>,
+    undoLine: LineEdit,
+    addLyrics: string,
+  ) {
     const lyrics = undoLine.lyrics;
     const word = undoLine.word;
 
     const lines = addLyrics?.split("\n") || [];
     lines.unshift(lyrics);
     const newText = lines.join("\n");
-    setLineFunctions.setLyricsText(newText);
-    setLineFunctions.setLyrics(lyrics || "");
-    setLineFunctions.setWord(word || "");
+    setLyricsText(newText);
+
+    lineInputReducer({ type: "set", payload: { lyrics, word } });
   }
 }

@@ -1,9 +1,9 @@
-import { Line } from "@/types";
+import { LineEdit } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface LineChange {
-  old: Line;
-  new: Line;
+  old: LineEdit;
+  new: LineEdit;
   lineNumber: string;
 }
 
@@ -13,9 +13,9 @@ interface AllAdjustTime {
 }
 
 export interface UndoRedoStatus {
-  past: { type: string; data: Line | LineChange | AllAdjustTime }[];
-  present: { type: string; data: Line | LineChange | AllAdjustTime } | null;
-  future: { type: string; data: Line | LineChange | AllAdjustTime }[];
+  past: { type: string; data: LineEdit | LineChange | AllAdjustTime }[];
+  present: { type: string; data: LineEdit | LineChange | AllAdjustTime } | null;
+  future: { type: string; data: LineEdit | LineChange | AllAdjustTime }[];
 }
 
 const initialState: UndoRedoStatus = {

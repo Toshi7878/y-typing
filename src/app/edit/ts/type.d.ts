@@ -1,6 +1,8 @@
+import { LineInput } from "@/types";
 import { Dispatch } from "react";
 
-export type SetTagsType = "set" | "add" | "delete" | "reset";
+export type TagsReducerActionType = "set" | "add" | "delete" | "reset";
+export type LineInputReducerActionType = "set" | "reset";
 export interface EditorSendData {
   title: string;
   creatorComment: string;
@@ -20,16 +22,9 @@ export interface EditorSendData {
 
 export type EditTabIndex = 0 | 1 | 2;
 
-export interface SetLineFunctions {
-  setLyrics: Dispatch<string>;
-  setWord: Dispatch<string>;
-  setLyricsText: Dispatch<string>;
-}
-
 export interface EditorTabRef {
   undoAddLyrics: (undoLine: Line) => void;
   redoAddLyrics: (redoLine: Line) => void;
-  lineInit: () => void;
 }
 export interface EditorButtonsRef {
   add: () => void;
@@ -46,6 +41,8 @@ export interface EditSettingsRef {
 export interface EditorTimeInputRef {
   clearTime: () => void;
   getTime: () => number;
-  selectedTime: () => void;
+  selectedTime: (count: number | null) => void;
   undoAdd: (time: Line["time"]) => void;
 }
+
+export type LineInputReducerAction = { type: LineInputReducerActionType; payload?: LineInput };

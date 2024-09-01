@@ -10,7 +10,14 @@ export type LeftNavConfig = {
   items: NavItem[];
 };
 
-export interface Line {
+export interface LineInput {
+  time?: string;
+  lyrics?: string;
+  word: string;
+  selectCount?: number;
+}
+
+export interface LineEdit {
   time: string;
   lyrics: string;
   word: string;

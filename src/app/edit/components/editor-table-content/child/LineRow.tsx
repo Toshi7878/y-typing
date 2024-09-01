@@ -4,22 +4,25 @@ import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LineOptionModal from "./LineOptionModal";
-import { Line, ThemeColors } from "@/types";
+import { LineEdit, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
-  editLineSelectedNumberAtom as editLineSelectedCountAtom,
   editSpeedAtom,
   editTimeCountAtom,
   isEditYouTubePlayingAtom,
   isEditYouTubeStartedAtom,
+  useEditLineSelectedCountAtom,
+  useLineInputReducer,
   useSetCanUploadAtom,
+  useSetEditLineSelectedCountAtom,
   useSetTabIndexAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useAtom, useAtomValue } from "jotai";
+import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
 
 export default function LineRow() {
   console.log("Table");
@@ -28,18 +31,21 @@ export default function LineRow() {
   const setCanUpload = useSetCanUploadAtom();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
-  const [lineOptions, setLineOptions] = useState<Line["options"] | null>(null);
+  const [lineOptions, setLineOptions] = useState<LineEdit["options"] | null>(null);
   const [speed, setSpeed] = useAtom(editSpeedAtom);
   const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
-  const [lineSelectedCount, setLineSelectedCount] = useAtom(editLineSelectedCountAtom);
+  const lineSelectedCount = useEditLineSelectedCountAtom();
+  const setLineSelectedCount = useSetEditLineSelectedCountAtom();
+  const lineInputReducer = useLineInputReducer();
   const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
   const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
-
+  const setAddLyrics = useSetAddLyrics();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
   const theme: ThemeColors = useTheme();
+
   const keydownHandler = useCallback(
     (event: KeyboardEvent) =>
       handleKeydown(
@@ -53,6 +59,8 @@ export default function LineRow() {
         isYTPlaying,
         setLineSelectedCount,
         setCanUpload,
+        lineInputReducer,
+        setAddLyrics,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refs, undoredoState, mapData, speed],
@@ -115,9 +123,19 @@ export default function LineRow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTStarted]);
 
-  const selectLine = (index: SetStateAction<number | null>) => {
-    setLineSelectedCount(index);
-  };
+  const selectLine = useCallback(
+    (selectCount: number) => {
+      const time = mapData[selectCount].time;
+      const lyrics = mapData[selectCount].lyrics;
+      const word = mapData[selectCount].word;
+      setLineSelectedCount(selectCount);
+      lineInputReducer({ type: "set", payload: { time, lyrics, word, selectCount } });
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mapData],
+  );
+
   useEffect(() => {
     const updateTimeBg = () => {
       if (timeCount !== null) {
@@ -171,7 +189,6 @@ export default function LineRow() {
           }}
           onClick={() => {
             selectLine(index);
-
             setTabIndex(1);
           }}
         >
