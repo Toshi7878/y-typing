@@ -18,6 +18,7 @@ import {
 import { useAtom, useSetAtom } from "jotai";
 import { useParams, useSearchParams } from "next/navigation";
 import NProgress from "nprogress";
+import { useVolumeAtom } from "@/components/atom/globalAtoms";
 
 interface EditorYouTubeProps {
   className: string;
@@ -31,6 +32,7 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
   const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
   const setTimeCount = useSetAtom(editTimeCountAtom);
   const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
+  const volume = useVolumeAtom();
   const setMapTitle = useSetMapTitleAtom();
   const videoId = useVideoIdAtom();
   const searchParams = useSearchParams();
@@ -46,7 +48,7 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
       NProgress.done();
       refs.setRef("playerRef", player);
       const isNewMap = id ? false : true;
-      ytState.ready(refs, setMapTitle, setIsReady, dispatch, isNewMap);
+      ytState.ready(refs, setMapTitle, setIsReady, dispatch, isNewMap, volume);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

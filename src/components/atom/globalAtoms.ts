@@ -1,5 +1,5 @@
 import { DEFAULT_VOLUME } from "@/config/consts";
-import { atom } from "jotai";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 
 const getInitialTheme = (): "light" | "dark" => {
   if (typeof window !== "undefined") {
@@ -12,3 +12,10 @@ const getInitialTheme = (): "light" | "dark" => {
 export const themeAtom = atom<"light" | "dark">(getInitialTheme());
 
 const volumeAtom = atom<number>(DEFAULT_VOLUME);
+
+export const useVolumeAtom = () => {
+  return useAtomValue(volumeAtom);
+};
+export const useSetVolumeAtom = () => {
+  return useSetAtom(volumeAtom);
+};

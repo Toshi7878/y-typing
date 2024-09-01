@@ -53,6 +53,7 @@ class YTState {
     setIsReady: Dispatch<boolean>,
     dispatch: Dispatch<Action>,
     isNewMap: boolean,
+    volume: number,
   ) {
     console.log("ready");
     const videoData = refs.playerRef!.current!.getVideoData();
@@ -74,7 +75,7 @@ class YTState {
         }),
       );
     }
-    refs.playerRef.current.setVolume(refs.editSettingsRef.current?.getVolume());
+    refs.playerRef.current.setVolume(volume);
   }
 }
 
