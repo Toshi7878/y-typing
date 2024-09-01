@@ -77,7 +77,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["k"].slice(-10).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["k"]}
           word={lineWord.word.map((w) => w["k"]).join("")}
-          className="lowercase"
+          className="lowercase word-kana"
         />
 
         <PlayingWord
@@ -85,7 +85,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className={`uppercase ml-1 ${inputMode === "kana" ? "invisible" : ""}`}
+          className={`uppercase ml-1 word-roma ${inputMode === "kana" ? "invisible" : ""}`}
         />
       </Box>
 
