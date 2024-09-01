@@ -78,7 +78,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   };
 
   const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-    const timeOffset = isYTPlaying ? addTimeOffset : 0;
+    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
     const time = timeValidate(editorTimeInputRef.current!.getTime() + timeOffset, mapData).toFixed(
       3,
     );
