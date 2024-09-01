@@ -1,7 +1,7 @@
-import { Box, Text, UnorderedList, ListItem } from "@chakra-ui/react"; // UnorderedListとListItemを追加
+import { ThemeColors } from "@/types";
+import { Box, Text, UnorderedList, ListItem, useTheme } from "@chakra-ui/react"; // UnorderedListとListItemを追加
 import React from "react";
 
-// ダミーデータを更新
 const updates = [
   {
     date: "2024-09-1",
@@ -77,10 +77,12 @@ const updates = [
 ];
 
 const UpdateHistory = () => {
+  const theme: ThemeColors = useTheme();
+
   return (
     <Box>
       {updates.map((update, index) => (
-        <Box key={index} mb={12} gap={2}>
+        <Box key={index} mb={12} gap={2} color={theme.colors.color}>
           <Text fontWeight="bold">{update.date}</Text>
           <UnorderedList>
             {update.descriptions.map((desc, i) => (

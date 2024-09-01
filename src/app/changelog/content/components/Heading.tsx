@@ -1,9 +1,10 @@
-import { Heading } from "@chakra-ui/react";
-import React from "react";
+import { ThemeColors } from "@/types";
+import { Heading, useTheme } from "@chakra-ui/react";
 
 const ContentHeading = () => {
+  const theme: ThemeColors = useTheme();
   return (
-    <Heading as="h2" size="lg" mb={4}>
+    <Heading as="h2" size="lg" mb={4} color={theme.colors.color}>
       更新履歴
     </Heading>
   );
