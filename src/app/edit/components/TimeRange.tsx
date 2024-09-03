@@ -5,24 +5,25 @@ import "@/app/edit/style/editor.scss";
 import { Box, Button, HStack, Text, useTheme } from "@chakra-ui/react";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { YTSpeedController } from "../ts/youtube-ts/editYtHandleEvents";
-import { useAtom, useAtomValue } from "jotai";
-import {
-  editSpeedAtom,
-  isEditYouTubeReadyAtom,
-  isEditYouTubeStartedAtom,
-} from "../edit-atom/editAtom";
 import { ThemeColors } from "@/types";
+import {
+  useIsEditYTReadyAtom,
+  useIsEditYTStartedAtom,
+  useSetSpeedAtom,
+  useSpeedAtom,
+} from "../edit-atom/editAtom";
 const TimeRange = () => {
   console.log("range");
 
   const { playerRef } = useRefs();
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
-  const [speed, setSpeed] = useAtom(editSpeedAtom); //0.25 or 2.00 場合片方のボタンをdisabledにする
+  const speed = useSpeedAtom(); //0.25 or 2.00 場合片方のボタンをdisabledにする
+  const setSpeed = useSetSpeedAtom();
   const theme: ThemeColors = useTheme();
 
-  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
-  const isYTReady = useAtomValue(isEditYouTubeReadyAtom);
+  const isYTStarted = useIsEditYTStartedAtom();
+  const isYTReady = useIsEditYTReadyAtom();
 
   const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const time = Number(e.target.value);

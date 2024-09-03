@@ -10,7 +10,7 @@ import {
   useSetEditLineLyricsAtom,
   useSetEditLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useAddRubyTagEvent } from "@/app/edit/ts/windowKeyDown";
+import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 
 interface EditorLineInputProps {
   setIsTimeInputValid: Dispatch<boolean>;

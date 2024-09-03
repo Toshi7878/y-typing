@@ -7,9 +7,8 @@ import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 import "@/app/edit/style/reactTags.scss";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { Tag } from "@/types";
-import { useAtomValue } from "jotai";
 import {
-  isEditYouTubeReadyAtom,
+  useIsEditYTReadyAtom,
   useSetCanUploadAtom,
   useSetTagsAtom,
   useTagsAtom,
@@ -20,7 +19,7 @@ const InfoGenreTag = () => {
   const setTags = useSetTagsAtom();
   const setCanUpload = useSetCanUploadAtom();
 
-  const isYouTubeReady = useAtomValue(isEditYouTubeReadyAtom);
+  const isYouTubeReady = useIsEditYTReadyAtom();
   const { playerRef } = useRefs();
   const [ytTitle, setYtTitle] = useState("動画タイトル"); // あとで無くす
 

@@ -1,8 +1,5 @@
-import { LineInput } from "@/types";
+import { LineInput, YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
-
-export type TagsReducerActionType = "set" | "add" | "delete" | "reset";
-export type LineInputReducerActionType = "set" | "reset";
 
 export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
 export interface EditorSendData {
@@ -25,7 +22,6 @@ export interface EditorSendData {
 export type EditTabIndex = 0 | 1 | 2;
 
 export interface EditorTabRef {
-  undoAddLyrics: (undoLine: Line) => void;
   redoAddLyrics: (redoLine: Line) => void;
 }
 export interface EditorButtonsRef {
@@ -41,4 +37,8 @@ export interface EditorTimeInputRef {
   undoAdd: (time: Line["time"]) => void;
 }
 
+type TagsReducerActionType = "set" | "add" | "delete" | "reset";
+type LineInputReducerActionType = "set" | "reset";
+export type YTSpeedReducerActionType = "up" | "down";
 export type LineInputReducerAction = { type: LineInputReducerActionType; payload?: LineInput };
+export type TagsReducerAction = { type: TagsReducerActionType; payload?: Tag | Tag[] };

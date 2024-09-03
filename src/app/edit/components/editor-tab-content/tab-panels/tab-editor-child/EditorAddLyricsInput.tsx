@@ -1,16 +1,14 @@
 import { Box, Textarea, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
-import { useEditAddLyricsInputAtom } from "@/app/edit/edit-atom/editAtom";
-import { useSetAddLyrics } from "@/app/edit/hooks/useSetAddLyrics";
-import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
+import { useEditAddLyricsTextAtom } from "@/app/edit/edit-atom/editAtom";
+import { useSetAddLyrics } from "@/app/edit/hooks/useEditAddLyricsTextHooks";
+import { useAddLyricsTextPasteEvents } from "@/app/edit/hooks/useEditPasteEventHooks";
 
 const EditorAddLyricsInput = () => {
   const theme: ThemeColors = useTheme();
-
-  const lyricsText = useEditAddLyricsInputAtom();
+  const pasteEvent = useAddLyricsTextPasteEvents();
+  const lyricsText = useEditAddLyricsTextAtom();
   const setAddLyrics = useSetAddLyrics();
-  const setTopLyricsText = useSetTopLyricsText();
 
   return (
     <Box display="flex" alignItems="center">
@@ -21,9 +19,7 @@ const EditorAddLyricsInput = () => {
         value={lyricsText}
         bg={theme.colors.background}
         borderColor={`${theme.colors.card.borderColor}80`}
-        onPaste={() => {
-          TextAreaEvents.paste(setTopLyricsText);
-        }}
+        onPaste={pasteEvent}
         onChange={(e) => setAddLyrics(e.target.value)}
       />
     </Box>

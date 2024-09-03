@@ -8,14 +8,15 @@ import { useRefs } from "../../edit-contexts/refsProvider";
 import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
 import {
   editTimeCountAtom,
-  isEditYouTubePlayingAtom,
-  isEditYouTubeReadyAtom,
-  isEditYouTubeStartedAtom,
+  useIsEditYTStartedAtom,
+  useSetIsEditYTPlayingAtom,
+  useSetIsEditYTReadyAtom,
+  useSetIsEditYTStartedAtom,
   useSetMapTitleAtom,
   useSetTabIndexAtom,
   useVideoIdAtom,
 } from "../../edit-atom/editAtom";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useParams, useSearchParams } from "next/navigation";
 import NProgress from "nprogress";
 import { useVolumeAtom } from "@/components/atom/globalAtoms";
@@ -28,10 +29,11 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
   console.log("YouTube");
   const dispatch = useDispatch();
   const setTabIndex = useSetTabIndexAtom();
-  const setIsReady = useSetAtom(isEditYouTubeReadyAtom);
-  const setIsYTPlaying = useSetAtom(isEditYouTubePlayingAtom);
+  const setIsReady = useSetIsEditYTReadyAtom();
+  const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setTimeCount = useSetAtom(editTimeCountAtom);
-  const [isYTStarted, setIsYTStarted] = useAtom(isEditYouTubeStartedAtom);
+  const isYTStarted = useIsEditYTStartedAtom();
+  const setIsYTStarted = useSetIsEditYTStartedAtom();
   const volume = useVolumeAtom();
   const setMapTitle = useSetMapTitleAtom();
   const videoId = useVideoIdAtom();

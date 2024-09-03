@@ -7,70 +7,51 @@ import LineOptionModal from "./LineOptionModal";
 import { LineEdit, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { handleKeydown } from "@/app/edit/ts/windowKeyDown";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
-  editSpeedAtom,
   editTimeCountAtom,
-  isEditYouTubePlayingAtom,
-  isEditYouTubeStartedAtom,
+  useEditAddLyricsTextAtom,
   useEditLineSelectedCountAtom,
+  useIsEditYTPlayingAtom,
+  useIsEditYTStartedAtom,
   useLineInputReducer,
-  useSetCanUploadAtom,
   useSetEditLineSelectedCountAtom,
   useSetTabIndexAtom,
+  useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useAtom, useAtomValue } from "jotai";
-import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
+import { useAtom } from "jotai";
+import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 
 function LineRow() {
   const setTabIndex = useSetTabIndexAtom();
   const dispatch = useDispatch();
-  const setCanUpload = useSetCanUploadAtom();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
   const [lineOptions, setLineOptions] = useState<LineEdit["options"] | null>(null);
-  const [speed, setSpeed] = useAtom(editSpeedAtom);
-  const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
   const lineSelectedCount = useEditLineSelectedCountAtom();
   const setLineSelectedCount = useSetEditLineSelectedCountAtom();
   const lineInputReducer = useLineInputReducer();
   const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
-  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
-  const setTopLyricsText = useSetTopLyricsText();
-
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const isYTStarted = useIsEditYTStartedAtom();
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
-  const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const refs = useRefs();
   const theme: ThemeColors = useTheme();
+  const windowKeydownEvent = useWindowKeydownEvent();
 
-  const keydownHandler = useCallback(
-    (event: KeyboardEvent) =>
-      handleKeydown(
-        event,
-        refs,
-        undoredoState,
-        dispatch,
-        mapData,
-        speed,
-        setSpeed,
-        isYTPlaying,
-        setCanUpload,
-        lineInputReducer,
-        setTopLyricsText,
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refs, undoredoState, mapData, speed],
-  );
+  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const undoredoState = useSelector((state: RootState) => state.undoRedo);
+  const speed = useSpeedAtom();
+  const isYTPlaying = useIsEditYTPlayingAtom();
+  const addLyricsText = useEditAddLyricsTextAtom();
 
   useEffect(() => {
-    window.addEventListener("keydown", keydownHandler);
+    window.addEventListener("keydown", windowKeydownEvent);
     return () => {
-      window.removeEventListener("keydown", keydownHandler);
+      window.removeEventListener("keydown", windowKeydownEvent);
     };
-  }, [keydownHandler]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapData, undoredoState, speed, isYTPlaying, addLyricsText]);
 
   useEffect(() => {
     if (mapData.length > 0) {

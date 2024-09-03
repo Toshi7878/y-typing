@@ -1,22 +1,19 @@
 import { Box, Card, CardBody, Flex, useTheme } from "@chakra-ui/react";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { LineEdit, ThemeColors } from "@/types";
-import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
+import { ThemeColors } from "@/types";
 
 import { EditorButtonsRef, EditorTabRef } from "@/app/edit/ts/type";
 import {
-  useEditAddLyricsInputAtom,
+  useEditAddLyricsTextAtom,
   useEditLineLyricsAtom,
   useEditWordConvertOptionAtom,
-  useLineInputReducer,
-  useSetEditAddLyricsInputAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import EditorButtons from "./tab-editor-child/EditorButtons";
 import EditorLineInput from "./tab-editor-child/EditorLineInput";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
 import AddTimeAdjust from "./tab-settings-shortcutlist-child/settings-child/AddTimeAdjust";
-import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
+import { useDeleteTopLyricsText } from "@/app/edit/hooks/useEditAddLyricsTextHooks";
 
 const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   const [isTimeInputValid, setIsTimeInputValid] = useState(false);
@@ -24,13 +21,11 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
 
   const editorButtonsRef = useRef<EditorButtonsRef>(null);
 
-  const { editorTimeInputRef, setRef } = useRefs();
+  const { setRef } = useRefs();
   const lyrics = useEditLineLyricsAtom();
-  const lyricsText = useEditAddLyricsInputAtom();
-  const setLyricsText = useSetEditAddLyricsInputAtom();
-  const lineInputReducer = useLineInputReducer();
+  const lyricsText = useEditAddLyricsTextAtom();
   const convertOption = useEditWordConvertOptionAtom();
-  const setTopLyricsText = useSetTopLyricsText();
+  const deleteTopLyricsText = useDeleteTopLyricsText();
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -40,13 +35,8 @@ const TabEditor = forwardRef<EditorTabRef, unknown>((props, ref) => {
   }, [lyricsText, lyrics, convertOption]);
 
   useImperativeHandle(ref, () => ({
-    undoAddLyrics: (undoLine: LineEdit) => {
-      TextAreaEvents.undoTopLyrics(lineInputReducer, setLyricsText, undoLine, lyricsText);
-      editorTimeInputRef.current!.undoAdd(undoLine.time);
-    },
-
     redoAddLyrics: () => {
-      TextAreaEvents.deleteTopLyrics(setLyricsText, lyrics, lyricsText, setTopLyricsText);
+      deleteTopLyricsText(lyrics, lyricsText);
     },
   }));
 

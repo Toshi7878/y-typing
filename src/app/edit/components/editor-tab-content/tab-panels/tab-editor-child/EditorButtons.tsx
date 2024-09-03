@@ -1,16 +1,13 @@
-import { Box, Flex, Button, useTheme } from "@chakra-ui/react";
+import { Flex, Button, useTheme } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
-import { TextAreaEvents } from "@/app/edit/ts/tab/editor/textAreaEvent";
 import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
 import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { EditorButtonsRef } from "@/app/edit/ts/type";
-import { useAtomValue } from "jotai";
 import {
-  isEditYouTubePlayingAtom,
   useSetCanUploadAtom,
   useIsLoadWordConvertAtom,
   useSetIsLoadWordConvertAtom,
@@ -18,13 +15,13 @@ import {
   useEditLineLyricsAtom,
   useEditLineWordAtom,
   useLineInputReducer,
-  useEditAddLyricsInputAtom,
-  useSetEditAddLyricsInputAtom,
+  useEditAddLyricsTextAtom,
   useEditAddTimeOffsetAtom,
   useEditWordConvertOptionAtom,
+  useIsEditYTPlayingAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { useSetTopLyricsText } from "@/app/edit/hooks/useSetTopLyricsText";
+import { useDeleteTopLyricsText } from "@/app/edit/hooks/useEditAddLyricsTextHooks";
 
 interface EditorButtonsProps {
   isTimeInputValid: boolean;
@@ -38,12 +35,11 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
   const word = useEditLineWordAtom();
   const lineInputReducer = useLineInputReducer();
 
-  const lyricsText = useEditAddLyricsInputAtom();
-  const setLyricsText = useSetEditAddLyricsInputAtom();
-  const isYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+  const lyricsText = useEditAddLyricsTextAtom();
+  const isYTPlaying = useIsEditYTPlayingAtom();
   const addTimeOffset = useEditAddTimeOffsetAtom();
   const convertOption = useEditWordConvertOptionAtom();
-  const setTopLyricsText = useSetTopLyricsText();
+  const deleteTopLyricsText = useDeleteTopLyricsText();
 
   const dispatch = useDispatch();
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -93,7 +89,7 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       lineInputReducer({ type: "reset" });
     }
 
-    TextAreaEvents.deleteTopLyrics(setLyricsText, lyricsCopy, addLyrics, setTopLyricsText);
+    deleteTopLyricsText(lyricsCopy, addLyrics);
   };
 
   const update = (mapData: RootState["mapData"]["value"]) => {

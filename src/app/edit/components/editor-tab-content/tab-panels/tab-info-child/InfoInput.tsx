@@ -16,15 +16,14 @@ import { extractYouTubeVideoId } from "@/components/header/child/right-child/new
 import { z } from "zod";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import {
-  isEditYouTubeStartedAtom,
   useCreatorCommentAtom,
   useMapTitleAtom,
   useSetCanUploadAtom,
   useSetCreatorCommentAtom,
+  useSetIsEditYTStartedAtom,
   useSetMapTitleAtom,
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useSetAtom } from "jotai";
 import { ThemeColors } from "@/types";
 
 const videoIdSchema = z
@@ -37,7 +36,7 @@ const InfoInput = () => {
   const { playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const [canChangeVideo, setCanChangeVideo] = useState(false);
-  const setIsYTStarted = useSetAtom(isEditYouTubeStartedAtom);
+  const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();

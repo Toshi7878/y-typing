@@ -3,7 +3,8 @@ import {
   ConvertOptionsType,
   EditTabIndex,
   LineInputReducerAction,
-  TagsReducerActionType,
+  TagsReducerAction,
+  YTSpeedReducerActionType,
 } from "../ts/type";
 import { Tag, YouTubeSpeed } from "@/types";
 import { atomWithReducer } from "jotai/utils"; // 追加
@@ -54,7 +55,6 @@ export const useSetCreatorCommentAtom = () => {
   return useSetAtom(editCreatorCommentAtom, { store: editAtomStore });
 };
 
-type TagsReducerAction = { type: TagsReducerActionType; payload?: Tag | Tag[] };
 const tagsReducer = (state: Tag[], action: TagsReducerAction): Tag[] => {
   switch (action.type) {
     case "set":
@@ -96,11 +96,80 @@ export const useSetCreatorIdAtom = () => {
   return useSetAtom(editCreatorIdAtom, { store: editAtomStore });
 };
 
-export const editSpeedAtom = atom<YouTubeSpeed>(1);
+const editSpeedAtom = atom<YouTubeSpeed>(1);
 
-export const isEditYouTubeReadyAtom = atom<boolean>(false);
-export const isEditYouTubeStartedAtom = atom<boolean>(false);
-export const isEditYouTubePlayingAtom = atom<boolean>(false);
+export const useEditYTSpeedAtom = () => {
+  return useAtomValue(editSpeedAtom, { store: editAtomStore });
+};
+
+const useSetEditYTSpeedAtom = () => {
+  return useSetAtom(editSpeedAtom, { store: editAtomStore });
+};
+
+export const useSpeedReducer = () => {
+  const speed = useEditYTSpeedAtom();
+  const setYTSpeedAtom = useSetEditYTSpeedAtom();
+  const { playerRef } = useRefs();
+
+  return (actionType: YTSpeedReducerActionType) => {
+    switch (actionType) {
+      case "up":
+        {
+          const newSpeed = (speed < 2 ? speed + 0.25 : 2) as YouTubeSpeed;
+          setYTSpeedAtom(newSpeed);
+          playerRef.setPlaybackRate(newSpeed);
+        }
+        break;
+      case "down":
+        {
+          const newSpeed = (speed > 0.25 ? speed - 0.25 : 0.25) as YouTubeSpeed;
+          setYTSpeedAtom(newSpeed);
+          playerRef.setPlaybackRate(newSpeed);
+        }
+        break;
+      default:
+        throw new Error(`Unknown action type: ${actionType}`);
+    }
+  };
+};
+
+export const useSpeedAtom = () => {
+  return useAtomValue(editSpeedAtom, { store: editAtomStore });
+};
+
+export const useSetSpeedAtom = () => {
+  return useSetAtom(editSpeedAtom, { store: editAtomStore });
+};
+
+const isEditYouTubeReadyAtom = atom<boolean>(false);
+
+export const useIsEditYTReadyAtom = () => {
+  return useAtomValue(isEditYouTubeReadyAtom, { store: editAtomStore });
+};
+
+export const useSetIsEditYTReadyAtom = () => {
+  return useSetAtom(isEditYouTubeReadyAtom, { store: editAtomStore });
+};
+
+const isEditYouTubeStartedAtom = atom<boolean>(false);
+
+export const useIsEditYTStartedAtom = () => {
+  return useAtomValue(isEditYouTubeStartedAtom, { store: editAtomStore });
+};
+
+export const useSetIsEditYTStartedAtom = () => {
+  return useSetAtom(isEditYouTubeStartedAtom, { store: editAtomStore });
+};
+
+const isEditYouTubePlayingAtom = atom<boolean>(false);
+
+export const useIsEditYTPlayingAtom = () => {
+  return useAtomValue(isEditYouTubePlayingAtom, { store: editAtomStore });
+};
+
+export const useSetIsEditYTPlayingAtom = () => {
+  return useSetAtom(isEditYouTubePlayingAtom, { store: editAtomStore });
+};
 
 const editLineLyricsAtom = atom<string>("");
 const editLineWordAtom = atom<string>("");
@@ -143,6 +212,8 @@ export const useLineInputReducer = () => {
           if (typeof payload.selectCount === "number") {
             editorTimeInputRef.current!.selectedTime(payload.selectCount);
             setEditLineCount(payload.selectCount);
+          } else if (typeof payload.time === "string") {
+            editorTimeInputRef.current!.undoAdd(payload.time);
           }
         }
         break;
@@ -160,14 +231,14 @@ export const useLineInputReducer = () => {
 
 export const editTimeCountAtom = atom<number>(0);
 
-const editAddLyricsInputAtom = atom<string>("");
+const editAddLyricsTextAtom = atom<string>("");
 
-export const useEditAddLyricsInputAtom = () => {
-  return useAtomValue(editAddLyricsInputAtom, { store: editAtomStore });
+export const useEditAddLyricsTextAtom = () => {
+  return useAtomValue(editAddLyricsTextAtom, { store: editAtomStore });
 };
 
-export const useSetEditAddLyricsInputAtom = () => {
-  return useSetAtom(editAddLyricsInputAtom, { store: editAtomStore });
+export const useSetEditAddLyricsTextAtom = () => {
+  return useSetAtom(editAddLyricsTextAtom, { store: editAtomStore });
 };
 
 const editIsLoadWordConvertAtom = atom<boolean>(false);

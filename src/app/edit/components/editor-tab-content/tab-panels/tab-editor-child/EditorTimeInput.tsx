@@ -9,10 +9,9 @@ import { LineEdit, ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
-import { useAtomValue } from "jotai";
 import {
-  isEditYouTubePlayingAtom,
   useEditLineSelectedCountAtom,
+  useIsEditYTPlayingAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
 
@@ -41,7 +40,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
     } = methods;
 
     const [maxTime, setMaxTime] = useState("0");
-    const setIsYTPlaying = useAtomValue(isEditYouTubePlayingAtom);
+    const isYTPlaying = useIsEditYTPlayingAtom();
 
     const lineNumber = useEditLineSelectedCountAtom();
 
@@ -53,7 +52,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
         setRef("editorTimeInputRef", ref.current!);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mapData, lineNumber, maxTime, setIsYTPlaying]);
+    }, [mapData, lineNumber, maxTime, isYTPlaying]);
 
     useEffect(() => {
       onFormStateChange(isValid);
@@ -78,7 +77,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
 
     useEffect(() => {
       if (maxTime === "0") {
-        if (setIsYTPlaying) {
+        if (isYTPlaying) {
           const duration = playerRef.current?.getDuration().toFixed(3);
           if (duration !== undefined) {
             setMaxTime(duration);
@@ -88,7 +87,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mapData, maxTime, setIsYTPlaying]);
+    }, [mapData, maxTime, isYTPlaying]);
 
     useImperativeHandle(ref, () => ({
       clearTime: () => {

@@ -6,13 +6,12 @@ import TabInfoUpload from "./tab-panels/TabInfoUpload";
 import TabSettings from "./tab-panels/TabSettingsShortcutList";
 import { IndexDBOption, ThemeColors } from "@/types";
 import {
-  isEditYouTubeStartedAtom,
+  useIsEditYTStartedAtom,
   useSetEditAddTimeOffsetAtom,
   useSetEditWordConvertOptionAtom,
   useSetTabIndexAtom,
   useTabIndexAtom,
 } from "../../edit-atom/editAtom";
-import { useAtomValue } from "jotai";
 import { EditorTabRef, EditTabIndex } from "../../ts/type";
 import { db } from "@/lib/db";
 import { DEFAULT_ADD_ADJUST_TIME } from "../../ts/const/editDefaultValues";
@@ -29,7 +28,7 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
   const tabIndex = useTabIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
 
-  const isYTStarted = useAtomValue(isEditYouTubeStartedAtom);
+  const isYTStarted = useIsEditYTStartedAtom();
   const [isDisabled, setIsDisabled] = useState(true);
   const theme: ThemeColors = useTheme();
   const setSelectedConvertOption = useSetEditWordConvertOptionAtom();
