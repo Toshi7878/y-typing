@@ -4,13 +4,12 @@ import { timer } from "../ts/youtube-ts/editTimer";
 import "@/app/edit/style/editor.scss";
 import { Box, Button, HStack, Text, useTheme } from "@chakra-ui/react";
 import { useRefs } from "../edit-contexts/refsProvider";
-import { YTSpeedController } from "../ts/youtube-ts/editYtHandleEvents";
 import { ThemeColors } from "@/types";
 import {
   useIsEditYTReadyAtom,
   useIsEditYTStartedAtom,
-  useSetSpeedAtom,
   useSpeedAtom,
+  useSpeedReducer,
 } from "../edit-atom/editAtom";
 const TimeRange = () => {
   console.log("range");
@@ -19,7 +18,7 @@ const TimeRange = () => {
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
   const speed = useSpeedAtom(); //0.25 or 2.00 場合片方のボタンをdisabledにする
-  const setSpeed = useSetSpeedAtom();
+  const speedReducer = useSpeedReducer();
   const theme: ThemeColors = useTheme();
 
   const isYTStarted = useIsEditYTStartedAtom();
@@ -91,13 +90,7 @@ const TimeRange = () => {
       />
       <HStack justify="center" className="w-[170px]">
         <Box>
-          <Button
-            cursor="pointer"
-            variant="unstyled"
-            onClick={() =>
-              new YTSpeedController("down", { setSpeed, playerRef: playerRef.current })
-            }
-          >
+          <Button cursor="pointer" variant="unstyled" onClick={() => speedReducer("down")}>
             <Box className="relative">
               -
               <Text as="span" className="f-key">
@@ -113,11 +106,7 @@ const TimeRange = () => {
           倍速
         </Box>
         <Box>
-          <Button
-            variant="unstyled"
-            cursor="pointer"
-            onClick={() => new YTSpeedController("up", { setSpeed, playerRef: playerRef.current })}
-          >
+          <Button variant="unstyled" cursor="pointer" onClick={() => speedReducer("up")}>
             <Box className="relative">
               +
               <Text as="span" className="f-key">

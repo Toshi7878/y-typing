@@ -229,7 +229,15 @@ export const useLineInputReducer = () => {
   };
 };
 
-export const editTimeCountAtom = atom<number>(0);
+const editTimeCountAtom = atom<number>(0);
+
+export const useEditTimeCountAtom = () => {
+  return useAtomValue(editTimeCountAtom, { store: editAtomStore });
+};
+
+export const useSetEditTimeCountAtom = () => {
+  return useSetAtom(editTimeCountAtom, { store: editAtomStore });
+};
 
 const editAddLyricsTextAtom = atom<string>("");
 

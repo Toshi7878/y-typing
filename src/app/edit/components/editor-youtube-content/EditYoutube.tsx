@@ -2,24 +2,17 @@
 
 import React, { useCallback } from "react";
 import YouTube from "react-youtube";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useRefs } from "../../edit-contexts/refsProvider";
-import { ytState } from "../../ts/youtube-ts/editYoutubeEvents";
+import { useIsEditYTStartedAtom, useVideoIdAtom } from "../../edit-atom/editAtom";
+import { useSearchParams } from "next/navigation";
 import {
-  editTimeCountAtom,
-  useIsEditYTStartedAtom,
-  useSetIsEditYTPlayingAtom,
-  useSetIsEditYTReadyAtom,
-  useSetIsEditYTStartedAtom,
-  useSetMapTitleAtom,
-  useSetTabIndexAtom,
-  useVideoIdAtom,
-} from "../../edit-atom/editAtom";
-import { useSetAtom } from "jotai";
-import { useParams, useSearchParams } from "next/navigation";
-import NProgress from "nprogress";
-import { useVolumeAtom } from "@/components/atom/globalAtoms";
+  useYTEndStopEvent,
+  useYTPauseEvent,
+  useYTPlayEvent,
+  useYTReadyEvent,
+  useYTSeekEvent,
+} from "../../hooks/useEditYTEventsHooks";
 
 interface EditorYouTubeProps {
   className: string;
@@ -27,49 +20,17 @@ interface EditorYouTubeProps {
 
 const EditYouTube = function ({ className }: EditorYouTubeProps) {
   console.log("YouTube");
-  const dispatch = useDispatch();
-  const setTabIndex = useSetTabIndexAtom();
-  const setIsReady = useSetIsEditYTReadyAtom();
-  const setIsYTPlaying = useSetIsEditYTPlayingAtom();
-  const setTimeCount = useSetAtom(editTimeCountAtom);
   const isYTStarted = useIsEditYTStartedAtom();
-  const setIsYTStarted = useSetIsEditYTStartedAtom();
-  const volume = useVolumeAtom();
-  const setMapTitle = useSetMapTitleAtom();
   const videoId = useVideoIdAtom();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
-
   const mapData = useSelector((state: RootState) => state.mapData.value);
-  const refs = useRefs();
-  const { id } = useParams();
 
-  const handleReady = useCallback(
-    (event: { target: any }) => {
-      const player = event.target;
-      NProgress.done();
-      refs.setRef("playerRef", player);
-      const isNewMap = id ? false : true;
-      ytState.ready(refs, setMapTitle, setIsReady, dispatch, isNewMap, volume);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
-  const handlePlay = useCallback(() => {
-    ytState.play(refs.playerRef, setIsYTPlaying, setTabIndex, setIsYTStarted);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isYTStarted]);
-
-  const handlePause = useCallback(() => {
-    ytState.pause(setIsYTPlaying);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleEnd = useCallback(() => {
-    ytState.end(setIsYTPlaying);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onReady = useYTReadyEvent();
+  const onPlay = useYTPlayEvent();
+  const onPause = useYTPauseEvent();
+  const onEndStop = useYTEndStopEvent();
+  const onSeek = useYTSeekEvent();
 
   const handleStateChange = useCallback(
     (event: any) => {
@@ -82,7 +43,7 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
 
       if (event.data === 3) {
         // seek時の処理
-        ytState.seek(event, setTimeCount, mapData);
+        onSeek(event);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
         console.log("未スタート -1");
@@ -101,10 +62,10 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
         height: "100%",
         playerVars: { enablejsapi: 1 },
       }}
-      onReady={handleReady}
-      onPlay={handlePlay}
-      onPause={handlePause}
-      onEnd={handleEnd}
+      onReady={onReady}
+      onPlay={onPlay}
+      onPause={onPause}
+      onEnd={onEndStop}
       onStateChange={handleStateChange}
     />
   );

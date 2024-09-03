@@ -10,17 +10,17 @@ import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
-  editTimeCountAtom,
   useEditAddLyricsTextAtom,
   useEditLineSelectedCountAtom,
+  useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
   useLineInputReducer,
   useSetEditLineSelectedCountAtom,
+  useSetEditTimeCountAtom,
   useSetTabIndexAtom,
   useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { useAtom } from "jotai";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 
 function LineRow() {
@@ -32,7 +32,8 @@ function LineRow() {
   const lineSelectedCount = useEditLineSelectedCountAtom();
   const setLineSelectedCount = useSetEditLineSelectedCountAtom();
   const lineInputReducer = useLineInputReducer();
-  const [timeCount, setTimeCount] = useAtom(editTimeCountAtom);
+  const timeCount = useEditTimeCountAtom();
+  const setTimeCount = useSetEditTimeCountAtom();
   const isYTStarted = useIsEditYTStartedAtom();
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
   const refs = useRefs();
