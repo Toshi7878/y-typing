@@ -11,6 +11,7 @@ import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditAddLyricsTextAtom,
+  useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
   useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
@@ -49,6 +50,7 @@ function LineRow() {
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const speed = useSpeedAtom();
   const isYTPlaying = useIsEditYTPlayingAtom();
+  const lyrics = useEditLineLyricsAtom();
   const addLyricsText = useEditAddLyricsTextAtom();
   const isAddButtonDisabled = useIsAddButtonDisabled();
   const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
@@ -65,6 +67,7 @@ function LineRow() {
     undoredoState,
     speed,
     isYTPlaying,
+    lyrics,
     addLyricsText,
     isAddButtonDisabled,
     isUpdateButtonDisabled,

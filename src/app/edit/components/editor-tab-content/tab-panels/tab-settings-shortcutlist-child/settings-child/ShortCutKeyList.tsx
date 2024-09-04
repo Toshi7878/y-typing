@@ -7,6 +7,7 @@ const shortCutList = [
   { keys: ["←", "→"], description: "3秒スキップ" },
   { keys: ["↑", "↓"], description: "選択ライン移動" },
   { keys: ["S"], description: "追加" },
+  { keys: ["Shift+S"], description: "空行を追加" },
   { keys: ["U"], description: "変更" },
   { keys: ["Delete"], description: "削除" },
   { keys: ["Esc"], description: "再生・停止" },

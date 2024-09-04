@@ -52,16 +52,16 @@ export const useLineAddButtonEvent = () => {
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
+  const endAfterLineIndex =
+    mapData.length -
+    1 -
+    mapData
+      .slice()
+      .reverse()
+      .findIndex((line) => line.lyrics === "end");
 
   return (isShiftKey: boolean) => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
-    const endAfterLineIndex =
-      mapData.length -
-      1 -
-      mapData
-        .slice()
-        .reverse()
-        .findIndex((line) => line.lyrics === "end");
 
     const time = timeValidate(
       editorTimeInputRef.current!.getTime() + timeOffset,
@@ -99,21 +99,19 @@ export const useLineUpdateButtonEvent = () => {
   const lyrics = useEditLineLyricsAtom();
   const word = useEditLineWordAtom();
   const selectedLineCount = useEditLineSelectedCountAtom();
-
   const { editorTimeInputRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
-
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
 
+  const endAfterLineIndex =
+    mapData.length -
+    1 -
+    mapData
+      .slice()
+      .reverse()
+      .findIndex((line) => line.lyrics === "end");
   return () => {
-    const endAfterLineIndex =
-      mapData.length -
-      1 -
-      mapData
-        .slice()
-        .reverse()
-        .findIndex((line) => line.lyrics === "end");
     const time = timeValidate(
       editorTimeInputRef.current!.getTime(),
       mapData,
