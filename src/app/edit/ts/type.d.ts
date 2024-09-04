@@ -21,9 +21,6 @@ export interface EditorSendData {
 
 export type EditTabIndex = 0 | 1 | 2;
 
-export interface EditorTabRef {
-  redoAddLyrics: (redoLine: Line) => void;
-}
 export interface EditorButtonsRef {
   add: () => void;
   update: () => void;

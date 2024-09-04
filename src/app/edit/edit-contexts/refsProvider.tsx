@@ -1,9 +1,8 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { EditorButtonsRef, EditorTabRef, EditorTimeInputRef } from "../ts/type";
+import { EditorButtonsRef, EditorTimeInputRef } from "../ts/type";
 
 export interface RefsContextType {
-  editorTabRef: React.RefObject<EditorTabRef>;
   editorButtonsRef: React.RefObject<EditorButtonsRef>;
   editorTimeInputRef: React.RefObject<EditorTimeInputRef>;
   tbodyRef: React.RefObject<HTMLElement>;
@@ -12,7 +11,6 @@ export interface RefsContextType {
 }
 
 const RefsContext = createContext<RefsContextType>({
-  editorTabRef: { current: null },
   editorButtonsRef: { current: null },
   editorTimeInputRef: { current: null },
   tbodyRef: { current: null },
@@ -20,7 +18,6 @@ const RefsContext = createContext<RefsContextType>({
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
-  const editorTabRef = useRef(null);
   const editorButtonsRef = useRef(null);
   const editorTimeInputRef = useRef(null);
   const tbodyRef = useRef(null);
@@ -28,9 +25,6 @@ export const RefsProvider = ({ children }) => {
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "editorTabRef":
-        editorTabRef.current = ref;
-        break;
       case "editorButtonsRef":
         editorButtonsRef.current = ref;
         break;
@@ -49,7 +43,6 @@ export const RefsProvider = ({ children }) => {
   return (
     <RefsContext.Provider
       value={{
-        editorTabRef,
         tbodyRef,
         playerRef,
         editorButtonsRef,
@@ -65,7 +58,6 @@ export const RefsProvider = ({ children }) => {
 export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
-    editorTabRef: context.editorTabRef,
     tbodyRef: context.tbodyRef,
     playerRef: context.playerRef,
     editorButtonsRef: context.editorButtonsRef,

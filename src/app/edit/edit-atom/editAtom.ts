@@ -175,6 +175,15 @@ const editLineLyricsAtom = atom<string>("");
 const editLineWordAtom = atom<string>("");
 const editLineSelectedCountAtom = atom<number | null>(null);
 
+const isLineNotSelectAtom = atom<boolean>((get) => {
+  const count = get(editLineSelectedCountAtom);
+  return count === 0 || count === null;
+});
+
+export const useIsLineNotSelectAtom = () => {
+  return useAtomValue(isLineNotSelectAtom, { store: editAtomStore });
+};
+
 export const useEditLineLyricsAtom = () => {
   return useAtomValue(editLineLyricsAtom, { store: editAtomStore });
 };

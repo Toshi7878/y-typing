@@ -47,9 +47,10 @@ export const useSetAddLyrics = () => {
 export const useDeleteTopLyricsText = () => {
   const setLyricsText = useSetEditAddLyricsTextAtom();
   const setTopLyricsText = useSetTopLyricsText();
+  const lyricsText = useEditAddLyricsTextAtom();
 
-  return (lyrics: string, addLyrics: string) => {
-    const lines = addLyrics?.split("\n") || [];
+  return (lyrics: string) => {
+    const lines = lyricsText.split("\n") || [];
     const topLine = lines[0];
     const newText = lines.slice(1).join("\n");
 

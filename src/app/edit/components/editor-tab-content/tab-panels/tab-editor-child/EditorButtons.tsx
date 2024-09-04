@@ -1,47 +1,36 @@
 import { Flex, Button, useTheme } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
-import { setLastAddedTime } from "@/app/edit/redux/mapDataSlice";
-import { ButtonEvents } from "@/app/edit/ts/tab/editor/buttonEvent";
-import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { EditorButtonsRef } from "@/app/edit/ts/type";
 import {
-  useSetCanUploadAtom,
   useIsLoadWordConvertAtom,
-  useSetIsLoadWordConvertAtom,
   useEditLineSelectedCountAtom,
-  useEditLineLyricsAtom,
-  useEditLineWordAtom,
-  useLineInputReducer,
-  useEditAddLyricsTextAtom,
-  useEditAddTimeOffsetAtom,
-  useEditWordConvertOptionAtom,
-  useIsEditYTPlayingAtom,
+  useIsLineNotSelectAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { useDeleteTopLyricsText } from "@/app/edit/hooks/useEditAddLyricsTextHooks";
+import {
+  useLineAddButtonEvent,
+  useLineDelete,
+  useLineUpdateButtonEvent,
+  useWordConvertButtonEvent as useWordConvertButtonEvent,
+} from "@/app/edit/hooks/useEditorButtonEvents";
 
 interface EditorButtonsProps {
   isTimeInputValid: boolean;
 }
 const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, ref) => {
-  const { editorTimeInputRef, setRef } = useRefs();
+  const { setRef } = useRefs();
   const theme: ThemeColors = useTheme();
 
   const selectedLineCount = useEditLineSelectedCountAtom();
-  const lyrics = useEditLineLyricsAtom();
-  const word = useEditLineWordAtom();
-  const lineInputReducer = useLineInputReducer();
+  const isLineNotSelect = useIsLineNotSelectAtom();
 
-  const lyricsText = useEditAddLyricsTextAtom();
-  const isYTPlaying = useIsEditYTPlayingAtom();
-  const addTimeOffset = useEditAddTimeOffsetAtom();
-  const convertOption = useEditWordConvertOptionAtom();
-  const deleteTopLyricsText = useDeleteTopLyricsText();
-
-  const dispatch = useDispatch();
+  const lineAddButtonEvent = useLineAddButtonEvent();
+  const lineUpdateButtonEvent = useLineUpdateButtonEvent();
+  const wordConvertButtonEvent = useWordConvertButtonEvent();
+  const lineDelete = useLineDelete();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const endAfterLineIndex =
     mapData.length -
@@ -52,8 +41,6 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       .findIndex((line) => line.lyrics === "end");
 
   const isLoadWordConvert = useIsLoadWordConvertAtom();
-  const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
-  const setCanUpload = useSetCanUploadAtom();
 
   useEffect(() => {
     if (ref && "current" in ref) {
@@ -62,93 +49,17 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const timeValidate = (time: number, mapData: RootState["mapData"]["value"]) => {
-    const lastLineTime = Number(mapData[endAfterLineIndex]["time"]);
-
-    if (0 >= time) {
-      return 0.001;
-    } else if (lastLineTime <= time) {
-      return lastLineTime - 0.001;
-    } else {
-      return time;
-    }
-  };
-
-  const add = (mapData: RootState["mapData"]["value"], isShiftKey: boolean) => {
-    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
-    const time = timeValidate(editorTimeInputRef.current!.getTime() + timeOffset, mapData).toFixed(
-      3,
-    );
-    const addLyrics = lyricsText;
-
-    const lyricsCopy = JSON.parse(JSON.stringify(lyrics));
-    dispatch(setLastAddedTime(time));
-    ButtonEvents.addLine(dispatch, setCanUpload, { time, lyrics, word });
-
-    if (!isShiftKey) {
-      lineInputReducer({ type: "reset" });
-    }
-
-    deleteTopLyricsText(lyricsCopy, addLyrics);
-  };
-
-  const update = (mapData: RootState["mapData"]["value"]) => {
-    const time = timeValidate(editorTimeInputRef.current!.getTime(), mapData).toFixed(3);
-
-    setCanUpload(true);
-    dispatch(
-      addHistory({
-        type: "update",
-        data: {
-          old: mapData[selectedLineCount!],
-          new: { time, lyrics, word },
-          lineNumber: selectedLineCount,
-        },
-      }),
-    );
-
-    ButtonEvents.updateLine(dispatch, {
-      time,
-      lyrics,
-      word,
-      selectedLineCount: selectedLineCount ?? undefined,
-    });
-    lineInputReducer({ type: "reset" });
-  };
-
-  const wordConvert = async () => {
-    setIsLoadWordConvert(true);
-    const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
-    setIsLoadWordConvert(false);
-    lineInputReducer({ type: "set", payload: { word } });
-  };
-
-  const deleteLine = (mapData: RootState["mapData"]["value"]) => {
-    if (selectedLineCount) {
-      ButtonEvents.deleteLine(dispatch, setCanUpload, {
-        ...mapData[selectedLineCount],
-        selectedLineCount: selectedLineCount,
-      });
-    }
-    lineInputReducer({ type: "reset" });
-  };
-
   const addButtonRef = useRef<HTMLButtonElement | null>(null);
   const updateButtonRef = useRef<HTMLButtonElement | null>(null);
   const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
-
   const isLastLineSelected = selectedLineCount === endAfterLineIndex;
-  const isNotSelect = !selectedLineCount || selectedLineCount === 0;
+
   const buttonConfigs = {
     add: {
       isDisabled: !props.isTimeInputValid,
       colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg,
       ref: addButtonRef,
-      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
-        add(mapData, e.shiftKey);
-        //フォーカスを外さないとクリック時にテーブルがスクロールされない
-        (document.activeElement as HTMLElement)?.blur();
-      },
+      onClick: lineAddButtonEvent,
       text: (
         <>
           追加<small className="hidden sm:inline">(S)</small>
@@ -157,13 +68,11 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       isLoading: false,
     },
     update: {
-      isDisabled: !props.isTimeInputValid || isNotSelect || isLastLineSelected,
+      isDisabled: !props.isTimeInputValid || isLineNotSelect || isLastLineSelected,
       ref: updateButtonRef,
 
       colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
-      onClick: () => {
-        update(mapData);
-      },
+      onClick: lineUpdateButtonEvent,
       text: (
         <>
           変更<small className="hidden sm:inline">(U)</small>
@@ -176,17 +85,15 @@ const EditorButtons = forwardRef<EditorButtonsRef, EditorButtonsProps>((props, r
       ref: undefined,
       isLoading: isLoadWordConvert,
       colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
-      onClick: wordConvert,
+      onClick: wordConvertButtonEvent,
       text: "読み変換",
     },
     delete: {
-      isDisabled: !props.isTimeInputValid || isNotSelect || isLastLineSelected,
+      isDisabled: !props.isTimeInputValid || isLineNotSelect || isLastLineSelected,
       ref: deleteButtonRef,
 
       colorScheme: theme.colors.edit.mapTable.errorLine.bg,
-      onClick: () => {
-        deleteLine(mapData);
-      },
+      onClick: lineDelete,
       text: (
         <>
           削除<small className="hidden sm:inline">(Del)</small>

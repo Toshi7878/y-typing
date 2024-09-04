@@ -28,7 +28,7 @@ export default function AddTimeAdjust() {
         }}
         hasArrow
         placement="top"
-        label={<Box>再生中に追加ボタン(S)を押した時に、数値分のタイムを調整します</Box>}
+        label={<Box>再生中に追加ボタン(S)を押した時に、数値分タイムを補正します</Box>}
       >
         <HStack alignItems="baseline">
           <FormLabel fontSize="xs" mr={1}>

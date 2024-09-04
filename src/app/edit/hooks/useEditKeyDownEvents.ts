@@ -9,7 +9,7 @@ import {
   useSpeedAtom,
   useSpeedReducer,
 } from "../edit-atom/editAtom";
-import { useSetTopLyricsText } from "./useEditAddLyricsTextHooks";
+import { useDeleteTopLyricsText, useSetTopLyricsText } from "./useEditAddLyricsTextHooks";
 import { redo, undo } from "../redux/undoredoSlice";
 import { mapDataRedo, mapDataUndo } from "../redux/mapDataSlice";
 import { useUndoLine } from "./useEditUndoRedoHooks";
@@ -17,7 +17,7 @@ import { LineEdit } from "@/types";
 import { useWordFindReplace } from "./useWordFindReplace";
 
 export const useWindowKeydownEvent = () => {
-  const { tbodyRef, playerRef, editorButtonsRef, editorTabRef } = useRefs();
+  const { tbodyRef, playerRef, editorButtonsRef } = useRefs();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const speed = useSpeedAtom();
@@ -29,6 +29,8 @@ export const useWindowKeydownEvent = () => {
   const setTopLyricsText = useSetTopLyricsText();
   const undoLine = useUndoLine();
   const wordFindReplace = useWordFindReplace();
+  const deleteTopLyricsText = useDeleteTopLyricsText();
+
   return (event: KeyboardEvent) => {
     const iS_FOCUS_TEXTAREA =
       document.activeElement instanceof HTMLInputElement ||
@@ -138,7 +140,7 @@ export const useWindowKeydownEvent = () => {
 
               if (future.type === "add") {
                 const data = future.data as LineEdit;
-                editorTabRef.current?.redoAddLyrics(data);
+                deleteTopLyricsText(data.lyrics);
               }
 
               dispatch(redo());

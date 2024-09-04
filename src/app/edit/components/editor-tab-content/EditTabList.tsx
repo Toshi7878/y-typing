@@ -12,7 +12,7 @@ import {
   useSetTabIndexAtom,
   useTabIndexAtom,
 } from "../../edit-atom/editAtom";
-import { EditorTabRef, EditTabIndex } from "../../ts/type";
+import { EditTabIndex } from "../../ts/type";
 import { db } from "@/lib/db";
 import { DEFAULT_ADD_ADJUST_TIME } from "../../ts/const/editDefaultValues";
 
@@ -24,7 +24,6 @@ const tabLists = ["情報 & 保存", "エディター", "設定 & ショート�
 export default function EditorTabContent({ className }: EditorTabContentProps) {
   console.log("Tab");
 
-  const editorTabRef = useRef<EditorTabRef>(null);
   const tabIndex = useTabIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
 
@@ -85,7 +84,7 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
         </TabPanel>
 
         <TabPanel px={0} pb={0} pt={2}>
-          <TabEditor ref={editorTabRef} />
+          <TabEditor />
         </TabPanel>
         <TabPanel px={0} pb={0} pt={2}>
           <TabSettings />
