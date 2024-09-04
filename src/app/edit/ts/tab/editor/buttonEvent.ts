@@ -6,12 +6,6 @@ import { LineEdit } from "@/types";
 import { Action } from "@reduxjs/toolkit";
 
 export class ButtonEvents {
-  static addLine(dispatch: Dispatch<Action>, setCanUpload: Dispatch<boolean>, line: LineEdit) {
-    dispatch(addLine({ time: line.time, lyrics: line.lyrics, word: line.word }));
-    setCanUpload(true);
-    dispatch(addHistory({ type: "add", data: line }));
-  }
-
   static updateLine(dispatch: Dispatch<any>, line: LineEdit) {
     dispatch(
       updateLine({

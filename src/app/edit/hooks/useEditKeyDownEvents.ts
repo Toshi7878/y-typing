@@ -15,14 +15,26 @@ import { mapDataRedo, mapDataUndo } from "../redux/mapDataSlice";
 import { useUndoLine } from "./useEditUndoRedoHooks";
 import { LineEdit } from "@/types";
 import { useWordFindReplace } from "./useWordFindReplace";
+import {
+  useIsAddButtonDisabled,
+  useIsConvertButtonDisabled,
+  useIsDeleteButtonDisabled,
+  useIsUpdateButtonDisabled,
+  useLineAddButtonEvent,
+  useLineDelete,
+  useLineUpdateButtonEvent,
+} from "./useEditorButtonEvents";
 
 export const useWindowKeydownEvent = () => {
-  const { tbodyRef, playerRef, editorButtonsRef } = useRefs();
+  const { tbodyRef, playerRef } = useRefs();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const speed = useSpeedAtom();
   const isYTPlaying = useIsEditYTPlayingAtom();
   const addLyricsText = useEditAddLyricsTextAtom();
+  const isAddButtonDisabled = useIsAddButtonDisabled();
+  const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
+  const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const speedReducer = useSpeedReducer();
@@ -30,6 +42,10 @@ export const useWindowKeydownEvent = () => {
   const undoLine = useUndoLine();
   const wordFindReplace = useWordFindReplace();
   const deleteTopLyricsText = useDeleteTopLyricsText();
+
+  const lineAddButtonEvent = useLineAddButtonEvent();
+  const lineUpdateButtonEvent = useLineUpdateButtonEvent();
+  const lineDelete = useLineDelete();
 
   return (event: KeyboardEvent) => {
     const iS_FOCUS_TEXTAREA =
@@ -104,12 +120,16 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "KeyS":
-          editorButtonsRef.current!.add();
+          if (!isAddButtonDisabled) {
+            lineAddButtonEvent(event.shiftKey);
+          }
           event.preventDefault();
           break;
 
         case "KeyU":
-          editorButtonsRef.current!.update();
+          if (!isUpdateButtonDisabled) {
+            lineUpdateButtonEvent();
+          }
           event.preventDefault();
           break;
 
@@ -157,7 +177,9 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "Delete":
-          editorButtonsRef.current!.delete();
+          if (!isDeleteButtonDisabled) {
+            lineDelete();
+          }
           event.preventDefault();
 
           break;

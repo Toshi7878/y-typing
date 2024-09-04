@@ -11,6 +11,8 @@ import { atomWithReducer } from "jotai/utils"; // 追加
 import { getEditAtomStore } from "../components/EditProvider";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { DEFAULT_ADD_ADJUST_TIME } from "../ts/const/editDefaultValues";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 const editAtomStore = getEditAtomStore();
 
 const editTabIndexAtom = atom<EditTabIndex>(0);
@@ -184,6 +186,20 @@ export const useIsLineNotSelectAtom = () => {
   return useAtomValue(isLineNotSelectAtom, { store: editAtomStore });
 };
 
+export const useIsLineLastSelect = () => {
+  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const selectedLineCount = useEditLineSelectedCountAtom();
+  const endAfterLineIndex =
+    mapData.length -
+    1 -
+    mapData
+      .slice()
+      .reverse()
+      .findIndex((line) => line.lyrics === "end");
+
+  return selectedLineCount === endAfterLineIndex;
+};
+
 export const useEditLineLyricsAtom = () => {
   return useAtomValue(editLineLyricsAtom, { store: editAtomStore });
 };
@@ -306,4 +322,14 @@ export const useEditWordConvertOptionAtom = () => {
 
 export const useSetEditWordConvertOptionAtom = () => {
   return useSetAtom(editWordConvertOptionAtom, { store: editAtomStore });
+};
+
+const editIsTimeInputValidAtom = atom<boolean>(false);
+
+export const useEditIsTimeInputValidAtom = () => {
+  return useAtomValue(editIsTimeInputValidAtom, { store: editAtomStore });
+};
+
+export const useSetEditIsTimeInputValidAtom = () => {
+  return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
 };

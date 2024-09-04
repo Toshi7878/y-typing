@@ -22,6 +22,11 @@ import {
   useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
+import {
+  useIsAddButtonDisabled,
+  useIsDeleteButtonDisabled,
+  useIsUpdateButtonDisabled,
+} from "@/app/edit/hooks/useEditorButtonEvents";
 
 function LineRow() {
   const setTabIndex = useSetTabIndexAtom();
@@ -45,6 +50,9 @@ function LineRow() {
   const speed = useSpeedAtom();
   const isYTPlaying = useIsEditYTPlayingAtom();
   const addLyricsText = useEditAddLyricsTextAtom();
+  const isAddButtonDisabled = useIsAddButtonDisabled();
+  const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
+  const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
 
   useEffect(() => {
     window.addEventListener("keydown", windowKeydownEvent);
@@ -52,7 +60,16 @@ function LineRow() {
       window.removeEventListener("keydown", windowKeydownEvent);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapData, undoredoState, speed, isYTPlaying, addLyricsText]);
+  }, [
+    mapData,
+    undoredoState,
+    speed,
+    isYTPlaying,
+    addLyricsText,
+    isAddButtonDisabled,
+    isUpdateButtonDisabled,
+    isDeleteButtonDisabled,
+  ]);
 
   useEffect(() => {
     if (mapData.length > 0) {

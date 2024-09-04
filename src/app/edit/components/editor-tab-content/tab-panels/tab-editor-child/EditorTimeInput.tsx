@@ -12,6 +12,7 @@ import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditLineSelectedCountAtom,
   useIsEditYTPlayingAtom,
+  useSetEditIsTimeInputValidAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
 
@@ -19,13 +20,10 @@ const schema = z.object({
   time: z.string().min(1),
 });
 
-interface EditorTimeInputProps {
-  onFormStateChange: (isValid: boolean) => void;
-}
-
-const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
-  function EditorTimeInput({ onFormStateChange }, ref) {
+const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
+  function EditorTimeInput(props, ref) {
     const theme: ThemeColors = useTheme();
+    const setEditIsTimeInputValid = useSetEditIsTimeInputValidAtom();
 
     const methods = useForm({
       mode: "all",
@@ -55,7 +53,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, EditorTimeInputProps>(
     }, [mapData, lineNumber, maxTime, isYTPlaying]);
 
     useEffect(() => {
-      onFormStateChange(isValid);
+      setEditIsTimeInputValid(isValid);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isValid]);
 

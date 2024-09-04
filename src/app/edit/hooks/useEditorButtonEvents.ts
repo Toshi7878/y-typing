@@ -1,18 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   useEditAddTimeOffsetAtom,
+  useEditIsTimeInputValidAtom,
   useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
   useEditLineWordAtom,
   useEditWordConvertOptionAtom,
   useIsEditYTPlayingAtom,
+  useIsLineLastSelect,
+  useIsLineNotSelectAtom,
   useLineInputReducer,
   useSetCanUploadAtom,
   useSetIsLoadWordConvertAtom,
 } from "../edit-atom/editAtom";
 import { useDeleteTopLyricsText } from "./useEditAddLyricsTextHooks";
 import { RootState } from "../redux/store";
-import { setLastAddedTime } from "../redux/mapDataSlice";
+import { addLine, setLastAddedTime } from "../redux/mapDataSlice";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { ButtonEvents } from "../ts/tab/editor/buttonEvent";
 import { addHistory } from "../redux/undoredoSlice";
@@ -33,6 +36,11 @@ const timeValidate = (
   }
 };
 
+export const useIsAddButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  return !isTimeInputValid;
+};
+
 export const useLineAddButtonEvent = () => {
   const isYTPlaying = useIsEditYTPlayingAtom();
   const addTimeOffset = useEditAddTimeOffsetAtom();
@@ -42,12 +50,11 @@ export const useLineAddButtonEvent = () => {
 
   const { editorTimeInputRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
-
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
 
-  return (event: React.MouseEvent<HTMLButtonElement>) => {
+  return (isShiftKey: boolean) => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
     const endAfterLineIndex =
       mapData.length -
@@ -62,20 +69,30 @@ export const useLineAddButtonEvent = () => {
       mapData,
       endAfterLineIndex,
     ).toFixed(3);
-
-    const lyricsCopy = structuredClone(lyrics);
     dispatch(setLastAddedTime(time));
-    ButtonEvents.addLine(dispatch, setCanUpload, { time, lyrics, word });
 
-    if (!event.shiftKey) {
+    const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
+    dispatch(addLine(newLine));
+    dispatch(addHistory({ type: "add", data: newLine }));
+    if (!isShiftKey) {
       lineInputReducer({ type: "reset" });
     }
 
+    const lyricsCopy = !isShiftKey ? structuredClone(lyrics) : "";
     deleteTopLyricsText(lyricsCopy);
 
+    setCanUpload(true);
     //フォーカスを外さないとクリック時にテーブルがスクロールされない
     (document.activeElement as HTMLElement)?.blur();
   };
+};
+
+export const useIsUpdateButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  const isLineNotSelect = useIsLineNotSelectAtom();
+  const isLineLastSelect = useIsLineLastSelect();
+
+  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 };
 
 export const useLineUpdateButtonEvent = () => {
@@ -90,7 +107,7 @@ export const useLineUpdateButtonEvent = () => {
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
 
-  return (event: React.MouseEvent<HTMLButtonElement>) => {
+  return () => {
     const endAfterLineIndex =
       mapData.length -
       1 -
@@ -126,6 +143,11 @@ export const useLineUpdateButtonEvent = () => {
   };
 };
 
+export const useIsConvertButtonDisabled = () => {
+  const isLineLastSelect = useIsLineLastSelect();
+
+  return isLineLastSelect;
+};
 export const useWordConvertButtonEvent = () => {
   const lyrics = useEditLineLyricsAtom();
   const convertOption = useEditWordConvertOptionAtom();
@@ -137,6 +159,14 @@ export const useWordConvertButtonEvent = () => {
     setIsLoadWordConvert(false);
     lineInputReducer({ type: "set", payload: { word } });
   };
+};
+
+export const useIsDeleteButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  const isLineNotSelect = useIsLineNotSelectAtom();
+  const isLineLastSelect = useIsLineLastSelect();
+
+  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 };
 
 export const useLineDelete = () => {

@@ -21,12 +21,6 @@ export interface EditorSendData {
 
 export type EditTabIndex = 0 | 1 | 2;
 
-export interface EditorButtonsRef {
-  add: () => void;
-  update: () => void;
-  delete: () => void;
-}
-
 export interface EditorTimeInputRef {
   clearTime: () => void;
   getTime: () => number;
