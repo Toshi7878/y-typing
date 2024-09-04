@@ -1,6 +1,5 @@
 import jschardet from "jschardet";
 import iconv from "iconv-lite";
-import { WordConvert } from "../editor/wordConvert";
 import { RootState } from "../../../redux/store";
 import { Action, Dispatch } from "@reduxjs/toolkit";
 import { setMapData } from "../../../redux/mapDataSlice";
@@ -8,7 +7,7 @@ import { setMapData } from "../../../redux/mapDataSlice";
 export class ImportFile {
   async open(
     file: File,
-    convertOption: string,
+    wordConvert: (lyrics: string) => Promise<string>,
     dispatch: Dispatch<Action>,
     mapData: RootState["mapData"]["value"],
   ) {
@@ -26,7 +25,7 @@ export class ImportFile {
 
     if (file.name.endsWith(".lrc")) {
       const lrc = decodedData.split("\r\n");
-      const convertedData = await Convert.lrc(lrc, convertOption, mapData);
+      const convertedData = await Convert.lrc(lrc, wordConvert, mapData);
       dispatch(setMapData(convertedData));
     } else {
       const convertedData = await Convert.json(JSON.parse(decodedData).map, mapData);
@@ -57,13 +56,16 @@ class Convert {
     return result;
   }
 
-  static async lrc(lrc: string[], convertOption: string, mapData: RootState["mapData"]["value"]) {
+  static async lrc(
+    lrc: string[],
+    wordConvert: (lyrics: string) => Promise<string>,
+    mapData: RootState["mapData"]["value"],
+  ) {
     const result: RootState["mapData"]["value"] = [{ time: "0", lyrics: "", word: "" }];
     for (let i = 0; i < lrc.length; i++) {
       const timeTagMatch = lrc[i].match(/\[\d\d:\d\d.\d\d\]/);
 
       if (timeTagMatch) {
-        const wordConvert = new WordConvert(convertOption);
         const timeTag = timeTagMatch[0].match(/\d\d/g);
         const minute = +timeTag![0];
         const second = +timeTag![1];
@@ -71,7 +73,7 @@ class Convert {
 
         const time = (minute * 60 + second + minSec * 0.01).toString();
         const lyrics = lrc[i].replace(/\[\d\d:\d\d.\d\d\]/g, "").trim();
-        const word = (await wordConvert.convert(lyrics)) ?? "";
+        const word = (await wordConvert(lyrics)) ?? "";
 
         result.push({ time, lyrics, word });
       }

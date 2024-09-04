@@ -1,3 +1,5 @@
+import { useEditWordConvertOptionAtom } from "@/app/edit/edit-atom/editAtom";
+
 const convertChar = ["ゔ"];
 
 export const nonSymbol: string[] = [" ", "ー", "'", "＇", "%", "％", "&", "＆", "@", "＠"];
@@ -66,7 +68,17 @@ export const addSymbolAll: string[] = [
   "｝",
 ];
 
-export class WordConvert {
+export const useWordConvert = () => {
+  const convertOption = useEditWordConvertOptionAtom();
+
+  return async (lyrics: string) => {
+    const wordConvert = new WordConvert(convertOption);
+    const word = lyrics ? await wordConvert.convert(lyrics) : "";
+    return word ?? "";
+  };
+};
+
+class WordConvert {
   symbolList: string[];
   convertMode: string;
   constructor(convertOption: string) {

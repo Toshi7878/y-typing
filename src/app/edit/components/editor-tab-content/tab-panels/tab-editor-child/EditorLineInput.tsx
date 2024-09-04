@@ -18,8 +18,8 @@ const EditorLineInput = () => {
   const timeInputRef = useRef<EditorTimeInputRef>(null);
   const selectedLineCount = useEditLineSelectedCountAtom();
   const lyrics = useEditLineLyricsAtom();
-  const setLyrics = useSetEditLineLyricsAtom();
   const word = useEditLineWordAtom();
+  const setLyrics = useSetEditLineLyricsAtom();
   const setWord = useSetEditLineWordAtom();
   const handleEnterAddRuby = useAddRubyTagEvent();
 

@@ -39,9 +39,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
 
     const [maxTime, setMaxTime] = useState("0");
     const isYTPlaying = useIsEditYTPlayingAtom();
-
     const lineNumber = useEditLineSelectedCountAtom();
-
     const { playerRef, setRef } = useRefs();
     const mapData = useSelector((state: RootState) => state.mapData.value);
 
@@ -92,7 +90,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
         setValue("time", "", { shouldValidate: true });
       },
       getTime: () => Number(methods.getValues("time")),
-      selectedTime: (count) => {
+      setSelectedTime: (count) => {
         if (count !== null) {
           const selectedTime = mapData[count]?.["time"];
           setValue("time", selectedTime, { shouldValidate: true });
@@ -100,7 +98,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
           setValue("time", "", { shouldValidate: true });
         }
       },
-      undoAdd: (time: LineEdit["time"]) => {
+      setTime: (time: LineEdit["time"]) => {
         setValue("time", time, { shouldValidate: true });
       },
     }));

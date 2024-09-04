@@ -235,15 +235,15 @@ export const useLineInputReducer = () => {
             setEditLineLyrics(payload.lyrics);
           }
           if (typeof payload.selectCount === "number") {
-            editorTimeInputRef.current!.selectedTime(payload.selectCount);
+            editorTimeInputRef.current!.setSelectedTime(payload.selectCount);
             setEditLineCount(payload.selectCount);
           } else if (typeof payload.time === "string") {
-            editorTimeInputRef.current!.undoAdd(payload.time);
+            editorTimeInputRef.current!.setTime(payload.time);
           }
         }
         break;
       case "reset":
-        editorTimeInputRef.current!.selectedTime(null);
+        editorTimeInputRef.current!.setSelectedTime(null);
         setEditLineLyrics("");
         setEditLineCount(null);
         setEditLineWord("");

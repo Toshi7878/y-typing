@@ -4,15 +4,13 @@ import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/edit/redux/store";
 import { ImportFile } from "@/app/edit/ts/tab/settings/importFile";
-import {
-  useEditWordConvertOptionAtom,
-  useSetIsLrcConvertingAtom,
-} from "@/app/edit/edit-atom/editAtom";
+import { useSetIsLrcConvertingAtom } from "@/app/edit/edit-atom/editAtom";
+import { useWordConvert } from "@/app/edit/hooks/useWordConvert";
 
 export default function LrcConvertButton() {
   const dispatch = useDispatch();
-  const selectedConvertOption = useEditWordConvertOptionAtom();
   const setIsLrcConverting = useSetIsLrcConvertingAtom();
+  const wordConvert = useWordConvert();
   const toast = useToast();
 
   const mapData = useSelector((state: RootState) => state.mapData!.value);
@@ -33,7 +31,7 @@ export default function LrcConvertButton() {
             setIsLrcConverting(true);
 
             const importFile = new ImportFile();
-            await importFile.open(file, selectedConvertOption, dispatch, mapData);
+            await importFile.open(file, wordConvert, dispatch, mapData);
             e.target.value = "";
           } catch (error) {
             console.error("ファイルの処理中にエラーが発生しました:", error);

@@ -1,5 +1,4 @@
 import { Flex, Button, useTheme } from "@chakra-ui/react";
-import React, { useRef } from "react";
 import { ThemeColors } from "@/types";
 import { useIsLoadWordConvertAtom } from "@/app/edit/edit-atom/editAtom";
 import {
@@ -28,15 +27,10 @@ const EditorButtons = () => {
 
   const isLoadWordConvert = useIsLoadWordConvertAtom();
 
-  const addButtonRef = useRef<HTMLButtonElement | null>(null);
-  const updateButtonRef = useRef<HTMLButtonElement | null>(null);
-  const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
-
   const buttonConfigs = {
     add: {
       isDisabled: isAddButtonDisabled,
       colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg,
-      ref: addButtonRef,
       onClick: (event: React.MouseEvent<HTMLButtonElement>) => lineAddButtonEvent(event.shiftKey),
       text: (
         <>
@@ -47,8 +41,6 @@ const EditorButtons = () => {
     },
     update: {
       isDisabled: isUpdateButtonDisabled,
-      ref: updateButtonRef,
-
       colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
       onClick: lineUpdateButtonEvent,
       text: (
@@ -68,8 +60,6 @@ const EditorButtons = () => {
     },
     delete: {
       isDisabled: isDeleteButtonDisabled,
-      ref: deleteButtonRef,
-
       colorScheme: theme.colors.edit.mapTable.errorLine.bg,
       onClick: lineDelete,
       text: (
@@ -86,7 +76,6 @@ const EditorButtons = () => {
       {Object.values(buttonConfigs).map((config, index) => (
         <Button
           key={index}
-          ref={config.ref ? config.ref : undefined}
           isDisabled={config.isDisabled}
           isLoading={config.isLoading}
           variant="outline"

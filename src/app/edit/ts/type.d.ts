@@ -24,8 +24,8 @@ export type EditTabIndex = 0 | 1 | 2;
 export interface EditorTimeInputRef {
   clearTime: () => void;
   getTime: () => number;
-  selectedTime: (count: number | null) => void;
-  undoAdd: (time: Line["time"]) => void;
+  setSelectedTime: (count: number | null) => void;
+  setTime: (time: Line["time"]) => void;
 }
 
 type TagsReducerActionType = "set" | "add" | "delete" | "reset";

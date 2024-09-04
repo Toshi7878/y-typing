@@ -5,7 +5,6 @@ import {
   useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
   useEditLineWordAtom,
-  useEditWordConvertOptionAtom,
   useIsEditYTPlayingAtom,
   useIsLineLastSelect,
   useIsLineNotSelectAtom,
@@ -15,10 +14,10 @@ import {
 } from "../edit-atom/editAtom";
 import { useDeleteTopLyricsText } from "./useEditAddLyricsTextHooks";
 import { RootState } from "../redux/store";
-import { addLine, setLastAddedTime } from "../redux/mapDataSlice";
+import { addLine, deleteLine, setLastAddedTime, updateLine } from "../redux/mapDataSlice";
 import { useRefs } from "../edit-contexts/refsProvider";
-import { ButtonEvents } from "../ts/tab/editor/buttonEvent";
 import { addHistory } from "../redux/undoredoSlice";
+import { useWordConvert } from "./useWordConvert";
 
 const timeValidate = (
   time: number,
@@ -133,12 +132,14 @@ export const useLineUpdateButtonEvent = () => {
       }),
     );
 
-    ButtonEvents.updateLine(dispatch, {
-      time,
-      lyrics,
-      word,
-      selectedLineCount: selectedLineCount ?? undefined,
-    });
+    dispatch(
+      updateLine({
+        time,
+        lyrics,
+        word,
+        selectedLineCount: selectedLineCount ?? undefined,
+      }),
+    );
     lineInputReducer({ type: "reset" });
   };
 };
@@ -150,12 +151,13 @@ export const useIsConvertButtonDisabled = () => {
 };
 export const useWordConvertButtonEvent = () => {
   const lyrics = useEditLineLyricsAtom();
-  const convertOption = useEditWordConvertOptionAtom();
   const lineInputReducer = useLineInputReducer();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
+  const wordConvert = useWordConvert();
+
   return async () => {
     setIsLoadWordConvert(true);
-    const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
+    const word = await wordConvert(lyrics);
     setIsLoadWordConvert(false);
     lineInputReducer({ type: "set", payload: { word } });
   };
@@ -178,10 +180,17 @@ export const useLineDelete = () => {
 
   return () => {
     if (selectedLineCount) {
-      ButtonEvents.deleteLine(dispatch, setCanUpload, {
-        ...mapData[selectedLineCount],
-        selectedLineCount: selectedLineCount,
-      });
+      dispatch(deleteLine(selectedLineCount));
+      setCanUpload(true);
+      dispatch(
+        addHistory({
+          type: "delete",
+          data: {
+            ...mapData[selectedLineCount],
+            selectedLineCount: selectedLineCount,
+          },
+        }),
+      );
     }
     lineInputReducer({ type: "reset" });
   };

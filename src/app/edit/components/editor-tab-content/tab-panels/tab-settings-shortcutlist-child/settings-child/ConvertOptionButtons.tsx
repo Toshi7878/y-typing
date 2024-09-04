@@ -12,7 +12,7 @@ import {
 import { ThemeColors } from "@/types";
 import { ConvertOptionsType } from "@/app/edit/ts/type";
 import { useMemo } from "react";
-import { addSymbol, addSymbolAll, nonSymbol } from "@/app/edit/ts/tab/editor/wordConvert";
+import { addSymbol, addSymbolAll, nonSymbol } from "@/app/edit/hooks/useWordConvert";
 import {
   useEditWordConvertOptionAtom,
   useSetEditWordConvertOptionAtom,

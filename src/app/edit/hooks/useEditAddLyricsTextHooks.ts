@@ -1,25 +1,24 @@
 import {
   useEditAddLyricsTextAtom,
   useEditLineLyricsAtom,
-  useEditWordConvertOptionAtom,
   useLineInputReducer,
   useSetEditAddLyricsTextAtom,
   useSetIsLoadWordConvertAtom,
 } from "../edit-atom/editAtom";
-import { ButtonEvents } from "../ts/tab/editor/buttonEvent";
+import { useWordConvert } from "./useWordConvert";
 
 export function useSetTopLyricsText() {
   const lineInputReducer = useLineInputReducer();
   const lyricsText = useEditAddLyricsTextAtom();
-  const convertOption = useEditWordConvertOptionAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
+  const wordConvert = useWordConvert();
 
   return async (newLyrics?: string | undefined) => {
     const lines = lyricsText.split("\n");
     const lyrics = newLyrics === undefined ? lines[0].replace(/\r$/, "") : newLyrics;
 
     setIsLoadWordConvert(true);
-    const word = await ButtonEvents.lyricsConvert(lyrics, convertOption);
+    const word = await wordConvert(lyrics);
     setIsLoadWordConvert(false);
 
     lineInputReducer({ type: "set", payload: { lyrics, word } });
