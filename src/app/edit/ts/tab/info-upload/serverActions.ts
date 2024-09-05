@@ -57,7 +57,6 @@ export async function actions(data: EditorSendData, mapId: string) {
     if (mapId === "new") {
       newMapId = await createMap(data, userId);
       // リストの再検証をトリガー(更新されるようになる)
-      revalidatePath("/api/map-list");
     } else {
       const mapCreatorId = await prisma.map.findUnique({
         where: { id: Number(mapId) },
@@ -71,6 +70,7 @@ export async function actions(data: EditorSendData, mapId: string) {
         return { id: null, message: "この譜面を保存する権限がありません", status: 403 };
       }
     }
+    revalidatePath("/api/map-list");
 
     return {
       id: newMapId,
