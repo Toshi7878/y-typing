@@ -36,7 +36,7 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
   const previewTimeCount = useEditPreviewTimeCountAtom();
-  const setPreviewTimeCountAtom = useSetEditPreviewTimeCountAtom();
+  const setPreviewTimeCount = useSetEditPreviewTimeCountAtom();
 
   const handleBtnClick = () => {
     dispatch(setLineOption({ options: { changeCSS, eternalCSS }, number: optionModalIndex }));
@@ -84,9 +84,9 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
                     isChecked={previewTimeCount === optionModalIndex}
                     onChange={() => {
                       if (previewTimeCount === optionModalIndex) {
-                        setPreviewTimeCountAtom(null);
+                        setPreviewTimeCount(null);
                       } else {
-                        setPreviewTimeCountAtom(optionModalIndex);
+                        setPreviewTimeCount(optionModalIndex);
                       }
                     }}
                   />

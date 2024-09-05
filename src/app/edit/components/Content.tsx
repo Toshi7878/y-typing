@@ -15,9 +15,9 @@ import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
+  useSetEditPreviewTimeCountAtom,
   useSetMapTitleAtom,
   useSetTagsAtom,
-  useSetVideoIdAtom,
 } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
@@ -28,17 +28,25 @@ function Content() {
   const { id } = useParams();
   const theme: ThemeColors = useTheme();
   const isLrcConverting = useIsLrcConvertingAtom();
-  const setVideoId = useSetVideoIdAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
   const setTags = useSetTagsAtom();
+  const setPreviewTimeCount = useSetEditPreviewTimeCountAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {
       if (!id) return;
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      dispatch(setMapData(data.mapData));
+      const mapData = data.mapData;
+      dispatch(setMapData(mapData));
+      const previewTime = data.previewTime;
+
+      for (let i = 0; i < mapData.length; i++) {
+        if (mapData[i].time === previewTime) {
+          setPreviewTimeCount(i);
+        }
+      }
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行
