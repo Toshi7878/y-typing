@@ -18,6 +18,7 @@ import { ThemeColors } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
+  useEditPreviewTimeCountAtom,
   useMapTitleAtom,
   useSetCanUploadAtom,
   useTagsAtom,
@@ -36,6 +37,8 @@ const TabInfoUpload = () => {
 
   const mapTitle = useMapTitleAtom();
   const creatorComment = useCreatorCommentAtom();
+  const previewTimeCount = useEditPreviewTimeCountAtom();
+
   const toast = useToast();
   const theme: ThemeColors = useTheme();
 
@@ -51,7 +54,7 @@ const TabInfoUpload = () => {
       creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),
-      previewTime: mapData[map.startLine]["time"],
+      previewTime: mapData[previewTimeCount !== null ? previewTimeCount : map.startLine]["time"],
       romaKpmMedian: map.speedDifficulty.median.r,
       romaKpmMax: map.speedDifficulty.max.r,
       kanaKpmMedian: map.speedDifficulty.median.r,

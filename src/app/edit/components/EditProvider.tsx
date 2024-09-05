@@ -14,6 +14,7 @@ import {
   editTagsAtom,
   editVideoIdAtom,
 } from "../edit-atom/editAtom";
+import { useSearchParams } from "next/navigation";
 
 const queryClient = new QueryClient();
 const editAtomStore = createStore();
@@ -26,6 +27,9 @@ interface EditProviderProps {
 }
 
 const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+
   if (mapInfo) {
     editAtomStore.set(editMapTitleAtom, mapInfo.title);
     editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
@@ -37,6 +41,7 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
     });
   } else {
     editAtomStore.set(editCreatorIdAtom, null);
+    editAtomStore.set(editVideoIdAtom, newVideoId);
   }
   return (
     <InfoTabProvider>

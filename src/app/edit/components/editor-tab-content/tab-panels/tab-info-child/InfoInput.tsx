@@ -22,6 +22,7 @@ import {
   useSetCreatorCommentAtom,
   useSetIsEditYTStartedAtom,
   useSetMapTitleAtom,
+  useSetVideoIdAtom,
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
@@ -32,26 +33,21 @@ const videoIdSchema = z
   .regex(/^[!-~]+$/);
 
 const InfoInput = () => {
-  const methods = useFormContext();
-  const { playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
-  const [canChangeVideo, setCanChangeVideo] = useState(false);
+  const videoId = useVideoIdAtom();
+
+  const [changeVideoId, setChangeVideoId] = useState(videoId); // atomの値を初期値に設定
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
-  const videoId = useVideoIdAtom();
+  const setVideoId = useSetVideoIdAtom();
   const mapTitle = useMapTitleAtom();
   const creatorComment = useCreatorCommentAtom();
   const searchParams = useSearchParams();
 
-  const handleVideoIdChange = (newVideoId: string) => {
-    if (videoIdSchema.safeParse(newVideoId).success && videoId !== newVideoId) {
-      setCanChangeVideo(true);
-    } else {
-      setCanChangeVideo(false);
-    }
-  };
+  const canChangeVideo =
+    videoIdSchema.safeParse(changeVideoId).success && videoId !== changeVideoId;
   return (
     <Stack display="flex" flexDirection="column" gap="6">
       <Flex alignItems="center" hidden={!searchParams.get("new") ? false : true}>
@@ -66,7 +62,7 @@ const InfoInput = () => {
             size="sm"
             maxLength={11} // YouTubeのID11文字に制限
             fontWeight="bold"
-            value={videoId}
+            value={changeVideoId}
             bg={theme.colors.background}
             borderColor={`${theme.colors.card.borderColor}60`}
             onPaste={async (e) => {
@@ -75,10 +71,10 @@ const InfoInput = () => {
               const videoId = extractYouTubeVideoId(url);
               if (videoId) {
                 inputElement.value = videoId;
-                handleVideoIdChange(videoId);
+                setChangeVideoId(videoId);
               }
             }}
-            onChange={(e) => handleVideoIdChange(e.target.value)}
+            onChange={(e) => setChangeVideoId(e.target.value)}
           />
           <Button
             variant={"outline"}
@@ -88,7 +84,7 @@ const InfoInput = () => {
             onClick={() => {
               if (canChangeVideo) {
                 setIsYTStarted(false);
-                playerRef.current.cueVideoById({ videoId: methods.getValues("url") });
+                setVideoId(changeVideoId);
               }
             }}
           >

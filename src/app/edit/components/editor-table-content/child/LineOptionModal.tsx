@@ -1,6 +1,11 @@
 "use client";
-import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
+import {
+  useEditPreviewTimeCountAtom,
+  useSetCanUploadAtom,
+  useSetEditPreviewTimeCountAtom,
+} from "@/app/edit/edit-atom/editAtom";
 import { setLineOption } from "@/app/edit/redux/mapDataSlice";
+import { ThemeColors } from "@/types";
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Modal,
@@ -16,6 +21,10 @@ import {
   Stack,
   Badge,
   Button,
+  Checkbox,
+  Text,
+  Tooltip,
+  useTheme,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -23,8 +32,11 @@ import { useDispatch } from "react-redux";
 export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lineOptions }) {
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");
   const [eternalCSS, setEternalCSS] = useState(lineOptions?.eternalCSS || "");
+  const theme: ThemeColors = useTheme();
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
+  const previewTimeCount = useEditPreviewTimeCountAtom();
+  const setPreviewTimeCountAtom = useSetEditPreviewTimeCountAtom();
 
   const handleBtnClick = () => {
     dispatch(setLineOption({ options: { changeCSS, eternalCSS }, number: optionModalIndex }));
@@ -44,6 +56,43 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
           </Badge>
 
           <Stack spacing={10}>
+            <Box>
+              <Tooltip
+                bg={theme.colors.popup.bg}
+                color={theme.colors.popup.color}
+                borderWidth="1px"
+                borderStyle="solid"
+                borderColor={theme.colors.card.borderColor}
+                css={{
+                  "--popper-arrow-bg": theme.colors.popup.bg,
+                  "--popper-arrow-shadow-color": theme.colors.card.borderColor,
+                }}
+                hasArrow
+                placement="right"
+                label={
+                  <Box>
+                    有効にすると譜面一覧等でのプレビュー再生時に、有効にした時間から再生されます
+                  </Box>
+                }
+                isDisabled={previewTimeCount === optionModalIndex}
+              >
+                <FormLabel display="flex" cursor="pointer" width="fit-content">
+                  <Text as="span" mr={2}>
+                    プレビュー再生タイムに設定
+                  </Text>
+                  <Checkbox
+                    isChecked={previewTimeCount === optionModalIndex}
+                    onChange={() => {
+                      if (previewTimeCount === optionModalIndex) {
+                        setPreviewTimeCountAtom(null);
+                      } else {
+                        setPreviewTimeCountAtom(optionModalIndex);
+                      }
+                    }}
+                  />
+                </FormLabel>
+              </Tooltip>
+            </Box>
             {optionModalIndex === 0 && (
               <Box>
                 <FormLabel>永続的に適用するCSSを入力</FormLabel>

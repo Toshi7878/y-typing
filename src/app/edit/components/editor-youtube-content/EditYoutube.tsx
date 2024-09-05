@@ -22,8 +22,6 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
   console.log("YouTube");
   const isYTStarted = useIsEditYTStartedAtom();
   const videoId = useVideoIdAtom();
-  const searchParams = useSearchParams();
-  const newVideoId = searchParams.get("new") || "";
   const mapData = useSelector((state: RootState) => state.mapData.value);
 
   const onReady = useYTReadyEvent();
@@ -56,7 +54,7 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
   return (
     <YouTube
       className={className}
-      videoId={videoId ? videoId : newVideoId}
+      videoId={videoId}
       opts={{
         width: "100%",
         height: "100%",

@@ -333,3 +333,13 @@ export const useEditIsTimeInputValidAtom = () => {
 export const useSetEditIsTimeInputValidAtom = () => {
   return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
 };
+
+const editPreviewTimeCountAtom = atom<number | null>(null);
+
+export const useEditPreviewTimeCountAtom = () => {
+  return useAtomValue(editPreviewTimeCountAtom, { store: editAtomStore });
+};
+
+export const useSetEditPreviewTimeCountAtom = () => {
+  return useSetAtom(editPreviewTimeCountAtom, { store: editAtomStore });
+};

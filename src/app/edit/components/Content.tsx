@@ -49,17 +49,14 @@ function Content() {
   });
 
   useLayoutEffect(() => {
-    return () => {
-      if (id) {
-        //新規作成譜面に移動したら初期化
-        setVideoId("");
-        setMapTitle("");
-        setCreatorComment("");
-        dispatch(resetMapData());
-        setTags({ type: "reset" });
-        dispatch(resetUndoRedoData());
-      }
-    };
+    if (!id) {
+      //新規作成譜面に移動したら初期化
+      setMapTitle("");
+      setCreatorComment("");
+      dispatch(resetMapData());
+      setTags({ type: "reset" });
+      dispatch(resetUndoRedoData());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
