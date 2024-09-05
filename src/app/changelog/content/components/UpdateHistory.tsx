@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-09-6",
+    descriptions: [`エディターのラインオプションにプレビュータイム変更設定を追加`],
+  },
+  {
     date: "2024-09-1",
     descriptions: [
       `エディターの設定タブにショートカットキー 一覧を追加`,
