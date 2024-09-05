@@ -88,6 +88,7 @@ export default function LineOptionModal({ isOpen, onClose, optionModalIndex, lin
                       } else {
                         setPreviewTimeCount(optionModalIndex);
                       }
+                      setCanUpload(true);
                     }}
                   />
                 </FormLabel>
