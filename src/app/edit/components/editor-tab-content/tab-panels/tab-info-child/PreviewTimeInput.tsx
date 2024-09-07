@@ -4,6 +4,7 @@ import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
 import {
   useEditPreviewTimeInputAtom,
+  useSetCanUploadAtom,
   useSetEditPreviewTimeInputAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { FaPlay } from "react-icons/fa";
@@ -15,6 +16,7 @@ const PreviewTimeInput = () => {
 
   const previewTime = useEditPreviewTimeInputAtom();
   const setPreviewTime = useSetEditPreviewTimeInputAtom();
+  const setCanUpload = useSetCanUploadAtom();
 
   const handlePreviewClick = () => {
     editStatus.current!.isNotAutoTabToggle = true;
@@ -42,7 +44,10 @@ const PreviewTimeInput = () => {
               type="number"
               size="sm"
               step="0.1"
-              onChange={(e) => setPreviewTime(e.target.value)}
+              onChange={(e) => {
+                setPreviewTime(e.target.value);
+                setCanUpload(true);
+              }}
             />
             <Box cursor="pointer" _hover={{ outline: "solid 1px" }} onClick={handlePreviewClick}>
               <FaPlay size={15} />
