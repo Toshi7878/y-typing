@@ -33,6 +33,7 @@ import {
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
 import CustomToolTip from "@/components/CustomToolTip";
+import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -96,28 +97,7 @@ const TabInfoUpload = () => {
                   <UploadButton state={state} />
                 </form>
               ) : null}
-
-              <CustomToolTip
-                tooltipLabel={
-                  "譜面一覧でのプレビュー再生時に入力されているタイムから再生されるようになります。未入力の場合は、最初にワードが出現するタイムに設定されます"
-                }
-                placement="top"
-              >
-                <HStack alignItems="baseline">
-                  <FormLabel fontSize="sm">
-                    <Text as="span" mr={3}>
-                      プレビュータイム
-                    </Text>
-                    <Input
-                      width="80px"
-                      bg={theme.colors.background}
-                      type="number"
-                      size="sm"
-                      step="0.1"
-                    />
-                  </FormLabel>
-                </HStack>
-              </CustomToolTip>
+              <PreviewTimeInput />
             </HStack>
           </Stack>
         </FormProvider>

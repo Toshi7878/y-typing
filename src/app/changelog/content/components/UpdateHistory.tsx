@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-09-8",
+    descriptions: [`エディターのプレビュータイム設定を情報 & 保存タブに移動`],
+  },
+  {
     date: "2024-09-6",
     descriptions: [`エディターのラインオプションにプレビュータイム変更設定を追加`],
   },

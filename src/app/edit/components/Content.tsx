@@ -15,7 +15,6 @@ import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
-  useSetEditPreviewTimeCountAtom,
   useSetMapTitleAtom,
   useSetTagsAtom,
 } from "../edit-atom/editAtom";
@@ -31,7 +30,6 @@ function Content() {
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
   const setTags = useSetTagsAtom();
-  const setPreviewTimeCount = useSetEditPreviewTimeCountAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -40,13 +38,6 @@ function Content() {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
       const mapData = data.mapData;
       dispatch(setMapData(mapData));
-      const previewTime = data.previewTime;
-
-      for (let i = 0; i < mapData.length; i++) {
-        if (mapData[i].time === previewTime) {
-          setPreviewTimeCount(i);
-        }
-      }
     },
 
     enabled: !!id, // useQueryをidが存在する場合にのみ実行

@@ -29,6 +29,10 @@ export interface EditorTimeInputRef {
   setTime: (time: Line["time"]) => void;
 }
 
+export interface EditStatusRef {
+  isNotAutoTabToggle: boolean;
+}
+
 type TagsReducerActionType = "set" | "add" | "delete" | "reset";
 type LineInputReducerActionType = "set" | "reset";
 export type YTSpeedReducerActionType = "up" | "down";

@@ -1,4 +1,4 @@
-import { FormLabel, HStack, Input, Text, useTheme } from "@chakra-ui/react";
+import { Box, FormLabel, HStack, Input, Text, useTheme } from "@chakra-ui/react";
 
 import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
@@ -6,12 +6,20 @@ import {
   useEditPreviewTimeInputAtom,
   useSetEditPreviewTimeInputAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { FaPlay } from "react-icons/fa";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 
-const TabInfoUpload = () => {
+const PreviewTimeInput = () => {
   const theme: ThemeColors = useTheme();
+  const { playerRef, editStatus } = useRefs();
 
   const previewTime = useEditPreviewTimeInputAtom();
   const setPreviewTime = useSetEditPreviewTimeInputAtom();
+
+  const handlePreviewClick = () => {
+    editStatus.current!.isNotAutoTabToggle = true;
+    playerRef.current.seekTo(Number(previewTime));
+  };
 
   return (
     <CustomToolTip
@@ -22,22 +30,28 @@ const TabInfoUpload = () => {
     >
       <HStack alignItems="baseline">
         <FormLabel fontSize="sm">
-          <Text as="span" mr={3}>
-            プレビュータイム
-          </Text>
-          <Input
-            value={previewTime}
-            width="80px"
-            bg={theme.colors.background}
-            type="number"
-            size="sm"
-            step="0.1"
-            onChange={(e) => setPreviewTime(e.target.value)}
-          />
+          <HStack alignItems="baseline">
+            <Text as="span" mr={3}>
+              プレビュータイム
+            </Text>
+
+            <Input
+              value={previewTime}
+              width="80px"
+              bg={theme.colors.background}
+              type="number"
+              size="sm"
+              step="0.1"
+              onChange={(e) => setPreviewTime(e.target.value)}
+            />
+            <Box cursor="pointer" _hover={{ outline: "solid 1px" }} onClick={handlePreviewClick}>
+              <FaPlay size={15} />
+            </Box>
+          </HStack>
         </FormLabel>
       </HStack>
     </CustomToolTip>
   );
 };
 
-export default TabInfoUpload;
+export default PreviewTimeInput;

@@ -56,7 +56,7 @@ export const useYTReadyEvent = () => {
 };
 
 export const useYTPlayEvent = () => {
-  const { playerRef } = useRefs();
+  const { playerRef, editStatus } = useRefs();
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setTabIndex = useSetTabIndexAtom();
@@ -68,7 +68,11 @@ export const useYTPlayEvent = () => {
     editTicker.start();
     setIsYTPlaying(true);
     setIsYTStarted(true);
-    setTabIndex(1);
+    if (!editStatus.current?.isNotAutoTabToggle) {
+      setTabIndex(1);
+    }
+
+    editStatus.current!.isNotAutoTabToggle = false;
   };
 };
 
