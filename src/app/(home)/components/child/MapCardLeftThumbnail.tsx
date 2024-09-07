@@ -77,7 +77,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const width = useBreakpointValue(thubnailWidth);
   const height = useBreakpointValue(thubnailHeight);
   return (
-    <Box className="relative group" width={width}>
+    <Box className="relative group" width={width} pointerEvents="none">
       {loading && (
         <Box className="absolute inset-0 flex items-center justify-center">
           <Spinner />
@@ -88,9 +88,9 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         alt={alt}
         src={imgSrc}
         width={width}
-        height={height} // 16:9の比率で高さを設定
+        height={height}
         minW={width}
-        minH={height} // 16:9の比率で最小高さを設定
+        minH={height}
         className="rounded-md"
       />
       <Box
