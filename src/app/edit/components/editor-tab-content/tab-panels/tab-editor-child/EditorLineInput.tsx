@@ -11,6 +11,7 @@ import {
   useSetEditLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
+import CustomToolTip from "@/components/CustomToolTip";
 
 const EditorLineInput = () => {
   const [isLineLyricsSelected, setIsLineLyricsSelected] = useState(false);
@@ -28,23 +29,30 @@ const EditorLineInput = () => {
     <>
       <Box display="flex" alignItems="center">
         <EditorTimeInput ref={timeInputRef} />
-        <Input
-          placeholder="歌詞"
-          size="sm"
-          autoComplete="off"
-          value={lyrics}
-          onChange={(e) => setLyrics(e.target.value)}
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
-          onKeyDown={handleEnterAddRuby}
-          onSelect={(e) => {
-            const start = e.currentTarget.selectionStart;
-            const end = e.currentTarget.selectionEnd;
+        <CustomToolTip
+          tooltipLabel={<Box fontSize="xs">Enterキーを押すとRubyタグを挿入できます。</Box>}
+          placement="top"
+          isDisabled={!isLineLyricsSelected}
+          isOpen={isLineLyricsSelected}
+        >
+          <Input
+            placeholder="歌詞"
+            size="sm"
+            autoComplete="off"
+            value={lyrics}
+            onChange={(e) => setLyrics(e.target.value)}
+            bg={theme.colors.background}
+            borderColor={`${theme.colors.card.borderColor}60`}
+            onKeyDown={handleEnterAddRuby}
+            onSelect={(e) => {
+              const start = e.currentTarget.selectionStart;
+              const end = e.currentTarget.selectionEnd;
 
-            const isSelected = end !== null && start !== null && start - end > 0;
-            setIsLineLyricsSelected(isSelected);
-          }}
-        />
+              const isSelected = end !== null && start !== null && end - start > 0;
+              setIsLineLyricsSelected(isSelected);
+            }}
+          />
+        </CustomToolTip>
       </Box>
       <Box display="flex" alignItems="center">
         <Input
