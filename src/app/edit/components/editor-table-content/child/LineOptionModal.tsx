@@ -20,7 +20,6 @@ import { MapData } from "@/app/type/ts/type";
 import CSSTextLength from "./line-option-child/CSSTextLength";
 import CSSInput from "./line-option-child/CSSInput";
 import SaveOptionButton from "./line-option-child/SaveOptionButton";
-import PreviewTimeOption from "./line-option-child/PreviewTimeOption";
 import LineOptionModalCloseButton from "./line-option-child/LineOptionModalCloseButton";
 import { ThemeColors } from "@/types";
 
@@ -63,7 +62,6 @@ export default function LineOptionModal({
           </Badge>
 
           <Stack spacing={10}>
-            <PreviewTimeOption optionModalIndex={optionModalIndex} />
             {optionModalIndex === 0 && (
               <Box>
                 <FormLabel>永続的に適用するCSSを入力</FormLabel>

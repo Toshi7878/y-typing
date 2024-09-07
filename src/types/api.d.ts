@@ -4,4 +4,5 @@ export interface GetInfoData {
   creatorComment: string;
   creatorId: number;
   tags?: string[];
+  previewTime: string;
 }

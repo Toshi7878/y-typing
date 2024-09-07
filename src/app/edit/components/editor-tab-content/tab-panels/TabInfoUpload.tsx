@@ -1,6 +1,16 @@
 import { useForm, FormProvider } from "react-hook-form";
 
-import { Card, CardBody, Stack, useTheme } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  FormLabel,
+  HStack,
+  Input,
+  Stack,
+  Text,
+  useTheme,
+} from "@chakra-ui/react";
 
 import InfoInput from "./tab-info-child/InfoInput";
 import InfoGenreTag from "./tab-info-child/InfoGenreTag";
@@ -17,11 +27,12 @@ import { ThemeColors, UploadResult } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
-  useEditPreviewTimeCountAtom,
+  useEditPreviewTimeInputAtom,
   useMapTitleAtom,
   useTagsAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
+import CustomToolTip from "@/components/CustomToolTip";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -34,7 +45,7 @@ const TabInfoUpload = () => {
 
   const mapTitle = useMapTitleAtom();
   const creatorComment = useCreatorCommentAtom();
-  const previewTimeCount = useEditPreviewTimeCountAtom();
+  const previewTime = useEditPreviewTimeInputAtom();
 
   const theme: ThemeColors = useTheme();
 
@@ -44,13 +55,15 @@ const TabInfoUpload = () => {
   const upload = async () => {
     const map = new CreateMap(mapData);
     const mapVideoId = playerRef.current.getVideoData().video_id;
+    const videoDuration: number = playerRef.current.getDuration();
     const sendData = {
       videoId: mapVideoId,
       title: mapTitle,
       creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),
-      previewTime: mapData[previewTimeCount !== null ? previewTimeCount : map.startLine]["time"],
+      previewTime:
+        Number(previewTime) < videoDuration ? previewTime : mapData[map.startLine]["time"],
       romaKpmMedian: map.speedDifficulty.median.r,
       romaKpmMax: map.speedDifficulty.max.r,
       kanaKpmMedian: map.speedDifficulty.median.r,
@@ -77,11 +90,35 @@ const TabInfoUpload = () => {
             <InfoInput />
             <InfoGenreTag />
 
-            {myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId) ? (
-              <form action={formAction}>
-                <UploadButton state={state} />
-              </form>
-            ) : null}
+            <HStack justifyContent="space-between">
+              {myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId) ? (
+                <form action={formAction}>
+                  <UploadButton state={state} />
+                </form>
+              ) : null}
+
+              <CustomToolTip
+                tooltipLabel={
+                  "譜面一覧でのプレビュー再生時に入力されているタイムから再生されるようになります。未入力の場合は、最初にワードが出現するタイムに設定されます"
+                }
+                placement="top"
+              >
+                <HStack alignItems="baseline">
+                  <FormLabel fontSize="sm">
+                    <Text as="span" mr={3}>
+                      プレビュータイム
+                    </Text>
+                    <Input
+                      width="80px"
+                      bg={theme.colors.background}
+                      type="number"
+                      size="sm"
+                      step="0.1"
+                    />
+                  </FormLabel>
+                </HStack>
+              </CustomToolTip>
+            </HStack>
           </Stack>
         </FormProvider>
       </CardBody>

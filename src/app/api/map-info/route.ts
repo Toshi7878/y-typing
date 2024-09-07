@@ -21,6 +21,7 @@ export async function GET(request: Request) {
         tags: true,
         mapData: false,
         videoId: true,
+        previewTime: true,
       },
     });
 

@@ -13,7 +13,6 @@ import {
   useEditAddLyricsTextAtom,
   useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
-  useEditPreviewTimeCountAtom,
   useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
@@ -56,7 +55,6 @@ function LineRow() {
   const isYTPlaying = useIsEditYTPlayingAtom();
   const lyrics = useEditLineLyricsAtom();
   const addLyricsText = useEditAddLyricsTextAtom();
-  const previewTimeCount = useEditPreviewTimeCountAtom();
   const isAddButtonDisabled = useIsAddButtonDisabled();
   const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
   const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
@@ -226,7 +224,7 @@ function LineRow() {
             <Td>
               <Button
                 disabled={mapData.length - 1 === index}
-                variant={line.options || previewTimeCount === index ? "solid" : "outline"}
+                variant={line.options ? "solid" : "outline"}
                 colorScheme="green"
                 size="sm"
                 onClick={() => {
@@ -237,7 +235,7 @@ function LineRow() {
                   }
                 }}
               >
-                {line.options || previewTimeCount === index ? "設定有" : "未設定"}
+                {line.options ? "設定有" : "未設定"}
               </Button>
             </Td>
           </Tr>
@@ -249,7 +247,7 @@ function LineRow() {
       return rows;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex, previewTimeCount],
+    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex],
   );
 
   return (

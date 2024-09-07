@@ -334,14 +334,14 @@ export const useSetEditIsTimeInputValidAtom = () => {
   return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
 };
 
-const editPreviewTimeCountAtom = atom<number | null>(null);
+export const editPreviewTimeInputAtom = atom<string>("");
 
-export const useEditPreviewTimeCountAtom = () => {
-  return useAtomValue(editPreviewTimeCountAtom, { store: editAtomStore });
+export const useEditPreviewTimeInputAtom = () => {
+  return useAtomValue(editPreviewTimeInputAtom, { store: editAtomStore });
 };
 
-export const useSetEditPreviewTimeCountAtom = () => {
-  return useSetAtom(editPreviewTimeCountAtom, { store: editAtomStore });
+export const useSetEditPreviewTimeInputAtom = () => {
+  return useSetAtom(editPreviewTimeInputAtom, { store: editAtomStore });
 };
 
 const editCustomStyleLengthAtom = atom<number>(0);

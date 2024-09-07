@@ -11,6 +11,7 @@ import {
   editCreatorCommentAtom,
   editCreatorIdAtom,
   editMapTitleAtom,
+  editPreviewTimeInputAtom,
   editTagsAtom,
   editVideoIdAtom,
 } from "../edit-atom/editAtom";
@@ -35,6 +36,8 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
     editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
     editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
     editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
+    editAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
+
     editAtomStore.set(editTagsAtom, {
       type: "set",
       payload: mapInfo.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
