@@ -1,41 +1,56 @@
 "use client";
-import { Button } from "@chakra-ui/react";
+import { Button, useTheme } from "@chakra-ui/react";
 
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { useCanUploadAtom, useSetCanUploadAtom, useTagsAtom } from "@/app/edit/edit-atom/editAtom";
+import { useCanUploadAtom, useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
+import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import { useRouter } from "next/navigation";
+import { ThemeColors, UploadResult } from "@/types";
 interface UploadButtonProps {
-  responseStatus: number;
+  state: UploadResult;
 }
-const UploadButton = ({ responseStatus }: UploadButtonProps) => {
+const UploadButton = ({ state }: UploadButtonProps) => {
   const { pending } = useFormStatus();
-  const tags = useTagsAtom();
+  const theme: ThemeColors = useTheme();
   const canUpload = useCanUploadAtom();
   const setCanUpload = useSetCanUploadAtom();
-  const isUpButtonDisabled = tags.length < 2 || !canUpload;
+  const successToast = useSuccessToast();
+  const router = useRouter();
 
   useEffect(() => {
-    if (responseStatus !== 200) {
-    } else {
-      setCanUpload(false);
+    if (state.status !== 0) {
+      successToast(state);
+
+      const isSuccess = state.status === 200 ? true : false;
+
+      if (isSuccess) {
+        setCanUpload(false);
+
+        if (!state.id) {
+          router.push(`/edit/${state.id}`);
+        }
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseStatus]);
+  }, [state]);
 
   return (
     <Button
       className="cursor-pointer"
       variant="solid"
       size="lg"
-      colorScheme="blue"
       width="200px"
       border="1px"
-      borderColor="black"
-      isLoading={pending} // 変更
-      cursor={canUpload ? "" : "not-allowed"}
-      opacity={isUpButtonDisabled ? "0.6" : "1"}
-      _hover={{ bg: "#3a90f3" }}
+      isLoading={pending}
+      bg={theme.colors.type.progress.bg}
+      color={theme.colors.card.color}
+      _hover={{
+        bg: canUpload ? theme.colors.type.progress.hover.bg : theme.colors.type.progress.bg,
+      }}
+      borderColor={theme.colors.card.borderColor}
+      opacity={canUpload ? "1" : "0.7"}
       type="submit"
       onClick={(e) => {
         if (!canUpload) {

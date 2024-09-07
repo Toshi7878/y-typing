@@ -2,12 +2,12 @@ import { HStack } from "@chakra-ui/react";
 import React from "react";
 import EndUploadButton from "./EndRankingButton";
 import EndMainButton from "./child/EndMainButton";
-import { ActionState } from "@/app/type/ts/type";
+import { UploadResult } from "@/types";
 
 interface EndMainButtonContainerProps {
   isDisplayRankingButton: boolean;
   isScoreUpdated: boolean;
-  state: ActionState;
+  state: UploadResult;
   onOpen: () => void;
   formAction: () => void;
   isPlayingMode: boolean;

@@ -1,12 +1,13 @@
 import { HStack } from "@chakra-ui/react";
 import React from "react";
 import EndSubButton from "./child/EndSubButton";
-import { ActionState, GameStateRef } from "@/app/type/ts/type";
+import { GameStateRef } from "@/app/type/ts/type";
+import { UploadResult } from "@/types";
 
 interface EndSubButtonContainerProps {
   isPlayingMode: boolean;
   isDisplayRankingButton: boolean;
-  state: ActionState;
+  state: UploadResult;
   gameStateRef: React.RefObject<GameStateRef>;
 }
 

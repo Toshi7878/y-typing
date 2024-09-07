@@ -4,6 +4,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { resultSendSchema } from "./validationSchema";
 import { SendResultData } from "../../type";
+import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
@@ -23,7 +24,7 @@ const send = async (data: SendResultData, userId: number) => {
         ...data.status,
       },
     });
-    return updatedResult.id; // 更新されたマップのIDを返す
+    return updatedResult.id;
   } else {
     const newResult = await prisma.result.create({
       data: {
@@ -37,7 +38,7 @@ const send = async (data: SendResultData, userId: number) => {
   }
 };
 
-export async function actions(data: SendResultData) {
+export async function actions(data: SendResultData): Promise<UploadResult> {
   const session = await auth();
 
   const validatedFields = resultSendSchema.safeParse({
@@ -49,6 +50,7 @@ export async function actions(data: SendResultData) {
   if (!validatedFields.success) {
     return {
       id: null,
+      title: "ランキングデータが正常ではありませんでした。",
       message: validatedFields.error.errors[0].message,
       status: 400,
     };
@@ -59,10 +61,10 @@ export async function actions(data: SendResultData) {
 
     return {
       id: newId,
-      message: "ランキング登録が完了しました",
+      title: "ランキング登録が完了しました",
       status: 200,
     };
   } catch (error) {
-    return { id: null, message: "サーバー側で問題が発生しました", status: 500 };
+    return { id: null, title: "サーバー側で問題が発生しました", status: 500 };
   }
 }

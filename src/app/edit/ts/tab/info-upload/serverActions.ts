@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { mapSendSchema } from "./validationSchema";
 import { revalidatePath } from "next/cache";
 import { EditorSendData } from "../../type";
+import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
@@ -32,7 +33,7 @@ const updateMap = async (data: EditorSendData, mapId: number) => {
   return updatedMap.id; // 更新されたマップのIDを返す
 };
 
-export async function actions(data: EditorSendData, mapId: string) {
+export async function actions(data: EditorSendData, mapId: string): Promise<UploadResult> {
   const session = await auth();
 
   const validatedFields = mapSendSchema.safeParse({
@@ -47,8 +48,9 @@ export async function actions(data: EditorSendData, mapId: string) {
   if (!validatedFields.success) {
     return {
       id: null,
+      title: "保存に失敗しました",
       message: validatedFields.error.errors[0].message,
-      status: 400, // ステータスコードを追加
+      status: 400,
     };
   }
   try {
@@ -67,17 +69,27 @@ export async function actions(data: EditorSendData, mapId: string) {
       if (mapCreatorId?.creatorId === userId) {
         newMapId = await updateMap(data, Number(mapId));
       } else {
-        return { id: null, message: "この譜面を保存する権限がありません", status: 403 };
+        return {
+          id: null,
+          title: "保存に失敗しました",
+          message: "この譜面を保存する権限がありません",
+          status: 403,
+        };
       }
     }
     revalidatePath("/api/map-list");
 
     return {
       id: newMapId,
-      message: mapId === "new" ? "アップロード完了" : "アップデート完了",
+      title: mapId === "new" ? "アップロード完了" : "アップデート完了",
       status: 200,
     };
   } catch (error) {
-    return { id: null, message: "サーバー側で問題が発生しました", status: 500 };
+    return {
+      id: null,
+      title: "保存に失敗しました",
+      message: "サーバー側で問題が発生しました",
+      status: 500,
+    };
   }
 }

@@ -12,18 +12,18 @@ import {
   Button,
   useDisclosure,
   Box,
-  useToast,
 } from "@chakra-ui/react"; // Chakra UIのコンポーネントをインポート
 import EndMainButton from "./child/EndMainButton";
-import { ActionState } from "@/app/type/ts/type";
 import { tabIndexAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useSetAtom } from "jotai";
 import AlertDialogButton from "./child/AlertDialogButton";
+import { UploadResult } from "@/types";
+import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
   formAction: () => void;
-  state: ActionState;
+  state: UploadResult;
 }
 
 const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProps) => {
@@ -32,8 +32,7 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
   const cancelRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const setTabIndex = useSetAtom(tabIndexAtom);
-
-  const toast = useToast();
+  const successToast = useSuccessToast();
 
   useEffect(() => {
     if (state.status === 200) {
@@ -53,40 +52,16 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
   };
 
   useEffect(() => {
-    function handleStateChange() {
-      if (state.status && state.status !== 200) {
-        toast({
-          title: "保存に失敗しました",
-          description: <small>{state.message}</small>,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-          containerStyle: {
-            border: "1px solid",
+    if (state.status !== 0) {
+      successToast(state);
 
-            borderColor: "gray.200",
-            fontSize: "lg", // サイズを大きくする
-          },
-        });
-      } else if (state.status === 200) {
-        toast({
-          title: state.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-          containerStyle: {
-            border: "1px solid",
+      const isSuccess = state.status === 200 ? true : false;
 
-            borderColor: "gray.200",
-            fontSize: "lg", // サイズを大きくする
-          },
-        });
+      if (isSuccess) {
         setTabIndex(1);
       }
     }
-    handleStateChange();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 

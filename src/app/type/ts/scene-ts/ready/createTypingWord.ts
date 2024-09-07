@@ -389,7 +389,7 @@ export class CreateMap {
   currentTimeBarFrequency: number;
   movieTotalTime: number;
 
-  constructor(data: MapData) {
+  constructor(data: MapData[]) {
     const wordRomaMap = this.parseWord(data);
 
     const result = this.create(wordRomaMap, data);
@@ -408,7 +408,7 @@ export class CreateMap {
     this.currentTimeBarFrequency = this.movieTotalTime / 1700;
   }
 
-  private create(wordRomaMap: string[][], data: MapData) {
+  private create(wordRomaMap: string[][], data: MapData[]) {
     const mapData: LineData[] = [];
     const defaultLineResultData: LineResultData[] = [];
     const typingLineNumbers: number[] = [];
@@ -511,7 +511,7 @@ export class CreateMap {
     return { k: kanaNotes, r: romaWord.join("").length };
   }
 
-  private parseWord(data: MapData) {
+  private parseWord(data: MapData[]) {
     let lyrics = data
       .map((line) => line["word"].replace(/[ 　]+$/, "").replace(/^[ 　]+/, ""))
       .join("\n")

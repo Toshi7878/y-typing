@@ -143,7 +143,7 @@ class WordReplace {
         if (confirm(`残り${matchLength}件\n${this.newWord}\n置き換えますか？`)) {
           let n = 0;
 
-          const lineNumber = i;
+          const selectedLineCount = i;
 
           const time = this.mapData[i]["time"];
 
@@ -168,7 +168,7 @@ class WordReplace {
 
           this.newWord = newWord;
 
-          this.dispatch(updateLine({ lineNumber, time, lyrics, word: this.newWord }));
+          this.dispatch(updateLine({ selectedLineCount, time, lyrics, word: this.newWord }));
         }
 
         resolve(1);

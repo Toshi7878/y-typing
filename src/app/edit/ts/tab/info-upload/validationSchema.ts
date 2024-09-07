@@ -4,6 +4,9 @@ const lineSchema = z.object({
   time: z.string(),
   lyrics: z.string().optional(),
   word: z.string().optional(),
+  options: z
+    .object({ eternalCSS: z.string().optional(), changeCSS: z.string().optional() })
+    .optional(), // 追加
 });
 
 export const mapSendSchema = z.object({
@@ -43,6 +46,27 @@ export const mapSendSchema = z.object({
       },
       {
         message: "endの後に無効な行があります",
+      },
+    )
+    .refine(
+      (lines) => {
+        let allCustomStyleLength = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+          const eternalCSS = lines[i].options?.eternalCSS;
+          const changeCSS = lines[i].options?.changeCSS;
+          if (eternalCSS) {
+            allCustomStyleLength += eternalCSS.length;
+          }
+
+          if (changeCSS) {
+            allCustomStyleLength += changeCSS.length;
+          }
+        }
+        return allCustomStyleLength < 10000;
+      },
+      {
+        message: "カスタムCSSの合計文字数は10000文字以下になるようにしてください",
       },
     ),
   videoId: z.string(),

@@ -7,7 +7,7 @@ export type MapData = {
   lyrics: string;
   word: string;
   options?: { eternalCSS?: string; changeCSS?: string };
-}[];
+};
 export type TypeChank = { k: string; r: string[]; p: number };
 
 export type SpeedDifficulty = { median: { r: number; k: number }; max: { r: number; k: number } };
@@ -221,9 +221,3 @@ export type NormalizeHirakana =
   | "ほ";
 
 export type HanDakuten = "ぱ" | "ぴ" | "ぷ" | "ぺ" | "ぽ";
-
-export interface ActionState {
-  id: number | null;
-  message: string;
-  status: number;
-}

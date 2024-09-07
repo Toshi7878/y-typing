@@ -1,11 +1,11 @@
 "use server";
 
-import { auth } from "../../../lib/auth"; // updateSessionNameをインポート
+import { auth } from "../../../lib/auth";
 import { PrismaClient } from "@prisma/client";
 import { nameSchema } from "./validationSchema";
-// export const runtime = "edge";
-
+import { UploadResult } from "@/types";
 const prisma = new PrismaClient();
+
 const sendUserName = async (email_hash: string, newName: string) => {
   if (email_hash) {
     await prisma.user.update({
@@ -14,28 +14,30 @@ const sendUserName = async (email_hash: string, newName: string) => {
     });
   }
 };
-export async function actions(state: { message: string | null }, formData: FormData) {
+
+export async function actions(newName: string): Promise<UploadResult> {
   const session = await auth();
 
   const validatedFields = nameSchema.safeParse({
-    newName: formData.get("newName"),
+    newName,
   });
 
   if (!validatedFields.success) {
     return {
-      newName: "",
+      id: "",
+      title: "名前の更新中にエラーが発生しました",
       message: validatedFields.error.errors[0].message,
-      status: 400, // ステータスコードを追加
+      status: 400,
     };
   }
 
-  const email_hash = session?.user?.email; // セッションからidを取得
+  const email_hash = session?.user?.email;
 
   try {
     const newName = validatedFields.data!.newName;
     await sendUserName(email_hash!, newName);
-    return { newName, message: "名前が更新されました", status: 200 };
+    return { id: newName, title: "名前が更新されました", status: 200 };
   } catch (error) {
-    return { newName: "", message: "名前の更新中にエラーが発生しました", status: 500 };
+    return { id: "", title: "名前の更新中にエラーが発生しました", status: 500 };
   }
 }

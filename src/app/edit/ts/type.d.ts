@@ -1,4 +1,5 @@
-import { LineInput, YouTubeSpeed } from "@/types";
+import { MapData } from "@/app/type/ts/type";
+import { YouTubeSpeed } from "@/types";
 import { Dispatch } from "react";
 
 export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
@@ -6,7 +7,7 @@ export interface EditorSendData {
   title: string;
   creatorComment: string;
   tags: string[];
-  mapData: Line[];
+  mapData: MapData[];
   videoId: string;
   previewTime: string;
   romaKpmMedian: number;

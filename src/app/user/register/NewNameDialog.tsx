@@ -1,49 +1,55 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Button, Input, FormControl, useToast, Box } from "@chakra-ui/react";
+import { Button, Input, FormControl, Box } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { nameSchema } from "./validationSchema";
 import { actions } from "./actions";
 import { useFormState } from "react-dom";
+import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import { UploadResult } from "@/types";
 
 interface FormData {
   newName: string;
 }
 
 export default function NewNameDialog() {
-  const initialState = { newName: "", message: "", status: 0 };
-
-  const [state, formAction] = useFormState(actions, initialState);
-  const { data: session, update } = useSession();
-
-  const toast = useToast();
+  const initialState: UploadResult = { id: "", title: "", status: 0 };
   const {
     register,
     formState: { errors },
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(nameSchema),
   });
+  const newNameValue = watch("newName");
+
+  const upload = async () => {
+    const result = await actions(newNameValue);
+    return result;
+  };
+
+  const [state, formAction] = useFormState(upload, initialState);
+  const { data: session, update } = useSession();
+
+  const successToast = useSuccessToast();
 
   useEffect(() => {
-    async function handleStateChange() {
-      if (state.status && state.status !== 200) {
-        toast({
-          id: "name-error-toast",
-          title: "入力エラー",
-          description: state.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      } else if (state.status === 200) {
-        await update({ ...session?.user, name: state.newName });
-        window.location.href = "/";
-      }
+    if (state.status !== 0) {
+      (async function () {
+        successToast(state);
+
+        const isSuccess = state.status === 200 ? true : false;
+
+        if (isSuccess) {
+          await update({ ...session?.user, name: state.id });
+          window.location.href = "/";
+        }
+      })();
     }
-    handleStateChange();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 

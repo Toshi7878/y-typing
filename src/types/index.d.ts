@@ -137,3 +137,10 @@ export interface IndexDBOption {
   optionName: string;
   value: string | number | boolean;
 }
+
+export interface UploadResult {
+  id: number | string | null;
+  title: string;
+  message?: string;
+  status: number;
+}

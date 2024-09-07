@@ -343,3 +343,13 @@ export const useEditPreviewTimeCountAtom = () => {
 export const useSetEditPreviewTimeCountAtom = () => {
   return useSetAtom(editPreviewTimeCountAtom, { store: editAtomStore });
 };
+
+const editCustomStyleLengthAtom = atom<number>(0);
+
+export const useEditCustomStyleLengthAtom = () => {
+  return useAtomValue(editCustomStyleLengthAtom, { store: editAtomStore });
+};
+
+export const useSetEditCustomStyleLengthAtom = () => {
+  return useSetAtom(editCustomStyleLengthAtom, { store: editAtomStore });
+};

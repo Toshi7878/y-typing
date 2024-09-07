@@ -1,14 +1,5 @@
 "use client";
-import {
-  Button,
-  FormLabel,
-  Input,
-  HStack,
-  useToast,
-  Box,
-  useTheme,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Button, FormLabel, Input, HStack, Box, useTheme, Tooltip } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { allAdjustTime } from "@/app/edit/redux/mapDataSlice";
 import { RootState } from "@/app/edit/redux/store";
@@ -16,12 +7,14 @@ import { addHistory } from "@/app/edit/redux/undoredoSlice";
 import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
 import { useState } from "react";
+import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 
 export default function TotalTimeAdjust() {
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
-  const toast = useToast();
   const theme: ThemeColors = useTheme();
+  const successToast = useSuccessToast();
+
   const [totalAdjustValue, setTotalAdjustValue] = useState<string>("");
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
@@ -41,25 +34,14 @@ export default function TotalTimeAdjust() {
       }),
     );
     dispatch(allAdjustTime(totalAdjustValue));
-    toast({
+    const successState = {
+      id: null,
       title: "タイムを調整しました",
-      description: (
-        <Box as="small">
-          全体のタイムが {totalAdjustValue} 秒調整されました。
-          <br />
-          Ctrl + Zで前のタイムに戻ることができます。
-        </Box>
-      ),
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-      position: "bottom-right",
-      containerStyle: {
-        border: "1px solid",
-        borderColor: "gray.200",
-        fontSize: "lg",
-      },
-    });
+      message: `全体のタイムが ${totalAdjustValue} 秒調整されました。\n
+          Ctrl + Zで前のタイムに戻ることができます。`,
+      status: 200,
+    };
+    successToast(successState);
   };
 
   return (
