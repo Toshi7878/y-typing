@@ -77,7 +77,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const width = useBreakpointValue(thubnailWidth);
   const height = useBreakpointValue(thubnailHeight);
   return (
-    <Box className="relative group" width={width} pointerEvents="none">
+    <Box className="relative group" width={width} style={{ userSelect: "none" }}>
       {loading && (
         <Box className="absolute inset-0 flex items-center justify-center">
           <Spinner />
