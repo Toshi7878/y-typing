@@ -25,7 +25,7 @@ const End = ({ onOpen }: EndProps) => {
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
 
-  const initialState: UploadResult = { id: null, title: "", status: 0 };
+  const initialState: UploadResult = { id: null, title: "", message: "", status: 0 };
   const status = tabStatusRef.current!.getStatus();
 
   const upload = (): ReturnType<typeof actions> => {

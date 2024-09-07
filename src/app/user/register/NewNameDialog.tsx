@@ -16,7 +16,7 @@ interface FormData {
 }
 
 export default function NewNameDialog() {
-  const initialState: UploadResult = { id: "", title: "", status: 0 };
+  const initialState: UploadResult = { id: "", title: "", message: "", status: 0 };
   const {
     register,
     formState: { errors },

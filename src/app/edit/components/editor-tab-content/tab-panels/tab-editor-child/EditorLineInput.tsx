@@ -1,5 +1,5 @@
 import { Input, Box, useTheme } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ThemeColors } from "@/types";
 import EditorTimeInput from "./EditorTimeInput";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
@@ -13,6 +13,7 @@ import {
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 
 const EditorLineInput = () => {
+  const [isLineLyricsSelected, setIsLineLyricsSelected] = useState(false);
   const theme: ThemeColors = useTheme();
 
   const timeInputRef = useRef<EditorTimeInputRef>(null);
@@ -36,6 +37,13 @@ const EditorLineInput = () => {
           bg={theme.colors.background}
           borderColor={`${theme.colors.card.borderColor}60`}
           onKeyDown={handleEnterAddRuby}
+          onSelect={(e) => {
+            const start = e.currentTarget.selectionStart;
+            const end = e.currentTarget.selectionEnd;
+
+            const isSelected = end !== null && start !== null && start - end > 0;
+            setIsLineLyricsSelected(isSelected);
+          }}
         />
       </Box>
       <Box display="flex" alignItems="center">

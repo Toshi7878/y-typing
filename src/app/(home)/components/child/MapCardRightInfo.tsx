@@ -6,6 +6,7 @@ import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
 import { handleLinkClick } from "@/app/nprogress";
 import { MapCardInfo } from "../MapList";
+import CustomToolTip from "@/components/CustomToolTip";
 
 interface MapCardProps {
   map: MapCardInfo;
@@ -28,21 +29,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
       _hover={{ textDecoration: "none" }} // 追加: ホバー時の下線を無効化する
     >
-      <Tooltip
-        label={map.title}
-        placement="top"
-        whiteSpace="normal"
-        hasArrow
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
-        css={{
-          "--popper-arrow-bg": theme.colors.popup.bg,
-          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-        }}
-      >
+      <CustomToolTip tooltipLabel={map.title} placement="top">
         <Box
           color={"home.card.link"}
           fontWeight="bold"
@@ -53,7 +40,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
         >
           {map.title}
         </Box>
-      </Tooltip>
+      </CustomToolTip>
 
       <Text as="small">
         <Link

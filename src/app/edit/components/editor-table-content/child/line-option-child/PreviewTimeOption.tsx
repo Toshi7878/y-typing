@@ -4,6 +4,7 @@ import {
   useSetCanUploadAtom,
   useSetEditPreviewTimeCountAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { FormLabel, Box, Checkbox, Text, Tooltip, useTheme } from "@chakra-ui/react";
 
@@ -19,21 +20,11 @@ export default function PreviewTimeOption({ optionModalIndex }: PreviewTimeOptio
 
   return (
     <Box>
-      <Tooltip
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
-        css={{
-          "--popper-arrow-bg": theme.colors.popup.bg,
-          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-        }}
-        hasArrow
-        placement="right"
-        label={
+      <CustomToolTip
+        tooltipLabel={
           <Box>有効にすると譜面一覧等でのプレビュー再生時に、有効にした時間から再生されます</Box>
         }
+        placement="right"
         isDisabled={previewTimeCount === optionModalIndex}
       >
         <FormLabel display="flex" cursor="pointer" width="fit-content">
@@ -52,7 +43,7 @@ export default function PreviewTimeOption({ optionModalIndex }: PreviewTimeOptio
             }}
           />
         </FormLabel>
-      </Tooltip>
+      </CustomToolTip>
     </Box>
   );
 }

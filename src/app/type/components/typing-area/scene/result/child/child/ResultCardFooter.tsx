@@ -1,5 +1,6 @@
 "use client";
 
+import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Text, Tooltip, Stack, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
@@ -28,34 +29,22 @@ function ResultCardFooter({
     <Stack>
       <Box>
         miss: {lMiss},{" "}
-        <Tooltip
-          label={`rkpm:${rkpm}`}
-          placement="top"
-          fontSize="sm"
-          bg={theme.colors.popup.bg}
-          color={theme.colors.popup.color}
-          border="1px solid"
-          borderColor={theme.colors.card.borderColor}
-        >
+        <CustomToolTip tooltipLabel={`rkpm:${rkpm}`} placement="top" fontSize="sm">
           <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
             kpm: {kpm}
           </Text>
-        </Tooltip>
+        </CustomToolTip>
         ,{" "}
-        <Tooltip
-          label={`sumPoint: ${Number(point) + Number(tBonus)}${scoreCount ? ` Score: ${scoreCount}` : ""}`}
+        <CustomToolTip
+          tooltipLabel={`sumPoint: ${Number(point) + Number(tBonus)}${scoreCount ? ` Score: ${scoreCount}` : ""}`}
           placement="top"
           fontSize="sm"
-          bg={theme.colors.popup.bg}
-          color={theme.colors.popup.color}
-          border="1px solid"
-          borderColor={theme.colors.card.borderColor}
         >
           <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
             point: {point}
             {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
           </Text>
-        </Tooltip>
+        </CustomToolTip>
       </Box>
     </Stack>
   );

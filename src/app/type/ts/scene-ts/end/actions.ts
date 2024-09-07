@@ -62,9 +62,10 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
     return {
       id: newId,
       title: "ランキング登録が完了しました",
+      message: "",
       status: 200,
     };
   } catch (error) {
-    return { id: null, title: "サーバー側で問題が発生しました", status: 500 };
+    return { id: null, title: "サーバー側で問題が発生しました", message: "", status: 500 };
   }
 }

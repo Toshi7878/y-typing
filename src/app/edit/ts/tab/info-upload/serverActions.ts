@@ -58,7 +58,6 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     let newMapId: number;
     if (mapId === "new") {
       newMapId = await createMap(data, userId);
-      // リストの再検証をトリガー(更新されるようになる)
     } else {
       const mapCreatorId = await prisma.map.findUnique({
         where: { id: Number(mapId) },
@@ -82,6 +81,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     return {
       id: newMapId,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",
+      message: "",
       status: 200,
     };
   } catch (error) {

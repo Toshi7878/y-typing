@@ -36,8 +36,8 @@ export async function actions(newName: string): Promise<UploadResult> {
   try {
     const newName = validatedFields.data!.newName;
     await sendUserName(email_hash!, newName);
-    return { id: newName, title: "名前が更新されました", status: 200 };
+    return { id: newName, title: "名前が更新されました", message: "", status: 200 };
   } catch (error) {
-    return { id: "", title: "名前の更新中にエラーが発生しました", status: 500 };
+    return { id: "", title: "名前の更新中にエラーが発生しました", message: "", status: 500 };
   }
 }

@@ -7,6 +7,7 @@ import {
   useSetEditAddTimeOffsetAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { sendIndexedDB } from "@/lib/db";
+import CustomToolTip from "@/components/CustomToolTip";
 
 export default function AddTimeAdjust() {
   const theme: ThemeColors = useTheme();
@@ -16,19 +17,9 @@ export default function AddTimeAdjust() {
 
   return (
     <HStack alignItems="baseline">
-      <Tooltip
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
-        css={{
-          "--popper-arrow-bg": theme.colors.popup.bg,
-          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-        }}
-        hasArrow
+      <CustomToolTip
+        tooltipLabel={<Box>再生中に追加ボタン(S)を押した時に、数値分タイムを補正します</Box>}
         placement="top"
-        label={<Box>再生中に追加ボタン(S)を押した時に、数値分タイムを補正します</Box>}
       >
         <HStack alignItems="baseline">
           <FormLabel fontSize="xs" mr={1}>
@@ -52,7 +43,7 @@ export default function AddTimeAdjust() {
             }}
           />
         </HStack>
-      </Tooltip>
+      </CustomToolTip>
     </HStack>
   );
 }

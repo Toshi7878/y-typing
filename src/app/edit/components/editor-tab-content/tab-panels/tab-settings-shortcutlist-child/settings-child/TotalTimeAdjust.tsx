@@ -8,6 +8,7 @@ import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
 import { useState } from "react";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import CustomToolTip from "@/components/CustomToolTip";
 
 export default function TotalTimeAdjust() {
   const dispatch = useDispatch();
@@ -46,19 +47,9 @@ export default function TotalTimeAdjust() {
 
   return (
     <HStack alignItems="baseline">
-      <Tooltip
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
-        css={{
-          "--popper-arrow-bg": theme.colors.popup.bg,
-          "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-        }}
-        hasArrow
+      <CustomToolTip
+        tooltipLabel={<Box>数値を入力後、実行ボタンを押すと、全体のタイムが数値分増減します</Box>}
         placement="top"
-        label={<Box>数値を入力後、実行ボタンを押すと、全体のタイムが数値分増減します</Box>}
       >
         <HStack alignItems="baseline">
           <FormLabel fontSize="sm">全体タイム調整</FormLabel>
@@ -91,7 +82,7 @@ export default function TotalTimeAdjust() {
             実行
           </Button>
         </HStack>
-      </Tooltip>
+      </CustomToolTip>
     </HStack>
   );
 }

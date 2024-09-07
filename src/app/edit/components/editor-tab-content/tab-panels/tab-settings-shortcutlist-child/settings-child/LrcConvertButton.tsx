@@ -37,6 +37,7 @@ export default function LrcConvertButton() {
             const successState = {
               id: null,
               title: "lrcインポート完了",
+              message: "",
               status: 200,
             };
             successToast(successState);

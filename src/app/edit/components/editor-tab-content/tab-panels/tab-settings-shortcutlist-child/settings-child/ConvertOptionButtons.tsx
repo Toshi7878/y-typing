@@ -18,6 +18,7 @@ import {
   useSetEditWordConvertOptionAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { sendIndexedDB } from "@/lib/db";
+import CustomToolTip from "@/components/CustomToolTip";
 
 export default function ConvertOptionButtons() {
   const theme: ThemeColors = useTheme();
@@ -74,21 +75,7 @@ export default function ConvertOptionButtons() {
       >
         <Stack direction="row">
           {options.map((option) => (
-            <Tooltip
-              key={option.label}
-              bg={theme.colors.popup.bg}
-              color={theme.colors.popup.color}
-              borderWidth="1px"
-              borderStyle="solid"
-              borderColor={theme.colors.card.borderColor}
-              css={{
-                "--popper-arrow-bg": theme.colors.popup.bg,
-                "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-              }}
-              hasArrow
-              placement="bottom"
-              label={option.tooltipLabel}
-            >
+            <CustomToolTip tooltipLabel={option.tooltipLabel} key={option.label} placement="bottom">
               <Button
                 variant={selectedConvertOption === option.value ? "solid" : "outline"}
                 size="sm"
@@ -105,7 +92,7 @@ export default function ConvertOptionButtons() {
               >
                 {option.label}
               </Button>
-            </Tooltip>
+            </CustomToolTip>
           ))}
         </Stack>
       </RadioGroup>

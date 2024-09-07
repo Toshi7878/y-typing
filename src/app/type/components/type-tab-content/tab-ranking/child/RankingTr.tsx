@@ -1,6 +1,7 @@
 "use client";
 
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Td, Text, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
@@ -98,17 +99,8 @@ const RankingTr = (props: RankingTrProps) => {
     return null;
   };
   return (
-    <Tooltip
-      bg={theme.colors.popup.bg}
-      color={theme.colors.popup.color}
-      borderWidth="1px"
-      borderStyle="solid"
-      borderColor={theme.colors.card.borderColor}
-      css={{
-        "--popper-arrow-bg": theme.colors.popup.bg,
-        "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-      }}
-      label={
+    <CustomToolTip
+      tooltipLabel={
         <Box fontSize="sm">
           {props.romaType > 0 && (
             <Box>
@@ -194,9 +186,8 @@ const RankingTr = (props: RankingTrProps) => {
           </Box>
         </Box>
       }
-      hasArrow
-      placement="bottom-end"
       isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
+      placement="bottom-end"
     >
       <Tr
         _hover={{ backgroundColor: theme.colors.card.hover.bg }}
@@ -228,7 +219,7 @@ const RankingTr = (props: RankingTrProps) => {
           {formatDistanceToNowStrict(new Date(props.updatedAt), { addSuffix: true, locale: ja })}
         </Td>
       </Tr>
-    </Tooltip>
+    </CustomToolTip>
   );
 };
 

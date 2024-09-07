@@ -2,9 +2,10 @@
 import { mapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { InputModeType } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
-import { Box, Text, Tooltip, useTheme } from "@chakra-ui/react";
+import { Box, Text, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
+import CustomToolTip from "@/components/CustomToolTip";
 
 interface ResultCardHeaderdProps {
   index: number;
@@ -36,14 +37,10 @@ function ResultCardHeader({
       <Text as="span" mx={2}>
         {"|"}
       </Text>
-      <Tooltip
-        label={`ライン打鍵数${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
+      <CustomToolTip
+        tooltipLabel={`ライン打鍵数${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
         placement="top"
         fontSize="sm"
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        border="1px solid"
-        borderColor={theme.colors.card.borderColor}
       >
         <Text
           as="span"
@@ -52,35 +49,23 @@ function ResultCardHeader({
         >
           {lineNotes}打
         </Text>
-      </Tooltip>
+      </CustomToolTip>
       ÷{" "}
-      <Tooltip
-        label="ライン時間"
-        placement="top"
-        fontSize="sm"
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        border="1px solid"
-        borderColor={theme.colors.card.borderColor}
-      >
+      <CustomToolTip tooltipLabel="ライン時間" placement="top" fontSize="sm">
         <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }} className="line-time">
           {lineTime.toFixed(1)}秒
         </Text>
-      </Tooltip>
+      </CustomToolTip>
       ={" "}
-      <Tooltip
-        label={`要求打鍵速度${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
+      <CustomToolTip
+        tooltipLabel={`要求打鍵速度${lineInputMode === "roma" ? "(ローマ字)" : "(かな)"}`}
         placement="top"
         fontSize="sm"
-        bg={theme.colors.popup.bg}
-        color={theme.colors.popup.color}
-        border="1px solid"
-        borderColor={theme.colors.card.borderColor}
       >
         <Text as="span" className="line-kpm" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
           {lineKpm.toFixed(0)}kpm {lineSpeed > 1 && <>{`(${lineSpeed.toFixed(2)}倍速)`}</>}
         </Text>
-      </Tooltip>
+      </CustomToolTip>
     </Box>
   );
 }

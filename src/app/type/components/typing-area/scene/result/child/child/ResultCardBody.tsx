@@ -1,4 +1,5 @@
 import { TypeResult } from "@/app/type/ts/type";
+import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Text, CardBody, Tooltip, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
@@ -22,20 +23,11 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
         {typeResult.map(
           (type: TypeResult, index: number) =>
             type.c && (
-              <Tooltip
+              <CustomToolTip
                 key={index}
-                label={`time: ${type.t.toFixed(3)}`}
+                tooltipLabel={`time: ${type.t.toFixed(3)}`}
                 placement="top"
                 fontSize="sm"
-                hasArrow
-                bg={theme.colors.popup.bg}
-                color={theme.colors.popup.color}
-                border="1px solid"
-                borderColor={theme.colors.card.borderColor}
-                css={{
-                  "--popper-arrow-bg": theme.colors.popup.bg,
-                  "--popper-arrow-shadow-color": theme.colors.card.borderColor,
-                }}
               >
                 <Text
                   as="span"
@@ -53,7 +45,7 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
                 >
                   {type.c.replace(/ /g, "ˍ")}
                 </Text>
-              </Tooltip>
+              </CustomToolTip>
             ),
         )}
         <Text as="span" wordBreak="break-all">

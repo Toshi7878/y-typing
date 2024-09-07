@@ -141,6 +141,6 @@ export interface IndexDBOption {
 export interface UploadResult {
   id: number | string | null;
   title: string;
-  message?: string;
+  message: string;
   status: number;
 }
