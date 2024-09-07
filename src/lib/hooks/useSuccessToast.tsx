@@ -11,7 +11,7 @@ export const useSuccessToast = () => {
   return (state: UploadResult) => {
     const isSuccess = state.status === 200 ? true : false;
     const title = state.title;
-    const description = <small>{state.message}</small>;
+    const description = state.message ? <small>{state.message}</small> : null;
     // const status = isSuccess ? "success" : "error";
 
     toast({
@@ -36,7 +36,7 @@ export const useSuccessToast = () => {
 
               {title}
             </Flex>
-            <Box mt={2}>{description}</Box>
+            {description ? <Box mt={2}>{description}</Box> : ""}
           </Box>
         </Box>
       ),
