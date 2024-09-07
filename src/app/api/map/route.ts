@@ -15,6 +15,7 @@ export async function GET(request: Request) {
       where: { id: Number(mapId) },
       select: {
         mapData: true,
+        previewTime: true,
       },
     });
 
