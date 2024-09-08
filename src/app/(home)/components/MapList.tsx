@@ -82,7 +82,7 @@ function MapList() {
         mb={10}
         w="82vw"
       >
-        {data?.pages.map((page) => page.map((map) => <MapCard key={map.id} map={map} />))}{" "}
+        {data?.pages.map((page) => page.map((map) => <MapCard key={map.id} map={map} />))}
       </Box>
     </InfiniteScroll>
   );
