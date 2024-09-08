@@ -43,15 +43,7 @@ export default function Content() {
 
   return (
     <>
-      <Box
-        display="grid"
-        gridTemplateColumns={{ md: "1fr", lg: "repeat(2, 1fr)" }}
-        gap={3}
-        mb={10}
-        w="82vw"
-      >
-        <MapList />
-      </Box>
+      <MapList />
       <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
         <HomeYouTubeContent />
       </Box>
