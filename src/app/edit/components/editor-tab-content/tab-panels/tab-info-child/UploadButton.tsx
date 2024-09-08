@@ -27,8 +27,8 @@ const UploadButton = ({ state }: UploadButtonProps) => {
       if (isSuccess) {
         setCanUpload(false);
 
-        if (!state.id) {
-          router.push(`/edit/${state.id}`);
+        if (state.id) {
+          router.replace(`/edit/${state.id}`);
         }
       }
     }

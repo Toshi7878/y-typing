@@ -4,7 +4,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/navigation";
 import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
-import { handleLinkClick } from "@/app/nprogress";
+import { handleLinkClick, useLinkClick } from "@/app/nprogress";
 import { MapCardInfo } from "../MapList";
 import CustomToolTip from "@/components/CustomToolTip";
 
@@ -12,13 +12,13 @@ interface MapCardProps {
   map: MapCardInfo;
 }
 function MapCardRightInfo({ map }: MapCardProps) {
-  const router = useRouter();
   const theme = useTheme();
+  const handleLinkClick = useLinkClick();
 
   return (
     <Link
       href={`/type/${map.id}`}
-      onClick={handleLinkClick(`/type/${map.id}`, router)}
+      onClick={(event) => handleLinkClick(event, `/type/${map.id}`)}
       display="flex"
       flexDirection="column"
       justifyContent="start"
@@ -45,7 +45,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       <Text as="small">
         <Link
           href={`/user/${map.user.id}`}
-          onClick={handleLinkClick(`/user/${map.user.id}`, router)}
+          onClick={(event) => handleLinkClick(event, `/type/${map.id}`)}
           color={"home.card.link"}
         >
           {map.user.name}

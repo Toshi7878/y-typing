@@ -34,6 +34,7 @@ import {
 import { useSession } from "next-auth/react";
 import CustomToolTip from "@/components/CustomToolTip";
 import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
+import TypeLinkButton from "./tab-info-child/TypeLinkButton";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -95,6 +96,8 @@ const TabInfoUpload = () => {
               {myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId) ? (
                 <form action={formAction}>
                   <UploadButton state={state} />
+
+                  {id ? <TypeLinkButton /> : ""}
                 </form>
               ) : null}
               <PreviewTimeInput />

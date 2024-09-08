@@ -27,7 +27,8 @@ const StyledKbd = styled(Kbd)<{ isDisabled: boolean; isKbdHidden: boolean }>`
 `;
 
 const StyledBadge = styled(Badge)<{ isDisabled: boolean; isKbdHidden: boolean }>`
-  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) =>
+    props.isDisabled ? "not-allowed" : props.isKbdHidden ? "initial" : "pointer"};
   transition: transform 0.1s ease-in-out;
 
   &:hover {

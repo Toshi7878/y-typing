@@ -2,7 +2,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import TimeRange from "./TimeRange";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -26,6 +26,9 @@ import { Provider } from "jotai";
 function Content() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+
   const theme: ThemeColors = useTheme();
   const isLrcConverting = useIsLrcConvertingAtom();
   const setMapTitle = useSetMapTitleAtom();
@@ -61,7 +64,7 @@ function Content() {
       dispatch(resetUndoRedoData());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id, newVideoId]);
 
   useEffect(() => {
     window.getSelection()!.removeAllRanges();

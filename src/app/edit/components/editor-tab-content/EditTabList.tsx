@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme } from "@chakra-ui/react";
 import TabEditor from "./tab-panels/TabEditor";
 import TabInfoUpload from "./tab-panels/TabInfoUpload";
