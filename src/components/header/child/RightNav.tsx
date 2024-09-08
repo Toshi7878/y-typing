@@ -25,7 +25,7 @@ export default function RightNav() {
   };
 
   return (
-    <Box className="flex items-center gap-5 md:gap-10">
+    <Box className="flex items-center gap-5 ">
       {session?.user?.name ? <NewMap /> : <></>}
 
       <Switch onChange={changeTheme} isChecked={themeColor === "dark"} />
