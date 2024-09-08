@@ -37,7 +37,7 @@ export default function RightNav() {
           color: theme.colors.header.hover.color,
         }}
       >
-        <FaPalette />
+        {/* <FaPalette /> */}
       </Box>
 
       <Login />
