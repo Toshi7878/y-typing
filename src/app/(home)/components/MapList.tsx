@@ -39,26 +39,44 @@ function getCurrentPageFromURL() {
 }
 
 function MapList() {
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } =
-    useInfiniteQuery({
-      queryKey: ["mapList"],
-      queryFn: ({ pageParam = 0 }) => getMapList(pageParam), // ページ数を引数として渡す
-      initialPageParam: getCurrentPageFromURL(),
-      getNextPageParam: (lastPage, allPages) => {
-        // ページング処理を修正
+  const {
+    data,
+    error,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ["mapList"],
+    queryFn: ({ pageParam = 0 }) => getMapList(pageParam), // ページ数を引数として渡す
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      // ページング処理を修正
 
-        if (lastPage.length > 0) {
-          const nextPage = allPages.length;
-          return nextPage;
-        }
+      if (lastPage.length > 0) {
+        const nextPage = allPages.length;
+        return nextPage;
+      }
 
-        return undefined;
-      },
-      staleTime: Infinity, // データを常に新鮮に保つ
-      refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
-      refetchOnReconnect: false, // 再接続時に再フェッチしない
-      refetchOnMount: false, // マウント時に再フェッチしない
-    });
+      return undefined;
+    },
+    getPreviousPageParam: (firstPage, allPages) => {
+      // 前のページを取得するための処理
+      if (allPages.length > 1) {
+        return allPages.length - 2;
+      }
+
+      return undefined;
+    },
+    staleTime: Infinity, // データを常に新鮮に保つ
+    refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
+    refetchOnReconnect: false, // 再接続時に再フェッチしない
+    refetchOnMount: false, // マウント時に再フェッチしない
+  });
 
   if (isFetching) {
     return (
@@ -73,7 +91,7 @@ function MapList() {
       loadMore={() => fetchNextPage()}
       loader={<div key={0}>Loading...</div>}
       hasMore={hasNextPage}
-      isReverse
+      isReverse={false} // 上にスクロールして読み込むためにfalseに設定
     >
       <Box
         display="grid"
