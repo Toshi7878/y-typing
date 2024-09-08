@@ -119,14 +119,14 @@ export const useSpeedReducer = () => {
         {
           const newSpeed = (speed < 2 ? speed + 0.25 : 2) as YouTubeSpeed;
           setYTSpeedAtom(newSpeed);
-          playerRef.setPlaybackRate(newSpeed);
+          playerRef.current.setPlaybackRate(newSpeed);
         }
         break;
       case "down":
         {
           const newSpeed = (speed > 0.25 ? speed - 0.25 : 0.25) as YouTubeSpeed;
           setYTSpeedAtom(newSpeed);
-          playerRef.setPlaybackRate(newSpeed);
+          playerRef.current.setPlaybackRate(newSpeed);
         }
         break;
       default:
