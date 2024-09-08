@@ -16,6 +16,9 @@ import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
   useSetEditPreviewTimeInputAtom,
+  useSetIsEditYTPlayingAtom,
+  useSetIsEditYTReadyAtom,
+  useSetIsEditYTStartedAtom,
   useSetMapTitleAtom,
   useSetTagsAtom,
 } from "../edit-atom/editAtom";
@@ -35,6 +38,9 @@ function Content() {
   const setCreatorComment = useSetCreatorCommentAtom();
   const setPreviewTime = useSetEditPreviewTimeInputAtom();
   const setTags = useSetTagsAtom();
+  const setIsYTStarted = useSetIsEditYTStartedAtom();
+  const setIsYTReady = useSetIsEditYTReadyAtom();
+  const setIsYTPlaying = useSetIsEditYTPlayingAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -63,6 +69,9 @@ function Content() {
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
       setPreviewTime("");
+      setIsYTStarted(false);
+      setIsYTReady(false);
+      setIsYTPlaying(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);
