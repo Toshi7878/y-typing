@@ -3,7 +3,7 @@ import { Card, CardBody, useTheme } from "@chakra-ui/react";
 
 import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapCardRightInfo from "./child/MapCardRightInfo";
-import { MapCardInfo } from "./MapList";
+import { MapCardInfo } from "../ts/type";
 
 interface MapCardProps {
   map: MapCardInfo;

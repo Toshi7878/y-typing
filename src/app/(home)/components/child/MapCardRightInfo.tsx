@@ -1,17 +1,16 @@
 "use client";
-import { Box, useTheme, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/app/nprogress";
-import { MapCardInfo } from "../MapList";
 import CustomToolTip from "@/components/CustomToolTip";
+import { MapCardInfo } from "../../ts/type";
 
 interface MapCardProps {
   map: MapCardInfo;
 }
 function MapCardRightInfo({ map }: MapCardProps) {
-  const theme = useTheme();
   const handleLinkClick = useLinkClick();
 
   return (

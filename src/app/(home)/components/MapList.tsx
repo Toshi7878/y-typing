@@ -1,23 +1,22 @@
 "use client";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroller";
 
 import MapCard from "./MapCard";
+import SkeletonCard from "./SkeletonCard";
+import MapCardLayout from "./MapCardLayout";
+import { MapCardInfo } from "../ts/type";
 
-export interface MapCardInfo {
-  id: number;
-  title: string;
-  videoId: string;
-  updatedAt: string;
-  previewTime: string;
-  difficulty: string;
-  thumbnailQuality: "maxresdefault" | "mqdefault";
-  user: {
-    id: number;
-    name: string;
-  };
+function LoadingMapCard() {
+  return (
+    <MapCardLayout>
+      {[...Array(30)].map((_, index) => (
+        <SkeletonCard key={index} />
+      ))}
+    </MapCardLayout>
+  );
 }
 
 async function getMapList(page: number): Promise<MapCardInfo[]> {
@@ -31,11 +30,6 @@ async function getMapList(page: number): Promise<MapCardInfo[]> {
   }
 
   return response.data;
-}
-
-function getCurrentPageFromURL() {
-  const urlParams = new URLSearchParams(window.location.hash.replace("#", ""));
-  return Number(urlParams.get("page")) || 0;
 }
 
 function MapList() {
@@ -78,30 +72,19 @@ function MapList() {
     refetchOnMount: false, // マウント時に再フェッチしない
   });
 
-  if (isFetching) {
-    return (
-      <Box display="flex" justifyContent="center">
-        <Spinner />
-      </Box>
-    );
+  if (status === "pending") {
+    return <LoadingMapCard />;
   }
 
   return (
     <InfiniteScroll
       loadMore={() => fetchNextPage()}
-      loader={<div key={0}>Loading...</div>}
+      loader={<LoadingMapCard />}
       hasMore={hasNextPage}
-      isReverse={false} // 上にスクロールして読み込むためにfalseに設定
     >
-      <Box
-        display="grid"
-        gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} // 2列表示に変更
-        gap={3}
-        mb={10}
-        w="82vw"
-      >
+      <MapCardLayout>
         {data?.pages.map((page) => page.map((map) => <MapCard key={map.id} map={map} />))}
-      </Box>
+      </MapCardLayout>
     </InfiniteScroll>
   );
 }
