@@ -11,9 +11,7 @@ function SiteLogo() {
   return (
     <Link
       href={"/"}
-      onClick={(event) =>
-        pathname === "/" ? (window.location.href = "/") : handleLinkClick(event, `/`)
-      }
+      onClick={pathname === "/" ? () => (window.location.href = "/") : handleLinkClick}
       className="text-2xl relative top-[-2.5px]"
       color={theme.colors.color}
       _hover={{

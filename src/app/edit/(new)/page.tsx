@@ -1,8 +1,9 @@
 import { SessionProvider } from "next-auth/react";
-import Content from "./components/Content";
-import EditProvider from "./components/EditProvider";
+
 import { Metadata } from "next";
 import { auth } from "@/lib/auth";
+import EditProvider from "../components/EditProvider";
+import Content from "../components/Content";
 
 export const metadata: Metadata = {
   title: `Edit New Map - YTyping`,

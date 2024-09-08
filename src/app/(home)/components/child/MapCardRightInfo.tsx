@@ -1,10 +1,9 @@
 "use client";
-import { Box, useTheme, Text, Tooltip } from "@chakra-ui/react";
+import { Box, useTheme, Text } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useRouter } from "next/navigation";
 import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
-import { handleLinkClick, useLinkClick } from "@/app/nprogress";
+import { useLinkClick } from "@/app/nprogress";
 import { MapCardInfo } from "../MapList";
 import CustomToolTip from "@/components/CustomToolTip";
 
@@ -18,7 +17,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
   return (
     <Link
       href={`/type/${map.id}`}
-      onClick={(event) => handleLinkClick(event, `/type/${map.id}`)}
+      onClick={handleLinkClick}
       display="flex"
       flexDirection="column"
       justifyContent="start"
@@ -43,11 +42,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       </CustomToolTip>
 
       <Text as="small">
-        <Link
-          href={`/user/${map.user.id}`}
-          onClick={(event) => handleLinkClick(event, `/type/${map.id}`)}
-          color={"home.card.link"}
-        >
+        <Link href={`/user/${map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
           {map.user.name}
         </Link>
 

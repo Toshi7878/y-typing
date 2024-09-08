@@ -9,11 +9,7 @@ const TypeLinkButton = () => {
   const { id } = useParams();
   const handleLinkClick = useLinkClick();
   return (
-    <Link
-      href={`/type/${id}`}
-      onClick={(event) => handleLinkClick(event, `/type/${id}`)}
-      cursor="pointer"
-    >
+    <Link href={`/type/${id}`} onClick={handleLinkClick} cursor="pointer">
       <Button
         size="md"
         variant="outline"

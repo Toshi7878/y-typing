@@ -1,16 +1,6 @@
 import { useForm, FormProvider } from "react-hook-form";
 
-import {
-  Box,
-  Card,
-  CardBody,
-  FormLabel,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  useTheme,
-} from "@chakra-ui/react";
+import { Card, CardBody, HStack, Stack, useTheme } from "@chakra-ui/react";
 
 import InfoInput from "./tab-info-child/InfoInput";
 import InfoGenreTag from "./tab-info-child/InfoGenreTag";
@@ -32,7 +22,6 @@ import {
   useTagsAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
-import CustomToolTip from "@/components/CustomToolTip";
 import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
 import TypeLinkButton from "./tab-info-child/TypeLinkButton";
 
@@ -84,6 +73,7 @@ const TabInfoUpload = () => {
   const [state, formAction] = useFormState(upload, initialState);
 
   const myUserId = session?.user?.id;
+  const isDisplayUploadButton = myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId);
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
       <CardBody>
@@ -93,13 +83,16 @@ const TabInfoUpload = () => {
             <InfoGenreTag />
 
             <HStack justifyContent="space-between">
-              {myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId) ? (
+              {isDisplayUploadButton ? (
                 <form action={formAction}>
                   <UploadButton state={state} />
-
                   {id ? <TypeLinkButton /> : ""}
                 </form>
-              ) : null}
+              ) : id ? (
+                <TypeLinkButton />
+              ) : (
+                ""
+              )}
               <PreviewTimeInput />
             </HStack>
           </Stack>

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import TypeTabContent from "../components/type-tab-content/TypeTab";
 import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -24,25 +24,11 @@ import {
 } from "../type-atoms/gameRenderAtoms";
 import SceneWrapper from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
-import NProgress from "nprogress";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-
-export const queryClient = new QueryClient();
+import { queryClient } from "./TypeProvider";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
-  useEffect(() => {
-    window.getSelection()!.removeAllRanges();
-    NProgress.done();
-  }, []);
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ContentInner mapInfo={mapInfo} />
-    </QueryClientProvider>
-  );
-}
-
-function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
   const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
   const scene = useAtomValue(sceneAtom);
@@ -140,7 +126,7 @@ function ContentInner({ mapInfo }: { mapInfo: GetInfoData }) {
         <Box style={style}>
           <Flex direction="column">
             <Flex gap="6">
-              <Box className="">
+              <Box style={{ userSelect: "none" }}>
                 <TypeYouTubeContent
                   className={` w-[512px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
                   videoId={videoId}

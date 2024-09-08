@@ -5,7 +5,6 @@ import YouTube from "react-youtube";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useIsEditYTStartedAtom, useVideoIdAtom } from "../../edit-atom/editAtom";
-import { useSearchParams } from "next/navigation";
 import {
   useYTEndStopEvent,
   useYTPauseEvent,

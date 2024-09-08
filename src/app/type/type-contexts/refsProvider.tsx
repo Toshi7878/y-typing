@@ -1,10 +1,10 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { TabStatusRef } from "../components/type-tab-content/tab-status/TabStatus";
 import { GameStateRef, PlayingRef, PlayMode, StatusRef, YTStateRef } from "../ts/type";
 import { PlayingComboRef } from "../components/typing-area/scene/playing-child/child/PlayingCombo";
 import { PlayingLineTimeRef } from "../components/typing-area/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/typing-area/scene/playing-child/PlayingCenter";
+import { TabStatusRef } from "../components/type-tab-content/tab-status/TabStatus";
 
 export const defaultStatusRef: StatusRef = {
   status: {

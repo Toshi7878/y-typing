@@ -13,6 +13,7 @@ import {
   sceneAtom,
   speedAtom,
 } from "../../type-atoms/gameRenderAtoms";
+import NProgress from "nprogress";
 
 interface TypeYouTubeProps {
   className: string;
@@ -42,6 +43,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
   const handleReady = useCallback(
     (event: { target: any }) => {
       const player = event.target;
+      NProgress.done();
       setRef("playerRef", player);
       ytState.ready(player);
     },
