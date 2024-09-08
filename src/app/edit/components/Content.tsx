@@ -62,6 +62,7 @@ function Content() {
       dispatch(resetMapData());
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
+      setPreviewTime("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);
