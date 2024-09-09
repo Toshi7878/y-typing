@@ -7,7 +7,7 @@ const MapCardLayout = ({ children }) => {
       display="grid"
       gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} // 2列表示に変更
       gap={3}
-      mb={10}
+      mb={3}
       w="82vw"
     >
       {children}

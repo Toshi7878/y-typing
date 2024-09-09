@@ -12,7 +12,7 @@ import { MapCardInfo } from "../ts/type";
 function LoadingMapCard() {
   return (
     <MapCardLayout>
-      {[...Array(30)].map((_, index) => (
+      {[...Array(10)].map((_, index) => (
         <SkeletonCard key={index} />
       ))}
     </MapCardLayout>
