@@ -64,9 +64,12 @@ const TimeRange = () => {
 
   useEffect(() => {
     const updateRangeValue = (currentTime: string) => {
-      rangeRef.current!.value = currentTime;
-      const progress = (Number(currentTime) / Number(rangeMaxValue)) * 100;
-      rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.type.progress.bg} ${progress}%, ${theme.colors.color}30 ${progress}%)`;
+      const currentRangeRef = rangeRef.current;
+      if (currentRangeRef) {
+        rangeRef.current!.value = currentTime;
+        const progress = (Number(currentTime) / Number(rangeMaxValue)) * 100;
+        rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.type.progress.bg} ${progress}%, ${theme.colors.color}30 ${progress}%)`;
+      }
     };
 
     timer.addListener(updateRangeValue);

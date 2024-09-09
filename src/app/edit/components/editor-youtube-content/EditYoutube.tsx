@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import YouTube from "react-youtube";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -12,19 +12,20 @@ import {
   useYTReadyEvent,
   useYTSeekEvent,
 } from "../../hooks/useEditYTEventsHooks";
+import { Ticker } from "@pixi/ticker";
 
 interface EditorYouTubeProps {
   className: string;
 }
+export const editTicker = new Ticker();
 
 const EditYouTube = function ({ className }: EditorYouTubeProps) {
   console.log("YouTube");
   const isYTStarted = useIsEditYTStartedAtom();
   const videoId = useVideoIdAtom();
   const mapData = useSelector((state: RootState) => state.mapData.value);
-
   const onReady = useYTReadyEvent();
-  const onPlay = useYTPlayEvent();
+  const { onPlay, tickerFunction } = useYTPlayEvent();
   const onPause = useYTPauseEvent();
   const onEndStop = useYTEndStopEvent();
   const onSeek = useYTSeekEvent();
@@ -49,6 +50,15 @@ const EditYouTube = function ({ className }: EditorYouTubeProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [mapData, isYTStarted],
   );
+
+  useEffect(() => {
+    editTicker.add(tickerFunction);
+    return () => {
+      editTicker.stop();
+      editTicker.remove(tickerFunction);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <YouTube

@@ -21,16 +21,12 @@ class TimerEvent {
 }
 
 class Timer extends TimerEvent {
-  public currentTime: string;
-
   constructor() {
     super();
-    this.currentTime = "0";
   }
 
   update(playerRef: RefsContextType["playerRef"]) {
     const currentTime = Number(playerRef.current.getCurrentTime()).toFixed(3);
-    this.currentTime = currentTime;
     this.notifyListeners(currentTime);
   }
 }

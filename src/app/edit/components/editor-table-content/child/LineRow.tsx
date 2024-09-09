@@ -141,14 +141,11 @@ function LineRow() {
   );
 
   useEffect(() => {
-    const updateTimeBg = () => {
-      if (timeCount !== null) {
-        const nextLine = mapData[timeCount + 1];
-        if (nextLine && Number(timer.currentTime) >= Number(nextLine["time"])) {
-          setTimeCount(timeCount + 1);
-        }
-      } else {
-        setTimeCount(0);
+    const updateTimeBg = (currentTime: string) => {
+      const nextLine = mapData[timeCount + 1];
+      console.log(currentTime);
+      if (nextLine && Number(currentTime) >= Number(nextLine["time"])) {
+        setTimeCount(timeCount + 1);
       }
     };
 

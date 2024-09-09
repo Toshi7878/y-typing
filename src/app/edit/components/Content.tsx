@@ -15,7 +15,9 @@ import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
+  useSetEditLineSelectedCountAtom,
   useSetEditPreviewTimeInputAtom,
+  useSetEditTimeCountAtom,
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
@@ -41,6 +43,8 @@ function Content() {
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setIsYTReady = useSetIsEditYTReadyAtom();
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
+  const setTimeCount = useSetEditTimeCountAtom();
+  const setSelectedCount = useSetEditLineSelectedCountAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -65,14 +69,17 @@ function Content() {
       //新規作成譜面に移動したら初期化
       setMapTitle("");
       setCreatorComment("");
-      dispatch(resetMapData());
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
       setPreviewTime("");
-      setIsYTStarted(false);
-      setIsYTReady(false);
-      setIsYTPlaying(false);
+      dispatch(resetMapData());
     }
+
+    setIsYTStarted(false);
+    setIsYTReady(false);
+    setIsYTPlaying(false);
+    setSelectedCount(null);
+    setTimeCount(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);
 
