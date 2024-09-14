@@ -18,6 +18,7 @@ import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
   useEditPreviewTimeInputAtom,
+  useMapArtistNameAtom,
   useMapTitleAtom,
   useSetGeminiTagsAtom,
   useSetMapArtistNameAtom,
@@ -42,6 +43,8 @@ const TabInfoUpload = () => {
   const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const mapTitle = useMapTitleAtom();
+  const artistName = useMapArtistNameAtom();
+
   const creatorComment = useCreatorCommentAtom();
   const previewTime = useEditPreviewTimeInputAtom();
   const videoId = useVideoIdAtom();
@@ -61,6 +64,7 @@ const TabInfoUpload = () => {
     const sendData = {
       videoId: mapVideoId,
       title: mapTitle,
+      artistName,
       creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),

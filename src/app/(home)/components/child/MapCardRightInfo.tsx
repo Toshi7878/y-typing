@@ -27,19 +27,30 @@ function MapCardRightInfo({ map }: MapCardProps) {
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
       _hover={{ textDecoration: "none" }} // 追加: ホバー時の下線を無効化する
     >
-      <CustomToolTip tooltipLabel={map.title} placement="top">
+      <CustomToolTip tooltipLabel={`${map.title} / ${map.artistName}`} placement="top">
         <Box
           color={"home.card.link"}
           fontWeight="bold"
-          className="hover:underline"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
+          fontSize="lg"
         >
           {map.title}
         </Box>
       </CustomToolTip>
 
+      <Box
+        color={"home.card.link"}
+        fontWeight="bold"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        whiteSpace="nowrap"
+        fontSize="sm"
+        mb={6}
+      >
+        {map.artistName}
+      </Box>
       <Text as="small">
         <Link href={`/user/${map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
           {map.user.name}

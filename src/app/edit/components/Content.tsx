@@ -72,6 +72,7 @@ function Content() {
     if (!id) {
       //新規作成譜面に移動したら初期化
       setMapTitle("");
+      setArtistName("");
       setCreatorComment("");
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
@@ -85,7 +86,6 @@ function Content() {
     setSelectedCount(null);
     setTimeCount(0);
     setGeminiTags([]);
-    setArtistName("");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);

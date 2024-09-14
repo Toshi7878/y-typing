@@ -10,6 +10,7 @@ import { GetInfoData } from "@/types/api";
 import {
   editCreatorCommentAtom,
   editCreatorIdAtom,
+  editMapArtistNameAtom,
   editMapTitleAtom,
   editPreviewTimeInputAtom,
   editTagsAtom,
@@ -33,6 +34,8 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
 
   if (mapInfo) {
     editAtomStore.set(editMapTitleAtom, mapInfo.title);
+    editAtomStore.set(editMapArtistNameAtom, mapInfo.artistName);
+
     editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
     editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
     editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);

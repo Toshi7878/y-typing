@@ -1,6 +1,7 @@
 export interface MapCardInfo {
   id: number;
   title: string;
+  artistName: string;
   videoId: string;
   updatedAt: string;
   previewTime: string;

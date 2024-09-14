@@ -16,6 +16,7 @@ export async function GET(request: Request) {
       select: {
         id: false,
         title: true,
+        artistName: true,
         creatorComment: true,
         creatorId: true,
         tags: true,

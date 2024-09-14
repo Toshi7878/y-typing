@@ -5,6 +5,7 @@ import { Dispatch } from "react";
 export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
 export interface EditorSendData {
   title: string;
+  artistName: string;
   creatorComment: string;
   tags: string[];
   mapData: MapData[];
