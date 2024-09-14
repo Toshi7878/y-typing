@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useFormContext } from "react-hook-form";
 import {
   Input,
   FormLabel,
@@ -14,13 +12,14 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
 import { z } from "zod";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import {
   useCreatorCommentAtom,
+  useMapArtistNameAtom,
   useMapTitleAtom,
   useSetCanUploadAtom,
   useSetCreatorCommentAtom,
   useSetIsEditYTStartedAtom,
+  useSetMapArtistNameAtom,
   useSetMapTitleAtom,
   useSetVideoIdAtom,
   useVideoIdAtom,
@@ -40,17 +39,20 @@ const InfoInput = () => {
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setMapTitle = useSetMapTitleAtom();
+  const setMapArtistName = useSetMapArtistNameAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
   const setVideoId = useSetVideoIdAtom();
   const mapTitle = useMapTitleAtom();
+  const mapArtistName = useMapArtistNameAtom();
   const creatorComment = useCreatorCommentAtom();
   const searchParams = useSearchParams();
+  const isNewCreateMap = !!searchParams.get("new");
 
   const canChangeVideo =
     videoIdSchema.safeParse(changeVideoId).success && videoId !== changeVideoId;
   return (
     <Stack display="flex" flexDirection="column" gap="6">
-      <Flex alignItems="center" hidden={!searchParams.get("new") ? false : true}>
+      <Flex alignItems="center" hidden={isNewCreateMap ? true : false}>
         <FormLabel mb="0" width="150px" fontWeight="bold">
           YouTube URL
         </FormLabel>
@@ -93,25 +95,46 @@ const InfoInput = () => {
         </InputGroup>
       </Flex>
 
-      <Flex alignItems="center">
-        <FormLabel mb="0" width="150px" fontWeight="bold">
-          タイトル
-        </FormLabel>
+      <Stack>
+        <Flex alignItems="center">
+          <FormLabel mb="0" width="150px" fontWeight="bold" fontSize="sm">
+            曲名タイトル
+          </FormLabel>
 
-        <Input
-          isInvalid={mapTitle === ""}
-          placeholder="曲名 / アーティスト【アニメ名OP】など"
-          size="sm"
-          fontWeight="bold"
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
-          value={mapTitle}
-          onChange={(e) => {
-            setCanUpload(true);
-            setMapTitle(e.target.value);
-          }}
-        />
-      </Flex>
+          <Input
+            isInvalid={mapTitle === ""}
+            placeholder="曲名"
+            size="sm"
+            fontWeight="bold"
+            bg={theme.colors.background}
+            borderColor={`${theme.colors.card.borderColor}60`}
+            value={mapTitle}
+            onChange={(e) => {
+              setCanUpload(true);
+              setMapTitle(e.target.value);
+            }}
+          />
+        </Flex>
+        <Flex alignItems="center">
+          <FormLabel mb="0" width="150px" fontWeight="bold" fontSize="sm">
+            アーティスト名
+          </FormLabel>
+
+          <Input
+            isInvalid={mapArtistName === ""}
+            placeholder="アーティスト名"
+            size="sm"
+            fontWeight="bold"
+            bg={theme.colors.background}
+            borderColor={`${theme.colors.card.borderColor}60`}
+            value={mapArtistName}
+            onChange={(e) => {
+              setCanUpload(true);
+              setMapArtistName(e.target.value);
+            }}
+          />
+        </Flex>
+      </Stack>
       <Flex alignItems="center">
         <FormLabel mb="0" width="150px" fontWeight="bold">
           コメント

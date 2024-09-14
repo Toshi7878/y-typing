@@ -1,12 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  useIsEditYTStartedAtom,
-  useMapTitleAtom,
   useSetEditTimeCountAtom,
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
-  useSetMapTitleAtom,
   useSetTabIndexAtom,
 } from "../edit-atom/editAtom";
 import { useRefs } from "../edit-contexts/refsProvider";
@@ -20,39 +17,27 @@ import { editTicker } from "../components/editor-youtube-content/EditYoutube";
 
 export const useYTReadyEvent = () => {
   const { setRef } = useRefs();
-  const setMapTitle = useSetMapTitleAtom();
   const setIsReady = useSetIsEditYTReadyAtom();
   const dispatch = useDispatch();
   const volume = useVolumeAtom();
-  const mapTitle = useMapTitleAtom();
 
   return (event) => {
     console.log("ready");
     NProgress.done();
     const player = event.target;
     setRef("playerRef", player);
-
-    const videoData = player.getVideoData();
     const duration = player.getDuration();
     player.setVolume(volume);
-
     setIsReady(true);
 
-    if (!mapTitle) {
-      if (videoData) {
-        const { title } = videoData;
-        setMapTitle(title);
-      }
-
-      dispatch(
-        updateLine({
-          time: duration.toFixed(3),
-          lyrics: "end",
-          word: "",
-          selectedLineCount: 1,
-        }),
-      );
-    }
+    dispatch(
+      updateLine({
+        time: duration.toFixed(3),
+        lyrics: "end",
+        word: "",
+        selectedLineCount: 1,
+      }),
+    );
   };
 };
 

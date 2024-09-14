@@ -35,6 +35,16 @@ export const useSetMapTitleAtom = () => {
   return useSetAtom(editMapTitleAtom, { store: editAtomStore });
 };
 
+export const editMapArtistNameAtom = atom<string>("");
+
+export const useMapArtistNameAtom = () => {
+  return useAtomValue(editMapArtistNameAtom, { store: editAtomStore });
+};
+
+export const useSetMapArtistNameAtom = () => {
+  return useSetAtom(editMapArtistNameAtom, { store: editAtomStore });
+};
+
 //動画ID
 export const editVideoIdAtom = atom<string>("");
 
@@ -55,6 +65,17 @@ export const useCreatorCommentAtom = () => {
 
 export const useSetCreatorCommentAtom = () => {
   return useSetAtom(editCreatorCommentAtom, { store: editAtomStore });
+};
+
+//制作者コメント
+export const editGeminiTagsAtom = atom<string[]>([]);
+
+export const useGeminiTagsAtom = () => {
+  return useAtomValue(editGeminiTagsAtom, { store: editAtomStore });
+};
+
+export const useSetGeminiTagsAtom = () => {
+  return useSetAtom(editGeminiTagsAtom, { store: editAtomStore });
 };
 
 const tagsReducer = (state: Tag[], action: TagsReducerAction): Tag[] => {

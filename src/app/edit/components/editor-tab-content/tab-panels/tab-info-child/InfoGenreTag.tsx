@@ -1,38 +1,23 @@
-import { useEffect, useState } from "react";
-
-import { Box, Flex, Stack, Badge, Text, FormLabel } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, FormLabel } from "@chakra-ui/react";
 
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 
 import "@/app/edit/style/reactTags.scss";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { Tag } from "@/types";
 import {
-  useIsEditYTReadyAtom,
+  useGeminiTagsAtom,
   useSetCanUploadAtom,
   useSetTagsAtom,
   useTagsAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { CHOICE_TAGS, TAG_MAX_LEN, TAG_MIN_LEN } from "@/app/edit/ts/const/editDefaultValues";
+import TagBadge from "./child/TagBadge";
 
 const InfoGenreTag = () => {
   const tags = useTagsAtom();
+  const geminiTags = useGeminiTagsAtom();
   const setTags = useSetTagsAtom();
   const setCanUpload = useSetCanUploadAtom();
-
-  const isYouTubeReady = useIsEditYTReadyAtom();
-  const { playerRef } = useRefs();
-  const [ytTitle, setYtTitle] = useState("動画タイトル"); // あとで無くす
-
-  useEffect(() => {
-    if (playerRef.current) {
-      setYtTitle(playerRef.current.getVideoData().title);
-    }
-
-    return () => {
-      setYtTitle("");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isYouTubeReady]);
 
   const suggestions = [
     { id: "1", text: "公式MV", className: "" },
@@ -57,9 +42,6 @@ const InfoGenreTag = () => {
       setTags({ type: "add", payload: tag });
     }
   };
-
-  const TAG_MAX_LEN = 10;
-  const TAG_MIN_LEN = 2;
 
   return (
     <Box display="flex" flexDirection="column" gap="5">
@@ -109,69 +91,29 @@ const InfoGenreTag = () => {
       </Flex>
       <Flex direction="column" wrap="wrap">
         <Stack direction="row" spacing={3} wrap="wrap">
-          {[
-            "公式動画",
-            "Cover/歌ってみた",
-            "J-POP",
-            "ボーカロイド/ボカロ",
-            "東方ボーカル",
-            "洋楽",
-            "Vtuber",
-            "アニメ",
-            "ゲーム",
-            "英語",
-            "英語&日本語",
-            "多言語",
-            "ラップ",
-            "同人音楽",
-            "フリー音源",
-            "初音ミク",
-            "ロック",
-            "セリフ読み",
-            "Nightcore",
-            "キッズ&ファミリー",
-            "映画",
-            "MAD",
-            "Remix",
-            "音ゲー",
-            "電波ソング",
-            "簡単",
-            "難しい",
-            "装飾譜面",
-            "ギミック譜面",
-            "YouTube Premium",
-          ].map((label, index) => {
+          {CHOICE_TAGS.map((label, index) => {
             const isSelected = tags.some((tag) => tag.id === label);
 
             if (isSelected) {
               return "";
             } else {
-              return (
-                <Badge
-                  key={index}
-                  variant="solid"
-                  colorScheme="teal"
-                  bg={`teal.400`}
-                  opacity="0.7"
-                  className={`cursor-pointer text-sm rounded-lg`}
-                  _hover={{ opacity: "1" }}
-                  textTransform="none" // 追加: UpperCaseを解除
-                  onClick={() => {
-                    if (tags.length < TAG_MAX_LEN) {
-                      handleAddition({ id: label, text: label, className: "" });
-                    }
-                  }}
-                >
-                  {label}
-                </Badge>
-              );
+              return <TagBadge key={index} label={label} bg="teal.400" />;
             }
           })}
         </Stack>
-        <small>
-          <span className="font-bold">{ytTitle}</span> ← ドラッグ用
-          (曲名・アーティスト・アニメ名などをタグに追加すると、見つけやすくなります)
-        </small>
+      </Flex>
+      <Flex direction="column" wrap="wrap">
+        <Stack direction="row" spacing={3} wrap="wrap">
+          {geminiTags.map((label, index) => {
+            const isSelected = tags.some((tag) => tag.id === label);
+
+            if (isSelected) {
+              return "";
+            } else {
+              return <TagBadge key={index} label={label} bg="cyan.400" />;
+            }
+          })}
+        </Stack>
       </Flex>
     </Box>
   );

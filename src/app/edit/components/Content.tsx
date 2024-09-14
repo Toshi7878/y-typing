@@ -18,9 +18,11 @@ import {
   useSetEditLineSelectedCountAtom,
   useSetEditPreviewTimeInputAtom,
   useSetEditTimeCountAtom,
+  useSetGeminiTagsAtom,
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
+  useSetMapArtistNameAtom,
   useSetMapTitleAtom,
   useSetTagsAtom,
 } from "../edit-atom/editAtom";
@@ -45,6 +47,8 @@ function Content() {
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setTimeCount = useSetEditTimeCountAtom();
   const setSelectedCount = useSetEditLineSelectedCountAtom();
+  const setGeminiTags = useSetGeminiTagsAtom();
+  const setArtistName = useSetMapArtistNameAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -80,6 +84,9 @@ function Content() {
     setIsYTPlaying(false);
     setSelectedCount(null);
     setTimeCount(0);
+    setGeminiTags([]);
+    setArtistName("");
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);
 
