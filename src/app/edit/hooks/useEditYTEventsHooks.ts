@@ -20,6 +20,7 @@ export const useYTReadyEvent = () => {
   const setIsReady = useSetIsEditYTReadyAtom();
   const dispatch = useDispatch();
   const volume = useVolumeAtom();
+  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   return (event) => {
     console.log("ready");
@@ -30,14 +31,16 @@ export const useYTReadyEvent = () => {
     player.setVolume(volume);
     setIsReady(true);
 
-    dispatch(
-      updateLine({
-        time: duration.toFixed(3),
-        lyrics: "end",
-        word: "",
-        selectedLineCount: 1,
-      }),
-    );
+    if (mapData.length === 2) {
+      dispatch(
+        updateLine({
+          time: duration.toFixed(3),
+          lyrics: "end",
+          word: "",
+          selectedLineCount: 1,
+        }),
+      );
+    }
   };
 };
 
