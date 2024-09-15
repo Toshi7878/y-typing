@@ -16,6 +16,8 @@ const safetySettings: SafetySetting[] = [
 
 const TEXT_PROMPT = `以下のJSONデータ情報を解析して{musicTitle:string, artistName:string, otherTags:string[]}の形式で出力してください。\n
   ただし、channelTitleはその曲のアーティスト名とは限りません。\n
+  歌ってみたやカバー曲の場合は出力するmusicTitleの末尾に (Cover)を追加してください\n
+  featが付く場合はmusicTitleにfeatを追加してください\n
   descriptionなどに記載されているアーティストや曲に関連する単語をotherTagsに格納してください。アーティストの所属するグループ名や映画・ドラマ・アニメのタイトルは重要です。\n
   出力するJSONデータはJSON.parseができるように改行を使用せずに出力してください。`;
 
