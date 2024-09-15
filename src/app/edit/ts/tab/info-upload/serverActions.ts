@@ -70,7 +70,6 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
 
       if (mapCreatorId?.creatorId === userId || userRole === "admin") {
         newMapId = await updateMap(data, Number(mapId));
-        revalidatePath(`/api/map-info?id=${newMapId}`);
         revalidateTag("map-info");
       } else {
         return {
@@ -82,7 +81,6 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
       }
     }
     revalidatePath("/api/map-list");
-    revalidateTag("mapList");
 
     return {
       id: newMapId,
