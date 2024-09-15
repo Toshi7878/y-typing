@@ -77,7 +77,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
       }
     }
     revalidatePath("/api/map-list");
-    revalidatePath("/api/map-info");
+    revalidatePath(`/api/map-info?id=${newMapId}`);
 
     return {
       id: newMapId,
