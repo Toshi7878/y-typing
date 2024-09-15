@@ -2,7 +2,7 @@ import { useForm, FormProvider } from "react-hook-form";
 
 import { Card, CardBody, HStack, Stack, useTheme } from "@chakra-ui/react";
 
-import InfoInput from "./tab-info-child/InfoInput";
+import InfoInputForm from "./tab-info-child/InfoInputFrom";
 import InfoGenreTag from "./tab-info-child/InfoGenreTag";
 import UploadButton from "./tab-info-child/UploadButton";
 import { useSelector } from "react-redux";
@@ -133,41 +133,30 @@ const TabInfoUpload = () => {
   });
 
   return (
-    <LoadingOverlayWrapper
-      active={isLoading}
-      spinner={true}
-      text="タイトル・アーティスト・関連タグを生成中…"
-    >
-      <Card
-        variant="filled"
-        bg={theme.colors.card.bg}
-        boxShadow="lg"
-        color={theme.colors.card.color}
-      >
-        <CardBody>
-          <FormProvider {...methods}>
-            <Stack display="flex" flexDirection="column" gap="6">
-              <InfoInput />
-              <InfoGenreTag />
+    <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
+      <CardBody>
+        <FormProvider {...methods}>
+          <Stack display="flex" flexDirection="column" gap="6">
+            <InfoInputForm isGeminiLoading={isLoading} />
+            <InfoGenreTag />
 
-              <HStack justifyContent="space-between">
-                {isDisplayUploadButton ? (
-                  <form action={formAction}>
-                    <UploadButton state={state} />
-                    {id ? <TypeLinkButton /> : ""}
-                  </form>
-                ) : id ? (
-                  <TypeLinkButton />
-                ) : (
-                  ""
-                )}
-                <PreviewTimeInput />
-              </HStack>
-            </Stack>
-          </FormProvider>
-        </CardBody>
-      </Card>
-    </LoadingOverlayWrapper>
+            <HStack justifyContent="space-between">
+              {isDisplayUploadButton ? (
+                <form action={formAction}>
+                  <UploadButton state={state} />
+                  {id ? <TypeLinkButton /> : ""}
+                </form>
+              ) : id ? (
+                <TypeLinkButton />
+              ) : (
+                ""
+              )}
+              <PreviewTimeInput />
+            </HStack>
+          </Stack>
+        </FormProvider>
+      </CardBody>
+    </Card>
   );
 };
 
