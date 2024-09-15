@@ -3,7 +3,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { mapSendSchema } from "./validationSchema";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { EditorSendData } from "../../type";
 import { UploadResult } from "@/types";
 
@@ -77,8 +77,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
       }
     }
     revalidatePath("/api/map-list");
-    revalidatePath(`/api/map-info?id=${newMapId}`);
-
+    revalidateTag(`map-info-${newMapId}`);
     return {
       id: newMapId,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",
