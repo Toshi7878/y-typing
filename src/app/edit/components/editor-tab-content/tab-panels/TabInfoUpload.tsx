@@ -120,6 +120,7 @@ const TabInfoUpload = () => {
           setMapArtistName(mapInfoData.artistName);
         }
         setGeminiTags(mapInfoData.otherTags);
+        console.log("🚀 ~ queryFn: ~ mapInfoData:", mapInfoData);
       }
 
       return ytInfo.data;
