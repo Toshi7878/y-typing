@@ -81,6 +81,7 @@ function MapList() {
       loadMore={() => fetchNextPage()}
       loader={<LoadingMapCard />}
       hasMore={hasNextPage}
+      threshold={700} // スクロールの閾値を追加
     >
       <MapCardLayout>
         {data?.pages.map((page) => page.map((map) => <MapCard key={map.id} map={map} />))}
