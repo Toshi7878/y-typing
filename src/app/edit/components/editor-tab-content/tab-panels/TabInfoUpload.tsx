@@ -88,7 +88,9 @@ const TabInfoUpload = () => {
   const [state, formAction] = useFormState(upload, initialState);
 
   const myUserId = session?.user?.id;
-  const isDisplayUploadButton = myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId);
+  const isAdmin = session?.user?.role === "admin";
+  const isDisplayUploadButton =
+    (myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId)) || isAdmin;
 
   const searchParams = useSearchParams();
   const isNewCreateMap = !!searchParams.get("new");

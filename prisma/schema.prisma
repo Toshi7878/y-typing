@@ -64,6 +64,8 @@ model User {
   name          String?         @unique
   email_hash    String          @unique
   image         String?
+  role          String          @default("user")
+
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   maps          Map[]

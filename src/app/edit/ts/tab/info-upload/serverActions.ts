@@ -65,7 +65,10 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
           creatorId: true,
         },
       });
-      if (mapCreatorId?.creatorId === userId) {
+
+      const userRole = session?.user.role;
+
+      if (mapCreatorId?.creatorId === userId || userRole === "admin") {
         newMapId = await updateMap(data, Number(mapId));
       } else {
         return {
@@ -78,6 +81,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     }
     revalidatePath("/api/map-list");
     revalidateTag(`map-info-${newMapId}`);
+
     return {
       id: newMapId,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",

@@ -51,6 +51,7 @@ const EditorLineInput = () => {
               const isSelected = end !== null && start !== null && end - start > 0;
               setIsLineLyricsSelected(isSelected);
             }}
+            onBlur={() => setIsLineLyricsSelected(false)}
           />
         </CustomToolTip>
       </Box>

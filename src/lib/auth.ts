@@ -28,6 +28,7 @@ export const config: NextAuthConfig = {
               email_hash: hash!,
               name: null,
               image: identicon,
+              role: "user",
             },
           });
         } catch (err) {
@@ -67,12 +68,11 @@ export const config: NextAuthConfig = {
         if (dbUser) {
           token.uid = dbUser.id.toString();
           token.email_hash = dbUser.email_hash;
-          token.picture = dbUser.image;
-        } else {
-          const identicon = generateIdenticon(user.email);
-          token.picture = identicon;
         }
+
         token.name = dbUser?.name ?? null;
+        token.role = dbUser?.role ?? "user";
+        token.picture = dbUser?.image ?? generateIdenticon(user.email);
       }
 
       return token;
@@ -82,6 +82,7 @@ export const config: NextAuthConfig = {
         session.user.id = token.uid as string;
         session.user.name = token.name;
         session.user.email = token.email_hash as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
