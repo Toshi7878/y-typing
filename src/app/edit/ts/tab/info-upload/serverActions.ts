@@ -80,8 +80,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
         };
       }
     }
-    revalidatePath("/api/map-list");
-
+    revalidatePath(`/api/map-list?page=0`);
     return {
       id: newMapId,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",
