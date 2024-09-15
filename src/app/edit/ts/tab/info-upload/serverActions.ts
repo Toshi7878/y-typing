@@ -70,7 +70,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
 
       if (mapCreatorId?.creatorId === userId || userRole === "admin") {
         newMapId = await updateMap(data, Number(mapId));
-        revalidateTag("map-info");
+        revalidateTag(`map-info/${mapId}`);
       } else {
         return {
           id: null,
