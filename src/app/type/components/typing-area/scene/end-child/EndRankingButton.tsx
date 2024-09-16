@@ -17,7 +17,7 @@ import EndMainButton from "./child/EndMainButton";
 import AlertDialogButton from "./child/AlertDialogButton";
 import { UploadResult } from "@/types";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
-import { useSetTabIndexAtom } from "@/app/edit/edit-atom/editAtom";
+import { useSetTabIndexAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
