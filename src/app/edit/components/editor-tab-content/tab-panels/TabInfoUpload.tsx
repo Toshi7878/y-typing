@@ -69,7 +69,9 @@ const TabInfoUpload = () => {
       mapData,
       tags: tags.map((tag) => tag.id),
       previewTime:
-        Number(previewTime) < videoDuration ? previewTime : mapData[map.startLine]["time"],
+        previewTime && Number(previewTime) < videoDuration
+          ? previewTime
+          : mapData[map.startLine]["time"],
       romaKpmMedian: map.speedDifficulty.median.r,
       romaKpmMax: map.speedDifficulty.max.r,
       kanaKpmMedian: map.speedDifficulty.median.r,
