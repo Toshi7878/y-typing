@@ -337,6 +337,7 @@ export class TypingWord {
     }
 
     lineWord[lineWord.length - 1]["r"] = [...repeat, ...xtu, ...ltu, ...xtsu, ...ltsu];
+    lineWord[lineWord.length - 1]["p"] = CHAR_POINT * lineWord[lineWord.length - 1]["r"][0].length;
 
     return lineWord;
   }
