@@ -141,7 +141,7 @@ export const replay = (
         playingCenterRef.current!.setLineWord(result.newLineWord);
       } else {
         console.log("update replay failed");
-        const miss = new Miss(status, statusRef, key, playingComboRef, lineConstantTime);
+        const miss = new Miss(status, statusRef, key, playingComboRef, lineConstantTime, map!);
         tabStatusRef.current!.setStatus(miss.newStatus);
       }
     } else if (option) {
