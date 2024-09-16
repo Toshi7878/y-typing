@@ -1,10 +1,6 @@
 import PlayingCenter, { PlayingCenterRef } from "./playing-child/PlayingCenter";
 import { forwardRef, RefObject, useEffect, useImperativeHandle, useRef } from "react";
-import {
-  defaultGameStateRef,
-  defaultStatusRef,
-  useRefs,
-} from "@/app/type/type-contexts/refsProvider";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
   inputModeAtom,
   lineResultsAtom,
@@ -26,6 +22,7 @@ import { getLineCount, typeTicker } from "@/app/type/ts/youtubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
 import { handleTyping, shortcutKey } from "@/app/type/ts/scene-ts/playing/keydown/keydownHandle";
+import { defaultGameStateRef, defaultStatusRef } from "@/app/type/ts/const/typeDefaultValue";
 
 interface PlayingProps {
   isOpen: boolean;

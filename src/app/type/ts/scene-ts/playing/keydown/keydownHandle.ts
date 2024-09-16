@@ -140,7 +140,14 @@ export function handleTyping({
       tabStatusRef.current!.setStatus(success.newStatus);
     }
   } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-    const miss = new Miss(status, statusRef, result.failKey, playingComboRef, lineConstantTime);
+    const miss = new Miss(
+      status,
+      statusRef,
+      result.failKey,
+      playingComboRef,
+      lineConstantTime,
+      map!,
+    );
     tabStatusRef.current!.setStatus(miss.newStatus);
   }
 }

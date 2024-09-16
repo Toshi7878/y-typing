@@ -1,73 +1,14 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { GameStateRef, PlayingRef, PlayMode, StatusRef, YTStateRef } from "../ts/type";
-import { PlayingComboRef } from "../components/typing-area/scene/playing-child/child/PlayingCombo";
-import { PlayingLineTimeRef } from "../components/typing-area/scene/playing-child/child/PlayingLineTime";
-import { PlayingCenterRef } from "../components/typing-area/scene/playing-child/PlayingCenter";
-import { TabStatusRef } from "../components/type-tab-content/tab-status/TabStatus";
-
-export const defaultStatusRef: StatusRef = {
-  status: {
-    count: 0,
-    romaType: 0,
-    kanaType: 0,
-    flickType: 0,
-    rkpm: 0,
-    kanaToRomaConvertCount: 0,
-    maxCombo: 0,
-    missCombo: 0,
-    totalTypeTime: 0,
-    totalLatency: 0,
-    completeCount: 0,
-    failureCount: 0,
-  },
-  lineStatus: {
-    lineType: 0,
-    lineMiss: 0,
-    lineClearTime: 0,
-    latency: 0,
-    typeResult: [],
-    lineStartSpeed: 1,
-    lineStartInputMode: "roma",
-  },
-};
-
-export const defaultYTStateRef: YTStateRef = {
-  isPaused: false,
-  currentTime: 0,
-  movieDuration: 0,
-};
-export const defaultGameStateRef: GameStateRef = {
-  isRetrySkip: false,
-  retryCount: 1,
-  isSeekedLine: false,
-  playMode: "playing" as PlayMode,
-  replay: {
-    replayKeyCount: 0,
-    userName: "",
-  },
-  practice: {
-    hasMyRankingData: false,
-  },
-};
-export interface RefsContextType {
-  playerRef: any;
-  tabStatusRef: React.RefObject<TabStatusRef>;
-  playingRef: React.RefObject<PlayingRef>;
-  playingComboRef: React.RefObject<PlayingComboRef>;
-  lineCountRef: React.MutableRefObject<number>;
-  bestScoreRef: React.MutableRefObject<number>;
-  statusRef: React.RefObject<StatusRef>;
-  ytStateRef: React.RefObject<YTStateRef>;
-  gameStateRef: React.RefObject<GameStateRef>;
-  lineProgressRef: React.RefObject<HTMLProgressElement>;
-  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
-  playingCenterRef: React.RefObject<PlayingCenterRef>;
-  setRef: (key: string, ref: HTMLElement | any) => void;
-}
+import { GameStateRef, RefsContextType, StatusRef, YTStateRef } from "../ts/type";
+import {
+  defaultGameStateRef,
+  defaultStatusRef,
+  defaultYTStateRef,
+} from "../ts/const/typeDefaultValue";
 
 // Start of Selection
-const RefsContext = createContext<RefsContextType>({
+export const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
   playingComboRef: { current: null },
@@ -83,6 +24,7 @@ const RefsContext = createContext<RefsContextType>({
 
   setRef: (ref: HTMLElement | any) => {},
 });
+
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
   const tabStatusRef = useRef(null);

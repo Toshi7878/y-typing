@@ -24,6 +24,7 @@ model Result {
   miss           Int @default(0)
   lost           Int @default(0)
   maxCombo       Int @default(0)
+  clearRate      Float @default(0)
   updatedAt      DateTime @default(now()) @updatedAt
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)

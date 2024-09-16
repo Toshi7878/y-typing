@@ -45,6 +45,7 @@ const End = ({ onOpen }: EndProps) => {
       kpm: status.kpm,
       romaKpm: Math.round((kanaToRomaConvertCount / rkpmTime) * 60),
       defaultSpeed: speedData.defaultSpeed,
+      clearRate: Math.round(statusRef.current!.status.clearRate * 10) / 10,
     };
     const sendData = {
       mapId: mapId,

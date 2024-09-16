@@ -48,7 +48,6 @@ export class LineResult {
     const newStatus = { ...status };
     if (scene === "playing" && statusRef.current) {
       statusRef.current.status.kanaToRomaConvertCount += lineWord.correct.r.length;
-      console.log(`convertCount: ${statusRef.current.status.kanaToRomaConvertCount}`);
     }
 
     newStatus.timeBonus = 0;
@@ -60,9 +59,15 @@ export class LineResult {
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
       newStatus.lost += lostLen;
+      statusRef.current!.status.clearRate -= map.keyRate * lostLen;
       newStatus.score += newStatus.point;
       newStatus.rank = getRank(rankingScores, newStatus.score);
     }
+
+    console.log(
+      "🚀 ~ LineResult ~ statusRef.current!.status.clearRate:",
+      statusRef.current!.status.clearRate,
+    );
 
     newStatus.point = 0;
     return newStatus;

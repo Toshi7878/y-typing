@@ -35,10 +35,27 @@ export interface RankingListType {
   miss: number;
   lost: number;
   maxCombo: number;
+  clearRate: number;
   playSpeed: number;
   defaultSpeed: number;
   score: number;
   updatedAt: string;
+}
+
+export interface RefsContextType {
+  playerRef: any;
+  tabStatusRef: React.RefObject<TabStatusRef>;
+  playingRef: React.RefObject<PlayingRef>;
+  playingComboRef: React.RefObject<PlayingComboRef>;
+  lineCountRef: React.MutableRefObject<number>;
+  bestScoreRef: React.MutableRefObject<number>;
+  statusRef: React.RefObject<StatusRef>;
+  ytStateRef: React.RefObject<YTStateRef>;
+  gameStateRef: React.RefObject<GameStateRef>;
+  lineProgressRef: React.RefObject<HTMLProgressElement>;
+  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
+  playingCenterRef: React.RefObject<PlayingCenterRef>;
+  setRef: (key: string, ref: HTMLElement | any) => void;
 }
 export interface PlayingRef {
   retry: () => void;
@@ -102,6 +119,7 @@ export interface StatusRef {
     kanaType: number;
     flickType: number;
     rkpm: number;
+    clearRate: number;
     kanaToRomaConvertCount: number;
     maxCombo: number;
     missCombo: number;
@@ -142,6 +160,7 @@ export interface SendResultData {
     maxCombo: number;
     kpm: number;
     defaultSpeed: number;
+    clearRate: number;
   };
 }
 export interface TypeResult {

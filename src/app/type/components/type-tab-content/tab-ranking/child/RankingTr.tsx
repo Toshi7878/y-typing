@@ -25,6 +25,7 @@ interface RankingTrProps {
   miss: number;
   lost: number;
   maxCombo: number;
+  clearRate: number;
   updatedAt: string;
   isHighlighted: boolean;
   isHovered: boolean;
@@ -49,6 +50,8 @@ const RankingTr = (props: RankingTrProps) => {
 
   const isPerfect = props.miss === 0 && props.lost === 0;
   const isKanaFlickTyped = props.kanaType > 0 || props.flickType > 0;
+
+  const correctRate = ((props.type / (props.miss + props.type)) * 100).toFixed(1);
   const getInputMode = () => {
     if (props.romaType && props.kanaType) {
       if (props.romaType >= props.kanaType) {
@@ -129,7 +132,7 @@ const RankingTr = (props: RankingTrProps) => {
           <Box>
             ミス数:{" "}
             <Text as="span" fontSize="md" fontWeight="bold">
-              {props.miss}
+              {props.miss} ({correctRate}%)
             </Text>
           </Box>
           <Box>
@@ -209,7 +212,7 @@ const RankingTr = (props: RankingTrProps) => {
           {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
           className={`${isPerfect ? "outline-text" : ""}`}
         >
-          {((props.type / (props.miss + props.type)) * 100).toFixed(1) + "%"}
+          {props.clearRate.toFixed(1)}%
         </Td>
         <Td>{props.kpm}</Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">

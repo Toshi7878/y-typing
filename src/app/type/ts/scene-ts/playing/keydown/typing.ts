@@ -8,7 +8,7 @@ import {
   StatusRef,
   WordType,
 } from "../../../type";
-import { CHAR_POINT, CreateMap } from "../../ready/createTypingWord";
+import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWord";
 import { PlayingComboRef } from "../../../../components/typing-area/scene/playing-child/child/PlayingCombo";
 import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
 
@@ -639,7 +639,9 @@ export class Success {
     newStatus.type++;
     statusRef.current!.lineStatus.lineType++;
     statusRef.current!.status.missCombo = 0;
-    newStatus.point += updatePoint;
+    if (updatePoint > 0) {
+      newStatus.point += updatePoint;
+    }
     newStatus.kpm = totalTypeSpeed;
 
     const newCombo = playingComboRef.current!.getCombo() + 1;
@@ -690,8 +692,9 @@ export class Miss {
     failKey: string,
     playingComboRef: React.RefObject<PlayingComboRef>,
     lineConstantTime: number,
+    map: CreateMap,
   ) {
-    this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef);
+    this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef, map!);
 
     statusRef.current!.lineStatus.typeResult.push({
       c: failKey,
@@ -703,12 +706,15 @@ export class Miss {
     newStatus: Status,
     statusRef: React.RefObject<StatusRef>,
     playingComboRef: React.RefObject<PlayingComboRef>,
+    map: CreateMap,
   ) {
     newStatus.miss++;
     statusRef.current!.lineStatus.lineMiss++;
     statusRef.current!.status.missCombo++;
     playingComboRef.current?.setCombo(0);
-    newStatus.point -= 5;
+    newStatus.point -= MISS_PENALTY;
+    statusRef.current!.status.clearRate -= map.missRate;
+
     return newStatus;
   }
 }

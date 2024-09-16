@@ -1,4 +1,4 @@
-import { defaultStatusRef } from "../type-contexts/refsProvider";
+import { defaultStatusRef } from "./const/typeDefaultValue";
 import { CreateMap } from "./scene-ts/ready/createTypingWord";
 import { GameStateRef, LineResultData, StatusRef } from "./type";
 

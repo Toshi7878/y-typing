@@ -25,7 +25,7 @@ export async function GET(request: Request) {
         miss: true,
         lost: true,
         maxCombo: true,
-        lineResult: false, // lineResultを追加
+        clearRate: true,
         updatedAt: true,
         user: {
           select: {

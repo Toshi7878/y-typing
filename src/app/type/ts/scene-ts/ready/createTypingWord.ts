@@ -237,7 +237,8 @@ const SYMBOL_LIST = [
   "\\",
 ];
 
-export const CHAR_POINT = 10;
+export const CHAR_POINT = 50;
+export const MISS_PENALTY = CHAR_POINT / 2;
 
 export class TypingWord {
   word: LineData["word"];
@@ -388,6 +389,8 @@ export class CreateMap {
   speedDifficulty: SpeedDifficulty;
   currentTimeBarFrequency: number;
   movieTotalTime: number;
+  keyRate: number;
+  missRate: number;
 
   constructor(data: MapData[]) {
     const wordRomaMap = this.parseWord(data);
@@ -406,6 +409,8 @@ export class CreateMap {
 
     this.movieTotalTime = +this.mapData[result.words.length - 1].time;
     this.currentTimeBarFrequency = this.movieTotalTime / 1700;
+    this.keyRate = 100 / this.totalNotes.r;
+    this.missRate = this.keyRate / 2;
   }
 
   private create(wordRomaMap: string[][], data: MapData[]) {

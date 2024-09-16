@@ -5,7 +5,6 @@ import { SkipGuideRef } from "../../../components/typing-area/scene/playing-chil
 import { PlayingTotalTimeRef } from "../../../components/typing-area/scene/playing-child/child/PlayingTotalTime";
 import { PlayingCenterRef } from "../../../components/typing-area/scene/playing-child/PlayingCenter";
 import { CalcTypeSpeed } from "./calcTypeSpeed";
-import { defaultStatusRef } from "@/app/type/type-contexts/refsProvider";
 
 import { CreateMap } from "../ready/createTypingWord";
 import { LineResult } from "./lineResult";
@@ -22,6 +21,7 @@ import {
 } from "../../type";
 import { lineReplayUpdate, replay, updateReplayStatus } from "./replay";
 import { getLineCount, typeTicker } from "../../youtubeEvents";
+import { defaultStatusRef } from "../../const/typeDefaultValue";
 
 export const updateTimer = (
   map: CreateMap,

@@ -66,8 +66,8 @@ const TabRanking = (props: TabRankingProps) => {
                 <Th width="10%" color={theme.colors.card.color}>
                   Score
                 </Th>
-                <Th width="5%" color={theme.colors.card.color}>
-                  正確率
+                <Th width="7%" color={theme.colors.card.color}>
+                  クリア率
                 </Th>
                 <Th width="5%" color={theme.colors.card.color}>
                   kpm
