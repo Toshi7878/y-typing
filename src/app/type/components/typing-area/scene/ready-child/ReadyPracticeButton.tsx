@@ -1,4 +1,4 @@
-import { lineResultsAtom, loadingOverlayAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { lineResultsAtom, useSetIsLoadingOverlayAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { LineResultData, SendResultData } from "@/app/type/ts/type";
 import { Button, useTheme } from "@chakra-ui/react";
@@ -13,7 +13,7 @@ const ReadyPracticeButton = () => {
   const { gameStateRef, playerRef } = useRefs();
   const { data: session } = useSession();
   const { id } = useParams();
-  const setIsLoadingOverlay = useSetAtom(loadingOverlayAtom);
+  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
   const setLineResults = useSetAtom(lineResultsAtom);
   const theme = useTheme();
 
