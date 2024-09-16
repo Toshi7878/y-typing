@@ -8,8 +8,8 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { RankingListType } from "@/app/type/ts/type";
 import RankingTr from "./RankingTr";
 import RankingMenu from "./RankingMenu";
-import { useAtomValue, useSetAtom } from "jotai";
-import { rankingScoresAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useSetAtom } from "jotai";
+import { rankingScoresAtom, useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 const RankingList = () => {
   const { id } = useParams();
@@ -18,7 +18,7 @@ const RankingList = () => {
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const setRankingScores = useSetAtom(rankingScoresAtom);
-  const scene = useAtomValue(sceneAtom);
+  const scene = useSceneAtom();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

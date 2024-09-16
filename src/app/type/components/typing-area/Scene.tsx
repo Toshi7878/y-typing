@@ -8,8 +8,8 @@ import {
   isHoverDrawerLabelAtom,
   lineSelectIndexAtom,
   mapAtom,
-  sceneAtom,
-  tabIndexAtom,
+  useSceneAtom,
+  useSetTabIndexAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import Ready from "./scene/Ready";
 import { Box, Card, useDisclosure, useTheme } from "@chakra-ui/react";
@@ -24,7 +24,7 @@ import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
 import { ThemeColors } from "@/types";
 
 export const Scene = () => {
-  const scene = useAtomValue(sceneAtom);
+  const scene = useSceneAtom();
   const map = useAtomValue(mapAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
@@ -44,7 +44,7 @@ export const Scene = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovering, isOpen]);
-  const setTabIndex = useSetAtom(tabIndexAtom);
+  const setTabIndex = useSetTabIndexAtom();
   const playingRef = useRef<PlayingRef>(null);
 
   useEffect(() => {

@@ -1,15 +1,10 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme, HStack, Box } from "@chakra-ui/react";
 import TabRanking from "./tab-ranking/TabRanking";
-import { useAtom } from "jotai";
-import { tabIndexAtom } from "../../type-atoms/gameRenderAtoms";
 import { useEffect, useRef } from "react";
 import { ThemeColors } from "@/types";
-import { BiEdit } from "react-icons/bi";
-import { useLinkClick } from "@/app/nprogress";
-import { useParams } from "next/navigation";
-import { Link } from "@chakra-ui/next-js";
 import TabStatus from "./tab-status/TabStatus";
 import TabIcons from "./child/TabIcons";
+import { useSetTabIndexAtom, useTabIndexAtom } from "../../type-atoms/gameRenderAtoms";
 
 interface TypeTabContentProps {
   className?: string;
@@ -18,11 +13,9 @@ interface TypeTabContentProps {
 const tabLists = ["ステータス", "ランキング"];
 export default function TypeTabContent({ className }: TypeTabContentProps) {
   console.log("Tab");
-  const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
+  const tabIndex = useTabIndexAtom();
+  const setTabIndex = useSetTabIndexAtom();
   const theme: ThemeColors = useTheme();
-  const { id } = useParams();
-
-  const handleLinkClick = useLinkClick();
 
   const tabStatusRef = useRef(null);
 

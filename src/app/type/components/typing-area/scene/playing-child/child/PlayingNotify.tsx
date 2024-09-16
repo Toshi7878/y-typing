@@ -1,7 +1,9 @@
-import { playingNotifyAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-
+import {
+  usePlayingNotifyAtom,
+  useSceneAtom,
+  useSetPlayingNotifyAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import { useAtom, useAtomValue } from "jotai";
 import { AnimatePresence, motion } from "framer-motion"; // 追加
 import { FaPause } from "react-icons/fa6";
 import { FaPlay } from "react-icons/fa6";
@@ -16,8 +18,9 @@ const NON_ANIMATED = ["ll", "Replay", "Practice"];
 
 const PlayingNotify = ({ className = "" }: PlayingNotifyProps) => {
   const { gameStateRef } = useRefs();
-  const [notify, setNotify] = useAtom(playingNotifyAtom);
-  const scene = useAtomValue(sceneAtom);
+  const notify = usePlayingNotifyAtom();
+  const setNotify = useSetPlayingNotifyAtom();
+  const scene = useSceneAtom();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const playModeNotify = () => {

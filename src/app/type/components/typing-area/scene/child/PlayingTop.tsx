@@ -4,16 +4,15 @@ import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 import PlayingCombo from "../playing-child/child/PlayingCombo";
 import PlayingLineTime, { PlayingLineTimeRef } from "../playing-child/child/PlayingLineTime";
 import PlayingNotify from "../playing-child/child/PlayingNotify";
-import { sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useAtomValue } from "jotai";
 import { useRef } from "react";
+import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface PlayingTopProps {
   lineProgressRef: React.RefObject<HTMLProgressElement>;
   PlayingRemainTimeRef: React.RefObject<PlayingLineTimeRef>;
 }
 function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) {
-  const scene = useAtomValue(sceneAtom);
+  const scene = useSceneAtom();
 
   const playingComboRef = useRef(null);
 

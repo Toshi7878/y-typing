@@ -1,7 +1,7 @@
-import { playingNotifyAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Badge, HStack, Kbd, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
+import { usePlayingNotifyAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface PlayingLineSeekBadgeProps {
   badgeText: string;
@@ -28,7 +28,7 @@ const StyledKbd = styled(Kbd)<{ isDisabled: boolean }>`
 const StyledBadge = styled(Badge)<{ isDisabled: boolean }>``;
 
 const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
-  const notify = useAtomValue(playingNotifyAtom);
+  const notify = usePlayingNotifyAtom();
 
   const isDisabled = notify.description === "ll";
   const theme = useTheme();

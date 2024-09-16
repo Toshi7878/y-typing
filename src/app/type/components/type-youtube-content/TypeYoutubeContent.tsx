@@ -4,14 +4,15 @@ import React, { useCallback, useMemo } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "../../ts/youtubeEvents";
 import { useRefs } from "../../type-contexts/refsProvider"; // 変更
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import {
-  inputModeAtom,
   lineResultsAtom,
   mapAtom,
-  playingNotifyAtom,
-  sceneAtom,
   speedAtom,
+  useInputModeAtom,
+  useSceneAtom,
+  useSetPlayingNotifyAtom,
+  useSetSceneAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import NProgress from "nprogress";
 
@@ -22,8 +23,9 @@ interface TypeYouTubeProps {
 
 const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeYouTubeProps) {
   console.log("YouTube");
-  const [scene, setScene] = useAtom(sceneAtom);
-  const setNotify = useSetAtom(playingNotifyAtom);
+  const scene = useSceneAtom();
+  const setScene = useSetSceneAtom();
+  const setNotify = useSetPlayingNotifyAtom();
   const {
     ytStateRef,
     playerRef,
@@ -36,7 +38,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
     setRef,
   } = useRefs();
   const map = useAtomValue(mapAtom);
-  const inputMode = useAtomValue(inputModeAtom);
+  const inputMode = useInputModeAtom();
   const speedData = useAtomValue(speedAtom);
   const lineResults = useAtomValue(lineResultsAtom);
 

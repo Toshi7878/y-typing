@@ -8,19 +8,20 @@ import { GetInfoData } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import {
-  inputModeAtom,
   isHoverDrawerLabelAtom,
   lineResultsAtom,
   lineSelectIndexAtom,
-  loadingOverlayAtom,
   mapAtom,
-  mapIdAtom,
-  playingNotifyAtom,
   rankingScoresAtom,
-  sceneAtom,
   speedAtom,
+  useIsLoadingOverlayAtom,
+  useSceneAtom,
+  useSetInputModeAtom,
+  useSetMapIdAtom,
+  useSetPlayingNotifyAtom,
+  useSetSceneAtom,
 } from "../type-atoms/gameRenderAtoms";
 import SceneWrapper from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
@@ -31,21 +32,21 @@ import { queryClient } from "./TypeProvider";
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
   const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
-  const scene = useAtomValue(sceneAtom);
+  const scene = useSceneAtom();
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const setMap = useSetAtom(mapAtom);
-  const setScene = useSetAtom(sceneAtom);
-  const setMapId = useSetAtom(mapIdAtom);
+  const setScene = useSetSceneAtom();
+  const setMapId = useSetMapIdAtom();
   const setRankingScores = useSetAtom(rankingScoresAtom);
   const setSpeedData = useSetAtom(speedAtom);
-  const setInputMode = useSetAtom(inputModeAtom);
-  const setNotify = useSetAtom(playingNotifyAtom);
+  const setInputMode = useSetInputModeAtom();
+  const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetAtom(lineResultsAtom);
   const setLineSelectIndex = useSetAtom(lineSelectIndexAtom);
   const theme = useTheme();
 
-  const isLoadingOverlay = useAtomValue(loadingOverlayAtom);
+  const isLoadingOverlay = useIsLoadingOverlayAtom();
 
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({

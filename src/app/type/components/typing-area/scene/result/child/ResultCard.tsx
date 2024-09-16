@@ -1,9 +1,9 @@
 "use client";
 import {
-  inputModeAtom,
   mapAtom,
-  sceneAtom,
   speedAtom,
+  useInputModeAtom,
+  useSceneAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData } from "@/app/type/ts/type";
@@ -37,8 +37,8 @@ function ResultCard({
   handleCardClick,
 }: ResultCardProps) {
   const map = useAtomValue(mapAtom);
-  const inputMode = useAtomValue(inputModeAtom);
-  const scene = useAtomValue(sceneAtom);
+  const inputMode = useInputModeAtom();
+  const scene = useSceneAtom();
   const speedData = useAtomValue(speedAtom);
   const theme: ThemeColors = useTheme();
 

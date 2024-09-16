@@ -32,7 +32,6 @@ import TypeLinkButton from "./tab-info-child/TypeLinkButton";
 import { GeminiMapInfo, GetYouTubeMovieInfo } from "@/app/edit/ts/type";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 
 const TabInfoUpload = () => {

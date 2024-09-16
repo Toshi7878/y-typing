@@ -14,7 +14,7 @@ import {
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { lineResultsAtom, mapAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { lineResultsAtom, mapAtom, useSetSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { proceedRetry } from "@/app/type/ts/retry";
 import { PlayMode } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
@@ -31,7 +31,7 @@ const EndSubButton = ({ isRetryAlert, retryMode }: EndSubButtonProps) => {
   const theme: ThemeColors = useTheme();
 
   const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
-  const setScene = useSetAtom(sceneAtom);
+  const setScene = useSetSceneAtom();
   const map = useAtomValue(mapAtom);
 
   const retry = (playMode: PlayMode) => {

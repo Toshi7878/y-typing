@@ -4,9 +4,9 @@ import PlayingLyrics from "./child/PlayingLyrics";
 import type { NextLyricsType, WordType } from "@/app/type/ts/type";
 import PlayingWord from "./child/PlayingWord";
 import NextLyrics from "./child/PlayingNextLyrics";
-import { inputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useAtomValue } from "jotai";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { useInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;
@@ -36,7 +36,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   const [lineWord, setLineWord] = useState(structuredClone(defaultLineWord));
   const [lyrics, setLyrics] = useState("");
   const [nextLyrics, setNextLyrics] = useState(structuredClone(defaultNextLyrics));
-  const inputMode = useAtomValue(inputModeAtom);
+  const inputMode = useInputModeAtom();
   const { gameStateRef, setRef } = useRefs();
 
   useEffect(() => {

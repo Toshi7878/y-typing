@@ -14,11 +14,10 @@ import {
   Box,
 } from "@chakra-ui/react"; // Chakra UIのコンポーネントをインポート
 import EndMainButton from "./child/EndMainButton";
-import { tabIndexAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useSetAtom } from "jotai";
 import AlertDialogButton from "./child/AlertDialogButton";
 import { UploadResult } from "@/types";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import { useSetTabIndexAtom } from "@/app/edit/edit-atom/editAtom";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
@@ -31,7 +30,7 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
-  const setTabIndex = useSetAtom(tabIndexAtom);
+  const setTabIndex = useSetTabIndexAtom();
   const successToast = useSuccessToast();
 
   useEffect(() => {

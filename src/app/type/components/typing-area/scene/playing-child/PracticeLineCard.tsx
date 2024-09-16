@@ -4,11 +4,11 @@ import { ThemeColors } from "@/types";
 import ResultCardBody from "../result/child/child/ResultCardBody";
 import { useAtomValue } from "jotai";
 import {
-  inputModeAtom,
   lineResultsAtom,
   lineSelectIndexAtom,
   mapAtom,
   speedAtom,
+  useInputModeAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import ResultCardFooter from "../result/child/child/ResultCardFooter";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
@@ -24,7 +24,7 @@ const PracticeLineCard = () => {
   const lineResults = useAtomValue(lineResultsAtom);
   const speedData = useAtomValue(speedAtom);
   const lineSelectIndex = useAtomValue(lineSelectIndexAtom);
-  const inputMode = useAtomValue(inputModeAtom);
+  const inputMode = useInputModeAtom();
   const lineResult = lineResults[lineSelectIndex as number];
   const lineInputMode = lineResult.status?.mode ?? inputMode;
   const index = map!.typingLineNumbers[(lineSelectIndex! - 1) as number];

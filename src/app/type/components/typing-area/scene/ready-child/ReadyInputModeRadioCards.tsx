@@ -1,9 +1,9 @@
 "use client";
-import { inputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { InputModeType } from "@/app/type/ts/type";
 import { Box, HStack, useRadio, useRadioGroup, UseRadioProps, useTheme } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
 import { ThemeColors } from "@/types";
+import { useSetInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface RadioCardProps extends UseRadioProps {
   option: InputModeType;
@@ -62,7 +62,7 @@ function ReadyInputModeRadioCards() {
     { value: "flick", label: "フリック入力" },
   ];
 
-  const setInputMode = useSetAtom(inputModeAtom);
+  const setInputMode = useSetInputModeAtom();
 
   const inputModeStorage = localStorage.getItem("inputMode");
 

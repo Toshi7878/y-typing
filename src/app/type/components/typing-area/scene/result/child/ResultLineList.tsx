@@ -3,7 +3,7 @@ import {
   lineResultsAtom,
   lineSelectIndexAtom,
   mapAtom,
-  sceneAtom,
+  useSceneAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { LineResultData } from "@/app/type/ts/type";
@@ -20,7 +20,7 @@ interface ResultLineListProps {
 
 function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
   const map = useAtomValue(mapAtom);
-  const scene = useAtomValue(sceneAtom);
+  const scene = useSceneAtom();
   const { playerRef, gameStateRef } = useRefs();
   const lineResults = useAtomValue(lineResultsAtom);
 

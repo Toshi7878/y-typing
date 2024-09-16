@@ -1,5 +1,5 @@
 import { InputModeType, SceneType, Status, StatusRef, WordType } from "../../type";
-import { CreateMap } from "../ready/createTypingWord";
+import { CHAR_POINT, CreateMap } from "../ready/createTypingWord";
 import { getRank } from "./keydown/typing";
 
 export class LineResult {
@@ -18,7 +18,7 @@ export class LineResult {
     scene: SceneType,
   ) {
     this.lostLen = lineWord.nextChar["k"]
-      ? lineWord.nextChar["p"] / 10 + lineWord.word.map((w) => w["r"][0]).join("").length
+      ? lineWord.nextChar["p"] / CHAR_POINT + lineWord.word.map((w) => w["r"][0]).join("").length
       : 0;
 
     this.newStatus = this.updateStatus(
@@ -63,11 +63,6 @@ export class LineResult {
       newStatus.score += newStatus.point;
       newStatus.rank = getRank(rankingScores, newStatus.score);
     }
-
-    console.log(
-      "🚀 ~ LineResult ~ statusRef.current!.status.clearRate:",
-      statusRef.current!.status.clearRate,
-    );
 
     newStatus.point = 0;
     return newStatus;

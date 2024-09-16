@@ -1,4 +1,4 @@
-import { playingNotifyAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { usePlayingNotifyAtom, useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Badge, HStack, Kbd, useTheme } from "@chakra-ui/react";
 import styled from "@emotion/styled";
@@ -41,8 +41,8 @@ const StyledBadge = styled(Badge)<{ isDisabled: boolean; isKbdHidden: boolean }>
   }
 `;
 const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
-  const notify = useAtomValue(playingNotifyAtom);
-  const scene = useAtomValue(sceneAtom);
+  const notify = usePlayingNotifyAtom();
+  const scene = useSceneAtom();
   const isDisabled = notify.description === "ll" && props.isPauseDisabled;
   const isHidden = scene === "ready" || scene === "end";
   const theme: ThemeColors = useTheme();

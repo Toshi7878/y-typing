@@ -1,14 +1,15 @@
 import {
   lineResultsAtom,
-  loadingOverlayAtom,
   mapAtom,
-  sceneAtom,
   speedAtom,
+  useSceneAtom,
+  useSetIsLoadingOverlayAtom,
+  useSetSceneAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/ts/type";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
 import axios from "axios";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -30,9 +31,10 @@ const RankingMenu = ({
   const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
   const theme = useTheme();
 
-  const [scene, setScene] = useAtom(sceneAtom);
+  const scene = useSceneAtom();
+  const setScene = useSetSceneAtom();
   const setSpeedData = useSetAtom(speedAtom);
-  const setIsLoadingOverlay = useSetAtom(loadingOverlayAtom);
+  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
   const setLineResults = useSetAtom(lineResultsAtom);
 
   const map = useAtomValue(mapAtom);
