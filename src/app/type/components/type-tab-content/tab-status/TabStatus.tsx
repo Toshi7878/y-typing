@@ -1,20 +1,9 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
-import {
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  TableContainer,
-  Card,
-  CardBody,
-  useMediaQuery,
-  useTheme,
-} from "@chakra-ui/react"; // Card, CardBodyを追加
+import { Table, Tbody, Tr, Td, TableContainer, Card, CardBody, useTheme } from "@chakra-ui/react"; // Card, CardBodyを追加
 
-import { mapAtom, rankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useMapAtom, useRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
-import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 import StatusValue from "./child/StatusValue";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
@@ -33,8 +22,8 @@ interface TabStatusProps {
 }
 
 const TabStatus = forwardRef((props: TabStatusProps, ref) => {
-  const map = useAtomValue(mapAtom);
-  const rankingScores = useAtomValue(rankingScoresAtom);
+  const map = useMapAtom();
+  const rankingScores = useRankingScoresAtom();
   const theme: ThemeColors = useTheme();
 
   const { setRef } = useRefs();

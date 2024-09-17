@@ -1,17 +1,20 @@
-import { speedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { Box, Button, HStack, Tooltip, useTheme } from "@chakra-ui/react";
-import { useAtom } from "jotai";
 import React from "react";
 import { ThemeColors } from "@/types";
+import {
+  useSetTypePageSpeedAtom,
+  useTypePageSpeedAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface ReadyPlaySpeedProps {
   speedUpButtonRef: React.RefObject<HTMLButtonElement>;
   speedDownButtonRef: React.RefObject<HTMLButtonElement>;
 }
 const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
-  const [speedData, setSpeedData] = useAtom(speedAtom);
+  const speedData = useTypePageSpeedAtom();
+  const setSpeedData = useSetTypePageSpeedAtom();
   const { playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
 

@@ -1,11 +1,11 @@
 "use client";
-import { mapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { InputModeType } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
 import { Box, Text, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
 import CustomToolTip from "@/components/CustomToolTip";
+import { useMapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface ResultCardHeaderdProps {
   index: number;
@@ -26,7 +26,7 @@ function ResultCardHeader({
   lineKpm,
   lineSpeed,
 }: ResultCardHeaderdProps) {
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const theme: ThemeColors = useTheme();
 
   return (

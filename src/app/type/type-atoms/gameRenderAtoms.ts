@@ -1,8 +1,17 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { InputModeType, LineResultData, SceneType, Speed } from "../ts/type";
+import { defaultSpeed } from "../ts/const/typeDefaultValue";
 
-export const mapAtom = atom<CreateMap | null>(null);
+const mapAtom = atom<CreateMap | null>(null);
+
+export const useMapAtom = () => {
+  return useAtomValue(mapAtom);
+};
+
+export const useSetMapAtom = () => {
+  return useSetAtom(mapAtom);
+};
 
 const sceneAtom = atom<SceneType>("ready");
 
@@ -66,15 +75,51 @@ export const useSetMapIdAtom = () => {
   return useSetAtom(mapIdAtom);
 };
 
-export const rankingScoresAtom = atom<number[]>([]);
-export const kpmAtom = atom<number>(0);
+const rankingScoresAtom = atom<number[]>([]);
+export const useRankingScoresAtom = () => {
+  return useAtomValue(rankingScoresAtom);
+};
 
-export const lineResultsAtom = atom<LineResultData[]>([]);
+export const useSetRankingScoresAtom = () => {
+  return useSetAtom(rankingScoresAtom);
+};
 
-export const isHoverDrawerLabelAtom = atom<boolean>(false);
+const lineResultsAtom = atom<LineResultData[]>([]);
 
-export const lineSelectIndexAtom = atom<number | null>(null);
-export const speedAtom = atom<Speed>({
-  defaultSpeed: 1,
-  playSpeed: 1,
-});
+export const useLineResultsAtom = () => {
+  return useAtomValue(lineResultsAtom);
+};
+
+export const useSetLineResultsAtom = () => {
+  return useSetAtom(lineResultsAtom);
+};
+
+const isHoverDrawerLabelAtom = atom<boolean>(false);
+
+export const useIsHoverDrawerLabelAtom = () => {
+  return useAtomValue(isHoverDrawerLabelAtom);
+};
+
+export const useSetIsHoverDrawerLabelAtom = () => {
+  return useSetAtom(isHoverDrawerLabelAtom);
+};
+
+const lineSelectIndexAtom = atom<number | null>(null);
+
+export const useLineSelectIndexAtom = () => {
+  return useAtomValue(lineSelectIndexAtom);
+};
+
+export const useSetLineSelectIndexAtom = () => {
+  return useSetAtom(lineSelectIndexAtom);
+};
+
+const speedAtom = atom<Speed>(defaultSpeed);
+
+export const useTypePageSpeedAtom = () => {
+  return useAtomValue(speedAtom);
+};
+
+export const useSetTypePageSpeedAtom = () => {
+  return useSetAtom(speedAtom);
+};

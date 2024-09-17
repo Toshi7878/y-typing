@@ -1,7 +1,11 @@
 import { Box, Stack } from "@chakra-ui/react";
 import React from "react";
 import { actions } from "@/app/type/ts/scene-ts/end/actions";
-import { lineResultsAtom, speedAtom, useMapIdAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useLineResultsAtom,
+  useMapIdAtom,
+  useTypePageSpeedAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { useAtomValue } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
@@ -20,8 +24,8 @@ const End = ({ onOpen }: EndProps) => {
   const { data: session } = useSession();
 
   const mapId = useMapIdAtom();
-  const speedData = useAtomValue(speedAtom);
-  const lineResults = useAtomValue(lineResultsAtom);
+  const speedData = useTypePageSpeedAtom();
+  const lineResults = useLineResultsAtom();
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
 

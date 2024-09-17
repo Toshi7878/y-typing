@@ -3,12 +3,13 @@ import "../../style/type.scss";
 import React, { useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import {
-  isHoverDrawerLabelAtom,
-  lineSelectIndexAtom,
-  mapAtom,
+  useIsHoverDrawerLabelAtom,
+  useLineSelectIndexAtom,
+  useMapAtom,
   useSceneAtom,
+  useSetIsHoverDrawerLabelAtom,
   useSetTabIndexAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import Ready from "./scene/Ready";
@@ -25,10 +26,11 @@ import { ThemeColors } from "@/types";
 
 export const Scene = () => {
   const scene = useSceneAtom();
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
-  const lineSelectIndex = useAtomValue(lineSelectIndexAtom);
+  const isHovering = useIsHoverDrawerLabelAtom();
+  const setIsHovering = useSetIsHoverDrawerLabelAtom();
+  const lineSelectIndex = useLineSelectIndexAtom();
   const lineProgressRef = useRef<HTMLProgressElement | null>(null);
   const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
   const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);

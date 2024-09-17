@@ -1,14 +1,14 @@
 "use client";
 import {
-  lineResultsAtom,
-  lineSelectIndexAtom,
-  mapAtom,
+  useLineResultsAtom,
+  useLineSelectIndexAtom,
+  useMapAtom,
   useSceneAtom,
+  useSetLineSelectIndexAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { LineResultData } from "@/app/type/ts/type";
 
-import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
 import { Ticker } from "@pixi/ticker";
@@ -19,12 +19,14 @@ interface ResultLineListProps {
 }
 
 function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const scene = useSceneAtom();
   const { playerRef, gameStateRef } = useRefs();
-  const lineResults = useAtomValue(lineResultsAtom);
+  const lineResults = useLineResultsAtom();
 
-  const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
+  const lineSelectIndex = useLineSelectIndexAtom();
+  const setLineSelectIndex = useSetLineSelectIndexAtom();
+
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const isManualScrollRef = useRef(false);
   const scrollToCard = useCallback((newIndex: number) => {

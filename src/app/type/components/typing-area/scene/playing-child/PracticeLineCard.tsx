@@ -2,13 +2,12 @@ import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/rea
 import { useInteractJS } from "@/app/type/ts/scene-ts/hooks";
 import { ThemeColors } from "@/types";
 import ResultCardBody from "../result/child/child/ResultCardBody";
-import { useAtomValue } from "jotai";
 import {
-  lineResultsAtom,
-  lineSelectIndexAtom,
-  mapAtom,
-  speedAtom,
   useInputModeAtom,
+  useLineResultsAtom,
+  useLineSelectIndexAtom,
+  useMapAtom,
+  useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import ResultCardFooter from "../result/child/child/ResultCardFooter";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
@@ -18,12 +17,12 @@ import { useState } from "react";
 
 const PracticeLineCard = () => {
   const interact = useInteractJS();
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const { playingRef } = useRefs();
 
-  const lineResults = useAtomValue(lineResultsAtom);
-  const speedData = useAtomValue(speedAtom);
-  const lineSelectIndex = useAtomValue(lineSelectIndexAtom);
+  const lineResults = useLineResultsAtom();
+  const speedData = useTypePageSpeedAtom();
+  const lineSelectIndex = useLineSelectIndexAtom();
   const inputMode = useInputModeAtom();
   const lineResult = lineResults[lineSelectIndex as number];
   const lineInputMode = lineResult.status?.mode ?? inputMode;

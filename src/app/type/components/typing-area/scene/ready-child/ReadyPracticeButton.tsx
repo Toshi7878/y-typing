@@ -1,10 +1,12 @@
-import { lineResultsAtom, useSetIsLoadingOverlayAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useSetIsLoadingOverlayAtom,
+  useSetLineResultsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { LineResultData, SendResultData } from "@/app/type/ts/type";
 import { Button, useTheme } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useCallback } from "react";
@@ -14,7 +16,7 @@ const ReadyPracticeButton = () => {
   const { data: session } = useSession();
   const { id } = useParams();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
-  const setLineResults = useSetAtom(lineResultsAtom);
+  const setLineResults = useSetLineResultsAtom();
   const theme = useTheme();
 
   const mapId = id;

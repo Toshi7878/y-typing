@@ -1,15 +1,14 @@
 import {
-  lineResultsAtom,
-  mapAtom,
-  speedAtom,
+  useMapAtom,
   useSceneAtom,
   useSetIsLoadingOverlayAtom,
+  useSetLineResultsAtom,
   useSetSceneAtom,
+  useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/ts/type";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
 import axios from "axios";
-import { useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -33,11 +32,11 @@ const RankingMenu = ({
 
   const scene = useSceneAtom();
   const setScene = useSetSceneAtom();
-  const setSpeedData = useSetAtom(speedAtom);
+  const setSpeedData = useSetTypePageSpeedAtom();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
-  const setLineResults = useSetAtom(lineResultsAtom);
+  const setLineResults = useSetLineResultsAtom();
 
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const params = useParams();
   const mapId = params.id as string;
 

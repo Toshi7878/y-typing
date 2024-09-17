@@ -8,8 +8,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { RankingListType } from "@/app/type/ts/type";
 import RankingTr from "./RankingTr";
 import RankingMenu from "./RankingMenu";
-import { useSetAtom } from "jotai";
-import { rankingScoresAtom, useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 const RankingList = () => {
   const { id } = useParams();
@@ -17,7 +16,7 @@ const RankingList = () => {
   const { bestScoreRef } = useRefs();
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const setRankingScores = useSetAtom(rankingScoresAtom);
+  const setRankingScores = useSetRankingScoresAtom();
   const scene = useSceneAtom();
 
   useEffect(() => {

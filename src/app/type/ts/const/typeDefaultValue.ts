@@ -45,3 +45,8 @@ export const defaultGameStateRef: GameStateRef = {
     hasMyRankingData: false,
   },
 };
+
+export const defaultSpeed = {
+  defaultSpeed: 1,
+  playSpeed: 1,
+};

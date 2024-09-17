@@ -1,7 +1,7 @@
-import { mapAtom, speedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useMapAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Box } from "@chakra-ui/react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 interface TotalTimeProps {
@@ -24,8 +24,8 @@ const PlayingTotalTime = forwardRef<PlayingTotalTimeRef, TotalTimeProps>(
   ({ className = "" }, ref) => {
     const { ytStateRef } = useRefs();
     const [currentTimeSSMM, setCurrentTimeSSMM] = useState(0);
-    const map = useAtomValue(mapAtom);
-    const speedData = useAtomValue(speedAtom);
+    const map = useMapAtom();
+    const speedData = useTypePageSpeedAtom();
 
     useImperativeHandle(ref, () => ({
       getCurrentTime: () => currentTimeSSMM,

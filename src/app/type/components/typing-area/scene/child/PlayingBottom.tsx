@@ -2,7 +2,7 @@ import { Box, HStack } from "@chakra-ui/react";
 import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "../playing-child/child/PlayingSkipGuide";
 import PlayingTotalTime, { PlayingTotalTimeRef } from "../playing-child/child/PlayingTotalTime";
-import { speedAtom, useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useSceneAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useAtomValue } from "jotai";
 import PlayingBottomBadge from "../playing-child/child/PlayingBottomBadge";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
@@ -21,7 +21,7 @@ const PlayingBottom = function ({
 }: PlayingBottomRef) {
   const { playingRef } = useRefs();
   const scene = useSceneAtom();
-  const speedData = useAtomValue(speedAtom);
+  const speedData = useTypePageSpeedAtom();
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 

@@ -1,15 +1,14 @@
 "use client";
 import {
-  mapAtom,
-  speedAtom,
   useInputModeAtom,
+  useMapAtom,
   useSceneAtom,
+  useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
 import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
-import { useAtomValue } from "jotai";
 import { memo } from "react";
 import ResultCardHeader from "./child/ResultCardHeader";
 import ResultCardFooter from "./child/ResultCardFooter";
@@ -36,10 +35,10 @@ function ResultCard({
   lineSelectIndex,
   handleCardClick,
 }: ResultCardProps) {
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const inputMode = useInputModeAtom();
   const scene = useSceneAtom();
-  const speedData = useAtomValue(speedAtom);
+  const speedData = useTypePageSpeedAtom();
   const theme: ThemeColors = useTheme();
 
   const lineSpeed =

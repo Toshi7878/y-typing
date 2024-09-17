@@ -8,20 +8,21 @@ import { GetInfoData } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import {
-  isHoverDrawerLabelAtom,
-  lineResultsAtom,
-  lineSelectIndexAtom,
-  mapAtom,
-  rankingScoresAtom,
-  speedAtom,
+  useIsHoverDrawerLabelAtom,
   useIsLoadingOverlayAtom,
   useSceneAtom,
   useSetInputModeAtom,
+  useSetIsHoverDrawerLabelAtom,
+  useSetLineResultsAtom,
+  useSetLineSelectIndexAtom,
+  useSetMapAtom,
   useSetMapIdAtom,
   useSetPlayingNotifyAtom,
+  useSetRankingScoresAtom,
   useSetSceneAtom,
+  useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
 import SceneWrapper from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
@@ -31,19 +32,20 @@ import { queryClient } from "./TypeProvider";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
-  const [isHovering, setIsHovering] = useAtom(isHoverDrawerLabelAtom);
+  const isHovering = useIsHoverDrawerLabelAtom();
+  const setIsHovering = useSetIsHoverDrawerLabelAtom();
   const scene = useSceneAtom();
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
-  const setMap = useSetAtom(mapAtom);
+  const setMap = useSetMapAtom();
   const setScene = useSetSceneAtom();
   const setMapId = useSetMapIdAtom();
-  const setRankingScores = useSetAtom(rankingScoresAtom);
-  const setSpeedData = useSetAtom(speedAtom);
+  const setRankingScores = useSetRankingScoresAtom();
+  const setSpeedData = useSetTypePageSpeedAtom();
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
-  const setLineResults = useSetAtom(lineResultsAtom);
-  const setLineSelectIndex = useSetAtom(lineSelectIndexAtom);
+  const setLineResults = useSetLineResultsAtom();
+  const setLineSelectIndex = useSetLineSelectIndexAtom();
   const theme = useTheme();
 
   const isLoadingOverlay = useIsLoadingOverlayAtom();

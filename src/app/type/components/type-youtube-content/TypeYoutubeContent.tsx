@@ -6,13 +6,13 @@ import { ytState } from "../../ts/youtubeEvents";
 import { useRefs } from "../../type-contexts/refsProvider"; // 変更
 import { useAtomValue } from "jotai";
 import {
-  lineResultsAtom,
-  mapAtom,
-  speedAtom,
   useInputModeAtom,
+  useLineResultsAtom,
+  useMapAtom,
   useSceneAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
+  useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import NProgress from "nprogress";
 
@@ -37,10 +37,10 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
     playingLineTimeRef,
     setRef,
   } = useRefs();
-  const map = useAtomValue(mapAtom);
+  const map = useMapAtom();
   const inputMode = useInputModeAtom();
-  const speedData = useAtomValue(speedAtom);
-  const lineResults = useAtomValue(lineResultsAtom);
+  const speedData = useTypePageSpeedAtom();
+  const lineResults = useLineResultsAtom();
 
   const handleReady = useCallback(
     (event: { target: any }) => {

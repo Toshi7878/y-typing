@@ -2,18 +2,20 @@ import PlayingCenter, { PlayingCenterRef } from "./playing-child/PlayingCenter";
 import { forwardRef, RefObject, useEffect, useImperativeHandle, useRef } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
-  lineResultsAtom,
-  lineSelectIndexAtom,
-  mapAtom,
-  rankingScoresAtom,
-  speedAtom,
   useInputModeAtom,
+  useLineResultsAtom,
+  useLineSelectIndexAtom,
+  useMapAtom,
+  useRankingScoresAtom,
   useSceneAtom,
   useSetInputModeAtom,
+  useSetLineResultsAtom,
+  useSetLineSelectIndexAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
+  useSetTypePageSpeedAtom,
+  useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useAtom, useAtomValue } from "jotai";
 import { isTyped } from "@/app/type/ts/scene-ts/playing/keydown/typing";
 import { PlayingRef, StatusRef } from "@/app/type/ts/type";
 import { realtimeChange, YTSpeedController } from "@/app/type/ts/ytHandleEvents";
@@ -49,18 +51,21 @@ const Playing = forwardRef<PlayingRef, PlayingProps>(
       setRef,
     } = useRefs();
 
-    const map = useAtomValue(mapAtom) as CreateMap;
+    const map = useMapAtom() as CreateMap;
 
     const playingCenterRef = useRef<PlayingCenterRef>(null);
     const scene = useSceneAtom();
     const setScene = useSetSceneAtom();
     const setNotify = useSetPlayingNotifyAtom();
-    const [speedData, setSpeedData] = useAtom(speedAtom);
+    const speedData = useTypePageSpeedAtom();
+    const setSpeedData = useSetTypePageSpeedAtom();
     const inputMode = useInputModeAtom();
     const setInputMode = useSetInputModeAtom();
-    const rankingScores = useAtomValue(rankingScoresAtom);
-    const [lineResults, setLineResults] = useAtom(lineResultsAtom);
-    const [lineSelectIndex, setLineSelectIndex] = useAtom(lineSelectIndexAtom);
+    const rankingScores = useRankingScoresAtom();
+    const lineResults = useLineResultsAtom();
+    const setLineResults = useSetLineResultsAtom();
+    const lineSelectIndex = useLineSelectIndexAtom();
+    const setLineSelectIndex = useSetLineSelectIndexAtom();
 
     //forwardRefやめる？（あとで
     useImperativeHandle(ref, () => ({
