@@ -238,7 +238,7 @@ const SYMBOL_LIST = [
 ];
 
 export const CHAR_POINT = 50;
-export const MISS_PENALTY = CHAR_POINT / 2;
+export const MISS_PENALTY = CHAR_POINT;
 
 export class TypingWord {
   word: LineData["word"];
