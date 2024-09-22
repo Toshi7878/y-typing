@@ -9,7 +9,7 @@ import {
   useLineReplayUpdate,
   useReplay,
 } from "../../../ts/scene-ts/playing/replay";
-import { getLineCount, typeTicker } from "../../../ts/youtubeEvents";
+import { typeTicker } from "../../useYoutubeEvents";
 import { defaultStatusRef } from "../../../ts/const/typeDefaultValue";
 import {
   useInputModeAtom,
@@ -22,6 +22,7 @@ import {
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/useDisplaySkipGuide";
+import { useGetSeekLineCount } from "./useSeekGetLineCount";
 
 export const usePlayTimer = () => {
   const {
@@ -42,6 +43,7 @@ export const usePlayTimer = () => {
   const updateLine = useUpdateLine();
   const calcLineResult = useCalcLineResult();
   const replay = useReplay();
+  const getSeekLineCount = useGetSeekLineCount();
 
   return (
     totalTimeProgressRef: React.RefObject<HTMLProgressElement>,
@@ -133,7 +135,7 @@ export const usePlayTimer = () => {
         if (scene === "playing") {
           statusRef.current!.status.count += 1;
         } else {
-          statusRef.current!.status.count = getLineCount(ytCurrentTime, map.mapData);
+          statusRef.current!.status.count = getSeekLineCount(ytCurrentTime);
         }
 
         updateLine(statusRef.current!.status.count);

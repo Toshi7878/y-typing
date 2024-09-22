@@ -7,9 +7,10 @@ import {
   useSetPlayingNotifyAtom,
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
-import { getLineCount, typeTicker } from "../../ts/youtubeEvents";
+import { typeTicker } from "../useYoutubeEvents";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useUpdateLine } from "./timer-hooks/useTimer";
+import { useGetSeekLineCount } from "./timer-hooks/useSeekGetLineCount";
 
 export const useMoveLine = () => {
   const { gameStateRef, statusRef, playerRef } = useRefs();
@@ -20,6 +21,7 @@ export const useMoveLine = () => {
   const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const updateLine = useUpdateLine();
+  const getSeekLineCount = useGetSeekLineCount();
 
   const movePrevLine = (drawerClosure: UseDisclosureReturn) => {
     if (drawerClosure.isOpen && gameStateRef.current!.isSeekedLine) {
@@ -42,7 +44,7 @@ export const useMoveLine = () => {
     }
 
     if (!drawerClosure.isOpen) {
-      const newCount = getLineCount(prevTime, map!.mapData);
+      const newCount = getSeekLineCount(prevTime);
       statusRef.current!.status.count = newCount;
       updateLine(newCount);
     } else {
@@ -82,7 +84,7 @@ export const useMoveLine = () => {
     }
 
     if (!drawerClosure.isOpen) {
-      const newCount = getLineCount(nextTime, map!.mapData);
+      const newCount = getSeekLineCount(nextTime);
       statusRef.current!.status.count = newCount;
       updateLine(newCount);
     } else {

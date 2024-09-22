@@ -1,6 +1,6 @@
 import { defaultStatusRef } from "../../ts/const/typeDefaultValue";
 import { StatusRef } from "../../ts/type";
-import { typeTicker } from "../../ts/youtubeEvents";
+import { typeTicker } from "../useYoutubeEvents";
 import {
   useMapAtom,
   useSceneAtom,

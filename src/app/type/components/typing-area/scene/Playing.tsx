@@ -13,7 +13,7 @@ import { isTyped } from "@/app/type/ts/scene-ts/playing/keydown/typing";
 
 import { usePlayTimer } from "@/app/type/hooks/playing-hooks/timer-hooks/useTimer";
 import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
-import { typeTicker } from "@/app/type/ts/youtubeEvents";
+import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
 import {
