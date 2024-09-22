@@ -54,7 +54,11 @@ const RankingList = () => {
     queryFn: async ({ queryKey }) => {
       const [_key, id] = queryKey;
 
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`, {
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      });
 
       // scoreが高い順にソート
       data.sort((a: { score: number }, b: { score: number }) => b.score - a.score);
