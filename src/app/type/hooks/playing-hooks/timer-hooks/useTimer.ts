@@ -56,7 +56,6 @@ export const usePlayTimer = () => {
     const count = statusRef.current!.status.count;
     const currentLine = map.mapData[count - 1];
     const nextLine = map.mapData[count];
-    // const afterLine = map.mapData[count + 1];
     const movieDuration = ytStateRef.current!.movieDuration;
     const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
 
