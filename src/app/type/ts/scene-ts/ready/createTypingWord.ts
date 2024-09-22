@@ -411,7 +411,7 @@ export class CreateMap {
     this.movieTotalTime = +this.mapData[result.words.length - 1].time;
     this.currentTimeBarFrequency = this.movieTotalTime / 1700;
     this.keyRate = 100 / this.totalNotes.r;
-    this.missRate = this.keyRate / 2;
+    this.missRate = this.keyRate;
   }
 
   private create(wordRomaMap: string[][], data: MapData[]) {
