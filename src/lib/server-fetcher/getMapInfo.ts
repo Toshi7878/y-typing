@@ -5,7 +5,7 @@ import { cache } from "react";
 
 export const getMapInfo = cache(async (id: string): Promise<GetInfoData> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/map-info?id=${id}`, {
-    next: { tags: [`map-info/${id}`] },
+    cache: "no-store",
   });
   if (!response.ok) {
     throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
