@@ -1,7 +1,7 @@
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { CreateMap } from "../ready/createTypingWord";
 import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown/typing";
-import { GameStateRef, InputModeType, LineResultData, Status } from "../../type";
+import { InputModeType, LineResultData, Status } from "../../type";
 import {
   useInputModeAtom,
   useLineResultsAtom,
@@ -10,7 +10,10 @@ import {
   useSceneAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { useRealTimeSpeedChange } from "@/app/type/hooks/playing-hooks/useSpeedChange";
+import {
+  useRealTimeSpeedChange,
+  useSetRealTimeSpeed,
+} from "@/app/type/hooks/playing-hooks/useSpeedChange";
 import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
 
 export const updateReplayStatus = (
@@ -162,19 +165,20 @@ export const useReplay = () => {
   };
 };
 
-export const lineReplayUpdate = (
-  lineResults: LineResultData[],
-  gameStateRef: React.RefObject<GameStateRef>,
-  newCount: number,
-  setRealTimeSpeed: (speed: number) => void,
-  inputModeChange: (newInputMode: InputModeType) => void,
-) => {
-  const lineResult = lineResults[newCount];
-  const lineInputMode = lineResult.status!.mode;
-  const speed = lineResult.status!.sp;
+export const useLineReplayUpdate = () => {
+  const { gameStateRef } = useRefs();
+  const lineResults = useLineResultsAtom();
+  const setRealTimeSpeed = useSetRealTimeSpeed();
+  const inputModeChange = useInputModeChange();
 
-  inputModeChange(lineInputMode);
-  setRealTimeSpeed(speed);
+  return (newCount: number) => {
+    const lineResult = lineResults[newCount];
+    const lineInputMode = lineResult.status!.mode;
+    const speed = lineResult.status!.sp;
 
-  gameStateRef.current!.replay.replayKeyCount = 0;
+    inputModeChange(lineInputMode);
+    setRealTimeSpeed(speed);
+
+    gameStateRef.current!.replay.replayKeyCount = 0;
+  };
 };

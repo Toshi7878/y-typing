@@ -1,23 +1,12 @@
-import { TabStatusRef } from "../../../components/type-tab-content/tab-status/TabStatus";
-import { PlayingLineTimeRef } from "../../../components/typing-area/scene/playing-child/child/PlayingLineTime";
 import { SkipGuideRef } from "../../../components/typing-area/scene/playing-child/child/PlayingSkipGuide";
 import { PlayingTotalTimeRef } from "../../../components/typing-area/scene/playing-child/child/PlayingTotalTime";
-import { PlayingCenterRef } from "../../../components/typing-area/scene/playing-child/PlayingCenter";
 import { CalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
-
 import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import { LineResult } from "../../../ts/scene-ts/playing/lineResult";
+import { InputModeType } from "../../../ts/type";
 import {
-  GameStateRef,
-  InputModeType,
-  SceneType,
-  Speed,
-  StatusRef,
-  YTStateRef,
-} from "../../../ts/type";
-import {
-  lineReplayUpdate,
   updateReplayStatus,
+  useLineReplayUpdate,
   useReplay,
 } from "../../../ts/scene-ts/playing/replay";
 import { getLineCount, typeTicker } from "../../../ts/youtubeEvents";
@@ -31,8 +20,6 @@ import {
   useSetLineResultsAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useSetRealTimeSpeed } from "@/app/type/hooks/playing-hooks/useSpeedChange";
-import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/useDisplaySkipGuide";
 
@@ -273,22 +260,14 @@ export const useCalcLineResult = () => {
 };
 
 export const useUpdateLine = () => {
-  const {
-    statusRef,
-    playingLineTimeRef,
-    playingCenterRef,
-    lineProgressRef,
-    gameStateRef,
-    ytStateRef,
-  } = useRefs();
+  const { statusRef, playingLineTimeRef, playingCenterRef, lineProgressRef, ytStateRef } =
+    useRefs();
 
   const scene = useSceneAtom();
   const map = useMapAtom() as CreateMap;
   const inputMode = useInputModeAtom();
   const speedData = useTypePageSpeedAtom();
-  const lineResults = useLineResultsAtom();
-  const setRealTimeSpeed = useSetRealTimeSpeed();
-  const inputModeChange = useInputModeChange();
+  const lineReplayUpdate = useLineReplayUpdate();
 
   return (newCount: number) => {
     const currentCount = newCount ? newCount - 1 : 0;
@@ -334,7 +313,7 @@ export const useUpdateLine = () => {
     }
 
     if (scene === "replay") {
-      lineReplayUpdate(lineResults, gameStateRef, currentCount, setRealTimeSpeed, inputModeChange);
+      lineReplayUpdate(currentCount);
     }
   };
 };
