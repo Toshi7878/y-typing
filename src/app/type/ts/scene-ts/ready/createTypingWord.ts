@@ -237,7 +237,7 @@ const SYMBOL_LIST = [
   "\\",
 ];
 
-export const CHAR_POINT = 50;
+export const CHAR_POINT = 25;
 export const MISS_PENALTY = CHAR_POINT;
 
 export class TypingWord {
