@@ -3,6 +3,7 @@ import Header from "@/components/header/Header";
 
 import { fonts } from "./fonts";
 import "@/app/nprogress.css";
+import { Analytics } from "@vercel/analytics/react";
 
 // export const runtime = "edge";
 
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={fonts.rubik.variable}>
+        <Analytics />
         <ThemeProvider>
           <Header />
           {children}
