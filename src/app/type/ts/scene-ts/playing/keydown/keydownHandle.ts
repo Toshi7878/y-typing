@@ -154,6 +154,7 @@ export const usePlayShortcutKey = () => {
   const { statusRef } = useRefs();
   const scene = useSceneAtom();
   const inputMode = useInputModeAtom();
+
   const retry = useRetry();
   const pressSkip = usePressSkip();
   const realTimeSpeedChange = useRealTimeSpeedChange();

@@ -4,6 +4,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
   useInputModeAtom,
   useLineResultsAtom,
+  useLineSelectIndexAtom,
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
@@ -36,7 +37,7 @@ const Playing = ({
   skipGuideRef,
   totalTimeProgressRef,
 }: PlayingProps) => {
-  const { isOpen, onOpen } = drawerClosure;
+  const { onOpen } = drawerClosure;
   const { playerRef, statusRef, lineProgressRef, ytStateRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
@@ -47,6 +48,8 @@ const Playing = ({
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
+  const lineSelectIndex = useLineSelectIndexAtom();
+
   const gamePause = useGamePause();
   const toggleLineListDrawer = useToggleLineList();
   const playTimer = usePlayTimer();
@@ -97,7 +100,15 @@ const Playing = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores, speedData, scene, lineResults, drawerClosure.isOpen]);
+  }, [
+    inputMode,
+    rankingScores,
+    speedData,
+    scene,
+    lineResults,
+    drawerClosure.isOpen,
+    lineSelectIndex,
+  ]);
 
   useEffect(() => {
     const updateFunction = () => playTimer(totalTimeProgressRef, playingTotalTimeRef, skipGuideRef);
