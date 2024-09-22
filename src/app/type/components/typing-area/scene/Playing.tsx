@@ -1,37 +1,28 @@
 import PlayingCenter, { PlayingCenterRef } from "./playing-child/PlayingCenter";
-import { forwardRef, RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
   useInputModeAtom,
   useLineResultsAtom,
-  useLineSelectIndexAtom,
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
-  useSetLineResultsAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { isTyped } from "@/app/type/ts/scene-ts/playing/keydown/typing";
 
-import { updateTimer } from "@/app/type/ts/scene-ts/playing/typeTimer";
+import { usePlayTimer } from "@/app/type/hooks/playing-hooks/timer-hooks/useTimer";
 import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { typeTicker } from "@/app/type/ts/youtubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
-import { handleTyping, shortcutKey } from "@/app/type/ts/scene-ts/playing/keydown/keydownHandle";
-import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
-import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
 import {
-  useRealTimeSpeedChange,
-  useSetRealTimeSpeed,
-} from "@/app/type/hooks/playing-hooks/useSpeedChange";
+  useHandleTyping,
+  usePlayShortcutKey,
+} from "@/app/type/ts/scene-ts/playing/keydown/keydownHandle";
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
-import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
-import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
-import { useChangePlayMode } from "@/app/type/hooks/playing-hooks/useChangePlayMode";
-import { useChangePracticeSpeed } from "@/app/type/hooks/playing-hooks/usePracticeSpeedChange";
 
 interface PlayingProps {
   drawerClosure: UseDisclosureReturn;
@@ -46,16 +37,7 @@ const Playing = ({
   totalTimeProgressRef,
 }: PlayingProps) => {
   const { isOpen, onOpen } = drawerClosure;
-  const {
-    playerRef,
-    playingComboRef,
-    tabStatusRef,
-    statusRef,
-    playingLineTimeRef,
-    lineProgressRef,
-    ytStateRef,
-    gameStateRef,
-  } = useRefs();
+  const { playerRef, statusRef, lineProgressRef, ytStateRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
 
@@ -65,23 +47,15 @@ const Playing = ({
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
-  const setLineResults = useSetLineResultsAtom();
-
-  const retry = useRetry();
-  const pressSkip = usePressSkip();
-  const realTimeSpeedChange = useRealTimeSpeedChange();
-  const setRealTimeSpeed = useSetRealTimeSpeed();
   const gamePause = useGamePause();
-  const inputModeChange = useInputModeChange();
   const toggleLineListDrawer = useToggleLineList();
-  const changePlayMode = useChangePlayMode();
-  const changePracticeSpeed = useChangePracticeSpeed();
-  const { movePrevLine, moveNextLine, moveSetLine } = useMoveLine();
+  const playTimer = usePlayTimer();
+  const handleTyping = useHandleTyping();
+  const playShortcutKey = usePlayShortcutKey();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const lineWord = playingCenterRef.current!.getLineWord();
-
       const cloneLineWord = structuredClone(lineWord);
 
       if (!ytStateRef.current?.isPaused) {
@@ -104,44 +78,11 @@ const Playing = ({
           handleTyping({
             event,
             cloneLineWord,
-            inputMode,
             lineTime,
-            speedData,
-            tabStatusRef,
-            map,
             count,
-            statusRef,
-            playingComboRef,
-            rankingScores,
-            scene,
-            playingCenterRef,
-            playingLineTimeRef,
-            lineResults,
-            setLineResults,
-            ytStateRef,
           });
         } else {
-          shortcutKey(
-            event,
-            skipGuideRef,
-            statusRef,
-            inputMode,
-            lineTime,
-            scene,
-            isOpen,
-            drawerClosure,
-            retry,
-            pressSkip,
-            realTimeSpeedChange,
-            gamePause,
-            inputModeChange,
-            movePrevLine,
-            moveNextLine,
-            moveSetLine,
-            toggleLineListDrawer,
-            changePlayMode,
-            changePracticeSpeed,
-          );
+          playShortcutKey(event, skipGuideRef, lineTime, drawerClosure);
         }
       } else if (event.key === "Escape") {
         gamePause();
@@ -156,34 +97,10 @@ const Playing = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputMode, rankingScores, speedData, scene, lineResults, isOpen]);
+  }, [inputMode, rankingScores, speedData, scene, lineResults, drawerClosure.isOpen]);
 
   useEffect(() => {
-    const updateFunction = () =>
-      updateTimer(
-        map!,
-        lineResults,
-        setLineResults,
-        playerRef,
-        ytStateRef,
-        speedData,
-        totalTimeProgressRef,
-        playingTotalTimeRef,
-        playingLineTimeRef,
-        playingCenterRef,
-        lineProgressRef,
-        skipGuideRef,
-        statusRef,
-        tabStatusRef,
-        gameStateRef,
-        rankingScores,
-        playingComboRef,
-        inputMode,
-        scene,
-        realTimeSpeedChange,
-        setRealTimeSpeed,
-        inputModeChange,
-      );
+    const updateFunction = () => playTimer(totalTimeProgressRef, playingTotalTimeRef, skipGuideRef);
     typeTicker.add(updateFunction);
 
     return () => {

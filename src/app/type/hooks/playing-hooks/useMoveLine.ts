@@ -1,7 +1,5 @@
 import { useRefs } from "../../type-contexts/refsProvider";
 import {
-  useInputModeAtom,
-  useLineResultsAtom,
   useLineSelectIndexAtom,
   useMapAtom,
   useSceneAtom,
@@ -10,31 +8,18 @@ import {
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { getLineCount, typeTicker } from "../../ts/youtubeEvents";
-import { setNewLine } from "../../ts/scene-ts/playing/typeTimer";
-import { useSetRealTimeSpeed } from "./useSpeedChange";
-import { useInputModeChange } from "./useInputModeChange";
 import { UseDisclosureReturn } from "@chakra-ui/react";
+import { useUpdateLine } from "./timer-hooks/useTimer";
 
 export const useMoveLine = () => {
-  const {
-    gameStateRef,
-    statusRef,
-    playingLineTimeRef,
-    playingCenterRef,
-    lineProgressRef,
-    ytStateRef,
-    playerRef,
-  } = useRefs();
+  const { gameStateRef, statusRef, playerRef } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom();
   const speedData = useTypePageSpeedAtom();
-  const inputMode = useInputModeAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
-  const lineResults = useLineResultsAtom();
-  const inputModeChange = useInputModeChange();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
-  const setRealTimeSpeed = useSetRealTimeSpeed();
   const setNotify = useSetPlayingNotifyAtom();
+  const updateLine = useUpdateLine();
 
   const movePrevLine = (drawerClosure: UseDisclosureReturn) => {
     if (drawerClosure.isOpen && gameStateRef.current!.isSeekedLine) {
@@ -59,22 +44,7 @@ export const useMoveLine = () => {
     if (!drawerClosure.isOpen) {
       const newCount = getLineCount(prevTime, map!.mapData);
       statusRef.current!.status.count = newCount;
-      setNewLine(
-        newCount,
-        scene,
-        statusRef,
-        map!,
-        inputMode,
-        speedData,
-        playingLineTimeRef,
-        playingCenterRef,
-        lineProgressRef,
-        lineResults,
-        gameStateRef,
-        ytStateRef,
-        setRealTimeSpeed,
-        inputModeChange,
-      );
+      updateLine(newCount);
     } else {
       gameStateRef.current!.isSeekedLine = true;
     }
@@ -114,22 +84,7 @@ export const useMoveLine = () => {
     if (!drawerClosure.isOpen) {
       const newCount = getLineCount(nextTime, map!.mapData);
       statusRef.current!.status.count = newCount;
-      setNewLine(
-        newCount,
-        scene,
-        statusRef,
-        map!,
-        inputMode,
-        speedData,
-        playingLineTimeRef,
-        playingCenterRef,
-        lineProgressRef,
-        lineResults,
-        gameStateRef,
-        ytStateRef,
-        setRealTimeSpeed,
-        inputModeChange,
-      );
+      updateLine(newCount);
     } else {
       gameStateRef.current!.isSeekedLine = true;
     }

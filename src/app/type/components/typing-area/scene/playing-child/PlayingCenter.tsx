@@ -44,7 +44,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
       setRef("playingCenterRef", ref.current!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lineWord]);
 
   useImperativeHandle(ref, () => ({
     setLineWord: (newLineWord) => setLineWord(newLineWord),

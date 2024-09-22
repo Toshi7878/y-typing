@@ -9,7 +9,6 @@ import {
   YTStateRef,
 } from "./type";
 import { CreateMap } from "./scene-ts/ready/createTypingWord";
-import { setNewLine } from "./scene-ts/playing/typeTimer";
 import { PlayingLineTimeRef } from "../components/typing-area/scene/playing-child/child/PlayingLineTime";
 import { PlayingCenterRef } from "../components/typing-area/scene/playing-child/PlayingCenter";
 import { Ticker } from "@pixi/ticker";
@@ -97,15 +96,7 @@ class YTState {
     gameStateRef: React.RefObject<GameStateRef>,
     map: CreateMap,
     scene: SceneType,
-    inputMode: InputModeType,
-    speedData: Speed,
-    playingCenterRef: React.RefObject<PlayingCenterRef>,
-    playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
-    lineProgressRef: React.RefObject<HTMLProgressElement>, // 修正箇所
-    lineResults: LineResultData[],
-    ytStateRef: React.RefObject<YTStateRef>,
-    setRealTimeSpeed: (speed: number) => void,
-    inputModeChange: (newInputMode: InputModeType) => void,
+    updateLine: (newCount: number) => void,
   ) {
     const time = target.getCurrentTime();
 
@@ -117,22 +108,7 @@ class YTState {
         const newCount = getLineCount(time, map.mapData);
         console.log(newCount);
         statusRef.current!.status.count = newCount;
-        setNewLine(
-          newCount,
-          scene,
-          statusRef,
-          map,
-          inputMode,
-          speedData,
-          playingLineTimeRef,
-          playingCenterRef,
-          lineProgressRef,
-          lineResults,
-          gameStateRef,
-          ytStateRef,
-          setRealTimeSpeed,
-          inputModeChange,
-        );
+        updateLine(newCount);
         if (typeTicker.started) {
           typeTicker.stop();
         }

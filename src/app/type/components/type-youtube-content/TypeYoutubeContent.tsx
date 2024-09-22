@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useMemo } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "../../ts/youtubeEvents";
@@ -14,8 +13,7 @@ import {
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import NProgress from "nprogress";
-import { useSetRealTimeSpeed } from "../../hooks/playing-hooks/useSpeedChange";
-import { useInputModeChange } from "../../hooks/playing-hooks/useInputModeChange";
+import { useUpdateLine } from "../../hooks/playing-hooks/timer-hooks/useTimer";
 
 interface TypeYouTubeProps {
   className: string;
@@ -27,22 +25,12 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
   const scene = useSceneAtom();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
-  const {
-    ytStateRef,
-    playerRef,
-    statusRef,
-    gameStateRef,
-    lineProgressRef,
-    playingCenterRef,
-    playingLineTimeRef,
-    setRef,
-  } = useRefs();
+  const { ytStateRef, playerRef, statusRef, gameStateRef, setRef } = useRefs();
   const map = useMapAtom();
   const inputMode = useInputModeAtom();
   const speedData = useTypePageSpeedAtom();
   const lineResults = useLineResultsAtom();
-  const setRealTimeSpeed = useSetRealTimeSpeed();
-  const inputChangeMode = useInputModeChange();
+  const updateLine = useUpdateLine();
 
   const handleReady = useCallback(
     (event: { target: any }) => {
@@ -81,22 +69,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
 
       if (event.data === 3) {
         // seek時の処理
-        ytState.seek(
-          event.target,
-          statusRef,
-          gameStateRef,
-          map!,
-          scene,
-          inputMode,
-          speedData,
-          playingCenterRef,
-          playingLineTimeRef,
-          lineProgressRef,
-          lineResults,
-          ytStateRef,
-          setRealTimeSpeed,
-          inputChangeMode,
-        );
+        ytState.seek(event.target, statusRef, gameStateRef, map!, scene, updateLine);
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など
         console.log("未スタート -1");
