@@ -2,7 +2,6 @@ import { SkipGuideRef } from "@/app/type/components/typing-area/scene/playing-ch
 import {
   InputModeType,
   LineResultData,
-  PlayingRef,
   SceneType,
   Speed,
   StatusRef,
@@ -18,6 +17,7 @@ import { PlayingComboRef } from "@/app/type/components/typing-area/scene/playing
 import { PlayingCenterRef } from "@/app/type/components/typing-area/scene/playing-child/PlayingCenter";
 import { PlayingLineTimeRef } from "@/app/type/components/typing-area/scene/playing-child/child/PlayingLineTime";
 import { CreateMap } from "../../ready/createTypingWord";
+import { UseDisclosureReturn } from "@chakra-ui/react";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -159,12 +159,23 @@ const keyWhiteList = ["F5"];
 export function shortcutKey(
   event: KeyboardEvent,
   skipGuideRef: React.RefObject<SkipGuideRef>,
-  playingRef: React.RefObject<PlayingRef>,
   statusRef: React.RefObject<StatusRef>,
   inputMode: InputModeType,
   lineTime: number,
   scene: SceneType,
   isOpen: boolean,
+  drawerClosure: UseDisclosureReturn,
+  retry: () => void,
+  pressSkip: (skipGuideRef: React.RefObject<SkipGuideRef>) => void,
+  realTimeSpeedChange: () => void,
+  gamePause: () => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
+  movePrevLine: (drawerClosure: UseDisclosureReturn) => void,
+  moveNextLine: (drawerClosure: UseDisclosureReturn) => void,
+  moveSetLine: () => void,
+  toggleLineListDrawer: (drawerClosure: UseDisclosureReturn) => void,
+  changePlayMode: (drawerClosure: UseDisclosureReturn) => void,
+  changePracticeSpeed: (changeType: "up" | "down") => void,
 ) {
   //間奏スキップ
   const skip = skipGuideRef.current?.getSkipGuide?.();
@@ -181,7 +192,7 @@ export function shortcutKey(
 
   switch (event.code) {
     case "Escape": //Escでポーズ
-      playingRef.current!.gamePause();
+      gamePause();
       event.preventDefault();
       break;
     case "ArrowUp":
@@ -192,43 +203,43 @@ export function shortcutKey(
       break;
     case "ArrowRight":
       if (scene === "replay" || scene === "practice") {
-        playingRef.current!.nextLine();
+        moveNextLine(drawerClosure);
       }
       event.preventDefault();
       break;
     case "ArrowLeft":
       if (scene === "replay" || scene === "practice") {
-        playingRef.current!.prevLine();
+        movePrevLine(drawerClosure);
       }
       event.preventDefault();
       break;
     case skip:
-      playingRef.current!.pressSkip();
+      pressSkip(skipGuideRef);
       event.preventDefault();
       break;
     case "F4":
-      playingRef.current!.retry();
+      retry();
       event.preventDefault();
       break;
     case "F7":
-      playingRef.current!.changePlayMode();
+      changePlayMode(drawerClosure);
       event.preventDefault();
       break;
     case "F9": //F9で低速(練習モード)
       if (scene === "practice") {
-        playingRef.current!.practiceSpeedDown();
+        changePracticeSpeed("down");
       }
       event.preventDefault();
       break;
     case "F10":
       if (scene === "playing") {
-        playingRef.current!.realtimeSpeedChange();
+        realTimeSpeedChange();
         statusRef.current!.lineStatus.typeResult.push({
           op: "speedChange",
           t: Math.round(lineTime * 1000) / 1000,
         });
       } else if (scene === "practice") {
-        playingRef.current!.practiceSpeedUp();
+        changePracticeSpeed("up");
       }
       event.preventDefault();
       break;
@@ -236,13 +247,13 @@ export function shortcutKey(
     case "Romaji":
       if (scene !== "replay") {
         if (inputMode === "roma") {
-          playingRef.current!.inputModeChange("kana");
+          inputModeChange("kana");
           statusRef.current!.lineStatus.typeResult.push({
             op: "kana",
             t: Math.round(lineTime * 1000) / 1000,
           });
         } else {
-          playingRef.current!.inputModeChange("roma");
+          inputModeChange("roma");
           statusRef.current!.lineStatus.typeResult.push({
             op: "roma",
             t: Math.round(lineTime * 1000) / 1000,
@@ -253,14 +264,14 @@ export function shortcutKey(
       break;
     case "Backspace":
       if (scene === "replay" || scene === "practice") {
-        playingRef.current!.practiceSetLine();
+        moveSetLine();
       }
       event.preventDefault();
       break;
 
     case "Tab":
       if (scene === "replay" || scene === "practice") {
-        playingRef.current!.openLineList();
+        toggleLineListDrawer(drawerClosure);
       }
       event.preventDefault();
       break;

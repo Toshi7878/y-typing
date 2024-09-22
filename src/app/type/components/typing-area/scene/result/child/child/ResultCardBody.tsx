@@ -1,7 +1,7 @@
 import { TypeResult } from "@/app/type/ts/type";
 import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
-import { Box, Text, CardBody, Tooltip, useTheme } from "@chakra-ui/react";
+import { Box, Text, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
 
 interface ResultCardBodyProps {

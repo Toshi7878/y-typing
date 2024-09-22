@@ -3,18 +3,14 @@ import React, { CSSProperties, useEffect } from "react";
 import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeContent";
 import { useParams } from "next/navigation";
 import TypeTabContent from "../components/type-tab-content/TypeTab";
-import { Box, Flex, useTheme } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
-import { useSetAtom } from "jotai";
 import {
-  useIsHoverDrawerLabelAtom,
   useIsLoadingOverlayAtom,
-  useSceneAtom,
   useSetInputModeAtom,
-  useSetIsHoverDrawerLabelAtom,
   useSetLineResultsAtom,
   useSetLineSelectIndexAtom,
   useSetMapAtom,
@@ -32,9 +28,6 @@ import { queryClient } from "./TypeProvider";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
-  const isHovering = useIsHoverDrawerLabelAtom();
-  const setIsHovering = useSetIsHoverDrawerLabelAtom();
-  const scene = useSceneAtom();
   const { videoId, title, creatorComment, tags } = mapInfo;
   const { id } = useParams();
   const setMap = useSetMapAtom();
@@ -46,7 +39,6 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetLineResultsAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
-  const theme = useTheme();
 
   const isLoadingOverlay = useIsLoadingOverlayAtom();
 
@@ -108,24 +100,6 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
         height={"100vh"}
         bg={"background"}
       >
-        {(scene === "practice" || scene === "replay") && (
-          <Box
-            position="fixed"
-            right={0}
-            top={0}
-            bottom={0}
-            width="50px"
-            borderLeft="2px solid"
-            borderColor={theme.colors.card.borderColor}
-            cursor="pointer"
-            zIndex="100"
-            onMouseEnter={() => {
-              if (!isHovering) {
-                setIsHovering(true);
-              }
-            }}
-          />
-        )}
         <Box style={style}>
           <Flex direction="column">
             <Flex gap="6">

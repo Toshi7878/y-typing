@@ -1,27 +1,37 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, UseDisclosureReturn } from "@chakra-ui/react";
 import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "../playing-child/child/PlayingSkipGuide";
 import PlayingTotalTime, { PlayingTotalTimeRef } from "../playing-child/child/PlayingTotalTime";
 import { useSceneAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useAtomValue } from "jotai";
 import PlayingBottomBadge from "../playing-child/child/PlayingBottomBadge";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import PlayingLineSeekBadge from "../playing-child/child/PlayingLineSeekBadge";
+import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
+import { useRealTimeSpeedChange } from "@/app/type/hooks/playing-hooks/useSpeedChange";
+import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
+import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
+import { useChangePracticeSpeed } from "@/app/type/hooks/playing-hooks/usePracticeSpeedChange";
 
 interface PlayingBottomRef {
+  drawerClosure: UseDisclosureReturn;
+
   skipGuideRef: React.RefObject<SkipGuideRef>;
   totalTimeProgressRef: React.RefObject<HTMLProgressElement>;
   playingTotalTimeRef: React.RefObject<PlayingTotalTimeRef>;
 }
 
 const PlayingBottom = function ({
+  drawerClosure,
   skipGuideRef,
   totalTimeProgressRef,
   playingTotalTimeRef,
 }: PlayingBottomRef) {
-  const { playingRef } = useRefs();
   const scene = useSceneAtom();
   const speedData = useTypePageSpeedAtom();
+  const retry = useRetry();
+  const realTimeSpeedChange = useRealTimeSpeedChange();
+  const toggleLineListDrawer = useToggleLineList();
+  const changePracticeSpeed = useChangePracticeSpeed();
+  const { movePrevLine, moveNextLine } = useMoveLine();
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
@@ -45,14 +55,14 @@ const PlayingBottom = function ({
             kbdTextPrev="F9-"
             kbdTextNext="+F10"
             onClick={() => {}}
-            onClickPrev={() => playingRef.current!.practiceSpeedDown()}
-            onClickNext={() => playingRef.current!.practiceSpeedUp()}
+            onClickPrev={() => changePracticeSpeed("down")}
+            onClickNext={() => changePracticeSpeed("up")}
           />
         ) : (
           <PlayingBottomBadge
             badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
             kbdText="F10"
-            onClick={() => playingRef.current?.realtimeSpeedChange()}
+            onClick={realTimeSpeedChange}
             isPauseDisabled={true}
             isKbdHidden={scene === "replay" ? true : false}
           />
@@ -64,13 +74,13 @@ const PlayingBottom = function ({
               kbdTextPrev="←"
               kbdTextNext="→"
               onClick={() => {}}
-              onClickPrev={() => playingRef.current!.prevLine()}
-              onClickNext={() => playingRef.current!.nextLine()}
+              onClickPrev={() => movePrevLine(drawerClosure)}
+              onClickNext={() => moveNextLine(drawerClosure)}
             />
             <PlayingBottomBadge
               badgeText="ライン一覧"
               kbdText="Tab"
-              onClick={() => playingRef.current?.openLineList()}
+              onClick={() => toggleLineListDrawer(drawerClosure)}
               isPauseDisabled={false}
               isKbdHidden={false}
             />
@@ -80,7 +90,7 @@ const PlayingBottom = function ({
         <PlayingBottomBadge
           badgeText="やり直し"
           kbdText="F4"
-          onClick={() => playingRef.current?.retry()}
+          onClick={retry}
           isPauseDisabled={true}
           isKbdHidden={false}
         />

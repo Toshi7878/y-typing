@@ -13,7 +13,6 @@ import {
   InputModeType,
   LineData,
   LineResultData,
-  PlayingRef,
   SceneType,
   Speed,
   StatusRef,
@@ -42,8 +41,10 @@ export const updateTimer = (
   rankingScores: number[],
   playingComboRef: React.RefObject<PlayingComboRef>,
   inputMode: string,
-  playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
+  realTimeSpeedChange: () => void,
+  setRealTimeSpeed: (speed: number) => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
 ) => {
   const ytCurrentTime = playerRef.current.getCurrentTime();
   ytStateRef.current!.currentTime = ytCurrentTime;
@@ -77,9 +78,7 @@ export const updateTimer = (
         count,
         lineResults,
         gameStateRef,
-        playingRef,
         map,
-        lineTime,
         playingCenterRef,
         ytStateRef,
         statusRef,
@@ -90,6 +89,8 @@ export const updateTimer = (
         lineConstantTime,
         rankingScores,
         scene,
+        realTimeSpeedChange,
+        inputModeChange,
       );
     }
   }
@@ -155,8 +156,9 @@ export const updateTimer = (
       count,
       nextLine,
       afterLine,
-      playingRef,
       scene,
+      setRealTimeSpeed,
+      inputModeChange,
     );
   }
 };
@@ -182,8 +184,9 @@ export const lineUpdate = (
   count: number,
   currentLine: LineData,
   nextLine: LineData,
-  playingRef: React.RefObject<PlayingRef>,
   scene: SceneType,
+  setRealTimeSpeed: (speed: number) => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
 ) => {
   const currentPlayingCenterRef = playingCenterRef.current;
   const status = tabStatusRef.current!.getStatus();
@@ -311,8 +314,9 @@ export const lineUpdate = (
       lineProgressRef,
       lineResults,
       gameStateRef,
-      playingRef,
       ytStateRef,
+      setRealTimeSpeed,
+      inputModeChange,
     );
   }
 };
@@ -329,8 +333,9 @@ export function setNewLine(
   lineProgressRef: React.RefObject<HTMLProgressElement>,
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
-  playingRef: React.RefObject<PlayingRef>,
   ytStateRef: React.RefObject<YTStateRef>,
+  setRealTimeSpeed: (speed: number) => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
 ) {
   const currentCount = newCount ? newCount - 1 : 0;
   statusRef.current!.lineStatus = structuredClone({
@@ -375,6 +380,6 @@ export function setNewLine(
   }
 
   if (scene === "replay") {
-    lineReplayUpdate(lineResults, gameStateRef, playingRef, currentCount);
+    lineReplayUpdate(lineResults, gameStateRef, currentCount, setRealTimeSpeed, inputModeChange);
   }
 }

@@ -6,7 +6,6 @@ import {
   useMapIdAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useAtomValue } from "jotai";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 

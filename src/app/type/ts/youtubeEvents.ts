@@ -3,7 +3,6 @@ import {
   InputModeType,
   LineData,
   LineResultData,
-  PlayingRef,
   SceneType,
   Speed,
   StatusRef,
@@ -100,12 +99,13 @@ class YTState {
     scene: SceneType,
     inputMode: InputModeType,
     speedData: Speed,
-    playingRef: React.RefObject<PlayingRef>,
     playingCenterRef: React.RefObject<PlayingCenterRef>,
     playingLineTimeRef: React.RefObject<PlayingLineTimeRef>,
     lineProgressRef: React.RefObject<HTMLProgressElement>, // 修正箇所
     lineResults: LineResultData[],
     ytStateRef: React.RefObject<YTStateRef>,
+    setRealTimeSpeed: (speed: number) => void,
+    inputModeChange: (newInputMode: InputModeType) => void,
   ) {
     const time = target.getCurrentTime();
 
@@ -129,8 +129,9 @@ class YTState {
           lineProgressRef,
           lineResults,
           gameStateRef,
-          playingRef,
           ytStateRef,
+          setRealTimeSpeed,
+          inputModeChange,
         );
         if (typeTicker.started) {
           typeTicker.stop();

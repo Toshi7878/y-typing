@@ -1,13 +1,13 @@
-import { defaultStatusRef } from "../ts/const/typeDefaultValue";
-import { StatusRef } from "../ts/type";
-import { typeTicker } from "../ts/youtubeEvents";
+import { defaultStatusRef } from "../../ts/const/typeDefaultValue";
+import { StatusRef } from "../../ts/type";
+import { typeTicker } from "../../ts/youtubeEvents";
 import {
   useMapAtom,
   useSceneAtom,
   useSetLineResultsAtom,
   useSetPlayingNotifyAtom,
-} from "../type-atoms/gameRenderAtoms";
-import { useRefs } from "../type-contexts/refsProvider";
+} from "../../type-atoms/gameRenderAtoms";
+import { useRefs } from "../../type-contexts/refsProvider";
 
 export const useRetry = () => {
   const { playingCenterRef, tabStatusRef, playingComboRef, statusRef, gameStateRef, playerRef } =

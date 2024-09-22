@@ -9,7 +9,6 @@ import {
   GameStateRef,
   InputModeType,
   LineResultData,
-  PlayingRef,
   SceneType,
   Status,
   StatusRef,
@@ -56,9 +55,7 @@ export const replay = (
   count: number,
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
-  playingRef: React.RefObject<PlayingRef>,
   map: CreateMap,
-  lineTime: number,
   playingCenterRef: React.RefObject<PlayingCenterRef>,
   ytStateRef: React.RefObject<YTStateRef>,
   statusRef: React.RefObject<StatusRef>,
@@ -69,6 +66,8 @@ export const replay = (
   lineConstantTime: number,
   rankingScores: number[],
   scene: SceneType,
+  realTimeSpeedChange: () => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
 ) => {
   const lineResult: LineResultData = lineResults[count - 1];
   const typeResults = lineResult.typeResult;
@@ -149,13 +148,13 @@ export const replay = (
 
       switch (option) {
         case "roma":
-          playingRef.current?.inputModeChange("roma");
+          inputModeChange("roma");
           break;
         case "kana":
-          playingRef.current?.inputModeChange("kana");
+          inputModeChange("kana");
           break;
         case "speedChange":
-          playingRef.current!.realtimeSpeedChange();
+          realTimeSpeedChange();
           break;
       }
     }
@@ -167,15 +166,16 @@ export const replay = (
 export const lineReplayUpdate = (
   lineResults: LineResultData[],
   gameStateRef: React.RefObject<GameStateRef>,
-  playingRef: React.RefObject<PlayingRef>,
   newCount: number,
+  setRealTimeSpeed: (speed: number) => void,
+  inputModeChange: (newInputMode: InputModeType) => void,
 ) => {
   const lineResult = lineResults[newCount];
   const lineInputMode = lineResult.status!.mode;
   const speed = lineResult.status!.sp;
 
-  playingRef.current?.inputModeChange(lineInputMode);
-  playingRef.current?.setRealTimeSpeed(speed);
+  inputModeChange(lineInputMode);
+  setRealTimeSpeed(speed);
 
   gameStateRef.current!.replay.replayKeyCount = 0;
 };

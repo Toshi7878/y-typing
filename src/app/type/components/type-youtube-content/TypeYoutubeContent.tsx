@@ -4,7 +4,6 @@ import React, { useCallback, useMemo } from "react";
 import YouTube from "react-youtube";
 import { ytState } from "../../ts/youtubeEvents";
 import { useRefs } from "../../type-contexts/refsProvider"; // 変更
-import { useAtomValue } from "jotai";
 import {
   useInputModeAtom,
   useLineResultsAtom,
@@ -15,6 +14,8 @@ import {
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import NProgress from "nprogress";
+import { useSetRealTimeSpeed } from "../../hooks/playing-hooks/useSpeedChange";
+import { useInputModeChange } from "../../hooks/playing-hooks/useInputModeChange";
 
 interface TypeYouTubeProps {
   className: string;
@@ -31,7 +32,6 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
     playerRef,
     statusRef,
     gameStateRef,
-    playingRef,
     lineProgressRef,
     playingCenterRef,
     playingLineTimeRef,
@@ -41,6 +41,8 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
   const inputMode = useInputModeAtom();
   const speedData = useTypePageSpeedAtom();
   const lineResults = useLineResultsAtom();
+  const setRealTimeSpeed = useSetRealTimeSpeed();
+  const inputChangeMode = useInputModeChange();
 
   const handleReady = useCallback(
     (event: { target: any }) => {
@@ -87,12 +89,13 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
           scene,
           inputMode,
           speedData,
-          playingRef,
           playingCenterRef,
           playingLineTimeRef,
           lineProgressRef,
           lineResults,
           ytStateRef,
+          setRealTimeSpeed,
+          inputChangeMode,
         );
       } else if (event.data === 1) {
         //	未スタート、他の動画に切り替えた時など

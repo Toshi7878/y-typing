@@ -7,16 +7,17 @@ import {
   DrawerBody,
   DrawerCloseButton,
   useTheme,
+  UseDisclosureReturn,
 } from "@chakra-ui/react";
 import { memo, useEffect, useRef, useState } from "react";
 import ResultLineList from "./child/ResultLineList";
 
 interface ResultDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+  drawerClosure: UseDisclosureReturn;
 }
 
-function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
+function ResultDrawer({ drawerClosure }: ResultDrawerProps) {
+  const { isOpen, onClose } = drawerClosure;
   const [drawerHeight, setDrawerHeight] = useState("100vh");
   const modalContentRef = useRef(null);
   const theme = useTheme();

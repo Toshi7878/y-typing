@@ -12,14 +12,12 @@ import {
 import ResultCardFooter from "../result/child/child/ResultCardFooter";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import ResultCardHeader from "../result/child/child/ResultCardHeader";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useState } from "react";
+import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 
 const PracticeLineCard = () => {
   const interact = useInteractJS();
   const map = useMapAtom();
-  const { playingRef } = useRefs();
-
   const lineResults = useLineResultsAtom();
   const speedData = useTypePageSpeedAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
@@ -30,6 +28,7 @@ const PracticeLineCard = () => {
   const lineData = map!.mapData[index];
   const theme: ThemeColors = useTheme();
   const [isDragging, setIsDragging] = useState(false);
+  const { moveSetLine } = useMoveLine();
 
   // mapのLineデータ
   const maxLinePoint = lineData.notes.r * CHAR_POINT;
@@ -75,7 +74,7 @@ const PracticeLineCard = () => {
       onMouseMove={() => setIsDragging(true)}
       onClick={() => {
         if (!isDragging) {
-          playingRef.current?.practiceSetLine();
+          moveSetLine();
         }
       }}
     >

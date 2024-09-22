@@ -45,7 +45,6 @@ export interface RankingListType {
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
-  playingRef: React.RefObject<PlayingRef>;
   playingComboRef: React.RefObject<PlayingComboRef>;
   lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
@@ -56,21 +55,6 @@ export interface RefsContextType {
   playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
   playingCenterRef: React.RefObject<PlayingCenterRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
-}
-export interface PlayingRef {
-  retry: () => void;
-  pressSkip: () => void;
-  realtimeSpeedChange: () => void;
-  gamePause: () => void;
-  setRealTimeSpeed: (speed: number) => void;
-  inputModeChange: (inputMode: InputModeType) => void;
-  openLineList: () => void;
-  prevLine: () => void;
-  nextLine: () => void;
-  practiceSetLine: () => void;
-  practiceSpeedUp: () => void;
-  practiceSpeedDown: () => void;
-  changePlayMode: () => void;
 }
 
 export interface WordType {

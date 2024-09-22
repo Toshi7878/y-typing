@@ -94,16 +94,6 @@ export const useSetLineResultsAtom = () => {
   return useSetAtom(lineResultsAtom);
 };
 
-const isHoverDrawerLabelAtom = atom<boolean>(false);
-
-export const useIsHoverDrawerLabelAtom = () => {
-  return useAtomValue(isHoverDrawerLabelAtom);
-};
-
-export const useSetIsHoverDrawerLabelAtom = () => {
-  return useSetAtom(isHoverDrawerLabelAtom);
-};
-
 const lineSelectIndexAtom = atom<number | null>(null);
 
 export const useLineSelectIndexAtom = () => {

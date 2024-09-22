@@ -12,7 +12,6 @@ export const RefsContext = createContext<RefsContextType>({
   playerRef: null,
   tabStatusRef: { current: null },
   playingComboRef: { current: null },
-  playingRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
   statusRef: { current: structuredClone(defaultStatusRef) },
@@ -28,7 +27,6 @@ export const RefsContext = createContext<RefsContextType>({
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
   const tabStatusRef = useRef(null);
-  const playingRef = useRef(null);
   const playingComboRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
@@ -46,9 +44,6 @@ export const RefsProvider = ({ children }) => {
         break;
       case "tabStatusRef":
         tabStatusRef.current = ref;
-        break;
-      case "playingRef":
-        playingRef.current = ref;
         break;
       case "playingComboRef":
         playingComboRef.current = ref;
@@ -71,7 +66,6 @@ export const RefsProvider = ({ children }) => {
         ytStateRef,
         gameStateRef,
         statusRef,
-        playingRef,
         playingComboRef,
         lineProgressRef,
         playingCenterRef,
@@ -99,7 +93,6 @@ export const useRefs = () => {
     lineProgressRef: context.lineProgressRef,
     playingLineTimeRef: context.playingLineTimeRef,
     playingCenterRef: context.playingCenterRef,
-    playingRef: context.playingRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,
     gameStateRef: context.gameStateRef,
