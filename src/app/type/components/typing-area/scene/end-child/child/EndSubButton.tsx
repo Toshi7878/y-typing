@@ -13,14 +13,9 @@ import {
 
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useRef } from "react";
-import {
-  useMapAtom,
-  useSetLineResultsAtom,
-  useSetSceneAtom,
-} from "@/app/type/type-atoms/gameRenderAtoms";
-import { proceedRetry } from "@/app/type/ts/retry";
 import { PlayMode } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
+import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 
 interface EndSubButtonProps {
   retryMode: PlayMode;
@@ -30,28 +25,16 @@ interface EndSubButtonProps {
 const EndSubButton = ({ isRetryAlert, retryMode }: EndSubButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
-  const setLineResults = useSetLineResultsAtom();
   const theme: ThemeColors = useTheme();
 
-  const { statusRef, tabStatusRef, playerRef, gameStateRef, playingComboRef } = useRefs();
-  const setScene = useSetSceneAtom();
-  const map = useMapAtom();
+  const { gameStateRef } = useRefs();
+  const proceedRetry = useProceedRetry();
 
   const retry = (playMode: PlayMode) => {
     if (isRetryAlert) {
       onOpen();
     } else {
-      proceedRetry(
-        playMode,
-        setLineResults,
-        map!,
-        statusRef,
-        setScene,
-        tabStatusRef,
-        playingComboRef,
-        gameStateRef,
-        playerRef,
-      );
+      proceedRetry(playMode);
     }
   };
 
@@ -89,17 +72,7 @@ const EndSubButton = ({ isRetryAlert, retryMode }: EndSubButtonProps) => {
                 colorScheme="red"
                 onClick={() => {
                   onClose();
-                  proceedRetry(
-                    retryMode,
-                    setLineResults,
-                    map!,
-                    statusRef,
-                    setScene,
-                    tabStatusRef,
-                    playingComboRef,
-                    gameStateRef,
-                    playerRef,
-                  );
+                  proceedRetry(retryMode);
                 }}
                 ml={3}
               >

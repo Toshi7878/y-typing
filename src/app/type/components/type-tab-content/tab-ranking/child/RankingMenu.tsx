@@ -1,9 +1,7 @@
 import {
-  useMapAtom,
   useSceneAtom,
   useSetIsLoadingOverlayAtom,
   useSetLineResultsAtom,
-  useSetSceneAtom,
   useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { LineResultData, SendResultData } from "@/app/type/ts/type";
@@ -14,7 +12,7 @@ import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
-import { proceedRetry } from "@/app/type/ts/retry";
+import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 
 const RankingMenu = ({
   userId,
@@ -27,16 +25,15 @@ const RankingMenu = ({
   setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
   setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
-  const { gameStateRef, playerRef, statusRef, tabStatusRef, playingComboRef } = useRefs();
+  const { gameStateRef, playerRef } = useRefs();
   const theme = useTheme();
 
   const scene = useSceneAtom();
-  const setScene = useSetSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
   const setLineResults = useSetLineResultsAtom();
+  const proceedRetry = useProceedRetry();
 
-  const map = useMapAtom();
   const params = useParams();
   const mapId = params.id as string;
 
@@ -64,17 +61,7 @@ const RankingMenu = ({
       setIsLoadingOverlay(false);
       if (result.data) {
         if (scene === "end") {
-          proceedRetry(
-            "replay",
-            setLineResults,
-            map!,
-            statusRef,
-            setScene,
-            tabStatusRef,
-            playingComboRef,
-            gameStateRef,
-            playerRef,
-          );
+          proceedRetry("replay");
         }
         setShowMenu(null);
         setHoveredIndex(null);

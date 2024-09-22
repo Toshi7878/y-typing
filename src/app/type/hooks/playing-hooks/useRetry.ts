@@ -6,8 +6,10 @@ import {
   useSceneAtom,
   useSetLineResultsAtom,
   useSetPlayingNotifyAtom,
+  useSetSceneAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
+import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
 
 export const useRetry = () => {
   const { playingCenterRef, tabStatusRef, playingComboRef, statusRef, gameStateRef, playerRef } =
@@ -21,23 +23,22 @@ export const useRetry = () => {
     const currentPlayingCenterRef = playingCenterRef.current; // 追加
     currentPlayingCenterRef!.resetWordLyrics();
 
-    if (scene !== "practice") {
-      tabStatusRef.current!.resetStatus();
-      playingComboRef.current?.setCombo(0);
-      (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+    tabStatusRef.current!.resetStatus();
+    playingComboRef.current?.setCombo(0);
+    (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
 
-      if (scene !== "replay") {
-        setLineResults(structuredClone(map!.defaultLineResultData));
-      }
-
-      if (scene === "playing") {
-        const status = tabStatusRef.current?.getStatus();
-        if (status?.type) {
-          gameStateRef.current!.retryCount++;
-        }
-        setNotify(Symbol(`Retry(${gameStateRef.current!.retryCount})`));
-      }
+    if (scene !== "replay") {
+      setLineResults(structuredClone(map!.defaultLineResultData));
     }
+
+    if (scene === "playing") {
+      const status = tabStatusRef.current?.getStatus();
+      if (status?.type) {
+        gameStateRef.current!.retryCount++;
+      }
+      setNotify(Symbol(`Retry(${gameStateRef.current!.retryCount})`));
+    }
+
     gameStateRef.current!.replay.replayKeyCount = 0;
 
     gameStateRef.current!.isRetrySkip = true;
@@ -45,5 +46,30 @@ export const useRetry = () => {
     if (typeTicker.started) {
       typeTicker.stop();
     }
+  };
+};
+
+export const useProceedRetry = () => {
+  const { statusRef, tabStatusRef, gameStateRef, playerRef, playingComboRef } = useRefs();
+
+  const map = useMapAtom() as CreateMap;
+  const setLineResults = useSetLineResultsAtom();
+  const setScene = useSetSceneAtom();
+
+  return (playMode: "playing" | "replay" | "practice") => {
+    setScene(playMode);
+
+    if (playMode === "playing") {
+      setLineResults(structuredClone(map.defaultLineResultData));
+    }
+
+    tabStatusRef.current.resetStatus();
+    playingComboRef.current.setCombo(0);
+    gameStateRef.current!.replay.replayKeyCount = 0;
+    (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+    gameStateRef.current!.isRetrySkip = true;
+
+    playerRef.current.seekTo(0);
+    playerRef.current.playVideo();
   };
 };

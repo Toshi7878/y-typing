@@ -102,14 +102,14 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       bottom: 0;
       left: 0;
       height: 2px;
-      width: ${({ label }) => (label === "score" || label === "point" ? "140px" : "80px")};
+      width: ${({ label }) => (label === "score" || label === "point" ? "159px" : "80px")};
       background-color: ${theme.colors.card.color};
     }
   `;
 
   const TrStyled = styled(Tr)``;
   const TdStyled = styled(Td)<{ id: string }>`
-    width: ${({ id }) => (id === "score" || id === "point" ? "20%" : "15%")};
+    width: ${({ id }) => (id === "score" || id === "point" ? "20%" : "14%")};
   `;
 
   return (
