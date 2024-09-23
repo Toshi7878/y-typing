@@ -5,6 +5,7 @@ import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import { previewTimeAtom, videoIdAtom } from "../../atoms/atoms";
 import { useAtom, useSetAtom } from "jotai";
+import { THUBNAIL_HEIGHT, THUBNAIL_WIDTH } from "../../ts/const/consts";
 
 interface MapLeftThumbnailProps {
   src: string;
@@ -68,15 +69,9 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     handleImageLoad(src);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
-  const thubnailWidth = { base: 120, sm: 170, xl: 220 };
-  const thubnailHeight = {
-    base: (thubnailWidth.base * 9) / 16,
-    sm: (thubnailWidth.sm * 9) / 16,
-    xl: (thubnailWidth.xl * 9) / 16,
-  };
 
-  const width = useBreakpointValue(thubnailWidth);
-  const height = useBreakpointValue(thubnailHeight);
+  const width = useBreakpointValue(THUBNAIL_WIDTH);
+  const height = useBreakpointValue(THUBNAIL_HEIGHT);
   return (
     <Box className="relative group" width={width} style={{ userSelect: "none" }}>
       <Image
