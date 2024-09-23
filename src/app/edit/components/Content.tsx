@@ -15,7 +15,9 @@ import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
+  useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
+  useSetEditLineWordAtom,
   useSetEditMusicSouceAtom,
   useSetEditPreviewTimeInputAtom,
   useSetEditTimeCountAtom,
@@ -51,6 +53,8 @@ function Content() {
   const setGeminiTags = useSetGeminiTagsAtom();
   const setArtistName = useSetMapArtistNameAtom();
   const setMusicSouce = useSetEditMusicSouceAtom();
+  const setLyrics = useSetEditLineLyricsAtom();
+  const setWord = useSetEditLineWordAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -90,6 +94,10 @@ function Content() {
     setTimeCount(0);
     setGeminiTags([]);
 
+    return () => {
+      setLyrics("");
+      setWord("");
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, newVideoId]);
 

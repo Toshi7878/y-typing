@@ -110,7 +110,6 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
           size="sm"
           width="90px"
           type="number"
-          step="0.1"
           bg={theme.colors.background}
           borderColor={`${theme.colors.card.borderColor}60`}
           {...register("time")}
@@ -119,6 +118,16 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
               e.target.value = (Number(maxTime) - 0.001).toFixed(3);
             }
             trigger("time");
+          }}
+          onKeyDown={(e) => {
+            const value = e.currentTarget.value;
+
+            e.preventDefault();
+            if (e.code === "ArrowDown") {
+              e.currentTarget.value = (Number(value) - 0.1).toFixed(3);
+            } else if (e.code === "ArrowUp") {
+              e.currentTarget.value = (Number(value) + 0.1).toFixed(3);
+            }
           }}
         />
       </FormProvider>
