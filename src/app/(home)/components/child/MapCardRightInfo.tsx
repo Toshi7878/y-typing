@@ -47,11 +47,21 @@ function MapCardRightInfo({ map }: MapCardProps) {
         textOverflow="ellipsis"
         whiteSpace="nowrap"
         fontSize="sm"
-        mb={6}
       >
-        {map.artistName}
+        {map.artistName || "\u00A0"}
       </Box>
-      <Text as="small">
+      <Box
+        color={"home.card.link"}
+        fontWeight="bold"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        whiteSpace="nowrap"
+        fontSize="xs"
+        mt={1}
+      >
+        {map.musicSouce || "\u00A0"}
+      </Box>
+      <Text as="small" mt={2}>
         <Link href={`/user/${map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
           {map.user.name}
         </Link>

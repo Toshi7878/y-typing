@@ -110,6 +110,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
           size="sm"
           width="90px"
           type="number"
+          step="0.1"
           bg={theme.colors.background}
           borderColor={`${theme.colors.card.borderColor}60`}
           {...register("time")}

@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
         id: true,
         title: true,
         artistName: true,
+        musicSouce: true,
         creatorComment: false,
         tags: false,
         mapData: false,
