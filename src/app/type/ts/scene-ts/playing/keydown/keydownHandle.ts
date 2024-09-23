@@ -146,7 +146,17 @@ export const useHandleTyping = () => {
   };
 };
 
-const disableKeys = ["Home", "End", "PageUp", "PageDown", "CapsLock", "Backquote", "F3", "Space"];
+const disableKeys = [
+  "Home",
+  "End",
+  "PageUp",
+  "PageDown",
+  "CapsLock",
+  "Backquote",
+  "F3",
+  "F6",
+  "Space",
+];
 
 const keyWhiteList = ["F5"];
 
