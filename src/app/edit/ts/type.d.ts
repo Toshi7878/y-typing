@@ -28,7 +28,7 @@ export interface EditorTimeInputRef {
   clearTime: () => void;
   getTime: () => number;
   setSelectedTime: (count: number | null) => void;
-  setTime: (time: Line["time"]) => void;
+  setTime: (time: string) => void;
 }
 
 export interface EditStatusRef {

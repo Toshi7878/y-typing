@@ -17,6 +17,7 @@ const shortCutList = [
   { keys: ["Ctrl+Z"], description: "元に戻す" },
   { keys: ["Ctrl+Y"], description: "繰り返し" },
   { keys: ["Enter"], description: "歌詞テキストボックスの選択した文字にRubyタグを挿入" },
+  { keys: ["Ctrl+登録済みラインクリック"], description: "ライン直接編集モード" },
 ];
 
 const ShortCutKeyList = () => {

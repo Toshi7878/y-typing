@@ -144,7 +144,6 @@ export const useLineUpdateButtonEvent = () => {
 
 export const useIsConvertButtonDisabled = () => {
   const isLineLastSelect = useIsLineLastSelect();
-
   return isLineLastSelect;
 };
 export const useWordConvertButtonEvent = () => {

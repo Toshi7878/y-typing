@@ -1,6 +1,6 @@
 "use client";
 import { Tr, Td, Button, useTheme, Input, Box, UseDisclosureReturn } from "@chakra-ui/react";
-import { Dispatch, useCallback, useState } from "react";
+import { Dispatch, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { LineEdit, ThemeColors } from "@/types";
@@ -22,6 +22,7 @@ import {
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 import parse from "html-react-parser";
 import CustomToolTip from "@/components/CustomToolTip";
+import { useLineUpdateButtonEvent } from "@/app/edit/hooks/useEditorButtonEvents";
 
 interface LineRowProps {
   index: number;
@@ -29,14 +30,19 @@ interface LineRowProps {
   optionClosure: UseDisclosureReturn;
   setOptionModalIndex: Dispatch<number>;
   setLineOptions: Dispatch<LineEdit["options"]>;
+  endAfterLineIndex: number;
 }
+
 function LineRow({
   line,
   index,
   optionClosure,
   setOptionModalIndex,
   setLineOptions,
+  endAfterLineIndex,
 }: LineRowProps) {
+  const [editTime, setEditTime] = useState(line.time);
+
   const setTabIndex = useSetTabIndexAtom();
   const [isLineLyricsSelected, setIsLineLyricsSelected] = useState(false);
   const lineSelectedCount = useEditLineSelectedCountAtom();
@@ -56,6 +62,7 @@ function LineRow({
   const selectWord = useEditLineWordAtom();
 
   const handleEnterAddRuby = useAddRubyTagEvent();
+  const lineUpdateButtonEvent = useLineUpdateButtonEvent();
 
   const selectLine = useCallback(
     (isCtrlKey: boolean, selectCount: number) => {
@@ -63,7 +70,13 @@ function LineRow({
       const lyrics = mapData[selectCount].lyrics;
       const word = mapData[selectCount].word;
 
-      if (isCtrlKey) {
+      if (directEdit === selectCount) {
+        return null;
+      } else if (directEdit) {
+        lineUpdateButtonEvent();
+      }
+
+      if (isCtrlKey && selectCount !== 0 && selectCount !== endAfterLineIndex) {
         setDirectEdit(selectCount);
       } else if (directEdit !== selectCount) {
         setDirectEdit(null);
@@ -74,14 +87,25 @@ function LineRow({
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData, directEdit],
+    [mapData, directEdit, editTime, selectLyrics, selectWord, endAfterLineIndex],
   );
 
-  const clickTimeCell = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-    const time = Number(event.currentTarget.textContent);
-    refs.playerRef.current.seekTo(time);
+  const clickTimeCell = (
+    event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
+    index: number,
+  ) => {
+    if (directEdit !== index) {
+      const time = Number(event.currentTarget.textContent);
+      refs.playerRef.current.seekTo(time);
+    }
   };
-  const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
+
+  useEffect(() => {
+    if (directEdit === index) {
+      setEditTime(line.time);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [directEdit]);
 
   return (
     <Tr
@@ -117,23 +141,34 @@ function LineRow({
       <Td
         borderRight="1px solid black"
         className="time-cell hover:bg-cyan-700/35"
-        onClick={clickTimeCell}
+        onClick={(event) => clickTimeCell(event, index)}
         px={directEdit === index ? 2 : 4}
       >
         {directEdit === index ? (
           <Input
             size="xs"
             type="number"
-            value={editorTimeInputRef.current!.getTime()}
-            onChange={(e) => editorTimeInputRef.current!.setTime(e.target.value)}
+            value={editTime}
+            bg={theme.colors.background}
+            borderColor={`${theme.colors.card.borderColor}60`}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setEditTime(newValue);
+              editorTimeInputRef.current!.setTime(newValue);
+            }}
             onKeyDown={(e) => {
               const value = e.currentTarget.value;
 
-              e.preventDefault();
               if (e.code === "ArrowDown") {
-                e.currentTarget.value = (Number(value) - 0.1).toFixed(3);
+                const newValue = (Number(value) - 0.1).toFixed(3);
+                setEditTime(newValue);
+                editorTimeInputRef.current!.setTime(newValue);
+                e.preventDefault();
               } else if (e.code === "ArrowUp") {
-                e.currentTarget.value = (Number(value) + 0.1).toFixed(3);
+                const newValue = (Number(value) + 0.1).toFixed(3);
+                setEditTime(newValue);
+                editorTimeInputRef.current!.setTime(newValue);
+                e.preventDefault();
               }
             }}
           />
@@ -181,7 +216,7 @@ function LineRow({
             onChange={(e) => setWord(e.target.value)}
           />
         ) : (
-          parse(line.word)
+          line.word
         )}
       </Td>
       <Td>

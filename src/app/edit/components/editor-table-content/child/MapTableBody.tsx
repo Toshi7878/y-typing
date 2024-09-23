@@ -13,6 +13,7 @@ import {
   useEditDirectEditCountAtom,
   useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
+  useEditLineWordAtom,
   useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
@@ -50,6 +51,7 @@ function MapTableBody() {
   const speed = useSpeedAtom();
   const isYTPlaying = useIsEditYTPlayingAtom();
   const selectLyrics = useEditLineLyricsAtom();
+  const selectWord = useEditLineWordAtom();
 
   const addLyricsText = useEditAddLyricsTextAtom();
   const isAddButtonDisabled = useIsAddButtonDisabled();
@@ -73,6 +75,7 @@ function MapTableBody() {
     isAddButtonDisabled,
     isUpdateButtonDisabled,
     isDeleteButtonDisabled,
+    directEdit,
   ]);
 
   useEffect(() => {
@@ -140,11 +143,11 @@ function MapTableBody() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeCount, mapData]);
 
-  const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
-
   const renderedRows = useMemo(
     () => {
       let customStyleLength = 0;
+      const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
+
       const rows = mapData.map((line, index) => {
         const eternalCSS = line.options?.eternalCSS;
         const changeCSS = line.options?.changeCSS;
@@ -164,6 +167,7 @@ function MapTableBody() {
             optionClosure={optionClosure}
             setLineOptions={setLineOptions}
             setOptionModalIndex={setOptionModalIndex}
+            endAfterLineIndex={endAfterLineIndex}
           />
         );
       });
@@ -173,7 +177,7 @@ function MapTableBody() {
       return rows;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex, directEdit],
+    [mapData, lineSelectedCount, timeCount, theme, directEdit, selectLyrics, selectWord],
   );
 
   return (

@@ -126,11 +126,14 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
           onKeyDown={(e) => {
             const value = e.currentTarget.value;
 
-            e.preventDefault();
             if (e.code === "ArrowDown") {
-              e.currentTarget.value = (Number(value) - 0.1).toFixed(3);
+              const newValue = (Number(value) - 0.1).toFixed(3);
+              setValue("time", newValue, { shouldValidate: true });
+              e.preventDefault();
             } else if (e.code === "ArrowUp") {
-              e.currentTarget.value = (Number(value) + 0.1).toFixed(3);
+              const newValue = (Number(value) + 0.1).toFixed(3);
+              setValue("time", newValue, { shouldValidate: true });
+              e.preventDefault();
             }
           }}
         />

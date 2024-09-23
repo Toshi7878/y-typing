@@ -3,8 +3,10 @@ import { useRefs } from "../edit-contexts/refsProvider";
 import { RootState } from "../redux/store";
 import {
   useEditAddLyricsTextAtom as useEditAddLyricsTextAtom,
+  useEditDirectEditCountAtom,
   useIsEditYTPlayingAtom,
   useLineInputReducer,
+  useSetEditDirectEditCountAtom,
   useSetEditLineLyricsAtom,
   useSpeedAtom,
   useSpeedReducer,
@@ -35,10 +37,13 @@ export const useWindowKeydownEvent = () => {
   const isAddButtonDisabled = useIsAddButtonDisabled();
   const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
   const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
+  const directEdit = useEditDirectEditCountAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const speedReducer = useSpeedReducer();
   const setTopLyricsText = useSetTopLyricsText();
+  const setDirectEdit = useSetEditDirectEditCountAtom();
+
   const undoLine = useUndoLine();
   const wordFindReplace = useWordFindReplace();
   const deleteTopLyricsText = useDeleteTopLyricsText();
@@ -60,7 +65,7 @@ export const useWindowKeydownEvent = () => {
           {
             const selectedLine = tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
-            if (selectedLine) {
+            if (selectedLine && !directEdit) {
               const prevCount = Number((selectedLine as HTMLElement).dataset.lineIndex) - 1;
               const prevLine = mapData[prevCount];
               if (prevLine) {
@@ -80,10 +85,9 @@ export const useWindowKeydownEvent = () => {
           {
             const selectedLine = tbodyRef.current!.getElementsByClassName("selected-line")[0];
 
-            if (selectedLine) {
+            if (selectedLine && !directEdit) {
               const nextCount = Number((selectedLine as HTMLElement).dataset.lineIndex) + 1;
               const nextLine = mapData[nextCount];
-
               if (nextLine) {
                 player.seekTo(Number(nextLine.time));
                 lineInputReducer({
@@ -172,6 +176,7 @@ export const useWindowKeydownEvent = () => {
 
         case "KeyD":
           lineInputReducer({ type: "reset" });
+          setDirectEdit(null);
           event.preventDefault();
 
           break;
