@@ -22,9 +22,10 @@ const PracticeLineCard = () => {
   const speedData = useTypePageSpeedAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
   const inputMode = useInputModeAtom();
-  const lineResult = lineResults[lineSelectIndex as number];
-  const lineInputMode = lineResult.status?.mode ?? inputMode;
   const index = map!.typingLineNumbers[(lineSelectIndex! - 1) as number];
+  const lineResult = lineResults[index as number];
+  const lineInputMode = lineResult.status?.mode ?? inputMode;
+
   const lineData = map!.mapData[index];
   const theme: ThemeColors = useTheme();
   const [isDragging, setIsDragging] = useState(false);

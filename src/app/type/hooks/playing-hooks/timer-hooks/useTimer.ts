@@ -145,7 +145,7 @@ export const usePlayTimer = () => {
 };
 
 export const useCalcLineResult = () => {
-  const { statusRef, playingCenterRef, tabStatusRef, playingComboRef } = useRefs();
+  const { statusRef, playingCenterRef, tabStatusRef, playingComboRef, gameStateRef } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom() as CreateMap;
   const lineResults = useLineResultsAtom();
