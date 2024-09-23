@@ -28,7 +28,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       _hover={{ textDecoration: "none" }}
     >
       <MapInfo map={map} />
-      <Text as="small" mt={2}>
+      <Text as="small" mt={4}>
         <Link href={`/user/${map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
           {map.user.name}
         </Link>
