@@ -24,7 +24,6 @@ function MapCard({ map }: MapCardProps) {
       _hover={{
         boxShadow: theme.colors.home.card.hover,
       }}
-      size="lg"
     >
       <CardBody
         color={"color"}

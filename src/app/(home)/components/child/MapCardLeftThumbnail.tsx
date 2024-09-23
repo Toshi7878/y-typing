@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, Spinner, useBreakpointValue } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
@@ -17,7 +17,6 @@ interface MapLeftThumbnailProps {
 
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime } = props;
-  const [loading, setLoading] = useState(true); // ローディング状態を追加
   const [imgSrc, setImgSrc] = useState(src);
   const [videoId, setVideoId] = useAtom(videoIdAtom);
   const setPreviewTime = useSetAtom(previewTimeAtom);
@@ -61,28 +60,25 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
       if (img.width === 120) {
         setImgSrc(fallbackSrc);
       }
-      setLoading(false); // 画像がロードされたらローディングを終了
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    setLoading(true); // 新しい画像をロードする前にローディングを開始
     handleImageLoad(src);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
-  const thubnailWidth = { base: 120, sm: 170, xl: 200 };
-  const thubnailHeight = { base: (120 * 9) / 16, sm: (170 * 9) / 16, xl: (200 * 9) / 16 };
+  const thubnailWidth = { base: 120, sm: 170, xl: 220 };
+  const thubnailHeight = {
+    base: (thubnailWidth.base * 9) / 16,
+    sm: (thubnailWidth.sm * 9) / 16,
+    xl: (thubnailWidth.xl * 9) / 16,
+  };
 
   const width = useBreakpointValue(thubnailWidth);
   const height = useBreakpointValue(thubnailHeight);
   return (
     <Box className="relative group" width={width} style={{ userSelect: "none" }}>
-      {loading && (
-        <Box className="absolute inset-0 flex items-center justify-center">
-          <Spinner />
-        </Box>
-      )}
       <Image
         loader={({ src }) => src}
         alt={alt}
