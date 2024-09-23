@@ -1,5 +1,5 @@
 import { ThemeColors } from "@/types";
-import { PlacementWithLogical, Tooltip, useTheme } from "@chakra-ui/react";
+import { Box, PlacementWithLogical, Tooltip, useTheme } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 
 interface CustomToolTipProps {
@@ -33,10 +33,11 @@ const CustomToolTip = ({
       }}
       hasArrow
       placement={placement}
-      label={tooltipLabel}
+      label={<Box whiteSpace="nowrap">{tooltipLabel}</Box>}
       isDisabled={isDisabled}
       isOpen={isOpen}
       fontSize={fontSize}
+      minWidth="fit-content"
     >
       {children}
     </Tooltip>
