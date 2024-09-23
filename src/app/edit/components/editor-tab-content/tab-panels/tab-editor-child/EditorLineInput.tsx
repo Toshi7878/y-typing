@@ -47,7 +47,6 @@ const EditorLineInput = () => {
             onSelect={(e) => {
               const start = e.currentTarget.selectionStart;
               const end = e.currentTarget.selectionEnd;
-
               const isSelected = end !== null && start !== null && end - start > 0;
               setIsLineLyricsSelected(isSelected);
             }}

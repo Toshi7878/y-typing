@@ -1,8 +1,7 @@
 "use client";
-import { Tr, Td, Button, useDisclosure, useTheme } from "@chakra-ui/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDisclosure, useTheme } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import LineOptionModal from "./LineOptionModal";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
@@ -11,16 +10,14 @@ import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditAddLyricsTextAtom,
+  useEditDirectEditCountAtom,
   useEditLineLyricsAtom,
   useEditLineSelectedCountAtom,
   useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
-  useLineInputReducer,
   useSetEditCustomStyleLengthAtom,
-  useSetEditLineSelectedCountAtom,
   useSetEditTimeCountAtom,
-  useSetTabIndexAtom,
   useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
@@ -30,16 +27,15 @@ import {
   useIsUpdateButtonDisabled,
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import { MapData } from "@/app/type/ts/type";
+import LineRow from "./child/LineRow";
 
-function LineRow() {
-  const setTabIndex = useSetTabIndexAtom();
+function MapTableBody() {
   const dispatch = useDispatch();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const optionClosure = useDisclosure();
   const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
+
   const [lineOptions, setLineOptions] = useState<MapData["options"] | null>(null);
   const lineSelectedCount = useEditLineSelectedCountAtom();
-  const setLineSelectedCount = useSetEditLineSelectedCountAtom();
-  const lineInputReducer = useLineInputReducer();
   const setTimeCount = useSetEditTimeCountAtom();
   const setCustomStyleLength = useSetEditCustomStyleLengthAtom();
   const timeCount = useEditTimeCountAtom();
@@ -53,11 +49,13 @@ function LineRow() {
   const undoredoState = useSelector((state: RootState) => state.undoRedo);
   const speed = useSpeedAtom();
   const isYTPlaying = useIsEditYTPlayingAtom();
-  const lyrics = useEditLineLyricsAtom();
+  const selectLyrics = useEditLineLyricsAtom();
+
   const addLyricsText = useEditAddLyricsTextAtom();
   const isAddButtonDisabled = useIsAddButtonDisabled();
   const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
   const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
+  const directEdit = useEditDirectEditCountAtom();
 
   useEffect(() => {
     window.addEventListener("keydown", windowKeydownEvent);
@@ -70,7 +68,7 @@ function LineRow() {
     undoredoState,
     speed,
     isYTPlaying,
-    lyrics,
+    selectLyrics,
     addLyricsText,
     isAddButtonDisabled,
     isUpdateButtonDisabled,
@@ -127,23 +125,9 @@ function LineRow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTStarted]);
 
-  const selectLine = useCallback(
-    (selectCount: number) => {
-      const time = mapData[selectCount].time;
-      const lyrics = mapData[selectCount].lyrics;
-      const word = mapData[selectCount].word;
-      setLineSelectedCount(selectCount);
-      lineInputReducer({ type: "set", payload: { time, lyrics, word, selectCount } });
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData],
-  );
-
   useEffect(() => {
     const updateTimeBg = (currentTime: string) => {
       const nextLine = mapData[timeCount + 1];
-      console.log(currentTime);
       if (nextLine && Number(currentTime) >= Number(nextLine["time"])) {
         setTimeCount(timeCount + 1);
       }
@@ -155,10 +139,7 @@ function LineRow() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeCount, mapData]);
-  const clickTimeCell = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-    const time = Number(event.currentTarget.textContent);
-    refs.playerRef.current.seekTo(time);
-  };
+
   const endAfterLineIndex = mapData.findIndex((line) => line.lyrics === "end");
 
   const renderedRows = useMemo(
@@ -176,66 +157,14 @@ function LineRow() {
         }
 
         return (
-          <Tr
+          <LineRow
             key={index}
-            id={`line_${index}`}
-            data-line-index={index}
-            cursor="pointer"
-            position="relative"
-            bg={
-              lineSelectedCount === index
-                ? theme.colors.edit.mapTable.selectedLine.bg
-                : timeCount === index && lineSelectedCount !== index
-                  ? `${theme.colors.edit.mapTable.currentTimeLine.bg}40`
-                  : endAfterLineIndex < index && line.lyrics !== "end"
-                    ? `${theme.colors.edit.mapTable.errorLine.bg}35`
-                    : "transparent"
-            }
-            color={theme.colors.color}
-            outline={lineSelectedCount === index ? "1px solid" : "none"}
-            outlineColor={lineSelectedCount === index ? theme.colors.color : "none"}
-            _hover={{
-              bg:
-                lineSelectedCount !== index
-                  ? `${theme.colors.edit.mapTable.selectedLine.bg}50`
-                  : theme.colors.edit.mapTable.selectedLine.bg,
-            }}
-            onClick={() => {
-              selectLine(index);
-              setTabIndex(1);
-            }}
-            className={lineSelectedCount === index ? "selected-line" : ""}
-          >
-            <Td
-              borderRight="1px solid black"
-              className="time-cell hover:bg-cyan-700/35"
-              onClick={clickTimeCell}
-            >
-              {line.time}
-            </Td>
-            <Td
-              borderRight="1px solid black"
-              dangerouslySetInnerHTML={{ __html: line.lyrics }}
-            ></Td>
-            <Td borderRight="1px solid black">{line.word}</Td>
-            <Td>
-              <Button
-                disabled={mapData.length - 1 === index}
-                variant={line.options ? "solid" : "outline"}
-                colorScheme="green"
-                size="sm"
-                onClick={() => {
-                  if (mapData.length - 1 !== index) {
-                    setOptionModalIndex(index);
-                    setLineOptions(line.options);
-                    onOpen();
-                  }
-                }}
-              >
-                {line.options ? "設定有" : "未設定"}
-              </Button>
-            </Td>
-          </Tr>
+            index={index}
+            line={line}
+            optionClosure={optionClosure}
+            setLineOptions={setLineOptions}
+            setOptionModalIndex={setOptionModalIndex}
+          />
         );
       });
 
@@ -244,17 +173,17 @@ function LineRow() {
       return rows;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex],
+    [mapData, lineSelectedCount, timeCount, theme, endAfterLineIndex, directEdit],
   );
 
   return (
     <>
       {renderedRows}
 
-      {isOpen && (
+      {optionClosure.isOpen && (
         <LineOptionModal
-          isOpen={isOpen}
-          onClose={onClose}
+          isOpen={optionClosure.isOpen}
+          onClose={optionClosure.onClose}
           optionModalIndex={optionModalIndex}
           lineOptions={lineOptions}
         />
@@ -263,4 +192,4 @@ function LineRow() {
   );
 }
 
-export default LineRow;
+export default MapTableBody;

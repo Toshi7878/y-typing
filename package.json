@@ -36,6 +36,7 @@
     "dexie": "^4.0.7",
     "dexie-react-hooks": "^1.1.7",
     "framer-motion": "^11.2.10",
+    "html-react-parser": "^5.1.16",
     "identicon.js": "^2.3.3",
     "interactjs": "^1.10.27",
     "jotai": "^2.8.3",

@@ -385,3 +385,13 @@ export const useEditCustomStyleLengthAtom = () => {
 export const useSetEditCustomStyleLengthAtom = () => {
   return useSetAtom(editCustomStyleLengthAtom, { store: editAtomStore });
 };
+
+const editDirectEditCountAtom = atom<number | null>(null);
+
+export const useEditDirectEditCountAtom = () => {
+  return useAtomValue(editDirectEditCountAtom, { store: editAtomStore });
+};
+
+export const useSetEditDirectEditCountAtom = () => {
+  return useSetAtom(editDirectEditCountAtom, { store: editAtomStore });
+};

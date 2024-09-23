@@ -10,6 +10,7 @@ import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
+  useEditDirectEditCountAtom,
   useEditLineSelectedCountAtom,
   useIsEditYTPlayingAtom,
   useSetEditIsTimeInputValidAtom,
@@ -24,6 +25,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
   function EditorTimeInput(props, ref) {
     const theme: ThemeColors = useTheme();
     const setEditIsTimeInputValid = useSetEditIsTimeInputValidAtom();
+    const directEdit = useEditDirectEditCountAtom();
 
     const methods = useForm({
       mode: "all",
@@ -48,7 +50,7 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
         setRef("editorTimeInputRef", ref.current!);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mapData, lineNumber, maxTime, isYTPlaying]);
+    }, [mapData, lineNumber, maxTime, isYTPlaying, directEdit]);
 
     useEffect(() => {
       setEditIsTimeInputValid(isValid);
@@ -57,10 +59,12 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
 
     const updateTimeValue = useCallback(
       (currentTime: string) => {
-        setValue("time", currentTime, { shouldValidate: true });
+        if (directEdit === null) {
+          setValue("time", currentTime, { shouldValidate: true });
+        }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [],
+      [directEdit],
     );
 
     useEffect(() => {

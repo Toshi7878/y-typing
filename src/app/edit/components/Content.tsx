@@ -83,9 +83,8 @@ function Content() {
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
       setPreviewTime("");
-      dispatch(resetMapData());
     }
-
+    dispatch(resetMapData());
     setIsYTStarted(false);
     setIsYTReady(false);
     setIsYTPlaying(false);
@@ -131,7 +130,7 @@ function Content() {
             <TimeRange />
           </Box>
           <Box as="section" width="100%" mt={0}>
-            <EditTable />
+            <EditTable mapLoading={isLoading} />
           </Box>
         </Box>
         <ColorStyle />
