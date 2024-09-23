@@ -38,7 +38,6 @@ function Content() {
   const { id } = useParams();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
-
   const theme: ThemeColors = useTheme();
   const isLrcConverting = useIsLrcConvertingAtom();
   const setMapTitle = useSetMapTitleAtom();
