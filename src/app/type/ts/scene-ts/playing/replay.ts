@@ -1,7 +1,14 @@
 import { CalcTypeSpeed } from "./calcTypeSpeed";
 import { CreateMap } from "../ready/createTypingWord";
-import { CharsType, getRank, KanaInput, Miss, RomaInput, Success } from "./keydown/typing";
-import { InputModeType, LineResultData, Status } from "../../type";
+import {
+  CharsType,
+  getRank,
+  KanaInput,
+  RomaInput,
+  useTypeMiss,
+  useTypeSuccess,
+} from "./keydown/typing";
+import { LineResultData, Status } from "../../type";
 import {
   useInputModeAtom,
   useLineResultsAtom,
@@ -70,6 +77,8 @@ export const useReplay = () => {
 
   const inputModeChange = useInputModeChange();
   const realTimeSpeedChange = useRealTimeSpeedChange();
+  const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
+  const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
   return ({ count, lineConstantTime }: { count: number; lineConstantTime: number }) => {
     const lineResult: LineResultData = lineResults[count - 1];
     const typeResults = lineResult.typeResult;
@@ -105,34 +114,35 @@ export const useReplay = () => {
               ? new RomaInput({ chars, lineWord })
               : new KanaInput({ chars, lineWord });
           const currentLine = map!.mapData[count];
-          const remainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
+          const lineRemainTime = Number(currentLine.time) - ytStateRef.current!.currentTime;
 
           if (result.newLineWord.nextChar["k"]) {
             const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
-            const success = new Success(
-              status,
-              statusRef,
-              result.successKey,
-              lineConstantTime,
-              playingComboRef,
-              inputMode as InputModeType,
-              result.updatePoint,
-              result.newLineWord,
-              map!,
-              typeSpeed.totalKpm,
-              remainTime,
-              rankingScores,
-              scene,
-            );
 
-            tabStatusRef.current!.setStatus(success.newStatus);
-            playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
-          } else {
-            const newStatus = updateReplayStatus(count, lineResults, map, rankingScores);
-            newStatus.point = lineResult.status!.p as number;
-            newStatus.timeBonus = lineResult.status!.tBonus as number;
+            updateSuccessStatusRefs({
+              lineConstantTime,
+              newLineWord: result.newLineWord,
+              successKey: result.successKey,
+              newLineKpm: typeSpeed.lineKpm,
+            });
+
+            const newStatus = updateSuccessStatus({
+              newLineWord: result.newLineWord,
+              lineRemainTime,
+              lineConstantTime,
+              updatePoint: result.updatePoint,
+              totalKpm: typeSpeed.totalKpm,
+              status,
+            });
 
             tabStatusRef.current!.setStatus(newStatus);
+            playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+          } else {
+            const newStatusReplay = updateReplayStatus(count, lineResults, map, rankingScores);
+            newStatusReplay.point = lineResult.status!.p as number;
+            newStatusReplay.timeBonus = lineResult.status!.tBonus as number;
+
+            tabStatusRef.current!.setStatus(newStatusReplay);
             playingComboRef.current?.setCombo(lineResult.status!.combo as number);
             playingLineTimeRef.current?.setLineKpm(lineResult.status!.lKpm as number);
             statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
@@ -141,8 +151,9 @@ export const useReplay = () => {
           playingCenterRef.current!.setLineWord(result.newLineWord);
         } else {
           console.log("update replay failed");
-          const miss = new Miss(status, statusRef, key, playingComboRef, lineConstantTime, map!);
-          tabStatusRef.current!.setStatus(miss.newStatus);
+          const newStatus = updateMissStatus(status);
+          updateMissRefStatus({ lineConstantTime, failKey: key });
+          tabStatusRef.current!.setStatus(newStatus);
         }
       } else if (option) {
         console.log("update replay option");

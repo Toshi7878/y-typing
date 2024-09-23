@@ -1,7 +1,7 @@
 import { SkipGuideRef } from "@/app/type/components/typing-area/scene/playing-child/child/PlayingSkipGuide";
 import { WordType } from "../../../type";
 import { updateReplayStatus } from "../replay";
-import { Miss, Success, Typing } from "./typing";
+import { Typing, useTypeMiss, useTypeSuccess } from "./typing";
 import { CalcTypeSpeed } from "../calcTypeSpeed";
 import { CreateMap } from "../../ready/createTypingWord";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
@@ -33,14 +33,7 @@ interface HandleTypingParams {
 }
 
 export const useHandleTyping = () => {
-  const {
-    playingComboRef,
-    tabStatusRef,
-    statusRef,
-    playingLineTimeRef,
-    ytStateRef,
-    playingCenterRef,
-  } = useRefs();
+  const { playingComboRef, tabStatusRef, statusRef, ytStateRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
   const scene = useSceneAtom();
@@ -49,6 +42,9 @@ export const useHandleTyping = () => {
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
   const setLineResults = useSetLineResultsAtom();
+  const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
+  const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
+
   return ({ event, cloneLineWord, lineTime, count }: HandleTypingParams) => {
     const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
     const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
@@ -61,27 +57,24 @@ export const useHandleTyping = () => {
       const movieDuration = ytStateRef.current!.movieDuration;
       const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
 
-      const remainTime = nextLineTime - currentLine.time - lineConstantTime;
+      const lineRemainTime = nextLineTime - currentLine.time - lineConstantTime;
       const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
 
-      const success = new Success(
-        status,
-        statusRef,
-        result.successKey,
+      updateSuccessStatusRefs({
         lineConstantTime,
-        playingComboRef,
-        inputMode,
-        result.updatePoint,
-        result.newLineWord,
-        map!,
-        typeSpeed.totalKpm,
-        remainTime,
-        rankingScores,
-        scene,
-      );
+        newLineWord: result.newLineWord,
+        successKey: result.successKey,
+        newLineKpm: typeSpeed.lineKpm,
+      });
 
-      playingCenterRef.current!.setLineWord(result.newLineWord);
-      playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
+      const newStatus = updateSuccessStatus({
+        newLineWord: result.newLineWord,
+        lineRemainTime,
+        lineConstantTime,
+        updatePoint: result.updatePoint,
+        totalKpm: typeSpeed.totalKpm,
+        status,
+      });
 
       if (scene === "practice" && speedData.playSpeed >= 1 && !result.newLineWord.nextChar["k"]) {
         const combo = playingComboRef.current!.getCombo();
@@ -91,7 +84,7 @@ export const useHandleTyping = () => {
         const typeResult = statusRef.current!.lineStatus.typeResult;
         const lResult = lineResults[count - 1];
         const lMiss = statusRef.current!.lineStatus.lineMiss;
-        const lineScore = success.newStatus.point + success.newStatus.timeBonus + lMiss * 5;
+        const lineScore = newStatus.point + newStatus.timeBonus + lMiss * 5;
         const oldLineScore =
           lResult.status!.p! + lResult.status!.tBonus! + lResult.status!.lMiss! * 5;
 
@@ -101,8 +94,8 @@ export const useHandleTyping = () => {
         if (isUpdateResult) {
           newLineResults[count - 1] = {
             status: {
-              p: success.newStatus.point,
-              tBonus: success.newStatus.timeBonus,
+              p: newStatus.point,
+              tBonus: newStatus.timeBonus,
               lType: statusRef.current!.lineStatus.lineType,
               lMiss,
               lRkpm: typeSpeed.lineRkpm,
@@ -118,30 +111,25 @@ export const useHandleTyping = () => {
           };
           setLineResults(newLineResults);
         }
-        const newStatus = updateReplayStatus(
+
+        const newStatusReplay = updateReplayStatus(
           map!.mapData.length - 1,
           newLineResults,
           map!,
           rankingScores,
         );
         tabStatusRef.current!.setStatus({
-          ...newStatus,
-          point: success.newStatus.point,
-          timeBonus: success.newStatus.timeBonus,
+          ...newStatusReplay,
+          point: newStatus.point,
+          timeBonus: newStatus.timeBonus,
         });
       } else {
-        tabStatusRef.current!.setStatus(success.newStatus);
+        tabStatusRef.current!.setStatus(newStatus);
       }
     } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-      const miss = new Miss(
-        status,
-        statusRef,
-        result.failKey,
-        playingComboRef,
-        lineConstantTime,
-        map!,
-      );
-      tabStatusRef.current!.setStatus(miss.newStatus);
+      const newStatus = updateMissStatus(status);
+      updateMissRefStatus({ lineConstantTime, failKey: result.failKey });
+      tabStatusRef.current!.setStatus(newStatus);
     }
   };
 };

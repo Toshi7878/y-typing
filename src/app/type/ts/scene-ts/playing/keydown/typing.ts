@@ -11,6 +11,13 @@ import {
 import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWord";
 import { PlayingComboRef } from "../../../../components/typing-area/scene/playing-child/child/PlayingCombo";
 import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import {
+  useInputModeAtom,
+  useMapAtom,
+  useRankingScoresAtom,
+  useSceneAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 
 const keyboardCharacters = [
   "0",
@@ -579,71 +586,55 @@ export class Typing {
   }
 }
 
-export class Success {
-  newStatus: Status;
+export const useTypeSuccess = () => {
+  const { playingComboRef, tabStatusRef, statusRef, playingCenterRef, playingLineTimeRef } =
+    useRefs();
 
-  constructor(
-    status: Status,
-    statusRef: React.RefObject<StatusRef>,
-    successKey: string,
-    lineConstantTime: number,
-    playingComboRef: React.RefObject<PlayingComboRef>,
-    inputMode: InputModeType,
-    updatePoint: number,
-    newLineWord: WordType,
-    map: CreateMap,
-    totalTypeSpeed: number,
-    remainTime: number,
-    rankingScores: number[],
-    scene: SceneType,
-  ) {
-    this.newStatus = this.updateStatus(
-      { ...status },
-      statusRef,
-      lineConstantTime,
-      playingComboRef,
-      inputMode,
-      updatePoint,
-      newLineWord,
-      map,
-      remainTime,
-      totalTypeSpeed,
-      rankingScores,
-    );
+  const status = tabStatusRef.current!.getStatus();
+  const inputMode = useInputModeAtom();
+  const rankingScores = useRankingScoresAtom();
+  const map = useMapAtom() as CreateMap;
+  const scene = useSceneAtom();
 
-    if (scene !== "replay") {
-      statusRef.current!.lineStatus.typeResult.push({
-        c: successKey,
-        is: true,
-        t: lineConstantTime,
-      });
+  const updateSuccessStatus = ({
+    newLineWord,
+    lineRemainTime,
+    lineConstantTime,
+    updatePoint,
+    totalKpm,
+    status,
+  }): Status => {
+    const newStatus = { ...status };
+
+    if (statusRef.current!.lineStatus.lineType === 1) {
+      newStatus.point = updatePoint;
+    } else if (updatePoint > 0) {
+      newStatus.point += updatePoint;
     }
-  }
+    newStatus.kpm = totalKpm;
+    newStatus.type++;
 
-  private updateStatus(
-    newStatus: Status,
-    statusRef: React.RefObject<StatusRef>,
-    lineConstantTime: number,
-    playingComboRef: React.RefObject<PlayingComboRef>,
-    inputMode: InputModeType,
-    updatePoint: number,
-    newLineWord: WordType,
-    map: CreateMap,
-    remainTime: number,
-    totalTypeSpeed: number,
-    rankingScores: number[],
-  ) {
+    if (!newLineWord.nextChar["k"]) {
+      const timeBonus = Math.round(lineRemainTime * 1 * 100);
+      newStatus.timeBonus = timeBonus; //speed;
+      statusRef.current!.lineStatus.lineClearTime = lineConstantTime;
+      newStatus.score += newStatus.point + timeBonus;
+      statusRef.current!.status.completeCount++;
+      newStatus.line =
+        map.lineLength -
+        (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
+      newStatus.rank = getRank(rankingScores, newStatus.score);
+    }
+
+    return newStatus;
+  };
+
+  const updateSuccessRefStatus = ({ lineConstantTime, newLineWord, successKey, newLineKpm }) => {
     if (statusRef.current!.lineStatus.lineType === 0) {
       statusRef.current!.lineStatus.latency = lineConstantTime;
     }
-    newStatus.type++;
-    statusRef.current!.lineStatus.lineType++;
-    statusRef.current!.status.missCombo = 0;
-    if (updatePoint > 0) {
-      newStatus.point += updatePoint;
-    }
-    newStatus.kpm = totalTypeSpeed;
 
+    statusRef.current!.status.missCombo = 0;
     const newCombo = playingComboRef.current!.getCombo() + 1;
 
     playingComboRef.current?.setCombo(newCombo);
@@ -660,22 +651,28 @@ export class Success {
       statusRef.current!.status.flickType++;
     }
 
+    statusRef.current!.lineStatus.lineType++;
+
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
-      const timeBonus = Math.round(remainTime * 1 * 100);
-      newStatus.timeBonus = timeBonus; //speed;
       statusRef.current!.lineStatus.lineClearTime = lineConstantTime;
-      newStatus.score += newStatus.point + timeBonus;
       statusRef.current!.status.completeCount++;
-      newStatus.line =
-        map.lineLength -
-        (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
-      newStatus.rank = getRank(rankingScores, newStatus.score);
     }
 
-    return newStatus;
-  }
-}
+    if (scene !== "replay") {
+      statusRef.current!.lineStatus.typeResult.push({
+        c: successKey,
+        is: true,
+        t: lineConstantTime,
+      });
+    }
+
+    playingCenterRef.current!.setLineWord(newLineWord);
+    playingLineTimeRef.current?.setLineKpm(newLineKpm);
+  };
+
+  return { updateSuccessStatus, updateSuccessStatusRefs: updateSuccessRefStatus };
+};
 
 export function getRank(scores: number[], currentScore: number): number {
   // 現在のスコアが何番目に入るかを取得
@@ -683,41 +680,33 @@ export function getRank(scores: number[], currentScore: number): number {
   return (rank < 0 ? scores.length : rank) + 1;
 }
 
-export class Miss {
-  newStatus: Status;
+export const useTypeMiss = () => {
+  const { playingComboRef, statusRef } = useRefs();
 
-  constructor(
-    status: Status,
-    statusRef: React.RefObject<StatusRef>,
-    failKey: string,
-    playingComboRef: React.RefObject<PlayingComboRef>,
-    lineConstantTime: number,
-    map: CreateMap,
-  ) {
-    this.newStatus = this.missCounter({ ...status }, statusRef, playingComboRef, map!);
+  const map = useMapAtom() as CreateMap;
 
+  const updateMissStatus = (status: Status) => {
+    const newStatus = { ...status };
+
+    newStatus.miss++;
+    newStatus.point -= MISS_PENALTY;
+
+    return newStatus;
+  };
+
+  const updateMissRefStatus = ({ lineConstantTime, failKey }) => {
+    statusRef.current!.status.clearRate -= map.missRate;
     statusRef.current!.lineStatus.typeResult.push({
       c: failKey,
       t: lineConstantTime,
     });
-  }
-
-  private missCounter(
-    newStatus: Status,
-    statusRef: React.RefObject<StatusRef>,
-    playingComboRef: React.RefObject<PlayingComboRef>,
-    map: CreateMap,
-  ) {
-    newStatus.miss++;
     statusRef.current!.lineStatus.lineMiss++;
     statusRef.current!.status.missCombo++;
     playingComboRef.current?.setCombo(0);
-    newStatus.point -= MISS_PENALTY;
-    statusRef.current!.status.clearRate -= map.missRate;
+  };
 
-    return newStatus;
-  }
-}
+  return { updateMissStatus, updateMissRefStatus };
+};
 
 export function isTyped({ event, lineWord }: TypingEvent) {
   const KEY_CODE = event.keyCode;
