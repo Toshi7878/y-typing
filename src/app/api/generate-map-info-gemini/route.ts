@@ -14,10 +14,11 @@ const safetySettings: SafetySetting[] = [
   { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
 ];
 
-const TEXT_PROMPT = `以下のJSONデータ情報を解析して{musicTitle:string, artistName:string, otherTags:string[]}の形式で出力してください。\n
-  ただし、channelTitleはその曲のアーティスト名とは限りません。\n
-  featが存在する場合はmusicTitleにfeatを追加してください\n
-  descriptionなどに記載されているアーティストや曲に関連する単語をotherTagsに格納してください。アーティストの所属するグループ名や映画・ドラマ・アニメのタイトルは重要です。\n
+const TEXT_PROMPT = `以下のJSONデータ情報を解析して{musicTitle:string; artistName:string; musicSouce:string; otherTags:string[];}の形式で出力してください。\n
+  アニメ・ドラマ・映画のタイトルが存在する場合はmusicSouceに出力してください。。情報が見つかった場合のみ出力してください。\n
+  channelTitleはその曲のアーティスト名とは限りません。\n
+  ボーカロイドや歌手とアーティストが異なる場合はmusicTitleにfeat.で歌っている人の名前を追加してください\n
+  descriptionなどに記載されているアーティストや曲に関連する単語をotherTagsに格納してください。アーティストの所属するグループ名は重要です。\n
   出力するJSONデータはJSON.parseができるように改行を使用せずに出力してください。`;
 
 export async function POST(req: Request) {

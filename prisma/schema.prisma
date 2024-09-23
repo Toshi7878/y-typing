@@ -37,6 +37,7 @@ model Map {
   videoId          String
   title            String
   artistName       String @default("")
+  musicSouce       String @default("")
   creatorComment   String
   tags             String[] //分ける
   creatorId        Int

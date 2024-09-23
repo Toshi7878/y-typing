@@ -1,5 +1,4 @@
 import { Box, Card, CardBody, Flex, useTheme } from "@chakra-ui/react";
-import React, { useRef } from "react";
 import { ThemeColors } from "@/types";
 
 import EditorButtons from "./tab-editor-child/EditorButtons";

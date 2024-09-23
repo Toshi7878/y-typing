@@ -6,6 +6,7 @@ export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
 export interface EditorSendData {
   title: string;
   artistName: string;
+  musicSouce: string;
   creatorComment: string;
   tags: string[];
   mapData: MapData[];
@@ -50,5 +51,6 @@ export interface GetYouTubeMovieInfo {
 export interface GeminiMapInfo {
   musicTitle: string;
   artistName: string;
+  musicSouce: string;
   otherTags: string[];
 }

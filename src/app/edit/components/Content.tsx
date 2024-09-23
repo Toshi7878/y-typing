@@ -16,6 +16,7 @@ import {
   useIsLrcConvertingAtom,
   useSetCreatorCommentAtom,
   useSetEditLineSelectedCountAtom,
+  useSetEditMusicSouceAtom,
   useSetEditPreviewTimeInputAtom,
   useSetEditTimeCountAtom,
   useSetGeminiTagsAtom,
@@ -49,6 +50,7 @@ function Content() {
   const setSelectedCount = useSetEditLineSelectedCountAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const setArtistName = useSetMapArtistNameAtom();
+  const setMusicSouce = useSetEditMusicSouceAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -73,6 +75,7 @@ function Content() {
       //新規作成譜面に移動したら初期化
       setMapTitle("");
       setArtistName("");
+      setMusicSouce("");
       setCreatorComment("");
       setTags({ type: "reset" });
       dispatch(resetUndoRedoData());

@@ -3,7 +3,6 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Card, CardBody, HStack, Stack, useTheme } from "@chakra-ui/react";
 
 import InfoInputForm from "./tab-info-child/InfoInputFrom";
-import InfoGenreTag from "./tab-info-child/InfoGenreTag";
 import UploadButton from "./tab-info-child/UploadButton";
 import { useSelector } from "react-redux";
 import { useFormState } from "react-dom";
@@ -17,9 +16,11 @@ import { ThemeColors, UploadResult } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
+  useEditMusicSouceAtom,
   useEditPreviewTimeInputAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
+  useSetEditMusicSouceAtom,
   useSetGeminiTagsAtom,
   useSetMapArtistNameAtom,
   useSetMapTitleAtom,
@@ -33,6 +34,7 @@ import { GeminiMapInfo, GetYouTubeMovieInfo } from "@/app/edit/ts/type";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import InfoTag from "./tab-info-child/InfoTag";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -45,11 +47,14 @@ const TabInfoUpload = () => {
   const artistName = useMapArtistNameAtom();
 
   const creatorComment = useCreatorCommentAtom();
+  const musicSouce = useEditMusicSouceAtom();
+
   const previewTime = useEditPreviewTimeInputAtom();
   const videoId = useVideoIdAtom();
   const theme: ThemeColors = useTheme();
   const setMapTitle = useSetMapTitleAtom();
   const setMapArtistName = useSetMapArtistNameAtom();
+  const setMusicSouce = useSetEditMusicSouceAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const successToast = useSuccessToast();
 
@@ -64,6 +69,7 @@ const TabInfoUpload = () => {
       videoId: mapVideoId,
       title: mapTitle,
       artistName,
+      musicSouce,
       creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),
@@ -119,7 +125,9 @@ const TabInfoUpload = () => {
         if (isNewCreateMap) {
           setMapTitle(mapInfoData.musicTitle);
           setMapArtistName(mapInfoData.artistName);
+          setMusicSouce(mapInfoData.musicSouce);
         }
+
         setGeminiTags(mapInfoData.otherTags);
       }
 
@@ -137,9 +145,8 @@ const TabInfoUpload = () => {
       <CardBody>
         <FormProvider {...methods}>
           <Stack display="flex" flexDirection="column" gap="6">
-            <InfoInputForm isGeminiLoading={isLoading} />
-            <InfoGenreTag />
-
+            <InfoInputForm isGeminiLoading={isLoading && isNewCreateMap} />
+            <InfoTag isGeminiLoading={isLoading} />
             <HStack justifyContent="space-between">
               {isDisplayUploadButton ? (
                 <form action={formAction}>

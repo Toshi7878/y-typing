@@ -2,9 +2,11 @@ import { Flex, Stack } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
 import {
   useCreatorCommentAtom,
+  useEditMusicSouceAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
   useSetCreatorCommentAtom,
+  useSetEditMusicSouceAtom,
   useSetMapArtistNameAtom,
   useSetMapTitleAtom,
 } from "@/app/edit/edit-atom/editAtom";
@@ -14,12 +16,15 @@ import VideoIdInput from "./child/VideoIdInput";
 interface InfoInputFormProps {
   isGeminiLoading: boolean;
 }
+
 const InfoInputForm = (props: InfoInputFormProps) => {
   const setMapTitle = useSetMapTitleAtom();
   const setMapArtistName = useSetMapArtistNameAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
+  const setMusicSouce = useSetEditMusicSouceAtom();
   const mapTitle = useMapTitleAtom();
   const mapArtistName = useMapArtistNameAtom();
+  const musicSouce = useEditMusicSouceAtom();
   const creatorComment = useCreatorCommentAtom();
   const searchParams = useSearchParams();
   const isNewCreateMap = !!searchParams.get("new");
@@ -34,10 +39,11 @@ const InfoInputForm = (props: InfoInputFormProps) => {
         <Flex alignItems="center">
           <InfoInput
             label={"曲名タイトル"}
-            placeholder="曲名"
+            placeholder="曲名タイトル"
             inputState={mapTitle}
             setInputState={setMapTitle}
             isRequired={true}
+            isGeminiLoading={props.isGeminiLoading}
           />
         </Flex>
         <Flex alignItems="center">
@@ -47,6 +53,17 @@ const InfoInputForm = (props: InfoInputFormProps) => {
             inputState={mapArtistName}
             setInputState={setMapArtistName}
             isRequired={true}
+            isGeminiLoading={props.isGeminiLoading}
+          />
+        </Flex>
+        <Flex alignItems="center">
+          <InfoInput
+            label={"ソース"}
+            placeholder="曲が使用されているアニメ・ドラマ・映画タイトルを入力"
+            inputState={musicSouce}
+            setInputState={setMusicSouce}
+            isRequired={false}
+            isGeminiLoading={props.isGeminiLoading}
           />
         </Flex>
       </Stack>

@@ -67,6 +67,17 @@ export const useSetCreatorCommentAtom = () => {
   return useSetAtom(editCreatorCommentAtom, { store: editAtomStore });
 };
 
+//楽曲ソース
+export const editMusicSouceAtom = atom<string>("");
+
+export const useEditMusicSouceAtom = () => {
+  return useAtomValue(editMusicSouceAtom, { store: editAtomStore });
+};
+
+export const useSetEditMusicSouceAtom = () => {
+  return useSetAtom(editMusicSouceAtom, { store: editAtomStore });
+};
+
 //制作者コメント
 export const editGeminiTagsAtom = atom<string[]>([]);
 

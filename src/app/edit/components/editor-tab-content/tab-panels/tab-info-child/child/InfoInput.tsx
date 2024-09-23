@@ -21,8 +21,9 @@ const InfoInput = (props: InfoInputProps) => {
       </FormLabel>
 
       <Input
-        isInvalid={props.isRequired && props.inputState === ""}
-        placeholder={props.placeholder}
+        isInvalid={!props.isGeminiLoading && props.isRequired && props.inputState === ""}
+        placeholder={props.isGeminiLoading ? `${props.label}を生成中` : props.placeholder}
+        isDisabled={props.isGeminiLoading}
         size="sm"
         fontWeight={props.isRequired ? "bold" : "normal"}
         bg={theme.colors.background}
