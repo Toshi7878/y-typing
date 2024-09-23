@@ -587,10 +587,8 @@ export class Typing {
 }
 
 export const useTypeSuccess = () => {
-  const { playingComboRef, tabStatusRef, statusRef, playingCenterRef, playingLineTimeRef } =
-    useRefs();
+  const { playingComboRef, statusRef, playingCenterRef, playingLineTimeRef } = useRefs();
 
-  const status = tabStatusRef.current!.getStatus();
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const map = useMapAtom() as CreateMap;
@@ -617,9 +615,7 @@ export const useTypeSuccess = () => {
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(lineRemainTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
-      statusRef.current!.lineStatus.lineClearTime = lineConstantTime;
       newStatus.score += newStatus.point + timeBonus;
-      statusRef.current!.status.completeCount++;
       newStatus.line =
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
