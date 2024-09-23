@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-09-23",
+    descriptions: ["採点変更 1key=50 1miss=25 10ms=1 ※再度調整する可能性がありますm(_ _)m"],
+  },
+  {
     date: "2024-09-22",
     descriptions: [
       "採点変更 1key=25 1miss=25 10ms=1 ※再度調整する可能性がありますm(_ _)m",
