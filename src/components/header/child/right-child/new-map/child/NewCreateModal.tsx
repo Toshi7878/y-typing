@@ -90,39 +90,37 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
 
         <ModalFooter>
           <Flex justify="space-between" align="center" w="100%">
-            {backupTitle.videoId ? (
-              <CustomToolTip
-                tooltipLabel={
-                  <Box>
-                    <Box>タイトル: {backupTitle.title}</Box>
-                    <Box>YouTubeId: {backupTitle.videoId}</Box>
-                  </Box>
-                }
-                placement="top"
+            <CustomToolTip
+              tooltipLabel={
+                <Box>
+                  <Box>タイトル: {backupTitle.title}</Box>
+                  <Box>YouTubeId: {backupTitle.videoId}</Box>
+                </Box>
+              }
+              placement="top"
+              fontSize="sm"
+              isDisabled={backupTitle.title ? false : true}
+            >
+              <Link
                 fontSize="sm"
-                isDisabled={backupTitle.title ? false : true}
+                href={`/edit?new=${backupTitle.videoId}&backup=true`}
+                onClick={(event) => {
+                  handleLinkClick(event);
+                  newCreateModalDisclosure.onClose();
+                }}
+                hidden={backupTitle.videoId ? false : true}
               >
-                <Link
-                  fontSize="sm"
-                  href={`/edit?new=${backupTitle.videoId}&backup=true`}
-                  onClick={(event) => {
-                    handleLinkClick(event);
-                    newCreateModalDisclosure.onClose();
-                  }}
+                <Button
+                  variant="outline"
+                  size="xs"
+                  p={4}
+                  color={`${theme.colors.card.color}ff`}
+                  borderColor={`${theme.colors.card.borderColor}50`}
                 >
-                  <Button
-                    variant="outline"
-                    size="xs"
-                    p={4}
-                    color={`${theme.colors.card.color}ff`}
-                    borderColor={`${theme.colors.card.borderColor}50`}
-                  >
-                    前回のバックアップデータが存在します。
-                  </Button>
-                </Link>
-              </CustomToolTip>
-            ) : null}
-
+                  前回のバックアップデータが存在します。
+                </Button>
+              </Link>
+            </CustomToolTip>
             <Link href={`/edit?new=${newID}`} onClick={handleLinkClick}>
               <Button colorScheme="blue" isDisabled={!newID}>
                 新規作成
