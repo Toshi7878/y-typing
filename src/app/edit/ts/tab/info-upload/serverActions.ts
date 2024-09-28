@@ -81,7 +81,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     }
     revalidatePath(`/api/map-list?page=0`);
     return {
-      id: newMapId,
+      id: mapId === "new" ? newMapId : null,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",
       message: "",
       status: 200,
