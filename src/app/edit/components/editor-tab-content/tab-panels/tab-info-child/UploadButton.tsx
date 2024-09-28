@@ -28,9 +28,9 @@ const UploadButton = ({ state }: UploadButtonProps) => {
 
       if (isSuccess) {
         setCanUpload(false);
-        initializeEditorCreateIndexedDB();
         if (state.id) {
           router.replace(`/edit/${state.id}`);
+          initializeEditorCreateIndexedDB();
         }
       }
     }
