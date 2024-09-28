@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-const CONTENT_LENGTH = 30;
+const CONTENT_LENGTH = 40;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
