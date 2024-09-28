@@ -108,7 +108,7 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
                   handleLinkClick(event);
                   newCreateModalDisclosure.onClose();
                 }}
-                hidden={backupTitle.videoId ? false : true}
+                visibility={backupTitle.videoId ? "visible" : "hidden"}
               >
                 <Button
                   variant="outline"
