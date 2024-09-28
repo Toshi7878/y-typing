@@ -60,13 +60,13 @@ export const mapDataSlice = createSlice({
     },
 
     addLine: (state, action) => {
-      const newValue = [...state.value, action.payload].sort(
-        (a, b) => parseFloat(a.time) - parseFloat(b.time),
-      );
-
-      state.value = newValue;
+      return {
+        ...state,
+        value: [...state.value, action.payload].sort(
+          (a, b) => parseFloat(a.time) - parseFloat(b.time),
+        ),
+      };
     },
-
     updateLine: (state, action) => {
       const { selectedLineCount, time, lyrics, word } = action.payload;
 
@@ -75,6 +75,7 @@ export const mapDataSlice = createSlice({
       newValue[selectedLineCount] = {
         time,
         lyrics,
+
         word,
         ...(newValue[selectedLineCount].options && {
           options: newValue[selectedLineCount].options,
@@ -82,12 +83,16 @@ export const mapDataSlice = createSlice({
       };
 
       state.value = newValue.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+
+      return state; // 変更された値を返す
     },
 
     deleteLine: (state, action) => {
       const lineNumber = Number(action.payload);
 
       state.value = state.value.filter((_, index) => index !== lineNumber);
+
+      return state;
     },
 
     allAdjustTime: (state, action) => {

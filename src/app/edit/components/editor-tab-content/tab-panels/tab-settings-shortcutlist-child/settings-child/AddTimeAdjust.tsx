@@ -1,12 +1,12 @@
 "use client";
-import { FormLabel, Input, HStack, Box, useTheme, Tooltip } from "@chakra-ui/react";
+import { FormLabel, Input, HStack, Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 
 import {
   useEditAddTimeOffsetAtom,
   useSetEditAddTimeOffsetAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { sendIndexedDB } from "@/lib/db";
+import { sendEditorOptionIndexedDBData } from "@/lib/db";
 import CustomToolTip from "@/components/CustomToolTip";
 
 export default function AddTimeAdjust() {
@@ -39,7 +39,7 @@ export default function AddTimeAdjust() {
             value={addTimeOffset}
             onChange={(e) => {
               setAddTimeOffset(Number(e.target.value));
-              sendIndexedDB(e.target as HTMLInputElement);
+              sendEditorOptionIndexedDBData(e.target as HTMLInputElement);
             }}
           />
         </HStack>

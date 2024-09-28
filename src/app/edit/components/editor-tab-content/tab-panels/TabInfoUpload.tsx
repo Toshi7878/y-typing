@@ -1,5 +1,3 @@
-import { useForm, FormProvider } from "react-hook-form";
-
 import { Card, CardBody, HStack, Stack, useTheme } from "@chakra-ui/react";
 
 import InfoInputForm from "./tab-info-child/InfoInputFrom";
@@ -35,13 +33,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import InfoTag from "./tab-info-child/InfoTag";
+import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
   const { data: session } = useSession();
   const mapCreatorId = useCreatorIdAtom();
-  const initialState: UploadResult = { id: null, title: "", message: "", status: 0 };
-  const methods = useForm();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const mapTitle = useMapTitleAtom();
   const artistName = useMapArtistNameAtom();
@@ -92,7 +89,7 @@ const TabInfoUpload = () => {
     return result;
   };
 
-  const [state, formAction] = useFormState(upload, initialState);
+  const [state, formAction] = useFormState(upload, INITIAL_SERVER_ACTIONS_STATE);
 
   const myUserId = session?.user?.id;
   const isAdmin = session?.user?.role === "admin";
@@ -143,25 +140,23 @@ const TabInfoUpload = () => {
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
       <CardBody>
-        <FormProvider {...methods}>
-          <Stack display="flex" flexDirection="column" gap="6">
-            <InfoInputForm isGeminiLoading={isLoading && isNewCreateMap} />
-            <InfoTag isGeminiLoading={isLoading} />
-            <HStack justifyContent="space-between">
-              {isDisplayUploadButton ? (
-                <form action={formAction}>
-                  <UploadButton state={state} />
-                  {id ? <TypeLinkButton /> : ""}
-                </form>
-              ) : id ? (
-                <TypeLinkButton />
-              ) : (
-                ""
-              )}
-              <PreviewTimeInput />
-            </HStack>
-          </Stack>
-        </FormProvider>
+        <Stack display="flex" flexDirection="column" gap="6">
+          <InfoInputForm isGeminiLoading={isLoading && isNewCreateMap} />
+          <InfoTag isGeminiLoading={isLoading} />
+          <HStack justifyContent="space-between">
+            {isDisplayUploadButton ? (
+              <form action={formAction}>
+                <UploadButton state={state} />
+                {id ? <TypeLinkButton /> : ""}
+              </form>
+            ) : id ? (
+              <TypeLinkButton />
+            ) : (
+              ""
+            )}
+            <PreviewTimeInput />
+          </HStack>
+        </Stack>
       </CardBody>
     </Card>
   );

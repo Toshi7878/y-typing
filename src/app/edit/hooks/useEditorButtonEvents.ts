@@ -18,6 +18,8 @@ import { addLine, deleteLine, setLastAddedTime, updateLine } from "../redux/mapD
 import { useRefs } from "../edit-contexts/refsProvider";
 import { addHistory } from "../redux/undoredoSlice";
 import { useWordConvert } from "./useWordConvert";
+import { useSearchParams } from "next/navigation";
+import { useUpdateNewMapBackUp } from "./useUpdateNewMapBackUp";
 
 const timeValidate = (
   time: number,
@@ -46,6 +48,9 @@ export const useLineAddButtonEvent = () => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lyrics = useEditLineLyricsAtom();
   const word = useEditLineWordAtom();
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+  const updateNewMapBackUp = useUpdateNewMapBackUp();
 
   const { editorTimeInputRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
@@ -71,7 +76,13 @@ export const useLineAddButtonEvent = () => {
     dispatch(setLastAddedTime(time));
 
     const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
-    dispatch(addLine(newLine));
+
+    const newMapData = dispatch(addLine(newLine));
+
+    if (newVideoId) {
+      updateNewMapBackUp(newVideoId, newMapData.payload);
+    }
+
     dispatch(addHistory({ type: "add", data: newLine }));
     if (!isShiftKey) {
       lineInputReducer({ type: "reset" });
@@ -81,6 +92,7 @@ export const useLineAddButtonEvent = () => {
     deleteTopLyricsText(lyricsCopy);
 
     setCanUpload(true);
+
     //フォーカスを外さないとクリック時にテーブルがスクロールされない
     (document.activeElement as HTMLElement)?.blur();
   };
@@ -103,6 +115,9 @@ export const useLineUpdateButtonEvent = () => {
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+  const updateNewMapBackUp = useUpdateNewMapBackUp();
 
   const endAfterLineIndex =
     mapData.length -
@@ -111,7 +126,7 @@ export const useLineUpdateButtonEvent = () => {
       .slice()
       .reverse()
       .findIndex((line) => line.lyrics === "end");
-  return () => {
+  return async () => {
     const time = timeValidate(
       editorTimeInputRef.current!.getTime(),
       mapData,
@@ -130,7 +145,7 @@ export const useLineUpdateButtonEvent = () => {
       }),
     );
 
-    dispatch(
+    const newMapData = dispatch(
       updateLine({
         time,
         lyrics,
@@ -138,6 +153,11 @@ export const useLineUpdateButtonEvent = () => {
         selectedLineCount: selectedLineCount ?? undefined,
       }),
     );
+
+    if (newVideoId) {
+      updateNewMapBackUp(newVideoId, newMapData.payload);
+    }
+
     lineInputReducer({ type: "reset" });
   };
 };
@@ -175,9 +195,13 @@ export const useLineDelete = () => {
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
 
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+  const updateNewMapBackUp = useUpdateNewMapBackUp();
+
   return () => {
     if (selectedLineCount) {
-      dispatch(deleteLine(selectedLineCount));
+      const newMapData = dispatch(deleteLine(selectedLineCount));
       setCanUpload(true);
       dispatch(
         addHistory({
@@ -188,7 +212,12 @@ export const useLineDelete = () => {
           },
         }),
       );
+
+      if (newVideoId) {
+        updateNewMapBackUp(newVideoId, newMapData.payload);
+      }
     }
+
     lineInputReducer({ type: "reset" });
   };
 };

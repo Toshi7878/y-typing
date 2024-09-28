@@ -1,4 +1,4 @@
-export function extractYouTubeVideoId(url:string) {
+export function extractYouTubeVideoId(url: string) {
   const regex = /[?&]v=([^?&]+)/;
   const match = url.match(regex);
 
@@ -17,6 +17,6 @@ export function extractYouTubeVideoId(url:string) {
     return match[1];
   } else {
     // No match found or invalid URL
-    return null;
+    return "";
   }
 }

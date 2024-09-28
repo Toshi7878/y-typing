@@ -1,14 +1,5 @@
 "use client";
-import {
-  Box,
-  Button,
-  FormLabel,
-  HStack,
-  RadioGroup,
-  Stack,
-  Tooltip,
-  useTheme,
-} from "@chakra-ui/react";
+import { Box, Button, FormLabel, HStack, RadioGroup, Stack, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { ConvertOptionsType } from "@/app/edit/ts/type";
 import { useMemo } from "react";
@@ -17,7 +8,7 @@ import {
   useEditWordConvertOptionAtom,
   useSetEditWordConvertOptionAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { sendIndexedDB } from "@/lib/db";
+import { sendEditorOptionIndexedDBData } from "@/lib/db";
 import CustomToolTip from "@/components/CustomToolTip";
 
 export default function ConvertOptionButtons() {
@@ -87,7 +78,7 @@ export default function ConvertOptionButtons() {
                 value={option.value}
                 onClick={(e) => {
                   setSelectedConvertOption(option.value as ConvertOptionsType);
-                  sendIndexedDB(e.target as HTMLInputElement);
+                  sendEditorOptionIndexedDBData(e.target as HTMLInputElement);
                 }}
               >
                 {option.label}

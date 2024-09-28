@@ -1,3 +1,5 @@
+import { EditorNewMapBackUpSendData, EditorSendData } from "@/app/edit/ts/type";
+
 export type HeaderMenu = { title: string; href: string };
 
 export type NavItem = {
@@ -135,7 +137,7 @@ export type YouTubeSpeed = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
 export interface IndexDBOption {
   id: number;
   optionName: string;
-  value: string | number | boolean;
+  value: string | number | boolean | EditorNewMapBackUpSendData;
 }
 
 export interface UploadResult {

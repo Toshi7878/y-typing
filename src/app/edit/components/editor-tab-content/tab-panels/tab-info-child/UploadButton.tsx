@@ -7,6 +7,7 @@ import { useCanUploadAtom, useSetCanUploadAtom } from "@/app/edit/edit-atom/edit
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import { useRouter } from "next/navigation";
 import { ThemeColors, UploadResult } from "@/types";
+import { useInitializeEditorCreateBak } from "@/lib/db";
 interface UploadButtonProps {
   state: UploadResult;
 }
@@ -16,6 +17,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
   const canUpload = useCanUploadAtom();
   const setCanUpload = useSetCanUploadAtom();
   const successToast = useSuccessToast();
+  const initializeEditorCreateIndexedDB = useInitializeEditorCreateBak();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
 
       if (isSuccess) {
         setCanUpload(false);
-
+        initializeEditorCreateIndexedDB();
         if (state.id) {
           router.replace(`/edit/${state.id}`);
         }
