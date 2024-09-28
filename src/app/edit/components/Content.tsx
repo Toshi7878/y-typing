@@ -33,7 +33,6 @@ import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
 import { Provider } from "jotai";
 import { db } from "@/lib/db";
-import { MapData } from "@/app/type/ts/type";
 
 function Content() {
   const dispatch = useDispatch();

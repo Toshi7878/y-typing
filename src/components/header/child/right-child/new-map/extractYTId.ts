@@ -13,7 +13,7 @@ export function extractYouTubeVideoId(url: string) {
   }
 
   // Check if a match is found
-  if (match && match[1]) {
+  if (match && match[1] && match[1].length === 11) {
     return match[1];
   } else {
     // No match found or invalid URL

@@ -30,6 +30,9 @@ interface NewCreateModalProps {
   newCreateModalDisclosure: UseDisclosureReturn;
 }
 
+const BACKUP_OVERWRITE_WARNING =
+  "新規作成すると前回のバックアップデータが失われますがよろしいですか？";
+
 export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateModalProps) {
   const router = useRouter();
   const theme: ThemeColors = useTheme();
@@ -42,11 +45,15 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
     event.preventDefault(); // ページ遷移を無効にする
     const NEW_ID = extractYouTubeVideoId(createYTURL);
     if (NEW_ID && NEW_ID.length == 11) {
-      NProgress.configure({ showSpinner: false });
-      NProgress.configure({ trickle: false });
-      NProgress.start();
-      router.push(`/edit?new=${NEW_ID}`);
-      newCreateModalDisclosure.onClose();
+      const shouldOverwriteBackup = backupTitle.videoId ? confirm(BACKUP_OVERWRITE_WARNING) : true;
+
+      if (shouldOverwriteBackup) {
+        NProgress.configure({ showSpinner: false });
+        NProgress.configure({ trickle: false });
+        NProgress.start();
+        router.push(`/edit?new=${NEW_ID}`);
+        newCreateModalDisclosure.onClose();
+      }
     }
   };
 
@@ -121,7 +128,21 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
                 </Button>
               </Link>
             </CustomToolTip>
-            <Link href={`/edit?new=${newID}`} onClick={handleLinkClick}>
+            <Link
+              href={`/edit?new=${newID}`}
+              onClick={(event) => {
+                const shouldOverwriteBackup = backupTitle.videoId
+                  ? confirm(BACKUP_OVERWRITE_WARNING)
+                  : true;
+
+                if (shouldOverwriteBackup) {
+                  handleLinkClick(event);
+                  newCreateModalDisclosure.onClose();
+                } else {
+                  event.preventDefault();
+                }
+              }}
+            >
               <Button colorScheme="blue" isDisabled={!newID}>
                 新規作成
               </Button>
