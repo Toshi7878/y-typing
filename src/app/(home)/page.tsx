@@ -10,8 +10,8 @@ export default function Home() {
     <QueryClientProvider client={queryClient}>
       <Box
         as="main"
-        minH="100vw"
-        width={"100vw"}
+        minH="100vh" // 変更: 100vw から 100vh へ
+        width={"100%"}
         bg={"background"}
         display="flex"
         flexDirection="column"
