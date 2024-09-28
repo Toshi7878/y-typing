@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   Button,
   Input,
   Box,
@@ -21,7 +20,7 @@ import { IndexDBOption, ThemeColors } from "@/types";
 import CustomToolTip from "@/components/CustomToolTip";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/db";
-import { EditorNewMapBackUpSendData } from "@/app/edit/ts/type";
+import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/app/nprogress";
 import NProgress from "nprogress";
@@ -52,15 +51,16 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
   };
 
   useEffect(() => {
-    db.editorNewCreateBak.toArray().then((allData) => {
-      const backupMap: IndexDBOption = allData[0];
-      if (backupMap) {
-        const value = backupMap.value as EditorNewMapBackUpSendData;
-        setBackupTitle({ title: value.title, videoId: value.videoId });
-      } else {
-        setBackupTitle({ title: "", videoId: "" });
-      }
-    });
+    db.editorNewCreateBak
+      .get({ optionName: "backupMapInfo" })
+      .then((data: IndexDBOption | undefined) => {
+        if (data) {
+          const backupMapInfo = data.value as EditorNewMapBackUpInfoData;
+          setBackupTitle({ title: backupMapInfo.title, videoId: backupMapInfo.videoId });
+        } else {
+          setBackupTitle({ title: "", videoId: "" });
+        }
+      });
 
     return () => {
       setBackupTitle({ title: "", videoId: "" });

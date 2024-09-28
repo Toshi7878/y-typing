@@ -5,7 +5,6 @@ import {
   useMapArtistNameAtom,
   useMapTitleAtom,
   useTagsAtom,
-  useVideoIdAtom,
 } from "../edit-atom/editAtom";
 import { sendEditorNewCreateBakIndexedDBData } from "@/lib/db";
 import { Tag } from "@/types";
@@ -19,15 +18,17 @@ export const useUpdateNewMapBackUp = () => {
   const creatorComment = useCreatorCommentAtom();
   const previewTime = useEditPreviewTimeInputAtom();
   return (newVideoId: string, newMapData: MapData[]) => {
-    sendEditorNewCreateBakIndexedDBData({
-      title,
-      artistName,
-      musicSouce,
-      creatorComment,
-      videoId: newVideoId,
-      previewTime,
-      tags: tags.map((tag: Tag) => tag.id),
-      mapData: newMapData,
-    });
+    sendEditorNewCreateBakIndexedDBData(
+      {
+        title,
+        artistName,
+        musicSouce,
+        creatorComment,
+        videoId: newVideoId,
+        previewTime,
+        tags: tags.map((tag: Tag) => tag.id),
+      },
+      newMapData,
+    );
   };
 };

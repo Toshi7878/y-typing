@@ -6,7 +6,7 @@ import LineOptionModal from "./LineOptionModal";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
+import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditAddLyricsTextAtom,
@@ -122,7 +122,11 @@ function MapTableBody() {
           }
         }
 
-        dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
+        const addLineMap = [
+          ...mapData,
+          { time: duration.toFixed(3), lyrics: "end", word: "" },
+        ].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+        dispatch(setMapData(addLineMap));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

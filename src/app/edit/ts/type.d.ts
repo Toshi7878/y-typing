@@ -22,14 +22,13 @@ export interface EditorSendData {
   thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
-export interface EditorNewMapBackUpSendData {
+export interface EditorNewMapBackUpInfoData {
   title: string;
   artistName: string;
   musicSouce: string;
   videoId: string;
   creatorComment: string;
   tags: string[];
-  mapData: MapData[];
   previewTime: string;
 }
 

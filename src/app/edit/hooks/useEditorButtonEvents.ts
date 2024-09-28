@@ -14,7 +14,7 @@ import {
 } from "../edit-atom/editAtom";
 import { useDeleteTopLyricsText } from "./useEditAddLyricsTextHooks";
 import { RootState } from "../redux/store";
-import { addLine, deleteLine, setLastAddedTime, updateLine } from "../redux/mapDataSlice";
+import { setLastAddedTime, setMapData } from "../redux/mapDataSlice";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { addHistory } from "../redux/undoredoSlice";
 import { useWordConvert } from "./useWordConvert";
@@ -37,11 +37,6 @@ const timeValidate = (
   }
 };
 
-export const useIsAddButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  return !isTimeInputValid;
-};
-
 export const useLineAddButtonEvent = () => {
   const isYTPlaying = useIsEditYTPlayingAtom();
   const addTimeOffset = useEditAddTimeOffsetAtom();
@@ -51,10 +46,10 @@ export const useLineAddButtonEvent = () => {
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
+  const dispatch = useDispatch();
 
   const { editorTimeInputRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
-  const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
   const endAfterLineIndex =
@@ -65,7 +60,7 @@ export const useLineAddButtonEvent = () => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
 
-  return (isShiftKey: boolean) => {
+  return async (isShiftKey: boolean) => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
 
     const time = timeValidate(
@@ -73,17 +68,19 @@ export const useLineAddButtonEvent = () => {
       mapData,
       endAfterLineIndex,
     ).toFixed(3);
-    dispatch(setLastAddedTime(time));
-
     const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
+    const addLineMap = [...mapData, newLine].sort(
+      (a, b) => parseFloat(a.time) - parseFloat(b.time),
+    );
 
-    const newMapData = dispatch(addLine(newLine));
+    dispatch(setLastAddedTime(time));
+    dispatch(setMapData(addLineMap));
+    dispatch(addHistory({ type: "add", data: newLine }));
 
     if (newVideoId) {
-      updateNewMapBackUp(newVideoId, newMapData.payload);
+      updateNewMapBackUp(newVideoId, addLineMap);
     }
 
-    dispatch(addHistory({ type: "add", data: newLine }));
     if (!isShiftKey) {
       lineInputReducer({ type: "reset" });
     }
@@ -98,19 +95,11 @@ export const useLineAddButtonEvent = () => {
   };
 };
 
-export const useIsUpdateButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  const isLineNotSelect = useIsLineNotSelectAtom();
-  const isLineLastSelect = useIsLineLastSelect();
-
-  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
-};
-
 export const useLineUpdateButtonEvent = () => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lyrics = useEditLineLyricsAtom();
   const word = useEditLineWordAtom();
-  const selectedLineCount = useEditLineSelectedCountAtom();
+  const selectedLineCount = useEditLineSelectedCountAtom() as number;
   const { editorTimeInputRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
@@ -133,6 +122,21 @@ export const useLineUpdateButtonEvent = () => {
       endAfterLineIndex,
     ).toFixed(3);
 
+    const updatedLine = {
+      time,
+      lyrics,
+      word,
+      ...(mapData[selectedLineCount].options && {
+        options: mapData[selectedLineCount].options,
+      }),
+    };
+
+    const newValue = [
+      ...mapData.slice(0, selectedLineCount),
+      updatedLine,
+      ...mapData.slice(selectedLineCount + 1),
+    ].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+
     setCanUpload(true);
     dispatch(
       addHistory({
@@ -145,27 +149,16 @@ export const useLineUpdateButtonEvent = () => {
       }),
     );
 
-    const newMapData = dispatch(
-      updateLine({
-        time,
-        lyrics,
-        word,
-        selectedLineCount: selectedLineCount ?? undefined,
-      }),
-    );
+    dispatch(setMapData(newValue));
 
     if (newVideoId) {
-      updateNewMapBackUp(newVideoId, newMapData.payload);
+      updateNewMapBackUp(newVideoId, newValue);
     }
 
     lineInputReducer({ type: "reset" });
   };
 };
 
-export const useIsConvertButtonDisabled = () => {
-  const isLineLastSelect = useIsLineLastSelect();
-  return isLineLastSelect;
-};
 export const useWordConvertButtonEvent = () => {
   const lyrics = useEditLineLyricsAtom();
   const lineInputReducer = useLineInputReducer();
@@ -178,14 +171,6 @@ export const useWordConvertButtonEvent = () => {
     setIsLoadWordConvert(false);
     lineInputReducer({ type: "set", payload: { word } });
   };
-};
-
-export const useIsDeleteButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  const isLineNotSelect = useIsLineNotSelectAtom();
-  const isLineLastSelect = useIsLineLastSelect();
-
-  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 };
 
 export const useLineDelete = () => {
@@ -201,7 +186,9 @@ export const useLineDelete = () => {
 
   return () => {
     if (selectedLineCount) {
-      const newMapData = dispatch(deleteLine(selectedLineCount));
+      const newValue = mapData.filter((_, index) => index !== selectedLineCount);
+
+      dispatch(setMapData(newValue));
       setCanUpload(true);
       dispatch(
         addHistory({
@@ -214,10 +201,36 @@ export const useLineDelete = () => {
       );
 
       if (newVideoId) {
-        updateNewMapBackUp(newVideoId, newMapData.payload);
+        updateNewMapBackUp(newVideoId, newValue);
       }
     }
 
     lineInputReducer({ type: "reset" });
   };
+};
+
+export const useIsAddButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  return !isTimeInputValid;
+};
+
+export const useIsUpdateButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  const isLineNotSelect = useIsLineNotSelectAtom();
+  const isLineLastSelect = useIsLineLastSelect();
+
+  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
+};
+
+export const useIsConvertButtonDisabled = () => {
+  const isLineLastSelect = useIsLineLastSelect();
+  return isLineLastSelect;
+};
+
+export const useIsDeleteButtonDisabled = () => {
+  const isTimeInputValid = useEditIsTimeInputValidAtom();
+  const isLineNotSelect = useIsLineNotSelectAtom();
+  const isLineLastSelect = useIsLineLastSelect();
+
+  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 };

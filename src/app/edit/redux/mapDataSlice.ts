@@ -59,14 +59,6 @@ export const mapDataSlice = createSlice({
       state.value = action.payload.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
 
-    addLine: (state, action) => {
-      return {
-        ...state,
-        value: [...state.value, action.payload].sort(
-          (a, b) => parseFloat(a.time) - parseFloat(b.time),
-        ),
-      };
-    },
     updateLine: (state, action) => {
       const { selectedLineCount, time, lyrics, word } = action.payload;
 
@@ -75,7 +67,6 @@ export const mapDataSlice = createSlice({
       newValue[selectedLineCount] = {
         time,
         lyrics,
-
         word,
         ...(newValue[selectedLineCount].options && {
           options: newValue[selectedLineCount].options,
@@ -199,7 +190,6 @@ export const mapDataSlice = createSlice({
 });
 
 export const {
-  addLine,
   updateLine,
   deleteLine,
   setLineOption,
