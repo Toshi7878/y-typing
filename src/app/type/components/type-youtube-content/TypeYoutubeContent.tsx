@@ -68,7 +68,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
   const memoizedYouTube = useMemo(
     () => (
       <YouTube
-        className={className}
+        className={`${className} `}
         videoId={videoId}
         opts={{
           width: "100%",
@@ -78,6 +78,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
             controls: 0,
           },
         }}
+        iframeClassName="shadow-xl" // iframeタグにクラスを追加
         onReady={ytReadyEvent}
         onPlay={ytPlayEvent}
         onPause={ytPauseEvent}
