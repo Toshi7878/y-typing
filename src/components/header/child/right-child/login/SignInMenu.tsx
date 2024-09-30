@@ -17,6 +17,7 @@ export default function SignInMenu() {
         color={theme.colors.header.color}
         _hover={{ color: theme.colors.header.hover.color }}
         _active={{ color: theme.colors.header.hover.color }}
+        className="dropdown-toggle"
       >
         ログイン
       </MenuButton>
