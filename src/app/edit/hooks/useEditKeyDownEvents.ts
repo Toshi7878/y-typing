@@ -19,13 +19,30 @@ import { LineEdit } from "@/types";
 import { useWordFindReplace } from "./useWordFindReplace";
 import {
   useIsAddButtonDisabled,
-  useIsConvertButtonDisabled,
   useIsDeleteButtonDisabled,
   useIsUpdateButtonDisabled,
   useLineAddButtonEvent,
   useLineDelete,
   useLineUpdateButtonEvent,
 } from "./useEditorButtonEvents";
+
+export const useTbodyScroll = () => {
+  const { tbodyRef } = useRefs();
+
+  return (count: number) => {
+    const targetRow = tbodyRef.current?.children[count];
+
+    if (targetRow && targetRow instanceof HTMLElement) {
+      const parentElement = targetRow.parentElement!.parentElement!.parentElement;
+      if (parentElement && targetRow instanceof HTMLElement) {
+        parentElement.scrollTo({
+          top: targetRow.offsetTop - parentElement.offsetTop - targetRow.offsetHeight,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+};
 
 export const useWindowKeydownEvent = () => {
   const { tbodyRef, playerRef } = useRefs();
@@ -51,6 +68,7 @@ export const useWindowKeydownEvent = () => {
   const lineAddButtonEvent = useLineAddButtonEvent();
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();
   const lineDelete = useLineDelete();
+  const tbodyScroll = useTbodyScroll();
 
   return (event: KeyboardEvent) => {
     const iS_FOCUS_TEXTAREA =
@@ -74,6 +92,7 @@ export const useWindowKeydownEvent = () => {
                   type: "set",
                   payload: { lyrics: prevLine.lyrics, word: prevLine.word, selectCount: prevCount },
                 });
+                tbodyScroll(prevCount);
               }
             }
           }
@@ -98,6 +117,7 @@ export const useWindowKeydownEvent = () => {
                     selectCount: nextCount,
                   },
                 });
+                tbodyScroll(nextCount);
               }
             }
           }

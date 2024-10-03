@@ -5,9 +5,12 @@ import { useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { useCanUploadAtom, useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ThemeColors, UploadResult } from "@/types";
 import { useInitializeEditorCreateBak } from "@/lib/db";
+import { useUpdateNewMapBackUp } from "@/app/edit/hooks/useUpdateNewMapBackUp";
+import { RootState } from "@/app/edit/redux/store";
+import { useSelector } from "react-redux";
 interface UploadButtonProps {
   state: UploadResult;
 }
@@ -19,12 +22,16 @@ const UploadButton = ({ state }: UploadButtonProps) => {
   const successToast = useSuccessToast();
   const initializeEditorCreateIndexedDB = useInitializeEditorCreateBak();
   const router = useRouter();
+  const updateNewMapBackUp = useUpdateNewMapBackUp();
+  const searchParams = useSearchParams();
+  const newVideoId = searchParams.get("new") || "";
+  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   useEffect(() => {
     if (state.status !== 0) {
       successToast(state);
 
-      const isSuccess = state.status === 200 ? true : false;
+      const isSuccess = state.status === 200;
 
       if (isSuccess) {
         setCanUpload(false);
@@ -32,11 +39,29 @@ const UploadButton = ({ state }: UploadButtonProps) => {
           router.replace(`/edit/${state.id}`);
           initializeEditorCreateIndexedDB();
         }
+      } else if (state.status === 500) {
+        if (newVideoId) {
+          updateNewMapBackUp(newVideoId, mapData);
+        }
       }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (canUpload) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [canUpload]);
 
   return (
     <Button

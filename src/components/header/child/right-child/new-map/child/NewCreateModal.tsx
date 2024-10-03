@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/db";
 import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
 import { Link } from "@chakra-ui/next-js";
-import { useLinkClick } from "@/app/nprogress";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import NProgress from "nprogress";
 import { extractYouTubeVideoId } from "../extractYTId";
 

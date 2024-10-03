@@ -14,6 +14,7 @@ import EditTable from "./editor-table-content/EditTable";
 import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
+  useSetCanUploadAtom,
   useSetCreatorCommentAtom,
   useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
@@ -55,6 +56,7 @@ function Content() {
   const setArtistName = useSetMapArtistNameAtom();
   const setMusicSouce = useSetEditMusicSouceAtom();
   const setLyrics = useSetEditLineLyricsAtom();
+  const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
 
   const { data, error, isLoading } = useQuery({
@@ -104,6 +106,7 @@ function Content() {
     setSelectedCount(null);
     setTimeCount(0);
     setGeminiTags([]);
+    setCanUpload(false);
 
     return () => {
       setLyrics("");

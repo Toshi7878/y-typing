@@ -29,6 +29,7 @@ import {
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import { MapData } from "@/app/type/ts/type";
 import LineRow from "./child/LineRow";
+import React from "react";
 
 function MapTableBody() {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ function MapTableBody() {
   const timeCount = useEditTimeCountAtom();
   const isYTStarted = useIsEditYTStartedAtom();
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
-  const refs = useRefs();
+  const { tbodyRef, playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const windowKeydownEvent = useWindowKeydownEvent();
 
@@ -82,7 +83,7 @@ function MapTableBody() {
     if (mapData.length > 0) {
       for (let i = mapData.length - 1; i >= 0; i--) {
         if (Number(mapData[i]["time"]) == Number(lastAddedTime)) {
-          const targetRow = refs.tbodyRef.current?.children[i];
+          const targetRow = tbodyRef.current?.children[i];
 
           if (targetRow && targetRow instanceof HTMLElement) {
             const parentElement = targetRow.parentElement!.parentElement!.parentElement;
@@ -104,7 +105,7 @@ function MapTableBody() {
 
   useEffect(() => {
     if (isYTStarted) {
-      const duration = refs.playerRef.current?.getDuration();
+      const duration = playerRef.current?.getDuration();
 
       if (duration) {
         for (let i = mapData.length - 1; i >= 0; i--) {

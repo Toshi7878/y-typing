@@ -3,7 +3,7 @@ import { Text } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
-import { useLinkClick } from "@/app/nprogress";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { MapCardInfo } from "../../ts/type";
 import MapInfo from "./child/MapInfo";
 

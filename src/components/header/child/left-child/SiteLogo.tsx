@@ -1,6 +1,6 @@
 import { ThemeColors } from "@/types";
 import { usePathname } from "next/navigation";
-import { useLinkClick } from "@/app/nprogress";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { Text, useTheme } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 
