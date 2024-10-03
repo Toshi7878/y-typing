@@ -29,6 +29,7 @@ import {
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import { MapData } from "@/app/type/ts/type";
 import LineRow from "./child/LineRow";
+import React from "react";
 
 function MapTableBody() {
   const dispatch = useDispatch();
