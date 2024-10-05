@@ -83,10 +83,10 @@ export const useLineAddButtonEvent = () => {
 
     if (!isShiftKey) {
       lineInputReducer({ type: "reset" });
-    }
 
-    const lyricsCopy = !isShiftKey ? structuredClone(lyrics) : "";
-    deleteTopLyricsText(lyricsCopy);
+      const lyricsCopy = structuredClone(lyrics);
+      deleteTopLyricsText(lyricsCopy);
+    }
 
     setCanUpload(true);
 
