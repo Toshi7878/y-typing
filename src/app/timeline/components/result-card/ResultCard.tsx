@@ -50,7 +50,7 @@ function ResultCard({ result }: ResultCardProps) {
         <Text as="span">
           {" "}
           -{" "}
-          {formatDistanceToNowStrict(new Date(result.map.updatedAt), {
+          {formatDistanceToNowStrict(new Date(result.updatedAt), {
             addSuffix: true,
             locale: ja,
           })}
