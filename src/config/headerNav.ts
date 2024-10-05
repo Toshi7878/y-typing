@@ -4,7 +4,10 @@ export const leftNavConfig: LeftNavConfig = {
   items: [
     {
       title: "Menu",
-      menuItem: [{ title: "更新履歴", href: "/changelog" }],
+      menuItem: [
+        { title: "更新履歴", href: "/changelog" },
+        { title: "タイムライン", href: "/timeline" },
+      ],
     },
   ],
 };

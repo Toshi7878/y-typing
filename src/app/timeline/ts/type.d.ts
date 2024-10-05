@@ -14,6 +14,10 @@ export interface ResultCardInfo {
     previewTime: string;
     thumbnailQuality: "maxresdefault" | "mqdefault";
     updatedAt: Date;
+    user: {
+      id: number;
+      name: string;
+    };
   };
   user: {
     id: number;

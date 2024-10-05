@@ -1,15 +1,12 @@
 import { NavItem, ThemeColors } from "@/types";
 
-import { usePathname } from "next/navigation";
-import { Box, Button, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/react";
+import { Box, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/react";
 import LinkMenuItem from "../child/LinkMenuItem";
 
 interface LeftMenusProps {
   items: NavItem[];
 }
 function LeftMenus({ items }: LeftMenusProps) {
-  const pathname = usePathname();
-
   const theme: ThemeColors = useTheme();
 
   return (
@@ -26,6 +23,7 @@ function LeftMenus({ items }: LeftMenusProps) {
               className="dropdown-toggle"
               fontSize="sm"
               _active={{ color: theme.colors.header.hover.color }}
+              ml={5}
             >
               {item.title}
             </MenuButton>

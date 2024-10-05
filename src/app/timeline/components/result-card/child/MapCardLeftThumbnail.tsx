@@ -3,9 +3,9 @@ import { Box, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
-import { previewTimeAtom, videoIdAtom } from "../../atoms/atoms";
+import { previewTimeAtom, videoIdAtom } from "../../../atoms/atoms";
 import { useAtom, useSetAtom } from "jotai";
-import { THUBNAIL_HEIGHT, THUBNAIL_WIDTH } from "../../ts/const/consts";
+import { THUBNAIL_HEIGHT, THUBNAIL_WIDTH } from "../../../ts/const/consts";
 
 interface MapLeftThumbnailProps {
   src: string;

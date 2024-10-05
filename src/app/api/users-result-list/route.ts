@@ -32,6 +32,13 @@ export async function GET(req: NextRequest) {
             previewTime: true,
             thumbnailQuality: true,
             updatedAt: true,
+
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         user: {

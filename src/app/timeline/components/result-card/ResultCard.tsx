@@ -15,8 +15,9 @@ import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { ThemeColors } from "@/types";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
-import MapLeftThumbnail from "./MapCardLeftThumbnail";
+import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapInfo from "./child/MapInfo";
+import MapResultBadges from "./child/MapResultBadges";
 
 interface ResultCardProps {
   result: ResultCardInfo;
@@ -34,21 +35,21 @@ function ResultCard({ result }: ResultCardProps) {
   return (
     <Card
       transition="box-shadow 0.3s"
+      bg={theme.colors.card.bg}
       _hover={{
         boxShadow: theme.colors.home.card.hover,
       }}
     >
-      <CardHeader bg={theme.colors.card.bg} borderRadius="md">
-        <Link
-          href={`/user/${result.user.id}`}
-          onClick={handleLinkClick}
-          color={theme.colors.home.card.link}
-          fontWeight="bold"
-        >
-          {result.user.name}
-        </Link>
+      <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2}>
         <Text as="span">
-          {" "}
+          <Link
+            href={`/user/${result.user.id}`}
+            onClick={handleLinkClick}
+            color={theme.colors.home.card.link}
+            fontWeight="bold"
+          >
+            {result.user.name}
+          </Link>{" "}
           -{" "}
           {formatDistanceToNowStrict(new Date(result.updatedAt), {
             addSuffix: true,
@@ -62,18 +63,21 @@ function ResultCard({ result }: ResultCardProps) {
         borderRadius="lg"
         className="flex items-start"
         style={{ padding: 0, border: "none" }}
+        mx={6}
       >
-        {result.id}
-        <Flex py={6} ml={10} direction="row" gap={4}>
-          <MapLeftThumbnail
-            alt={result.map.title}
-            src={src}
-            fallbackSrc={`https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`}
-            mapVideoId={result.map.videoId}
-            mapPreviewTime={result.map.previewTime}
-            thumbnailQuality={result.map.thumbnailQuality}
-          />
-          <MapInfo map={result.map} />
+        <Flex py={6} ml={20} direction="row" gap={4} justifyContent="space-between" w="100%">
+          <Flex direction="row" gap={4}>
+            <MapLeftThumbnail
+              alt={result.map.title}
+              src={src}
+              fallbackSrc={`https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`}
+              mapVideoId={result.map.videoId}
+              mapPreviewTime={result.map.previewTime}
+              thumbnailQuality={result.map.thumbnailQuality}
+            />
+            <MapInfo map={result.map} />
+          </Flex>
+          <MapResultBadges result={result} />
         </Flex>
       </CardBody>
       <CardFooter bg={theme.colors.card.bg} borderRadius="md"></CardFooter>
