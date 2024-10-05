@@ -97,8 +97,10 @@ function Content() {
             dispatch(setMapData(data.value));
           }
         });
+      setCanUpload(true);
     } else {
       dispatch(resetMapData());
+      setCanUpload(false);
     }
     setIsYTStarted(false);
     setIsYTReady(false);
@@ -106,7 +108,6 @@ function Content() {
     setSelectedCount(null);
     setTimeCount(0);
     setGeminiTags([]);
-    setCanUpload(false);
 
     return () => {
       setLyrics("");
