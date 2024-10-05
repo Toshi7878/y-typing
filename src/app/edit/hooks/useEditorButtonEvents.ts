@@ -119,7 +119,7 @@ export const useLineUpdateButtonEvent = () => {
   return async () => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
     const time_ =
-      isYTPlaying && selectedLineCount
+      isYTPlaying && !selectedLineCount
         ? playerRef.current.getCurrentTime()
         : editorTimeInputRef.current!.getTime();
 
