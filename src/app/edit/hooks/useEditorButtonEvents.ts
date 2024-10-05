@@ -117,7 +117,7 @@ export const useLineUpdateButtonEvent = () => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
   return async () => {
-    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
+    const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) : 0;
     const time_ =
       isYTPlaying && !selectedLineCount
         ? playerRef.current.getCurrentTime()
