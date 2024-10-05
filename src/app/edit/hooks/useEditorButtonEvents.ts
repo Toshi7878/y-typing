@@ -118,9 +118,10 @@ export const useLineUpdateButtonEvent = () => {
       .findIndex((line) => line.lyrics === "end");
   return async () => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
-    const time_ = isYTPlaying
-      ? playerRef.current.getCurrentTime()
-      : editorTimeInputRef.current!.getTime();
+    const time_ =
+      isYTPlaying && selectedLineCount
+        ? playerRef.current.getCurrentTime()
+        : editorTimeInputRef.current!.getTime();
 
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
