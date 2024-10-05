@@ -11,6 +11,7 @@ import {
   useLineUpdateButtonEvent,
   useWordConvertButtonEvent,
 } from "@/app/edit/hooks/useEditorButtonEvents";
+import React from "react";
 
 const EditorButtons = () => {
   const theme: ThemeColors = useTheme();

@@ -54,6 +54,9 @@ const TabInfoUpload = () => {
   const setMusicSouce = useSetEditMusicSouceAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const successToast = useSuccessToast();
+  const searchParams = useSearchParams();
+  const isNewCreateMap = !!searchParams.get("new");
+  const isBackUp = searchParams.get("backup") === "true";
 
   const { playerRef } = useRefs();
   const { id } = useParams();
@@ -96,9 +99,6 @@ const TabInfoUpload = () => {
   const isDisplayUploadButton =
     (myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId)) || isAdmin;
 
-  const searchParams = useSearchParams();
-  const isNewCreateMap = !!searchParams.get("new");
-
   const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
     queryKey: ["generate-gemini-map-info", videoId, isNewCreateMap],
     queryFn: async () => {
@@ -119,7 +119,7 @@ const TabInfoUpload = () => {
 
         const mapInfoData: GeminiMapInfo = JSON.parse(geminiMapInfo.data.message);
 
-        if (isNewCreateMap) {
+        if (isNewCreateMap && !isBackUp) {
           setMapTitle(mapInfoData.musicTitle);
           setMapArtistName(mapInfoData.artistName);
           setMusicSouce(mapInfoData.musicSouce);
