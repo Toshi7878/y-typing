@@ -2,6 +2,7 @@ import { Input, FormLabel, useTheme } from "@chakra-ui/react";
 import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
 import { Dispatch } from "react";
+import React from "react";
 
 interface InfoInputProps {
   isGeminiLoading?: boolean;

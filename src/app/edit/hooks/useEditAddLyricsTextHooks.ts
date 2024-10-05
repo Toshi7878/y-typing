@@ -53,7 +53,7 @@ export const useDeleteTopLyricsText = () => {
     const topLine = lines[0];
     const newText = lines.slice(1).join("\n");
 
-    if (lyrics === topLine) {
+    if (lyrics.replace(/\r$/, "") === topLine) {
       setLyricsText(newText);
     }
 
