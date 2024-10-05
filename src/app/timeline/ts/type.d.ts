@@ -1,13 +1,20 @@
-export interface MapCardInfo {
+export interface ResultCardInfo {
   id: number;
-  title: string;
-  artistName: string;
-  musicSouce: string;
-  videoId: string;
-  updatedAt: string;
-  previewTime: string;
-  difficulty: string;
-  thumbnailQuality: "maxresdefault" | "mqdefault";
+  mapId: number;
+  userId: number;
+  updatedAt: Date;
+  clearRate: number;
+  score: number;
+  miss: number;
+  map: {
+    id: number;
+    videoId: string;
+    title: string;
+    artistName: string;
+    previewTime: string;
+    thumbnailQuality: "maxresdefault" | "mqdefault";
+    updatedAt: Date;
+  };
   user: {
     id: number;
     name: string;

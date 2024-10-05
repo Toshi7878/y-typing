@@ -78,7 +78,6 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
             controls: 0,
           },
         }}
-        iframeClassName="shadow-xl" // iframeタグにクラスを追加
         onReady={ytReadyEvent}
         onPlay={ytPlayEvent}
         onPause={ytPauseEvent}

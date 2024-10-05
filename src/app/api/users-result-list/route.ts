@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const page = searchParams.get("page") ?? "0";
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
+
   try {
     const resultList = await prisma.result.findMany({
       skip: offset,
@@ -24,6 +25,7 @@ export async function GET(req: NextRequest) {
         miss: true,
         map: {
           select: {
+            id: true,
             videoId: true,
             title: true,
             artistName: true,
@@ -40,7 +42,7 @@ export async function GET(req: NextRequest) {
         },
       },
       orderBy: {
-        updatedAt: "desc", // 逆順で取得
+        updatedAt: "desc",
       },
     });
 
