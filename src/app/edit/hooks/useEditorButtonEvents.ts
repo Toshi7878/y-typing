@@ -48,7 +48,7 @@ export const useLineAddButtonEvent = () => {
   const updateNewMapBackUp = useUpdateNewMapBackUp();
   const dispatch = useDispatch();
 
-  const { editorTimeInputRef } = useRefs();
+  const { editorTimeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
@@ -62,12 +62,11 @@ export const useLineAddButtonEvent = () => {
 
   return async (isShiftKey: boolean) => {
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
+    const time_ = isYTPlaying
+      ? playerRef.current.getCurrentTime()
+      : editorTimeInputRef.current!.getTime();
 
-    const time = timeValidate(
-      editorTimeInputRef.current!.getTime() + timeOffset,
-      mapData,
-      endAfterLineIndex,
-    ).toFixed(3);
+    const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
     const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
     const addLineMap = [...mapData, newLine].sort(
       (a, b) => parseFloat(a.time) - parseFloat(b.time),
@@ -100,13 +99,15 @@ export const useLineUpdateButtonEvent = () => {
   const lyrics = useEditLineLyricsAtom();
   const word = useEditLineWordAtom();
   const selectedLineCount = useEditLineSelectedCountAtom() as number;
-  const { editorTimeInputRef } = useRefs();
+  const { editorTimeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
+  const isYTPlaying = useIsEditYTPlayingAtom();
+  const addTimeOffset = useEditAddTimeOffsetAtom();
 
   const endAfterLineIndex =
     mapData.length -
@@ -116,11 +117,12 @@ export const useLineUpdateButtonEvent = () => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
   return async () => {
-    const time = timeValidate(
-      editorTimeInputRef.current!.getTime(),
-      mapData,
-      endAfterLineIndex,
-    ).toFixed(3);
+    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
+    const time_ = isYTPlaying
+      ? playerRef.current.getCurrentTime()
+      : editorTimeInputRef.current!.getTime();
+
+    const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
     const updatedLine = {
       time,
