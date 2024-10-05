@@ -65,7 +65,7 @@ function ResultCard({ result }: ResultCardProps) {
         style={{ padding: 0, border: "none" }}
         mx={6}
       >
-        <Flex py={6} ml={20} direction="row" gap={4} justifyContent="space-between" w="100%">
+        <Flex ml={20} py={6} direction="row" gap={4} justifyContent="space-between" w="100%">
           <Flex direction="row" gap={4}>
             <MapLeftThumbnail
               alt={result.map.title}
@@ -77,10 +77,11 @@ function ResultCard({ result }: ResultCardProps) {
             />
             <MapInfo map={result.map} />
           </Flex>
+
           <MapResultBadges result={result} />
         </Flex>
       </CardBody>
-      <CardFooter bg={theme.colors.card.bg} borderRadius="md"></CardFooter>
+      <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1}></CardFooter>
     </Card>
   );
 }
