@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { LineResultData, SendResultData } from "../ts/type";
+import { LineResultData, SendResultData } from "../../ts/type";
 import axios from "axios";
-import { useSetIsLoadingOverlayAtom, useSetLineResultsAtom } from "../type-atoms/gameRenderAtoms";
+import {
+  useSetIsLoadingOverlayAtom,
+  useSetLineResultsAtom,
+} from "../../type-atoms/gameRenderAtoms";
 
 export const usePracticeDataQuery = () => {
   const { data: session } = useSession();
@@ -31,6 +34,8 @@ export const usePracticeDataQuery = () => {
       setIsLoadingOverlay(false);
 
       setLineResults(response.data!.lineResult);
+
+      return response.data;
     },
     enabled: false,
   });

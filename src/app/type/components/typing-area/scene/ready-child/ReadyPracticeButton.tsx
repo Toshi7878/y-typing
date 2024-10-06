@@ -5,7 +5,7 @@ import {
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Button, useTheme } from "@chakra-ui/react";
 import React, { useCallback } from "react";
-import { usePracticeDataQuery } from "@/app/type/hooks/useQueryPracticeData";
+import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
 
 const ReadyPracticeButton = () => {
   const { gameStateRef, playerRef } = useRefs();
