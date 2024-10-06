@@ -27,7 +27,8 @@ const calcRank = async (mapId: number) => {
         userId: rankingList[i].userId,
       },
       data: {
-        rank: i + 1, // mapDataをunknownに変換してからJsonObjectにキャスト
+        rank: i + 1,
+        updatedAt: undefined,
       },
     });
   }
