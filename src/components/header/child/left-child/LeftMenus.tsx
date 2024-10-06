@@ -1,7 +1,9 @@
 import { NavItem, ThemeColors } from "@/types";
 
-import { Box, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/react";
+import { Box, Button, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/react";
 import LinkMenuItem from "../child/LinkMenuItem";
+import { leftLink } from "@/config/headerNav";
+import { Link } from "@chakra-ui/next-js";
 
 interface LeftMenusProps {
   items: NavItem[];
@@ -33,6 +35,26 @@ function LeftMenus({ items }: LeftMenusProps) {
               })}
             </MenuList>
           </Menu>
+        );
+      })}
+
+      {leftLink.map((link, index) => {
+        return (
+          <Link
+            as={Button}
+            key={index}
+            href={link.href}
+            cursor="pointer"
+            color={theme.colors.header.color}
+            _hover={{
+              color: theme.colors.header.hover.color,
+            }}
+            fontSize="sm"
+            _active={{ color: theme.colors.header.hover.color }}
+            ml={5}
+          >
+            {link.title}
+          </Link>
         );
       })}
     </Box>

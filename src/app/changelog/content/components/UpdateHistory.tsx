@@ -5,7 +5,7 @@ import React from "react";
 const updates = [
   {
     date: "2024-10-6",
-    descriptions: ["タイムラインに順位を追加"],
+    descriptions: ["タイムラインに順位を追加", "タイムラインのリンクをヘッダーに表示"],
   },
   {
     date: "2024-10-5",
