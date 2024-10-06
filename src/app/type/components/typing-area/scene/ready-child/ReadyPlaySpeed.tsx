@@ -1,7 +1,7 @@
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { Box, Button, HStack, useTheme } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeColors } from "@/types";
 import {
   useSetTypePageSpeedAtom,
@@ -16,8 +16,15 @@ interface ReadyPlaySpeedProps {
 const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
   const speedData = useTypePageSpeedAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
-  const { playerRef } = useRefs();
+  const { playerRef, gameStateRef } = useRefs();
   const theme: ThemeColors = useTheme();
+
+  useEffect(() => {
+    if (speedData.defaultSpeed < 1) {
+      gameStateRef.current!.playMode = "practice";
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speedData.defaultSpeed]);
 
   return (
     <HStack
@@ -31,7 +38,7 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
       <CustomToolTip
         tooltipLabel="1.00倍速未満の場合は練習モードになります。"
         placement="top"
-        isDisabled={speedData.defaultSpeed < 1}
+        isDisabled={speedData.defaultSpeed > 1}
       >
         <Box>
           <Button
