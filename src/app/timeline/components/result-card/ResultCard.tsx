@@ -40,7 +40,7 @@ function ResultCard({ result }: ResultCardProps) {
         boxShadow: theme.colors.home.card.hover,
       }}
     >
-      <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2}>
+      <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2} py={3}>
         <Text as="span">
           <Link
             href={`/user/${result.user.id}`}
