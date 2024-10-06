@@ -16,6 +16,7 @@ const calcRank = async (mapId: number) => {
     select: {
       userId: true,
       score: true,
+      updatedAt: true,
     },
     orderBy: { score: "desc" },
   });
@@ -28,7 +29,7 @@ const calcRank = async (mapId: number) => {
       },
       data: {
         rank: i + 1,
-        updatedAt: undefined,
+        updatedAt: rankingList[i].updatedAt, // 現在のupdatedAtの値を再設定
       },
     });
   }
