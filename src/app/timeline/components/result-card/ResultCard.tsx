@@ -65,8 +65,18 @@ function ResultCard({ result }: ResultCardProps) {
         style={{ padding: 0, border: "none" }}
         mx={6}
       >
-        <Flex ml={20} py={6} direction="row" gap={4} justifyContent="space-between" w="100%">
+        <Flex
+          py={6}
+          direction="row"
+          gap={4}
+          justifyContent="space-between"
+          w="100%"
+          alignItems="center"
+        >
           <Flex direction="row" gap={4}>
+            <Box fontSize="lg" fontWeight="bold" pl={5} pr={1} whiteSpace="nowrap" m={"auto"}>
+              Rank: #{result.rank}
+            </Box>
             <MapLeftThumbnail
               alt={result.map.title}
               src={src}

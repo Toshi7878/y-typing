@@ -22,6 +22,7 @@ function MapInfo({ map }: MapCardProps) {
           href={`/type/${map.id}`}
           onClick={handleLinkClick}
           color={theme.colors.home.card.link}
+          w="30vw"
         >
           <Box
             fontWeight="bold"
@@ -29,6 +30,7 @@ function MapInfo({ map }: MapCardProps) {
             textOverflow="ellipsis"
             whiteSpace="nowrap"
             fontSize="md"
+            w="30vw"
           >
             {`${map.title} / ${map.artistName}`}
           </Box>

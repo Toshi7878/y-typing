@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-10-6",
+    descriptions: ["タイムラインに順位を追加"],
+  },
+  {
     date: "2024-10-5",
     descriptions: ["リザルトタイムラインを追加"],
   },

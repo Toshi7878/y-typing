@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
         clearRate: true,
         score: true,
         miss: true,
+        rank: true,
         map: {
           select: {
             id: true,

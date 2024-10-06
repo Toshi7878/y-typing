@@ -6,6 +6,7 @@ export interface ResultCardInfo {
   clearRate: number;
   score: number;
   miss: number;
+  rank: number;
   map: {
     id: number;
     videoId: string;
