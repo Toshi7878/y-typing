@@ -12,6 +12,7 @@ import { LineResultData } from "@/app/type/ts/type";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
 import { Ticker } from "@pixi/ticker";
+import React from "react";
 
 interface ResultLineListProps {
   modalContentRef: React.RefObject<HTMLDivElement>;

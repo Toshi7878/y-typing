@@ -3,9 +3,10 @@
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import CustomToolTip from "@/components/CustomToolTip";
 import { ThemeColors } from "@/types";
-import { Box, Td, Text, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Td, Text, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
+import React from "react";
 import { useEffect } from "react";
 
 interface RankingTrProps {
