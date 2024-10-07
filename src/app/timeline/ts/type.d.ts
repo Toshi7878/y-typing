@@ -7,6 +7,12 @@ export interface ResultCardInfo {
   score: number;
   miss: number;
   rank: number;
+  kanaType: number;
+  romaType: number;
+  flickType: number;
+  kpm: number;
+  romaKpm: number;
+  defaultSpeed: number;
   map: {
     id: number;
     videoId: string;

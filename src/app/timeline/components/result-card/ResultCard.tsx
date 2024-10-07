@@ -18,6 +18,7 @@ import { ja } from "date-fns/locale";
 import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapInfo from "./child/MapInfo";
 import MapResultBadges from "./child/MapResultBadges";
+import UserRank from "./child/UserRank";
 
 interface ResultCardProps {
   result: ResultCardInfo;
@@ -74,9 +75,7 @@ function ResultCard({ result }: ResultCardProps) {
           alignItems="center"
         >
           <Flex direction="row" gap={4}>
-            <Box fontSize="lg" fontWeight="bold" pl={5} pr={1} whiteSpace="nowrap" m={"auto"}>
-              Rank: #{result.rank}
-            </Box>
+            <UserRank userRank={result.rank} />
             <MapLeftThumbnail
               alt={result.map.title}
               src={src}

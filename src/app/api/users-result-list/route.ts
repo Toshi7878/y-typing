@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-const CONTENT_LENGTH = 40;
+const CONTENT_LENGTH = 30;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -24,6 +24,12 @@ export async function GET(req: NextRequest) {
         score: true,
         miss: true,
         rank: true,
+        kanaType: true,
+        romaType: true,
+        flickType: true,
+        kpm: true,
+        romaKpm: true,
+        defaultSpeed: true,
         map: {
           select: {
             id: true,
