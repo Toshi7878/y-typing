@@ -18,9 +18,9 @@ function UsersResultList() {
     status,
   } = useUsersResultInfiniteQuery();
 
-  if (status === "pending") {
-    // return <LoadingMapCard />;
-  }
+  // if (status === "pending") {
+  //   // return <LoadingMapCard />;
+  // }
 
   return (
     <InfiniteScroll
