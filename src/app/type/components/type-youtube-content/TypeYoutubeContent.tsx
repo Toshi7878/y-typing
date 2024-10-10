@@ -68,7 +68,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
   const memoizedYouTube = useMemo(
     () => (
       <YouTube
-        className={className}
+        className={`${className} `}
         videoId={videoId}
         opts={{
           width: "100%",

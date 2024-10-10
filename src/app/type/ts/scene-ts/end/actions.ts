@@ -8,6 +8,33 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
+const calcRank = async (mapId: number) => {
+  const rankingList = await prisma.result.findMany({
+    where: {
+      mapId: mapId,
+    },
+    select: {
+      userId: true,
+      score: true,
+      updatedAt: true,
+    },
+    orderBy: { score: "desc" },
+  });
+
+  for (let i = 0; i < rankingList.length; i++) {
+    await prisma.result.updateMany({
+      where: {
+        mapId: mapId,
+        userId: rankingList[i].userId,
+      },
+      data: {
+        rank: i + 1,
+        updatedAt: rankingList[i].updatedAt, // 現在のupdatedAtの値を再設定
+      },
+    });
+  }
+};
+
 const send = async (data: SendResultData, userId: number) => {
   const existingResult = await prisma.result.findFirst({
     where: {
@@ -58,7 +85,7 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
   try {
     const userId = Number(session?.user?.id);
     const newId = await send(data, userId);
-
+    await calcRank(data.mapId);
     return {
       id: newId,
       title: "ランキング登録が完了しました",

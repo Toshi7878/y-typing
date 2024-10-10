@@ -74,7 +74,7 @@ export const useMoveLine = () => {
       speedData.playSpeed;
 
     const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * speedData.playSpeed : 0;
-    const nextTime = count > 0 ? Number(map!.mapData[nextCount]["time"]) - seekBuffer : 0;
+    const nextTime = Number(map!.mapData[nextCount]["time"]) - seekBuffer;
 
     const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
 

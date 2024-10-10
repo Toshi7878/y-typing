@@ -2,10 +2,12 @@
 
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import CustomToolTip from "@/components/CustomToolTip";
+import { UserInputMode } from "@/components/UserInputMode";
 import { ThemeColors } from "@/types";
-import { Box, Td, Text, Tooltip, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Td, Text, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 import { formatDistanceToNowStrict } from "date-fns";
 import { ja } from "date-fns/locale";
+import React from "react";
 import { useEffect } from "react";
 
 interface RankingTrProps {
@@ -33,6 +35,7 @@ interface RankingTrProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
+
 const RankingTr = (props: RankingTrProps) => {
   const { gameStateRef } = useRefs();
   const theme: ThemeColors = useTheme();
@@ -44,63 +47,10 @@ const RankingTr = (props: RankingTrProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const romaColor = theme.colors.type.ready.radio.roma.bg;
-  const kanaColor = theme.colors.type.ready.radio.kana.bg;
-  const flickColor = theme.colors.type.ready.radio.flick.bg;
-
   const isPerfect = props.miss === 0 && props.lost === 0;
   const isKanaFlickTyped = props.kanaType > 0 || props.flickType > 0;
-
   const correctRate = ((props.type / (props.miss + props.type)) * 100).toFixed(1);
-  const getInputMode = () => {
-    if (props.romaType && props.kanaType) {
-      if (props.romaType >= props.kanaType) {
-        return (
-          <>
-            <Text as="span" color={romaColor} className="input-mode-outline-text">
-              ローマ字
-            </Text>
-            <Text as="span" color={theme.colors.card.color}>
-              ・
-            </Text>
-            <Text as="span" color={kanaColor} className="input-mode-outline-text">
-              かな
-            </Text>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <Text as="span" color={kanaColor} className="input-mode-outline-text">
-              かな
-            </Text>
-            <Text as="span" color={theme.colors.card.color}>
-              ・
-            </Text>
-            <Text as="span" color={romaColor} className="input-mode-outline-text">
-              ローマ字
-            </Text>
-          </>
-        );
-      }
-    } else {
-      if (props.romaType) {
-        return (
-          <Text as="span" color={romaColor} className="input-mode-outline-text">
-            ローマ字
-          </Text>
-        );
-      }
-      if (props.kanaType) {
-        return (
-          <Text as="span" color={kanaColor} className="input-mode-outline-text">
-            かな
-          </Text>
-        );
-      }
-    }
-    return null;
-  };
+
   return (
     <CustomToolTip
       tooltipLabel={
@@ -216,7 +166,11 @@ const RankingTr = (props: RankingTrProps) => {
         </Td>
         <Td>{props.kpm}</Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-          {getInputMode()}
+          <UserInputMode
+            kanaType={props.kanaType}
+            romaType={props.romaType}
+            flickType={props.flickType}
+          />
         </Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           {formatDistanceToNowStrict(new Date(props.updatedAt), { addSuffix: true, locale: ja })}

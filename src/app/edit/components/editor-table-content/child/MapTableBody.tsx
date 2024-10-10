@@ -6,7 +6,7 @@ import LineOptionModal from "./LineOptionModal";
 import { ThemeColors } from "@/types";
 import { RootState } from "@/app/edit/redux/store";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { addLine, updateLine } from "@/app/edit/redux/mapDataSlice";
+import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditAddLyricsTextAtom,
@@ -43,7 +43,7 @@ function MapTableBody() {
   const timeCount = useEditTimeCountAtom();
   const isYTStarted = useIsEditYTStartedAtom();
   const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
-  const refs = useRefs();
+  const { tbodyRef, playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const windowKeydownEvent = useWindowKeydownEvent();
 
@@ -83,7 +83,7 @@ function MapTableBody() {
     if (mapData.length > 0) {
       for (let i = mapData.length - 1; i >= 0; i--) {
         if (Number(mapData[i]["time"]) == Number(lastAddedTime)) {
-          const targetRow = refs.tbodyRef.current?.children[i];
+          const targetRow = tbodyRef.current?.children[i];
 
           if (targetRow && targetRow instanceof HTMLElement) {
             const parentElement = targetRow.parentElement!.parentElement!.parentElement;
@@ -105,7 +105,7 @@ function MapTableBody() {
 
   useEffect(() => {
     if (isYTStarted) {
-      const duration = refs.playerRef.current?.getDuration();
+      const duration = playerRef.current?.getDuration();
 
       if (duration) {
         for (let i = mapData.length - 1; i >= 0; i--) {
@@ -123,7 +123,11 @@ function MapTableBody() {
           }
         }
 
-        dispatch(addLine({ time: duration.toFixed(3), lyrics: "end", word: "" }));
+        const addLineMap = [
+          ...mapData,
+          { time: duration.toFixed(3), lyrics: "end", word: "" },
+        ].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+        dispatch(setMapData(addLineMap));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

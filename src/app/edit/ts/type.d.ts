@@ -22,6 +22,16 @@ export interface EditorSendData {
   thumbnailQuality: "maxresdefault" | "mqdefault";
 }
 
+export interface EditorNewMapBackUpInfoData {
+  title: string;
+  artistName: string;
+  musicSouce: string;
+  videoId: string;
+  creatorComment: string;
+  tags: string[];
+  previewTime: string;
+}
+
 export type EditTabIndex = 0 | 1 | 2;
 
 export interface EditorTimeInputRef {

@@ -9,6 +9,8 @@ export const leftNavConfig: LeftNavConfig = {
   ],
 };
 
+export const leftLink: HeaderMenu[] = [{ title: "タイムライン", href: "/timeline" }];
+
 export const loginMenuItem: HeaderMenu[] = [
   { title: "TestMenu1", href: "/" },
   { title: "TestMenu2", href: "/" },

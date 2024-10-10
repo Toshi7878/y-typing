@@ -105,7 +105,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
             <Flex gap="6">
               <Box style={{ userSelect: "none" }}>
                 <TypeYouTubeContent
-                  className={` w-[512px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
+                  className={`w-[513px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
                   videoId={videoId}
                 />
               </Box>

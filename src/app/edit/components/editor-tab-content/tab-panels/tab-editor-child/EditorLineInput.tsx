@@ -12,6 +12,7 @@ import {
 } from "@/app/edit/edit-atom/editAtom";
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 import CustomToolTip from "@/components/CustomToolTip";
+import React from "react";
 
 const EditorLineInput = () => {
   const [isLineLyricsSelected, setIsLineLyricsSelected] = useState(false);

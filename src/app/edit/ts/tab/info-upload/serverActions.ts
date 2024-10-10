@@ -56,6 +56,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
   try {
     const userId = Number(session?.user?.id);
     let newMapId: number;
+
     if (mapId === "new") {
       newMapId = await createMap(data, userId);
     } else {
@@ -81,7 +82,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     }
     revalidatePath(`/api/map-list?page=0`);
     return {
-      id: newMapId,
+      id: mapId === "new" ? newMapId : null,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",
       message: "",
       status: 200,
@@ -89,8 +90,8 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
   } catch (error) {
     return {
       id: null,
-      title: "保存に失敗しました",
-      message: "サーバー側で問題が発生しました",
+      title: "サーバー側で問題が発生しました",
+      message: "しばらく時間をおいてから再度お試しください。",
       status: 500,
     };
   }

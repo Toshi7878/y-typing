@@ -1,18 +1,10 @@
-import {
-  useSceneAtom,
-  useSetIsLoadingOverlayAtom,
-  useSetLineResultsAtom,
-  useSetTypePageSpeedAtom,
-} from "@/app/type/type-atoms/gameRenderAtoms";
-import { LineResultData, SendResultData } from "@/app/type/ts/type";
+import { useSceneAtom, useSetTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
-import axios from "axios";
-import { useParams } from "next/navigation";
 import { useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
+import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
 
 const RankingMenu = ({
   userId,
@@ -27,49 +19,24 @@ const RankingMenu = ({
 }) => {
   const { gameStateRef, playerRef } = useRefs();
   const theme = useTheme();
-
   const scene = useSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
-  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
-  const setLineResults = useSetLineResultsAtom();
   const proceedRetry = useProceedRetry();
-
-  const params = useParams();
-  const mapId = params.id as string;
-
-  const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["replayData", Number(userId), Number(mapId)],
-    queryFn: async () => {
-      const response = await axios.get<{
-        lineResult: LineResultData[];
-        defaultSpeed: SendResultData["status"]["defaultSpeed"];
-      }>(`${process.env.NEXT_PUBLIC_API_URL}/api/replay`, {
-        params: {
-          mapId: mapId,
-          userId: userId,
-        },
-      });
-      return response.data;
-    },
-    enabled: false,
-  });
+  const { refetch } = usePracticeDataQuery();
 
   const handleReplayClick = useCallback(
     async (name: string) => {
-      setIsLoadingOverlay(true);
       const result = await refetch();
-      setIsLoadingOverlay(false);
       if (result.data) {
         if (scene === "end") {
           proceedRetry("replay");
         }
         setShowMenu(null);
         setHoveredIndex(null);
-        setLineResults(result.data.lineResult);
         gameStateRef.current!.replay.userName = name;
         gameStateRef.current!.playMode = "replay";
+        const defaultSpeed = result.data.lineResult[0].status?.sp;
 
-        const defaultSpeed = result.data.defaultSpeed;
         new YTSpeedController("setDefaultSpeed", {
           setSpeedData,
           playerRef: playerRef.current,

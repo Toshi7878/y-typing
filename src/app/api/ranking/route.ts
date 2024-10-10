@@ -33,7 +33,7 @@ export async function GET(request: Request) {
           },
         },
       },
-      orderBy: {},
+      orderBy: { score: "desc" },
     });
 
     return new Response(JSON.stringify(rankingList), {

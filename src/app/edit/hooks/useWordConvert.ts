@@ -144,7 +144,7 @@ class WordConvert {
       },
       body: JSON.stringify({
         app_id: APIKEY,
-        sentence: JSON.stringify(SENTENCE),
+        sentence: JSON.stringify(SENTENCE.replace(/\r$/, "")),
         info_filter: "form|read",
       }),
     };
@@ -194,11 +194,11 @@ class WordConvert {
         result.push(this.kanaToHira(LIST[i][1]));
       } else {
         // 半角文字の時の処理を記述
-        const NON_ADD_SYMBOL = LIST[i][0] == "\\" || (!IS_ADD_SYMBOL && IS_SYMBOL);
+        const NON_ADD_SYMBOL = !IS_ADD_SYMBOL && IS_SYMBOL;
         if (NON_ADD_SYMBOL) {
           continue;
         }
-        result.push(LIST[i][0]);
+        result.push(LIST[i][0].replace("\\\\", "\\"));
       }
     }
 

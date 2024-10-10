@@ -2,20 +2,25 @@ import {
   useSceneAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
+  useSetTypePageSpeedAtom,
+  useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
-import { defaultGameStateRef } from "../../ts/const/typeDefaultValue";
+import { defaultGameStateRef, defaultSpeed } from "../../ts/const/typeDefaultValue";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useRetry } from "./useRetry";
+import { YTSpeedController } from "../../ts/ytHandleEvents";
 
 export const useChangePlayMode = () => {
-  const { gameStateRef } = useRefs();
+  const { gameStateRef, playerRef } = useRefs();
 
   const scene = useSceneAtom();
 
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const retry = useRetry();
+  const speedData = useTypePageSpeedAtom();
+  const setSpeedData = useSetTypePageSpeedAtom();
 
   return (drawerClosure: UseDisclosureReturn) => {
     if (scene === "playing") {
@@ -33,8 +38,17 @@ export const useChangePlayMode = () => {
         setScene("playing");
         drawerClosure.onClose();
         retry();
-        setNotify(Symbol(""));
+        if (speedData.defaultSpeed < 1) {
+          new YTSpeedController("setDefaultSpeed", {
+            setSpeedData,
+            playerRef: playerRef.current,
+            speed: 1,
+            defaultSpeed: 1,
+          });
+        }
+        setSpeedData(defaultSpeed);
       }
+      setNotify(Symbol(""));
     }
   };
 };

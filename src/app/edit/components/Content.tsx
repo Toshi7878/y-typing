@@ -9,11 +9,12 @@ import axios from "axios";
 import { resetMapData, setMapData } from "../redux/mapDataSlice";
 import { resetUndoRedoData } from "../redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
-import { ThemeColors } from "@/types";
+import { IndexDBOption, ThemeColors } from "@/types";
 import EditTable from "./editor-table-content/EditTable";
 import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
+  useSetCanUploadAtom,
   useSetCreatorCommentAtom,
   useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
@@ -32,12 +33,14 @@ import {
 import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
 import { Provider } from "jotai";
+import { db } from "@/lib/db";
 
 function Content() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
+  const isBackUp = searchParams.get("backup") === "true";
   const theme: ThemeColors = useTheme();
   const isLrcConverting = useIsLrcConvertingAtom();
   const setMapTitle = useSetMapTitleAtom();
@@ -53,6 +56,7 @@ function Content() {
   const setArtistName = useSetMapArtistNameAtom();
   const setMusicSouce = useSetEditMusicSouceAtom();
   const setLyrics = useSetEditLineLyricsAtom();
+  const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
 
   const { data, error, isLoading } = useQuery({
@@ -84,7 +88,20 @@ function Content() {
       dispatch(resetUndoRedoData());
       setPreviewTime("");
     }
-    dispatch(resetMapData());
+
+    if (isBackUp) {
+      db.editorNewCreateBak
+        .get({ optionName: "backupMapData" })
+        .then((data: IndexDBOption | undefined) => {
+          if (data) {
+            dispatch(setMapData(data.value));
+          }
+        });
+      setCanUpload(true);
+    } else {
+      dispatch(resetMapData());
+      setCanUpload(false);
+    }
     setIsYTStarted(false);
     setIsYTReady(false);
     setIsYTPlaying(false);

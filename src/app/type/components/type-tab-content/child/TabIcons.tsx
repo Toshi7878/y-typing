@@ -1,7 +1,7 @@
 import { useTheme, Box } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { BiEdit } from "react-icons/bi";
-import { useLinkClick } from "@/app/nprogress";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { useParams } from "next/navigation";
 import { Link } from "@chakra-ui/next-js";
 import CustomToolTip from "@/components/CustomToolTip";

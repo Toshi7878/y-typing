@@ -1,3 +1,4 @@
+import { UploadResult } from "@/types";
 import { EditStatusRef } from "../type";
 
 export const DEFAULT_ADD_ADJUST_TIME = -0.16;
@@ -7,6 +8,13 @@ export const TAG_MIN_LEN = 2;
 
 export const DEFAULT_EDIT_STATUS_REF: EditStatusRef = {
   isNotAutoTabToggle: false,
+};
+
+export const INITIAL_SERVER_ACTIONS_STATE: UploadResult = {
+  id: null,
+  title: "",
+  message: "",
+  status: 0,
 };
 
 export const CHOICE_TAGS = [

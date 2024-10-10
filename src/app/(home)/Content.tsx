@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { videoIdAtom } from "./atoms/atoms";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
+import React from "react";
 
 export default function Content() {
   const [videoId, setVideoId] = useAtom(videoIdAtom);

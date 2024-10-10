@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを追加
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { RankingListType } from "@/app/type/ts/type";
 import RankingTr from "./RankingTr";
 import RankingMenu from "./RankingMenu";
 import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useRankingQuery } from "@/app/type/hooks/data-query/useRankingQuery";
 
 const RankingList = () => {
-  const { id } = useParams();
   const { data: session } = useSession();
   const { bestScoreRef } = useRefs();
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const setRankingScores = useSetRankingScoresAtom();
   const scene = useSceneAtom();
+  const { data, error, isLoading } = useRankingQuery();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -48,30 +46,6 @@ const RankingList = () => {
       setHoveredIndex(null);
     };
   }, []);
-
-  const { data, error, isLoading } = useQuery<RankingListType[]>({
-    queryKey: ["userRanking", id],
-    queryFn: async ({ queryKey }) => {
-      const [_key, id] = queryKey;
-
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${id}`, {
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      });
-
-      // scoreが高い順にソート
-      data.sort((a: { score: number }, b: { score: number }) => b.score - a.score);
-
-      return data;
-    },
-
-    enabled: !!id, // useQueryをidが存在する場合にのみ実行
-    staleTime: Infinity, // データを常に新鮮に保つ
-    refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
-    refetchOnReconnect: false, // 再接続時に再フェッチしない
-    refetchOnMount: false, // マウント時に再フェッチしない
-  });
 
   useEffect(() => {
     const scores = data ? data.map((result: RankingListType) => result.score) : [];
