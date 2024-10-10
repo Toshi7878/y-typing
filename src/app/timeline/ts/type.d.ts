@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-export interface MapCardInfo {
-  id: number;
-  title: string;
-  artistName: string;
-  musicSouce: string;
-  videoId: string;
-  updatedAt: string;
-  previewTime: string;
-  difficulty: string;
-  thumbnailQuality: "maxresdefault" | "mqdefault";
-=======
 export interface ResultCardInfo {
   id: number;
   mapId: number;
@@ -38,7 +26,6 @@ export interface ResultCardInfo {
       name: string;
     };
   };
->>>>>>> main
   user: {
     id: number;
     name: string;
