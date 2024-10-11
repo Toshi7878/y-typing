@@ -5,6 +5,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
+import { useQuery } from "@tanstack/react-query";
 
 const RankingMenu = ({
   userId,
@@ -22,7 +23,7 @@ const RankingMenu = ({
   const scene = useSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
   const proceedRetry = useProceedRetry();
-  const { refetch } = usePracticeDataQuery();
+  const { refetch } = usePracticeDataQuery(Number(userId));
 
   const handleReplayClick = useCallback(
     async (name: string) => {

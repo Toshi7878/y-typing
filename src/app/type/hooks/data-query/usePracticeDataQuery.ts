@@ -1,23 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
 import { LineResultData, SendResultData } from "../../ts/type";
 import axios from "axios";
 import {
   useSetIsLoadingOverlayAtom,
   useSetLineResultsAtom,
 } from "../../type-atoms/gameRenderAtoms";
+import { useParams } from "next/navigation";
 
-export const usePracticeDataQuery = () => {
-  const { data: session } = useSession();
-  const { id } = useParams();
+export const usePracticeDataQuery = (userId: number) => {
+  const { mapId } = useParams();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
   const setLineResults = useSetLineResultsAtom();
 
-  const mapId = id;
-  const userId = session?.user?.id;
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["practiceData", Number(userId), Number(mapId)],
+    queryKey: ["practiceData", Number(mapId), userId],
     queryFn: async () => {
       setIsLoadingOverlay(true);
 
