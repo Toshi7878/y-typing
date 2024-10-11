@@ -4,6 +4,12 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-10-11",
+    descriptions: [
+      "リプレイデータがロードできない&自分のリプレイデータがロードされてしまう問題を修正",
+    ],
+  },
+  {
     date: "2024-10-7",
     descriptions: ["タイムラインに入力モードの表示を追加"],
   },

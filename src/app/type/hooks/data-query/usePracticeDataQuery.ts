@@ -8,7 +8,7 @@ import {
 import { useParams } from "next/navigation";
 
 export const usePracticeDataQuery = (userId: number) => {
-  const { mapId } = useParams();
+  const { id: mapId } = useParams();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
   const setLineResults = useSetLineResultsAtom();
 
