@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
         videoId: true,
         updatedAt: true,
         previewTime: true,
+        totalTime: true,
         thumbnailQuality: true,
         user: {
           select: {

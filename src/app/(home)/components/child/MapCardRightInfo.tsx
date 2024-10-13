@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Box } from "@chakra-ui/react";
+import { Badge, Box, HStack } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { MapCardInfo } from "../../ts/type";
@@ -37,11 +37,14 @@ function MapCardRightInfo({ map }: MapCardProps) {
         }
         placement="top"
       >
-        <Box>
+        <HStack mt={2}>
           <Badge fontSize="sm" borderRadius="full" px={2}>
             ★{(map.romaKpmMedian / 100).toFixed(1)}
           </Badge>
-        </Box>
+          <Badge fontSize="sm" borderRadius="full" px={2}>
+            {new Date(map.totalTime * 1000).toISOString().slice(14, 19)}
+          </Badge>
+        </HStack>
       </CustomToolTip>
     </Link>
   );

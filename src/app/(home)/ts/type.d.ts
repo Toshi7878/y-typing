@@ -9,6 +9,7 @@ export interface MapCardInfo {
   difficulty: string;
   romaKpmMedian: number;
   romaKpmMax: number;
+  totalTime: number;
   thumbnailQuality: "maxresdefault" | "mqdefault";
   user: {
     id: number;
