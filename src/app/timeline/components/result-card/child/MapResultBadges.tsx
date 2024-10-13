@@ -21,10 +21,25 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
             flickType={props.flickType}
           />
         </Badge>
-        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg" letterSpacing={1} minW="95px">
+        <Badge
+          borderRadius="lg"
+          px="2"
+          ml="2"
+          fontSize="lg"
+          letterSpacing={1}
+          minW="95px"
+          textAlign="center"
+        >
           {props.score}
         </Badge>
-        <Badge borderRadius="lg" px="2" fontSize="lg" minW="95px" letterSpacing={1}>
+        <Badge
+          borderRadius="lg"
+          px="2"
+          fontSize="lg"
+          minW="95px"
+          letterSpacing={1}
+          textAlign="center"
+        >
           <ClearRateText clearRate={props.clearRate} isPerfect={isPerfect} />
         </Badge>
       </Stack>
