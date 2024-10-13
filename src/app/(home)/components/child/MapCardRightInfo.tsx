@@ -39,7 +39,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       >
         <Box>
           <Badge fontSize="sm" borderRadius="full" px={2}>
-            ★{map.romaKpmMedian / 100}
+            ★{(map.romaKpmMedian / 100).toFixed(1)}
           </Badge>
         </Box>
       </CustomToolTip>
