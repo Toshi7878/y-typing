@@ -39,7 +39,7 @@ export interface RankingListType {
   playSpeed: number;
   defaultSpeed: number;
   score: number;
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface RefsContextType {
