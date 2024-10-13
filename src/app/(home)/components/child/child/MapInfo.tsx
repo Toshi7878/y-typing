@@ -34,16 +34,7 @@ function MapInfo({ map }: MapCardProps) {
         fontSize="sm"
       >
         {map.artistName || "\u00A0"}
-      </Box>
-      <Box
-        color={"home.card.link"}
-        fontWeight="bold"
-        overflow="hidden"
-        textOverflow="ellipsis"
-        whiteSpace="nowrap"
-        fontSize="xs"
-      >
-        {map.musicSouce || "\u00A0"}
+        {map.musicSouce ? `【${map.musicSouce}】` : "\u00A0"}
       </Box>
     </Flex>
   );
