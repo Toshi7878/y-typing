@@ -15,7 +15,7 @@ function MapInfo({ map }: MapCardProps) {
   const handleLinkClick = useLinkClick();
 
   return (
-    <Flex direction="column" gap={1}>
+    <Flex direction="column" gap={1} justifyContent="space-between">
       <CustomToolTip tooltipLabel={`${map.title} / ${map.artistName}`} placement="top">
         <Link
           href={`/type/${map.id}`}
