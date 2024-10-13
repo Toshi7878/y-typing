@@ -22,6 +22,7 @@ function ResultCard({ result }: ResultCardProps) {
     result.map.thumbnailQuality === "maxresdefault"
       ? `https://i.ytimg.com/vi_webp/${result.map.videoId}/maxresdefault.webp`
       : `https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`;
+  const isToggledInputMode = result.romaType != 0 && result.kanaType != 0;
 
   return (
     <Card
@@ -70,7 +71,7 @@ function ResultCard({ result }: ResultCardProps) {
               mapPreviewTime={result.map.previewTime}
               thumbnailQuality={result.map.thumbnailQuality}
             />
-            <MapInfo map={result.map} />
+            <MapInfo map={result.map} isToggledInputMode={isToggledInputMode} />
           </Flex>
           <Flex justifyContent="flex-end">
             <MapResultBadges props={result} />

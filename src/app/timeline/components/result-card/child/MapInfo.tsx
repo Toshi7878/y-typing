@@ -9,8 +9,9 @@ import UpdateAtText from "@/components/UpdateAtText";
 
 interface MapCardProps {
   map: ResultCardInfo["map"];
+  isToggledInputMode: boolean;
 }
-function MapInfo({ map }: MapCardProps) {
+function MapInfo({ map, isToggledInputMode }: MapCardProps) {
   const theme: ThemeColors = useTheme();
   const handleLinkClick = useLinkClick();
 
@@ -21,7 +22,7 @@ function MapInfo({ map }: MapCardProps) {
           href={`/type/${map.id}`}
           onClick={handleLinkClick}
           color={theme.colors.home.card.link}
-          w="20vw"
+          w={isToggledInputMode ? "16.5vw" : "20vw"}
         >
           <Box
             fontWeight="bold"

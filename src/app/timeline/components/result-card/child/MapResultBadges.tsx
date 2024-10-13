@@ -14,7 +14,7 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
   return (
     <VStack align="end" mr={5}>
       <Stack direction="row" spacing={5} mb={2}>
-        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg">
+        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg" textAlign="center">
           <UserInputModeText
             romaType={props.romaType}
             kanaType={props.kanaType}
@@ -44,13 +44,21 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
         </Badge>
       </Stack>
       <Stack direction="row" spacing={5}>
-        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg" textTransform="none" minW="95px">
+        <Badge
+          borderRadius="lg"
+          px="2"
+          ml="2"
+          fontSize="lg"
+          textTransform="none"
+          textAlign="center"
+          minW="95px"
+        >
           {props.kpm}
           <Text as="span" ml={1} letterSpacing={2}>
             kpm
           </Text>
         </Badge>
-        <Badge borderRadius="lg" px="2" fontSize="lg" minW="95px">
+        <Badge borderRadius="lg" px="2" fontSize="lg" minW="95px" textAlign="center">
           {props.defaultSpeed.toFixed(2)}
           <Text as="span" ml={1} letterSpacing={2}>
             倍速
