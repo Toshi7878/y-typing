@@ -1,30 +1,47 @@
 import { ResultCardInfo } from "@/app/timeline/ts/type";
-import { UserInputMode } from "@/components/UserInputMode";
-import { Badge, Stack, VStack } from "@chakra-ui/react";
+import ClearRateText from "@/components/user-result-text/ClearRateText";
+import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
+import { Badge, Stack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
 interface ResultCardProps {
-  result: ResultCardInfo;
+  props: ResultCardInfo;
 }
 
-const MapResultBadges = ({ result }: ResultCardProps) => {
+const MapResultBadges = ({ props }: ResultCardProps) => {
+  const isPerfect = props.miss === 0 && props.lost === 0;
+
   return (
-    <VStack mr={4} align="end" spacing={4}>
-      <Stack direction="row" spacing={4}>
+    <VStack align="end" mr={5}>
+      <Stack direction="row" spacing={5} mb={2}>
         <Badge borderRadius="lg" px="2" ml="2" fontSize="lg">
-          {result.score}
+          <UserInputModeText
+            romaType={props.romaType}
+            kanaType={props.kanaType}
+            flickType={props.flickType}
+          />
         </Badge>
-        <Badge borderRadius="lg" px="2" fontSize="lg" maxW="fit-content">
-          {result.clearRate.toFixed(1)}%
+        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg" letterSpacing={1} minW="95px">
+          {props.score}
+        </Badge>
+        <Badge borderRadius="lg" px="2" fontSize="lg" minW="95px" letterSpacing={1}>
+          <ClearRateText clearRate={props.clearRate} isPerfect={isPerfect} />
         </Badge>
       </Stack>
-      <Badge borderRadius="lg" px="2" ml="2" fontSize="lg">
-        <UserInputMode
-          romaType={result.romaType}
-          kanaType={result.kanaType}
-          flickType={result.flickType}
-        />
-      </Badge>
+      <Stack direction="row" spacing={5}>
+        <Badge borderRadius="lg" px="2" ml="2" fontSize="lg" textTransform="none" minW="95px">
+          {props.kpm}
+          <Text as="span" ml={1} letterSpacing={2}>
+            kpm
+          </Text>
+        </Badge>
+        <Badge borderRadius="lg" px="2" fontSize="lg" minW="95px">
+          {props.defaultSpeed.toFixed(2)}
+          <Text as="span" ml={1} letterSpacing={2}>
+            倍速
+          </Text>
+        </Badge>
+      </Stack>
     </VStack>
   );
 };

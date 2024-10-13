@@ -1,14 +1,14 @@
 import { ThemeColors } from "@/types";
-import { Text, useTheme } from "@chakra-ui/react";
+import { Box, Text, useTheme } from "@chakra-ui/react";
 import React from "react";
 
-interface UserInputModeProps {
+interface UserInputModeTextProps {
   kanaType: number;
   romaType: number;
   flickType: number;
 }
 
-export const UserInputMode = (props: UserInputModeProps) => {
+export const UserInputModeText = (props: UserInputModeTextProps) => {
   const theme: ThemeColors = useTheme();
 
   const romaColor = theme.colors.type.ready.radio.roma.bg;
@@ -18,7 +18,7 @@ export const UserInputMode = (props: UserInputModeProps) => {
   if (props.romaType && props.kanaType) {
     if (props.romaType >= props.kanaType) {
       return (
-        <>
+        <Box isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           <Text as="span" color={romaColor} className="input-mode-outline-text">
             ローマ字
           </Text>
@@ -28,7 +28,7 @@ export const UserInputMode = (props: UserInputModeProps) => {
           <Text as="span" color={kanaColor} className="input-mode-outline-text">
             かな
           </Text>
-        </>
+        </Box>
       );
     } else {
       return (

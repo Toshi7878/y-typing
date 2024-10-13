@@ -1,14 +1,15 @@
 "use client";
 
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import ClearRateText from "@/components/user-result-text/ClearRateText";
 import CustomToolTip from "@/components/CustomToolTip";
-import { UserInputMode } from "@/components/UserInputMode";
+import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
 import { ThemeColors } from "@/types";
-import { Box, Td, Text, Tr, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
-import { formatDistanceToNowStrict } from "date-fns";
-import { ja } from "date-fns/locale";
+import { Td, Tr, useTheme } from "@chakra-ui/react";
 import React from "react";
 import { useEffect } from "react";
+import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
+import UpdateAtText from "@/components/UpdateAtText";
 
 interface RankingTrProps {
   sessionUserId: number | undefined;
@@ -28,7 +29,7 @@ interface RankingTrProps {
   lost: number;
   maxCombo: number;
   clearRate: number;
-  updatedAt: string;
+  updatedAt: Date;
   isHighlighted: boolean;
   isHovered: boolean;
   handleShowMenu: () => void;
@@ -54,90 +55,22 @@ const RankingTr = (props: RankingTrProps) => {
   return (
     <CustomToolTip
       tooltipLabel={
-        <Box fontSize="sm">
-          {props.romaType > 0 && (
-            <Box>
-              <Text as="span">ローマ字タイプ数</Text>:{" "}
-              <Text as="span" fontSize="md" fontWeight="bold">
-                {props.romaType}
-              </Text>
-            </Box>
-          )}
-          {props.kanaType > 0 && (
-            <Box>
-              <Text as="span">かな入力タイプ数</Text>:{" "}
-              <Text as="span" fontSize="md" fontWeight="bold">
-                {props.kanaType}
-              </Text>
-            </Box>
-          )}
-          {props.flickType > 0 && (
-            <Box>
-              <Text as="span">フリック入力タイプ数</Text>:{" "}
-              <Text as="span" fontSize="md" fontWeight="bold">
-                {props.flickType}
-              </Text>
-            </Box>
-          )}
-          <Box>
-            ミス数:{" "}
-            <Text as="span" fontSize="md" fontWeight="bold">
-              {props.miss} ({correctRate}%)
-            </Text>
-          </Box>
-          <Box>
-            ロスト数:{" "}
-            <Text as="span" fontSize="md" fontWeight="bold">
-              {props.lost}
-            </Text>
-          </Box>
-          <Box>
-            最大コンボ:{" "}
-            <Text
-              as="span"
-              {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
-              className={`${isPerfect ? "outline-text" : ""}`}
-              fontSize="md"
-              fontWeight="bold"
-            >
-              {props.maxCombo}
-            </Text>
-          </Box>
-          <Box>
-            rkpm:{" "}
-            <Text as="span" fontSize="md" fontWeight="bold">
-              {props.rkpm}
-            </Text>
-          </Box>
-          {isKanaFlickTyped && props.kpm !== props.romaKpm && (
-            <Box>
-              <Text as="span">ローマ字換算kpm</Text>:{" "}
-              <Text as="span" fontSize="md" fontWeight="bold">
-                {props.romaKpm}
-              </Text>
-            </Box>
-          )}
-          {props.defaultSpeed > 1 && (
-            <Box>
-              倍速:{" "}
-              <Text as="span" fontSize="md" fontWeight="bold">
-                {props.defaultSpeed.toFixed(2)}x
-              </Text>
-            </Box>
-          )}
-          <Box>
-            日時:{" "}
-            <Text as="span" fontSize="md">
-              {new Date(props.updatedAt).toLocaleString("ja-JP", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </Text>
-          </Box>
-        </Box>
+        <ResultToolTipText
+          romaType={props.romaType}
+          kanaType={props.kanaType}
+          flickType={props.flickType}
+          miss={props.miss}
+          correctRate={correctRate}
+          lost={props.lost}
+          isPerfect={isPerfect}
+          maxCombo={props.maxCombo}
+          kpm={props.kpm}
+          rkpm={props.rkpm}
+          romaKpm={props.romaKpm}
+          isKanaFlickTyped={isKanaFlickTyped}
+          defaultSpeed={props.defaultSpeed}
+          updatedAt={props.updatedAt}
+        />
       }
       isOpen={(props.isHighlighted && window.innerWidth >= 768) || props.isHovered}
       placement="bottom-end"
@@ -158,22 +91,19 @@ const RankingTr = (props: RankingTrProps) => {
           {props.name}
         </Td>
         <Td>{props.score}</Td>
-        <Td
-          {...(isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
-          className={`${isPerfect ? "outline-text" : ""}`}
-        >
-          {props.clearRate.toFixed(1)}%
+        <Td>
+          <ClearRateText clearRate={props.clearRate} isPerfect={isPerfect} />
         </Td>
         <Td>{props.kpm}</Td>
-        <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-          <UserInputMode
+        <Td>
+          <UserInputModeText
             kanaType={props.kanaType}
             romaType={props.romaType}
             flickType={props.flickType}
           />
         </Td>
-        <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-          {formatDistanceToNowStrict(new Date(props.updatedAt), { addSuffix: true, locale: ja })}
+        <Td>
+          <UpdateAtText updatedAt={props.updatedAt} />
         </Td>
       </Tr>
     </CustomToolTip>

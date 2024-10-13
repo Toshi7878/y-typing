@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
         clearRate: true,
         score: true,
         miss: true,
+        lost: true,
         rank: true,
         kanaType: true,
         romaType: true,

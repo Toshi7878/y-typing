@@ -1,11 +1,10 @@
 "use client";
 import { Text } from "@chakra-ui/react";
-import { formatDistanceToNowStrict } from "date-fns";
-import { ja } from "date-fns/locale";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { MapCardInfo } from "../../ts/type";
 import MapInfo from "./child/MapInfo";
+import UpdateAtText from "@/components/UpdateAtText";
 
 interface MapCardProps {
   map: MapCardInfo;
@@ -35,11 +34,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
 
         <Text as="span" fontSize="xs">
           {" "}
-          -{" "}
-          {formatDistanceToNowStrict(new Date(map.updatedAt), {
-            addSuffix: true,
-            locale: ja,
-          })}
+          - <UpdateAtText updatedAt={map.updatedAt} />
         </Text>
       </Text>
     </Link>

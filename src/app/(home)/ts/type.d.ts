@@ -4,7 +4,7 @@ export interface MapCardInfo {
   artistName: string;
   musicSouce: string;
   videoId: string;
-  updatedAt: string;
+  updatedAt: Date;
   previewTime: string;
   difficulty: string;
   thumbnailQuality: "maxresdefault" | "mqdefault";

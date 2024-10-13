@@ -1,24 +1,14 @@
 "use client";
-import {
-  Box,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Flex,
-  Text,
-  useTheme,
-} from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, Flex, Text, useTheme } from "@chakra-ui/react";
 import { ResultCardInfo } from "../../ts/type";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { ThemeColors } from "@/types";
-import { formatDistanceToNowStrict } from "date-fns";
-import { ja } from "date-fns/locale";
 import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapInfo from "./child/MapInfo";
 import MapResultBadges from "./child/MapResultBadges";
 import UserRank from "./child/UserRank";
+import UpdateAtText from "@/components/UpdateAtText";
 
 interface ResultCardProps {
   result: ResultCardInfo;
@@ -51,11 +41,7 @@ function ResultCard({ result }: ResultCardProps) {
           >
             {result.user.name}
           </Link>{" "}
-          -{" "}
-          {formatDistanceToNowStrict(new Date(result.updatedAt), {
-            addSuffix: true,
-            locale: ja,
-          })}
+          - <UpdateAtText updatedAt={result.updatedAt} />
         </Text>
       </CardHeader>
       <CardBody
@@ -86,8 +72,9 @@ function ResultCard({ result }: ResultCardProps) {
             />
             <MapInfo map={result.map} />
           </Flex>
-
-          <MapResultBadges result={result} />
+          <Flex justifyContent="flex-end">
+            <MapResultBadges props={result} />
+          </Flex>
         </Flex>
       </CardBody>
       <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1}></CardFooter>
