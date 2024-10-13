@@ -22,6 +22,8 @@ export async function GET(req: NextRequest) {
         creatorComment: false,
         tags: false,
         mapData: false,
+        romaKpmMedian: true,
+        romaKpmMax: true,
         videoId: true,
         updatedAt: true,
         previewTime: true,

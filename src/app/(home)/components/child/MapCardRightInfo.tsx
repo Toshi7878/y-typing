@@ -1,10 +1,11 @@
 "use client";
-import { Text } from "@chakra-ui/react";
+import { Badge, Box } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { MapCardInfo } from "../../ts/type";
 import MapInfo from "./child/MapInfo";
-import UpdateAtText from "@/components/UpdateAtText";
+import MapCreateUser from "./child/MapCreateUser";
+import CustomToolTip from "@/components/CustomToolTip";
 
 interface MapCardProps {
   map: MapCardInfo;
@@ -27,16 +28,21 @@ function MapCardRightInfo({ map }: MapCardProps) {
       _hover={{ textDecoration: "none" }}
     >
       <MapInfo map={map} />
-      <Text as="small" mt={4}>
-        <Link href={`/user/${map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
-          {map.user.name}
-        </Link>
-
-        <Text as="span" fontSize="xs">
-          {" "}
-          - <UpdateAtText updatedAt={map.updatedAt} />
-        </Text>
-      </Text>
+      <MapCreateUser map={map} />
+      <CustomToolTip
+        tooltipLabel={
+          <Box>
+            <Box>最高速度:{map.romaKpmMax}kpm</Box>
+          </Box>
+        }
+        placement="top"
+      >
+        <Box>
+          <Badge fontSize="sm" borderRadius="full" px={2}>
+            ★{map.romaKpmMedian / 100}
+          </Badge>
+        </Box>
+      </CustomToolTip>
     </Link>
   );
 }

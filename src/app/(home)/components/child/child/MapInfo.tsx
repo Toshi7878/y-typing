@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex } from "@chakra-ui/react";
+import { Badge, Box, Flex } from "@chakra-ui/react";
 import CustomToolTip from "@/components/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
 
