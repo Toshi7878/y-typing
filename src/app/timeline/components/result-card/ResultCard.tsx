@@ -32,7 +32,7 @@ function ResultCard({ result }: ResultCardProps) {
       }}
     >
       <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2} py={3}>
-        <Text as="span">
+        <Text as="span" ml={6}>
           <Link
             href={`/user/${result.user.id}`}
             onClick={handleLinkClick}
