@@ -39,7 +39,7 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
         justifyContent="space-between"
         w="100%"
         alignItems="center"
-        zIndex={1}
+        zIndex={0}
       >
         <Flex direction="row" gap={4}>
           <UserRank userRank={result.rank} />
@@ -57,11 +57,6 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
           <MapResultBadges props={result} />
         </Flex>
       </Flex>
-      {/* <ThumbnailBgCover
-        src={src}
-        alt={result.map.title}
-        fallbackSrc={`https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`}
-      /> */}
     </CardBody>
   );
 };
