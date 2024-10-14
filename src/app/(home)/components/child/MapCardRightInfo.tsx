@@ -21,7 +21,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       flexDirection="column"
       justifyContent="start"
       h="full"
-      w="90%"
+      w="65%"
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
