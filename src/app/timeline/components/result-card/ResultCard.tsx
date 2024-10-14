@@ -1,28 +1,17 @@
 "use client";
-import { Card, CardBody, CardFooter, CardHeader, Flex, Text, useTheme } from "@chakra-ui/react";
+import { Card, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
 import { ResultCardInfo } from "../../ts/type";
-import { Link } from "@chakra-ui/next-js";
-import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { ThemeColors } from "@/types";
-import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
-import MapInfo from "./child/MapInfo";
-import MapResultBadges from "./child/MapResultBadges";
-import UserRank from "./child/UserRank";
-import UpdateAtText from "@/components/UpdateAtText";
+import ResultUserName from "./child/child/ResultUserName";
+import ResultInnerCardBody from "./child/ResultInnerCardBody";
 
 interface ResultCardProps {
   result: ResultCardInfo;
 }
 
-function ResultCard({ result }: ResultCardProps) {
+function ResultCard(props: ResultCardProps) {
+  const { result } = props;
   const theme: ThemeColors = useTheme();
-  const handleLinkClick = useLinkClick();
-
-  const src =
-    result.map.thumbnailQuality === "maxresdefault"
-      ? `https://i.ytimg.com/vi_webp/${result.map.videoId}/maxresdefault.webp`
-      : `https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`;
-  const isToggledInputMode = result.romaType != 0 && result.kanaType != 0;
 
   return (
     <Card
@@ -33,52 +22,10 @@ function ResultCard({ result }: ResultCardProps) {
       }}
     >
       <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2} py={3}>
-        <Text as="span" ml={6}>
-          <Link
-            href={`/user/${result.user.id}`}
-            onClick={handleLinkClick}
-            color={theme.colors.home.card.link}
-            fontWeight="bold"
-          >
-            {result.user.name}
-          </Link>{" "}
-          - <UpdateAtText updatedAt={result.updatedAt} />
-        </Text>
+        <ResultUserName result={result} />
       </CardHeader>
-      <CardBody
-        color={"color"}
-        bg={theme.colors.background}
-        borderRadius="lg"
-        className="flex items-start"
-        style={{ padding: 0, border: "none" }}
-        mx={6}
-      >
-        <Flex
-          py={6}
-          direction="row"
-          gap={4}
-          justifyContent="space-between"
-          w="100%"
-          alignItems="center"
-        >
-          <Flex direction="row" gap={4}>
-            <UserRank userRank={result.rank} />
-            <MapLeftThumbnail
-              alt={result.map.title}
-              src={src}
-              fallbackSrc={`https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`}
-              mapVideoId={result.map.videoId}
-              mapPreviewTime={result.map.previewTime}
-              thumbnailQuality={result.map.thumbnailQuality}
-            />
-            <MapInfo map={result.map} isToggledInputMode={isToggledInputMode} />
-          </Flex>
-          <Flex justifyContent="flex-end">
-            <MapResultBadges props={result} />
-          </Flex>
-        </Flex>
-      </CardBody>
-      <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1}></CardFooter>
+      <ResultInnerCardBody result={result} />
+      <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1} />
     </Card>
   );
 }
