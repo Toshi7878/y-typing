@@ -24,7 +24,7 @@ function MapInfo({ map, isToggledInputMode }: MapCardProps) {
           href={`/type/${map.id}`}
           onClick={handleLinkClick}
           color={theme.colors.home.card.link}
-          className={`w-[40vw] ${isToggledInputMode ? "md:w-[16.5vw]" : "md:w-[20vw]"}`}
+          width={["40vw", isToggledInputMode ? "16.5vw" : "20vw"]}
         >
           <Box
             fontWeight="bold"
