@@ -32,6 +32,13 @@ const sodaTheme: ThemeColors = {
         link: "#0d9388",
         hover: "0 10px 15px -3px rgba(20, 184, 166, 0.5), 0 4px 6px -2px rgba(20, 184, 166, 0.3)",
       },
+      badge: {
+        info: {
+          bg: "#414141",
+          color: "#FFFFFF",
+          borderColor: "#cccccc",
+        },
+      },
     },
     type: {
       word: {
@@ -123,6 +130,13 @@ const darkTheme: ThemeColors = {
         bg: "#2b3035",
         link: "#00bd7e",
         hover: "0 10px 15px -3px rgba(79, 209, 197, 0.3), 0 4px 6px -2px rgba(79, 209, 197, 0.2)",
+      },
+      badge: {
+        info: {
+          bg: "#3c3c3c",
+          color: "#FFFFFF",
+          borderColor: "#888888",
+        },
       },
     },
     type: {

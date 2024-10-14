@@ -60,6 +60,13 @@ interface ThemeColors {
         link: string;
         hover: string;
       };
+      badge: {
+        info: {
+          bg: string;
+          color: string;
+          borderColor: string;
+        };
+      };
     };
     card: {
       bg: string;
