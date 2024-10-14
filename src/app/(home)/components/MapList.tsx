@@ -1,5 +1,4 @@
 "use client";
-import { Box } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroller";
