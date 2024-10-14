@@ -13,7 +13,7 @@ const MapCreateUser = (props: MapCreateUserProps) => {
   const handleLinkClick = useLinkClick();
 
   return (
-    <Text as="small" mt={3}>
+    <Text as="small" mt={2}>
       <Link href={`/user/${props.map.user.id}`} onClick={handleLinkClick} color={"home.card.link"}>
         {props.map.user.name}
       </Link>

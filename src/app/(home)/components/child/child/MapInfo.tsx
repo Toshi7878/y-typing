@@ -14,12 +14,12 @@ function MapInfo({ map }: MapCardProps) {
         placement="top"
       >
         <Box
-          className="text-xs sm:text-md"
           color={"home.card.link"}
           fontWeight="bold"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
+          fontSize="md"
         >
           {map.title}
         </Box>

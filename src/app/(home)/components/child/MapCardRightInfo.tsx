@@ -21,7 +21,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       flexDirection="column"
       justifyContent="start"
       h="full"
-      w="65%"
+      w="90%"
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
@@ -31,7 +31,8 @@ function MapCardRightInfo({ map }: MapCardProps) {
       <Stack
         justifyContent="space-between"
         flexDirection={{ base: "row", md: "column" }} // 変更点: レスポンシブなflexDirectionを追加
-        mt={2}
+        my={1}
+        w="54vw"
       >
         <MapCreateUser map={map} />
         <MapBadges map={map} />

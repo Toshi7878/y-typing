@@ -1,6 +1,6 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import CustomToolTip from "@/components/CustomToolTip";
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import MapBadge from "./MapBadge";
 
@@ -10,8 +10,10 @@ interface MapBadgesProps {
 
 const MapBadges = (props: MapBadgesProps) => {
   const { map } = props;
+  const showBadges = useBreakpointValue({ base: false, sm: true });
+
   return (
-    <HStack>
+    <HStack mr={2}>
       <CustomToolTip
         tooltipLabel={
           <Box>
@@ -22,7 +24,9 @@ const MapBadges = (props: MapBadgesProps) => {
       >
         <MapBadge>★{(map.romaKpmMedian / 100).toFixed(1)}</MapBadge>
       </CustomToolTip>
-      <MapBadge>{new Date(map.totalTime * 1000).toISOString().slice(14, 19)}</MapBadge>
+      {showBadges && (
+        <MapBadge>{new Date(map.totalTime * 1000).toISOString().slice(14, 19)}</MapBadge>
+      )}
     </HStack>
   );
 };
