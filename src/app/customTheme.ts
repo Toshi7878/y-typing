@@ -133,7 +133,7 @@ const darkTheme: ThemeColors = {
       },
       badge: {
         info: {
-          bg: "#3c3c3c",
+          bg: "#2b3035",
           color: "#FFFFFF",
           borderColor: "#888888",
         },
