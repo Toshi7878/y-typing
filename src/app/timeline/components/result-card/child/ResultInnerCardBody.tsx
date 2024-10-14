@@ -6,7 +6,6 @@ import MapInfo from "./child/MapInfo";
 import MapResultBadges from "./child/MapResultBadges";
 import { ThemeColors } from "@/types";
 import { ResultCardInfo } from "@/app/timeline/ts/type";
-import ThumbnailBgCover from "./child/ThumbnailBgCover";
 
 interface ResultInnerCardBodyProps {
   result: ResultCardInfo;
