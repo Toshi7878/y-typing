@@ -2,11 +2,11 @@ import { Flex, Stack } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
 import {
   useCreatorCommentAtom,
-  useEditMusicSouceAtom,
+  useEditMusicSourceAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
   useSetCreatorCommentAtom,
-  useSetEditMusicSouceAtom,
+  useSetEditMusicSourceAtom,
   useSetMapArtistNameAtom,
   useSetMapTitleAtom,
 } from "@/app/edit/edit-atom/editAtom";
@@ -21,10 +21,10 @@ const InfoInputForm = (props: InfoInputFormProps) => {
   const setMapTitle = useSetMapTitleAtom();
   const setMapArtistName = useSetMapArtistNameAtom();
   const setCreatorComment = useSetCreatorCommentAtom();
-  const setMusicSouce = useSetEditMusicSouceAtom();
+  const setMusicSouce = useSetEditMusicSourceAtom();
   const mapTitle = useMapTitleAtom();
   const mapArtistName = useMapArtistNameAtom();
-  const musicSouce = useEditMusicSouceAtom();
+  const musicSource = useEditMusicSourceAtom();
   const creatorComment = useCreatorCommentAtom();
   const searchParams = useSearchParams();
   const isNewCreateMap = !!searchParams.get("new");
@@ -60,7 +60,7 @@ const InfoInputForm = (props: InfoInputFormProps) => {
           <InfoInput
             label={"ソース"}
             placeholder="曲が使用されているアニメ・ドラマ・映画タイトルを入力"
-            inputState={musicSouce}
+            inputState={musicSource}
             setInputState={setMusicSouce}
             isRequired={false}
             isGeminiLoading={props.isGeminiLoading}

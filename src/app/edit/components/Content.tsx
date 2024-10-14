@@ -19,7 +19,7 @@ import {
   useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
   useSetEditLineWordAtom,
-  useSetEditMusicSouceAtom,
+  useSetEditMusicSourceAtom,
   useSetEditPreviewTimeInputAtom,
   useSetEditTimeCountAtom,
   useSetGeminiTagsAtom,
@@ -54,7 +54,7 @@ function Content() {
   const setSelectedCount = useSetEditLineSelectedCountAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const setArtistName = useSetMapArtistNameAtom();
-  const setMusicSouce = useSetEditMusicSouceAtom();
+  const setMusicSouce = useSetEditMusicSourceAtom();
   const setLyrics = useSetEditLineLyricsAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();

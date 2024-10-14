@@ -1,6 +1,6 @@
 import {
   useCreatorCommentAtom,
-  useEditMusicSouceAtom,
+  useEditMusicSourceAtom,
   useEditPreviewTimeInputAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
@@ -14,7 +14,7 @@ export const useUpdateNewMapBackUp = () => {
   const tags: Tag[] = useTagsAtom();
   const title = useMapTitleAtom();
   const artistName = useMapArtistNameAtom();
-  const musicSouce = useEditMusicSouceAtom();
+  const musicSource = useEditMusicSourceAtom();
   const creatorComment = useCreatorCommentAtom();
   const previewTime = useEditPreviewTimeInputAtom();
   return (newVideoId: string, newMapData: MapData[]) => {
@@ -22,7 +22,7 @@ export const useUpdateNewMapBackUp = () => {
       {
         title,
         artistName,
-        musicSouce,
+        musicSource,
         creatorComment,
         videoId: newVideoId,
         previewTime,

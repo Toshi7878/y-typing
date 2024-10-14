@@ -68,14 +68,14 @@ export const useSetCreatorCommentAtom = () => {
 };
 
 //楽曲ソース
-export const editMusicSouceAtom = atom<string>("");
+export const editMusicSourceAtom = atom<string>("");
 
-export const useEditMusicSouceAtom = () => {
-  return useAtomValue(editMusicSouceAtom, { store: editAtomStore });
+export const useEditMusicSourceAtom = () => {
+  return useAtomValue(editMusicSourceAtom, { store: editAtomStore });
 };
 
-export const useSetEditMusicSouceAtom = () => {
-  return useSetAtom(editMusicSouceAtom, { store: editAtomStore });
+export const useSetEditMusicSourceAtom = () => {
+  return useSetAtom(editMusicSourceAtom, { store: editAtomStore });
 };
 
 //制作者コメント

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         id: false,
         title: true,
         artistName: true,
-        musicSouce: true,
+        musicSource: true,
         creatorComment: true,
         creatorId: true,
         tags: true,

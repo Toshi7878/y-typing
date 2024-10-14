@@ -14,11 +14,11 @@ import { ThemeColors, UploadResult } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
-  useEditMusicSouceAtom,
+  useEditMusicSourceAtom,
   useEditPreviewTimeInputAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
-  useSetEditMusicSouceAtom,
+  useSetEditMusicSourceAtom,
   useSetGeminiTagsAtom,
   useSetMapArtistNameAtom,
   useSetMapTitleAtom,
@@ -44,14 +44,14 @@ const TabInfoUpload = () => {
   const artistName = useMapArtistNameAtom();
 
   const creatorComment = useCreatorCommentAtom();
-  const musicSouce = useEditMusicSouceAtom();
+  const musicSource = useEditMusicSourceAtom();
 
   const previewTime = useEditPreviewTimeInputAtom();
   const videoId = useVideoIdAtom();
   const theme: ThemeColors = useTheme();
   const setMapTitle = useSetMapTitleAtom();
   const setMapArtistName = useSetMapArtistNameAtom();
-  const setMusicSouce = useSetEditMusicSouceAtom();
+  const setMusicSouce = useSetEditMusicSourceAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const successToast = useSuccessToast();
   const searchParams = useSearchParams();
@@ -69,7 +69,7 @@ const TabInfoUpload = () => {
       videoId: mapVideoId,
       title: mapTitle,
       artistName,
-      musicSouce,
+      musicSource: musicSource,
       creatorComment,
       mapData,
       tags: tags.map((tag) => tag.id),
@@ -122,7 +122,7 @@ const TabInfoUpload = () => {
         if (isNewCreateMap && !isBackUp) {
           setMapTitle(mapInfoData.musicTitle);
           setMapArtistName(mapInfoData.artistName);
-          setMusicSouce(mapInfoData.musicSouce);
+          setMusicSouce(mapInfoData.musicSource);
         }
 
         setGeminiTags(mapInfoData.otherTags);

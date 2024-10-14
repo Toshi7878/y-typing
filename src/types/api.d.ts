@@ -3,7 +3,7 @@ export interface GetInfoData {
   title: string;
   artistName: string;
   creatorComment: string;
-  musicSouce: string;
+  musicSource: string;
   creatorId: number;
   tags?: string[];
   previewTime: string;

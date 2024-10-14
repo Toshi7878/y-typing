@@ -12,7 +12,7 @@ import {
   editCreatorIdAtom,
   editMapArtistNameAtom,
   editMapTitleAtom,
-  editMusicSouceAtom,
+  editMusicSourceAtom,
   editPreviewTimeInputAtom,
   editTagsAtom,
   editVideoIdAtom,
@@ -44,7 +44,7 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
       editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
       editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
       editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
-      editAtomStore.set(editMusicSouceAtom, mapInfo.musicSouce);
+      editAtomStore.set(editMusicSourceAtom, mapInfo.musicSource);
       editAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
       editAtomStore.set(editTagsAtom, {
         type: "set",
@@ -64,7 +64,7 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
               editAtomStore.set(editMapTitleAtom, backupMap.title);
               editAtomStore.set(editMapArtistNameAtom, backupMap.artistName);
               editAtomStore.set(editCreatorCommentAtom, backupMap.creatorComment);
-              editAtomStore.set(editMusicSouceAtom, backupMap.musicSouce);
+              editAtomStore.set(editMusicSourceAtom, backupMap.musicSource);
               editAtomStore.set(editPreviewTimeInputAtom, backupMap.previewTime);
               editAtomStore.set(editTagsAtom, {
                 type: "set",
