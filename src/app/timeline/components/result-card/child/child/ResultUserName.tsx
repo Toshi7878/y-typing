@@ -17,7 +17,7 @@ const ResultUserName = (props: ResultUserNameProps) => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Text as="span" ml={6}>
+    <Text as="span" className="ml-0 md:ml-6">
       <Link
         href={`/user/${result.user.id}`}
         onClick={handleLinkClick}
