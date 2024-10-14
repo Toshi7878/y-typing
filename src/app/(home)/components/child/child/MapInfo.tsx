@@ -10,7 +10,7 @@ function MapInfo({ map }: MapCardProps) {
   return (
     <Flex direction="column" gap={1}>
       <CustomToolTip
-        tooltipLabel={`${map.title} / ${map.artistName}${map.musicSouce ? `【${map.musicSouce}】` : ""}`}
+        tooltipLabel={`${map.title} / ${map.artistName}${map.musicSource ? `【${map.musicSource}】` : ""}`}
         placement="top"
       >
         <Box
@@ -34,7 +34,7 @@ function MapInfo({ map }: MapCardProps) {
         fontSize="sm"
       >
         {map.artistName || "\u00A0"}
-        {map.musicSouce ? `【${map.musicSouce}】` : "\u00A0"}
+        {map.musicSource ? `【${map.musicSource}】` : "\u00A0"}
       </Box>
     </Flex>
   );

@@ -19,6 +19,7 @@ export interface ResultCardInfo {
     videoId: string;
     title: string;
     artistName: string;
+    musicSource: string;
     previewTime: string;
     thumbnailQuality: "maxresdefault" | "mqdefault";
     updatedAt: Date;
