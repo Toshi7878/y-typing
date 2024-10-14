@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Box, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import CustomToolTip from "@/components/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
 
@@ -14,24 +14,24 @@ function MapInfo({ map }: MapCardProps) {
         placement="top"
       >
         <Box
+          className="text-xs sm:text-md"
           color={"home.card.link"}
           fontWeight="bold"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
-          fontSize="md"
         >
           {map.title}
         </Box>
       </CustomToolTip>
 
       <Box
+        className="text-xs sm:text-sm"
         color={"home.card.link"}
         fontWeight="bold"
         overflow="hidden"
         textOverflow="ellipsis"
         whiteSpace="nowrap"
-        fontSize="sm"
       >
         {map.artistName || "\u00A0"}
         {map.musicSource ? `【${map.musicSource}】` : "\u00A0"}
