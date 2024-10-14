@@ -40,7 +40,7 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
           ml="2"
           fontSize="lg"
           letterSpacing={1}
-          minW="95px"
+          minW="97.55px"
           textAlign="center"
           bg={theme.colors.home.badge.info.bg}
           color={theme.colors.home.badge.info.color}
@@ -53,7 +53,7 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
           borderRadius="lg"
           px="2"
           fontSize="lg"
-          minW="95px"
+          minW="97.55px"
           letterSpacing={1}
           textAlign="center"
           bg={theme.colors.home.badge.info.bg}
@@ -72,7 +72,7 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
           fontSize="lg"
           textTransform="none"
           textAlign="center"
-          minW="95px"
+          minW="97.55px"
           bg={theme.colors.home.badge.info.bg}
           color={theme.colors.home.badge.info.color}
           borderColor={theme.colors.home.badge.info.borderColor}
@@ -86,7 +86,7 @@ const MapResultBadges = ({ props }: ResultCardProps) => {
           borderRadius="lg"
           px="2"
           fontSize="lg"
-          minW="95px"
+          minW="97.55px"
           textAlign="center"
           border="solid 1px"
           bg={theme.colors.home.badge.info.bg}
