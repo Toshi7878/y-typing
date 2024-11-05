@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-11-5",
+    descriptions: ["リプレイ機能で稀に正常に動作しない問題を一部修正"],
+  },
+  {
     date: "2024-10-14",
     descriptions: [
       "タイムラインページをレスポンシブ対応",

@@ -3,13 +3,10 @@ import {
   HanDakuten,
   InputModeType,
   NormalizeHirakana,
-  SceneType,
   Status,
-  StatusRef,
   WordType,
 } from "../../../type";
 import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWord";
-import { PlayingComboRef } from "../../../../components/typing-area/scene/playing-child/child/PlayingCombo";
 import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
