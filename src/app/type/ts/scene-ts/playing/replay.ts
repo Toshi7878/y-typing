@@ -72,7 +72,6 @@ const useKeyReplay = () => {
     tabStatusRef,
     playingComboRef,
     ytStateRef,
-    gameStateRef,
     playingLineTimeRef,
   } = useRefs();
 
@@ -161,8 +160,6 @@ const useKeyReplay = () => {
           break;
       }
     }
-
-    gameStateRef.current!.replay.replayKeyCount++;
   };
 };
 
@@ -179,20 +176,17 @@ export const useReplay = () => {
     }
     const keyCount = gameStateRef.current!.replay.replayKeyCount!;
 
-    for (let i = structuredClone(keyCount); i < typeResults.length; i++) {
-      const typeData = typeResults[i];
+    const typeData = typeResults[keyCount];
 
-      if (!typeData) {
-        return;
-      }
+    if (!typeData) {
+      return;
+    }
 
-      const keyTime = typeData.t;
+    const keyTime = typeData.t;
 
-      if (lineConstantTime >= keyTime) {
-        keyReplay({ count, lineConstantTime, lineResult, typeData });
-      } else {
-        break;
-      }
+    if (lineConstantTime >= keyTime) {
+      keyReplay({ count, lineConstantTime, lineResult, typeData });
+      gameStateRef.current!.replay.replayKeyCount++;
     }
   };
 };
