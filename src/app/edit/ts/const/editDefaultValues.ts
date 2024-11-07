@@ -38,6 +38,8 @@ export const CHOICE_TAGS = [
   "映画",
   "MAD",
   "Remix",
+  "Nightcore",
+  "TikTok",
   "音ゲー",
   "簡単",
   "難しい",
