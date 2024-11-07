@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
+import { searchTypeMode } from "./searchTypeMode";
+import { FilterMode } from "@/app/timeline/ts/type";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +11,7 @@ const CONTENT_LENGTH = 30;
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const page = searchParams.get("page") ?? "0";
+  const mode = (searchParams.get("mode") ?? "all") as FilterMode;
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
 
   try {
@@ -59,6 +62,7 @@ export async function GET(req: NextRequest) {
       orderBy: {
         updatedAt: "desc",
       },
+      where: searchTypeMode(mode),
     });
 
     return new Response(JSON.stringify(resultList), {

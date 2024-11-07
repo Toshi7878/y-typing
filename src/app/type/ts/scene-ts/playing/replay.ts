@@ -59,7 +59,6 @@ export const updateReplayStatus = (
 };
 
 interface UseKeyReplayProps {
-  count: number;
   lineConstantTime: number;
   typeData: TypeResult;
   lineResult: LineResultData;
@@ -85,10 +84,12 @@ const useKeyReplay = () => {
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
 
-  return ({ count, lineConstantTime, lineResult, typeData }: UseKeyReplayProps) => {
+  return ({ lineConstantTime, lineResult, typeData }: UseKeyReplayProps) => {
     const key = typeData.c;
     const isSuccess = typeData.is;
     const option = typeData.op;
+    const count = statusRef.current!.status.count;
+
     if (key) {
       const lineWord = playingCenterRef.current!.getLineWord();
       const chars: CharsType = {
@@ -164,10 +165,11 @@ const useKeyReplay = () => {
 };
 
 export const useReplay = () => {
-  const { gameStateRef } = useRefs();
+  const { gameStateRef, statusRef } = useRefs();
   const lineResults = useLineResultsAtom();
   const keyReplay = useKeyReplay();
-  return ({ count, lineConstantTime }: { count: number; lineConstantTime: number }) => {
+  return ({ lineConstantTime }: { lineConstantTime: number }) => {
+    const count = statusRef.current!.status.count;
     const lineResult: LineResultData = lineResults[count - 1];
     const typeResults = lineResult.typeResult;
 
@@ -185,7 +187,7 @@ export const useReplay = () => {
     const keyTime = typeData.t;
 
     if (lineConstantTime >= keyTime) {
-      keyReplay({ count, lineConstantTime, lineResult, typeData });
+      keyReplay({ lineConstantTime, lineResult, typeData });
       gameStateRef.current!.replay.replayKeyCount++;
     }
   };

@@ -9,6 +9,7 @@ import { videoIdAtom } from "./atoms/atoms";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
 import React from "react";
+import SearchContent from "./components/search/SearchContent";
 
 export default function Content() {
   const [videoId, setVideoId] = useAtom(videoIdAtom);
@@ -43,11 +44,12 @@ export default function Content() {
   }, [router, setVideoId]);
 
   return (
-    <>
+    <Box as="main" className="w-[100%] md:w-[90vw] 2xl:w-[65vw]">
+      <SearchContent />
       <UsersResultList />
       <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
         <HomeYouTubeContent />
       </Box>
-    </>
+    </Box>
   );
 }

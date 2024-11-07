@@ -1,3 +1,5 @@
+export type FilterMode = "all" | "roma" | "kana" | "romakana";
+
 export interface ResultCardInfo {
   id: number;
   mapId: number;

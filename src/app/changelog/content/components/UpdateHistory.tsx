@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-11-7",
+    descriptions: ["タイムラインに入力モード絞り込み機能を追加"],
+  },
+  {
     date: "2024-11-5",
     descriptions: ["リプレイ機能で稀に正常に動作しない問題を一部修正"],
   },

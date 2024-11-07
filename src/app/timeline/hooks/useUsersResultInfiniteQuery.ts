@@ -1,10 +1,16 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { ResultCardInfo } from "../ts/type";
+import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 
-async function getResultList(page: number): Promise<ResultCardInfo[]> {
+interface GetResultListProps {
+  page: number;
+  mode: FilterMode;
+}
+
+async function getResultList({ page, mode }: GetResultListProps): Promise<ResultCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users-result-list`, {
-    params: { page }, // ページ数をクエリパラメータとして追加
+    params: { page, mode }, // ページ数をクエリパラメータとして追加
     // cache: "no-cache", // キャッシュモード
   });
 
@@ -16,6 +22,9 @@ async function getResultList(page: number): Promise<ResultCardInfo[]> {
 }
 
 export const useUsersResultInfiniteQuery = () => {
+  const searchParams = useSearchParams();
+  const searchMode = (searchParams.get("mode") || "all") as FilterMode;
+
   const {
     data,
     error,
@@ -28,8 +37,8 @@ export const useUsersResultInfiniteQuery = () => {
     isFetchingPreviousPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["usersResultList"],
-    queryFn: ({ pageParam = 0 }) => getResultList(pageParam), // ページ数を引数として渡す
+    queryKey: ["usersResultList", searchMode], // 修正: searchModeをqueryKeyに追加
+    queryFn: ({ pageParam = 0 }) => getResultList({ page: pageParam, mode: searchMode }), // 修正: searchModeを使用
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       // ページング処理を修正

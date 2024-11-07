@@ -77,7 +77,7 @@ export const usePlayTimer = () => {
 
     if (scene === "replay") {
       if (count && lineTime) {
-        replay({ count, lineConstantTime });
+        replay({ lineConstantTime });
       }
     }
 
