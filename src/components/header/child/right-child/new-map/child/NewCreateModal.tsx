@@ -3,7 +3,6 @@
 import {
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -25,6 +24,7 @@ import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import NProgress from "nprogress";
 import { extractYouTubeVideoId } from "../extractYTId";
+import CustomModalContent from "@/components/CustomModalContent";
 
 interface NewCreateModalProps {
   newCreateModalDisclosure: UseDisclosureReturn;
@@ -78,7 +78,7 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
   return (
     <Modal isOpen={newCreateModalDisclosure.isOpen} onClose={newCreateModalDisclosure.onClose}>
       <ModalOverlay />
-      <ModalContent bg={"popup.bg"} color={"popup.color"}>
+      <CustomModalContent>
         <ModalHeader>譜面新規作成ウィンドウ</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -149,7 +149,7 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
             </Link>
           </Flex>
         </ModalFooter>
-      </ModalContent>
+      </CustomModalContent>
     </Modal>
   );
 }

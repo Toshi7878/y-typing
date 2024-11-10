@@ -90,8 +90,10 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
   } catch (error) {
     return {
       id: null,
+
       title: "サーバー側で問題が発生しました",
-      message: "しばらく時間をおいてから再度お試しください。",
+      message:
+        error instanceof Error ? error.message : "しばらく時間をおいてから再度お試しください。",
       status: 500,
     };
   }
