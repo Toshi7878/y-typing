@@ -42,6 +42,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
       } else if (state.status === 500) {
         if (newVideoId) {
           updateNewMapBackUp(newVideoId, mapData);
+          console.log(state.errorObject);
         }
       }
     }
@@ -51,7 +52,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (canUpload) {
+      if (canUpload && !newVideoId) {
         event.preventDefault();
       }
     };
@@ -61,7 +62,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [canUpload]);
+  }, [canUpload, newVideoId]);
 
   return (
     <Button

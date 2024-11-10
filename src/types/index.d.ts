@@ -152,4 +152,5 @@ export interface UploadResult {
   title: string;
   message: string;
   status: number;
+  errorObject?: unknown;
 }
