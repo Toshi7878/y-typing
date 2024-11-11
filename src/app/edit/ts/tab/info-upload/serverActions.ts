@@ -9,12 +9,12 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
-const createMap = async (data: EditorSendData, userId: number) => {
+const createMap = async (map: EditorSendData, userId: number) => {
   const newMap = await prisma.map.create({
     data: {
-      ...data,
+      ...map,
       creatorId: userId,
-      mapData: data.mapData as unknown as Prisma.JsonObject, // mapDataをunknownに変換してからJsonObjectにキャスト
+      mapData: map.mapData as unknown as Prisma.JsonObject,
     },
   });
   return newMap.id; // 新しく作成されたマップのIDを返す
@@ -93,7 +93,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
       title: "サーバー側で問題が発生しました",
       message: "しばらく時間をおいてから再度お試しください。",
       status: 500,
-      errorObject: error,
+      errorObject: error instanceof Error ? error.message : String(error), // エラーオブジェクトを文字列に変換
     };
   }
 }

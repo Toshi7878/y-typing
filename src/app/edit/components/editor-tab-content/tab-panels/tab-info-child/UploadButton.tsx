@@ -42,7 +42,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
       } else if (state.status === 500) {
         if (newVideoId) {
           updateNewMapBackUp(newVideoId, mapData);
-          // console.error(state.errorObject);
+          console.log(state.errorObject);
         }
       }
     }
