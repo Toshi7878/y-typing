@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardBody, useTheme } from "@chakra-ui/react";
 import { SearchResultRange } from "@/app/timeline/ts/type";
 import SearchRange from "./child/SearchRange";
@@ -12,6 +12,25 @@ import { ThemeColors } from "@/types";
 const SearchCard = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
   const theme: ThemeColors = useTheme();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsCardVisible(false);
+      }
+    };
+
+    if (isCardVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCardVisible]);
 
   const [kpmRange, setKpmRange] = useState<SearchResultRange>({
     minValue: DEFAULT_KPM_SEARCH_RANGE.min,
@@ -30,8 +49,9 @@ const SearchCard = () => {
     <>
       <Button onClick={() => setIsCardVisible(!isCardVisible)}>詳細フィルター</Button>
 
-      {isCardVisible && ( // カードの表示状態に基づいてレンダリング
+      {isCardVisible && (
         <Card
+          ref={cardRef}
           position="absolute"
           zIndex={4}
           width={"500px"}
