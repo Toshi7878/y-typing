@@ -35,3 +35,13 @@ export interface ResultCardInfo {
     name: string;
   };
 }
+
+export interface SearchResultKeyWords {
+  mapKeyWord: string;
+  userName: string;
+}
+
+export interface SearchResultRange {
+  minValue: number;
+  maxValue: number;
+}
