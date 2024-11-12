@@ -6,11 +6,16 @@ import { useSearchParams } from "next/navigation";
 interface GetResultListProps {
   page: number;
   mode: FilterMode;
+  userKeyword: string;
 }
 
-async function getResultList({ page, mode }: GetResultListProps): Promise<ResultCardInfo[]> {
+async function getResultList({
+  page,
+  mode,
+  userKeyword,
+}: GetResultListProps): Promise<ResultCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users-result-list`, {
-    params: { page, mode }, // ページ数をクエリパラメータとして追加
+    params: { page, mode, userKeyword }, // ページ数をクエリパラメータとして追加
     // cache: "no-cache", // キャッシュモード
   });
 
@@ -24,6 +29,7 @@ async function getResultList({ page, mode }: GetResultListProps): Promise<Result
 export const useUsersResultInfiniteQuery = () => {
   const searchParams = useSearchParams();
   const searchMode = (searchParams.get("mode") || "all") as FilterMode;
+  const searchUserKeyWord = searchParams.get("user-keyword") || "";
 
   const {
     data,
@@ -38,11 +44,10 @@ export const useUsersResultInfiniteQuery = () => {
     status,
   } = useInfiniteQuery({
     queryKey: ["usersResultList", searchMode], // 修正: searchModeをqueryKeyに追加
-    queryFn: ({ pageParam = 0 }) => getResultList({ page: pageParam, mode: searchMode }), // 修正: searchModeを使用
+    queryFn: ({ pageParam = 0 }) =>
+      getResultList({ page: pageParam, mode: searchMode, userKeyword: searchUserKeyWord }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      // ページング処理を修正
-
       if (lastPage.length > 0) {
         const nextPage = allPages.length;
         return nextPage;

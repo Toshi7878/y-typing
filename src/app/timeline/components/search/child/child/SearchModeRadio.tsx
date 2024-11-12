@@ -2,6 +2,7 @@ import React from "react";
 import { HStack, useRadioGroup, useTheme, useRadio, UseRadioProps, Box } from "@chakra-ui/react";
 import { FilterMode } from "@/app/timeline/ts/type";
 import { ThemeColors } from "@/types";
+import { useSearchResultModeAtom, useSetSearchResultModeAtom } from "@/app/timeline/atoms/atoms";
 interface RadioCardProps extends UseRadioProps {
   option: FilterMode;
   children: React.ReactNode;
@@ -60,10 +61,14 @@ const options: { value: FilterMode; label: string }[] = [
   { value: "romakana", label: "ローマ字&かな" },
 ];
 const SearchModeRadio = () => {
+  const modeAtom = useSearchResultModeAtom();
+  const setModeAtom = useSetSearchResultModeAtom();
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "modeFilter",
-    defaultValue: "all",
-    onChange: (value) => {},
+    defaultValue: modeAtom,
+    onChange: (value) => {
+      setModeAtom(value as FilterMode);
+    },
   });
 
   const group = getRootProps();

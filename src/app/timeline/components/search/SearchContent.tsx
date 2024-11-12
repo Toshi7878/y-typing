@@ -1,4 +1,4 @@
-import { Box, Flex, Stack } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React from "react";
 import SearchCard from "./child/SearchModal";
 import SearchInputs from "./child/SearchInputs";

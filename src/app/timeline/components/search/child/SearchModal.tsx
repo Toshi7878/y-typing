@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardBody, useTheme } from "@chakra-ui/react";
-import { SearchResultRange } from "@/app/timeline/ts/type";
 import SearchRange from "./child/SearchRange";
 import {
   DEFAULT_CLEAR_RATE_SEARCH_RANGE,
@@ -8,11 +7,25 @@ import {
 } from "@/app/timeline/ts/const/consts";
 import SearchModeRadio from "./child/SearchModeRadio";
 import { ThemeColors } from "@/types";
+import {
+  useSearchResultClearRateAtom,
+  useSearchResultKpmAtom,
+  useSearchResultSpeedAtom,
+  useSetSearchResultClearRateAtom,
+  useSetSearchResultKpmAtom,
+  useSetSearchResultSpeedAtom,
+} from "@/app/timeline/atoms/atoms";
 
 const SearchCard = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
   const theme: ThemeColors = useTheme();
   const cardRef = useRef<HTMLDivElement>(null);
+  const searchKpm = useSearchResultKpmAtom();
+  const searchClearRate = useSearchResultClearRateAtom();
+  const searchSpeed = useSearchResultSpeedAtom();
+  const setSearchKpm = useSetSearchResultKpmAtom();
+  const setSearchClearRate = useSetSearchResultClearRateAtom();
+  const setSearchSpeed = useSetSearchResultSpeedAtom();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -31,19 +44,6 @@ const SearchCard = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isCardVisible]);
-
-  const [kpmRange, setKpmRange] = useState<SearchResultRange>({
-    minValue: DEFAULT_KPM_SEARCH_RANGE.min,
-    maxValue: DEFAULT_KPM_SEARCH_RANGE.max,
-  });
-  const [clearRateRange, setClearRateRange] = useState<SearchResultRange>({
-    minValue: DEFAULT_CLEAR_RATE_SEARCH_RANGE.min,
-    maxValue: DEFAULT_CLEAR_RATE_SEARCH_RANGE.max,
-  });
-  const [speedRange, setSpeedRange] = useState<SearchResultRange>({
-    minValue: 1,
-    maxValue: 2,
-  });
 
   return (
     <>
@@ -67,24 +67,24 @@ const SearchCard = () => {
               min={DEFAULT_KPM_SEARCH_RANGE.min}
               max={DEFAULT_KPM_SEARCH_RANGE.max}
               step={10}
-              value={kpmRange}
-              setValue={setKpmRange}
+              value={searchKpm}
+              setValue={setSearchKpm}
             />
             <SearchRange
               label={"% (クリア率)"}
               min={DEFAULT_CLEAR_RATE_SEARCH_RANGE.min}
               max={DEFAULT_CLEAR_RATE_SEARCH_RANGE.max}
               step={1}
-              value={clearRateRange}
-              setValue={setClearRateRange}
+              value={searchClearRate}
+              setValue={setSearchClearRate}
             />
             <SearchRange
               label={"倍速"}
               min={1}
               max={2}
               step={0.25}
-              value={speedRange}
-              setValue={setSpeedRange}
+              value={searchSpeed}
+              setValue={setSearchSpeed}
             />
           </CardBody>
         </Card>
