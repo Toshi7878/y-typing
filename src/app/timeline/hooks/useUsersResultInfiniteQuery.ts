@@ -2,6 +2,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { useSearchResultKeyWordsAtom } from "../atoms/atoms";
+import { useEffect } from "react";
 
 interface GetResultListProps {
   page: number;
@@ -29,7 +31,7 @@ async function getResultList({
 export const useUsersResultInfiniteQuery = () => {
   const searchParams = useSearchParams();
   const searchMode = (searchParams.get("mode") || "all") as FilterMode;
-  const searchUserKeyWord = searchParams.get("user-keyword") || "";
+  const keywords = useSearchResultKeyWordsAtom();
 
   const {
     data,
@@ -42,10 +44,11 @@ export const useUsersResultInfiniteQuery = () => {
     isFetchingNextPage,
     isFetchingPreviousPage,
     status,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["usersResultList", searchMode], // 修正: searchModeをqueryKeyに追加
     queryFn: ({ pageParam = 0 }) =>
-      getResultList({ page: pageParam, mode: searchMode, userKeyword: searchUserKeyWord }),
+      getResultList({ page: pageParam, mode: searchMode, userKeyword: keywords.userName }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length > 0) {
@@ -80,5 +83,6 @@ export const useUsersResultInfiniteQuery = () => {
     isFetchingNextPage,
     isFetchingPreviousPage,
     status,
+    refetch,
   };
 };

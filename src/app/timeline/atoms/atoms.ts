@@ -1,20 +1,23 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { FilterMode, SearchResultKeyWords, SearchResultRange } from "../ts/type";
 import { DEFAULT_CLEAR_RATE_SEARCH_RANGE, DEFAULT_KPM_SEARCH_RANGE } from "../ts/const/consts";
+import { getTimelineAtomStore } from "../TimelineProvider";
+
+const timelineAtomStore = getTimelineAtomStore();
 export const videoIdAtom = atom<string | null>(null);
 export const previewTimeAtom = atom<string | null>(null);
 
-const searchResultKeyWordsAtom = atom<SearchResultKeyWords>({
+export const searchResultKeyWordsAtom = atom<SearchResultKeyWords>({
   mapKeyWord: "",
   userName: "",
 });
 
 export const useSearchResultKeyWordsAtom = () => {
-  return useAtomValue(searchResultKeyWordsAtom);
+  return useAtomValue(searchResultKeyWordsAtom, { store: timelineAtomStore });
 };
 
 export const useSetSearchResultKeyWordsAtom = () => {
-  return useSetAtom(searchResultKeyWordsAtom);
+  return useSetAtom(searchResultKeyWordsAtom, { store: timelineAtomStore });
 };
 
 const searchResultKpmAtom = atom<SearchResultRange>({
@@ -23,11 +26,11 @@ const searchResultKpmAtom = atom<SearchResultRange>({
 });
 
 export const useSearchResultKpmAtom = () => {
-  return useAtomValue(searchResultKpmAtom);
+  return useAtomValue(searchResultKpmAtom, { store: timelineAtomStore });
 };
 
 export const useSetSearchResultKpmAtom = () => {
-  return useSetAtom(searchResultKpmAtom);
+  return useSetAtom(searchResultKpmAtom, { store: timelineAtomStore });
 };
 
 const searchResultClearRateAtom = atom<SearchResultRange>({
@@ -36,11 +39,11 @@ const searchResultClearRateAtom = atom<SearchResultRange>({
 });
 
 export const useSearchResultClearRateAtom = () => {
-  return useAtomValue(searchResultClearRateAtom);
+  return useAtomValue(searchResultClearRateAtom, { store: timelineAtomStore });
 };
 
 export const useSetSearchResultClearRateAtom = () => {
-  return useSetAtom(searchResultClearRateAtom);
+  return useSetAtom(searchResultClearRateAtom, { store: timelineAtomStore });
 };
 
 const searchResultSpeedRangeAtom = atom<SearchResultRange>({
@@ -49,19 +52,19 @@ const searchResultSpeedRangeAtom = atom<SearchResultRange>({
 });
 
 export const useSearchResultSpeedAtom = () => {
-  return useAtomValue(searchResultSpeedRangeAtom);
+  return useAtomValue(searchResultSpeedRangeAtom, { store: timelineAtomStore });
 };
 
 export const useSetSearchResultSpeedAtom = () => {
-  return useSetAtom(searchResultSpeedRangeAtom);
+  return useSetAtom(searchResultSpeedRangeAtom, { store: timelineAtomStore });
 };
 
-const searchResultModeAtom = atom<FilterMode>("all");
+export const searchResultModeAtom = atom<FilterMode>("all");
 
 export const useSearchResultModeAtom = () => {
-  return useAtomValue(searchResultModeAtom);
+  return useAtomValue(searchResultModeAtom, { store: timelineAtomStore });
 };
 
 export const useSetSearchResultModeAtom = () => {
-  return useSetAtom(searchResultModeAtom);
+  return useSetAtom(searchResultModeAtom, { store: timelineAtomStore });
 };

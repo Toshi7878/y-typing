@@ -6,14 +6,19 @@ import { useSearchReload } from "@/app/timeline/hooks/useSearchReload";
 import { Button, HStack, Input } from "@chakra-ui/react";
 import React from "react";
 
-const SearchInputs = () => {
+interface SearchInputsProps {
+  refetch: () => void;
+}
+
+const SearchInputs = ({ refetch }: SearchInputsProps) => {
   const searchKeywords = useSearchResultKeyWordsAtom();
   const setSearchKeywords = useSetSearchResultKeyWordsAtom();
-  const searchReload = useSearchReload();
+  const searchReload = useSearchReload(refetch);
   return (
     <HStack>
       <Input
         size="md"
+        value={searchKeywords.mapKeyWord}
         placeholder="譜面キーワードで絞り込み"
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: e.target.value, userName: searchKeywords.userName })
@@ -22,6 +27,7 @@ const SearchInputs = () => {
       <Input
         size="md"
         placeholder="ユーザーネームで絞り込み"
+        value={searchKeywords.userName}
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: searchKeywords.mapKeyWord, userName: e.target.value })
         }

@@ -4,6 +4,7 @@ import ResultCard from "./result-card/ResultCard";
 import ResultCardLayout from "./result-card/ResultCardLayout";
 import { useUsersResultInfiniteQuery } from "../hooks/useUsersResultInfiniteQuery";
 import { Box } from "@chakra-ui/react";
+import SearchContent from "./search/SearchContent";
 
 function UsersResultList() {
   const {
@@ -17,6 +18,7 @@ function UsersResultList() {
     isFetchingNextPage,
     isFetchingPreviousPage,
     status,
+    refetch,
   } = useUsersResultInfiniteQuery();
 
   // if (status === "pending") {
@@ -25,6 +27,8 @@ function UsersResultList() {
 
   return (
     <Box as="section">
+      <SearchContent refetch={refetch} />
+
       <InfiniteScroll
         loadMore={() => fetchNextPage()}
         // loader={<LoadingMapCard />}
