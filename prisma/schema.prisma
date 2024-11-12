@@ -37,8 +37,8 @@ model Map {
   id               Int @id @default(autoincrement())
   videoId          String
   title            String
-  artistName       String @default("")
-  musicSource      String @default("")
+  artistName       String? @default("")
+  musicSource      String? @default("")
   creatorComment   String
   tags             String[] //分ける
   creatorId        Int

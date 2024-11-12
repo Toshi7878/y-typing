@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Map" ALTER COLUMN "artistName" DROP NOT NULL,
+ALTER COLUMN "musicSource" DROP NOT NULL;
