@@ -51,6 +51,7 @@ const PreviewTimeInput = () => {
               size="sm"
               step="0.05"
               min="0"
+              isRequired={true}
               onChange={(e) => {
                 setPreviewTime(e.target.value);
                 setCanUpload(true);
