@@ -14,6 +14,12 @@ export const mapSendSchema = z.object({
   creatorComment: z.string().optional(),
   tags: z.array(z.string()).min(2, { message: "タグは2つ以上必要です" }),
   thumbnailQuality: z.enum(["maxresdefault", "mqdefault"]),
+  previewTime: z
+    .string()
+    .min(1, { message: "プレビュータイムを設定してください。" })
+    .refine((value) => !isNaN(Number(value)), {
+      message: "プレビュータイムは数値である必要があります",
+    }),
   mapData: z
     .array(lineSchema)
     .refine(

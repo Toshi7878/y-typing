@@ -38,15 +38,22 @@ const PreviewTimeInput = () => {
             </Text>
 
             <Input
+              isInvalid={isNaN(Number(previewTime))}
               value={previewTime}
               width="80px"
               bg={theme.colors.background}
               type="number"
               size="sm"
               step="0.1"
+              min="0"
               onChange={(e) => {
                 setPreviewTime(e.target.value);
                 setCanUpload(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handlePreviewClick();
+                }
               }}
             />
             <Box cursor="pointer" _hover={{ outline: "solid 1px" }} onClick={handlePreviewClick}>
