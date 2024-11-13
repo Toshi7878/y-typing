@@ -49,7 +49,7 @@ const PreviewTimeInput = () => {
               bg={theme.colors.background}
               type="number"
               size="sm"
-              step="0.1"
+              step="0.05"
               min="0"
               onChange={(e) => {
                 setPreviewTime(e.target.value);
