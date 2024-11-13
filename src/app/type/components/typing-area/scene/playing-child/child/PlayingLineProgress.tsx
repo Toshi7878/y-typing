@@ -1,4 +1,5 @@
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { ThemeColors } from "@/types";
 import { Box, useTheme } from "@chakra-ui/react";
 import React, { forwardRef, memo, useEffect } from "react";
 
@@ -8,7 +9,7 @@ interface PlayingLineProgressProps {
 const PlayingLineProgress = forwardRef<HTMLProgressElement, PlayingLineProgressProps>(
   (props, ref) => {
     const { setRef } = useRefs();
-    const theme = useTheme();
+    const theme: ThemeColors = useTheme();
 
     useEffect(() => {
       if (props.id === "line_progress") {

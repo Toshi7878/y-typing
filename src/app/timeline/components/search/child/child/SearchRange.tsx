@@ -1,3 +1,4 @@
+import { ThemeColors } from "@/types";
 import {
   Box,
   RangeSlider,
@@ -5,6 +6,7 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
   Text,
+  useTheme,
 } from "@chakra-ui/react";
 import { Dispatch } from "react";
 
@@ -18,6 +20,8 @@ interface SearchRangeProps {
 }
 
 const SearchRange = ({ label, min, max, step, value, setValue }: SearchRangeProps) => {
+  const theme: ThemeColors = useTheme();
+
   return (
     <Box>
       <Text>{`${value.minValue} - ${value.maxValue === 1200 && label === "kpm" ? "All" : value.maxValue} ${label}`}</Text>
@@ -25,13 +29,14 @@ const SearchRange = ({ label, min, max, step, value, setValue }: SearchRangeProp
         defaultValue={[value.minValue, value.maxValue]}
         min={min}
         max={max}
+        size={"lg"}
         step={step}
         onChange={(val) => {
           setValue({ minValue: val[0], maxValue: val[1] });
         }}
       >
         <RangeSliderTrack>
-          <RangeSliderFilledTrack />
+          <RangeSliderFilledTrack bg={theme.colors.type.progress.bg} />
         </RangeSliderTrack>
         <RangeSliderThumb index={0} />
         <RangeSliderThumb index={1} />
