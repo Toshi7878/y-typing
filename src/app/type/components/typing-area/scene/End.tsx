@@ -46,7 +46,7 @@ const End = ({ onOpen }: EndProps) => {
       rkpm: Math.round((status.type / rkpmTime) * 60),
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
-      romaKpm: Math.round((kanaToRomaConvertCount / rkpmTime) * 60),
+      romaKpm: Math.round((kanaToRomaConvertCount / totalTypeTime) * 60),
       defaultSpeed: speedData.defaultSpeed,
       clearRate: +statusRef.current!.status.clearRate.toFixed(1),
     };
