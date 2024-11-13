@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-11-13",
+    descriptions: ["タイムラインの検索機能の数値絞り込みを追加"],
+  },
+  {
     date: "2024-11-12",
     descriptions: [
       "タイムラインで入力モード・ユーザー名での検索機能を追加",

@@ -36,4 +36,28 @@ export const searchKpm = (min: number, max: number) => {
   };
 };
 
-export const searchClearRate = (minRate: number, maxRate: number) => {};
+export const searchClearRate = (min: number, max: number) => {
+  if (max === 0) {
+    return;
+  }
+
+  return {
+    clearRate: {
+      ...{ gte: min },
+      ...(max !== DEFAULT_KPM_SEARCH_RANGE.max && { lte: max }),
+    },
+  };
+};
+
+export const searchSpeed = (min: number, max: number) => {
+  if (max === 0) {
+    return;
+  }
+
+  return {
+    defaultSpeed: {
+      ...{ gte: min },
+      ...(max !== DEFAULT_KPM_SEARCH_RANGE.max && { lte: max }),
+    },
+  };
+};

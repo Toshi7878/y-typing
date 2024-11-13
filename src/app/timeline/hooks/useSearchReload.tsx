@@ -19,7 +19,9 @@ export const useSearchReload = () => {
   return () => {
     router.push(
       `/timeline?mode=${searchMode}&user-keyword=${searchKeywords.userName}
-&min-kpm=${searchKpm.minValue}&max-kpm=${searchKpm.maxValue}`,
+&min-kpm=${searchKpm.minValue}&max-kpm=${searchKpm.maxValue}
+&min-clear-rate=${searchClearRate.minValue}&max-clear-rate=${searchClearRate.maxValue}
+&min-speed=${searchSpeed.minValue}&max-speed=${searchSpeed.maxValue}`,
     );
   };
 };

@@ -1,9 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
-import { searchKpm, searchTypeMode, searchUserKeyWord } from "./searchParams";
+import {
+  searchClearRate,
+  searchKpm,
+  searchSpeed,
+  searchTypeMode,
+  searchUserKeyWord,
+} from "./searchParams";
 import { FilterMode } from "@/app/timeline/ts/type";
-import { DEFAULT_KPM_SEARCH_RANGE } from "@/app/timeline/ts/const/consts";
+import {
+  DEFAULT_CLEAR_RATE_SEARCH_RANGE,
+  DEFAULT_KPM_SEARCH_RANGE,
+} from "@/app/timeline/ts/const/consts";
 
 const prisma = new PrismaClient();
 
@@ -17,6 +26,12 @@ export async function GET(req: NextRequest) {
   const userKey = searchParams.get("userKeyword") ?? "";
   const minKpm = Number(searchParams.get("minKpm") ?? DEFAULT_KPM_SEARCH_RANGE.min);
   const maxKpm = Number(searchParams.get("maxKpm"));
+  const minClearRate = Number(
+    searchParams.get("minClearRate") ?? DEFAULT_CLEAR_RATE_SEARCH_RANGE.min,
+  );
+  const maxClearRate = Number(searchParams.get("maxClearRate"));
+  const minSpeed = Number(searchParams.get("minSpeed") ?? 1);
+  const maxSpeed = Number(searchParams.get("maxSpeed"));
 
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
 
@@ -24,6 +39,8 @@ export async function GET(req: NextRequest) {
     const searchMode = searchTypeMode(mode);
     const userKeyWord = searchUserKeyWord(userKey);
     const kpm = searchKpm(minKpm, maxKpm);
+    const clearRate = searchClearRate(minClearRate, maxClearRate);
+    const speed = searchSpeed(minSpeed, maxSpeed);
 
     const resultList = await prisma.result.findMany({
       skip: offset,
@@ -75,6 +92,8 @@ export async function GET(req: NextRequest) {
       where: {
         ...searchMode,
         ...kpm,
+        ...clearRate,
+        ...speed,
         user: {
           ...userKeyWord,
         },

@@ -10,6 +10,10 @@ interface GetResultListProps {
   userKeyword: string;
   minKpm: number;
   maxKpm: number;
+  minClearRate: number;
+  maxClearRate: number;
+  minSpeed: number;
+  maxSpeed: number;
 }
 
 async function getResultList({
@@ -18,9 +22,23 @@ async function getResultList({
   userKeyword,
   minKpm,
   maxKpm,
+  minClearRate,
+  maxClearRate,
+  minSpeed,
+  maxSpeed,
 }: GetResultListProps): Promise<ResultCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users-result-list`, {
-    params: { page, mode, userKeyword, minKpm, maxKpm }, // ページ数をクエリパラメータとして追加
+    params: {
+      page,
+      mode,
+      userKeyword,
+      minKpm,
+      maxKpm,
+      minClearRate,
+      maxClearRate,
+      minSpeed,
+      maxSpeed,
+    }, // ページ数をクエリパラメータとして追加
     // cache: "no-cache", // キャッシュモード
   });
 
@@ -34,8 +52,12 @@ async function getResultList({
 export const useUsersResultInfiniteQuery = () => {
   const searchParams = useSearchParams();
   const searchMode = (searchParams.get("mode") || "all") as FilterMode;
-  const searchMinKpm = Number(searchParams.get("min-kpm") || 0);
-  const searchMaxKpm = Number(searchParams.get("max-kpm") || 0);
+  const minKpm = Number(searchParams.get("min-kpm") || 0);
+  const maxKpm = Number(searchParams.get("max-kpm") || 0);
+  const minClearRate = Number(searchParams.get("min-clear-rate") || 0);
+  const maxClearRate = Number(searchParams.get("max-clear-rate") || 0);
+  const minSpeed = Number(searchParams.get("min-speed") || 1);
+  const maxSpeed = Number(searchParams.get("max-speed") || 0);
   const keywords = useSearchResultKeyWordsAtom();
 
   const {
@@ -57,8 +79,12 @@ export const useUsersResultInfiniteQuery = () => {
         page: pageParam,
         mode: searchMode,
         userKeyword: keywords.userName,
-        minKpm: searchMinKpm,
-        maxKpm: searchMaxKpm,
+        minKpm,
+        maxKpm,
+        minClearRate,
+        maxClearRate,
+        minSpeed,
+        maxSpeed,
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
