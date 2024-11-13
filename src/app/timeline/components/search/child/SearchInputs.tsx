@@ -6,14 +6,10 @@ import { useSearchReload } from "@/app/timeline/hooks/useSearchReload";
 import { Button, HStack, Input } from "@chakra-ui/react";
 import React from "react";
 
-interface SearchInputsProps {
-  refetch: () => void;
-}
-
-const SearchInputs = ({ refetch }: SearchInputsProps) => {
+const SearchInputs = () => {
   const searchKeywords = useSearchResultKeyWordsAtom();
   const setSearchKeywords = useSetSearchResultKeyWordsAtom();
-  const searchReload = useSearchReload(refetch);
+  const searchReload = useSearchReload();
   return (
     <HStack>
       <Input

@@ -7,7 +7,7 @@ import {
   useSearchResultSpeedAtom,
 } from "../atoms/atoms";
 
-export const useSearchReload = (refetch: () => void) => {
+export const useSearchReload = () => {
   const searchKeywords = useSearchResultKeyWordsAtom();
 
   const searchKpm = useSearchResultKpmAtom();
@@ -15,8 +15,11 @@ export const useSearchReload = (refetch: () => void) => {
   const searchSpeed = useSearchResultSpeedAtom();
   const searchMode = useSearchResultModeAtom();
   const router = useRouter();
+
   return () => {
-    router.push(`/timeline?mode=${searchMode}&user-keyword=${searchKeywords.userName}`);
-    refetch();
+    router.push(
+      `/timeline?mode=${searchMode}&user-keyword=${searchKeywords.userName}
+&min-kpm=${searchKpm.minValue}&max-kpm=${searchKpm.maxValue}`,
+    );
   };
 };

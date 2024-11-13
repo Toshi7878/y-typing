@@ -3,21 +3,24 @@ import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useSearchResultKeyWordsAtom } from "../atoms/atoms";
-import { useEffect } from "react";
 
 interface GetResultListProps {
   page: number;
   mode: FilterMode;
   userKeyword: string;
+  minKpm: number;
+  maxKpm: number;
 }
 
 async function getResultList({
   page,
   mode,
   userKeyword,
+  minKpm,
+  maxKpm,
 }: GetResultListProps): Promise<ResultCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users-result-list`, {
-    params: { page, mode, userKeyword }, // ページ数をクエリパラメータとして追加
+    params: { page, mode, userKeyword, minKpm, maxKpm }, // ページ数をクエリパラメータとして追加
     // cache: "no-cache", // キャッシュモード
   });
 
@@ -31,6 +34,8 @@ async function getResultList({
 export const useUsersResultInfiniteQuery = () => {
   const searchParams = useSearchParams();
   const searchMode = (searchParams.get("mode") || "all") as FilterMode;
+  const searchMinKpm = Number(searchParams.get("min-kpm") || 0);
+  const searchMaxKpm = Number(searchParams.get("max-kpm") || 0);
   const keywords = useSearchResultKeyWordsAtom();
 
   const {
@@ -48,7 +53,13 @@ export const useUsersResultInfiniteQuery = () => {
   } = useInfiniteQuery({
     queryKey: ["usersResultList", searchMode], // 修正: searchModeをqueryKeyに追加
     queryFn: ({ pageParam = 0 }) =>
-      getResultList({ page: pageParam, mode: searchMode, userKeyword: keywords.userName }),
+      getResultList({
+        page: pageParam,
+        mode: searchMode,
+        userKeyword: keywords.userName,
+        minKpm: searchMinKpm,
+        maxKpm: searchMaxKpm,
+      }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length > 0) {

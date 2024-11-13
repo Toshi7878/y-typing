@@ -5,6 +5,8 @@ import ResultCardLayout from "./result-card/ResultCardLayout";
 import { useUsersResultInfiniteQuery } from "../hooks/useUsersResultInfiniteQuery";
 import { Box } from "@chakra-ui/react";
 import SearchContent from "./search/SearchContent";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 function UsersResultList() {
   const {
@@ -21,13 +23,16 @@ function UsersResultList() {
     refetch,
   } = useUsersResultInfiniteQuery();
 
-  // if (status === "pending") {
-  //   // return <LoadingMapCard />;
-  // }
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <Box as="section">
-      <SearchContent refetch={refetch} />
+      <SearchContent />
 
       <InfiniteScroll
         loadMore={() => fetchNextPage()}

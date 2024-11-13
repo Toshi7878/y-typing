@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
-import { searchTypeMode, searchUserKeyWord } from "./searchParams";
+import { searchKpm, searchTypeMode, searchUserKeyWord } from "./searchParams";
 import { FilterMode } from "@/app/timeline/ts/type";
+import { DEFAULT_KPM_SEARCH_RANGE } from "@/app/timeline/ts/const/consts";
 
 const prisma = new PrismaClient();
 
@@ -14,11 +15,15 @@ export async function GET(req: NextRequest) {
   const mode = (searchParams.get("mode") ?? "all") as FilterMode;
   const mapKeyword = searchParams.get("map-keyword") ?? "";
   const userKey = searchParams.get("userKeyword") ?? "";
+  const minKpm = Number(searchParams.get("minKpm") ?? DEFAULT_KPM_SEARCH_RANGE.min);
+  const maxKpm = Number(searchParams.get("maxKpm"));
+
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
 
   try {
     const searchMode = searchTypeMode(mode);
     const userKeyWord = searchUserKeyWord(userKey);
+    const kpm = searchKpm(minKpm, maxKpm);
 
     const resultList = await prisma.result.findMany({
       skip: offset,
@@ -69,6 +74,7 @@ export async function GET(req: NextRequest) {
       },
       where: {
         ...searchMode,
+        ...kpm,
         user: {
           ...userKeyWord,
         },

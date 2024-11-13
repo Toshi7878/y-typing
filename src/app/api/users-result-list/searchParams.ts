@@ -1,3 +1,4 @@
+import { DEFAULT_KPM_SEARCH_RANGE } from "@/app/timeline/ts/const/consts";
 import { FilterMode } from "@/app/timeline/ts/type";
 
 export const searchTypeMode = (mode: FilterMode) => {
@@ -22,6 +23,17 @@ export const searchUserKeyWord = (nameKeyWord: string) => {
     };
   }
 };
-export const searchKpm = (minKpm: number, maxKpm: number) => {};
+export const searchKpm = (min: number, max: number) => {
+  if (max === 0) {
+    return;
+  }
+
+  return {
+    romaKpm: {
+      ...{ gte: min },
+      ...(max !== DEFAULT_KPM_SEARCH_RANGE.max && { lte: max }),
+    },
+  };
+};
 
 export const searchClearRate = (minRate: number, maxRate: number) => {};

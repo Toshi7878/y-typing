@@ -20,7 +20,7 @@ export const useSetSearchResultKeyWordsAtom = () => {
   return useSetAtom(searchResultKeyWordsAtom, { store: timelineAtomStore });
 };
 
-const searchResultKpmAtom = atom<SearchResultRange>({
+export const searchResultKpmAtom = atom<SearchResultRange>({
   minValue: DEFAULT_KPM_SEARCH_RANGE.min,
   maxValue: DEFAULT_KPM_SEARCH_RANGE.max,
 });
