@@ -39,6 +39,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
   const validatedFields = mapSendSchema.safeParse({
     title: data.title,
     creatorComment: data.creatorComment,
+    previewTime: data.previewTime,
     tags: data.tags,
     mapData: data.mapData,
     videoId: data.videoId,
