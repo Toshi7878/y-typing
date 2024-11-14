@@ -109,6 +109,7 @@ export async function GET(req: NextRequest) {
           WHEN ${mapKeyword} != '' THEN "title" &@~ ${mapKeyword}
           OR "artistName" &@~ ${mapKeyword}
           OR "tags" &@~ ${mapKeyword}
+          OR "Creator"."name" &@~ ${mapKeyword}
           ELSE 1=1
         END
       )
