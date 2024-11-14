@@ -15,6 +15,7 @@ const SearchInputs = () => {
       <Input
         size="md"
         value={searchKeywords.mapKeyWord}
+        type="search"
         placeholder="譜面キーワードで絞り込み"
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: e.target.value, userName: searchKeywords.userName })
@@ -28,6 +29,7 @@ const SearchInputs = () => {
       <Input
         size="md"
         placeholder="ユーザーネームで絞り込み"
+        type="search"
         value={searchKeywords.userName}
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: searchKeywords.mapKeyWord, userName: e.target.value })

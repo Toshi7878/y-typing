@@ -13,6 +13,7 @@ const SearchInputs = () => {
         size="md"
         value={searchMapKeywords}
         placeholder="検索"
+        type="search"
         onChange={(e) => setSearchKeywords(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
