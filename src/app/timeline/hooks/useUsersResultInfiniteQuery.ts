@@ -58,7 +58,7 @@ export const useUsersResultInfiniteQuery = () => {
   const maxClearRate = Number(searchParams.get("max-clear-rate") || 0);
   const minSpeed = Number(searchParams.get("min-speed") || 1);
   const maxSpeed = Number(searchParams.get("max-speed") || 0);
-  const keywords = useSearchResultKeyWordsAtom();
+  const userNameKeyword = searchParams.get("user-keyword") || "";
 
   const {
     data,
@@ -78,7 +78,7 @@ export const useUsersResultInfiniteQuery = () => {
       getResultList({
         page: pageParam,
         mode: searchMode,
-        userKeyword: keywords.userName,
+        userKeyword: userNameKeyword,
         minKpm,
         maxKpm,
         minClearRate,
