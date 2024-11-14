@@ -19,6 +19,11 @@ const SearchInputs = () => {
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: e.target.value, userName: searchKeywords.userName })
         }
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            searchReload();
+          }
+        }}
       />
       <Input
         size="md"
@@ -27,6 +32,11 @@ const SearchInputs = () => {
         onChange={(e) =>
           setSearchKeywords({ mapKeyWord: searchKeywords.mapKeyWord, userName: e.target.value })
         }
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            searchReload();
+          }
+        }}
       />
       <Button width="30%" onClick={searchReload}>
         検索

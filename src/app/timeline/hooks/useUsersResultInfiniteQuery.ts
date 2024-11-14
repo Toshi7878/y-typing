@@ -2,11 +2,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useSearchResultKeyWordsAtom } from "../atoms/atoms";
 
 interface GetResultListProps {
   page: number;
   mode: FilterMode;
+  mapKeyword: string;
   userKeyword: string;
   minKpm: number;
   maxKpm: number;
@@ -19,6 +19,7 @@ interface GetResultListProps {
 async function getResultList({
   page,
   mode,
+  mapKeyword,
   userKeyword,
   minKpm,
   maxKpm,
@@ -31,6 +32,7 @@ async function getResultList({
     params: {
       page,
       mode,
+      mapKeyword,
       userKeyword,
       minKpm,
       maxKpm,
@@ -58,7 +60,8 @@ export const useUsersResultInfiniteQuery = () => {
   const maxClearRate = Number(searchParams.get("max-clear-rate") || 0);
   const minSpeed = Number(searchParams.get("min-speed") || 1);
   const maxSpeed = Number(searchParams.get("max-speed") || 0);
-  const userNameKeyword = searchParams.get("user-keyword") || "";
+  const userKeyword = searchParams.get("user-keyword") || "";
+  const mapKeyword = searchParams.get("map-keyword") || "";
 
   const {
     data,
@@ -78,7 +81,8 @@ export const useUsersResultInfiniteQuery = () => {
       getResultList({
         page: pageParam,
         mode: searchMode,
-        userKeyword: userNameKeyword,
+        mapKeyword,
+        userKeyword,
         minKpm,
         maxKpm,
         minClearRate,

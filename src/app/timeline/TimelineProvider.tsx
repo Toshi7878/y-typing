@@ -22,8 +22,9 @@ const TimelineProvider = ({ children }: TimelineProviderProps) => {
   const minKpm = Number(searchParams.get("min-kpm") ?? DEFAULT_KPM_SEARCH_RANGE.min);
   const maxKpm = Number(searchParams.get("max-kpm") ?? DEFAULT_KPM_SEARCH_RANGE.max);
   const searchUserKeyWord = searchParams.get("user-keyword") || "";
+  const searchMapKeyWord = searchParams.get("map-keyword") || "";
   timelineAtomStore.set(searchResultKeyWordsAtom, {
-    mapKeyWord: "",
+    mapKeyWord: searchMapKeyWord,
     userName: searchUserKeyWord,
   });
 

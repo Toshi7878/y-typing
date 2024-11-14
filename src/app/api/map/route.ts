@@ -12,18 +12,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    // const mapContents = await prisma.map.findUnique({
-    //   where: { id: Number(mapId) },
-    //   select: {
-    //     mapData: true,
-    //   },
-    // });
     const mapContents = await prisma.$queryRawTyped(getMapTypingData(Number(mapId)));
-    // const mapContents = await prisma.$queryRaw`
-    //   SELECT "mapData"
-    //   FROM "Map"
-    //   WHERE id = ${Number(mapId)}
-    // `;
+
     if (!mapContents) {
       return new Response("Map not found", { status: 404 });
     }

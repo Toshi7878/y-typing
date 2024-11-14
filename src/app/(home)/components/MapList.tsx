@@ -8,10 +8,10 @@ import SkeletonCard from "./SkeletonCard";
 import MapCardLayout from "./MapCardLayout";
 import { MapCardInfo } from "../ts/type";
 
-function LoadingMapCard() {
+function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
     <MapCardLayout>
-      {[...Array(10)].map((_, index) => (
+      {[...Array(cardLength)].map((_, index) => (
         <SkeletonCard key={index} />
       ))}
     </MapCardLayout>
@@ -72,13 +72,13 @@ function MapList() {
   });
 
   if (status === "pending") {
-    return <LoadingMapCard />;
+    return <LoadingMapCard cardLength={10} />;
   }
 
   return (
     <InfiniteScroll
       loadMore={() => fetchNextPage()}
-      loader={<LoadingMapCard />}
+      loader={<LoadingMapCard cardLength={2} />}
       hasMore={hasNextPage}
       threshold={1400} // スクロールの閾値を追加
     >
