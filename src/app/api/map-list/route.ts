@@ -11,6 +11,16 @@ export async function GET(req: NextRequest) {
   const page = searchParams.get("page") ?? "0";
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
   try {
+    //   const mapList = await prisma.$queryRaw`
+    //   SELECT "Map"."id", "Map"."title", "Map"."artistName", "Map"."musicSource",
+    //   "Map"."romaKpmMedian", "Map"."romaKpmMax", "Map"."videoId", "Map"."updatedAt",
+    //   "Map"."previewTime", "Map"."totalTime", "Map"."thumbnailQuality",
+    //   "User"."id" as "userId", "User"."name" as "userName"
+    //   FROM "Map"
+    //   JOIN "User" ON "Map"."userId" = "User"."id"
+    //   ORDER BY "Map"."id" DESC
+    //   LIMIT ${CONTENT_LENGTH} OFFSET ${offset}
+    // `;
     const mapList = await prisma.map.findMany({
       skip: offset,
       take: CONTENT_LENGTH,
@@ -19,9 +29,6 @@ export async function GET(req: NextRequest) {
         title: true,
         artistName: true,
         musicSource: true,
-        creatorComment: false,
-        tags: false,
-        mapData: false,
         romaKpmMedian: true,
         romaKpmMax: true,
         videoId: true,
