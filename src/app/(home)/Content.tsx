@@ -4,11 +4,12 @@ import MapList from "./components/MapList";
 import HomeYouTubeContent from "./components/HomeYouTubeContent";
 import { useEffect, useState } from "react";
 import { handleKeyDown } from "./ts/keydown";
-import { useAtom } from "jotai";
+import { Provider, useAtom } from "jotai";
 import { videoIdAtom } from "./atoms/atoms";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
 import React from "react";
+import SearchContent from "./components/SearchContent";
 
 export default function Content() {
   const [videoId, setVideoId] = useAtom(videoIdAtom);
@@ -43,11 +44,14 @@ export default function Content() {
   }, [router, setVideoId]);
 
   return (
-    <>
-      <MapList />
-      <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
-        <HomeYouTubeContent />
+    <Provider>
+      <Box className="w-[100%] md:w-[82vw]">
+        <SearchContent />
+        <MapList />
+        <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
+          <HomeYouTubeContent />
+        </Box>
       </Box>
-    </>
+    </Provider>
   );
 }

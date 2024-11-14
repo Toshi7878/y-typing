@@ -1,13 +1,10 @@
-"use client";
 import { Box } from "@chakra-ui/react";
 import Content from "./Content";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import HomeProvider from "./HomeProvider";
 
 export default function Home() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <HomeProvider>
       <Box
         as="main"
         minH="100vh" // 変更: 100vw から 100vh へ
@@ -21,6 +18,6 @@ export default function Home() {
       >
         <Content />
       </Box>
-    </QueryClientProvider>
+    </HomeProvider>
   );
 }
