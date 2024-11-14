@@ -1,13 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
-import {
-  searchClearRate,
-  searchKpm,
-  searchSpeed,
-  searchTypeMode,
-  searchUserKeyWord,
-} from "./searchParams";
+
 import { FilterMode } from "@/app/timeline/ts/type";
 import {
   DEFAULT_CLEAR_RATE_SEARCH_RANGE,
