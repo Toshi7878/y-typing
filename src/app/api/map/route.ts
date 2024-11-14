@@ -18,13 +18,17 @@ export async function GET(request: Request) {
     //     mapData: true,
     //   },
     // });
-    const mapContents = await prisma.$queryRawTyped(getMapTypingData(Number(mapId)));
-
+    // const mapContents = await prisma.$queryRawTyped(getMapTypingData(Number(mapId)));
+    const mapContents = await prisma.$queryRaw`
+      SELECT "mapData"
+      FROM "Map"
+      WHERE id = ${Number(mapId)}
+    `;
     if (!mapContents) {
       return new Response("Map not found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(mapContents), {
+    return new Response(JSON.stringify(mapContents[0]), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
