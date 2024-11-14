@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   engineType = "library" // または "binary"
+  previewFeatures = ["typedSql"]
 }
 
 datasource db {

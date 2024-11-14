@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { getMapTypingData } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
@@ -11,12 +12,13 @@ export async function GET(request: Request) {
   }
 
   try {
-    const mapContents = await prisma.map.findUnique({
-      where: { id: Number(mapId) },
-      select: {
-        mapData: true,
-      },
-    });
+    // const mapContents = await prisma.map.findUnique({
+    //   where: { id: Number(mapId) },
+    //   select: {
+    //     mapData: true,
+    //   },
+    // });
+    const mapContents = await prisma.$queryRawTyped(getMapTypingData(Number(mapId)));
 
     if (!mapContents) {
       return new Response("Map not found", { status: 404 });
