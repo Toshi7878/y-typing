@@ -1,5 +1,5 @@
+import { getMapTypingData } from "@/sql";
 import { PrismaClient } from "@prisma/client";
-import { getMapTypingData } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
