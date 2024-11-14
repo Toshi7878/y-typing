@@ -1,5 +1,6 @@
 import { DEFAULT_KPM_SEARCH_RANGE } from "@/app/timeline/ts/const/consts";
 import { FilterMode } from "@/app/timeline/ts/type";
+import { Prisma } from "@prisma/client";
 
 export const searchTypeMode = (mode: FilterMode) => {
   if (mode === "roma") {
@@ -11,14 +12,45 @@ export const searchTypeMode = (mode: FilterMode) => {
   }
 };
 
-export const searchMapKeyWord = (keyWord: string) => {};
+export const searchMapKeyWord = (keyWord: string) => {
+  if (keyWord) {
+    return {
+      OR: [
+        {
+          title: {
+            contains: keyWord,
+            mode: "insensitive",
+          },
+        },
+        {
+          artistName: {
+            contains: keyWord,
+            mode: "insensitive",
+          },
+        },
+        {
+          musicSource: {
+            contains: keyWord,
+            mode: "insensitive",
+          },
+        },
+        {
+          tags: {
+            contains: keyWord,
+            mode: "insensitive",
+          },
+        },
+      ],
+    };
+  }
+};
 
-export const searchUserKeyWord = (nameKeyWord: string) => {
+export const searchUserKeyWord = (nameKeyWord: string): Prisma.UserWhereInput | undefined => {
   if (nameKeyWord) {
     return {
       name: {
         contains: nameKeyWord,
-        // mode: "insensitive", // 大文字小文字を区別しない検索
+        mode: "insensitive",
       },
     };
   }
