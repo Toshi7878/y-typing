@@ -12,7 +12,7 @@ const SearchInputs = () => {
       <Input
         size="md"
         value={searchMapKeywords}
-        placeholder="譜面キーワードで絞り込み"
+        placeholder="検索"
         onChange={(e) => setSearchKeywords(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
