@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { getMapTypingData } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +17,10 @@ export async function GET(request: Request) {
     //     mapData: true,
     //   },
     // });
+
+    //TypedSQL
     // const mapContents = await prisma.$queryRawTyped(getMapTypingData(Number(mapId)));
+
     const mapContents = await prisma.$queryRaw`
       SELECT "mapData"
       FROM "Map"
