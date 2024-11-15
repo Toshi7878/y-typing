@@ -17,10 +17,10 @@ export const useUserResultIdQuery = (userId: number | undefined) => {
         },
       });
 
-      return response.data.id;
+      return response.data;
     },
-    enabled: !!userId, // userIdが存在する場合のみクエリを有効にする
+    enabled: !userId, // userIdが存在する場合のみクエリを有効にする
   });
 
-  return userId ? { data, error, isLoading, refetch } : undefined;
+  return { data, error, isLoading, refetch };
 };

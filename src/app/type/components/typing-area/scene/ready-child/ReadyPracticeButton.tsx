@@ -24,8 +24,9 @@ const ReadyPracticeButton = () => {
   const handleClick = useCallback(async () => {
     if (gameStateRef.current!.practice.hasMyRankingData) {
       setIsLoadingOverlay(true);
-      await getUserResultId?.refetch();
-      const result = await downloadResultJson(getUserResultId?.data as number);
+      const { data: resultData } = await getUserResultId?.refetch();
+      const resultId = resultData?.id; // resultIdを取得
+      const result = await downloadResultJson(resultId as number);
       setLineResults(result);
       setIsLoadingOverlay(false);
     }
