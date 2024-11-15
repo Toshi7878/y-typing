@@ -5,9 +5,6 @@ import { useParams } from "next/navigation";
 export const useUserResultIdQuery = (userId: number | undefined) => {
   const { id: mapId } = useParams();
 
-  if (!userId) {
-    return undefined;
-  }
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["practiceData", Number(mapId), userId],
     queryFn: async () => {
@@ -22,7 +19,8 @@ export const useUserResultIdQuery = (userId: number | undefined) => {
 
       return response.data.id;
     },
-    enabled: false,
+    enabled: !!userId, // userIdが存在する場合のみクエリを有効にする
   });
-  return { data, error, isLoading, refetch };
+
+  return userId ? { data, error, isLoading, refetch } : undefined;
 };
