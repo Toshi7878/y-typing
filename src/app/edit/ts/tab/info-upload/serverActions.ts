@@ -6,6 +6,7 @@ import { mapSendSchema } from "./validationSchema";
 import { revalidatePath } from "next/cache";
 import { EditorSendData } from "../../type";
 import { UploadResult } from "@/types";
+import { MapData } from "@/app/type/ts/type";
 
 const prisma = new PrismaClient();
 
@@ -31,7 +32,11 @@ const updateMap = async (data: EditorSendData, mapId: number) => {
   return updatedMap.id; // 更新されたマップのIDを返す
 };
 
-export async function actions(data: EditorSendData, mapId: string): Promise<UploadResult> {
+export async function actions(
+  data: EditorSendData,
+  mapData: MapData[],
+  mapId: string,
+): Promise<UploadResult> {
   const session = await auth();
 
   const validatedFields = mapSendSchema.safeParse({
@@ -39,7 +44,7 @@ export async function actions(data: EditorSendData, mapId: string): Promise<Uplo
     creatorComment: data.creatorComment,
     previewTime: data.previewTime,
     tags: data.tags,
-    mapData: data.mapData,
+    mapData,
     videoId: data.videoId,
     thumbnailQuality: data.thumbnailQuality,
   });

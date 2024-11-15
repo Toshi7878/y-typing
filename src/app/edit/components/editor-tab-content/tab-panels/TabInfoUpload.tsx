@@ -72,7 +72,6 @@ const TabInfoUpload = () => {
       artistName,
       musicSource: musicSource,
       creatorComment,
-      mapData,
       tags: tags.map((tag) => tag.id),
       previewTime:
         Number(previewTime) < videoDuration ? previewTime : mapData[map.startLine]["time"],
@@ -86,7 +85,11 @@ const TabInfoUpload = () => {
       thumbnailQuality: (await getThumbnailQuality(mapVideoId)) as "maxresdefault" | "mqdefault",
     };
 
-    const result: UploadResult = await actions(sendData, Array.isArray(id) ? id[0] : id || "new");
+    const result: UploadResult = await actions(
+      sendData,
+      mapData,
+      Array.isArray(id) ? id[0] : id || "new",
+    );
 
     if (result.id) {
       const jsonString = JSON.stringify(mapData, null, 2);

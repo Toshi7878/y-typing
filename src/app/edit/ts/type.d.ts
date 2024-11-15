@@ -9,7 +9,6 @@ export interface EditorSendData {
   musicSource: string;
   creatorComment: string;
   tags: string[];
-  mapData: MapData[];
   videoId: string;
   previewTime: string;
   romaKpmMedian: number;
