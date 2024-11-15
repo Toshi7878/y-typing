@@ -6,8 +6,8 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
-    const count = await prisma.result.count(); // resultテーブルの総数を取得
-    for (let i = 173; i < count; i++) {
+    const count = 533; // resultテーブルの総数を取得
+    for (let i = 513; i < count; i++) {
       const result = await prisma.result.findFirst({
         where: {
           id: i,
