@@ -1,12 +1,9 @@
 import { supabase } from "@/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setMapData } from "../../redux/mapDataSlice";
 
 export const useDownloadMapDataQuery = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -24,7 +21,6 @@ export const useDownloadMapDataQuery = () => {
         const jsonString = await data.text();
         const jsonData = JSON.parse(jsonString);
 
-        dispatch(setMapData(jsonData));
         return jsonData;
       } catch (error) {
         console.error("Error processing the downloaded file:", error);
@@ -38,5 +34,5 @@ export const useDownloadMapDataQuery = () => {
     refetchOnMount: false, // マウント時に再フェッチしない
   });
 
-  return { isLoading };
+  return { data, isLoading };
 };

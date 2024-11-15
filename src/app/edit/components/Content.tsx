@@ -58,7 +58,13 @@ function Content() {
   const setWord = useSetEditLineWordAtom();
   const { id } = useParams();
 
-  const { isLoading } = useDownloadMapDataQuery();
+  const { data, isLoading } = useDownloadMapDataQuery();
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setMapData(data));
+    }
+  }, [data, isLoading]);
 
   useLayoutEffect(() => {
     if (!id) {
