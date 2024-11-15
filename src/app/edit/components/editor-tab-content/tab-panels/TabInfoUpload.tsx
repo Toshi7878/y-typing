@@ -18,23 +18,15 @@ import {
   useEditPreviewTimeInputAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
-  useSetEditMusicSourceAtom,
-  useSetGeminiTagsAtom,
-  useSetMapArtistNameAtom,
-  useSetMapTitleAtom,
   useTagsAtom,
-  useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
 import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
 import TypeLinkButton from "./tab-info-child/TypeLinkButton";
-import { GeminiMapInfo, GetYouTubeMovieInfo } from "@/app/edit/ts/type";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import InfoTag from "./tab-info-child/InfoTag";
 import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
 import { supabase } from "@/lib/supabaseClient";
+import { useGetGeminiMapInfoQuery } from "@/app/edit/hooks/query/useGetGeminiMapInfoQuery";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -48,19 +40,14 @@ const TabInfoUpload = () => {
   const musicSource = useEditMusicSourceAtom();
 
   const previewTime = useEditPreviewTimeInputAtom();
-  const videoId = useVideoIdAtom();
   const theme: ThemeColors = useTheme();
-  const setMapTitle = useSetMapTitleAtom();
-  const setMapArtistName = useSetMapArtistNameAtom();
-  const setMusicSouce = useSetEditMusicSourceAtom();
-  const setGeminiTags = useSetGeminiTagsAtom();
-  const successToast = useSuccessToast();
   const searchParams = useSearchParams();
   const isNewCreateMap = !!searchParams.get("new");
-  const isBackUp = searchParams.get("backup") === "true";
 
   const { playerRef } = useRefs();
   const { id } = useParams();
+
+  const { isLoading } = useGetGeminiMapInfoQuery();
 
   const upload = async () => {
     const map = new CreateMap(mapData);
@@ -116,44 +103,6 @@ const TabInfoUpload = () => {
   const isAdmin = session?.user?.role === "admin";
   const isDisplayUploadButton =
     (myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId)) || isAdmin;
-
-  const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
-    queryKey: ["generate-gemini-map-info", videoId, isNewCreateMap],
-    queryFn: async () => {
-      const ytInfo = await axios.post<GetYouTubeMovieInfo | UploadResult>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/get-youtube-channel-info`,
-        { videoId },
-      );
-
-      if ("status" in ytInfo.data && ytInfo.data.status === 404) {
-        successToast(ytInfo.data);
-        return null;
-        // 404エラーの処理をここに追加
-      } else {
-        const geminiMapInfo = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/generate-map-info-gemini`,
-          { prompt_post: ytInfo.data },
-        );
-
-        const mapInfoData: GeminiMapInfo = JSON.parse(geminiMapInfo.data.message);
-
-        if (isNewCreateMap && !isBackUp) {
-          setMapTitle(mapInfoData.musicTitle);
-          setMapArtistName(mapInfoData.artistName);
-          setMusicSouce(mapInfoData.musicSource);
-        }
-
-        setGeminiTags(mapInfoData.otherTags);
-      }
-
-      return ytInfo.data;
-    },
-
-    staleTime: Infinity, // データを常に新鮮に保つ
-    refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
-    refetchOnReconnect: false, // 再接続時に再フェッチしない
-    refetchOnMount: false, // マウント時に再フェッチしない
-  });
 
   return (
     <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
