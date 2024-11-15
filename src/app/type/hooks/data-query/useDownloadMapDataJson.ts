@@ -1,11 +1,14 @@
 import { supabase } from "@/lib/supabaseClient";
+import { useParams } from "next/navigation";
 
-export const useDownloadResultJson = () => {
-  return async (resultId: number) => {
+export const useDownloadMapDataJson = () => {
+  const { id: mapId } = useParams();
+
+  return async () => {
     try {
       const { data, error } = await supabase.storage
-        .from("user-result") // バケット名を指定
-        .download(`public/${resultId}.json`);
+        .from("map-data") // バケット名を指定
+        .download(`public/${mapId}.json`);
 
       if (error) {
         console.error("Error downloading from Supabase:", error);

@@ -6,7 +6,6 @@ import TypeTabContent from "../components/type-tab-content/TypeTab";
 import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import {
   useIsLoadingOverlayAtom,
@@ -25,6 +24,7 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { queryClient } from "./TypeProvider";
+import { useDownloadMapDataJson } from "../hooks/data-query/useDownloadMapDataJson";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -39,9 +39,10 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetLineResultsAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
-
+  const downloadMapDataJson = useDownloadMapDataJson();
   const isLoadingOverlay = useIsLoadingOverlayAtom();
 
+  useEffect(() => {}, []);
   //useQueryYouTubeコンポーネントで行う（あとでやる
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
@@ -49,8 +50,13 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       setMapId(Number(id));
 
       if (!id) return;
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      const map = new CreateMap(data.mapData);
+
+      const mapData = await downloadMapDataJson();
+      const map = new CreateMap(mapData);
+      setMap(map);
+      // setLineResults(map.defaultLineResultData);
+      // const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
+      // const map = new CreateMap(data.mapData);
       setMap(map);
       setLineResults(map.defaultLineResultData);
 
