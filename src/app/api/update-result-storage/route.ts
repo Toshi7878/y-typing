@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   try {
     const count = 533; // resultテーブルの総数を取得
     for (let i = 513; i < count; i++) {
