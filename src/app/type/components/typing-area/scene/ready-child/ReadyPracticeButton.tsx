@@ -1,24 +1,39 @@
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Button, useTheme } from "@chakra-ui/react";
 import React, { useCallback } from "react";
-import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
 import { useSession } from "next-auth/react";
+import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
+import {
+  useSetIsLoadingOverlayAtom,
+  useSetLineResultsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
+import { useParams } from "next/navigation";
+import { useUserResultIdQuery } from "@/app/type/hooks/data-query/useUserResultIdQuery";
 
 const ReadyPracticeButton = () => {
   const { data: session } = useSession();
+
   const { gameStateRef, playerRef } = useRefs();
-  const { refetch } = usePracticeDataQuery(Number(session?.user.id));
+  const getUserResultId = useUserResultIdQuery(Number(session?.user?.id));
+  const downloadResultJson = useDownloadResultJson();
+  const setLineResults = useSetLineResultsAtom();
+  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
+
   const theme = useTheme();
 
   const handleClick = useCallback(async () => {
     if (gameStateRef.current!.practice.hasMyRankingData) {
-      await refetch();
+      setIsLoadingOverlay(true);
+      await getUserResultId?.refetch();
+      const result = await downloadResultJson(getUserResultId?.data as number);
+      setLineResults(result);
+      setIsLoadingOverlay(false);
     }
 
     gameStateRef.current!.playMode = "practice";
     playerRef.current.playVideo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch]);
+  }, []);
   return (
     <Button
       variant="outline"

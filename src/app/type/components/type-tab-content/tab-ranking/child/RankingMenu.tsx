@@ -1,5 +1,6 @@
 import {
   useSceneAtom,
+  useSetIsLoadingOverlayAtom,
   useSetLineResultsAtom,
   useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
@@ -8,8 +9,7 @@ import { useCallback } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
-import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
-import { useDownloadResultJson } from "@/app/type/hooks/useDownloadResultJson";
+import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
 import { LineResultData } from "@/app/type/ts/type";
 
 const RankingMenu = ({
@@ -30,14 +30,16 @@ const RankingMenu = ({
   const scene = useSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
   const proceedRetry = useProceedRetry();
-  const { refetch } = usePracticeDataQuery(Number(userId));
   const downloadResultJson = useDownloadResultJson();
   const setLineResults = useSetLineResultsAtom();
+  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
 
   const handleReplayClick = useCallback(
     async (name: string) => {
+      setIsLoadingOverlay(true);
       const result: LineResultData[] = await downloadResultJson(resultId);
-      // const result = await refetch();
+      setIsLoadingOverlay(false);
+
       if (result) {
         if (scene === "end") {
           proceedRetry("replay");
@@ -59,7 +61,7 @@ const RankingMenu = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refetch],
+    [],
   );
   return (
     <Stack
