@@ -29,6 +29,7 @@ model Result {
   clearRate      Float @default(0)
   rank           Int @default(1)
   updatedAt      DateTime @default(now()) @updatedAt
+  clapCount      Int @default(0)
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
 }

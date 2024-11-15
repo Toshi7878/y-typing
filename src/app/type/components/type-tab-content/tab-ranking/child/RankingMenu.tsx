@@ -1,18 +1,25 @@
-import { useSceneAtom, useSetTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useSceneAtom,
+  useSetLineResultsAtom,
+  useSetTypePageSpeedAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { usePracticeDataQuery } from "@/app/type/hooks/data-query/usePracticeDataQuery";
-import { useQuery } from "@tanstack/react-query";
+import { useDownloadResultJson } from "@/app/type/hooks/useDownloadResultJson";
+import { LineResultData } from "@/app/type/ts/type";
 
 const RankingMenu = ({
+  resultId,
   userId,
   name,
   setShowMenu,
   setHoveredIndex,
 }: {
+  resultId: number;
   userId: string;
   name: string;
   setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
@@ -24,11 +31,14 @@ const RankingMenu = ({
   const setSpeedData = useSetTypePageSpeedAtom();
   const proceedRetry = useProceedRetry();
   const { refetch } = usePracticeDataQuery(Number(userId));
+  const downloadResultJson = useDownloadResultJson();
+  const setLineResults = useSetLineResultsAtom();
 
   const handleReplayClick = useCallback(
     async (name: string) => {
-      const result = await refetch();
-      if (result.data) {
+      const result: LineResultData[] = await downloadResultJson(resultId);
+      // const result = await refetch();
+      if (result) {
         if (scene === "end") {
           proceedRetry("replay");
         }
@@ -36,7 +46,7 @@ const RankingMenu = ({
         setHoveredIndex(null);
         gameStateRef.current!.replay.userName = name;
         gameStateRef.current!.playMode = "replay";
-        const defaultSpeed = result.data.lineResult[0].status?.sp;
+        const defaultSpeed = result[0].status?.sp;
 
         new YTSpeedController("setDefaultSpeed", {
           setSpeedData,
@@ -44,6 +54,7 @@ const RankingMenu = ({
           speed: defaultSpeed,
           defaultSpeed: defaultSpeed,
         });
+        setLineResults(result);
         playerRef.current.playVideo();
       }
     },

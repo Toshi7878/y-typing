@@ -121,6 +121,7 @@ const RankingList = () => {
               />
               {showMenu === index && (
                 <RankingMenu
+                  resultId={Number(user.id)}
                   userId={user.userId}
                   name={user.user.name}
                   setShowMenu={setShowMenu}

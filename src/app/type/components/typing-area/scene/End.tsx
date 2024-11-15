@@ -14,6 +14,8 @@ import EndText from "./end-child/EndText";
 import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
 import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 import { UploadResult } from "@/types";
+import { supabase } from "@/lib/supabaseClient";
+import fs from "fs";
 
 interface EndProps {
   onOpen: () => void;
@@ -31,7 +33,7 @@ const End = ({ onOpen }: EndProps) => {
   const initialState: UploadResult = { id: null, title: "", message: "", status: 0 };
   const status = tabStatusRef.current!.getStatus();
 
-  const upload = (): ReturnType<typeof actions> => {
+  const upload = async (): Promise<ReturnType<typeof actions>> => {
     const totalTypeTime = statusRef.current!.status.totalTypeTime;
     const rkpmTime = totalTypeTime - statusRef.current!.status.totalLatency;
     const kanaToRomaConvertCount = statusRef.current!.status.kanaToRomaConvertCount;
@@ -56,8 +58,23 @@ const End = ({ onOpen }: EndProps) => {
       status: sendStatus,
     };
 
-    const result = actions(sendData);
+    const result = await actions(sendData);
 
+    const jsonString = JSON.stringify(lineResults, null, 2);
+
+    if (result) {
+      // Supabaseストレージにアップロード
+      const { data, error } = await supabase.storage
+        .from("user-result") // バケット名を指定
+        .upload(`public/${result.id}.json`, new Blob([jsonString], { type: "application/json" }), {
+          upsert: true, // 既存のファイルを上書きするオプションを追加
+        });
+
+      if (error) {
+        console.error("Error uploading to Supabase:", error);
+        throw error;
+      }
+    }
     return result;
   };
 

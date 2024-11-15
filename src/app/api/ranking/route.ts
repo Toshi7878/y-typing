@@ -12,6 +12,7 @@ export async function GET(request: Request) {
         mapId: id, // mapIdが1のカラムを取得
       },
       select: {
+        id: true,
         mapId: false,
         userId: true,
         score: true,

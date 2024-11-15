@@ -24,6 +24,7 @@ export interface LineData {
 }
 
 export interface RankingListType {
+  id: number;
   userId: string;
   user: { name: string };
   romaType: number;
