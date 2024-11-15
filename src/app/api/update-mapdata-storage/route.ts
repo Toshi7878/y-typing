@@ -4,27 +4,30 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
+  console.log("test");
   try {
-    const count = 533; // resultテーブルの総数を取得
-    for (let i = 513; i < count; i++) {
-      const result = await prisma.result.findFirst({
+    const count = 260; // resultテーブルの総数を取得
+    for (let i = 1; i < count; i++) {
+      const result = await prisma.map.findFirst({
         where: {
           id: i,
         },
-        select: {},
+        select: {
+          mapData: true,
+        },
       });
 
       if (!result) {
         continue;
       }
 
-      const jsonString = JSON.stringify(result, null, 2);
+      const jsonString = JSON.stringify(result.mapData, null, 2);
 
       if (result) {
         // Supabaseストレージにアップロード
         const { data, error } = await supabase.storage
-          .from("user-result") // バケット名を指定
+          .from("map-data") // バケット名を指定
           .upload(`public/${i}.json`, new Blob([jsonString], { type: "application/json" }), {
             upsert: true, // 既存のファイルを上書きするオプションを追加
           });
