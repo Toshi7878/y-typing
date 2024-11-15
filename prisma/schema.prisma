@@ -43,7 +43,6 @@ model Map {
   creatorComment   String
   tags             String[] //分ける
   creatorId        Int
-  mapData          Json
   previewTime      String @default("0")
   romaKpmMedian    Int @default(0)
   romaKpmMax       Int @default(0)
