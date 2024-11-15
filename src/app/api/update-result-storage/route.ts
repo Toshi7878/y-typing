@@ -40,7 +40,7 @@ export async function GET(request: Request) {
       }
     }
 
-    return "all done";
+    return NextResponse.json({ message: "all done" }, { status: 200 });
   } catch (error) {
     console.error("リプレイデータの取得中にエラーが発生しました:", error);
     return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
