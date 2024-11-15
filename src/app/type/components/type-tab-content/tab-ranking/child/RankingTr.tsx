@@ -105,6 +105,7 @@ const RankingTr = (props: RankingTrProps) => {
         <Td>
           <UpdateAtText updatedAt={props.updatedAt} />
         </Td>
+        <Td alignItems="center">{0}</Td>
       </Tr>
     </CustomToolTip>
   );

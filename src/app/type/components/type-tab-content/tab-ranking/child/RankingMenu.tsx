@@ -79,6 +79,13 @@ const RankingMenu = ({
       >
         リプレイ再生
       </Button>
+      <Button
+        variant="unstyled"
+        size="md"
+        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
+      >
+        記録に拍手
+      </Button>
     </Stack>
   );
 };

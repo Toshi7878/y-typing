@@ -1,6 +1,7 @@
 import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
 import RankingList from "./child/RankingList";
+import { FaHandsClapping } from "react-icons/fa6";
 
 interface TabRankingProps {
   height: string;
@@ -77,6 +78,15 @@ const TabRanking = (props: TabRankingProps) => {
                 </Th>
                 <Th width="10%" color={theme.colors.card.color}>
                   時間
+                </Th>
+                <Th
+                  width="1%"
+                  position="relative"
+                  right={1}
+                  top={-0.5}
+                  color={theme.colors.card.color}
+                >
+                  <FaHandsClapping size={"1rem"} />
                 </Th>
               </Tr>
             </Thead>
