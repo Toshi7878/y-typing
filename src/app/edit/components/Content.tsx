@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import TimeRange from "./TimeRange";
 import { useParams, useSearchParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { resetMapData, setMapData } from "../redux/mapDataSlice";
 import { resetUndoRedoData } from "../redux/undoredoSlice";
 import { Box, useTheme } from "@chakra-ui/react";
@@ -34,10 +32,10 @@ import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
 import { Provider } from "jotai";
 import { db } from "@/lib/db";
+import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
 
 function Content() {
   const dispatch = useDispatch();
-  const { id } = useParams();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
@@ -58,24 +56,9 @@ function Content() {
   const setLyrics = useSetEditLineLyricsAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
+  const { id } = useParams();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["mapData", id],
-    queryFn: async () => {
-      if (!id) return;
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      const mapData = data.mapData;
-      const previewTime = data.previewTime;
-      dispatch(setMapData(mapData));
-      setPreviewTime(previewTime);
-    },
-
-    enabled: !!id, // useQueryをidが存在する場合にのみ実行
-    staleTime: Infinity, // データを常に新鮮に保つ
-    refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
-    refetchOnReconnect: false, // 再接続時に再フェッチしない
-    refetchOnMount: false, // マウント時に再フェッチしない
-  });
+  const { isLoading } = useDownloadMapDataQuery();
 
   useLayoutEffect(() => {
     if (!id) {
