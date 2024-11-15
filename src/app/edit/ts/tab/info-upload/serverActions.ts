@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { mapSendSchema } from "./validationSchema";
 import { revalidatePath } from "next/cache";
@@ -14,7 +14,6 @@ const createMap = async (map: EditorSendData, userId: number) => {
     data: {
       ...map,
       creatorId: userId,
-      mapData: map.mapData as unknown as Prisma.JsonObject,
     },
   });
   return newMap.id; // 新しく作成されたマップのIDを返す
@@ -27,7 +26,6 @@ const updateMap = async (data: EditorSendData, mapId: number) => {
     },
     data: {
       ...data,
-      mapData: data.mapData as unknown as Prisma.JsonObject, // mapDataをunknownに変換してからJsonObjectにキャスト
     },
   });
   return updatedMap.id; // 更新されたマップのIDを返す
