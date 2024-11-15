@@ -15,7 +15,6 @@ import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
 import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 import { UploadResult } from "@/types";
 import { supabase } from "@/lib/supabaseClient";
-import fs from "fs";
 
 interface EndProps {
   onOpen: () => void;
@@ -54,7 +53,6 @@ const End = ({ onOpen }: EndProps) => {
     };
     const sendData = {
       mapId: mapId,
-      lineResult: lineResults,
       status: sendStatus,
     };
 

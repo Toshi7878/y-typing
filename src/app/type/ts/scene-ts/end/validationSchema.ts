@@ -40,6 +40,5 @@ export const lineResultObjSchema = z.object({
 
 export const resultSendSchema = z.object({
   mapId: z.number(),
-  lineResult: z.array(lineResultObjSchema),
   status: statusSchema,
 });

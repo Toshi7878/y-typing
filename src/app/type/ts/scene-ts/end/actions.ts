@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { resultSendSchema } from "./validationSchema";
 import { SendResultData } from "../../type";
@@ -47,7 +47,6 @@ const send = async (data: SendResultData, userId: number) => {
     const updatedResult = await prisma.result.update({
       where: { id: existingResult.id },
       data: {
-        lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
         ...data.status,
       },
     });
@@ -57,7 +56,6 @@ const send = async (data: SendResultData, userId: number) => {
       data: {
         mapId: data.mapId,
         userId,
-        lineResult: data.lineResult as unknown as Prisma.JsonObject, // 型キャストを修正
         ...data.status,
       },
     });
@@ -70,7 +68,6 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
 
   const validatedFields = resultSendSchema.safeParse({
     mapId: data.mapId,
-    lineResult: data.lineResult,
     status: data.status,
   });
 

@@ -14,7 +14,6 @@ model Result {
   id             Int @id @default(autoincrement())
   mapId          Int
   userId         Int
-  lineResult     Json
   score          Int @default(0)
   defaultSpeed   Float @default(1)
   kpm            Int @default(0)

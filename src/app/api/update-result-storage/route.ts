@@ -12,16 +12,14 @@ export async function GET(request: Request) {
         where: {
           id: i,
         },
-        select: {
-          lineResult: true,
-        },
+        select: {},
       });
 
       if (!result) {
         continue;
       }
 
-      const jsonString = JSON.stringify(result.lineResult, null, 2);
+      const jsonString = JSON.stringify(result, null, 2);
 
       if (result) {
         // Supabaseストレージにアップロード
