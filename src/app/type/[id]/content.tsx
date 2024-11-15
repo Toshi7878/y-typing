@@ -5,15 +5,12 @@ import { useParams } from "next/navigation";
 import TypeTabContent from "../components/type-tab-content/TypeTab";
 import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
-import { useQuery } from "@tanstack/react-query";
-import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import {
   useIsLoadingOverlayAtom,
   useSetInputModeAtom,
   useSetLineResultsAtom,
   useSetLineSelectIndexAtom,
   useSetMapAtom,
-  useSetMapIdAtom,
   useSetPlayingNotifyAtom,
   useSetRankingScoresAtom,
   useSetSceneAtom,
@@ -24,7 +21,7 @@ import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { queryClient } from "./TypeProvider";
-import { useDownloadMapDataJson } from "../hooks/data-query/useDownloadMapDataJson";
+import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -32,43 +29,15 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { id } = useParams();
   const setMap = useSetMapAtom();
   const setScene = useSetSceneAtom();
-  const setMapId = useSetMapIdAtom();
   const setRankingScores = useSetRankingScoresAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetLineResultsAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
-  const downloadMapDataJson = useDownloadMapDataJson();
+  const { isLoading } = useDownloadMapDataJsonQuery();
   const isLoadingOverlay = useIsLoadingOverlayAtom();
 
-  useEffect(() => {}, []);
-  //useQueryYouTubeコンポーネントで行う（あとでやる
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["mapData", id],
-    queryFn: async () => {
-      setMapId(Number(id));
-
-      if (!id) return;
-
-      const mapData = await downloadMapDataJson();
-      const map = new CreateMap(mapData);
-      setMap(map);
-      // setLineResults(map.defaultLineResultData);
-      // const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map?id=${id}`);
-      // const map = new CreateMap(data.mapData);
-      setMap(map);
-      setLineResults(map.defaultLineResultData);
-
-      return;
-    },
-
-    enabled: !!id, // useQueryをidが存在する場合にのみ実行
-    staleTime: Infinity, // データを常に新鮮に保つ
-    refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
-    refetchOnReconnect: false, // 再接続時に再フェッチしない
-    refetchOnMount: false, // マウント時に再フェッチしない
-  });
   useEffect(() => {
     return () => {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
