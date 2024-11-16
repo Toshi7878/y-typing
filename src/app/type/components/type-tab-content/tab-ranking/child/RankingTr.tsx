@@ -10,6 +10,8 @@ import React from "react";
 import { useEffect } from "react";
 import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
 import UpdateAtText from "@/components/UpdateAtText";
+import ClapedText from "@/components/user-result-text/ClapedText";
+import RankText from "@/components/user-result-text/RankText";
 
 interface RankingTrProps {
   sessionUserId: number | undefined;
@@ -31,6 +33,7 @@ interface RankingTrProps {
   clearRate: number;
   clapCount: number;
   updatedAt: Date;
+  hasClap: boolean;
   isHighlighted: boolean;
   isHovered: boolean;
   handleShowMenu: () => void;
@@ -87,7 +90,9 @@ const RankingTr = (props: RankingTrProps) => {
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}
       >
-        <Td pr={5} className="">{`#${props.rank}`}</Td>
+        <Td pr={5} className="">
+          <RankText rank={props.rank}>{`#${props.rank}`}</RankText>
+        </Td>
         <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           {props.name}
         </Td>
@@ -106,7 +111,9 @@ const RankingTr = (props: RankingTrProps) => {
         <Td>
           <UpdateAtText updatedAt={props.updatedAt} />
         </Td>
-        <Td alignItems="center">{props.clapCount}</Td>
+        <Td alignItems="center">
+          <ClapedText hasClap={props.hasClap} clapCount={props.clapCount} />
+        </Td>
       </Tr>
     </CustomToolTip>
   );

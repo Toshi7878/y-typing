@@ -114,6 +114,7 @@ const RankingList = () => {
                 clearRate={user.clearRate}
                 clapCount={user.clapCount}
                 updatedAt={user.updatedAt}
+                hasClap={user.hasClap}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}
                 handleShowMenu={handleShowMenu}
