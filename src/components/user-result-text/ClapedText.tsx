@@ -3,7 +3,7 @@ import React from "react";
 
 interface ClapedTextProps {
   hasClap: boolean;
-  clapCount: number;
+  localClapCount: number;
 }
 
 const ClapedText = (props: ClapedTextProps) => {
@@ -13,7 +13,7 @@ const ClapedText = (props: ClapedTextProps) => {
       {...(props.hasClap && { color: "#ffb825" })}
       className={`${props.hasClap ? "outline-text" : ""}`}
     >
-      {props.clapCount}
+      {props.localClapCount}
     </Text>
   );
 };

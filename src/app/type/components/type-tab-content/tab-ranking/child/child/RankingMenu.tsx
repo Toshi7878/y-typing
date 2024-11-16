@@ -5,28 +5,39 @@ import {
   useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { Dispatch, useCallback } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
 import { LineResultData } from "@/app/type/ts/type";
+import MenuClapButton from "./child/MenuClapButton";
+import { ThemeColors } from "@/types";
 
+interface RankingMenuProps {
+  resultId: number;
+  userId: number;
+  name: string;
+  setShowMenu: Dispatch<number | null>;
+  setHoveredIndex: Dispatch<number | null>;
+  localHasClap: boolean;
+  localClapCount: number;
+  setLocalHasClap: Dispatch<boolean>;
+  setLocalClapCount: Dispatch<number>;
+}
 const RankingMenu = ({
   resultId,
   userId,
   name,
   setShowMenu,
   setHoveredIndex,
-}: {
-  resultId: number;
-  userId: string;
-  name: string;
-  setShowMenu: React.Dispatch<React.SetStateAction<number | null>>;
-  setHoveredIndex: React.Dispatch<React.SetStateAction<number | null>>;
-}) => {
+  localHasClap,
+  localClapCount,
+  setLocalHasClap,
+  setLocalClapCount,
+}: RankingMenuProps) => {
   const { gameStateRef, playerRef } = useRefs();
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
   const scene = useSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
   const proceedRetry = useProceedRetry();
@@ -72,6 +83,8 @@ const RankingMenu = ({
       color={theme.colors.popup.color}
       boxShadow="md"
       p={2}
+      border="0.5px"
+      borderColor={theme.colors.card.borderColor}
       top={{ base: "-60px", md: "auto" }}
     >
       <Button
@@ -92,13 +105,13 @@ const RankingMenu = ({
       >
         リプレイ再生
       </Button>
-      <Button
-        variant="unstyled"
-        size="md"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
-      >
-        記録に拍手
-      </Button>
+      <MenuClapButton
+        resultId={resultId}
+        localClapCount={localClapCount}
+        localHasClap={localHasClap}
+        setLocalClapCount={setLocalClapCount}
+        setLocalHasClap={setLocalHasClap}
+      />
     </Stack>
   );
 };

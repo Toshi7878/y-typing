@@ -3,8 +3,7 @@ import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを�
 import { useSession } from "next-auth/react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { RankingListType } from "@/app/type/ts/type";
-import RankingTr from "./RankingTr";
-import RankingMenu from "./RankingMenu";
+import RankingTr from "./child/RankingTr";
 import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRankingQuery } from "@/app/type/hooks/data-query/useRankingQuery";
 
@@ -95,33 +94,23 @@ const RankingList = () => {
           return (
             <React.Fragment key={index}>
               <RankingTr
-                sessionUserId={Number(session?.user?.id)}
-                rankingUserId={Number(user.userId)}
+                result={user}
+                index={index}
                 rank={index + 1}
-                name={user.user.name}
-                score={user.score}
                 type={type}
-                kpm={user.kpm}
-                rkpm={user.rkpm}
-                romaKpm={user.romaKpm}
-                defaultSpeed={user.defaultSpeed}
                 romaType={romaType}
                 kanaType={kanaType}
                 flickType={flickType}
-                miss={user.miss}
-                lost={user.lost}
-                maxCombo={user.maxCombo}
-                clearRate={user.clearRate}
-                clapCount={user.clapCount}
-                updatedAt={user.updatedAt}
-                hasClap={user.hasClap}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}
+                showMenu={showMenu}
+                setShowMenu={setShowMenu}
+                setHoveredIndex={setHoveredIndex}
                 handleShowMenu={handleShowMenu}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               />
-              {showMenu === index && (
+              {/* {showMenu === index && (
                 <RankingMenu
                   resultId={Number(user.id)}
                   userId={user.userId}
@@ -129,7 +118,7 @@ const RankingList = () => {
                   setShowMenu={setShowMenu}
                   setHoveredIndex={setHoveredIndex}
                 />
-              )}
+              )} */}
             </React.Fragment>
           );
         })}

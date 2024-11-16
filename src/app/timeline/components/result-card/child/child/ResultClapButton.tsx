@@ -1,5 +1,5 @@
 "use client";
-import { toggleClapServerAction } from "@/components/server-actions/toggle-clap-server-action";
+import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
 import { INITIAL_STATE } from "@/config/consts";
 import { ThemeColors, UploadResult } from "@/types";
 import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
