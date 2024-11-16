@@ -1,9 +1,10 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import CustomToolTip from "@/components/CustomToolTip";
-import { Box, Flex, HStack, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, useBreakpointValue, useTheme } from "@chakra-ui/react";
 import React from "react";
 import MapBadge from "./MapBadge";
 import { FiHeart } from "react-icons/fi";
+import { ThemeColors } from "@/types";
 
 interface MapBadgesProps {
   map: MapCardInfo;
@@ -12,6 +13,7 @@ interface MapBadgesProps {
 
 const MapBadges = (props: MapBadgesProps) => {
   const { map } = props;
+  const theme: ThemeColors = useTheme();
   const showBadges = useBreakpointValue({ base: false, sm: true });
 
   return (
@@ -32,7 +34,7 @@ const MapBadges = (props: MapBadgesProps) => {
         )}
       </HStack>
       {/* {props.isCardHover ? ( */}
-      <Flex alignItems="baseline">
+      <Flex alignItems="baseline" color={`${theme.colors.color}99`}>
         <Box mr={0.5}>
           <FiHeart size={10} />
         </Box>
