@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { EditorSendData } from "../../type";
 import { UploadResult } from "@/types";
 import { MapData } from "@/app/type/ts/type";
+import { supabase } from "@/lib/supabaseClient";
 
 const prisma = new PrismaClient();
 
@@ -84,6 +85,20 @@ export async function actions(
         };
       }
     }
+
+    const jsonString = JSON.stringify(mapData, null, 2);
+
+    // Supabaseストレージにアップロード
+    await supabase.storage
+      .from("map-data") // バケット名を指定
+      .upload(
+        `public/${mapId === "new" ? newMapId : mapId}.json`,
+        new Blob([jsonString], { type: "application/json" }),
+        {
+          upsert: true, // 既存のファイルを上書きするオプションを追加
+        },
+      );
+
     revalidatePath(`/api/map-list?page=0`);
     return {
       id: mapId === "new" ? newMapId : null,

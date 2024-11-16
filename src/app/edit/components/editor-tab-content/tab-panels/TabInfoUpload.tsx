@@ -78,22 +78,6 @@ const TabInfoUpload = () => {
       Array.isArray(id) ? id[0] : id || "new",
     );
 
-    if (result.status === 200) {
-      const jsonString = JSON.stringify(mapData, null, 2);
-
-      // Supabaseストレージにアップロード
-      const { data, error } = await supabase.storage
-        .from("map-data") // バケット名を指定
-        .upload(`public/${result.id}.json`, new Blob([jsonString], { type: "application/json" }), {
-          upsert: true, // 既存のファイルを上書きするオプションを追加
-        });
-
-      if (error) {
-        console.error("Error uploading to Supabase:", error);
-        throw error;
-      }
-    }
-
     return result;
   };
 
