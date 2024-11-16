@@ -46,11 +46,11 @@ export const LikeButton = ({ size = 50, defaultLiked = false, text, onClick }: L
       >
         <Heart
           className={clsx(
-            isLiked ? "fill-pink-400 text-pink-400" : "fill-transparent text-gray-400",
+            isLiked ? "fill-pink-400 text-pink-400" : "fill-transparent",
             clicked ? (isLiked ? "like-animation" : "like-animation-end") : "",
           )}
           size={Math.floor(size / 2)}
-          strokeWidth={1}
+          strokeWidth={2.5}
         />
       </div>
       {text && (

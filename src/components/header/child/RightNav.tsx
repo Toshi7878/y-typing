@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { Box, Switch } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { themeAtom } from "../../atom/globalAtoms";
-import { LikeButton } from "@/components/like-button/LikeButton";
 
 export default function RightNav() {
   const { data: session } = useSession();
@@ -27,7 +26,6 @@ export default function RightNav() {
       {session?.user?.name ? <NewMap /> : null}
       <Switch onChange={changeTheme} isChecked={themeColor === "dark"} />
       <Login />
-      <LikeButton size={50} />
     </Box>
   );
 }
