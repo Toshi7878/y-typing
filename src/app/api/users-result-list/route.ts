@@ -68,11 +68,13 @@ export async function GET(req: NextRequest) {
         'id', "Player"."id",
         'name', "Player"."name"
       ) as "user",
-      EXISTS (
-      SELECT 1 FROM "Clap"
-      WHERE "Clap"."resultId" = "Result"."id"
-      AND "Clap"."userId" = ${userId}
-    ) as "hasClap"
+      (
+        SELECT "isClaped"
+        FROM "Clap"
+        WHERE "Clap"."resultId" = "Result"."id"
+        AND "Clap"."userId" = ${userId}
+        LIMIT 1
+      ) as "hasClap"
 
       FROM "Result"
       JOIN "Map" ON "Result"."mapId" = "Map"."id"
