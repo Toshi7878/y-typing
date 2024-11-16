@@ -9,9 +9,11 @@ export const useDownloadMapDataQuery = () => {
     queryKey: ["mapData", id],
     queryFn: async () => {
       try {
+        const timestamp = new Date().getTime(); // 一意のクエリパラメータを生成
+
         const { data, error } = await supabase.storage
           .from("map-data") // バケット名を指定
-          .download(`public/${id}.json`);
+          .download(`public/${id}.json?timestamp=${timestamp}`);
 
         if (error) {
           console.error("Error downloading from Supabase:", error);
