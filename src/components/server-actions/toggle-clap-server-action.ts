@@ -21,6 +21,9 @@ async function updateClapCount(resultId: number) {
     data: {
       clapCount: newClapCount,
     },
+    select: {
+      updatedAt: false, // updatedAtを更新しない
+    },
   });
 }
 
