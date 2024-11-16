@@ -6,7 +6,25 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
-export async function actions(resultId: number): Promise<UploadResult> {
+async function updateClapCount(resultId: number) {
+  const newClapCount = await prisma.clap.count({
+    where: {
+      resultId: resultId,
+      isClaped: true, // resultIdのisClapedがtrueのものをカウント
+    },
+  });
+
+  await prisma.result.update({
+    where: {
+      id: resultId,
+    },
+    data: {
+      clapCount: newClapCount,
+    },
+  });
+}
+
+export async function toggleClapServerAction(resultId: number): Promise<UploadResult> {
   const session = await auth();
 
   try {
@@ -29,10 +47,12 @@ export async function actions(resultId: number): Promise<UploadResult> {
       },
     });
 
+    await updateClapCount(resultId);
+
     return {
       id: claped.id,
       title: "拍手完了",
-      message: "この譜面を保存する権限がありません",
+      message: "",
       status: 200,
     };
   } catch (error) {

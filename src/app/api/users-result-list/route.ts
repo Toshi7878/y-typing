@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       "Result"."kpm",
       "Result"."romaKpm",
       "Result"."defaultSpeed",
+      "Result"."clapCount",
       json_build_object(
         'id', "Map"."id",
         'videoId', "Map"."videoId",

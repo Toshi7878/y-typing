@@ -5,7 +5,7 @@ import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapInfo from "./child/MapInfo";
 import { ThemeColors } from "@/types";
 import { ResultCardInfo } from "@/app/timeline/ts/type";
-import { MapResultBadges, MapResultBadgesMobile } from "./child/MapResultBadgesLayout";
+import { MapResultBadges } from "./child/MapResultBadgesLayout";
 
 interface ResultInnerCardBodyProps {
   result: ResultCardInfo;

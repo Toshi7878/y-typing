@@ -9,14 +9,13 @@ import { nameSchema } from "./validationSchema";
 import { actions } from "./actions";
 import { useFormState } from "react-dom";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
-import { UploadResult } from "@/types";
+import { INITIAL_STATE } from "@/config/consts";
 
 interface FormData {
   newName: string;
 }
 
 export default function NewNameDialog() {
-  const initialState: UploadResult = { id: "", title: "", message: "", status: 0 };
   const {
     register,
     formState: { errors },
@@ -31,7 +30,7 @@ export default function NewNameDialog() {
     return result;
   };
 
-  const [state, formAction] = useFormState(upload, initialState);
+  const [state, formAction] = useFormState(upload, INITIAL_STATE);
   const { data: session, update } = useSession();
 
   const successToast = useSuccessToast();

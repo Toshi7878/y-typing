@@ -13,8 +13,8 @@ import { useSession } from "next-auth/react";
 import EndText from "./end-child/EndText";
 import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
 import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
-import { UploadResult } from "@/types";
 import { supabase } from "@/lib/supabaseClient";
+import { INITIAL_STATE } from "@/config/consts";
 
 interface EndProps {
   onOpen: () => void;
@@ -29,7 +29,6 @@ const End = ({ onOpen }: EndProps) => {
 
   const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
 
-  const initialState: UploadResult = { id: null, title: "", message: "", status: 0 };
   const status = tabStatusRef.current!.getStatus();
 
   const upload = async (): Promise<ReturnType<typeof actions>> => {
@@ -76,7 +75,7 @@ const End = ({ onOpen }: EndProps) => {
     return result;
   };
 
-  const [state, formAction] = useFormState(upload, initialState);
+  const [state, formAction] = useFormState(upload, INITIAL_STATE);
 
   const isPerfect = status.miss === 0 && status.lost === 0;
   const isPlayingMode = gameStateRef.current!.playMode === "playing";

@@ -16,6 +16,7 @@ export interface ResultCardInfo {
   kpm: number;
   romaKpm: number;
   defaultSpeed: number;
+  clapCount: number;
   map: {
     id: number;
     videoId: string;
