@@ -6,7 +6,6 @@ import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
 import { useFormState } from "react-dom";
 import { FaHandsClapping } from "react-icons/fa6";
-
 interface ResultClapButtonProps {
   resultId: number;
   clapCount: number;
@@ -54,6 +53,7 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
         border={"1px"}
         size="sm"
         type="submit"
+        className="bubby-button"
       >
         <Flex alignItems="center" letterSpacing={1}>
           <FaHandsClapping />
