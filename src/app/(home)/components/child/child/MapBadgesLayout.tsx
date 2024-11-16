@@ -4,6 +4,8 @@ import { Box, Flex, HStack, useBreakpointValue, useTheme } from "@chakra-ui/reac
 import React from "react";
 import MapBadge from "./MapBadge";
 import { FiHeart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
+
 import { ThemeColors } from "@/types";
 
 interface MapBadgesProps {
@@ -34,10 +36,8 @@ const MapBadges = (props: MapBadgesProps) => {
         )}
       </HStack>
       {/* {props.isCardHover ? ( */}
-      <Flex alignItems="baseline" color={`${theme.colors.color}99`}>
-        <Box mr={0.5}>
-          <FiHeart size={10} />
-        </Box>
+      <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
+        <Box mr={0.5}>{map.hasLike ? <FaHeart size={10} /> : <FiHeart size={10} />}</Box>
         <Box fontSize="sm">{map.likeCount}</Box>
       </Flex>
       {/* ) : null} */}

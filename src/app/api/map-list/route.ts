@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
@@ -8,6 +9,9 @@ const CONTENT_LENGTH = 60;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+
   const page = searchParams.get("page") ?? "0";
   const mapKeyword = searchParams.get("mapKeyword") ?? "";
   const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
@@ -26,7 +30,14 @@ export async function GET(req: NextRequest) {
     "Map"."totalTime",
     "Map"."thumbnailQuality",
     "Map"."likeCount",
-    json_build_object('id', "User"."id", 'name', "User"."name") as "user"
+    json_build_object('id', "User"."id", 'name', "User"."name") as "user",
+    (
+        SELECT "isLiked"
+        FROM "MapLike"
+        WHERE "MapLike"."mapId" = "Map"."id"
+        AND "MapLike"."userId" = ${userId}
+        LIMIT 1
+    ) as "hasLike"
     FROM "Map"
     JOIN "User" ON "Map"."creatorId" = "User"."id"
     WHERE (
@@ -37,7 +48,7 @@ export async function GET(req: NextRequest) {
               OR "tags" &@~ ${mapKeyword}
               OR "User"."name" &@~ ${mapKeyword}
               ELSE 1=1
-            END
+              END
           )
     ORDER BY "Map"."id" DESC
     LIMIT ${CONTENT_LENGTH} OFFSET ${offset}`;
