@@ -43,7 +43,6 @@ export const useLineAddButtonEvent = () => {
   const addTimeOffset = useEditAddTimeOffsetAtom();
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lyrics = useEditLineLyricsAtom();
-  const speed = useSpeedAtom();
   const word = useEditLineWordAtom();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
@@ -63,7 +62,7 @@ export const useLineAddButtonEvent = () => {
       .findIndex((line) => line.lyrics === "end");
 
   return async (isShiftKey: boolean) => {
-    const timeOffset = isYTPlaying ? Number(addTimeOffset) * speed : 0;
+    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
     const time_ = isYTPlaying
       ? playerRef.current.getCurrentTime()
       : editorTimeInputRef.current!.getTime();
@@ -99,7 +98,6 @@ export const useLineAddButtonEvent = () => {
 export const useLineUpdateButtonEvent = () => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const lyrics = useEditLineLyricsAtom();
-  const speed = useSpeedAtom();
   const word = useEditLineWordAtom();
   const selectedLineCount = useEditLineSelectedCountAtom() as number;
   const { editorTimeInputRef, playerRef } = useRefs();
@@ -120,7 +118,7 @@ export const useLineUpdateButtonEvent = () => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
   return async () => {
-    const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) * speed : 0;
+    const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) : 0;
     const time_ =
       isYTPlaying && !selectedLineCount
         ? playerRef.current.getCurrentTime()
