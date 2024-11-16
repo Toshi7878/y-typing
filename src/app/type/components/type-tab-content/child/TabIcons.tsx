@@ -46,14 +46,14 @@ export default function TabIcons() {
     >
       <Flex alignItems="center" justifyContent="flex-end">
         {session?.user.id ? (
-          <CustomToolTip tooltipLabel="譜面にいいねします" placement="top">
+          <CustomToolTip tooltipLabel="譜面にいいね" placement="top">
             <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
               <LikeButton size={62} defaultLiked={hasLocalLikeAtom} />
             </Box>
           </CustomToolTip>
         ) : null}
 
-        <CustomToolTip tooltipLabel="譜面のEditページに移動します" placement="top">
+        <CustomToolTip tooltipLabel="譜面のEditページに移動" placement="top">
           <Box height="60px" display="flex" alignItems="center">
             <Link
               href={`/edit/${mapId}`}
