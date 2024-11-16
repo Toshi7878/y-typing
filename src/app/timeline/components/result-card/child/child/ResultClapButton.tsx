@@ -53,7 +53,6 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
         border={"1px"}
         size="sm"
         type="submit"
-        className="bubby-button"
       >
         <Flex alignItems="center" letterSpacing={1}>
           <FaHandsClapping />

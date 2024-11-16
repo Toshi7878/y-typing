@@ -2,6 +2,8 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { InputModeType, LineResultData, SceneType, Speed } from "../ts/type";
 import { defaultSpeed } from "../ts/const/typeDefaultValue";
+import { getTypeAtomStore } from "../[id]/TypeProvider";
+const typeAtomStore = getTypeAtomStore();
 
 const mapAtom = atom<CreateMap | null>(null);
 
@@ -21,6 +23,16 @@ export const useSceneAtom = () => {
 
 export const useSetSceneAtom = () => {
   return useSetAtom(sceneAtom);
+};
+
+export const hasLocalLikeAtom = atom<boolean>(false);
+
+export const useHasLocalLikeAtom = () => {
+  return useAtomValue(hasLocalLikeAtom, { store: typeAtomStore });
+};
+
+export const useSetHasLocalLikeAtom = () => {
+  return useSetAtom(hasLocalLikeAtom, { store: typeAtomStore });
 };
 
 const tabIndexAtom = atom<0 | 1>(1);

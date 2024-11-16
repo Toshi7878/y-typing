@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -5,32 +6,39 @@ const prisma = new PrismaClient();
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const mapId = url.searchParams.get("id");
-
+  const sessionId = url.searchParams.get("sessionid");
+  const userId = Number(sessionId);
   if (!mapId) {
     return new Response("mapId is required", { status: 400 });
   }
 
   try {
-    const mapContents = await prisma.map.findUnique({
-      where: { id: Number(mapId) },
-      select: {
-        id: false,
-        title: true,
-        artistName: true,
-        musicSource: true,
-        creatorComment: true,
-        creatorId: true,
-        tags: true,
-        videoId: true,
-        previewTime: true,
-      },
-    });
+    const mapContents = await prisma.$queryRaw`
+    SELECT
+    "Map"."title",
+    "Map"."artistName",
+    "Map"."musicSource",
+    "Map"."creatorComment",
+    "Map"."creatorId",
+    "Map"."tags",
+    "Map"."videoId",
+    "Map"."previewTime",
+    (
+        SELECT "isLiked"
+        FROM "MapLike"
+        WHERE "MapLike"."mapId" = "Map"."id"
+        AND "MapLike"."userId" = ${userId}
+        LIMIT 1
+      ) as "hasLike"
+    FROM "Map"
+    WHERE id = ${Number(mapId)}
+  `;
 
     if (!mapContents) {
       return new Response("Map not found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(mapContents), {
+    return new Response(JSON.stringify(mapContents[0]), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {

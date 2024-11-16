@@ -6,59 +6,59 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
-async function updateClap(resultId: number, userId: number) {
-  const clapedId = await prisma.$transaction(async (prisma) => {
-    const isClaped = await prisma.clap.findUnique({
+async function updateLike(mapId: number, userId: number) {
+  const likedId = await prisma.$transaction(async (prisma) => {
+    const isLiked = await prisma.mapLike.findUnique({
       where: {
-        userId_resultId: {
+        userId_mapId: {
           userId,
-          resultId,
+          mapId,
         },
       },
       select: {
-        isClaped: true,
+        isLiked: true,
       },
     });
 
-    const claped = await prisma.clap.upsert({
+    const claped = await prisma.mapLike.upsert({
       where: {
-        userId_resultId: {
+        userId_mapId: {
           userId,
-          resultId,
+          mapId,
         },
       },
       update: {
-        isClaped: !isClaped?.isClaped,
+        isLiked: !isLiked?.isLiked,
       },
       create: {
         userId,
-        resultId,
-        isClaped: true,
+        mapId,
+        isLiked: true,
       },
     });
 
-    const newClapCount = await prisma.clap.count({
+    const newLikeCount = await prisma.mapLike.count({
       where: {
-        resultId: resultId,
-        isClaped: true, // resultIdのisClapedがtrueのものをカウント
+        mapId: mapId,
+        isLiked: true, // resultIdのisClapedがtrueのものをカウント
       },
     });
 
-    const updatedAt = await prisma.result.findUnique({
+    const updatedAt = await prisma.map.findUnique({
       where: {
-        id: resultId,
+        id: mapId,
       },
       select: {
         updatedAt: true,
       },
     });
 
-    await prisma.result.update({
+    await prisma.map.update({
       where: {
-        id: resultId,
+        id: mapId,
       },
       data: {
-        clapCount: newClapCount,
+        likeCount: newLikeCount,
         updatedAt: updatedAt?.updatedAt,
       },
     });
@@ -66,20 +66,20 @@ async function updateClap(resultId: number, userId: number) {
     return claped.id;
   });
 
-  return clapedId;
+  return likedId;
 }
 
-export async function toggleClapServerAction(resultId: number): Promise<UploadResult> {
+export async function toggleLikeServerAction(mapId: number): Promise<UploadResult> {
   const session = await auth();
 
   try {
     const userId = Number(session?.user?.id);
 
-    const clapedId = await updateClap(resultId, userId);
+    const likedId = await updateLike(mapId, userId);
 
     return {
-      id: clapedId,
-      title: "拍手完了",
+      id: likedId,
+      title: "いいね完了",
       message: "",
       status: 200,
     };

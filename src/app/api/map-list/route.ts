@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
     "Map"."previewTime",
     "Map"."totalTime",
     "Map"."thumbnailQuality",
+    "Map"."likeCount",
     json_build_object('id', "User"."id", 'name', "User"."name") as "user"
     FROM "Map"
     JOIN "User" ON "Map"."creatorId" = "User"."id"

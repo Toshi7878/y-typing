@@ -10,6 +10,7 @@ export interface MapCardInfo {
   romaKpmMedian: number;
   romaKpmMax: number;
   totalTime: number;
+  likeCount: number;
   thumbnailQuality: "maxresdefault" | "mqdefault";
   user: {
     id: number;

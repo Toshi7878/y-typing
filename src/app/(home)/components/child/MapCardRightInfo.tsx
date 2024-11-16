@@ -9,8 +9,9 @@ import MapBadges from "./child/MapBadgesLayout";
 
 interface MapCardProps {
   map: MapCardInfo;
+  isCardHover: boolean;
 }
-function MapCardRightInfo({ map }: MapCardProps) {
+function MapCardRightInfo({ map, isCardHover }: MapCardProps) {
   const handleLinkClick = useLinkClick();
 
   return (
@@ -21,7 +22,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       flexDirection="column"
       justifyContent="start"
       h="full"
-      w="65%"
+      w={{ base: "65%", sm: "65%", md: "40%", lg: "50%", xl: "65%" }}
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
@@ -32,10 +33,9 @@ function MapCardRightInfo({ map }: MapCardProps) {
         justifyContent="space-between"
         flexDirection={{ base: "row", md: "column" }} // 変更点: レスポンシブなflexDirectionを追加
         my={1}
-        w="54vw"
       >
         <MapCreateUser map={map} />
-        <MapBadges map={map} />
+        <MapBadges map={map} isCardHover={isCardHover} />
       </Stack>
     </Link>
   );

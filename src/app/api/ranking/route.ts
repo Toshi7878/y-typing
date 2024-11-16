@@ -48,37 +48,6 @@ export async function GET(request: Request) {
       "Result"."score" DESC
   `;
 
-    // const rankingList = await prisma.result.findMany({
-    //   where: {
-    //     mapId: id, // mapIdが1のカラムを取得
-    //   },
-    //   select: {
-    //     id: true,
-    //     mapId: false,
-    //     userId: true,
-    //     score: true,
-    //     defaultSpeed: true,
-    //     kpm: true,
-    //     rkpm: true,
-    //     romaKpm: true,
-    //     romaType: true,
-    //     kanaType: true,
-    //     flickType: true,
-    //     miss: true,
-    //     lost: true,
-    //     maxCombo: true,
-    //     clapCount: true,
-    //     clearRate: true,
-    //     updatedAt: true,
-    //     user: {
-    //       select: {
-    //         name: true, // userからnameを取得
-    //       },
-    //     },
-    //   },
-    //   orderBy: { score: "desc" },
-    // });
-
     return new Response(JSON.stringify(rankingList), {
       headers: { "Content-Type": "application/json" },
     });

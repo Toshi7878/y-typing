@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createStore, Provider as JotaiProvider } from "jotai";
 import { GetInfoData } from "@/types/api";
 import { useEffect } from "react";
+import { hasLocalLikeAtom } from "../type-atoms/gameRenderAtoms";
 
 export const queryClient = new QueryClient();
 const typeAtomStore = createStore();
@@ -15,16 +16,7 @@ interface TypeProviderProps {
   children: React.ReactNode;
 }
 const TypeProvider = ({ mapInfo, children }: TypeProviderProps) => {
-  // typeAtomStore.set(editMapTitleAtom, mapInfo.title);
-  // typeAtomStore.set(editVideoIdAtom, mapInfo.videoId);
-  // typeAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
-  // typeAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
-  // typeAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
-
-  // typeAtomStore.set(editTagsAtom, {
-  //   type: "set",
-  //   payload: mapInfo.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
-  // });
+  typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.hasLike);
 
   useEffect(() => {
     window.getSelection()!.removeAllRanges();

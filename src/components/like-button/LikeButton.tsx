@@ -2,6 +2,7 @@ import React from "react";
 import { Heart } from "lucide-react";
 import { clsx } from "clsx";
 import "./css/render.css";
+import { useHasLocalLikeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 type LikeButtonProps = {
   size?: number;
@@ -30,6 +31,7 @@ export const LikeButton = ({ size = 50, defaultLiked = false, text, onClick }: L
         paddingLeft: text ? `${size}px` : "0",
       }}
       onClick={handleOnClick}
+      type="submit"
     >
       <div
         className={clsx(
