@@ -78,7 +78,7 @@ const TabInfoUpload = () => {
       Array.isArray(id) ? id[0] : id || "new",
     );
 
-    if (result.id) {
+    if (result.status === 200) {
       const jsonString = JSON.stringify(mapData, null, 2);
 
       // Supabaseストレージにアップロード
