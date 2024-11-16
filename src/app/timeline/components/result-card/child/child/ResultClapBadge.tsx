@@ -6,6 +6,7 @@ import { FaHandsClapping } from "react-icons/fa6";
 function ResultClapBadge() {
   const theme: ThemeColors = useTheme();
 
+  const handleClapClick = () => {};
   return (
     <Badge
       mx={5}

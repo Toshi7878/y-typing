@@ -35,32 +35,25 @@ const calcRank = async (mapId: number) => {
   }
 };
 
-const send = async (data: SendResultData, userId: number) => {
-  const existingResult = await prisma.result.findFirst({
+const sendNewResult = async (data: SendResultData, userId: number) => {
+  const upsertResult = await prisma.result.upsert({
     where: {
+      userId_mapId: {
+        userId: userId,
+        mapId: data.mapId,
+      },
+    },
+    update: {
+      ...data.status,
+    },
+    create: {
       mapId: data.mapId,
-      userId: userId,
+      userId,
+      ...data.status,
     },
   });
 
-  if (existingResult) {
-    const updatedResult = await prisma.result.update({
-      where: { id: existingResult.id },
-      data: {
-        ...data.status,
-      },
-    });
-    return updatedResult.id;
-  } else {
-    const newResult = await prisma.result.create({
-      data: {
-        mapId: data.mapId,
-        userId,
-        ...data.status,
-      },
-    });
-    return newResult.id; // 新しく作成されたマップのIDを返す
-  }
+  return upsertResult.id;
 };
 
 export async function actions(data: SendResultData): Promise<UploadResult> {
@@ -81,7 +74,7 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
   }
   try {
     const userId = Number(session?.user?.id);
-    const newId = await send(data, userId);
+    const newId = await sendNewResult(data, userId);
     await calcRank(data.mapId);
     return {
       id: newId,

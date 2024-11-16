@@ -1,0 +1,47 @@
+"use server";
+
+import { PrismaClient } from "@prisma/client";
+import { auth } from "@/lib/auth";
+import { UploadResult } from "@/types";
+
+const prisma = new PrismaClient();
+
+export async function actions(resultId: number): Promise<UploadResult> {
+  const session = await auth();
+
+  try {
+    const userId = Number(session?.user?.id);
+
+    const claped = await prisma.clap.upsert({
+      where: {
+        userId_resultId: {
+          userId,
+          resultId,
+        },
+      },
+      update: {
+        isClaped: true,
+      },
+      create: {
+        userId,
+        resultId,
+        isClaped: true,
+      },
+    });
+
+    return {
+      id: claped.id,
+      title: "拍手完了",
+      message: "この譜面を保存する権限がありません",
+      status: 200,
+    };
+  } catch (error) {
+    return {
+      id: null,
+      title: "サーバー側で問題が発生しました",
+      message: "しばらく時間をおいてから再度お試しください。",
+      status: 500,
+      errorObject: error instanceof Error ? error.message : String(error), // エラーオブジェクトを文字列に変換
+    };
+  }
+}

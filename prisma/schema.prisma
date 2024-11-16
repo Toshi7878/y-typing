@@ -31,6 +31,22 @@ model Result {
   clapCount      Int @default(0)
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  clap           Clap[]
+
+  @@unique([userId, mapId]) // 複合ユニーク制約を追加
+
+}
+
+model Clap {
+    id             Int @id @default(autoincrement())
+    userId         Int
+    resultId       Int
+    isClaped       Boolean
+    createdAt      DateTime @default(now())
+    user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
+    result         Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, resultId]) // 複合ユニーク制約を追加
 }
 
 
@@ -69,9 +85,9 @@ model User {
   email_hash    String          @unique
   image         String?
   role          String          @default("user")
-
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   maps          Map[]
   result        Result[]
+  clap          Clap[]
 }
