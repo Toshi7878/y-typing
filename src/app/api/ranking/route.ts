@@ -26,6 +26,7 @@ export async function GET(request: Request) {
         miss: true,
         lost: true,
         maxCombo: true,
+        clapCount: true,
         clearRate: true,
         updatedAt: true,
         user: {

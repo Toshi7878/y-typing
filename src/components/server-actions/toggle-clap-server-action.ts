@@ -6,32 +6,19 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
-async function updateClapCount(resultId: number) {
-  const newClapCount = await prisma.clap.count({
-    where: {
-      resultId: resultId,
-      isClaped: true, // resultIdのisClapedがtrueのものをカウント
-    },
-  });
-
-  await prisma.result.update({
-    where: {
-      id: resultId,
-    },
-    data: {
-      clapCount: newClapCount,
-    },
-    select: {
-      updatedAt: false, // updatedAtを更新しない
-    },
-  });
-}
-
-export async function toggleClapServerAction(resultId: number): Promise<UploadResult> {
-  const session = await auth();
-
-  try {
-    const userId = Number(session?.user?.id);
+async function updateClapCount(resultId: number, userId: number) {
+  const clapedId = await prisma.$transaction(async (prisma) => {
+    const isClaped = await prisma.clap.findUnique({
+      where: {
+        userId_resultId: {
+          userId,
+          resultId,
+        },
+      },
+      select: {
+        isClaped: true,
+      },
+    });
 
     const claped = await prisma.clap.upsert({
       where: {
@@ -41,7 +28,7 @@ export async function toggleClapServerAction(resultId: number): Promise<UploadRe
         },
       },
       update: {
-        isClaped: true,
+        isClaped: !isClaped?.isClaped,
       },
       create: {
         userId,
@@ -50,10 +37,48 @@ export async function toggleClapServerAction(resultId: number): Promise<UploadRe
       },
     });
 
-    await updateClapCount(resultId);
+    const newClapCount = await prisma.clap.count({
+      where: {
+        resultId: resultId,
+        isClaped: true, // resultIdのisClapedがtrueのものをカウント
+      },
+    });
+
+    const updatedAt = await prisma.result.findUnique({
+      where: {
+        id: resultId,
+      },
+      select: {
+        updatedAt: true,
+      },
+    });
+
+    await prisma.result.update({
+      where: {
+        id: resultId,
+      },
+      data: {
+        clapCount: newClapCount,
+        updatedAt: updatedAt?.updatedAt,
+      },
+    });
+
+    return claped.id;
+  });
+
+  return clapedId;
+}
+
+export async function toggleClapServerAction(resultId: number): Promise<UploadResult> {
+  const session = await auth();
+
+  try {
+    const userId = Number(session?.user?.id);
+
+    const clapedId = await updateClapCount(resultId, userId);
 
     return {
-      id: claped.id,
+      id: clapedId,
       title: "拍手完了",
       message: "",
       status: 200,

@@ -26,7 +26,11 @@ function ResultCard(props: ResultCardProps) {
     >
       <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2} py={3}>
         <ResultUserName result={result} />
-        <ResultClapButton resultId={result.id} clapCount={result.clapCount} />
+        <ResultClapButton
+          resultId={result.id}
+          clapCount={result.clapCount}
+          hasClap={result.hasClap}
+        />
       </CardHeader>
       <ResultInnerCardBody result={result} />
       <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1}>

@@ -39,6 +39,7 @@ export interface RankingListType {
   clearRate: number;
   playSpeed: number;
   defaultSpeed: number;
+  clapCount: number;
   score: number;
   updatedAt: Date;
 }

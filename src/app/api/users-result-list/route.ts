@@ -7,12 +7,16 @@ import {
   DEFAULT_CLEAR_RATE_SEARCH_RANGE,
   DEFAULT_KPM_SEARCH_RANGE,
 } from "@/app/timeline/ts/const/consts";
+import { auth } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 const CONTENT_LENGTH = 30;
 
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+
   const { searchParams } = new URL(req.url);
   const page = searchParams.get("page") ?? "0";
   const mode = (searchParams.get("mode") ?? "all") as FilterMode;
@@ -63,7 +67,13 @@ export async function GET(req: NextRequest) {
       json_build_object(
         'id', "Player"."id",
         'name', "Player"."name"
-      ) as "user"
+      ) as "user",
+      EXISTS (
+      SELECT 1 FROM "Clap"
+      WHERE "Clap"."resultId" = "Result"."id"
+      AND "Clap"."userId" = ${userId}
+    ) as "hasClap"
+
       FROM "Result"
       JOIN "Map" ON "Result"."mapId" = "Map"."id"
       JOIN "User" AS "Creator" ON "Map"."creatorId" = "Creator"."id"

@@ -29,6 +29,7 @@ interface RankingTrProps {
   lost: number;
   maxCombo: number;
   clearRate: number;
+  clapCount: number;
   updatedAt: Date;
   isHighlighted: boolean;
   isHovered: boolean;
@@ -105,7 +106,7 @@ const RankingTr = (props: RankingTrProps) => {
         <Td>
           <UpdateAtText updatedAt={props.updatedAt} />
         </Td>
-        <Td alignItems="center">{0}</Td>
+        <Td alignItems="center">{props.clapCount}</Td>
       </Tr>
     </CustomToolTip>
   );

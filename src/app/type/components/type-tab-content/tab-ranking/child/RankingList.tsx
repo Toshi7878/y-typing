@@ -112,6 +112,7 @@ const RankingList = () => {
                 lost={user.lost}
                 maxCombo={user.maxCombo}
                 clearRate={user.clearRate}
+                clapCount={user.clapCount}
                 updatedAt={user.updatedAt}
                 isHighlighted={showMenu === index}
                 isHovered={hoveredIndex === index}
