@@ -10,11 +10,13 @@ import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-serv
 import { useFormState } from "react-dom";
 import { INITIAL_STATE } from "@/config/consts";
 import { useHasLocalLikeAtom, useSetHasLocalLikeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useSession } from "next-auth/react";
 
 export default function TabIcons() {
   console.log("Tab");
   const theme: ThemeColors = useTheme();
   const { id: mapId } = useParams();
+  const { data: session } = useSession();
 
   const handleLinkClick = useLinkClick();
   const hasLocalLikeAtom = useHasLocalLikeAtom();
@@ -42,12 +44,14 @@ export default function TabIcons() {
       color={`${theme.colors.color}99`}
       width="100px"
     >
-      <Flex alignItems="center" justifyContent="space-between">
-        <CustomToolTip tooltipLabel="譜面にいいねします" placement="top">
-          <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
-            <LikeButton size={62} defaultLiked={hasLocalLikeAtom} />
-          </Box>
-        </CustomToolTip>
+      <Flex alignItems="center" justifyContent="flex-end">
+        {session?.user.id ? (
+          <CustomToolTip tooltipLabel="譜面にいいねします" placement="top">
+            <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
+              <LikeButton size={62} defaultLiked={hasLocalLikeAtom} />
+            </Box>
+          </CustomToolTip>
+        ) : null}
 
         <CustomToolTip tooltipLabel="譜面のEditページに移動します" placement="top">
           <Box height="60px" display="flex" alignItems="center">
