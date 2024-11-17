@@ -45,11 +45,10 @@ const MapBadges = (props: MapBadgesProps) => {
             map.myRank === 1
               ? theme.colors.type.tab.ranking.perfect.color
               : map.myRank
-                ? theme.colors.color
+                ? theme.colors.home.card.link
                 : `${theme.colors.color}99`
           }
           mr={2}
-          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }} // ぼかしを強調
         >
           <Box mr={0.5} position="relative" top="2px">
             {map.myRank === 1 ? (
