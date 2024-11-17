@@ -40,36 +40,32 @@ const MapBadges = (props: MapBadgesProps) => {
         )}
       </HStack>
       <Flex>
-        <CustomToolTip tooltipLabel={<Box>ランキング登録数</Box>} placement="top">
-          <Flex
-            alignItems="baseline"
-            color={
-              map.myRank === 1
-                ? theme.colors.type.tab.ranking.perfect.color
-                : map.myRank
-                  ? theme.colors.home.card.link
-                  : `${theme.colors.color}99`
-            }
-            mr={2}
-          >
-            <Box mr={1} position="relative" top="3px">
-              <FaRankingStar size={20} />
-            </Box>
-            <Box fontSize="lg" fontFamily="monospace">
-              {map.rankingCount}
-            </Box>
-          </Flex>
-        </CustomToolTip>
-        <CustomToolTip tooltipLabel={<Box>いいね数</Box>} placement="top">
-          <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
-            <Box mr={1} position="relative" top="2.5px">
-              {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
-            </Box>
-            <Box fontSize="lg" fontFamily="monospace">
-              {map.likeCount}
-            </Box>
-          </Flex>
-        </CustomToolTip>
+        <Flex
+          alignItems="baseline"
+          color={
+            map.myRank === 1
+              ? theme.colors.type.tab.ranking.perfect.color
+              : map.myRank
+                ? theme.colors.home.card.link
+                : `${theme.colors.color}99`
+          }
+          mr={2}
+        >
+          <Box mr={1} position="relative" top="3px">
+            <FaRankingStar size={20} />
+          </Box>
+          <Box fontSize="lg" fontFamily="monospace">
+            {map.rankingCount}
+          </Box>
+        </Flex>
+        <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
+          <Box mr={1} position="relative" top="2.5px">
+            {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
+          </Box>
+          <Box fontSize="lg" fontFamily="monospace">
+            {map.likeCount}
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   );
