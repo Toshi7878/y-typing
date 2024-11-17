@@ -50,20 +50,22 @@ const MapBadges = (props: MapBadgesProps) => {
           }
           mr={2}
         >
-          <Box mr={0.5} position="relative" top="2px">
+          <Box mr={1} position="relative" top="3px">
             {map.myRank === 1 ? (
-              <PiRankingFill size={14} />
+              <PiRankingFill size={20} />
             ) : map.myRank ? (
-              <PiRankingDuotone size={14} />
+              <PiRankingDuotone size={20} />
             ) : (
-              <PiRankingLight size={14} />
+              <PiRankingLight size={20} />
             )}
           </Box>
-          <Box fontSize="sm">{map.rankingCount}</Box>
+          <Box fontSize="lg">{map.rankingCount}</Box>
         </Flex>
         <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
-          <Box mr={0.5}>{map.hasLike ? <FaHeart size={10} /> : <FiHeart size={10} />}</Box>
-          <Box fontSize="sm">{map.likeCount}</Box>
+          <Box mr={1} position="relative" top="2.5px">
+            {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={18} />}
+          </Box>
+          <Box fontSize="lg">{map.likeCount}</Box>
         </Flex>
       </Flex>
     </Flex>
