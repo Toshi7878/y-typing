@@ -97,6 +97,18 @@ export interface GameStateRef {
   practice: {
     hasMyRankingData: boolean;
   };
+  userTypeOptions: {
+    userOffset: number;
+    soundEffects: {
+      typing: boolean;
+      miss: boolean;
+      lineClear: boolean;
+    };
+    nextDisplay: "lyrics" | "word";
+    shortcutKey: {
+      toggleInputMode: boolean;
+    };
+  };
 }
 
 export interface StatusRef {

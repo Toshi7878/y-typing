@@ -44,6 +44,18 @@ export const defaultGameStateRef: GameStateRef = {
   practice: {
     hasMyRankingData: false,
   },
+  userTypeOptions: {
+    userOffset: 0,
+    soundEffects: {
+      typing: false,
+      miss: false,
+      lineClear: false,
+    },
+    nextDisplay: "lyrics",
+    shortcutKey: {
+      toggleInputMode: true,
+    },
+  },
 };
 
 export const defaultSpeed = {

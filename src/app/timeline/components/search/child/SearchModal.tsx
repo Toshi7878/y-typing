@@ -56,7 +56,8 @@ const SearchCard = () => {
           zIndex={4}
           width={"500px"}
           mt={5}
-          bg={theme.colors.card.bg}
+          bg={theme.colors.popup.bg}
+          color={theme.colors.popup.color}
           border="1px"
           borderColor={theme.colors.card.borderColor}
         >

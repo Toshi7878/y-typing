@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
-import TimeRange from "./TimeRange";
+import TimeRange from "./editor-time-range-content/EditTimeRange";
 import { useParams, useSearchParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { resetMapData, setMapData } from "../redux/mapDataSlice";

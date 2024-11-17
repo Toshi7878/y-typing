@@ -1,24 +1,18 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { timer } from "../ts/youtube-ts/editTimer";
+import { timer } from "../../ts/youtube-ts/editTimer";
 import "@/app/edit/style/editor.scss";
-import { Box, Button, HStack, Text, useTheme } from "@chakra-ui/react";
-import { useRefs } from "../edit-contexts/refsProvider";
+import { Box, useTheme } from "@chakra-ui/react";
+import { useRefs } from "../../edit-contexts/refsProvider";
 import { ThemeColors } from "@/types";
-import {
-  useIsEditYTReadyAtom,
-  useIsEditYTStartedAtom,
-  useSpeedAtom,
-  useSpeedReducer,
-} from "../edit-atom/editAtom";
+import { useIsEditYTReadyAtom, useIsEditYTStartedAtom } from "../../edit-atom/editAtom";
+import EditSpeedChange from "./child/EditSpeedChange";
 const TimeRange = () => {
   console.log("range");
 
   const { playerRef } = useRefs();
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
-  const speed = useSpeedAtom(); //0.25 or 2.00 場合片方のボタンをdisabledにする
-  const speedReducer = useSpeedReducer();
   const theme: ThemeColors = useTheme();
 
   const isYTStarted = useIsEditYTStartedAtom();
@@ -91,34 +85,7 @@ const TimeRange = () => {
         onChange={handleRangeChange}
         className="w-full cursor-pointer"
       />
-      <HStack justify="center" className="w-[170px]">
-        <Box>
-          <Button cursor="pointer" variant="unstyled" onClick={() => speedReducer("down")}>
-            <Box className="relative">
-              -
-              <Text as="span" className="f-key">
-                F9
-              </Text>
-            </Box>
-          </Button>
-        </Box>
-        <Box>
-          <Text as="span" id="speed">
-            {speed.toFixed(2)}
-          </Text>
-          倍速
-        </Box>
-        <Box>
-          <Button variant="unstyled" cursor="pointer" onClick={() => speedReducer("up")}>
-            <Box className="relative">
-              +
-              <Text as="span" className="f-key">
-                F10
-              </Text>
-            </Box>
-          </Button>
-        </Box>
-      </HStack>
+      <EditSpeedChange />
     </Box>
   );
 };
