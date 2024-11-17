@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
     "Map"."totalTime",
     "Map"."thumbnailQuality",
     "Map"."likeCount",
+    "Map"."rankingCount",
     json_build_object('id', "User"."id", 'name', "User"."name") as "user",
     (
         SELECT "isLiked"

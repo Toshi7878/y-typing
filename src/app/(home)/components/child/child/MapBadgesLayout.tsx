@@ -5,6 +5,7 @@ import React from "react";
 import MapBadge from "./MapBadge";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import { PiRanking } from "react-icons/pi";
 
 import { ThemeColors } from "@/types";
 
@@ -35,12 +36,18 @@ const MapBadges = (props: MapBadgesProps) => {
           <MapBadge>{new Date(map.totalTime * 1000).toISOString().slice(14, 19)}</MapBadge>
         )}
       </HStack>
-      {/* {props.isCardHover ? ( */}
-      <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
-        <Box mr={0.5}>{map.hasLike ? <FaHeart size={10} /> : <FiHeart size={10} />}</Box>
-        <Box fontSize="sm">{map.likeCount}</Box>
+      <Flex>
+        <Flex alignItems="baseline" color={`${theme.colors.color}99`} mr={2}>
+          <Box mr={0.5} position="relative" top="2px">
+            <PiRanking size={14} />
+          </Box>
+          <Box fontSize="sm">{map.rankingCount}</Box>
+        </Flex>
+        <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
+          <Box mr={0.5}>{map.hasLike ? <FaHeart size={10} /> : <FiHeart size={10} />}</Box>
+          <Box fontSize="sm">{map.likeCount}</Box>
+        </Flex>
       </Flex>
-      {/* ) : null} */}
     </Flex>
   );
 };

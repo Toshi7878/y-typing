@@ -33,6 +33,15 @@ const calcRank = async (mapId: number) => {
       },
     });
   }
+
+  await prisma.map.update({
+    where: {
+      id: mapId,
+    },
+    data: {
+      rankingCount: rankingList.length,
+    },
+  });
 };
 
 const sendNewResult = async (data: SendResultData, userId: number) => {

@@ -11,6 +11,7 @@ export interface MapCardInfo {
   romaKpmMax: number;
   totalTime: number;
   likeCount: number;
+  rankingCount: number;
   hasLike: boolean;
   thumbnailQuality: "maxresdefault" | "mqdefault";
   user: {
