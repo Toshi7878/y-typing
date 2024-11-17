@@ -34,12 +34,22 @@ const calcRank = async (mapId: number) => {
     });
   }
 
+  const mapData = await prisma.map.findUnique({
+    where: {
+      id: mapId,
+    },
+    select: {
+      updatedAt: true,
+    },
+  });
+
   await prisma.map.update({
     where: {
       id: mapId,
     },
     data: {
       rankingCount: rankingList.length,
+      updatedAt: mapData?.updatedAt,
     },
   });
 };
