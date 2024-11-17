@@ -11,6 +11,7 @@ import { useFormState } from "react-dom";
 import { INITIAL_STATE } from "@/config/consts";
 import { useHasLocalLikeAtom, useSetHasLocalLikeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useSession } from "next-auth/react";
+import { IoMdSettings } from "react-icons/io";
 
 export default function TabIcons() {
   console.log("Tab");
@@ -39,12 +40,23 @@ export default function TabIcons() {
   return (
     <Box
       position="absolute"
-      top="-19px"
+      top="-20px"
       right="5px"
       color={`${theme.colors.color}99`}
       width="100px"
     >
       <Flex alignItems="center" justifyContent="flex-end">
+        <CustomToolTip tooltipLabel="設定(未実装)" placement="top">
+          <Box
+            height="60px"
+            display="flex"
+            _hover={{ color: theme.colors.color }}
+            alignItems="center"
+            cursor="pointer"
+          >
+            <IoMdSettings size={36} />
+          </Box>
+        </CustomToolTip>
         {session?.user.id ? (
           <CustomToolTip tooltipLabel="譜面にいいね" placement="top">
             <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
