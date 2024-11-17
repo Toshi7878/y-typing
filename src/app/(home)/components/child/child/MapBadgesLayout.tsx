@@ -59,13 +59,17 @@ const MapBadges = (props: MapBadgesProps) => {
               <PiRankingLight size={20} />
             )}
           </Box>
-          <Box fontSize="lg">{map.rankingCount}</Box>
+          <Box fontSize="lg" fontFamily="monospace">
+            {map.rankingCount}
+          </Box>
         </Flex>
         <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
           <Box mr={1} position="relative" top="2.5px">
-            {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={18} />}
+            {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
           </Box>
-          <Box fontSize="lg">{map.likeCount}</Box>
+          <Box fontSize="lg" fontFamily="monospace">
+            {map.likeCount}
+          </Box>
         </Flex>
       </Flex>
     </Flex>
