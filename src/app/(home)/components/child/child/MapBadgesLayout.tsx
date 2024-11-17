@@ -8,6 +8,7 @@ import { FaHeart } from "react-icons/fa";
 import { PiRankingLight } from "react-icons/pi";
 import { PiRankingFill } from "react-icons/pi";
 import { PiRankingDuotone } from "react-icons/pi";
+import { FaRankingStar } from "react-icons/fa6";
 
 import { ThemeColors } from "@/types";
 
@@ -51,13 +52,7 @@ const MapBadges = (props: MapBadgesProps) => {
           mr={2}
         >
           <Box mr={1} position="relative" top="3px">
-            {map.myRank === 1 ? (
-              <PiRankingFill size={20} />
-            ) : map.myRank ? (
-              <PiRankingDuotone size={20} />
-            ) : (
-              <PiRankingLight size={20} />
-            )}
+            <FaRankingStar size={20} />
           </Box>
           <Box fontSize="lg" fontFamily="monospace">
             {map.rankingCount}
