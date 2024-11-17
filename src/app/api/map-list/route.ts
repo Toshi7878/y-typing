@@ -38,7 +38,14 @@ export async function GET(req: NextRequest) {
         WHERE "MapLike"."mapId" = "Map"."id"
         AND "MapLike"."userId" = ${userId}
         LIMIT 1
-    ) as "hasLike"
+    ) as "hasLike",
+    (
+        SELECT "rank"
+        FROM "Result"
+        WHERE "Result"."mapId" = "Map"."id"
+        AND "Result"."userId" = ${userId}
+        LIMIT 1
+    ) as "myRank"
     FROM "Map"
     JOIN "User" ON "Map"."creatorId" = "User"."id"
     WHERE (

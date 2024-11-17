@@ -5,7 +5,9 @@ import React from "react";
 import MapBadge from "./MapBadge";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
-import { PiRanking } from "react-icons/pi";
+import { PiRankingLight } from "react-icons/pi";
+import { PiRankingFill } from "react-icons/pi";
+import { PiRankingDuotone } from "react-icons/pi";
 
 import { ThemeColors } from "@/types";
 
@@ -37,9 +39,26 @@ const MapBadges = (props: MapBadgesProps) => {
         )}
       </HStack>
       <Flex>
-        <Flex alignItems="baseline" color={`${theme.colors.color}99`} mr={2}>
+        <Flex
+          alignItems="baseline"
+          color={
+            map.myRank === 1
+              ? theme.colors.type.tab.ranking.perfect.color
+              : map.myRank
+                ? theme.colors.color
+                : `${theme.colors.color}99`
+          }
+          mr={2}
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }} // ぼかしを強調
+        >
           <Box mr={0.5} position="relative" top="2px">
-            <PiRanking size={14} />
+            {map.myRank === 1 ? (
+              <PiRankingFill size={14} />
+            ) : map.myRank ? (
+              <PiRankingDuotone size={14} />
+            ) : (
+              <PiRankingLight size={14} />
+            )}
           </Box>
           <Box fontSize="sm">{map.rankingCount}</Box>
         </Flex>

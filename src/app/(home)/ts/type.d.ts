@@ -13,6 +13,7 @@ export interface MapCardInfo {
   likeCount: number;
   rankingCount: number;
   hasLike: boolean;
+  myRank: number;
   thumbnailQuality: "maxresdefault" | "mqdefault";
   user: {
     id: number;
