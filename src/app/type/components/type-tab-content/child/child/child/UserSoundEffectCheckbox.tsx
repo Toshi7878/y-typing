@@ -5,7 +5,7 @@ const UserSoundEffectCheckbox = () => {
   return (
     <Flex>
       <Box>
-        <Text fontSize="lg" fontWeight="semibold" mb={2}>
+        <Text fontSize="lg" fontWeight="semibold" mb={2} color="#888">
           効果音
         </Text>
         <CheckboxGroup>

@@ -5,7 +5,7 @@ const UserShortcutKeyCheckbox = () => {
   return (
     <Flex>
       <Box>
-        <Text fontSize="lg" fontWeight="semibold" mb={2}>
+        <Text fontSize="lg" fontWeight="semibold" mb={2} color="#888">
           ショートカットキー設定
         </Text>
         <Flex alignItems="baseline">

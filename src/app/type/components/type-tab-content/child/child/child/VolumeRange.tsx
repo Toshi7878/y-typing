@@ -23,7 +23,7 @@ export default function VolumeRange() {
 
   return (
     <HStack alignItems="center">
-      <Text fontSize="lg" fontWeight="semibold" mr={2}>
+      <Text fontSize="lg" fontWeight="semibold" mr={2} color="#888">
         音量
       </Text>
 

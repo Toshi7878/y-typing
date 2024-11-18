@@ -52,7 +52,7 @@ export default function TabIcons() {
       >
         <Flex alignItems="center" justifyContent="flex-end">
           {session?.user.id ? (
-            <CustomToolTip tooltipLabel="設定(未実装)" placement="top">
+            <CustomToolTip tooltipLabel="設定(一部未実装)" placement="top">
               <Box
                 height="60px"
                 display="flex"
