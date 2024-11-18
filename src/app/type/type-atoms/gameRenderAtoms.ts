@@ -1,6 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
-import { InputModeType, LineResultData, SceneType, Speed, UserOptions } from "../ts/type";
+import { InputModeType, LineResultData, SceneType, Speed, UserTypingOptions } from "../ts/type";
 import { DEFAULT_SPEED, DEFAULT_USER_OPTIONS } from "../ts/const/typeDefaultValue";
 import { getTypeAtomStore } from "../[id]/TypeProvider";
 const typeAtomStore = getTypeAtomStore();
@@ -126,12 +126,12 @@ export const useSetTypePageSpeedAtom = () => {
   return useSetAtom(speedAtom);
 };
 
-const userOptionsAtom = atom<UserOptions>(DEFAULT_USER_OPTIONS);
+export const userOptionsAtom = atom<UserTypingOptions>(DEFAULT_USER_OPTIONS);
 
 export const useUserOptionsAtom = () => {
-  return useAtomValue(userOptionsAtom);
+  return useAtomValue(userOptionsAtom, { store: typeAtomStore });
 };
 
 export const useSetUserOptionsAtom = () => {
-  return useSetAtom(userOptionsAtom);
+  return useSetAtom(userOptionsAtom, { store: typeAtomStore });
 };

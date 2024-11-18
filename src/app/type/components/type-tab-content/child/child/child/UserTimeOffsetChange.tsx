@@ -1,5 +1,6 @@
 "use client";
 import "@/app/edit/style/editor.scss";
+import { sendUpdateData } from "@/app/type/hooks/sendTypingOptionData";
 import { CHANGE_TIME_OFFSET_VALUE } from "@/app/type/ts/const/typeDefaultValue";
 import { useSetUserOptionsAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
@@ -11,16 +12,26 @@ const UserTimeOffsetChange = () => {
   const userOptionsAtom = useUserOptionsAtom();
 
   const decrement = () => {
-    setUserOptionsAtom({
+    const newUserOptions = {
       ...userOptionsAtom,
-      userTimeOffset: userOptionsAtom.userTimeOffset - CHANGE_TIME_OFFSET_VALUE,
-    });
+      timeOffset: userOptionsAtom.timeOffset - CHANGE_TIME_OFFSET_VALUE,
+    };
+    setUserOptionsAtom(newUserOptions);
+
+    sendUpdateData(newUserOptions);
   };
   const increment = () => {
+    const newUserOptions = {
+      ...userOptionsAtom,
+      timeOffset: userOptionsAtom.timeOffset + CHANGE_TIME_OFFSET_VALUE,
+    };
+
     setUserOptionsAtom({
       ...userOptionsAtom,
-      userTimeOffset: userOptionsAtom.userTimeOffset + CHANGE_TIME_OFFSET_VALUE,
+      timeOffset: userOptionsAtom.timeOffset + CHANGE_TIME_OFFSET_VALUE,
     });
+
+    sendUpdateData(newUserOptions);
   };
 
   return (
@@ -39,7 +50,7 @@ const UserTimeOffsetChange = () => {
         <Button onClick={decrement} cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
           -
         </Button>
-        <Box fontSize="lg">{userOptionsAtom.userTimeOffset.toFixed(2)}</Box>
+        <Box fontSize="lg">{userOptionsAtom.timeOffset.toFixed(2)}</Box>
         <Button onClick={increment} cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
           +
         </Button>

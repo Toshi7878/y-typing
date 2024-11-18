@@ -1,4 +1,4 @@
-import { GameStateRef, PlayMode, StatusRef, UserOptions, YTStateRef } from "../type";
+import { GameStateRef, PlayMode, StatusRef, UserTypingOptions, YTStateRef } from "../type";
 
 export const DEFAULT_STATUS_REF: StatusRef = {
   status: {
@@ -51,18 +51,14 @@ export const DEFAULT_SPEED = {
   playSpeed: 1,
 };
 
-export const DEFAULT_USER_OPTIONS: UserOptions = {
-  userTimeOffset: 0,
-  soundEffects: {
-    typing: false,
-    miss: false,
-    lineClear: false,
-  },
+export const DEFAULT_USER_OPTIONS: UserTypingOptions = {
+  timeOffset: 0,
+  typeSound: false,
+  missSound: false,
+  lineClearSound: false,
   nextDisplay: "lyrics",
-  shortcutKey: {
-    timeOffset: "left-right",
-    toggleInputMode: false,
-  },
+  timeOffsetKey: "left-right",
+  toggleInputModeKey: false,
 };
 
 export const CHANGE_TIME_OFFSET_VALUE = 0.05;

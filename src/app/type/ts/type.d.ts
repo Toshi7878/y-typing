@@ -174,18 +174,14 @@ export interface LineResultData {
   typeResult: TypeResult[];
 }
 
-export interface UserOptions {
-  userTimeOffset: number;
-  soundEffects: {
-    typing: boolean;
-    miss: boolean;
-    lineClear: boolean;
-  };
+export interface UserTypingOptions {
+  timeOffset: number;
+  typeSound: boolean;
+  missSound: boolean;
+  lineClearSound: boolean;
   nextDisplay: "lyrics" | "word";
-  shortcutKey: {
-    timeOffset: "left-right" | "ctrl-left-right" | "ctrl-alt-left-right" | "none";
-    toggleInputMode: boolean;
-  };
+  timeOffsetKey: "left-right" | "ctrl-left-right" | "ctrl-alt-left-right" | "none";
+  toggleInputModeKey: boolean;
 }
 
 export interface Speed {

@@ -40,13 +40,13 @@ model Result {
 model TypingOption {
     id             Int @id @default(autoincrement())
     userId         Int @unique
-    timeOffset     Int @default(0)
+    timeOffset     Float @default(0)
     typeSound      Boolean @default(false)
     missSound      Boolean @default(false)
     lineClearSound Boolean @default(false)
-    nextDisplay    String
-    timeOffsetKey  String
-    toggleInputModeKey Boolean
+    nextDisplay    String @default("lyrics")
+    timeOffsetKey  String @default("left-right")
+    toggleInputModeKey Boolean  @default(false)
     user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
 }
 
