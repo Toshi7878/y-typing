@@ -9,22 +9,22 @@ import { themeAtom } from "../../atom/globalAtoms";
 
 export default function RightNav() {
   const { data: session } = useSession();
-  const [themeColor, setThemeColor] = useAtom(themeAtom);
+  // const [themeColor, setThemeColor] = useAtom(themeAtom);
 
-  const changeTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setThemeColor("dark");
-      localStorage.setItem("chakra-ui-color-mode", "dark");
-    } else {
-      setThemeColor("light");
-      localStorage.setItem("chakra-ui-color-mode", "light");
-    }
-  };
+  // const changeTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.checked) {
+  //     setThemeColor("dark");
+  //     localStorage.setItem("chakra-ui-color-mode", "dark");
+  //   } else {
+  //     setThemeColor("light");
+  //     localStorage.setItem("chakra-ui-color-mode", "light");
+  //   }
+  // };
 
   return (
     <Box className="flex items-center gap-5 ">
       {session?.user?.name ? <NewMap /> : null}
-      <Switch onChange={changeTheme} isChecked={themeColor === "dark"} />
+      {/* <Switch onChange={changeTheme} isChecked={themeColor === "dark"} /> */}
       <Login />
     </Box>
   );

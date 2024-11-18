@@ -23,7 +23,7 @@ export default function VolumeRange() {
   const handleChange = (value: number) => {
     setVolume(value);
     playerRef.current.setVolume(value);
-    db.editorOption.put({ optionName: "volume-range", value });
+    db.globalOption.put({ optionName: "volume-range", value });
   };
 
   return (

@@ -197,7 +197,9 @@ const darkTheme: ThemeColors = {
 };
 
 export const getTheme = (colorMode: "light" | "dark") => {
-  const themeColors = colorMode === "light" ? sodaTheme.colors : darkTheme.colors;
+  // const themeColors = colorMode === "light" ? sodaTheme.colors : darkTheme.colors;
+  const themeColors = darkTheme.colors;
+
   return extendTheme({
     config,
     colors: themeColors,

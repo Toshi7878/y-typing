@@ -49,6 +49,14 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
       setSelectedConvertOption(formattedData["word-convert-option"] ?? "non_symbol");
       setAddTimeOffset(formattedData["time-offset"] ?? DEFAULT_ADD_ADJUST_TIME);
     });
+    db.globalOption
+      .where("optionName")
+      .equals("volume-range")
+      .first()
+      .then((entry) => {
+        const volumeRange = entry?.value ?? "default_value"; // volume-rangeキーのみを取得
+        console.log("Volume Range:", volumeRange); // 取得した値を使用
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
