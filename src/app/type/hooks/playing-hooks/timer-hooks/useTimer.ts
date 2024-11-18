@@ -19,6 +19,7 @@ import {
   useSceneAtom,
   useSetLineResultsAtom,
   useTypePageSpeedAtom,
+  useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/useDisplaySkipGuide";
@@ -44,13 +45,14 @@ export const usePlayTimer = () => {
   const calcLineResult = useCalcLineResult();
   const replay = useReplay();
   const getSeekLineCount = useGetSeekLineCount();
+  const userOptionsAtom = useUserOptionsAtom();
 
   return (
     totalTimeProgressRef: React.RefObject<HTMLProgressElement>,
     playingTotalTimeRef: React.RefObject<PlayingTotalTimeRef>,
     skipGuideRef: React.RefObject<SkipGuideRef>,
   ) => {
-    const ytCurrentTime = playerRef.current.getCurrentTime();
+    const ytCurrentTime = playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset;
     ytStateRef.current!.currentTime = ytCurrentTime;
 
     const ytConstantTime = ytCurrentTime / speedData.playSpeed;
@@ -264,6 +266,7 @@ export const useUpdateLine = () => {
   const { statusRef, playingLineTimeRef, playingCenterRef, lineProgressRef, ytStateRef } =
     useRefs();
 
+  const userOptionsAtom = useUserOptionsAtom();
   const scene = useSceneAtom();
   const map = useMapAtom() as CreateMap;
   const inputMode = useInputModeAtom();
@@ -293,7 +296,10 @@ export const useUpdateLine = () => {
       speedData.playSpeed;
     if (nextKpm) {
       playingCenterRef.current!.setNextLyrics({
-        lyrics: map.mapData[newCount]["lyrics"],
+        lyrics:
+          userOptionsAtom.nextDisplay === "word"
+            ? map.mapData[newCount].kanaWord
+            : map.mapData[newCount]["lyrics"],
         kpm: nextKpm.toFixed(0),
       });
     } else {
