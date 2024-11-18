@@ -51,19 +51,21 @@ export default function TabIcons() {
         width="100px"
       >
         <Flex alignItems="center" justifyContent="flex-end">
-          <CustomToolTip tooltipLabel="設定(未実装)" placement="top">
-            <Box
-              height="60px"
-              display="flex"
-              _hover={{ color: theme.colors.color }}
-              alignItems="center"
-              cursor="pointer"
-              id="option_icon"
-              onClick={() => setIsCardVisible((prev) => !prev)} // 状態をトグルする
-            >
-              <IoMdSettings size={36} />
-            </Box>
-          </CustomToolTip>
+          {session?.user.id ? (
+            <CustomToolTip tooltipLabel="設定(未実装)" placement="top">
+              <Box
+                height="60px"
+                display="flex"
+                _hover={{ color: theme.colors.color }}
+                alignItems="center"
+                cursor="pointer"
+                id="option_icon"
+                onClick={() => setIsCardVisible((prev) => !prev)} // 状態をトグルする
+              >
+                <IoMdSettings size={36} />
+              </Box>
+            </CustomToolTip>
+          ) : null}
           {session?.user.id ? (
             <CustomToolTip tooltipLabel="譜面にいいね" placement="top">
               <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
