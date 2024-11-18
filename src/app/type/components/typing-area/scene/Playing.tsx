@@ -9,6 +9,7 @@ import {
   useRankingScoresAtom,
   useSceneAtom,
   useTypePageSpeedAtom,
+  useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { isTyped } from "@/app/type/ts/scene-ts/playing/keydown/typing";
 
@@ -49,6 +50,7 @@ const Playing = ({
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
+  const userOptionsAtom = useUserOptionsAtom();
 
   const gamePause = useGamePause();
   const toggleLineListDrawer = useToggleLineList();
@@ -69,7 +71,8 @@ const Playing = ({
           return;
         }
         const prevLine = map!.mapData[count - 1];
-        const lineTime = playerRef.current.getCurrentTime() - Number(prevLine.time);
+        const lineTime =
+          playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset - Number(prevLine.time);
 
         if (
           count - 1 == lineWord.lineCount &&
