@@ -1,8 +1,22 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react";
-import { Card, CardBody, useTheme } from "@chakra-ui/react";
+import React, { Dispatch, useEffect, useRef } from "react";
+import {
+  Box,
+  Card,
+  CardBody,
+  Checkbox,
+  CheckboxGroup,
+  Divider,
+  Flex,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+  useTheme,
+} from "@chakra-ui/react";
 
 import { ThemeColors } from "@/types";
-import UserTimeOffsetChange from "./child/EditSpeedChange";
+import UserTimeOffsetChange from "./child/UserTimeOffsetChange";
+import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
 
 interface SettingCardProps {
   isCardVisible: boolean;
@@ -53,6 +67,27 @@ const SettingCard = (props: SettingCardProps) => {
         >
           <CardBody>
             <UserTimeOffsetChange />
+            <Divider bg={theme.colors.color} my={3} />
+            <Flex>
+              <Box>
+                <Text fontSize="lg" fontWeight="semibold" mb={2}>
+                  効果音
+                </Text>
+                <CheckboxGroup>
+                  <Checkbox ml={2} mr={2}>
+                    タイプ音
+                  </Checkbox>
+                  <Checkbox ml={2} mr={2}>
+                    ミス音
+                  </Checkbox>
+                  <Checkbox ml={2} mr={2}>
+                    打ち切り音
+                  </Checkbox>
+                </CheckboxGroup>
+              </Box>
+            </Flex>
+            <Divider bg={theme.colors.color} my={3} />
+            <UserNextDisplayRadioButton />
           </CardBody>
         </Card>
       )}
