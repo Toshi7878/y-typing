@@ -19,7 +19,7 @@ export const usePressSkip = () => {
     const skippedTime =
       (gameStateRef.current!.isRetrySkip
         ? Number(map!.mapData[map!.startLine]["time"])
-        : Number(nextLine["time"])) - userOptionsAtom.timeOffset;
+        : Number(nextLine["time"])) + userOptionsAtom.timeOffset;
 
     const seekTime =
       nextLine["lyrics"] === "end"
