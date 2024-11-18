@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
   const mapInfo = await getMapInfo(params.id, Number(session?.user.id));
-  const userTypingOptions = await getUserTypingOptions(Number(session?.user.id));
+  const userTypingOptions = session?.user.id
+    ? await getUserTypingOptions(Number(session?.user.id))
+    : undefined;
 
   return (
     <SessionProvider session={session}>
