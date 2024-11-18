@@ -7,23 +7,26 @@ const UserTimeOffsetChange = () => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Flex
-      alignItems="baseline"
-      border="1px"
-      borderColor={theme.colors.card.borderColor}
-      width="fit-content"
-      rounded={"full"}
-      pl={4}
-      fontSize="md"
-    >
-      <Box>時間調整</Box>
-      <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
-        -
-      </Button>
-      <Box fontSize="lg">0.00</Box>
-      <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
-        +
-      </Button>
+    <Flex alignItems="baseline">
+      <Text fontSize="lg" fontWeight="semibold" mr={2}>
+        全体タイミング調整
+      </Text>
+      <Flex
+        alignItems="baseline"
+        border="1px"
+        borderColor={`${theme.colors.card.borderColor}90`}
+        width="fit-content"
+        rounded={"full"}
+        fontSize="md"
+      >
+        <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
+          -
+        </Button>
+        <Box fontSize="lg">0.00</Box>
+        <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
+          +
+        </Button>
+      </Flex>
     </Flex>
   );
 };

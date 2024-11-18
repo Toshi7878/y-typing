@@ -1,22 +1,11 @@
 import React, { Dispatch, useEffect, useRef } from "react";
-import {
-  Box,
-  Card,
-  CardBody,
-  Checkbox,
-  CheckboxGroup,
-  Divider,
-  Flex,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
-  useTheme,
-} from "@chakra-ui/react";
-
+import { Card, CardBody, Divider, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import UserTimeOffsetChange from "./child/UserTimeOffsetChange";
 import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
+import UserSoundEffectCheckbox from "./child/UserSoundEffectCheckbox";
+import VolumeRange from "./child/VolumeRange";
+import UserShortcutKeyCheckbox from "./child/UserShortcutKeyCheckbox";
 
 interface SettingCardProps {
   isCardVisible: boolean;
@@ -26,7 +15,8 @@ interface SettingCardProps {
 const SettingCard = (props: SettingCardProps) => {
   const theme: ThemeColors = useTheme();
   const cardRef = useRef<HTMLDivElement>(null);
-
+  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -48,6 +38,7 @@ const SettingCard = (props: SettingCardProps) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isCardVisible]);
 
   return (
@@ -66,28 +57,15 @@ const SettingCard = (props: SettingCardProps) => {
           borderColor={theme.colors.card.borderColor}
         >
           <CardBody>
+            {!isIOS && !isAndroid && <VolumeRange />}
+            {!isIOS && !isAndroid && <Divider bg={theme.colors.color} my={3} />}
             <UserTimeOffsetChange />
             <Divider bg={theme.colors.color} my={3} />
-            <Flex>
-              <Box>
-                <Text fontSize="lg" fontWeight="semibold" mb={2}>
-                  効果音
-                </Text>
-                <CheckboxGroup>
-                  <Checkbox ml={2} mr={2}>
-                    タイプ音
-                  </Checkbox>
-                  <Checkbox ml={2} mr={2}>
-                    ミス音
-                  </Checkbox>
-                  <Checkbox ml={2} mr={2}>
-                    打ち切り音
-                  </Checkbox>
-                </CheckboxGroup>
-              </Box>
-            </Flex>
+            <UserSoundEffectCheckbox />
             <Divider bg={theme.colors.color} my={3} />
             <UserNextDisplayRadioButton />
+            <Divider bg={theme.colors.color} my={3} />
+            <UserShortcutKeyCheckbox />
           </CardBody>
         </Card>
       )}
