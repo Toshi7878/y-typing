@@ -68,7 +68,7 @@ export const usePlayTimer = () => {
     const currentLineProgress = lineProgressRef.current;
     const lineTime = currentLine && count ? ytCurrentTime - currentLine.time : ytCurrentTime;
     const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
-    currentLineProgress!.value = lineTime;
+    currentLineProgress!.value = ytCurrentTime < 0 ? nextLine.time + ytCurrentTime : lineTime;
 
     if (
       currentTotalTimeProgress &&
