@@ -37,6 +37,20 @@ model Result {
 
 }
 
+model TypingOption {
+    id             Int @id @default(autoincrement())
+    userId         Int @unique
+    timeOffset     Int @default(0)
+    typeSound      Boolean @default(false)
+    missSound      Boolean @default(false)
+    lineClearSound Boolean @default(false)
+    nextDisplay    String
+    timeOffsetKey  String
+    toggleInputModeKey Boolean
+    user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
+}
+
+
 model Clap {
     id             Int @id @default(autoincrement())
     userId         Int
@@ -102,4 +116,5 @@ model User {
   result        Result[]
   clap          Clap[]
   mapLike       MapLike[]
+  typingOption  TypingOption[]
 }

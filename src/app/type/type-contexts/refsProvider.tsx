@@ -2,9 +2,9 @@
 import React, { createContext, useContext, useRef } from "react";
 import { GameStateRef, RefsContextType, StatusRef, YTStateRef } from "../ts/type";
 import {
-  defaultGameStateRef,
-  defaultStatusRef,
-  defaultYTStateRef,
+  DEFAULT_GAME_STATE_REF,
+  DEFAULT_STATUS_REF,
+  DEFAULT_YT_STATE_REF,
 } from "../ts/const/typeDefaultValue";
 
 // Start of Selection
@@ -14,9 +14,9 @@ export const RefsContext = createContext<RefsContextType>({
   playingComboRef: { current: null },
   lineCountRef: { current: 0 },
   bestScoreRef: { current: 0 },
-  statusRef: { current: structuredClone(defaultStatusRef) },
-  ytStateRef: { current: structuredClone(defaultYTStateRef) },
-  gameStateRef: { current: structuredClone(defaultGameStateRef) },
+  statusRef: { current: structuredClone(DEFAULT_STATUS_REF) },
+  ytStateRef: { current: structuredClone(DEFAULT_YT_STATE_REF) },
+  gameStateRef: { current: structuredClone(DEFAULT_GAME_STATE_REF) },
   lineProgressRef: { current: null },
   playingLineTimeRef: { current: null },
   playingCenterRef: { current: null },
@@ -30,9 +30,9 @@ export const RefsProvider = ({ children }) => {
   const playingComboRef = useRef(null);
   const lineCountRef = useRef(0);
   const bestScoreRef = useRef(0);
-  const statusRef = useRef<StatusRef>(structuredClone(defaultStatusRef));
-  const ytStateRef = useRef<YTStateRef>(structuredClone(defaultYTStateRef));
-  const gameStateRef = useRef<GameStateRef>(structuredClone(defaultGameStateRef));
+  const statusRef = useRef<StatusRef>(structuredClone(DEFAULT_STATUS_REF));
+  const ytStateRef = useRef<YTStateRef>(structuredClone(DEFAULT_YT_STATE_REF));
+  const gameStateRef = useRef<GameStateRef>(structuredClone(DEFAULT_GAME_STATE_REF));
   const lineProgressRef = useRef(null);
   const playingLineTimeRef = useRef(null);
   const playingCenterRef = useRef(null);

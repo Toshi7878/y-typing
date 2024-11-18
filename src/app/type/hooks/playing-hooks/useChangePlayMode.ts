@@ -6,7 +6,7 @@ import {
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
-import { defaultGameStateRef, defaultSpeed } from "../../ts/const/typeDefaultValue";
+import { DEFAULT_GAME_STATE_REF, DEFAULT_SPEED } from "../../ts/const/typeDefaultValue";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useRetry } from "./useRetry";
 import { YTSpeedController } from "../../ts/ytHandleEvents";
@@ -32,8 +32,8 @@ export const useChangePlayMode = () => {
     } else {
       const confirmMessage = "本番モードに移動しますか？了承すると初めから再生されます。";
       if (window.confirm(confirmMessage)) {
-        gameStateRef.current!.practice = structuredClone(defaultGameStateRef.practice);
-        gameStateRef.current!.replay = structuredClone(defaultGameStateRef.replay);
+        gameStateRef.current!.practice = structuredClone(DEFAULT_GAME_STATE_REF.practice);
+        gameStateRef.current!.replay = structuredClone(DEFAULT_GAME_STATE_REF.replay);
         gameStateRef.current!.playMode = "playing";
         setScene("playing");
         drawerClosure.onClose();
@@ -46,7 +46,7 @@ export const useChangePlayMode = () => {
             defaultSpeed: 1,
           });
         }
-        setSpeedData(defaultSpeed);
+        setSpeedData(DEFAULT_SPEED);
       }
       setNotify(Symbol(""));
     }

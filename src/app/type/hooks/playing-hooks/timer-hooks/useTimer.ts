@@ -10,7 +10,7 @@ import {
   useReplay,
 } from "../../../ts/scene-ts/playing/replay";
 import { typeTicker } from "../../useYoutubeEvents";
-import { defaultStatusRef } from "../../../ts/const/typeDefaultValue";
+import { DEFAULT_STATUS_REF } from "../../../ts/const/typeDefaultValue";
 import {
   useInputModeAtom,
   useLineResultsAtom,
@@ -273,7 +273,7 @@ export const useUpdateLine = () => {
   return (newCount: number) => {
     const currentCount = newCount ? newCount - 1 : 0;
     statusRef.current!.lineStatus = structuredClone({
-      ...defaultStatusRef.lineStatus,
+      ...DEFAULT_STATUS_REF.lineStatus,
       lineStartSpeed: speedData.playSpeed,
       lineStartInputMode: inputMode,
     });

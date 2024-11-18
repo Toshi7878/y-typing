@@ -97,18 +97,6 @@ export interface GameStateRef {
   practice: {
     hasMyRankingData: boolean;
   };
-  userTypeOptions: {
-    userOffset: number;
-    soundEffects: {
-      typing: boolean;
-      miss: boolean;
-      lineClear: boolean;
-    };
-    nextDisplay: "lyrics" | "word";
-    shortcutKey: {
-      toggleInputMode: boolean;
-    };
-  };
 }
 
 export interface StatusRef {
@@ -184,6 +172,20 @@ export interface LineResultData {
     sp: number;
   };
   typeResult: TypeResult[];
+}
+
+export interface UserOptions {
+  userTimeOffset: number;
+  soundEffects: {
+    typing: boolean;
+    miss: boolean;
+    lineClear: boolean;
+  };
+  nextDisplay: "lyrics" | "word";
+  shortcutKey: {
+    timeOffset: "left-right" | "ctrl-left-right" | "ctrl-alt-left-right" | "none";
+    toggleInputMode: boolean;
+  };
 }
 
 export interface Speed {

@@ -1,10 +1,27 @@
 "use client";
 import "@/app/edit/style/editor.scss";
+import { CHANGE_TIME_OFFSET_VALUE } from "@/app/type/ts/const/typeDefaultValue";
+import { useSetUserOptionsAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
 
 const UserTimeOffsetChange = () => {
   const theme: ThemeColors = useTheme();
+  const setUserOptionsAtom = useSetUserOptionsAtom();
+  const userOptionsAtom = useUserOptionsAtom();
+
+  const decrement = () => {
+    setUserOptionsAtom({
+      ...userOptionsAtom,
+      userTimeOffset: userOptionsAtom.userTimeOffset - CHANGE_TIME_OFFSET_VALUE,
+    });
+  };
+  const increment = () => {
+    setUserOptionsAtom({
+      ...userOptionsAtom,
+      userTimeOffset: userOptionsAtom.userTimeOffset + CHANGE_TIME_OFFSET_VALUE,
+    });
+  };
 
   return (
     <Flex alignItems="baseline">
@@ -19,11 +36,11 @@ const UserTimeOffsetChange = () => {
         rounded={"full"}
         fontSize="md"
       >
-        <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
+        <Button onClick={decrement} cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
           -
         </Button>
-        <Box fontSize="lg">0.00</Box>
-        <Button cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
+        <Box fontSize="lg">{userOptionsAtom.userTimeOffset.toFixed(2)}</Box>
+        <Button onClick={increment} cursor="pointer" variant="unstyled" size="lg" fontSize="xl">
           +
         </Button>
       </Flex>

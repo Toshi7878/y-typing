@@ -1,6 +1,6 @@
-import { GameStateRef, PlayMode, StatusRef, YTStateRef } from "../type";
+import { GameStateRef, PlayMode, StatusRef, UserOptions, YTStateRef } from "../type";
 
-export const defaultStatusRef: StatusRef = {
+export const DEFAULT_STATUS_REF: StatusRef = {
   status: {
     count: 0,
     romaType: 0,
@@ -27,12 +27,12 @@ export const defaultStatusRef: StatusRef = {
   },
 };
 
-export const defaultYTStateRef: YTStateRef = {
+export const DEFAULT_YT_STATE_REF: YTStateRef = {
   isPaused: false,
   currentTime: 0,
   movieDuration: 0,
 };
-export const defaultGameStateRef: GameStateRef = {
+export const DEFAULT_GAME_STATE_REF: GameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
   isSeekedLine: false,
@@ -44,21 +44,25 @@ export const defaultGameStateRef: GameStateRef = {
   practice: {
     hasMyRankingData: false,
   },
-  userTypeOptions: {
-    userOffset: 0,
-    soundEffects: {
-      typing: false,
-      miss: false,
-      lineClear: false,
-    },
-    nextDisplay: "lyrics",
-    shortcutKey: {
-      toggleInputMode: true,
-    },
-  },
 };
 
-export const defaultSpeed = {
+export const DEFAULT_SPEED = {
   defaultSpeed: 1,
   playSpeed: 1,
 };
+
+export const DEFAULT_USER_OPTIONS: UserOptions = {
+  userTimeOffset: 0,
+  soundEffects: {
+    typing: false,
+    miss: false,
+    lineClear: false,
+  },
+  nextDisplay: "lyrics",
+  shortcutKey: {
+    timeOffset: "left-right",
+    toggleInputMode: false,
+  },
+};
+
+export const CHANGE_TIME_OFFSET_VALUE = 0.05;

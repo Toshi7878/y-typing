@@ -1,4 +1,4 @@
-import { defaultStatusRef } from "../../ts/const/typeDefaultValue";
+import { DEFAULT_STATUS_REF } from "../../ts/const/typeDefaultValue";
 import { StatusRef } from "../../ts/type";
 import { typeTicker } from "../useYoutubeEvents";
 import {
@@ -25,7 +25,7 @@ export const useRetry = () => {
 
     tabStatusRef.current!.resetStatus();
     playingComboRef.current?.setCombo(0);
-    (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+    (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
 
     if (scene !== "replay") {
       setLineResults(structuredClone(map!.defaultLineResultData));
@@ -66,7 +66,7 @@ export const useProceedRetry = () => {
     tabStatusRef.current.resetStatus();
     playingComboRef.current.setCombo(0);
     gameStateRef.current!.replay.replayKeyCount = 0;
-    (statusRef.current as StatusRef) = structuredClone(defaultStatusRef);
+    (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
     gameStateRef.current!.isRetrySkip = true;
 
     playerRef.current.seekTo(0);
