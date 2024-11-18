@@ -23,7 +23,7 @@ const UserNextDisplayRadioButton = () => {
       <Text fontSize="lg" fontWeight="semibold" mb={2}>
         次の歌詞表示
       </Text>
-      <RadioGroup defaultValue="lyrics" onChange={changeRadio}>
+      <RadioGroup defaultValue={userOptionsAtom.nextDisplay} onChange={changeRadio}>
         <Stack direction="row" spacing={5}>
           <Radio value="lyrics">歌詞</Radio>
           <Radio value="word">ワード</Radio>
