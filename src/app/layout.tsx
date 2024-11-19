@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="ja">
       <head>
         <ColorModeScript initialColorMode={"dark"} />
-        {/* <NprogressStyle theme={theme as ThemeColors} /> */}
+        <NprogressStyle />
       </head>
       <body className={fonts.rubik.variable}>
         <Analytics />
