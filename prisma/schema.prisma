@@ -46,7 +46,7 @@ model TypingOption {
     lineClearSound Boolean @default(false)
     nextDisplay    String @default("lyrics")
     timeOffsetKey  String @default("ctrl-left-right")
-    toggleInputModeKey Boolean  @default(false)
+    toggleInputModeKey String  @default("alt-kana")
     user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
 }
 

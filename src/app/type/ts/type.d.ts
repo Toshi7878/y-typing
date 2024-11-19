@@ -181,7 +181,7 @@ export interface UserTypingOptions {
   lineClearSound: boolean;
   nextDisplay: "lyrics" | "word";
   timeOffsetKey: "left-right" | "ctrl-left-right" | "ctrl-alt-left-right" | "none";
-  toggleInputModeKey: boolean;
+  toggleInputModeKey: "alt-kana" | "tab";
 }
 
 export interface Speed {
