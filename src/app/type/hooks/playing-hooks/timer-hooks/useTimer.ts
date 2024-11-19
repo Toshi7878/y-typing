@@ -18,6 +18,7 @@ import {
   useRankingScoresAtom,
   useSceneAtom,
   useSetLineResultsAtom,
+  useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
@@ -46,13 +47,16 @@ export const usePlayTimer = () => {
   const replay = useReplay();
   const getSeekLineCount = useGetSeekLineCount();
   const userOptionsAtom = useUserOptionsAtom();
+  const timeOffset = useTimeOffsetAtom();
 
   return (
     totalTimeProgressRef: React.RefObject<HTMLProgressElement>,
     playingTotalTimeRef: React.RefObject<PlayingTotalTimeRef>,
     skipGuideRef: React.RefObject<SkipGuideRef>,
   ) => {
-    const ytCurrentTime = playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset;
+    const ytCurrentTime =
+      playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset - timeOffset;
+
     ytStateRef.current!.currentTime = ytCurrentTime;
 
     const ytConstantTime = ytCurrentTime / speedData.playSpeed;

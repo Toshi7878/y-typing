@@ -45,7 +45,7 @@ model TypingOption {
     missSound      Boolean @default(false)
     lineClearSound Boolean @default(false)
     nextDisplay    String @default("lyrics")
-    timeOffsetKey  String @default("left-right")
+    timeOffsetKey  String @default("ctrl-left-right")
     toggleInputModeKey Boolean  @default(false)
     user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
 }

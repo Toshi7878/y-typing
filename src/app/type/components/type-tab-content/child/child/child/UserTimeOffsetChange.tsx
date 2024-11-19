@@ -14,7 +14,7 @@ const UserTimeOffsetChange = () => {
   const decrement = () => {
     const newUserOptions = {
       ...userOptionsAtom,
-      timeOffset: userOptionsAtom.timeOffset - CHANGE_TIME_OFFSET_VALUE,
+      timeOffset: Math.round((userOptionsAtom.timeOffset - CHANGE_TIME_OFFSET_VALUE) * 100) / 100,
     };
     setUserOptionsAtom(newUserOptions);
 
@@ -23,13 +23,10 @@ const UserTimeOffsetChange = () => {
   const increment = () => {
     const newUserOptions = {
       ...userOptionsAtom,
-      timeOffset: userOptionsAtom.timeOffset + CHANGE_TIME_OFFSET_VALUE,
+      timeOffset: Math.round((userOptionsAtom.timeOffset + CHANGE_TIME_OFFSET_VALUE) * 100) / 100,
     };
 
-    setUserOptionsAtom({
-      ...userOptionsAtom,
-      timeOffset: userOptionsAtom.timeOffset + CHANGE_TIME_OFFSET_VALUE,
-    });
+    setUserOptionsAtom(newUserOptions);
 
     sendUpdateData(newUserOptions);
   };

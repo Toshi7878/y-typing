@@ -8,6 +8,7 @@ import {
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
+  useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
@@ -18,10 +19,7 @@ import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
 import { PlayingTotalTimeRef } from "./playing-child/child/PlayingTotalTime";
 import { SkipGuideRef } from "./playing-child/child/PlayingSkipGuide";
-import {
-  useHandleTyping,
-  usePlayShortcutKey,
-} from "@/app/type/ts/scene-ts/playing/keydown/keydownHandle";
+import { useHandleTyping, usePlayShortcutKey } from "@/app/type/hooks/useKeydownHandle";
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
@@ -51,6 +49,7 @@ const Playing = ({
   const lineResults = useLineResultsAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
   const userOptionsAtom = useUserOptionsAtom();
+  const timeOffset = useTimeOffsetAtom();
 
   const gamePause = useGamePause();
   const toggleLineListDrawer = useToggleLineList();
@@ -71,8 +70,9 @@ const Playing = ({
           return;
         }
         const prevLine = map!.mapData[count - 1];
-        const lineTime =
-          playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset - Number(prevLine.time);
+        const currentTime =
+          playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset - timeOffset;
+        const lineTime = currentTime - Number(prevLine.time);
 
         if (
           count - 1 == lineWord.lineCount &&

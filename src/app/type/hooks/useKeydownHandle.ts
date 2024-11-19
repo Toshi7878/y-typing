@@ -1,9 +1,9 @@
 import { SkipGuideRef } from "@/app/type/components/typing-area/scene/playing-child/child/PlayingSkipGuide";
-import { WordType } from "../../../type";
-import { updateReplayStatus } from "../replay";
-import { Typing, useTypeMiss, useTypeSuccess } from "./typing";
-import { CalcTypeSpeed } from "../calcTypeSpeed";
-import { CreateMap } from "../../ready/createTypingWord";
+import { WordType } from "../ts/type";
+import { updateReplayStatus } from "../ts/scene-ts/playing/replay";
+import { Typing, useTypeMiss, useTypeSuccess } from "../ts/scene-ts/playing/keydown/typing";
+import { CalcTypeSpeed } from "../ts/scene-ts/playing/calcTypeSpeed";
+import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
 import { useRealTimeSpeedChange } from "@/app/type/hooks/playing-hooks/useSpeedChange";
@@ -20,12 +20,15 @@ import {
   useRankingScoresAtom,
   useSceneAtom,
   useSetLineResultsAtom,
+  useSetPlayingNotifyAtom,
+  useSetTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useSoundEffect } from "@/app/type/hooks/playing-hooks/useSoundEffect";
+import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../ts/const/typeDefaultValue";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -168,6 +171,7 @@ export const usePlayShortcutKey = () => {
   const { statusRef } = useRefs();
   const scene = useSceneAtom();
   const inputMode = useInputModeAtom();
+  const userOptionsAtom = useUserOptionsAtom();
 
   const retry = useRetry();
   const pressSkip = usePressSkip();
@@ -178,6 +182,8 @@ export const usePlayShortcutKey = () => {
   const changePlayMode = useChangePlayMode();
   const changePracticeSpeed = useChangePracticeSpeed();
   const { movePrevLine, moveNextLine, moveSetLine } = useMoveLine();
+  const setTimeOffset = useSetTimeOffsetAtom();
+  const setNotify = useSetPlayingNotifyAtom();
 
   return (
     event: KeyboardEvent,
@@ -210,13 +216,43 @@ export const usePlayShortcutKey = () => {
         event.preventDefault();
         break;
       case "ArrowRight":
-        if (scene === "replay" || scene === "practice") {
+        if (userOptionsAtom.timeOffsetKey !== "none") {
+          const isCtrlLeftRight =
+            userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
+          const isCtrlAltLeftRight =
+            userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" &&
+            event.ctrlKey &&
+            event.altKey;
+
+          if (isCtrlLeftRight || isCtrlAltLeftRight) {
+            setTimeOffset((prev) => {
+              const newValue = Math.round((prev + TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
+              setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+              return newValue;
+            });
+          }
+        } else if (scene === "replay" || scene === "practice") {
           moveNextLine(drawerClosure);
         }
+
         event.preventDefault();
         break;
       case "ArrowLeft":
-        if (scene === "replay" || scene === "practice") {
+        if (userOptionsAtom.timeOffsetKey !== "none") {
+          const isCtrlLeftRight =
+            userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
+          const isCtrlAltLeftRight =
+            userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" &&
+            event.ctrlKey &&
+            event.altKey;
+          if (isCtrlLeftRight || isCtrlAltLeftRight) {
+            setTimeOffset((prev) => {
+              const newValue = Math.round((prev - TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
+              setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+              return newValue;
+            });
+          }
+        } else if (scene === "replay" || scene === "practice") {
           movePrevLine(drawerClosure);
         }
         event.preventDefault();

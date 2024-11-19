@@ -3,6 +3,7 @@ import { SkipGuideRef } from "../../components/typing-area/scene/playing-child/c
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
 import {
   useMapAtom,
+  useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
 } from "../../type-atoms/gameRenderAtoms";
@@ -13,13 +14,16 @@ export const usePressSkip = () => {
   const map = useMapAtom() as CreateMap;
   const speedData = useTypePageSpeedAtom();
   const userOptionsAtom = useUserOptionsAtom();
+  const timeOffset = useTimeOffsetAtom();
 
   return (skipGuideRef: RefObject<SkipGuideRef>) => {
     const nextLine = map!.mapData[statusRef.current!.status.count];
     const skippedTime =
       (gameStateRef.current!.isRetrySkip
         ? Number(map!.mapData[map!.startLine]["time"])
-        : Number(nextLine["time"])) + userOptionsAtom.timeOffset;
+        : Number(nextLine["time"])) +
+      userOptionsAtom.timeOffset +
+      timeOffset;
 
     const seekTime =
       nextLine["lyrics"] === "end"

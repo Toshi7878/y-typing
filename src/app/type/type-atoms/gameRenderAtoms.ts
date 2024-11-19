@@ -135,3 +135,13 @@ export const useUserOptionsAtom = () => {
 export const useSetUserOptionsAtom = () => {
   return useSetAtom(userOptionsAtom, { store: typeAtomStore });
 };
+
+const timeOffsetAtom = atom<number>(0);
+
+export const useTimeOffsetAtom = () => {
+  return useAtomValue(timeOffsetAtom, { store: typeAtomStore });
+};
+
+export const useSetTimeOffsetAtom = () => {
+  return useSetAtom(timeOffsetAtom, { store: typeAtomStore });
+};

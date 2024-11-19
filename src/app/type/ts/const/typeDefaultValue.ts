@@ -62,3 +62,5 @@ export const DEFAULT_USER_OPTIONS: UserTypingOptions = {
 };
 
 export const CHANGE_TIME_OFFSET_VALUE = 0.05;
+
+export const TIME_OFFSET_SHORTCUTKEY_RANGE = 0.1;
