@@ -1,5 +1,5 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
-import UpdateAtText from "@/components/UpdateAtText";
+import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { Link } from "@chakra-ui/next-js";
 import { Text } from "@chakra-ui/react";

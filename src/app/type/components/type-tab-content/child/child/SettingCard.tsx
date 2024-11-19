@@ -4,8 +4,9 @@ import { ThemeColors } from "@/types";
 import UserTimeOffsetChange from "./child/UserTimeOffsetChange";
 import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
 import UserSoundEffectCheckbox from "./child/UserSoundEffectCheckbox";
-import VolumeRange from "./child/VolumeRange";
 import UserShortcutKeyCheckbox from "./child/UserShortcutKeyCheckbox";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import VolumeRange from "@/components/custom-chakra-ui/VolumeRange";
 
 interface SettingCardProps {
   isCardVisible: boolean;
@@ -13,6 +14,7 @@ interface SettingCardProps {
 }
 
 const SettingCard = (props: SettingCardProps) => {
+  const { playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const cardRef = useRef<HTMLDivElement>(null);
   const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -57,7 +59,7 @@ const SettingCard = (props: SettingCardProps) => {
           borderColor={theme.colors.card.borderColor}
         >
           <CardBody>
-            {!isIOS && !isAndroid && <VolumeRange />}
+            {!isIOS && !isAndroid && <VolumeRange playerRef={playerRef} />}
             {!isIOS && !isAndroid && <Divider bg={theme.colors.color} my={3} />}
             <UserTimeOffsetChange />
             <Divider bg={theme.colors.color} my={3} />

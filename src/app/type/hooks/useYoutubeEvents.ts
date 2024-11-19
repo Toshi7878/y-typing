@@ -8,6 +8,7 @@ import { useRefs } from "../type-contexts/refsProvider";
 import { useUpdateLine } from "./playing-hooks/timer-hooks/useTimer";
 import NProgress from "nprogress";
 import { useGetSeekLineCount } from "./playing-hooks/timer-hooks/useSeekGetLineCount";
+import { useVolumeAtom } from "@/components/atom/globalAtoms";
 
 export const typeTicker = new Ticker();
 
@@ -129,12 +130,13 @@ export const useYTSeekEvent = () => {
 
 export const useYTReadyEvent = () => {
   const { setRef } = useRefs();
+  const volumeAtom = useVolumeAtom();
 
   return (event: { target: any }) => {
     const player = event.target;
     NProgress.done();
     setRef("playerRef", player);
     console.log("ready");
-    player.setVolume(30);
+    player.setVolume(volumeAtom);
   };
 };

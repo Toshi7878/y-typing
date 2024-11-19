@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex, Text, useTheme } from "@chakra-ui/react";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { ResultCardInfo } from "@/app/timeline/ts/type";
 import { ThemeColors } from "@/types";
 import { Link } from "@chakra-ui/next-js";

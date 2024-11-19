@@ -1,5 +1,5 @@
 import { TypeResult } from "@/app/type/ts/type";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Text, useTheme } from "@chakra-ui/react";
 import { memo } from "react";

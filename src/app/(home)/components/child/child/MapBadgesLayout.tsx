@@ -1,5 +1,5 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { Box, Flex, HStack, useBreakpointValue, useTheme } from "@chakra-ui/react";
 import React from "react";
 import MapBadge from "./MapBadge";

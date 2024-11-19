@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { IndexDBOption, ThemeColors } from "@/types";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/db";
 import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
@@ -24,7 +24,7 @@ import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import NProgress from "nprogress";
 import { extractYouTubeVideoId } from "../extractYTId";
-import CustomModalContent from "@/components/CustomModalContent";
+import CustomModalContent from "@/components/custom-chakra-ui/CustomModalContent";
 
 interface NewCreateModalProps {
   newCreateModalDisclosure: UseDisclosureReturn;

@@ -4,7 +4,7 @@ import { BiEdit } from "react-icons/bi";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { useParams } from "next/navigation";
 import { Link } from "@chakra-ui/next-js";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { LikeButton } from "@/components/like-button/LikeButton";
 import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-server-action";
 import { useFormState } from "react-dom";

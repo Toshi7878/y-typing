@@ -3,6 +3,7 @@
 import YouTube from "react-youtube";
 import { useAtomValue } from "jotai";
 import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
+import { useVolumeAtom } from "@/components/atom/globalAtoms";
 
 interface HomeYouTubeContentProps {
   className?: string;
@@ -10,6 +11,7 @@ interface HomeYouTubeContentProps {
 const HomeYouTubeContent = function YouTubeContent({ className = "" }: HomeYouTubeContentProps) {
   const videoId = useAtomValue(videoIdAtom);
   const previewTime = useAtomValue(previewTimeAtom);
+  const volumeAtom = useVolumeAtom();
 
   if (!videoId) {
     return null;
@@ -17,6 +19,7 @@ const HomeYouTubeContent = function YouTubeContent({ className = "" }: HomeYouTu
 
   const onReady = (event: any) => {
     event.target.seekTo(Number(previewTime));
+    event.taregt.setVolume(volumeAtom);
   };
 
   const WIDTH_DESKTOP = "448px";

@@ -4,7 +4,7 @@ import { ThemeColors } from "@/types";
 import { Box, Text, useTheme } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { useMapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface ResultCardHeaderdProps {

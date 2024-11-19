@@ -21,7 +21,7 @@ import {
 } from "@/app/edit/edit-atom/editAtom";
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 import parse from "html-react-parser";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { useLineUpdateButtonEvent } from "@/app/edit/hooks/useEditorButtonEvents";
 
 interface LineRowProps {

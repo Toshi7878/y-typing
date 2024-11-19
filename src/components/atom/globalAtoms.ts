@@ -1,5 +1,7 @@
+import { getGlobalAtomStore } from "@/app/GlobalProvider";
 import { DEFAULT_VOLUME } from "@/config/consts";
 import { atom, useAtomValue, useSetAtom } from "jotai";
+const globalAtomStore = getGlobalAtomStore();
 
 const getInitialTheme = (): "light" | "dark" => {
   if (typeof window !== "undefined") {
@@ -11,11 +13,12 @@ const getInitialTheme = (): "light" | "dark" => {
 
 export const themeAtom = atom<"light" | "dark">(getInitialTheme());
 
-const volumeAtom = atom<number>(DEFAULT_VOLUME);
+export const volumeAtom = atom<number>(DEFAULT_VOLUME);
+
+export const useSetVolumeAtom = () => {
+  return useSetAtom(volumeAtom, { store: globalAtomStore });
+};
 
 export const useVolumeAtom = () => {
-  return useAtomValue(volumeAtom);
-};
-export const useSetVolumeAtom = () => {
-  return useSetAtom(volumeAtom);
+  return useAtomValue(volumeAtom, { store: globalAtomStore });
 };

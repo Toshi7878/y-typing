@@ -1,6 +1,6 @@
 import { Box, FormLabel, HStack, Input, Text, useTheme } from "@chakra-ui/react";
 
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import {
   useEditPreviewTimeInputAtom,

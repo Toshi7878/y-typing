@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex } from "@chakra-ui/react";
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
 
 interface MapCardProps {

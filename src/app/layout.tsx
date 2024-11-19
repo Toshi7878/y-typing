@@ -8,7 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 // export const runtime = "edge";
 
 import type { Metadata } from "next";
-import { ThemeProvider } from "./ThemeProvider";
+import { GlobalProvider } from "./GlobalProvider";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -24,10 +24,10 @@ export default function RootLayout({
     <html lang="ja">
       <body className={fonts.rubik.variable}>
         <Analytics />
-        <ThemeProvider>
+        <GlobalProvider>
           <Header />
           {children}
-        </ThemeProvider>
+        </GlobalProvider>
       </body>
     </html>
   );

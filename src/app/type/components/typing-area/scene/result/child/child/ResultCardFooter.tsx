@@ -1,6 +1,6 @@
 "use client";
 
-import CustomToolTip from "@/components/CustomToolTip";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Text, Stack, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
