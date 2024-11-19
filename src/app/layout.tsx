@@ -10,9 +10,6 @@ import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 import GlobalProvider from "./provider/GlobalProvider";
 import { ColorModeScript } from "@chakra-ui/react";
-import { getTheme } from "@/lib/customTheme";
-import NprogressStyle from "./NprogressStyle";
-import { ThemeColors } from "@/types";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -30,7 +27,6 @@ export default function RootLayout({
     <html lang="ja">
       <head>
         <ColorModeScript initialColorMode={"dark"} />
-        <NprogressStyle />
       </head>
       <body className={fonts.rubik.variable}>
         <Analytics />
