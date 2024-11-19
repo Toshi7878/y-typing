@@ -120,7 +120,6 @@ const useKeyReplay = () => {
           const newStatus = updateSuccessStatus({
             newLineWord: result.newLineWord,
             lineRemainTime,
-            lineConstantTime,
             updatePoint: result.updatePoint,
             totalKpm: typeSpeed.totalKpm,
             status,
