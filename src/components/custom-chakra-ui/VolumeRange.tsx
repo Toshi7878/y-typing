@@ -57,7 +57,7 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
         max={100}
         value={volumeAtom}
         onMouseEnter={() => setShowSliderMark(true)}
-        onBlur={() => setShowSliderMark(false)}
+        onMouseLeave={() => setShowSliderMark(false)}
       >
         {showSliderMark && (
           <SliderMark
