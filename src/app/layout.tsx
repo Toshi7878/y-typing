@@ -1,8 +1,7 @@
 import "@/css/globals.css";
-import Header from "@/components/header/Header";
-
-import { fonts } from "../lib/fonts";
 import "@/css/nprogress.css";
+import Header from "@/components/header/Header";
+import { fonts } from "../lib/fonts";
 import { Analytics } from "@vercel/analytics/react";
 
 // export const runtime = "edge";
@@ -10,6 +9,10 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 import GlobalProvider from "./provider/GlobalProvider";
+import { ColorModeScript } from "@chakra-ui/react";
+import { getTheme } from "@/lib/customTheme";
+import NprogressStyle from "./NprogressStyle";
+import { ThemeColors } from "@/types";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -21,8 +24,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const theme = getTheme("dark");
+
   return (
     <html lang="ja">
+      <head>
+        {/* <ColorModeScript initialColorMode={theme.config?.initialColorMode} /> */}
+        {/* <NprogressStyle theme={theme as ThemeColors} /> */}
+      </head>
       <body className={fonts.rubik.variable}>
         <Analytics />
         <ThemeProvider>

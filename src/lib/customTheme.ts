@@ -1,5 +1,5 @@
 import { ThemeColors } from "@/types";
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { extendTheme, ThemeConfig, ThemeOverride } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
   initialColorMode: "dark",
@@ -196,13 +196,15 @@ const darkTheme: ThemeColors = {
   },
 };
 
-export const getTheme = (colorMode: "light" | "dark") => {
+// ThemeOverrideを拡張する新しい型を定義
+
+export const getTheme = (colorMode: "light" | "dark"): ThemeOverride => {
   // const themeColors = colorMode === "light" ? sodaTheme.colors : darkTheme.colors;
-  const themeColors = darkTheme.colors;
+  const theme: ThemeColors = darkTheme;
 
   return extendTheme({
     config,
-    colors: themeColors,
+    colors: theme.colors,
     styles: {
       global: {
         "body, *": {
