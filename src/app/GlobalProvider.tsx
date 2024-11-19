@@ -3,16 +3,15 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import React, { useLayoutEffect } from "react";
 import { useAtomValue } from "jotai";
-import { themeAtom, volumeAtom } from "@/components/atom/globalAtoms";
+import { getGlobalAtomStore, themeAtom, volumeAtom } from "@/components/atom/globalAtoms";
 import { getTheme } from "./customTheme";
-import { createStore, Provider as JotaiProvider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
 import { db } from "@/lib/db";
-const globalAtomStore = createStore();
-export const getGlobalAtomStore = () => globalAtomStore;
 
 export const GlobalProvider = ({ children }: { colorMode?: any; children: React.ReactNode }) => {
   const themeColor = useAtomValue(themeAtom);
   const theme = getTheme(themeColor);
+  const globalAtomStore = getGlobalAtomStore();
 
   useLayoutEffect(() => {
     const getUserVolume = async () => {

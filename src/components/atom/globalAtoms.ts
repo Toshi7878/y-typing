@@ -1,7 +1,7 @@
-import { getGlobalAtomStore } from "@/app/GlobalProvider";
 import { DEFAULT_VOLUME } from "@/config/consts";
-import { atom, useAtomValue, useSetAtom } from "jotai";
-const globalAtomStore = getGlobalAtomStore();
+import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
+const globalAtomStore = createStore();
+export const getGlobalAtomStore = () => globalAtomStore;
 
 const getInitialTheme = (): "light" | "dark" => {
   if (typeof window !== "undefined") {
