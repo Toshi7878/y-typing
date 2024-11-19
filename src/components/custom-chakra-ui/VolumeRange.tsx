@@ -12,6 +12,9 @@ import {
 import { ThemeColors } from "@/types";
 import { useSetVolumeAtom, useVolumeAtom } from "@/components/atom/globalAtoms";
 import { db } from "@/lib/db";
+import { IoMdVolumeMute } from "react-icons/io";
+import { IoMdVolumeLow } from "react-icons/io";
+import { IoMdVolumeHigh } from "react-icons/io";
 
 interface VolumeRangeProps {
   playerRef: any;
@@ -32,6 +35,13 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
     <HStack alignItems="center">
       <Text fontSize="lg" fontWeight="semibold" mr={2}>
         音量
+        {volumeAtom === 0 ? (
+          <IoMdVolumeMute />
+        ) : volumeAtom < 50 ? (
+          <IoMdVolumeLow />
+        ) : (
+          <IoMdVolumeHigh />
+        )}
       </Text>
 
       <Slider
