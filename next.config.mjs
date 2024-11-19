@@ -1,9 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-  images: {
-    domains: ["i.ytimg.com"],
+export default {
+  // ... existing configuration ...
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.(wav|mp3)$/,
+      use: {
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]",
+          outputPath: "static/sounds/",
+          publicPath: "/_next/static/sounds/",
+        },
+      },
+    });
+
+    return config;
   },
 };
-
-export default nextConfig;

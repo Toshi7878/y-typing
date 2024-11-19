@@ -21,9 +21,11 @@ import {
   useSceneAtom,
   useSetLineResultsAtom,
   useTypePageSpeedAtom,
+  useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { UseDisclosureReturn } from "@chakra-ui/react";
+import { useSoundEffect } from "@/app/type/hooks/playing-hooks/useSoundEffect";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -41,7 +43,10 @@ export const useHandleTyping = () => {
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
+  const userOptionsAtom = useUserOptionsAtom();
+
   const setLineResults = useSetLineResultsAtom();
+  const { clearTypeSoundPlay, typeSoundPlay, missSoundPlay } = useSoundEffect();
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
 
@@ -56,10 +61,8 @@ export const useHandleTyping = () => {
       const currentLine = map!.mapData[count - 1];
       const movieDuration = ytStateRef.current!.movieDuration;
       const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
-
       const lineRemainTime = nextLineTime - currentLine.time - lineConstantTime;
       const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
-
       updateSuccessStatusRefs({
         lineConstantTime,
         newLineWord: result.newLineWord,
@@ -70,11 +73,20 @@ export const useHandleTyping = () => {
       const newStatus = updateSuccessStatus({
         newLineWord: result.newLineWord,
         lineRemainTime,
-        lineConstantTime,
         updatePoint: result.updatePoint,
         totalKpm: typeSpeed.totalKpm,
         status,
       });
+
+      if (!result.newLineWord.nextChar["k"]) {
+        if (userOptionsAtom.lineClearSound) {
+          clearTypeSoundPlay();
+        }
+      } else {
+        if (userOptionsAtom.typeSound) {
+          typeSoundPlay();
+        }
+      }
 
       if (scene === "practice" && speedData.playSpeed >= 1 && !result.newLineWord.nextChar["k"]) {
         const combo = playingComboRef.current!.getCombo();
@@ -130,6 +142,10 @@ export const useHandleTyping = () => {
       const newStatus = updateMissStatus(status);
       updateMissRefStatus({ lineConstantTime, failKey: result.failKey });
       tabStatusRef.current!.setStatus(newStatus);
+
+      if (userOptionsAtom.missSound) {
+        missSoundPlay();
+      }
     }
   };
 };

@@ -594,7 +594,6 @@ export const useTypeSuccess = () => {
   const updateSuccessStatus = ({
     newLineWord,
     lineRemainTime,
-    lineConstantTime,
     updatePoint,
     totalKpm,
     status,
