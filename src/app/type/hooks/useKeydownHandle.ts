@@ -84,6 +84,8 @@ export const useHandleTyping = () => {
       if (!result.newLineWord.nextChar["k"]) {
         if (userOptionsAtom.lineClearSound) {
           clearTypeSoundPlay();
+        } else if (userOptionsAtom.typeSound) {
+          typeSoundPlay();
         }
       } else {
         if (userOptionsAtom.typeSound) {

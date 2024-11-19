@@ -146,6 +146,8 @@ const useKeyReplay = () => {
           statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
           if (userOptionsAtom.lineClearSound) {
             clearTypeSoundPlay();
+          } else if (userOptionsAtom.typeSound) {
+            typeSoundPlay();
           }
         }
 
