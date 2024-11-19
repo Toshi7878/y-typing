@@ -23,7 +23,7 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
   const setVolumeAtom = useSetVolumeAtom();
   const handleChange = (value: number) => {
     setVolumeAtom(value);
-    if (playerRef) {
+    if (playerRef.current) {
       playerRef.current.setVolume(value);
     }
     db.globalOption.put({ optionName: "volume-range", value });
