@@ -1,14 +1,11 @@
 "use client";
-
+import { getTheme } from "@/lib/customTheme";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import React from "react";
-import { useAtomValue } from "jotai";
-import { themeAtom } from "@/components/atom/globalAtoms";
-import { getTheme } from "../../lib/customTheme";
 
 const ThemeProvider = ({ children }: { colorMode?: any; children: React.ReactNode }) => {
-  const themeColor = useAtomValue(themeAtom);
-  const theme = getTheme(themeColor);
+  // const themeColor = useAtomValue(themeAtom);
+  const theme = getTheme("dark");
 
   return (
     <>
