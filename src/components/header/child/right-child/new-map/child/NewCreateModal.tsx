@@ -94,7 +94,7 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
         </ModalBody>
 
         <ModalFooter>
-          <Flex direction="column" justify="space-between" align="center" w="100%" minH={"100px"}>
+          <Flex direction="column" justify="space-between" align="center" w="100%" minH={"80px"}>
             <Flex justify="space-between" align="center" w="100%">
               <CreateMapBackUpButton
                 createMapBackUpInfo={createMapBackUpInfo}
