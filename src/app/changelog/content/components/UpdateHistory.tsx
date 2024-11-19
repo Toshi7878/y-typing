@@ -4,6 +4,10 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-11-19",
+    descriptions: ["音量設定を追加"],
+  },
+  {
     date: "2024-11-18",
     descriptions: ["タイピング設定の全体タイミング調整・次のワード表示方法を追加"],
   },
