@@ -6,8 +6,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   useTheme,
-  Text,
-  Flex,
   Box,
   SliderMark,
 } from "@chakra-ui/react";

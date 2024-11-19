@@ -1,3 +1,4 @@
+"use client";
 import LeftNav from "./child/LeftNav";
 import RightNav from "./child/RightNav";
 import { Box } from "@chakra-ui/react";

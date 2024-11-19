@@ -1,7 +1,8 @@
-import React from "react";
+import { auth } from "@/lib/auth";
 import { SessionProvider } from "next-auth/react";
 import HeaderContent from "./HeaderContent";
-import { auth } from "@/lib/auth";
+import HeaderClientProvider from "./HeaderClientProvider";
+
 // export const runtime = "edge";
 
 const Header = async () => {
@@ -9,7 +10,9 @@ const Header = async () => {
 
   return (
     <SessionProvider session={session}>
-      <HeaderContent />
+      <HeaderClientProvider>
+        <HeaderContent />
+      </HeaderClientProvider>
     </SessionProvider>
   );
 };

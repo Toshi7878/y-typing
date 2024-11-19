@@ -50,7 +50,9 @@ function MapList() {
       threshold={1400} // スクロールの閾値を追加
     >
       <MapCardLayout>
-        {data?.pages.map((page) => page.map((map) => <MapCard key={map.id} map={map} />))}
+        {data?.pages.map((page) =>
+          page.map((map) => <MapCard key={map.id} map={map} maxW={"700px"} />),
+        )}
       </MapCardLayout>
     </InfiniteScroll>
   );

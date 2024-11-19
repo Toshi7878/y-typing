@@ -67,12 +67,13 @@ const RankingList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene, data]);
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
         <Spinner size="xl" />
       </Box>
     );
+  }
   if (error) return <div>Error loading data</div>;
 
   return (

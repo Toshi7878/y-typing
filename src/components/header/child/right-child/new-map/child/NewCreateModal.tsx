@@ -7,24 +7,22 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
-  Input,
-  Box,
-  useTheme,
   Flex,
   UseDisclosureReturn,
+  Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { IndexDBOption, ThemeColors } from "@/types";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
-import { useEffect, useState } from "react";
+import { IndexDBOption } from "@/types";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
 import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
-import { Link } from "@chakra-ui/next-js";
-import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import NProgress from "nprogress";
 import { extractYouTubeVideoId } from "../extractYTId";
 import CustomModalContent from "@/components/custom-chakra-ui/CustomModalContent";
+import CreateMapBackUpButton from "./child/CreateMapBackUpButton";
+import NewCreateButton from "./child/NewCreateButton";
+import NewCreateVideoIdInputBox from "./child/NewCreateVideoIdInputBox";
+import CreatedCheck from "./child/CreatedCheck";
 
 interface NewCreateModalProps {
   newCreateModalDisclosure: UseDisclosureReturn;
@@ -35,27 +33,31 @@ const BACKUP_OVERWRITE_WARNING =
 
 export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateModalProps) {
   const router = useRouter();
-  const theme: ThemeColors = useTheme();
-  const [backupTitle, setBackupTitle] = useState({ title: "", videoId: "" });
+  const [createMapBackUpInfo, setCreateMapBackUpInfo] = useState({ title: "", videoId: "" });
   const [createYTURL, setCreateYTURL] = useState("");
   const [newID, setNewID] = useState("");
-  const handleLinkClick = useLinkClick();
+  const createBtnRef = useRef(null);
 
-  const newCreate = (event) => {
-    event.preventDefault(); // ページ遷移を無効にする
-    const NEW_ID = extractYouTubeVideoId(createYTURL);
-    if (NEW_ID && NEW_ID.length == 11) {
-      const shouldOverwriteBackup = backupTitle.videoId ? confirm(BACKUP_OVERWRITE_WARNING) : true;
+  const newCreate = useCallback(
+    (event) => {
+      event.preventDefault(); // ページ遷移を無効にする
+      const NEW_ID = extractYouTubeVideoId(createYTURL);
+      if (NEW_ID && NEW_ID.length == 11) {
+        const shouldOverwriteBackup = createMapBackUpInfo.videoId
+          ? confirm(BACKUP_OVERWRITE_WARNING)
+          : true;
 
-      if (shouldOverwriteBackup) {
-        NProgress.configure({ showSpinner: false });
-        NProgress.configure({ trickle: false });
-        NProgress.start();
-        router.push(`/edit?new=${NEW_ID}`);
-        newCreateModalDisclosure.onClose();
+        if (shouldOverwriteBackup) {
+          NProgress.configure({ showSpinner: false });
+          NProgress.configure({ trickle: false });
+          NProgress.start();
+          router.push(`/edit?new=${NEW_ID}`);
+          newCreateModalDisclosure.onClose();
+        }
       }
-    }
-  };
+    },
+    [createYTURL, createMapBackUpInfo],
+  );
 
   useEffect(() => {
     db.editorNewCreateBak
@@ -63,14 +65,14 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
       .then((data: IndexDBOption | undefined) => {
         if (data) {
           const backupMapInfo = data.value as EditorNewMapBackUpInfoData;
-          setBackupTitle({ title: backupMapInfo.title, videoId: backupMapInfo.videoId });
+          setCreateMapBackUpInfo({ title: backupMapInfo.title, videoId: backupMapInfo.videoId });
         } else {
-          setBackupTitle({ title: "", videoId: "" });
+          setCreateMapBackUpInfo({ title: "", videoId: "" });
         }
       });
 
     return () => {
-      setBackupTitle({ title: "", videoId: "" });
+      setCreateMapBackUpInfo({ title: "", videoId: "" });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,75 +80,38 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
   return (
     <Modal isOpen={newCreateModalDisclosure.isOpen} onClose={newCreateModalDisclosure.onClose}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent maxW="640px">
         <ModalHeader>譜面新規作成ウィンドウ</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          譜面を作成したいYouTube動画のURLを入力
-          <form onSubmit={newCreate}>
-            <Input
-              value={createYTURL}
-              placeholder="YouTube URLを入力"
-              onChange={(event) => {
-                setCreateYTURL(event.target.value);
-                setNewID(extractYouTubeVideoId(event.target.value));
-              }}
-            />
-          </form>
+          <NewCreateVideoIdInputBox
+            newCreateModalDisclosure={newCreateModalDisclosure}
+            createBtnRef={createBtnRef}
+            createYTURL={createYTURL}
+            setCreateYTURL={setCreateYTURL}
+            setNewID={setNewID}
+          />
         </ModalBody>
 
         <ModalFooter>
-          <Flex justify="space-between" align="center" w="100%">
-            <CustomToolTip
-              tooltipLabel={
-                <Box>
-                  <Box>タイトル: {backupTitle.title}</Box>
-                  <Box>YouTubeId: {backupTitle.videoId}</Box>
-                </Box>
-              }
-              placement="top"
-              fontSize="sm"
-              isDisabled={backupTitle.title ? false : true}
-            >
-              <Link
-                fontSize="sm"
-                href={`/edit?new=${backupTitle.videoId}&backup=true`}
-                onClick={(event) => {
-                  handleLinkClick(event);
-                  newCreateModalDisclosure.onClose();
-                }}
-                visibility={backupTitle.videoId ? "visible" : "hidden"}
-              >
-                <Button
-                  variant="outline"
-                  size="xs"
-                  p={4}
-                  color={`${theme.colors.card.color}ff`}
-                  borderColor={`${theme.colors.card.borderColor}50`}
-                >
-                  前回のバックアップデータが存在します。
-                </Button>
-              </Link>
-            </CustomToolTip>
-            <Link
-              href={`/edit?new=${newID}`}
-              onClick={(event) => {
-                const shouldOverwriteBackup = backupTitle.videoId
-                  ? confirm(BACKUP_OVERWRITE_WARNING)
-                  : true;
-
-                if (shouldOverwriteBackup) {
-                  handleLinkClick(event);
-                  newCreateModalDisclosure.onClose();
-                } else {
-                  event.preventDefault();
-                }
-              }}
-            >
-              <Button colorScheme="blue" isDisabled={!newID}>
-                新規作成
-              </Button>
-            </Link>
+          <Flex direction="column" justify="space-between" align="center" w="100%" minH={"100px"}>
+            <Flex justify="space-between" align="center" w="100%">
+              <CreateMapBackUpButton
+                createMapBackUpInfo={createMapBackUpInfo}
+                newCreateModalDisclosure={newCreateModalDisclosure}
+              />
+              <NewCreateButton
+                createMapBackUpInfo={createMapBackUpInfo}
+                newCreateModalDisclosure={newCreateModalDisclosure}
+                newID={newID}
+                createBtnRef={createBtnRef}
+              />
+            </Flex>
+            {newID ? (
+              <Flex>
+                <CreatedCheck videoId={newID} />{" "}
+              </Flex>
+            ) : null}
           </Flex>
         </ModalFooter>
       </CustomModalContent>

@@ -8,8 +8,9 @@ import { useState } from "react";
 
 interface MapCardProps {
   map: MapCardInfo;
+  maxW: string;
 }
-function MapCard({ map }: MapCardProps) {
+function MapCard({ map, maxW }: MapCardProps) {
   const theme = useTheme();
 
   const [isCardHover, setIsCardHover] = useState<boolean>(false);
@@ -28,6 +29,7 @@ function MapCard({ map }: MapCardProps) {
       }}
       onMouseEnter={() => setIsCardHover(true)} // ホバー時に状態を更新
       onMouseLeave={() => setIsCardHover(false)} // ホバー解除時に状態を更新
+      maxW={maxW}
     >
       <CardBody
         color={"color"}

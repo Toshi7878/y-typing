@@ -1,10 +1,14 @@
 import { ModalContent } from "@chakra-ui/react";
 import React from "react";
 
-const CustomModalContent = ({ children }: { children: React.ReactNode }) => {
+interface CustomModalContentProps {
+  children: React.ReactNode;
+  maxW?: string;
+}
+const CustomModalContent = (props: CustomModalContentProps) => {
   return (
-    <ModalContent bg={"popup.bg"} color={"popup.color"}>
-      {children}
+    <ModalContent bg={"popup.bg"} color={"popup.color"} maxW={props.maxW ? props.maxW : "auto"}>
+      {props.children}
     </ModalContent>
   );
 };
