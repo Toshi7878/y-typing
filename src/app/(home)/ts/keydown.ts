@@ -1,11 +1,13 @@
+import { Dispatch } from "react";
+
 export const handleKeyDown = (
   event: KeyboardEvent,
   videoId: string | null,
-  setVideoId: (id: string | null) => void,
+  setPreviewVideoId: Dispatch<string | null>,
 ) => {
   if (event.key === "Escape") {
     if (videoId) {
-      setVideoId(null);
+      setPreviewVideoId(null);
     }
   }
 };

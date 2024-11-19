@@ -1,18 +1,18 @@
 "use client";
 import { Box } from "@chakra-ui/react";
 import UsersResultList from "./components/UsersResultList";
-import HomeYouTubeContent from "./components/HomeYouTubeContent";
 import { useEffect, useState } from "react";
 import { handleKeyDown } from "./ts/keydown";
-import { Provider, useAtom } from "jotai";
-import { videoIdAtom } from "./atoms/atoms";
+import { Provider } from "jotai";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
 import React from "react";
-import SearchContent from "./components/search/SearchContent";
+import PreviewYouTubeContent from "@/components/PreviewYouTubeContent";
+import { usePreviewVideoIdAtom, useSetPreviewVideoIdAtom } from "@/components/atom/globalAtoms";
 
 export default function Content() {
-  const [videoId, setVideoId] = useAtom(videoIdAtom);
+  const videoId = usePreviewVideoIdAtom();
+  const setVideoId = useSetPreviewVideoIdAtom();
   const router = useRouter(); // 追加
 
   const [isMobile, setIsMobile] = useState(false);
@@ -41,14 +41,14 @@ export default function Content() {
     return () => {
       setVideoId(null);
     };
-  }, [router, setVideoId]);
+  }, [router]);
 
   return (
     <Provider>
       <Box as="main" className="w-[100%] md:w-[90vw] 2xl:w-[65vw]">
         <UsersResultList />
         <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
-          <HomeYouTubeContent />
+          <PreviewYouTubeContent />
         </Box>
       </Box>
     </Provider>

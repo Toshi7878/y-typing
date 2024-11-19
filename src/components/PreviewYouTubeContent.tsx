@@ -1,25 +1,22 @@
 "use client";
 
 import YouTube from "react-youtube";
-import { useAtomValue } from "jotai";
-import { previewTimeAtom, videoIdAtom } from "../atoms/atoms";
-import { useVolumeAtom } from "@/components/atom/globalAtoms";
+import { usePreviewTimeAtom, usePreviewVideoIdAtom } from "./atom/globalAtoms";
 
-interface HomeYouTubeContentProps {
+interface PreviewYouTubeContentProps {
   className?: string;
 }
-const HomeYouTubeContent = function YouTubeContent({ className = "" }: HomeYouTubeContentProps) {
-  const videoId = useAtomValue(videoIdAtom);
-  const previewTime = useAtomValue(previewTimeAtom);
-  const volumeAtom = useVolumeAtom();
-
+const PreviewYouTubeContent = function YouTubeContent({
+  className = "",
+}: PreviewYouTubeContentProps) {
+  const videoId = usePreviewVideoIdAtom();
+  const previewTime = usePreviewTimeAtom();
   if (!videoId) {
     return null;
   }
 
   const onReady = (event: any) => {
     event.target.seekTo(Number(previewTime));
-    event.taregt.setVolume(volumeAtom);
   };
 
   const WIDTH_DESKTOP = "448px";
@@ -43,9 +40,8 @@ const HomeYouTubeContent = function YouTubeContent({ className = "" }: HomeYouTu
         },
       }}
       onReady={onReady}
-      // onStateChange={onStateChange}
     />
   );
 };
 
-export default HomeYouTubeContent;
+export default PreviewYouTubeContent;

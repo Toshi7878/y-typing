@@ -4,8 +4,6 @@ import { DEFAULT_CLEAR_RATE_SEARCH_RANGE, DEFAULT_KPM_SEARCH_RANGE } from "../ts
 import { getTimelineAtomStore } from "../TimelineProvider";
 
 const timelineAtomStore = getTimelineAtomStore();
-export const videoIdAtom = atom<string | null>(null);
-export const previewTimeAtom = atom<string | null>(null);
 
 export const searchResultKeyWordsAtom = atom<SearchResultKeyWords>({
   mapKeyWord: "",

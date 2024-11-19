@@ -3,9 +3,12 @@ import { Box, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
-import { previewTimeAtom, videoIdAtom } from "../../../../atoms/atoms";
-import { useAtom, useSetAtom } from "jotai";
 import { THUBNAIL_HEIGHT, THUBNAIL_WIDTH } from "../../../../ts/const/consts";
+import {
+  usePreviewVideoIdAtom,
+  useSetPreviewTimeAtom,
+  useSetPreviewVideoIdAtom,
+} from "@/components/atom/globalAtoms";
 
 interface MapLeftThumbnailProps {
   src: string;
@@ -20,8 +23,11 @@ interface MapLeftThumbnailProps {
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime } = props;
   const [imgSrc, setImgSrc] = useState(src);
-  const [videoId, setVideoId] = useAtom(videoIdAtom);
-  const setPreviewTime = useSetAtom(previewTimeAtom);
+
+  const videoId = usePreviewVideoIdAtom();
+
+  const setVideoId = useSetPreviewVideoIdAtom();
+  const setPreviewTime = useSetPreviewTimeAtom();
 
   const previewYouTube = useCallback(
     (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {

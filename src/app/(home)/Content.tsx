@@ -1,20 +1,20 @@
 "use client";
 import { Box } from "@chakra-ui/react";
 import MapList from "./components/MapList";
-import HomeYouTubeContent from "./components/HomeYouTubeContent";
+import PreviewYouTubeContent from "../../components/PreviewYouTubeContent";
 import { useEffect, useState } from "react";
 import { handleKeyDown } from "./ts/keydown";
-import { Provider, useAtom } from "jotai";
-import { videoIdAtom } from "./atoms/atoms";
+import { Provider } from "jotai";
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
 import React from "react";
 import SearchContent from "./components/SearchContent";
+import { usePreviewVideoIdAtom, useSetPreviewVideoIdAtom } from "@/components/atom/globalAtoms";
 
 export default function Content() {
-  const [videoId, setVideoId] = useAtom(videoIdAtom);
   const router = useRouter(); // 追加
-
+  const previewVideoId = usePreviewVideoIdAtom();
+  const setPreviewVideoId = useSetPreviewVideoIdAtom();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,8 @@ export default function Content() {
   }, []);
 
   useEffect(() => {
-    const keyDownHandler = (event: KeyboardEvent) => handleKeyDown(event, videoId, setVideoId);
+    const keyDownHandler = (event: KeyboardEvent) =>
+      handleKeyDown(event, previewVideoId, setPreviewVideoId);
     window.addEventListener("keydown", keyDownHandler);
 
     return () => {
@@ -35,13 +36,13 @@ export default function Content() {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoId]);
+  }, [previewVideoId]);
 
   useEffect(() => {
     return () => {
-      setVideoId(null);
+      setPreviewVideoId(null);
     };
-  }, [router, setVideoId]);
+  }, [router]);
 
   return (
     <Provider>
@@ -49,7 +50,7 @@ export default function Content() {
         <SearchContent />
         <MapList />
         <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
-          <HomeYouTubeContent />
+          <PreviewYouTubeContent />
         </Box>
       </Box>
     </Provider>
