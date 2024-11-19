@@ -1,5 +1,5 @@
-import { CalcTypeSpeed } from "./calcTypeSpeed";
-import { CreateMap } from "../ready/createTypingWord";
+import { CalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
+import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import {
   CharsType,
   getRank,
@@ -7,13 +7,14 @@ import {
   RomaInput,
   useTypeMiss,
   useTypeSuccess,
-} from "./keydown/typing";
-import { LineResultData, Status, TypeResult } from "../../type";
+} from "../../../ts/scene-ts/playing/keydown/typing";
+import { LineResultData, Status, TypeResult } from "../../../ts/type";
 import {
   useInputModeAtom,
   useLineResultsAtom,
   useMapAtom,
   useRankingScoresAtom,
+  useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
@@ -21,6 +22,7 @@ import {
   useSetRealTimeSpeed,
 } from "@/app/type/hooks/playing-hooks/useSpeedChange";
 import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
+import { useSoundEffect } from "../useSoundEffect";
 
 export const updateReplayStatus = (
   count: number,
@@ -78,11 +80,13 @@ const useKeyReplay = () => {
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const lineResults = useLineResultsAtom();
+  const userOptionsAtom = useUserOptionsAtom();
 
   const inputModeChange = useInputModeChange();
   const realTimeSpeedChange = useRealTimeSpeedChange();
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
+  const { clearTypeSoundPlay, typeSoundPlay, missSoundPlay } = useSoundEffect();
 
   return ({ lineConstantTime, lineResult, typeData }: UseKeyReplayProps) => {
     const key = typeData.c;
@@ -125,6 +129,10 @@ const useKeyReplay = () => {
             status,
           });
 
+          if (userOptionsAtom.typeSound) {
+            typeSoundPlay();
+          }
+
           tabStatusRef.current!.setStatus(newStatus);
           playingLineTimeRef.current?.setLineKpm(typeSpeed.lineKpm);
         } else {
@@ -136,6 +144,9 @@ const useKeyReplay = () => {
           playingComboRef.current?.setCombo(lineResult.status!.combo as number);
           playingLineTimeRef.current?.setLineKpm(lineResult.status!.lKpm as number);
           statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
+          if (userOptionsAtom.lineClearSound) {
+            clearTypeSoundPlay();
+          }
         }
 
         playingCenterRef.current!.setLineWord(result.newLineWord);
@@ -144,6 +155,10 @@ const useKeyReplay = () => {
         const newStatus = updateMissStatus(status);
         updateMissRefStatus({ lineConstantTime, failKey: key });
         tabStatusRef.current!.setStatus(newStatus);
+
+        if (userOptionsAtom.missSound) {
+          missSoundPlay();
+        }
       }
     } else if (option) {
       console.log("update replay option");

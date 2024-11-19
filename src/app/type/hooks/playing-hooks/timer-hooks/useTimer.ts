@@ -4,11 +4,7 @@ import { CalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
 import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import { LineResult } from "../../../ts/scene-ts/playing/lineResult";
 import { InputModeType } from "../../../ts/type";
-import {
-  updateReplayStatus,
-  useLineReplayUpdate,
-  useReplay,
-} from "../../../ts/scene-ts/playing/replay";
+import { updateReplayStatus, useLineReplayUpdate, useReplay } from "./replayHooks";
 import { typeTicker } from "../../useYoutubeEvents";
 import { DEFAULT_STATUS_REF } from "../../../ts/const/typeDefaultValue";
 import {

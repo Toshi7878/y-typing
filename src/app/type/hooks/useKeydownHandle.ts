@@ -1,6 +1,6 @@
 import { SkipGuideRef } from "@/app/type/components/typing-area/scene/playing-child/child/PlayingSkipGuide";
 import { WordType } from "../ts/type";
-import { updateReplayStatus } from "../ts/scene-ts/playing/replay";
+import { updateReplayStatus } from "./playing-hooks/timer-hooks/replayHooks";
 import { Typing, useTypeMiss, useTypeSuccess } from "../ts/scene-ts/playing/keydown/typing";
 import { CalcTypeSpeed } from "../ts/scene-ts/playing/calcTypeSpeed";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
@@ -193,6 +193,9 @@ export const usePlayShortcutKey = () => {
   ) => {
     //間奏スキップ
     const skip = skipGuideRef.current?.getSkipGuide?.();
+    const isCtrlLeftRight = userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
+    const isCtrlAltLeftRight =
+      userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
 
     if (
       disableKeys.includes(event.code) ||
@@ -216,21 +219,12 @@ export const usePlayShortcutKey = () => {
         event.preventDefault();
         break;
       case "ArrowRight":
-        if (userOptionsAtom.timeOffsetKey !== "none") {
-          const isCtrlLeftRight =
-            userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
-          const isCtrlAltLeftRight =
-            userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" &&
-            event.ctrlKey &&
-            event.altKey;
-
-          if (isCtrlLeftRight || isCtrlAltLeftRight) {
-            setTimeOffset((prev) => {
-              const newValue = Math.round((prev + TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
-              setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
-              return newValue;
-            });
-          }
+        if (isCtrlLeftRight || isCtrlAltLeftRight) {
+          setTimeOffset((prev) => {
+            const newValue = Math.round((prev + TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
+            setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+            return newValue;
+          });
         } else if (scene === "replay" || scene === "practice") {
           moveNextLine(drawerClosure);
         }
@@ -238,20 +232,12 @@ export const usePlayShortcutKey = () => {
         event.preventDefault();
         break;
       case "ArrowLeft":
-        if (userOptionsAtom.timeOffsetKey !== "none") {
-          const isCtrlLeftRight =
-            userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
-          const isCtrlAltLeftRight =
-            userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" &&
-            event.ctrlKey &&
-            event.altKey;
-          if (isCtrlLeftRight || isCtrlAltLeftRight) {
-            setTimeOffset((prev) => {
-              const newValue = Math.round((prev - TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
-              setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
-              return newValue;
-            });
-          }
+        if (isCtrlLeftRight || isCtrlAltLeftRight) {
+          setTimeOffset((prev) => {
+            const newValue = Math.round((prev - TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
+            setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+            return newValue;
+          });
         } else if (scene === "replay" || scene === "practice") {
           movePrevLine(drawerClosure);
         }
