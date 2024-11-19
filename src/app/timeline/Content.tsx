@@ -2,19 +2,12 @@
 import { Box } from "@chakra-ui/react";
 import UsersResultList from "./components/UsersResultList";
 import { useEffect, useState } from "react";
-import { handleKeyDown } from "./ts/keydown";
 import { Provider } from "jotai";
-import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
 import React from "react";
 import PreviewYouTubeContent from "@/components/PreviewYouTubeContent";
-import { usePreviewVideoIdAtom, useSetPreviewVideoIdAtom } from "@/components/atom/globalAtoms";
 
 export default function Content() {
-  const videoId = usePreviewVideoIdAtom();
-  const setVideoId = useSetPreviewVideoIdAtom();
-  const router = useRouter(); // 追加
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -25,23 +18,6 @@ export default function Content() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  useEffect(() => {
-    const keyDownHandler = (event: KeyboardEvent) => handleKeyDown(event, videoId, setVideoId);
-    window.addEventListener("keydown", keyDownHandler);
-
-    return () => {
-      window.removeEventListener("keydown", keyDownHandler);
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoId]);
-
-  useEffect(() => {
-    return () => {
-      setVideoId(null);
-    };
-  }, [router]);
 
   return (
     <Provider>

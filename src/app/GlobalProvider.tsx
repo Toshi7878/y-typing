@@ -7,6 +7,7 @@ import { getGlobalAtomStore, themeAtom, volumeAtom } from "@/components/atom/glo
 import { getTheme } from "./customTheme";
 import { Provider as JotaiProvider } from "jotai";
 import { db } from "@/lib/db";
+import { GlobalRefProvider } from "@/components/globalRefContext/GlobalRefProvider";
 
 export const GlobalProvider = ({ children }: { colorMode?: any; children: React.ReactNode }) => {
   const themeColor = useAtomValue(themeAtom);
@@ -34,7 +35,9 @@ export const GlobalProvider = ({ children }: { colorMode?: any; children: React.
     <>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ChakraProvider theme={theme}>
-        <JotaiProvider store={globalAtomStore}>{children}</JotaiProvider>
+        <GlobalRefProvider>
+          <JotaiProvider store={globalAtomStore}>{children}</JotaiProvider>
+        </GlobalRefProvider>
       </ChakraProvider>
       <style>
         {`#nprogress .bar {

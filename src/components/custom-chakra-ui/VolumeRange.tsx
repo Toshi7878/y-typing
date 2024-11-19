@@ -28,7 +28,7 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
   };
   return (
     <HStack alignItems="center">
-      <Text fontSize="lg" fontWeight="semibold" mr={2} color="#888">
+      <Text fontSize="lg" fontWeight="semibold" mr={2}>
         音量
       </Text>
 

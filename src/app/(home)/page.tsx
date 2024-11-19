@@ -14,7 +14,7 @@ export default function Home() {
         flexDirection="column"
         alignItems="center"
         justifyContent="space-between"
-        pt={20}
+        pt={16}
       >
         <Content />
       </Box>
