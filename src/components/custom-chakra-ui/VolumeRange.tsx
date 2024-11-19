@@ -7,6 +7,9 @@ import {
   SliderThumb,
   useTheme,
   Text,
+  Flex,
+  Box,
+  SliderMark,
 } from "@chakra-ui/react";
 
 import { ThemeColors } from "@/types";
@@ -15,6 +18,7 @@ import { db } from "@/lib/db";
 import { IoMdVolumeMute } from "react-icons/io";
 import { IoMdVolumeLow } from "react-icons/io";
 import { IoMdVolumeHigh } from "react-icons/io";
+import { useState } from "react";
 
 interface VolumeRangeProps {
   playerRef: any;
@@ -24,6 +28,8 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
   const theme: ThemeColors = useTheme();
   const volumeAtom = useVolumeAtom();
   const setVolumeAtom = useSetVolumeAtom();
+  const [showSliderMark, setShowSliderMark] = useState(false);
+
   const handleChange = (value: number) => {
     setVolumeAtom(value);
     if (playerRef.current) {
@@ -33,16 +39,15 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
   };
   return (
     <HStack alignItems="center">
-      <Text fontSize="lg" fontWeight="semibold" mr={2}>
-        音量
+      <Box>
         {volumeAtom === 0 ? (
-          <IoMdVolumeMute />
+          <IoMdVolumeMute size={24} />
         ) : volumeAtom < 50 ? (
-          <IoMdVolumeLow />
+          <IoMdVolumeLow size={24} />
         ) : (
-          <IoMdVolumeHigh />
+          <IoMdVolumeHigh size={24} />
         )}
-      </Text>
+      </Box>
 
       <Slider
         size="lg"
@@ -51,7 +56,24 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
         onChange={handleChange}
         max={100}
         value={volumeAtom}
+        onMouseEnter={() => setShowSliderMark(true)}
+        onMouseLeave={() => setShowSliderMark(false)}
       >
+        {showSliderMark && (
+          <SliderMark
+            value={volumeAtom}
+            textAlign="center"
+            bg={theme.colors.popup.bg}
+            color={theme.colors.popup.color}
+            border="1px"
+            borderColor={theme.colors.card.borderColor}
+            mt="-10"
+            ml="-4"
+            w="8"
+          >
+            {volumeAtom}
+          </SliderMark>
+        )}
         <SliderTrack>
           <SliderFilledTrack bg={theme.colors.type.progress.bg} />
         </SliderTrack>
