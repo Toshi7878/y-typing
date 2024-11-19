@@ -56,7 +56,7 @@ export const mapDataSlice = createSlice({
 
   reducers: {
     setMapData: (state, action) => {
-      state.value = action.payload.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+      state.value = [...action.payload].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
     },
 
     updateLine: (state, action) => {
