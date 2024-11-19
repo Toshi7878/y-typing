@@ -180,7 +180,7 @@ export interface UserTypingOptions {
   missSound: boolean;
   lineClearSound: boolean;
   nextDisplay: "lyrics" | "word";
-  timeOffsetKey: "left-right" | "ctrl-left-right" | "ctrl-alt-left-right" | "none";
+  timeOffsetKey: "ctrl-left-right" | "ctrl-alt-left-right" | "none";
   toggleInputModeKey: "alt-kana" | "tab" | "none";
 }
 
