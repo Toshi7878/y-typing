@@ -14,6 +14,7 @@ import {
   useSetPlayingNotifyAtom,
   useSetRankingScoresAtom,
   useSetSceneAtom,
+  useSetTimeOffsetAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
 import SceneWrapper from "../components/typing-area/Scene";
@@ -35,6 +36,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetLineResultsAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
+  const setTimeOffset = useSetTimeOffsetAtom();
   const { isLoading } = useDownloadMapDataJsonQuery();
   const isLoadingOverlay = useIsLoadingOverlayAtom();
 
@@ -49,6 +51,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
       setLineSelectIndex(null);
       setInputMode(inputMode);
+      setTimeOffset(0);
       setRankingScores([]);
       setSpeedData({
         defaultSpeed: 1,
