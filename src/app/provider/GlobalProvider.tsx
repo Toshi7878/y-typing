@@ -1,17 +1,11 @@
 "use client";
-
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import React, { useLayoutEffect } from "react";
-import { useAtomValue } from "jotai";
-import { getGlobalAtomStore, themeAtom, volumeAtom } from "@/components/atom/globalAtoms";
-import { getTheme } from "./customTheme";
+import { getGlobalAtomStore, volumeAtom } from "@/components/atom/globalAtoms";
 import { Provider as JotaiProvider } from "jotai";
 import { db } from "@/lib/db";
 import { GlobalRefProvider } from "@/components/globalRefContext/GlobalRefProvider";
 
-export const GlobalProvider = ({ children }: { colorMode?: any; children: React.ReactNode }) => {
-  const themeColor = useAtomValue(themeAtom);
-  const theme = getTheme(themeColor);
+const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const globalAtomStore = getGlobalAtomStore();
 
   useLayoutEffect(() => {
@@ -33,17 +27,11 @@ export const GlobalProvider = ({ children }: { colorMode?: any; children: React.
   }, []);
   return (
     <>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <ChakraProvider theme={theme}>
-        <GlobalRefProvider>
-          <JotaiProvider store={globalAtomStore}>{children}</JotaiProvider>
-        </GlobalRefProvider>
-      </ChakraProvider>
-      <style>
-        {`#nprogress .bar {
-          background:${theme.colors.type.progress.bg};
-      }`}
-      </style>
+      <GlobalRefProvider>
+        <JotaiProvider store={globalAtomStore}>{children}</JotaiProvider>
+      </GlobalRefProvider>
     </>
   );
 };
+
+export default GlobalProvider;

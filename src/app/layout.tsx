@@ -1,14 +1,15 @@
-import "./globals.css";
+import "@/css/globals.css";
 import Header from "@/components/header/Header";
 
-import { fonts } from "./fonts";
-import "@/app/nprogress.css";
+import { fonts } from "../lib/fonts";
+import "@/css/nprogress.css";
 import { Analytics } from "@vercel/analytics/react";
 
 // export const runtime = "edge";
 
 import type { Metadata } from "next";
-import { GlobalProvider } from "./GlobalProvider";
+import ThemeProvider from "./provider/ThemeProvider";
+import GlobalProvider from "./provider/GlobalProvider";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -24,10 +25,10 @@ export default function RootLayout({
     <html lang="ja">
       <body className={fonts.rubik.variable}>
         <Analytics />
-        <GlobalProvider>
+        <ThemeProvider>
           <Header />
-          {children}
-        </GlobalProvider>
+          <GlobalProvider>{children}</GlobalProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
