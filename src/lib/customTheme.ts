@@ -198,7 +198,7 @@ const darkTheme: ThemeColors = {
 
 // ThemeOverrideを拡張する新しい型を定義
 
-export const getTheme = (colorMode: "light" | "dark"): ThemeOverride => {
+export const getTheme = (colorMode: "light" | "dark") => {
   // const themeColors = colorMode === "light" ? sodaTheme.colors : darkTheme.colors;
   const theme: ThemeColors = darkTheme;
 
