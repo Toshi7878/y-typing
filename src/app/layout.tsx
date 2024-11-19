@@ -27,7 +27,7 @@ export default function RootLayout({
         <Analytics />
         <ThemeProvider>
           <Header />
-          {children}
+          <GlobalProvider>{children}</GlobalProvider>
         </ThemeProvider>
       </body>
     </html>
