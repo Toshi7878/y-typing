@@ -18,7 +18,7 @@ export const useInputModeChange = () => {
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
 
-  return (newInputMode: InputModeType) => {
+  return (newInputMode: InputModeType, lineTime?: number) => {
     if (newInputMode === inputMode) {
       return;
     }
@@ -52,6 +52,13 @@ export const useInputModeChange = () => {
       playingCenterRef.current!.setNextLyrics({
         lyrics: nextLine["lyrics"],
         kpm: nextKpm.toFixed(0),
+      });
+    }
+
+    if (lineTime) {
+      statusRef.current!.lineStatus.typeResult.push({
+        op: newInputMode,
+        t: Math.round(lineTime * 1000) / 1000,
       });
     }
   };

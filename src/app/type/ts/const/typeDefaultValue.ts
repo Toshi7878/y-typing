@@ -58,7 +58,7 @@ export const DEFAULT_USER_OPTIONS: UserTypingOptions = {
   lineClearSound: false,
   nextDisplay: "lyrics",
   timeOffsetKey: "left-right",
-  toggleInputModeKey: false,
+  toggleInputModeKey: "alt-kana",
 };
 
 export const CHANGE_TIME_OFFSET_VALUE = 0.05;

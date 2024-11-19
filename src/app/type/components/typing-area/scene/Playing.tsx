@@ -92,7 +92,9 @@ const Playing = ({
         }
       } else if (event.key === "Escape") {
         gamePause();
-      } else if (event.code === "Tab") {
+      } else if (userOptionsAtom.toggleInputModeKey === "tab" && event.code === "F1") {
+        toggleLineListDrawer(drawerClosure);
+      } else if (userOptionsAtom.toggleInputModeKey !== "tab" && event.code === "Tab") {
         toggleLineListDrawer(drawerClosure);
       }
     };

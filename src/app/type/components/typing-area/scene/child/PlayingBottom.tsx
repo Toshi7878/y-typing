@@ -2,7 +2,11 @@ import { Box, HStack, UseDisclosureReturn } from "@chakra-ui/react";
 import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "../playing-child/child/PlayingSkipGuide";
 import PlayingTotalTime, { PlayingTotalTimeRef } from "../playing-child/child/PlayingTotalTime";
-import { useSceneAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useSceneAtom,
+  useTypePageSpeedAtom,
+  useUserOptionsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import PlayingBottomBadge from "../playing-child/child/PlayingBottomBadge";
 import PlayingLineSeekBadge from "../playing-child/child/PlayingLineSeekBadge";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
@@ -32,7 +36,7 @@ const PlayingBottom = function ({
   const toggleLineListDrawer = useToggleLineList();
   const changePracticeSpeed = useChangePracticeSpeed();
   const { movePrevLine, moveNextLine } = useMoveLine();
-
+  const userOptionsAtom = useUserOptionsAtom();
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   return (
@@ -79,7 +83,7 @@ const PlayingBottom = function ({
             />
             <PlayingBottomBadge
               badgeText="ライン一覧"
-              kbdText="Tab"
+              kbdText={userOptionsAtom.toggleInputModeKey === "tab" ? "F1" : "Tab"}
               onClick={() => toggleLineListDrawer(drawerClosure)}
               isPauseDisabled={false}
               isKbdHidden={false}

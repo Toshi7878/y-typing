@@ -261,6 +261,15 @@ export const usePlayShortcutKey = () => {
         pressSkip(skipGuideRef);
         event.preventDefault();
         break;
+      case "F1":
+        if (userOptionsAtom.toggleInputModeKey === "tab") {
+          if (scene === "replay" || scene === "practice") {
+            toggleLineListDrawer(drawerClosure);
+          }
+        }
+        event.preventDefault();
+        break;
+
       case "F4":
         retry();
         event.preventDefault();
@@ -289,19 +298,13 @@ export const usePlayShortcutKey = () => {
         break;
       case "KanaMode":
       case "Romaji":
-        if (scene !== "replay") {
-          if (inputMode === "roma") {
-            inputModeChange("kana");
-            statusRef.current!.lineStatus.typeResult.push({
-              op: "kana",
-              t: Math.round(lineTime * 1000) / 1000,
-            });
-          } else {
-            inputModeChange("roma");
-            statusRef.current!.lineStatus.typeResult.push({
-              op: "roma",
-              t: Math.round(lineTime * 1000) / 1000,
-            });
+        if (userOptionsAtom.toggleInputModeKey === "alt-kana") {
+          if (scene !== "replay") {
+            if (inputMode === "roma") {
+              inputModeChange("kana", lineTime);
+            } else {
+              inputModeChange("roma", lineTime);
+            }
           }
         }
         event.preventDefault();
@@ -314,8 +317,18 @@ export const usePlayShortcutKey = () => {
         break;
 
       case "Tab":
-        if (scene === "replay" || scene === "practice") {
-          toggleLineListDrawer(drawerClosure);
+        if (userOptionsAtom.toggleInputModeKey === "tab") {
+          if (scene !== "replay") {
+            if (inputMode === "roma") {
+              inputModeChange("kana", lineTime);
+            } else {
+              inputModeChange("roma", lineTime);
+            }
+          }
+        } else {
+          if (scene === "replay" || scene === "practice") {
+            toggleLineListDrawer(drawerClosure);
+          }
         }
         event.preventDefault();
         break;
