@@ -13,7 +13,7 @@ const PlayingLyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps
   return (
     <Box
       id="lyrics"
-      className={`${className}`} // マイナスのインデントを追加
+      className={`${className}`}
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}
