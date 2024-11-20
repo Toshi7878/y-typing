@@ -210,6 +210,9 @@ export const getTheme = (colorMode: "light" | "dark") => {
         "body, *": {
           transition: "background-color 0.5s ease",
         },
+        body: {
+          bg: theme.colors.background,
+        },
       },
     },
   });
