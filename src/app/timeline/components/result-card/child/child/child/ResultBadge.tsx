@@ -5,6 +5,7 @@ import React from "react";
 interface ResultBadgeProps {
   letterSpacing?: number;
   color: string;
+  borderColor: string;
   children: React.ReactNode;
 }
 
@@ -20,7 +21,7 @@ const ResultBadge = (props: ResultBadgeProps) => {
       border="solid 1px"
       textTransform="none"
       letterSpacing={props.letterSpacing}
-      bg={theme.colors.background.card}
+      bg={props.borderColor}
       color={props.color}
       borderColor={theme.colors.border.badge}
     >
