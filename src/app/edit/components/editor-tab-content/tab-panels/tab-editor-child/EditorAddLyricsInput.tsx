@@ -17,8 +17,8 @@ const EditorAddLyricsInput = () => {
         size="lg"
         style={{ height: "110px" }}
         value={lyricsText}
-        bg={theme.colors.background}
-        borderColor={`${theme.colors.card.borderColor}80`}
+        bg={theme.colors.background.body}
+        borderColor={`${theme.colors.border.card}80`}
         onPaste={pasteEvent}
         onChange={(e) => setAddLyrics(e.target.value)}
       />

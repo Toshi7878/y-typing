@@ -22,12 +22,12 @@ function ResultCard(props: ResultCardProps) {
   return (
     <Card
       transition="box-shadow 0.3s"
-      bg={theme.colors.card.bg}
+      bg={theme.colors.background.card}
       _hover={{
         boxShadow: theme.colors.home.card.hover,
       }}
     >
-      <CardHeader bg={theme.colors.card.bg} borderRadius="md" mx={2} py={3}>
+      <CardHeader bg={theme.colors.background.card} borderRadius="md" mx={2} py={3}>
         <Flex alignItems="baseline" justifyContent="space-between">
           <ResultUserName result={result} />
 
@@ -41,7 +41,7 @@ function ResultCard(props: ResultCardProps) {
         </Flex>
       </CardHeader>
       <ResultInnerCardBody result={result} />
-      <CardFooter bg={theme.colors.card.bg} borderRadius="md" pb={1}>
+      <CardFooter bg={theme.colors.background.card} borderRadius="md" pb={1}>
         {!showBadges && <MapResultBadgesMobile props={result} />}
       </CardFooter>
     </Card>

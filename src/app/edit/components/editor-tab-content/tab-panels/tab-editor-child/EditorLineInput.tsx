@@ -42,8 +42,8 @@ const EditorLineInput = () => {
             autoComplete="off"
             value={lyrics}
             onChange={(e) => setLyrics(e.target.value)}
-            bg={theme.colors.background}
-            borderColor={`${theme.colors.card.borderColor}60`}
+            bg={theme.colors.background.body}
+            borderColor={`${theme.colors.border.card}60`}
             onKeyDown={handleEnterAddRuby}
             onSelect={(e) => {
               const start = e.currentTarget.selectionStart;
@@ -62,8 +62,8 @@ const EditorLineInput = () => {
           width="90px"
           disabled
           variant="filled"
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
+          bg={theme.colors.background.body}
+          borderColor={`${theme.colors.border.card}60`}
           opacity={1}
           _disabled={{ opacity: 1 }}
           value={selectedLineCount ?? ""}
@@ -72,8 +72,8 @@ const EditorLineInput = () => {
           placeholder="ワード"
           size="sm"
           autoComplete="off"
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
+          bg={theme.colors.background.body}
+          borderColor={`${theme.colors.border.card}60`}
           value={word}
           onChange={(e) => setWord(e.target.value)}
         />

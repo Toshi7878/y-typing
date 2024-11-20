@@ -63,9 +63,9 @@ const PracticeLineCard = () => {
         ...interact.style,
         height: "fit-content",
       }}
-      bg={theme.colors.card.bg}
-      color={theme.colors.card.color}
-      outline={`1px solid ${theme.colors.card.borderColor}`}
+      bg={theme.colors.background.card}
+      color={theme.colors.text.body}
+      outline={`1px solid ${theme.colors.border.card}`}
       boxShadow={"lg"}
       _hover={{
         bg: theme.colors.card.hover.bg,

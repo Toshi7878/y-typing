@@ -46,7 +46,7 @@ const PreviewTimeInput = () => {
               isInvalid={isNaN(Number(previewTime))}
               value={previewTime}
               width="80px"
-              bg={theme.colors.background}
+              bg={theme.colors.background.body}
               type="number"
               size="sm"
               step="0.05"

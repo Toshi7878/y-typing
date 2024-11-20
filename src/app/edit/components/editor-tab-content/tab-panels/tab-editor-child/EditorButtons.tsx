@@ -32,7 +32,7 @@ const EditorButtons = () => {
   const buttonConfigs = {
     add: {
       isDisabled: isAddButtonDisabled,
-      colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg,
+      colorScheme: theme.colors.secondary.light,
       onClick: (event: React.MouseEvent<HTMLButtonElement>) => lineAddButtonEvent(event.shiftKey),
       text: (
         <>
@@ -43,7 +43,7 @@ const EditorButtons = () => {
     },
     update: {
       isDisabled: isUpdateButtonDisabled,
-      colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
+      colorScheme: theme.colors.primary.dark,
       onClick: lineUpdateButtonEvent,
       text: (
         <>
@@ -56,13 +56,13 @@ const EditorButtons = () => {
       isDisabled: isConvertButtonDisabled,
       ref: undefined,
       isLoading: isLoadWordConvert,
-      colorScheme: theme.colors.edit.mapTable.selectedLine.bg,
+      colorScheme: theme.colors.primary.dark,
       onClick: wordConvertButtonEvent,
       text: "読み変換",
     },
     delete: {
       isDisabled: isDeleteButtonDisabled,
-      colorScheme: theme.colors.edit.mapTable.errorLine.bg,
+      colorScheme: theme.colors.error.light,
       onClick: lineDelete,
       text: (
         <>
@@ -80,7 +80,7 @@ const EditorButtons = () => {
           key={index}
           isDisabled={config.isDisabled}
           isLoading={config.isLoading}
-          colorScheme={config.colorScheme}
+          colorScheme={config.colorScheme as string}
           onClick={config.onClick}
         >
           {config.text}

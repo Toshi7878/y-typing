@@ -124,21 +124,21 @@ function LineRow({
       position="relative"
       bg={
         lineSelectedCount === index
-          ? theme.colors.edit.mapTable.selectedLine.bg
+          ? theme.colors.primary.dark
           : timeCount === index && lineSelectedCount !== index
-            ? `${theme.colors.edit.mapTable.currentTimeLine.bg}40`
+            ? `${theme.colors.secondary.light}40`
             : endAfterLineIndex < index && line.lyrics !== "end"
-              ? `${theme.colors.edit.mapTable.errorLine.bg}35`
+              ? `${theme.colors.error.light}35`
               : "transparent"
       }
-      color={theme.colors.color}
+      color={theme.colors.text.body}
       outline={lineSelectedCount === index ? "1px solid" : "none"}
-      outlineColor={lineSelectedCount === index ? theme.colors.color : "none"}
+      outlineColor={lineSelectedCount === index ? theme.colors.text.body : "none"}
       _hover={{
         bg:
           lineSelectedCount !== index
-            ? `${theme.colors.edit.mapTable.selectedLine.bg}50`
-            : theme.colors.edit.mapTable.selectedLine.bg,
+            ? `${theme.colors.primary.dark}50`
+            : theme.colors.primary.dark,
       }}
       onClick={(event) => {
         selectLine(event.ctrlKey, index);
@@ -157,8 +157,8 @@ function LineRow({
             size="xs"
             type="number"
             value={editTime}
-            bg={theme.colors.background}
-            borderColor={`${theme.colors.card.borderColor}60`}
+            bg={theme.colors.background.body}
+            borderColor={`${theme.colors.border.card}60`}
             onChange={(e) => {
               const newValue = e.target.value;
               setEditTime(newValue);
@@ -197,8 +197,8 @@ function LineRow({
               autoComplete="off"
               value={selectLyrics}
               onKeyDown={handleEnterAddRuby}
-              bg={theme.colors.background}
-              borderColor={`${theme.colors.card.borderColor}60`}
+              bg={theme.colors.background.body}
+              borderColor={`${theme.colors.border.card}60`}
               onChange={(e) => setLyrics(e.target.value)}
               onSelect={(e) => {
                 const start = e.currentTarget.selectionStart;
@@ -223,12 +223,10 @@ function LineRow({
               size="sm"
               height="35px"
               width="8%"
-              color={theme.colors.card.color}
-              bg={theme.colors.background}
-              _hover={{ bg: `${theme.colors.edit.mapTable.currentTimeLine.bg}` }}
-              borderColor={theme.colors.edit.mapTable.currentTimeLine.bg}
+              color={theme.colors.text.body}
+              _hover={{ bg: `${theme.colors.secondary.main}60` }}
+              borderColor={theme.colors.secondary.main}
               onClick={wordConvertButtonEvent}
-              sx={{ colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg }}
             >
               変換
             </Button>
@@ -237,8 +235,8 @@ function LineRow({
               size="sm"
               autoComplete="off"
               value={selectWord}
-              bg={theme.colors.background}
-              borderColor={`${theme.colors.card.borderColor}60`}
+              bg={theme.colors.background.body}
+              borderColor={`${theme.colors.border.card}60`}
               onChange={(e) => setWord(e.target.value)}
             />
           </Flex>

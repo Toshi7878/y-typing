@@ -64,6 +64,7 @@ function Content() {
     if (data) {
       dispatch(setMapData(data));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isLoading]);
 
   useLayoutEffect(() => {
@@ -114,7 +115,6 @@ function Content() {
       <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
         <Box
           as="main"
-          bg={theme.colors.background}
           display="flex"
           minHeight="100vh"
           paddingX={{ base: 0, md: 14 }}

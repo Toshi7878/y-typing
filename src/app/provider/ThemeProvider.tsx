@@ -1,5 +1,6 @@
 "use client";
-import { getTheme } from "@/lib/customTheme";
+import { getTheme } from "@/lib/theme";
+import { ThemeColors } from "@/types";
 import { ChakraProvider, ThemeOverride } from "@chakra-ui/react";
 import React from "react";
 
@@ -15,7 +16,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
       <style>
         {`#nprogress .bar {
-	  background:${theme.colors.type.progress.bg};
+	  background:${theme.colors.primary.normal};
   }`}
       </style>
     </>

@@ -29,7 +29,7 @@ export default function CSSTextLength({
       textAlign="right"
       color={
         calcAllCustomStyleLength <= 10000
-          ? theme.colors.color
+          ? theme.colors.text.body
           : theme.colors.edit.mapTable.errorLine.bg
       }
     >

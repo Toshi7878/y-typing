@@ -31,7 +31,7 @@ const PlayingLineProgress = forwardRef<HTMLProgressElement, PlayingLineProgressP
         </Box>
         <style>
           {`#${props.id}::-webkit-progress-value {
-            background: ${theme.colors.type.progress.bg};
+            background: ${theme.colors.text.body};
               border-radius: 5px;
             }`}
         </style>

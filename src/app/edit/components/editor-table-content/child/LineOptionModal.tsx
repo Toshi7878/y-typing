@@ -52,7 +52,7 @@ export default function LineOptionModal({
   return (
     <Modal isOpen={isOpen} isCentered onClose={handleModalClose} closeOnOverlayClick={false}>
       <ModalOverlay />
-      <ModalContent maxW="600px" bg={theme.colors.card.bg} color={theme.colors.card.color}>
+      <ModalContent maxW="600px" bg={theme.colors.background.card} color={theme.colors.text.body}>
         <ModalHeader>ラインオプション </ModalHeader>
 
         <ModalCloseButton onClick={handleModalClose} />

@@ -64,7 +64,7 @@ const ResultToolTipText = (props: ResultToolTipTextProps) => {
         最大コンボ:{" "}
         <Text
           as="span"
-          {...(props.isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
+          {...(props.isPerfect && { color: theme.colors.semantic.perfect })}
           className={`${props.isPerfect ? "outline-text" : ""}`}
           fontSize="md"
           fontWeight="bold"

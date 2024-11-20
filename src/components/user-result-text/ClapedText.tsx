@@ -1,4 +1,5 @@
-import { Text } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
+import { Text, useTheme } from "@chakra-ui/react";
 import React from "react";
 
 interface ClapedTextProps {
@@ -7,10 +8,11 @@ interface ClapedTextProps {
 }
 
 const ClapedText = (props: ClapedTextProps) => {
+  const theme: ThemeColors = useTheme();
   return (
     <Text
       as="span"
-      {...(props.hasClap && { color: "#ffb825" })}
+      {...(props.hasClap && { color: theme.colors.semantic.clap })}
       className={`${props.hasClap ? "outline-text" : ""}`}
     >
       {props.localClapCount}

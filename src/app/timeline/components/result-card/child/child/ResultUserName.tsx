@@ -21,7 +21,7 @@ const ResultUserName = (props: ResultUserNameProps) => {
       <Link
         href={`/user/${result.user.id}`}
         onClick={handleLinkClick}
-        color={theme.colors.home.card.link}
+        color={theme.colors.secondary.main}
         fontWeight="bold"
       >
         {result.user.name}

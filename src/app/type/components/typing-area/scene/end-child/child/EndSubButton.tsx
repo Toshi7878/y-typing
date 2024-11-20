@@ -89,10 +89,10 @@ const EndSubButton = ({ isRetryAlert, retryMode }: EndSubButtonProps) => {
         py={6}
         fontSize="2xl"
         variant="outline"
-        borderColor={theme.colors.card.borderColor}
-        color={theme.colors.card.color}
+        borderColor={theme.colors.border.card}
+        color={theme.colors.text.body}
         _hover={{
-          bg: theme.colors.card.hover.bg,
+          bg: theme.colors.button.sub.hover,
         }}
         onClick={() => {
           retry(retryMode);

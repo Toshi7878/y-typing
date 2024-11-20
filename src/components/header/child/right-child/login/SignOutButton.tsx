@@ -19,8 +19,8 @@ export function SignOutButton() {
         type="submit"
         variant="link"
         fontSize="xs"
-        color={theme.colors.header.color}
-        _hover={{ color: theme.colors.header.hover.color }}
+        color={theme.colors.text.header.normal}
+        _hover={{ color: theme.colors.text.header.hover.color }}
       >
         ログアウト
       </Button>

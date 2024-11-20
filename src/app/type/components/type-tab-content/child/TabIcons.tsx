@@ -20,7 +20,7 @@ export default function TabIcons() {
         position="absolute"
         top="-20px"
         right="5px"
-        color={`${theme.colors.color}99`}
+        color={`${theme.colors.text.body}99`}
         width="100px"
       >
         <Flex alignItems="center" justifyContent="flex-end">

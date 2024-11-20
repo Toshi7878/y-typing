@@ -23,7 +23,7 @@ function MapInfo({ map, isToggledInputMode }: MapCardProps) {
         <Link
           href={`/type/${map.id}`}
           onClick={handleLinkClick}
-          color={theme.colors.home.card.link}
+          color={theme.colors.secondary.main}
           width={["40vw", isToggledInputMode ? "16.5vw" : "20vw"]}
         >
           <Box
@@ -43,7 +43,7 @@ function MapInfo({ map, isToggledInputMode }: MapCardProps) {
           <Link
             href={`/user/${map.user.id}`}
             onClick={handleLinkClick}
-            color={theme.colors.home.card.link}
+            color={theme.colors.secondary.main}
           >
             {map.user.name}
           </Link>

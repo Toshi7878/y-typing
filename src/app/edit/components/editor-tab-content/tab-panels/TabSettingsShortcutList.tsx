@@ -7,7 +7,7 @@ const TabSettings = () => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Card bg={theme.colors.card.bg}>
+    <Card bg={theme.colors.background.card}>
       <CardBody>
         <Stack spacing={6}>
           <EditorSettingModal />

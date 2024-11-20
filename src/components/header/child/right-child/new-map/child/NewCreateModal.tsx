@@ -9,15 +9,11 @@ import {
   ModalCloseButton,
   Flex,
   UseDisclosureReturn,
-  Box,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
 import { IndexDBOption } from "@/types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
 import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
-import NProgress from "nprogress";
-import { extractYouTubeVideoId } from "../extractYTId";
 import CustomModalContent from "@/components/custom-chakra-ui/CustomModalContent";
 import CreateMapBackUpButton from "./child/CreateMapBackUpButton";
 import NewCreateButton from "./child/NewCreateButton";
@@ -32,32 +28,10 @@ const BACKUP_OVERWRITE_WARNING =
   "新規作成すると前回のバックアップデータが失われますがよろしいですか？";
 
 export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateModalProps) {
-  const router = useRouter();
   const [createMapBackUpInfo, setCreateMapBackUpInfo] = useState({ title: "", videoId: "" });
   const [createYTURL, setCreateYTURL] = useState("");
   const [newID, setNewID] = useState("");
   const createBtnRef = useRef(null);
-
-  const newCreate = useCallback(
-    (event) => {
-      event.preventDefault(); // ページ遷移を無効にする
-      const NEW_ID = extractYouTubeVideoId(createYTURL);
-      if (NEW_ID && NEW_ID.length == 11) {
-        const shouldOverwriteBackup = createMapBackUpInfo.videoId
-          ? confirm(BACKUP_OVERWRITE_WARNING)
-          : true;
-
-        if (shouldOverwriteBackup) {
-          NProgress.configure({ showSpinner: false });
-          NProgress.configure({ trickle: false });
-          NProgress.start();
-          router.push(`/edit?new=${NEW_ID}`);
-          newCreateModalDisclosure.onClose();
-        }
-      }
-    },
-    [createYTURL, createMapBackUpInfo],
-  );
 
   useEffect(() => {
     db.editorNewCreateBak

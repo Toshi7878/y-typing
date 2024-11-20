@@ -51,22 +51,22 @@ const SettingCard = (props: SettingCardProps) => {
           position="absolute"
           zIndex={4}
           width={"600px"}
-          bg={theme.colors.popup.bg}
-          color={theme.colors.popup.color}
+          bg={theme.colors.background.body}
+          color={theme.colors.text.body}
           border="1px"
           top={10}
           right={0}
-          borderColor={theme.colors.card.borderColor}
+          borderColor={theme.colors.border.card}
         >
           <CardBody>
             {!isIOS && !isAndroid && <VolumeRange playerRef={playerRef} />}
-            {!isIOS && !isAndroid && <Divider bg={theme.colors.color} my={3} />}
+            {!isIOS && !isAndroid && <Divider bg={theme.colors.text.body} my={3} />}
             <UserTimeOffsetChange />
-            <Divider bg={theme.colors.color} my={3} />
+            <Divider bg={theme.colors.text.body} my={3} />
             <UserSoundEffectCheckbox />
-            <Divider bg={theme.colors.color} my={3} />
+            <Divider bg={theme.colors.text.body} my={3} />
             <UserNextDisplayRadioButton />
-            <Divider bg={theme.colors.color} my={3} />
+            <Divider bg={theme.colors.text.body} my={3} />
             <UserShortcutKeyCheckbox />
           </CardBody>
         </Card>

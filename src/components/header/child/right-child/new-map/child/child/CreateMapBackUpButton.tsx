@@ -42,8 +42,9 @@ export default function CreateMapBackUpButton(props: CreateMapBackUpButtonProps)
           variant="outline"
           size="xs"
           p={4}
-          color={`${theme.colors.card.color}ff`}
-          borderColor={`${theme.colors.card.borderColor}50`}
+          color={`${theme.colors.text.body}`}
+          borderColor={`${theme.colors.border.card}50`}
+          _hover={{ bg: theme.colors.button.sub.hover }}
         >
           前回のバックアップデータが存在します。
         </Button>

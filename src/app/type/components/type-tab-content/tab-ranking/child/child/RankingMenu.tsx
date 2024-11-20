@@ -79,12 +79,12 @@ const RankingMenu = ({
       className="rounded-md"
       position="absolute"
       zIndex="9999"
-      bg={theme.colors.popup.bg}
-      color={theme.colors.popup.color}
+      bg={theme.colors.background.body}
+      color={theme.colors.text.body}
       boxShadow="md"
       p={2}
       border="0.5px"
-      borderColor={theme.colors.card.borderColor}
+      borderColor={theme.colors.border.card}
       top={{ base: "-60px", md: "auto" }}
     >
       <Button
@@ -92,14 +92,14 @@ const RankingMenu = ({
         href={`/user/${userId}`}
         variant="unstyled"
         size="md"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
+        _hover={{ backgroundColor: theme.colors.button.sub.hover }}
       >
         ユーザーページへ
       </Button>
       <Button
         variant="unstyled"
         size="md"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
+        _hover={{ backgroundColor: theme.colors.button.sub.hover }}
         onClick={() => handleReplayClick(name)}
         isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >

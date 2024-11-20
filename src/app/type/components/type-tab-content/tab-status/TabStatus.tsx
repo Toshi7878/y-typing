@@ -103,7 +103,7 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
       left: 0;
       height: 2px;
       width: ${({ label }) => (label === "score" || label === "point" ? "159px" : "80px")};
-      background-color: ${theme.colors.card.color};
+      background-color: ${theme.colors.text.body};
     }
   `;
 
@@ -116,9 +116,9 @@ const TabStatus = forwardRef((props: TabStatusProps, ref) => {
     <Card
       className="tab-card"
       variant="filled"
-      bg={theme.colors.card.bg}
+      bg={theme.colors.background.card}
       boxShadow="lg"
-      color={theme.colors.card.color}
+      color={theme.colors.text.body}
     >
       <CardBody className="">
         <TableContainer>

@@ -39,7 +39,7 @@ const UserTimeOffsetChange = () => {
       <Flex
         alignItems="baseline"
         border="1px"
-        borderColor={`${theme.colors.card.borderColor}90`}
+        borderColor={`${theme.colors.border.card}90`}
         width="fit-content"
         rounded={"full"}
         fontSize="md"

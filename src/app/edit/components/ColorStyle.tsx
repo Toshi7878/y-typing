@@ -17,7 +17,7 @@ const ColorStyle = () => {
   outline: none;
   border-radius: 15px;
    height: 6px;
-  background: ${theme.colors.color}30;
+  background: ${theme.colors.text.body}30;
 }
 
 /* Thumb: webkit */
@@ -28,7 +28,7 @@ const ColorStyle = () => {
   /* creating a custom design */
   height: 15px;
   width: 15px;
-  background-color: ${theme.colors.type.progress.bg};
+  background-color: ${theme.colors.primary.main};
   border-radius: 50%;
   border: none;
 
@@ -39,7 +39,7 @@ const ColorStyle = () => {
 #time-range::-moz-range-thumb {
   height: 15px;
   width: 15px;
-  background-color: ${theme.colors.type.progress.bg};
+  background-color: ${theme.colors.primary.main};
   border-radius: 50%;
   border: none;
   transition: .2s ease-in-out;
@@ -48,25 +48,25 @@ const ColorStyle = () => {
 /* Hover, active & focus Thumb: Webkit */
 
 #time-range::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 10px ${theme.colors.type.progress.bg}40
+  box-shadow: 0 0 0 10px ${theme.colors.primary.main}40
 }
 #time-range:active::-webkit-slider-thumb {
-  box-shadow: 0 0 0 13px ${theme.colors.type.progress.bg}60
+  box-shadow: 0 0 0 13px ${theme.colors.primary.main}60
 }
 #time-range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 13px ${theme.colors.type.progress.bg}60
+  box-shadow: 0 0 0 13px ${theme.colors.primary.main}60
 }
 
 /* Hover, active & focus Thumb: Firfox */
 
 #time-range::-moz-range-thumb:hover {
-  box-shadow: 0 0 0 10px ${theme.colors.type.progress.bg}40
+  box-shadow: 0 0 0 10px ${theme.colors.primary.main}40
 }
 #time-range:active::-moz-range-thumb {
-  box-shadow: 0 0 0 13px ${theme.colors.type.progress.bg}60
+  box-shadow: 0 0 0 13px ${theme.colors.primary.main}60
 }
 #time-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 13px ${theme.colors.type.progress.bg}60
+  box-shadow: 0 0 0 13px ${theme.colors.primary.main}60
 }
 
       `}</style>

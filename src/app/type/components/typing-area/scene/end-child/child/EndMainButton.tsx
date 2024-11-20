@@ -24,17 +24,17 @@ const EndMainButton = ({
       variant="solid"
       py={12}
       width="450px"
-      bg={theme.colors.type.progress.bg}
-      color={theme.colors.card.color}
+      bg={theme.colors.primary.main}
+      color={theme.colors.text.body}
       border="1px"
-      borderColor={theme.colors.card.borderColor}
+      borderColor={theme.colors.border.card}
       fontSize="3xl"
       onClick={onClick}
       isDisabled={isDisabled}
       isLoading={pending}
       type={type}
       _hover={{
-        bg: theme.colors.type.progress.hover.bg,
+        bg: theme.colors.primary.light,
       }}
     >
       {text}

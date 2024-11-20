@@ -14,9 +14,9 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
   const input = getInputProps();
   const checkbox = getRadioProps();
   const allBg = "#FFFFFF";
-  const romaBg = theme.colors.type.ready.radio.roma.bg;
-  const kanaBg = theme.colors.type.ready.radio.kana.bg;
-  const flickBg = theme.colors.type.ready.radio.flick.bg;
+  const romaBg = theme.colors.semantic.roma;
+  const kanaBg = theme.colors.semantic.kana;
+  const flickBg = theme.colors.semantic.flick;
   const selectedBg = option === "roma" ? romaBg : option === "kana" ? kanaBg : allBg;
 
   return (
@@ -28,16 +28,16 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
         borderWidth="1px"
         boxShadow="md"
         fontSize="xx-small"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         className="select-none"
         _hover={{
           bg: `${selectedBg}80`,
-          color: theme.colors.type.ready.radio.hover.color,
+          color: theme.colors.text.body,
         }}
         _checked={{
           bg: selectedBg,
-          color: "#000",
-          borderColor: theme.colors.card.borderColor,
+          color: theme.colors.text.body,
+          borderColor: theme.colors.border.card,
           _hover: {
             bg: selectedBg,
           },

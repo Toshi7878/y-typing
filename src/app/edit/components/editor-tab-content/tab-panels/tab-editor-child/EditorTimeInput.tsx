@@ -114,8 +114,8 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
           size="sm"
           width="90px"
           type="number"
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
+          bg={theme.colors.background.body}
+          borderColor={`${theme.colors.border.card}60`}
           {...register("time")}
           onChange={(e) => {
             if (Number(e.target.value) >= Number(maxTime)) {

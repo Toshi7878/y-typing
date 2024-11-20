@@ -78,11 +78,11 @@ const RankingTr = (props: RankingTrProps) => {
         placement="bottom-end"
       >
         <Tr
-          _hover={{ backgroundColor: theme.colors.card.hover.bg }}
-          backgroundColor={props.isHighlighted ? theme.colors.card.hover.bg : "transparent"}
-          className={`cursor-pointer ${userId === props.result.id ? "my-result" : ""}`}
-          {...(userId === props.result.id && {
-            color: theme.colors.type.tab.ranking.myrank.color,
+          _hover={{ backgroundColor: theme.colors.button.sub.hover }}
+          backgroundColor={props.isHighlighted ? theme.colors.button.sub.hover : "transparent"}
+          className={`cursor-pointer ${userId === Number(props.result.userId) ? "my-result" : ""}`}
+          {...(userId === Number(props.result.userId) && {
+            color: theme.colors.secondary.main,
           })}
           onClick={props.handleShowMenu}
           onMouseEnter={props.onMouseEnter}

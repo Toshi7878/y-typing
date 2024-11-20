@@ -37,8 +37,8 @@ const VideoIdInput = (props: VideoIdInputProps) => {
           maxLength={11} // YouTubeのID11文字に制限
           fontWeight="bold"
           value={changeVideoId}
-          bg={theme.colors.background}
-          borderColor={`${theme.colors.card.borderColor}60`}
+          bg={theme.colors.background.body}
+          borderColor={`${theme.colors.border.card}60`}
           onPaste={async (e) => {
             const url = await navigator.clipboard.readText();
             const inputElement = e.target as HTMLInputElement;

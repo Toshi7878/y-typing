@@ -36,104 +36,58 @@ export interface Tag {
 
 interface ThemeColors {
   colors: {
-    background: `#${string}`;
-    color: `#${string}`;
+    background: {
+      body: `#${string}`;
+      card: `#${string}`;
+      header: `#${string}`;
+    };
+    text: {
+      body: `#${string}`;
+      header: {
+        normal: `#${string}`;
+        hover: `#${string}`;
+      };
+    };
+    button: {
+      sub: {
+        hover;
+      };
+    };
+    border: {
+      card: `#${string}`;
+    };
+    primary: {
+      main: `#${string}`;
+      light: `#${string}`;
+      dark: `#${string}`;
+    };
+    secondary: {
+      main: `#${string}`;
+      light: `#${string}`;
+    };
+    error: {
+      main: `#${string}`;
+      light: `#${string}`;
+    };
 
-    popup: {
-      bg: string;
-      color: string;
-      hover: {
-        bg: string;
-      };
-    };
-    header: {
-      bg: string;
-      color: string;
-      hover: {
-        color: string;
-        bg: string;
-      };
-    };
-    home: {
-      card: {
-        bg: string;
-        link: string;
-        hover: string;
-      };
-      badge: {
-        info: {
-          bg: string;
-          color: string;
-          borderColor: string;
-        };
-      };
-    };
-    card: {
-      bg: string;
-      color: string;
-      borderColor: `#${string}`;
-      hover: {
-        bg: string;
-      };
-    };
-    type: {
+    semantic: {
+      perfect: `#${string}`;
+      roma: `#${string}`;
+      kana: `#${string}`;
+      flick: `#${string}`;
+      like: `#${string}`;
+      clap: `#${string}`;
       word: {
         correct: string;
         next: string;
         word: string;
         completed: string;
-        error: string;
-      };
-      tab: {
-        ranking: {
-          myrank: {
-            color: string;
-          };
-          perfect: {
-            color: string;
-          };
-        };
-      };
-
-      ready: {
-        radio: {
-          roma: {
-            bg: `#${string}`;
-          };
-          kana: {
-            bg: `#${string}`;
-          };
-          flick: {
-            bg: `#${string}`;
-          };
-          hover: {
-            color: string;
-          };
-          selected: {
-            color: string;
-          };
-        };
-      };
-      progress: {
-        bg: string;
-        hover: {
-          bg: string;
-        };
       };
     };
 
-    edit: {
-      mapTable: {
-        currentTimeLine: {
-          bg: `#${string}`;
-        };
-        selectedLine: {
-          bg: `#${string}`;
-          outlineColor: `#${string}`;
-        };
-        errorLine: {
-          bg: `#${string}`;
-        };
+    home: {
+      card: {
+        hover: string;
       };
     };
   };

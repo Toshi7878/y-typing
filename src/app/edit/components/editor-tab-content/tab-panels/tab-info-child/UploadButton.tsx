@@ -72,12 +72,12 @@ const UploadButton = ({ state }: UploadButtonProps) => {
       width="200px"
       border="1px"
       isLoading={pending}
-      bg={theme.colors.type.progress.bg}
-      color={theme.colors.card.color}
+      bg={theme.colors.primary.main}
+      color={theme.colors.text.body}
       _hover={{
-        bg: canUpload ? theme.colors.type.progress.hover.bg : theme.colors.type.progress.bg,
+        bg: canUpload ? theme.colors.primary.light : theme.colors.primary.main,
       }}
-      borderColor={theme.colors.card.borderColor}
+      borderColor={theme.colors.border.card}
       opacity={canUpload ? "1" : "0.7"}
       type="submit"
       onClick={(e) => {

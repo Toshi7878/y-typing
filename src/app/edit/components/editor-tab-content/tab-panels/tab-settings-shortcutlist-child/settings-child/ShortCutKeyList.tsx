@@ -35,9 +35,9 @@ const ShortCutKeyList = () => {
               <Kbd
                 key={index}
                 fontWeight="bold"
-                bg={theme.colors.background}
-                color={theme.colors.color}
-                borderColor={`${theme.colors.card.borderColor}80`}
+                bg={theme.colors.background.body}
+                color={theme.colors.text.body}
+                borderColor={`${theme.colors.border.card}80`}
                 borderWidth="1px"
                 borderStyle="solid"
                 mr={1}

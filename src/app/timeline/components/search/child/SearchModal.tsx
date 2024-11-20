@@ -56,10 +56,10 @@ const SearchCard = () => {
           zIndex={4}
           width={"500px"}
           mt={5}
-          bg={theme.colors.popup.bg}
-          color={theme.colors.popup.color}
+          bg={theme.colors.background.body}
+          color={theme.colors.text.body}
           border="1px"
-          borderColor={theme.colors.card.borderColor}
+          borderColor={theme.colors.border.card}
         >
           <CardBody>
             <SearchModeRadio />

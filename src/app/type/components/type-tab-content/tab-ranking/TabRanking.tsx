@@ -2,21 +2,22 @@ import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box, useTheme } from "@cha
 
 import RankingList from "./child/RankingList";
 import { FaHandsClapping } from "react-icons/fa6";
+import { ThemeColors } from "@/types";
 
 interface TabRankingProps {
   height: string;
 }
 
 const TabRanking = (props: TabRankingProps) => {
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   return (
     <Card
       className="tab-card"
       variant="filled"
-      bg={theme.colors.card.bg}
+      bg={theme.colors.background.card}
       boxShadow="lg"
-      color={theme.colors.card.color}
+      color={theme.colors.text.body}
     >
       <CardBody className="text-3xl font-bold w-full" pt={2}>
         <Box
@@ -28,7 +29,7 @@ const TabRanking = (props: TabRankingProps) => {
               width: "12px",
             },
             "&::-webkit-scrollbar-thumb": {
-              background: theme.colors.card.borderColor,
+              background: theme.colors.border.card,
               borderRadius: "10px", // スクロールバーの角を丸くする
               border: "2px solid transparent", // スクロールバーの内側にスペースを作る
               backgroundClip: "content-box", // 背景をクリップ
@@ -41,7 +42,7 @@ const TabRanking = (props: TabRankingProps) => {
             size="sm"
             sx={{
               "th, td": {
-                borderColor: theme.colors.card.color,
+                borderColor: theme.colors.border.card,
               },
               "tr, td": {
                 paddingY: "0.5rem", // smとmdの間のサイズに調整
@@ -58,25 +59,25 @@ const TabRanking = (props: TabRankingProps) => {
               style={{ userSelect: "none" }}
             >
               <Tr>
-                <Th width="5%" color={theme.colors.card.color}>
+                <Th width="5%" color={theme.colors.text.body}>
                   順位
                 </Th>
-                <Th width="15%" color={theme.colors.card.color}>
+                <Th width="15%" color={theme.colors.text.body}>
                   名前
                 </Th>
-                <Th width="10%" color={theme.colors.card.color}>
+                <Th width="10%" color={theme.colors.text.body}>
                   Score
                 </Th>
-                <Th width="7%" color={theme.colors.card.color}>
+                <Th width="7%" color={theme.colors.text.body}>
                   クリア率
                 </Th>
-                <Th width="5%" color={theme.colors.card.color}>
+                <Th width="5%" color={theme.colors.text.body}>
                   kpm
                 </Th>
-                <Th width="10%" color={theme.colors.card.color}>
+                <Th width="10%" color={theme.colors.text.body}>
                   モード
                 </Th>
-                <Th width="10%" color={theme.colors.card.color}>
+                <Th width="10%" color={theme.colors.text.body}>
                   時間
                 </Th>
                 <Th
@@ -84,7 +85,7 @@ const TabRanking = (props: TabRankingProps) => {
                   position="relative"
                   right={1}
                   top={-0.5}
-                  color={theme.colors.card.color}
+                  color={theme.colors.text.body}
                 >
                   <FaHandsClapping size={"1rem"} />
                 </Th>

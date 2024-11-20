@@ -7,8 +7,8 @@ import {
   useSetIsLoadingOverlayAtom,
   useSetLineResultsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useParams } from "next/navigation";
 import { useUserResultIdQuery } from "@/app/type/hooks/data-query/useUserResultIdQuery";
+import { ThemeColors } from "@/types";
 
 const ReadyPracticeButton = () => {
   const { data: session } = useSession();
@@ -19,7 +19,7 @@ const ReadyPracticeButton = () => {
   const setLineResults = useSetLineResultsAtom();
   const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
 
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const handleClick = useCallback(async () => {
     if (gameStateRef.current!.practice.hasMyRankingData) {
@@ -38,14 +38,14 @@ const ReadyPracticeButton = () => {
   return (
     <Button
       variant="outline"
-      borderColor={theme.colors.card.borderColor}
-      color={theme.colors.card.color}
+      borderColor={theme.colors.border.card}
+      color={theme.colors.text.body}
       px={16}
       py={6}
       size="xl"
       className="text-3xl"
       _hover={{
-        bg: theme.colors.card.hover.bg,
+        bg: theme.colors.button.sub.hover,
       }}
       onClick={handleClick}
     >

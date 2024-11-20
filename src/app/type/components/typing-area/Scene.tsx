@@ -89,8 +89,8 @@ function SceneWrapper() {
     <Card
       className="typing-card"
       variant={"filled"}
-      bg={theme.colors.card.bg}
-      color={theme.colors.card.color}
+      bg={theme.colors.background.card}
+      color={theme.colors.text.body}
       boxShadow="lg"
     >
       <Scene />

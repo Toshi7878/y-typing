@@ -22,14 +22,14 @@ const CustomToolTip = ({
 
   return (
     <Tooltip
-      bg={theme.colors.popup.bg}
-      color={theme.colors.popup.color}
+      bg={theme.colors.background.body}
+      color={theme.colors.text.body}
       borderWidth="1px"
       borderStyle="solid"
-      borderColor={theme.colors.card.borderColor}
+      borderColor={theme.colors.border.card}
       css={{
-        "--popper-arrow-bg": theme.colors.popup.bg,
-        "--popper-arrow-shadow-color": theme.colors.card.borderColor,
+        "--popper-arrow-bg": theme.colors.background.body,
+        "--popper-arrow-shadow-color": theme.colors.border.card,
       }}
       hasArrow
       placement={placement}

@@ -18,18 +18,18 @@ function LeftMenus({ items }: LeftMenusProps) {
           <Menu placement="bottom" key={index}>
             <MenuButton
               cursor="pointer"
-              color={theme.colors.header.color}
+              color={theme.colors.text.header.normal}
               _hover={{
-                color: theme.colors.header.hover.color,
+                color: theme.colors.text.header.hover,
               }}
               className="dropdown-toggle"
               fontSize="sm"
-              _active={{ color: theme.colors.header.hover.color }}
+              _active={{ color: theme.colors.text.header.hover }}
               ml={5}
             >
               {item.title}
             </MenuButton>
-            <MenuList bg={theme.colors.background} minW="fit-content">
+            <MenuList bg={theme.colors.background.body} minW="fit-content">
               {item.menuItem.map((menuItem, index) => {
                 return <LinkMenuItem key={index} title={menuItem.title} href={menuItem.href} />;
               })}
@@ -45,12 +45,12 @@ function LeftMenus({ items }: LeftMenusProps) {
             key={index}
             href={link.href}
             cursor="pointer"
-            color={theme.colors.header.color}
+            color={theme.colors.text.header.normal}
             _hover={{
-              color: theme.colors.header.hover.color,
+              color: theme.colors.text.header.hover,
             }}
             fontSize="sm"
-            _active={{ color: theme.colors.header.hover.color }}
+            _active={{ color: theme.colors.text.header.hover }}
             ml={5}
           >
             {link.title}

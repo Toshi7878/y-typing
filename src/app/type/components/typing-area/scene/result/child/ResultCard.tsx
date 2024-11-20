@@ -81,18 +81,18 @@ function ResultCard({
       size={"sm"}
       boxShadow="md"
       cursor="pointer"
-      bg={theme.colors.card.bg}
-      color={theme.colors.card.color}
+      bg={theme.colors.background.card}
+      color={theme.colors.text.body}
       outline={
         lineSelectIndex === lineNumber
-          ? `3px solid ${theme.colors.type.word.correct}`
+          ? `3px solid ${theme.colors.semantic.word.correct}`
           : "1px solid transparent"
       }
       _hover={{
         outline:
           lineSelectIndex === lineNumber
-            ? `3px solid ${theme.colors.type.word.correct}`
-            : `1px solid ${theme.colors.card.borderColor}`,
+            ? `3px solid ${theme.colors.semantic.word.correct}`
+            : `1px solid ${theme.colors.border.card}`,
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >

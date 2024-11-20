@@ -42,14 +42,14 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
         mx={5}
         px={7}
         rounded={50}
-        background={localHasClap ? "#ffb62531" : "transparent"}
+        background={localHasClap ? `${theme.colors.semantic.clap}34` : "transparent"}
         _hover={{
-          bg: "#ffb6251c",
-          color: "#ffb825",
+          bg: `${theme.colors.semantic.clap}34`,
+          color: theme.colors.semantic.clap,
         }}
-        color={localHasClap ? "#ffb825" : "white"}
+        color={localHasClap ? theme.colors.semantic.clap : "white"}
         cursor="pointer"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         border={"1px"}
         size="sm"
         type="submit"

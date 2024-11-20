@@ -46,9 +46,9 @@ const LikeCount = (props: LikeCountProps) => {
         as="button"
         type="submit"
         alignItems="baseline"
-        color={hasLocalLike ? "#f472b6" : `${theme.colors.color}99`}
+        color={hasLocalLike ? theme.colors.semantic.like : `${theme.colors.text.body}99`}
         rounded="md"
-        _hover={{ bg: "#f472b660" }} // ホバー時に背景色を薄ピンクに設定
+        _hover={{ bg: `${theme.colors.semantic.like}60` }} // ホバー時に背景色を薄ピンクに設定
         px={1}
       >
         <Box mr={1} position="relative" top="2.5px">

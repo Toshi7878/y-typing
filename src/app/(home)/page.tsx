@@ -7,9 +7,8 @@ export default function Home() {
     <HomeProvider>
       <Box
         as="main"
-        minH="100vh" // 変更: 100vw から 100vh へ
+        minH="100vh"
         width={"100%"}
-        bg={"background"}
         display="flex"
         flexDirection="column"
         alignItems="center"

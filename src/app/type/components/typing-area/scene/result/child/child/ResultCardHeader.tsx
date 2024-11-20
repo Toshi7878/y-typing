@@ -42,17 +42,13 @@ function ResultCardHeader({
         placement="top"
         fontSize="sm"
       >
-        <Text
-          as="span"
-          _hover={{ bg: `${theme.colors.card.borderColor}30` }}
-          className="line-notes"
-        >
+        <Text as="span" _hover={{ bg: `${theme.colors.border.card}30` }} className="line-notes">
           {lineNotes}打
         </Text>
       </CustomToolTip>
       ÷{" "}
       <CustomToolTip tooltipLabel="ライン時間" placement="top" fontSize="sm">
-        <Text as="span" _hover={{ bg: `${theme.colors.card.borderColor}30` }} className="line-time">
+        <Text as="span" _hover={{ bg: `${theme.colors.border.card}30` }} className="line-time">
           {lineTime.toFixed(1)}秒
         </Text>
       </CustomToolTip>
@@ -62,7 +58,7 @@ function ResultCardHeader({
         placement="top"
         fontSize="sm"
       >
-        <Text as="span" className="line-kpm" _hover={{ bg: `${theme.colors.card.borderColor}30` }}>
+        <Text as="span" className="line-kpm" _hover={{ bg: `${theme.colors.border.card}30` }}>
           {lineKpm.toFixed(0)}kpm {lineSpeed > 1 && <>{`(${lineSpeed.toFixed(2)}倍速)`}</>}
         </Text>
       </CustomToolTip>

@@ -19,16 +19,16 @@ export default function UserMenu() {
     <Menu placement="bottom">
       <MenuButton
         fontSize="sm"
-        color={theme.colors.header.color}
+        color={theme.colors.text.header.normal}
         _hover={{
-          color: theme.colors.header.hover.color,
+          color: theme.colors.text.header.hover,
         }}
-        _active={{ color: theme.colors.header.hover.color }}
+        _active={{ color: theme.colors.text.header.hover }}
         className="dropdown-toggle"
       >
         {session!.user!.name}
       </MenuButton>
-      <MenuList bg={theme.colors.background} minW="fit-content">
+      <MenuList bg={theme.colors.background.body} minW="fit-content">
         {loginMenuItem.map((item, index) => {
           return <LinkMenuItem key={index} title={item.title} href={item.href} />;
         })}
@@ -39,11 +39,11 @@ export default function UserMenu() {
           <MenuItem
             type="submit"
             fontSize="sm"
-            bg={theme.colors.background}
+            bg={theme.colors.background.body}
             _hover={{
               bg: "gray.600",
             }}
-            color={theme.colors.color}
+            color={theme.colors.text.body}
           >
             ログアウト
           </MenuItem>

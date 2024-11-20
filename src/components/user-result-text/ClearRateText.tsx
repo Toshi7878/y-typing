@@ -13,7 +13,7 @@ const ClearRateText = (props: ClearRateTextProps) => {
   return (
     <Text
       as="span"
-      {...(props.isPerfect && { color: theme.colors.type.tab.ranking.perfect.color })}
+      {...(props.isPerfect && { color: theme.colors.semantic.perfect })}
       className={`${props.isPerfect ? "outline-text" : ""}`}
     >
       {props.clearRate.toFixed(1)}%

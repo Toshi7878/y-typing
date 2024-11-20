@@ -1,7 +1,7 @@
 import { Badge, HStack, Kbd, useTheme } from "@chakra-ui/react";
-import { useAtomValue } from "jotai";
 import styled from "@emotion/styled";
 import { usePlayingNotifyAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { ThemeColors } from "@/types";
 
 interface PlayingLineSeekBadgeProps {
   badgeText: string;
@@ -31,7 +31,7 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
   const notify = usePlayingNotifyAtom();
 
   const isDisabled = notify.description === "ll";
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   return (
     <HStack>
@@ -39,10 +39,10 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="xl"
         onClick={isDisabled ? undefined : props.onClickPrev}
         isDisabled={isDisabled}
-        bg={theme.colors.background}
-        color={theme.colors.color}
+        bg={theme.colors.background.body}
+        color={theme.colors.text.body}
         className="bottom-card-kbd"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         borderWidth="1px"
         borderStyle="solid"
         opacity={isDisabled ? 0.5 : 0.8}
@@ -55,12 +55,12 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="lg"
         borderRadius="3xl"
         opacity={isDisabled ? 0.5 : 1}
-        bg={theme.colors.card.bg}
-        color={theme.colors.color}
+        bg={theme.colors.background.card}
+        color={theme.colors.text.body}
         className="bottom-card-badge"
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         onClick={isDisabled ? undefined : props.onClick}
         isDisabled={isDisabled}
       >
@@ -70,10 +70,10 @@ const PlayingLineSeekBadge = function (props: PlayingLineSeekBadgeProps) {
         fontSize="xl"
         onClick={isDisabled ? undefined : props.onClickNext}
         isDisabled={isDisabled}
-        bg={theme.colors.background}
-        color={theme.colors.color}
+        bg={theme.colors.background.body}
+        color={theme.colors.text.body}
         className="bottom-card-kbd"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         borderWidth="1px"
         borderStyle="solid"
         opacity={isDisabled ? 0.5 : 0.8}

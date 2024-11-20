@@ -11,9 +11,9 @@ interface UserInputModeTextProps {
 export const UserInputModeText = (props: UserInputModeTextProps) => {
   const theme: ThemeColors = useTheme();
 
-  const romaColor = theme.colors.type.ready.radio.roma.bg;
-  const kanaColor = theme.colors.type.ready.radio.kana.bg;
-  const flickColor = theme.colors.type.ready.radio.flick.bg;
+  const romaColor = theme.colors.semantic.roma.bg;
+  const kanaColor = theme.colors.semantic.kana.bg;
+  const flickColor = theme.colors.semantic.flick.bg;
 
   if (props.romaType && props.kanaType) {
     if (props.romaType >= props.kanaType) {
@@ -22,7 +22,7 @@ export const UserInputModeText = (props: UserInputModeTextProps) => {
           <Text as="span" color={romaColor} className="input-mode-outline-text">
             ローマ字
           </Text>
-          <Text as="span" color={theme.colors.card.color}>
+          <Text as="span" color={theme.colors.text.body}>
             ・
           </Text>
           <Text as="span" color={kanaColor} className="input-mode-outline-text">
@@ -36,7 +36,7 @@ export const UserInputModeText = (props: UserInputModeTextProps) => {
           <Text as="span" color={kanaColor} className="input-mode-outline-text">
             かな
           </Text>
-          <Text as="span" color={theme.colors.card.color}>
+          <Text as="span" color={theme.colors.text.body}>
             ・
           </Text>
           <Text as="span" color={romaColor} className="input-mode-outline-text">

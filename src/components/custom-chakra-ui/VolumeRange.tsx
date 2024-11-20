@@ -61,10 +61,10 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
           <SliderMark
             value={volumeAtom}
             textAlign="center"
-            bg={theme.colors.popup.bg}
-            color={theme.colors.popup.color}
+            bg={theme.colors.background.body}
+            color={theme.colors.text.body}
             border="1px"
-            borderColor={theme.colors.card.borderColor}
+            borderColor={theme.colors.border.card}
             mt="-10"
             ml="-4"
             w="8"
@@ -73,7 +73,7 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
           </SliderMark>
         )}
         <SliderTrack>
-          <SliderFilledTrack bg={theme.colors.type.progress.bg} />
+          <SliderFilledTrack bg={theme.colors.primary.main} />
         </SliderTrack>
 
         <SliderThumb />

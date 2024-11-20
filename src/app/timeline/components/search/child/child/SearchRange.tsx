@@ -36,7 +36,7 @@ const SearchRange = ({ label, min, max, step, value, setValue }: SearchRangeProp
         }}
       >
         <RangeSliderTrack>
-          <RangeSliderFilledTrack bg={theme.colors.type.progress.bg} />
+          <RangeSliderFilledTrack bg={theme.colors.primary.main} />
         </RangeSliderTrack>
         <RangeSliderThumb index={0} />
         <RangeSliderThumb index={1} />

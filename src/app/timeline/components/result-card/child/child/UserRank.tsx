@@ -10,10 +10,7 @@ interface UserRankProps {
 const UserRank = ({ userRank }: UserRankProps) => {
   const theme: ThemeColors = useTheme();
 
-  const rankColor =
-    userRank === 1
-      ? theme.colors.type.tab.ranking.perfect.color
-      : theme.colors.home.badge.info.color;
+  const rankColor = userRank === 1 ? theme.colors.semantic.perfect : theme.colors.text.body;
   return (
     <Box fontSize="lg" fontWeight="bold" pl={5} pr={1} whiteSpace="nowrap" m={"auto"}>
       <ResultBadge color={rankColor}>Rank: #{userRank}</ResultBadge>

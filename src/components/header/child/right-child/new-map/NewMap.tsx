@@ -13,9 +13,9 @@ export default function NewMap() {
   return (
     <>
       <Box
-        color={theme.colors.header.color}
+        color={theme.colors.text.header.normal}
         _hover={{
-          color: theme.colors.header.hover.color,
+          color: theme.colors.text.header.hover,
         }}
         className="cursor-pointer text-xl"
         onClick={newCreateModalDisclosure.onOpen}

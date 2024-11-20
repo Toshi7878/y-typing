@@ -13,10 +13,10 @@ const TypeLinkButton = () => {
       <Button
         size="md"
         variant="outline"
-        color={theme.colors.card.color}
-        borderColor={theme.colors.card.borderColor}
+        color={theme.colors.text.body}
+        borderColor={theme.colors.border.card}
         _hover={{
-          bg: theme.colors.card.hover.bg,
+          bg: theme.colors.button.sub.hover,
         }}
         ml={5}
       >

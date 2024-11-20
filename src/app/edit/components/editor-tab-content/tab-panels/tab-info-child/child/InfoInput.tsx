@@ -27,8 +27,8 @@ const InfoInput = (props: InfoInputProps) => {
         isDisabled={props.isGeminiLoading}
         size="sm"
         fontWeight={props.isRequired ? "bold" : "normal"}
-        bg={theme.colors.background}
-        borderColor={`${theme.colors.card.borderColor}60`}
+        bg={theme.colors.background.body}
+        borderColor={`${theme.colors.border.card}60`}
         value={props.inputState}
         onChange={(e) => {
           setCanUpload(true);

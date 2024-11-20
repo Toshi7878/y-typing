@@ -222,7 +222,7 @@ const UpdateHistory = () => {
   return (
     <Box>
       {updates.map((update, index) => (
-        <Box key={index} mb={12} gap={2} color={theme.colors.color}>
+        <Box key={index} mb={12} gap={2} color={theme.colors.text.body}>
           <Text fontWeight="bold">{update.date}</Text>
           <UnorderedList>
             {update.descriptions.map((desc, i) => (

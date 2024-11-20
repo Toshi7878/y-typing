@@ -19,17 +19,17 @@ const PlayingWord = memo(({ correct, nextChar, word, className, id = "" }: WordP
         as="span"
         color={
           remainWord.length === 0
-            ? theme.colors.type.word.completed
-            : theme.colors.type.word.correct
+            ? theme.colors.semantic.word.completed
+            : theme.colors.semantic.word.correct
         }
         className={remainWord.length === 0 ? "word-completed" : "word-correct"}
       >
         {correct}
       </Text>
-      <Text as="span" color={theme.colors.type.word.next} className="word-next">
+      <Text as="span" color={theme.colors.semantic.word.next} className="word-next">
         {nextChar}
       </Text>
-      <Text as="span" color={theme.colors.type.word.word} className="word">
+      <Text as="span" color={theme.colors.semantic.word.word} className="word">
         {word}
       </Text>
     </Box>

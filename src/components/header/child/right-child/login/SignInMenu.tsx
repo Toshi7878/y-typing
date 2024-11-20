@@ -14,19 +14,19 @@ export default function SignInMenu() {
         as={Button}
         variant="link"
         fontSize="xs"
-        color={theme.colors.header.color}
-        _hover={{ color: theme.colors.header.hover.color }}
-        _active={{ color: theme.colors.header.hover.color }}
+        color={theme.colors.text.header.normal}
+        _hover={{ color: theme.colors.text.header.hover }}
+        _active={{ color: theme.colors.text.header.hover }}
         className="dropdown-toggle"
       >
         ログイン
       </MenuButton>
-      <MenuList bg={theme.colors.background}>
+      <MenuList bg={theme.colors.background.body}>
         <Box as="form" action={() => handleSignIn("discord")}>
           <MenuItem
             _hover={{ bg: "#7289DA", color: "white" }}
-            bg={theme.colors.background}
-            color={theme.colors.color}
+            bg={theme.colors.background.body}
+            color={theme.colors.text.body}
             type="submit"
           >
             <Button leftIcon={<BsDiscord size="1.5em" />} variant="">
@@ -37,8 +37,8 @@ export default function SignInMenu() {
         <Box as="form" action={() => handleSignIn("google")}>
           <MenuItem
             _hover={{ bg: "#DB4437", color: "white" }}
-            bg={theme.colors.background}
-            color={theme.colors.color}
+            bg={theme.colors.background.body}
+            color={theme.colors.text.body}
             type="submit"
           >
             <Button leftIcon={<BsGoogle size="1.5em" />} variant="">

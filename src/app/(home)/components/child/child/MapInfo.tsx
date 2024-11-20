@@ -1,12 +1,15 @@
 "use client";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useTheme } from "@chakra-ui/react";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
+import { ThemeColors } from "@/types";
 
 interface MapCardProps {
   map: MapCardInfo;
 }
 function MapInfo({ map }: MapCardProps) {
+  const theme: ThemeColors = useTheme();
+
   return (
     <Flex direction="column" gap={1}>
       <CustomToolTip
@@ -14,7 +17,7 @@ function MapInfo({ map }: MapCardProps) {
         placement="top"
       >
         <Box
-          color={"home.card.link"}
+          color={theme.colors.secondary.main}
           fontWeight="bold"
           overflow="hidden"
           textOverflow="ellipsis"
@@ -27,7 +30,7 @@ function MapInfo({ map }: MapCardProps) {
 
       <Box
         className="text-xs sm:text-sm"
-        color={"home.card.link"}
+        color={theme.colors.secondary.main}
         fontWeight="bold"
         overflow="hidden"
         textOverflow="ellipsis"

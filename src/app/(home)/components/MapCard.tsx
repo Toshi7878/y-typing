@@ -5,13 +5,14 @@ import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapCardRightInfo from "./child/MapCardRightInfo";
 import { MapCardInfo } from "../ts/type";
 import { useState } from "react";
+import { ThemeColors } from "@/types";
 
 interface MapCardProps {
   map: MapCardInfo;
   maxW: string;
 }
 function MapCard({ map, maxW }: MapCardProps) {
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const [isCardHover, setIsCardHover] = useState<boolean>(false);
   const src =
@@ -32,8 +33,8 @@ function MapCard({ map, maxW }: MapCardProps) {
       maxW={maxW}
     >
       <CardBody
-        color={"color"}
-        bg="home.card.bg"
+        color={theme.colors.text.body}
+        bg={theme.colors.background.card}
         borderRadius="md"
         className="flex items-start"
         style={{ padding: 0, border: "none" }}

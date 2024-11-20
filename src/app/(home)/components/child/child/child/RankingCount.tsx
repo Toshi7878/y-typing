@@ -16,10 +16,10 @@ const RankingCount = (props: RankingCountProps) => {
       alignItems="baseline"
       color={
         map.myRank === 1
-          ? theme.colors.type.tab.ranking.perfect.color
+          ? theme.colors.semantic.perfect
           : map.myRank
-            ? theme.colors.home.card.link
-            : `${theme.colors.color}99`
+            ? theme.colors.secondary.main
+            : `${theme.colors.text.body}99`
       }
       mr={1}
     >

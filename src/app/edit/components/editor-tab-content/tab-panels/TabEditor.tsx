@@ -10,7 +10,12 @@ const TabEditor = () => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Card variant="filled" bg={theme.colors.card.bg} boxShadow="lg" color={theme.colors.card.color}>
+    <Card
+      variant="filled"
+      bg={theme.colors.background.card}
+      boxShadow="lg"
+      color={theme.colors.text.body}
+    >
       <CardBody py={4}>
         <Box display="flex" flexDirection="column" gap={1}>
           <EditorLineInput />

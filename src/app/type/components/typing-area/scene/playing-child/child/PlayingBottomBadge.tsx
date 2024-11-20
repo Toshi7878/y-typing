@@ -60,11 +60,11 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         onClick={isDisabled || props.isKbdHidden ? undefined : props.onClick}
         borderRadius="3xl"
         opacity={isDisabled ? 0.5 : 1}
-        bg={theme.colors.card.bg}
+        bg={theme.colors.background.card}
         color={"color"}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
       >
         {props.badgeText}
       </StyledBadge>
@@ -74,7 +74,7 @@ const PlayingBottomBadge = function (props: PlayingBottomBadgeProps) {
         fontSize="xl"
         bg={"background"}
         color={"color"}
-        borderColor={theme.colors.card.borderColor}
+        borderColor={theme.colors.border.card}
         borderWidth="1px"
         borderStyle="solid"
         className="bottom-card-kbd"

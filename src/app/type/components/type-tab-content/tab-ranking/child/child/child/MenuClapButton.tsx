@@ -1,6 +1,6 @@
 import { INITIAL_STATE } from "@/config/consts";
 import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
-import { UploadResult } from "@/types";
+import { ThemeColors, UploadResult } from "@/types";
 import { Box, Button, useTheme } from "@chakra-ui/react";
 import { Dispatch } from "react";
 import { useFormState } from "react-dom";
@@ -20,7 +20,7 @@ const MenuClapButton = ({
   setLocalHasClap,
   setLocalClapCount,
 }: MenuClapButtonProps) => {
-  const theme = useTheme();
+  const theme: ThemeColors = useTheme();
 
   const toggleClapAction = (state: UploadResult): Promise<UploadResult> => {
     // 楽観的UI更新
@@ -48,7 +48,7 @@ const MenuClapButton = ({
         variant="unstyled"
         size="md"
         type="submit"
-        _hover={{ backgroundColor: theme.colors.popup.hover.bg }}
+        _hover={{ backgroundColor: `${theme.colors.text.body}60` }}
       >
         {localHasClap ? "拍手済み" : "記録に拍手"}
       </Button>
