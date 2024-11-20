@@ -18,7 +18,7 @@ export const MapResultBadges = ({ props }: ResultCardProps) => {
   return (
     <VStack align="end" mr={5} spacing={5}>
       <Stack direction="row" mb={2}>
-        <ResultBadge color={rankColor} letterSpacing={1} borderColor={theme.colors.background.card}>
+        <ResultBadge color={rankColor} letterSpacing={1} borderColor={theme.colors.border.badge}>
           <UserInputModeText
             romaType={props.romaType}
             kanaType={props.kanaType}
@@ -28,14 +28,14 @@ export const MapResultBadges = ({ props }: ResultCardProps) => {
         <ResultBadge
           color={theme.colors.text.body}
           letterSpacing={1.5}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           {props.score}
         </ResultBadge>
         <ResultBadge
           color={theme.colors.text.body}
           letterSpacing={1}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           <ClearRateText clearRate={props.clearRate} isPerfect={isPerfect} />
         </ResultBadge>
@@ -44,14 +44,14 @@ export const MapResultBadges = ({ props }: ResultCardProps) => {
         <ResultBadge
           color={theme.colors.text.body}
           letterSpacing={1}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           {props.kpm}
           <Text as="span" ml={1} letterSpacing={2}>
             kpm
           </Text>
         </ResultBadge>
-        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.background.card}>
+        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.border.badge}>
           {props.defaultSpeed.toFixed(2)}
           <Text as="span" ml={1} letterSpacing={2}>
             倍速
@@ -70,13 +70,13 @@ export const MapResultBadgesMobile = ({ props }: ResultCardProps) => {
   return (
     <>
       <VStack align="end" mr={5} spacing={5}>
-        <ResultBadge letterSpacing={1} color={rankColor} borderColor={theme.colors.background.card}>
+        <ResultBadge letterSpacing={1} color={rankColor} borderColor={theme.colors.border.badge}>
           Rank: #{props.rank}
         </ResultBadge>
         <ResultBadge
           letterSpacing={1}
           color={theme.colors.text.body}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           <UserInputModeText
             romaType={props.romaType}
@@ -89,14 +89,14 @@ export const MapResultBadgesMobile = ({ props }: ResultCardProps) => {
         <ResultBadge
           letterSpacing={1.5}
           color={theme.colors.text.body}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           {props.score}
         </ResultBadge>
         <ResultBadge
           letterSpacing={1}
           color={theme.colors.text.body}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           {props.kpm}
           <Text as="span" ml={1} letterSpacing={2}>
@@ -108,11 +108,11 @@ export const MapResultBadgesMobile = ({ props }: ResultCardProps) => {
         <ResultBadge
           letterSpacing={1}
           color={theme.colors.text.body}
-          borderColor={theme.colors.background.card}
+          borderColor={theme.colors.border.badge}
         >
           <ClearRateText clearRate={props.clearRate} isPerfect={isPerfect} />
         </ResultBadge>
-        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.background.card}>
+        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.border.badge}>
           {props.defaultSpeed.toFixed(2)}
           <Text as="span" ml={1} letterSpacing={2}>
             倍速

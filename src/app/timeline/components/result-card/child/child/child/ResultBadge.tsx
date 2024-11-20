@@ -21,9 +21,9 @@ const ResultBadge = (props: ResultBadgeProps) => {
       border="solid 1px"
       textTransform="none"
       letterSpacing={props.letterSpacing}
-      bg={props.borderColor}
+      bg={theme.colors.background.card}
       color={props.color}
-      borderColor={theme.colors.border.badge}
+      borderColor={props.borderColor}
     >
       {props.children}
     </Badge>
