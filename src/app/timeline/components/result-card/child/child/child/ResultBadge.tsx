@@ -20,7 +20,7 @@ const ResultBadge = (props: ResultBadgeProps) => {
       border="solid 1px"
       textTransform="none"
       letterSpacing={props.letterSpacing}
-      bg={theme.colors.background.body}
+      bg={theme.colors.background.card}
       color={props.color}
       borderColor={theme.colors.border.badge}
     >
