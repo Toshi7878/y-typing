@@ -1,5 +1,5 @@
 "use client";
-import { Tr, Td, Button, useTheme, Input, Box, UseDisclosureReturn } from "@chakra-ui/react";
+import { Tr, Td, Button, useTheme, Input, Box, UseDisclosureReturn, Flex } from "@chakra-ui/react";
 import { Dispatch, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -12,6 +12,7 @@ import {
   useEditLineSelectedCountAtom,
   useEditLineWordAtom,
   useEditTimeCountAtom,
+  useIsLoadWordConvertAtom,
   useLineInputReducer,
   useSetEditDirectEditCountAtom,
   useSetEditLineLyricsAtom,
@@ -22,7 +23,11 @@ import {
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 import parse from "html-react-parser";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
-import { useLineUpdateButtonEvent } from "@/app/edit/hooks/useEditorButtonEvents";
+import {
+  useIsConvertButtonDisabled,
+  useLineUpdateButtonEvent,
+  useWordConvertButtonEvent,
+} from "@/app/edit/hooks/useEditorButtonEvents";
 
 interface LineRowProps {
   index: number;
@@ -56,6 +61,9 @@ function LineRow({
   const timeCount = useEditTimeCountAtom();
   const refs = useRefs();
   const theme: ThemeColors = useTheme();
+  const isConvertButtonDisabled = useIsConvertButtonDisabled();
+  const wordConvertButtonEvent = useWordConvertButtonEvent();
+  const isLoadWordConvert = useIsLoadWordConvertAtom();
 
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const selectLyrics = useEditLineLyricsAtom();
@@ -207,14 +215,33 @@ function LineRow({
       </Td>
       <Td borderRight="1px solid black">
         {directEdit === index ? (
-          <Input
-            size="sm"
-            autoComplete="off"
-            value={selectWord}
-            bg={theme.colors.background}
-            borderColor={`${theme.colors.card.borderColor}60`}
-            onChange={(e) => setWord(e.target.value)}
-          />
+          <Flex alignItems="center" justifyContent="space-between">
+            <Button
+              isDisabled={isConvertButtonDisabled}
+              isLoading={isLoadWordConvert}
+              variant="outline"
+              size="sm"
+              height="35px"
+              width="8%"
+              color={theme.colors.card.color}
+              bg={theme.colors.background}
+              _hover={{ bg: `${theme.colors.edit.mapTable.currentTimeLine.bg}` }}
+              borderColor={theme.colors.edit.mapTable.currentTimeLine.bg}
+              onClick={wordConvertButtonEvent}
+              sx={{ colorScheme: theme.colors.edit.mapTable.currentTimeLine.bg }}
+            >
+              変換
+            </Button>
+            <Input
+              width="91%"
+              size="sm"
+              autoComplete="off"
+              value={selectWord}
+              bg={theme.colors.background}
+              borderColor={`${theme.colors.card.borderColor}60`}
+              onChange={(e) => setWord(e.target.value)}
+            />
+          </Flex>
         ) : (
           line.word
         )}

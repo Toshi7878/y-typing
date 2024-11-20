@@ -10,6 +10,7 @@ import {
   useIsLineNotSelectAtom,
   useLineInputReducer,
   useSetCanUploadAtom,
+  useSetEditDirectEditCountAtom,
   useSetIsLoadWordConvertAtom,
   useSpeedAtom,
 } from "../edit-atom/editAtom";
@@ -48,6 +49,7 @@ export const useLineAddButtonEvent = () => {
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
   const dispatch = useDispatch();
+  const setDirectEdit = useSetEditDirectEditCountAtom();
 
   const { editorTimeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
@@ -89,6 +91,7 @@ export const useLineAddButtonEvent = () => {
     }
 
     setCanUpload(true);
+    setDirectEdit(null);
 
     //フォーカスを外さないとクリック時にテーブルがスクロールされない
     (document.activeElement as HTMLElement)?.blur();
@@ -104,6 +107,8 @@ export const useLineUpdateButtonEvent = () => {
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
+  const setDirectEdit = useSetEditDirectEditCountAtom();
+
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
@@ -160,6 +165,7 @@ export const useLineUpdateButtonEvent = () => {
     }
 
     lineInputReducer({ type: "reset" });
+    setDirectEdit(null);
   };
 };
 

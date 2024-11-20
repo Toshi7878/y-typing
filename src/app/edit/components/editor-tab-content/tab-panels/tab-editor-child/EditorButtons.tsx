@@ -1,4 +1,4 @@
-import { Flex, Button, useTheme } from "@chakra-ui/react";
+import { Flex, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 import { useIsLoadWordConvertAtom } from "@/app/edit/edit-atom/editAtom";
 import {
@@ -12,6 +12,7 @@ import {
   useWordConvertButtonEvent,
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import React from "react";
+import EditorButton from "./child/EditorButton";
 
 const EditorButtons = () => {
   const theme: ThemeColors = useTheme();
@@ -75,23 +76,15 @@ const EditorButtons = () => {
   return (
     <Flex gap="3" className="w-[50%] lg:w-[60%] xl:w-[70%]">
       {Object.values(buttonConfigs).map((config, index) => (
-        <Button
+        <EditorButton
           key={index}
           isDisabled={config.isDisabled}
           isLoading={config.isLoading}
-          variant="outline"
-          size="sm"
-          height="35px"
-          className="w-[50%] lg:w-[60%] xl:w-[70%]"
-          color={theme.colors.card.color}
-          bg={theme.colors.background}
-          _hover={{ bg: `${config.colorScheme}80` }}
-          borderColor={config.colorScheme}
+          colorScheme={config.colorScheme}
           onClick={config.onClick}
-          sx={{ colorScheme: config.colorScheme }}
         >
           {config.text}
-        </Button>
+        </EditorButton>
       ))}
     </Flex>
   );
