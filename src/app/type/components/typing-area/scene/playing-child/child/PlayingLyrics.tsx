@@ -1,8 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React, { memo } from "react";
-// export interface LyricsHandle {
-//   setLyrics: (lyrics: string) => void;
-// }
+
 interface LyricsProps {
   lyrics: string;
   className?: string;
