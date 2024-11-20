@@ -20,7 +20,7 @@ export function SignOutButton() {
         variant="link"
         fontSize="xs"
         color={theme.colors.text.header.normal}
-        _hover={{ color: theme.colors.text.header.hover.color }}
+        _hover={{ color: theme.colors.text.header.hover }}
       >
         ログアウト
       </Button>
