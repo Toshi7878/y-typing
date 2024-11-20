@@ -1,13 +1,11 @@
-import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const mapId = url.searchParams.get("id");
-  const sessionId = url.searchParams.get("sessionid");
-  const userId = Number(sessionId);
+  const mapId = Number(url.searchParams.get("mapId"));
+  const userId = Number(url.searchParams.get("userId"));
   if (!mapId) {
     return new Response("mapId is required", { status: 400 });
   }
@@ -31,7 +29,7 @@ export async function GET(request: Request) {
         LIMIT 1
       ) as "hasLike"
     FROM "Map"
-    WHERE id = ${Number(mapId)}
+    WHERE "Map"."id" = ${Number(mapId)}
   `;
 
     if (!mapContents) {

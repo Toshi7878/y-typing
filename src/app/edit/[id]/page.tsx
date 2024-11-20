@@ -7,9 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const session = await auth();
-
-  const mapInfo = await getMapInfo(params.id, Number(session?.user.id));
+  const mapInfo = await getMapInfo(params.id);
   return {
     title: `Edit ${mapInfo.title} - YTyping`,
   };
@@ -17,7 +15,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
 
-  const mapInfo = await getMapInfo(params.id, Number(session?.user.id));
+  const mapInfo = await getMapInfo(params.id);
 
   return (
     <SessionProvider session={session}>

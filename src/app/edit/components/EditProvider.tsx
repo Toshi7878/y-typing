@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import InfoTabProvider from "../edit-contexts/InfoTabProvider";
 import { RefsProvider } from "../edit-contexts/refsProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -37,46 +37,42 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
 
-  useLayoutEffect(() => {
-    if (mapInfo) {
-      editAtomStore.set(editMapTitleAtom, mapInfo.title);
-      editAtomStore.set(editMapArtistNameAtom, mapInfo.artistName);
-      editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
-      editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
-      editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
-      editAtomStore.set(editMusicSourceAtom, mapInfo.musicSource);
-      editAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
-      editAtomStore.set(editTagsAtom, {
-        type: "set",
-        payload: mapInfo.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
-      });
-    } else {
-      editAtomStore.set(editCreatorIdAtom, null);
-      editAtomStore.set(editVideoIdAtom, newVideoId);
+  if (mapInfo) {
+    editAtomStore.set(editMapTitleAtom, mapInfo.title);
+    editAtomStore.set(editMapArtistNameAtom, mapInfo.artistName);
+    editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
+    editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
+    editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
+    editAtomStore.set(editMusicSourceAtom, mapInfo.musicSource);
+    editAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
+    editAtomStore.set(editTagsAtom, {
+      type: "set",
+      payload: mapInfo.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
+    });
+  } else {
+    editAtomStore.set(editCreatorIdAtom, null);
+    editAtomStore.set(editVideoIdAtom, newVideoId);
 
-      if (isBackUp) {
-        db.editorNewCreateBak
-          .get({ optionName: "backupMapInfo" })
-          .then((data: IndexDBOption | undefined) => {
-            if (data) {
-              const backupMap = data.value as EditorNewMapBackUpInfoData;
+    if (isBackUp) {
+      db.editorNewCreateBak
+        .get({ optionName: "backupMapInfo" })
+        .then((data: IndexDBOption | undefined) => {
+          if (data) {
+            const backupMap = data.value as EditorNewMapBackUpInfoData;
 
-              editAtomStore.set(editMapTitleAtom, backupMap.title);
-              editAtomStore.set(editMapArtistNameAtom, backupMap.artistName);
-              editAtomStore.set(editCreatorCommentAtom, backupMap.creatorComment);
-              editAtomStore.set(editMusicSourceAtom, backupMap.musicSource);
-              editAtomStore.set(editPreviewTimeInputAtom, backupMap.previewTime);
-              editAtomStore.set(editTagsAtom, {
-                type: "set",
-                payload:
-                  backupMap.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
-              });
-            }
-          });
-      }
+            editAtomStore.set(editMapTitleAtom, backupMap.title);
+            editAtomStore.set(editMapArtistNameAtom, backupMap.artistName);
+            editAtomStore.set(editCreatorCommentAtom, backupMap.creatorComment);
+            editAtomStore.set(editMusicSourceAtom, backupMap.musicSource);
+            editAtomStore.set(editPreviewTimeInputAtom, backupMap.previewTime);
+            editAtomStore.set(editTagsAtom, {
+              type: "set",
+              payload: backupMap.tags?.map((tag) => ({ id: tag, text: tag, className: "" })) || [],
+            });
+          }
+        });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
 
   return (
     <InfoTabProvider>

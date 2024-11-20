@@ -1,22 +1,27 @@
 "use server";
-import { GetInfoData } from "@/types/api";
 import "server-only";
 import { cache } from "react";
 import { UserTypingOptions } from "@/app/type/ts/type";
+import { auth } from "../auth";
 
-export const getUserTypingOptions = cache(
-  async (sessionId: number | null): Promise<UserTypingOptions> => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/get-user-typing-options?sessionid=${sessionId}`,
-      {
-        cache: "no-store",
-      },
-    );
+export const getUserTypingOptions = cache(async (): Promise<UserTypingOptions> => {
+  const session = await auth();
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/get-user-typing-options`); // URLを変数に格納
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
-    }
+  const params: Record<string, string> = {};
+  if (session?.user.id !== undefined) {
+    params.userId = session.user.id.toString();
+  }
 
-    return response.json();
-  },
-);
+  url.search = new URLSearchParams(params).toString();
+
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+});
