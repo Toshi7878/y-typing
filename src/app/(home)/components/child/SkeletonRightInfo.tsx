@@ -8,7 +8,7 @@ function SkeletonRightInfo() {
       flexDirection="column"
       justifyContent="start"
       h="full"
-      w="65%"
+      width={{ base: "100%", xl: "65%" }}
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}

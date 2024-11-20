@@ -51,7 +51,7 @@ function MapList() {
     >
       <MapCardLayout>
         {data?.pages.map((page) =>
-          page.map((map) => <MapCard key={map.id} map={map} maxW={"700px"} />),
+          page.map((map) => <MapCard key={map.id} map={map} maxW={"100%"} />),
         )}
       </MapCardLayout>
     </InfiniteScroll>

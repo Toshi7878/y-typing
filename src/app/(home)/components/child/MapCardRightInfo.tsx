@@ -1,5 +1,5 @@
 "use client";
-import { Stack } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { MapCardInfo } from "../../ts/type";
@@ -18,22 +18,19 @@ function MapCardRightInfo({ map, isCardHover }: MapCardProps) {
     <Link
       href={`/type/${map.id}`}
       onClick={handleLinkClick}
+      as={Flex}
       display="flex"
       flexDirection="column"
-      justifyContent="start"
+      justifyContent="space-between"
       h="full"
-      w={{ base: "65%", sm: "65%", md: "40%", lg: "50%", xl: "65%" }}
+      width={{ base: "100%", lg: "55%", "2xl": "65%" }} // 2xlを追加
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
       _hover={{ textDecoration: "none" }}
     >
       <MapInfo map={map} />
-      <Stack
-        justifyContent="space-between"
-        flexDirection={{ base: "row", md: "column" }} // 変更点: レスポンシブなflexDirectionを追加
-        my={1}
-      >
+      <Stack justifyContent="space-between" flexDirection={{ base: "row", md: "column" }} my={1}>
         <MapCreateUser map={map} />
         <MapBadges map={map} isCardHover={isCardHover} />
       </Stack>

@@ -22,7 +22,7 @@ export default function Content() {
 
   return (
     <Provider>
-      <Box className="w-[100%] md:w-[82vw]">
+      <Box width={{ base: "100%", lg: "92vw", "2xl": "82vw" }}>
         <SearchContent />
         <MapList />
         <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>

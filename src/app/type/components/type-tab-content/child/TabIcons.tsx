@@ -1,46 +1,19 @@
 import { useTheme, Box, Flex } from "@chakra-ui/react";
-import { ThemeColors, UploadResult } from "@/types";
-import { BiEdit } from "react-icons/bi";
-import { useLinkClick } from "@/lib/hooks/useLinkClick";
-import { useParams } from "next/navigation";
-import { Link } from "@chakra-ui/next-js";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
-import { LikeButton } from "@/components/like-button/LikeButton";
-import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-server-action";
-import { useFormState } from "react-dom";
-import { INITIAL_STATE } from "@/config/consts";
-import { useHasLocalLikeAtom, useSetHasLocalLikeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useSession } from "next-auth/react";
-import { IoMdSettings } from "react-icons/io";
-import { useState } from "react";
+import { ThemeColors } from "@/types";
 import SettingCard from "./child/SettingCard";
+import SettingIcon from "./icon-child/SettingIcon";
+import LikeIcon from "./icon-child/LikeIcon";
+import { useSession } from "next-auth/react";
+import EditIcon from "./icon-child/EditIcon";
+import { useState } from "react";
 
 export default function TabIcons() {
   console.log("Tab");
   const theme: ThemeColors = useTheme();
-  const { id: mapId } = useParams();
+
   const { data: session } = useSession();
   const [isCardVisible, setIsCardVisible] = useState(false);
 
-  const handleLinkClick = useLinkClick();
-  const hasLocalLikeAtom = useHasLocalLikeAtom();
-  const setHasLocalLikeAtom = useSetHasLocalLikeAtom();
-
-  const toggleClapAction = (state: UploadResult): Promise<UploadResult> => {
-    // 楽観的UI更新
-    const newHasLike = !hasLocalLikeAtom;
-    setHasLocalLikeAtom(newHasLike);
-
-    try {
-      return toggleLikeServerAction(Number(mapId));
-    } catch (error) {
-      // エラーが発生した場合、元の状態に戻す
-      setHasLocalLikeAtom(hasLocalLikeAtom);
-      return Promise.reject(error); // エラーを返す
-    }
-  };
-
-  const [state, formAction] = useFormState(toggleClapAction, INITIAL_STATE);
   return (
     <>
       <Box
@@ -51,41 +24,9 @@ export default function TabIcons() {
         width="100px"
       >
         <Flex alignItems="center" justifyContent="flex-end">
-          {session?.user.id ? (
-            <CustomToolTip tooltipLabel="設定" placement="top">
-              <Box
-                height="60px"
-                display="flex"
-                _hover={{ color: theme.colors.color }}
-                alignItems="center"
-                cursor="pointer"
-                id="option_icon"
-                onClick={() => setIsCardVisible((prev) => !prev)} // 状態をトグルする
-              >
-                <IoMdSettings size={36} />
-              </Box>
-            </CustomToolTip>
-          ) : null}
-          {session?.user.id ? (
-            <CustomToolTip tooltipLabel="譜面にいいね" placement="top">
-              <Box as="form" action={formAction} _hover={{ color: theme.colors.color }}>
-                <LikeButton size={62} defaultLiked={hasLocalLikeAtom} />
-              </Box>
-            </CustomToolTip>
-          ) : null}
-
-          <CustomToolTip tooltipLabel="譜面のEditページに移動" placement="top">
-            <Box height="60px" display="flex" alignItems="center">
-              <Link
-                href={`/edit/${mapId}`}
-                onClick={handleLinkClick}
-                _hover={{ color: theme.colors.color }}
-                cursor="pointer"
-              >
-                <BiEdit size={36} />
-              </Link>
-            </Box>
-          </CustomToolTip>
+          {session?.user.id ? <SettingIcon setIsCardVisible={setIsCardVisible} /> : null}
+          {session?.user.id ? <LikeIcon /> : null}
+          <EditIcon />
         </Flex>
       </Box>
       <SettingCard isCardVisible={isCardVisible} setIsCardVisible={setIsCardVisible} />

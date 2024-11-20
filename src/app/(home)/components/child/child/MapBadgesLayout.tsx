@@ -1,16 +1,10 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
-import { Box, Flex, HStack, useBreakpointValue, useTheme } from "@chakra-ui/react";
+import { Box, Flex, HStack, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import MapBadge from "./MapBadge";
-import { FiHeart } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
-import { PiRankingLight } from "react-icons/pi";
-import { PiRankingFill } from "react-icons/pi";
-import { PiRankingDuotone } from "react-icons/pi";
-import { FaRankingStar } from "react-icons/fa6";
-
-import { ThemeColors } from "@/types";
+import LikeCount from "./child/LikeCount";
+import RankingCount from "./child/RankingCount";
 
 interface MapBadgesProps {
   map: MapCardInfo;
@@ -19,7 +13,6 @@ interface MapBadgesProps {
 
 const MapBadges = (props: MapBadgesProps) => {
   const { map } = props;
-  const theme: ThemeColors = useTheme();
   const showBadges = useBreakpointValue({ base: false, sm: true });
 
   return (
@@ -40,32 +33,8 @@ const MapBadges = (props: MapBadgesProps) => {
         )}
       </HStack>
       <Flex>
-        <Flex
-          alignItems="baseline"
-          color={
-            map.myRank === 1
-              ? theme.colors.type.tab.ranking.perfect.color
-              : map.myRank
-                ? theme.colors.home.card.link
-                : `${theme.colors.color}99`
-          }
-          mr={2}
-        >
-          <Box mr={1} position="relative" top="3px">
-            <FaRankingStar size={20} />
-          </Box>
-          <Box fontSize="lg" fontFamily="monospace">
-            {map.rankingCount}
-          </Box>
-        </Flex>
-        <Flex alignItems="baseline" color={map.hasLike ? "#f472b6" : `${theme.colors.color}99`}>
-          <Box mr={1} position="relative" top="2.5px">
-            {map.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
-          </Box>
-          <Box fontSize="lg" fontFamily="monospace">
-            {map.likeCount}
-          </Box>
-        </Flex>
+        <RankingCount map={map} />
+        <LikeCount map={map} />
       </Flex>
     </Flex>
   );
