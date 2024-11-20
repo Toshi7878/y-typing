@@ -5,8 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const sessionId = url.searchParams.get("sessionid");
-  const userId = Number(sessionId);
+  const userId = Number(url.searchParams.get("userId"));
 
   try {
     const userTypingOptions = await prisma.typingOption.findUnique({
