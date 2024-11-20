@@ -50,7 +50,7 @@ interface ThemeColors {
     };
     button: {
       sub: {
-        hover;
+        hover: `#${string}`;
       };
     };
     border: {

@@ -68,7 +68,7 @@ const PracticeLineCard = () => {
       outline={`1px solid ${theme.colors.border.card}`}
       boxShadow={"lg"}
       _hover={{
-        bg: theme.colors.card.hover.bg,
+        bg: theme.colors.button.sub,
       }}
       cursor={isDragging ? "move" : "pointer"}
       onMouseDown={() => setIsDragging(false)}
