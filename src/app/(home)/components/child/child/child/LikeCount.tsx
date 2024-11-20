@@ -41,7 +41,7 @@ const LikeCount = (props: LikeCountProps) => {
     event.stopPropagation();
   };
   return (
-    <Flex as="form" action={formAction} zIndex={999} onClick={preventClick}>
+    <Flex as="form" action={formAction} onClick={preventClick}>
       <Flex
         as="button"
         type="submit"
