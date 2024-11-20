@@ -11,9 +11,9 @@ interface UserInputModeTextProps {
 export const UserInputModeText = (props: UserInputModeTextProps) => {
   const theme: ThemeColors = useTheme();
 
-  const romaColor = theme.colors.semantic.roma.bg;
-  const kanaColor = theme.colors.semantic.kana.bg;
-  const flickColor = theme.colors.semantic.flick.bg;
+  const romaColor = theme.colors.semantic.roma;
+  const kanaColor = theme.colors.semantic.kana;
+  const flickColor = theme.colors.semantic.flick;
 
   if (props.romaType && props.kanaType) {
     if (props.romaType >= props.kanaType) {
