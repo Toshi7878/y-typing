@@ -55,6 +55,7 @@ interface ThemeColors {
     };
     border: {
       card: `#${string}`;
+      badge: `#${string}`;
     };
     primary: {
       main: `#${string}`;

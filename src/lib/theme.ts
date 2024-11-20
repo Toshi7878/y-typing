@@ -20,6 +20,7 @@ const darkTheme: ThemeColors = {
     },
     border: {
       card: "#FFFFFF",
+      badge: "#FFFFFF",
     },
     text: {
       body: "#FFFFFF",
