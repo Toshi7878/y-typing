@@ -47,20 +47,6 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     [videoId],
   );
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      if (!e.changedTouches || e.changedTouches.length === 0) return;
-      const touch = e.changedTouches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLDivElement;
-      if (target && target.getAttribute("data-video-id") === videoId) {
-        setVideoId(target.getAttribute("data-video-id"));
-        setPreviewTime(target.getAttribute("data-preview-time"));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [videoId],
-  );
-
   const handleImageLoad = useCallback((src: string) => {
     const img = new window.Image();
     img.src = src;
@@ -108,7 +94,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         data-preview-time={mapPreviewTime}
         data-video-id={mapVideoId}
         onClick={!isIOS && !isAndroid ? previewYouTube : undefined}
-        onTouchEndCapture={isIOS || isAndroid ? previewYouTube : undefined}
+        onTouchStartCapture={isIOS || isAndroid ? previewYouTube : undefined}
       >
         {videoId === mapVideoId ? (
           <FaPause color="white" size={35} />
