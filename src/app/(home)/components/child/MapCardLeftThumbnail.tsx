@@ -23,8 +23,6 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime } = props;
   const [imgSrc, setImgSrc] = useState(src);
   const videoId = usePreviewVideoIdAtom();
-  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
 
   const setVideoId = useSetPreviewVideoIdAtom();
   const setPreviewTime = useSetPreviewTimeAtom();
