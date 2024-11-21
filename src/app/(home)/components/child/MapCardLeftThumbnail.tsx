@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
@@ -78,7 +78,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const width = useBreakpointValue(THUBNAIL_WIDTH);
   const height = useBreakpointValue(THUBNAIL_HEIGHT);
   return (
-    <Box className="relative group" width={width} style={{ userSelect: "none" }}>
+    <Box position="relative" className="group" width={width} style={{ userSelect: "none" }}>
       <Image
         loader={({ src }) => src}
         alt={alt}
@@ -89,10 +89,15 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         minH={height}
         className="rounded-md"
       />
-      <Box
-        className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
-          videoId === mapVideoId ? "opacity-100" : "opacity-0"
-        } group-hover:opacity-100 transition-opacity duration-300`}
+      <Flex
+        cursor="pointer"
+        position="absolute"
+        alignItems="center"
+        justify="center"
+        inset={0}
+        opacity={videoId === mapVideoId ? 1 : 0}
+        _groupHover={{ opacity: 1 }}
+        transition="opacity 0.3s"
         style={{
           backgroundColor: videoId === mapVideoId ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.3)",
           border: "none",
@@ -101,14 +106,14 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         data-preview-time={mapPreviewTime}
         data-video-id={mapVideoId}
         onClick={previewYouTube}
-        onTouchEnd={handleTouchEnd}
+        // onTouchEnd={handleTouchEnd}
       >
         {videoId === mapVideoId ? (
           <FaPause color="white" size={35} />
         ) : (
           <FaPlay color="white" size={35} />
         )}
-      </Box>
+      </Flex>
     </Box>
   );
 };

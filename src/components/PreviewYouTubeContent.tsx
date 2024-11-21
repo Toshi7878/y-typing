@@ -26,7 +26,6 @@ const PreviewYouTubeContent = function YouTubeContent({
   const { setRef } = useGlobalRefs();
   const setPreviewVideoId = useSetPreviewVideoIdAtom();
   const previewYouTubeKeyDown = usePreviewYouTubeKeyDown();
-  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   useEffect(() => {
     window.addEventListener("keydown", previewYouTubeKeyDown);
@@ -50,9 +49,7 @@ const PreviewYouTubeContent = function YouTubeContent({
   }
 
   const onReady = (event: any) => {
-    // event.target.mute();
     event.target.setVolume(volume);
-    event.target.playVideo();
     setRef("playerRef", event.target);
   };
 
