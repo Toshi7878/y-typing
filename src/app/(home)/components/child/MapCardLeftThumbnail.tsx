@@ -108,7 +108,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         data-preview-time={mapPreviewTime}
         data-video-id={mapVideoId}
         onClick={!isIOS && !isAndroid ? previewYouTube : undefined}
-        onTouchEnd={isIOS || isAndroid ? previewYouTube : undefined}
+        onTouchEndCapture={isIOS || isAndroid ? previewYouTube : undefined}
       >
         {videoId === mapVideoId ? (
           <FaPause color="white" size={35} />
