@@ -27,7 +27,7 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
     setClapOptimisticState(newOptimisticState);
 
     try {
-      const result = await toggleClapServerAction(resultId);
+      const result = await toggleClapServerAction(resultId, newOptimisticState.hasClap);
       if (result.id) {
         setClapLocalState(newOptimisticState);
       }

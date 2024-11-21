@@ -4,12 +4,14 @@ import { Box, Button, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/re
 import LinkMenuItem from "../child/LinkMenuItem";
 import { leftLink } from "@/config/headerNav";
 import { Link } from "@chakra-ui/next-js";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 
 interface LeftMenusProps {
   items: NavItem[];
 }
 function LeftMenus({ items }: LeftMenusProps) {
   const theme: ThemeColors = useTheme();
+  const handleLinkClick = useLinkClick();
 
   return (
     <Box as="nav">
@@ -52,6 +54,7 @@ function LeftMenus({ items }: LeftMenusProps) {
             fontSize="sm"
             _active={{ color: theme.colors.text.header.hover }}
             ml={5}
+            onClick={handleLinkClick}
           >
             {link.title}
           </Link>

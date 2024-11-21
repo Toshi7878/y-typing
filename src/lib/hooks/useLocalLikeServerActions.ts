@@ -27,7 +27,7 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
     setLikeOptimisticState(newOptimisticState);
 
     try {
-      const result = await toggleLikeServerAction(mapId);
+      const result = await toggleLikeServerAction(mapId, newOptimisticState.hasLike);
       if (result.id) {
         setLikeLocalState(newOptimisticState);
       }

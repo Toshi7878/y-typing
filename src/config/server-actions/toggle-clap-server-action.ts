@@ -7,20 +7,8 @@ import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-async function updateClap(resultId: number, userId: number) {
+async function updateClap(resultId: number, userId: number, optimisticState: boolean) {
   const clapedId = await prisma.$transaction(async (prisma) => {
-    const isClaped = await prisma.clap.findUnique({
-      where: {
-        userId_resultId: {
-          userId,
-          resultId,
-        },
-      },
-      select: {
-        isClaped: true,
-      },
-    });
-
     const claped = await prisma.clap.upsert({
       where: {
         userId_resultId: {
@@ -29,7 +17,7 @@ async function updateClap(resultId: number, userId: number) {
         },
       },
       update: {
-        isClaped: !isClaped?.isClaped,
+        isClaped: optimisticState,
       },
       create: {
         userId,
@@ -70,15 +58,16 @@ async function updateClap(resultId: number, userId: number) {
   return clapedId;
 }
 
-export async function toggleClapServerAction(resultId: number): Promise<UploadResult> {
+export async function toggleClapServerAction(
+  resultId: number,
+  optimisticState: boolean,
+): Promise<UploadResult> {
   const session = await auth();
 
   try {
     const userId = Number(session?.user?.id);
 
-    const clapedId = await updateClap(resultId, userId);
-
-    revalidatePath(`/api/users-result-list`);
+    const clapedId = await updateClap(resultId, userId, optimisticState);
 
     return {
       id: clapedId,

@@ -7,20 +7,8 @@ import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-async function updateLike(mapId: number, userId: number) {
+async function updateLike(mapId: number, userId: number, optimisticState: boolean) {
   const likedId = await prisma.$transaction(async (prisma) => {
-    const isLiked = await prisma.mapLike.findUnique({
-      where: {
-        userId_mapId: {
-          userId,
-          mapId,
-        },
-      },
-      select: {
-        isLiked: true,
-      },
-    });
-
     const claped = await prisma.mapLike.upsert({
       where: {
         userId_mapId: {
@@ -29,7 +17,7 @@ async function updateLike(mapId: number, userId: number) {
         },
       },
       update: {
-        isLiked: !isLiked?.isLiked,
+        isLiked: optimisticState,
       },
       create: {
         userId,
@@ -70,15 +58,16 @@ async function updateLike(mapId: number, userId: number) {
   return likedId;
 }
 
-export async function toggleLikeServerAction(mapId: number): Promise<UploadResult> {
+export async function toggleLikeServerAction(
+  mapId: number,
+  optimisticState: boolean,
+): Promise<UploadResult> {
   const session = await auth();
 
   try {
     const userId = Number(session?.user?.id);
 
-    const likedId = await updateLike(mapId, userId);
-
-    revalidatePath(`/api/map-list`);
+    const likedId = await updateLike(mapId, userId, optimisticState);
 
     return {
       id: likedId,
