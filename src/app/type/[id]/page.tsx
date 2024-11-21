@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { getMapInfo } from "@/lib/server-fetcher/getMapInfo";
 import TypeProvider from "./TypeProvider";
 import { auth } from "@/lib/auth";
-import { SessionProvider } from "next-auth/react";
 import { getUserTypingOptions } from "@/lib/server-fetcher/getUserTypingOptions";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
@@ -20,10 +19,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const userTypingOptions = session?.user.id ? await getUserTypingOptions() : undefined;
 
   return (
-    <SessionProvider session={session}>
-      <TypeProvider mapInfo={mapInfo} userTypingOptions={userTypingOptions}>
-        <Content mapInfo={mapInfo} />
-      </TypeProvider>
-    </SessionProvider>
+    <TypeProvider mapInfo={mapInfo} userTypingOptions={userTypingOptions}>
+      <Content mapInfo={mapInfo} />
+    </TypeProvider>
   );
 }
