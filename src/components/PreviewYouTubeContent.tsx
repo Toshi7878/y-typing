@@ -26,6 +26,8 @@ const PreviewYouTubeContent = function YouTubeContent({
   const { setRef } = useGlobalRefs();
   const setPreviewVideoId = useSetPreviewVideoIdAtom();
   const previewYouTubeKeyDown = usePreviewYouTubeKeyDown();
+  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
   useEffect(() => {
     window.addEventListener("keydown", previewYouTubeKeyDown);
 
@@ -48,8 +50,9 @@ const PreviewYouTubeContent = function YouTubeContent({
   }
 
   const onReady = (event: any) => {
-    event.target.setVolume(volume);
+    event.target.mute();
     event.target.playVideo();
+    event.target.setVolume(volume);
     setRef("playerRef", event.target);
   };
 
@@ -69,8 +72,9 @@ const PreviewYouTubeContent = function YouTubeContent({
         height: isMobile ? HEIGHT_MOBILE : HEIGHT_DESKTOP,
         playerVars: {
           enablejsapi: 1,
-          start: Number(previewTime), // 再生時間を指定
-          autoplay: 1,
+          start: Number(previewTime),
+          playsinline: 1,
+          autoplay: isIOS ? 0 : 1,
         },
       }}
       onReady={onReady}
