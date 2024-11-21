@@ -1,3 +1,4 @@
+"use client";
 import { ThemeColors } from "@/types";
 import { Heading, useTheme } from "@chakra-ui/react";
 
