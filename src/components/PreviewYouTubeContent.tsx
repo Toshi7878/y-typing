@@ -51,8 +51,8 @@ const PreviewYouTubeContent = function YouTubeContent({
 
   const onReady = (event: any) => {
     // event.target.mute();
-    event.target.playVideo();
     event.target.setVolume(volume);
+    event.target.playVideo();
     setRef("playerRef", event.target);
   };
 
