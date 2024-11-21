@@ -1,5 +1,5 @@
-import { Box, Button, Flex, useTheme } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Flex, useTheme } from "@chakra-ui/react";
+import React, { useOptimistic, useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { MapCardInfo } from "@/app/(home)/ts/type";
@@ -15,24 +15,37 @@ interface LikeCountProps {
 const LikeCount = (props: LikeCountProps) => {
   const theme: ThemeColors = useTheme();
   const { map } = props;
-  const [hasLocalLike, setHasLocalLike] = useState(map.hasLike);
-  const [localLikeCount, setLocalLikeCount] = useState(map.likeCount);
 
-  const toggleLikeAction = (state: UploadResult): Promise<UploadResult> => {
-    // 楽観的UI更新
-    const newHasLike = !hasLocalLike;
-    const newLikeCount = newHasLike ? localLikeCount + 1 : localLikeCount - 1;
-    setHasLocalLike(newHasLike);
-    setLocalLikeCount(newLikeCount);
+  const [localState, setLocalState] = useState<{ hasLike: boolean; likeCount: number }>({
+    hasLike: map.hasLike,
+    likeCount: map.likeCount,
+  });
+
+  const [optimisticState, setOptimisticState] = useOptimistic(
+    localState,
+    (currentState, newState) => {
+      return newState as { hasLike: boolean; likeCount: number };
+    },
+  );
+
+  const toggleLikeAction = async (state: UploadResult): Promise<UploadResult> => {
+    const newOptimisticState = {
+      hasLike: !optimisticState.hasLike,
+      likeCount: optimisticState.hasLike
+        ? optimisticState.likeCount - 1
+        : optimisticState.likeCount + 1,
+    };
+    setOptimisticState(newOptimisticState);
 
     try {
-      return toggleLikeServerAction(Number(map.id));
+      const result = await toggleLikeServerAction(Number(map.id));
+      if (result.id) {
+        setLocalState(newOptimisticState);
+      }
+      return result;
     } catch (error) {
-      // エラーが発生した場合、元の状態に戻す
-      setHasLocalLike(hasLocalLike);
-      setLocalLikeCount(localLikeCount);
-
-      return Promise.reject(error); // エラーを返す
+      setLocalState(localState);
+      return Promise.reject(error);
     }
   };
 
@@ -46,16 +59,16 @@ const LikeCount = (props: LikeCountProps) => {
         as="button"
         type="submit"
         alignItems="baseline"
-        color={hasLocalLike ? theme.colors.semantic.like : `${theme.colors.text.body}99`}
+        color={optimisticState.hasLike ? theme.colors.semantic.like : `${theme.colors.text.body}99`}
         rounded="md"
         _hover={{ bg: `${theme.colors.semantic.like}60` }} // ホバー時に背景色を薄ピンクに設定
         px={1}
       >
         <Box mr={1} position="relative" top="2.5px">
-          {hasLocalLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
+          {optimisticState.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
         </Box>
         <Box fontSize="lg" fontFamily="monospace">
-          {localLikeCount}
+          {optimisticState.likeCount}
         </Box>
       </Flex>
     </Flex>

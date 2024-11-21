@@ -1,40 +1,46 @@
 import { INITIAL_STATE } from "@/config/consts";
 import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
-import { ThemeColors, UploadResult } from "@/types";
+import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 import { Box, Button, useTheme } from "@chakra-ui/react";
 import { Dispatch } from "react";
 import { useFormState } from "react-dom";
 
 interface MenuClapButtonProps {
   resultId: number;
-  localClapCount: number;
-  localHasClap: boolean;
-  setLocalHasClap: Dispatch<boolean>;
-  setLocalClapCount: Dispatch<number>;
+  setClapLocalState: Dispatch<LocalClapState>;
+  optimisticState: LocalClapState;
+  setOptimisticState: Dispatch<LocalClapState>;
 }
 
 const MenuClapButton = ({
   resultId,
-  localClapCount,
-  localHasClap,
-  setLocalHasClap,
-  setLocalClapCount,
+  setClapLocalState,
+  optimisticState,
+  setOptimisticState,
 }: MenuClapButtonProps) => {
   const theme: ThemeColors = useTheme();
 
-  const toggleClapAction = (state: UploadResult): Promise<UploadResult> => {
+  const toggleClapAction = async (state: UploadResult): Promise<UploadResult> => {
     // 楽観的UI更新
-    const newHasClap = !localHasClap;
-    const newClapCount = newHasClap ? localClapCount + 1 : localClapCount - 1;
-    setLocalHasClap(newHasClap);
-    setLocalClapCount(newClapCount);
+    const newOptimisticState = {
+      hasClap: !optimisticState.hasClap,
+      clapCount: optimisticState.hasClap
+        ? optimisticState.clapCount - 1
+        : optimisticState.clapCount + 1,
+    };
+
+    setOptimisticState(newOptimisticState);
 
     try {
-      return toggleClapServerAction(resultId);
+      const result = await toggleClapServerAction(resultId);
+      if (result.id) {
+        setClapLocalState(newOptimisticState);
+      }
+
+      return result;
     } catch (error) {
       // エラーが発生した場合、元の状態に戻す
-      setLocalHasClap(localHasClap);
-      setLocalClapCount(localClapCount);
+
       return Promise.reject(error); // エラーを返す
     }
   };
@@ -50,7 +56,7 @@ const MenuClapButton = ({
         type="submit"
         _hover={{ backgroundColor: `${theme.colors.text.body}60` }}
       >
-        {localHasClap ? "拍手済み" : "記録に拍手"}
+        {optimisticState.hasClap ? "拍手済み" : "記録に拍手"}
       </Button>
     </Box>
   );

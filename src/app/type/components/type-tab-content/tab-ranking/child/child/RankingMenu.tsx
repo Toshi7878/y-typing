@@ -5,14 +5,14 @@ import {
   useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
-import { Dispatch, useCallback } from "react";
+import { Dispatch, DispatchWithoutAction, useCallback } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
 import { LineResultData } from "@/app/type/ts/type";
 import MenuClapButton from "./child/MenuClapButton";
-import { ThemeColors } from "@/types";
+import { LocalClapState, ThemeColors } from "@/types";
 
 interface RankingMenuProps {
   resultId: number;
@@ -20,10 +20,9 @@ interface RankingMenuProps {
   name: string;
   setShowMenu: Dispatch<number | null>;
   setHoveredIndex: Dispatch<number | null>;
-  localHasClap: boolean;
-  localClapCount: number;
-  setLocalHasClap: Dispatch<boolean>;
-  setLocalClapCount: Dispatch<number>;
+  setClapLocalState: Dispatch<LocalClapState>;
+  optimisticState: LocalClapState;
+  setOptimisticState: Dispatch<LocalClapState>;
 }
 const RankingMenu = ({
   resultId,
@@ -31,10 +30,9 @@ const RankingMenu = ({
   name,
   setShowMenu,
   setHoveredIndex,
-  localHasClap,
-  localClapCount,
-  setLocalHasClap,
-  setLocalClapCount,
+  setClapLocalState,
+  optimisticState,
+  setOptimisticState,
 }: RankingMenuProps) => {
   const { gameStateRef, playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
@@ -107,10 +105,9 @@ const RankingMenu = ({
       </Button>
       <MenuClapButton
         resultId={resultId}
-        localClapCount={localClapCount}
-        localHasClap={localHasClap}
-        setLocalClapCount={setLocalClapCount}
-        setLocalHasClap={setLocalHasClap}
+        setClapLocalState={setClapLocalState}
+        optimisticState={optimisticState}
+        setOptimisticState={setOptimisticState}
       />
     </Stack>
   );

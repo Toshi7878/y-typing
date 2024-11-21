@@ -4,9 +4,9 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import ClearRateText from "@/components/user-result-text/ClearRateText";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
-import { ThemeColors } from "@/types";
+import { LocalClapState, ThemeColors } from "@/types";
 import { Td, Tr, useTheme } from "@chakra-ui/react";
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, useOptimistic, useState } from "react";
 import { useEffect } from "react";
 import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
 import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
@@ -39,8 +39,17 @@ const RankingTr = (props: RankingTrProps) => {
   const theme: ThemeColors = useTheme();
   const { data: session } = useSession();
   const userId = Number(session?.user.id);
-  const [localHasClap, setLocalHasClap] = useState(props.result.hasClap);
-  const [localClapCount, setLocalClapCount] = useState(props.result.clapCount);
+  const [clapLocalState, setClapLocalState] = useState<LocalClapState>({
+    hasClap: props.result.hasClap,
+    clapCount: props.result.clapCount,
+  });
+
+  const [optimisticState, setOptimisticState] = useOptimistic(
+    clapLocalState,
+    (currentState, newState) => {
+      return newState as LocalClapState;
+    },
+  );
 
   useEffect(() => {
     if (userId === props.result.id) {
@@ -110,7 +119,7 @@ const RankingTr = (props: RankingTrProps) => {
             <UpdateAtText updatedAt={props.result.updatedAt} />
           </Td>
           <Td alignItems="center">
-            <ClapedText hasClap={localHasClap} localClapCount={localClapCount} />
+            <ClapedText optimisticState={optimisticState} />
           </Td>
         </Tr>
       </CustomToolTip>
@@ -121,10 +130,9 @@ const RankingTr = (props: RankingTrProps) => {
           name={props.result.user.name}
           setShowMenu={props.setShowMenu}
           setHoveredIndex={props.setHoveredIndex}
-          localHasClap={localHasClap}
-          localClapCount={localClapCount}
-          setLocalHasClap={setLocalHasClap}
-          setLocalClapCount={setLocalClapCount}
+          setClapLocalState={setClapLocalState}
+          optimisticState={optimisticState}
+          setOptimisticState={setOptimisticState}
         />
       )}
     </>

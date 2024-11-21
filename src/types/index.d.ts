@@ -109,3 +109,8 @@ export interface UploadResult {
   status: number;
   errorObject?: unknown;
 }
+
+export interface LocalClapState {
+  hasClap: boolean;
+  clapCount: number;
+}
