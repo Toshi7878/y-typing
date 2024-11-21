@@ -82,7 +82,7 @@ function ResultCard({
       boxShadow="md"
       cursor="pointer"
       bg={theme.colors.background.card}
-      color={theme.colors.text.body}
+      color={"text.body"}
       outline={
         lineSelectIndex === lineNumber
           ? `3px solid ${theme.colors.semantic.word.correct}`
@@ -92,7 +92,7 @@ function ResultCard({
         outline:
           lineSelectIndex === lineNumber
             ? `3px solid ${theme.colors.semantic.word.correct}`
-            : `1px solid ${theme.colors.border.card}`,
+            : `1px solid ${"border.card"}`,
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >

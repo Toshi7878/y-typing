@@ -89,12 +89,7 @@ const TabInfoUpload = () => {
     (myUserId && (!mapCreatorId || Number(myUserId) === mapCreatorId)) || isAdmin;
 
   return (
-    <Card
-      variant="filled"
-      bg={theme.colors.background.card}
-      boxShadow="lg"
-      color={theme.colors.text.body}
-    >
+    <Card variant="filled" bg={theme.colors.background.card} boxShadow="lg" color={"text.body"}>
       <CardBody>
         <Stack display="flex" flexDirection="column" gap="6">
           <InfoInputForm isGeminiLoading={isLoading && isNewCreateMap} />

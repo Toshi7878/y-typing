@@ -35,61 +35,59 @@ export interface Tag {
 }
 
 interface ThemeColors {
-  colors: {
-    background: {
-      body: `#${string}`;
-      card: `#${string}`;
-      header: `#${string}`;
+  background: {
+    body: { value: `#${string}` };
+    card: { value: `#${string}` };
+    header: { value: `#${string}` };
+  };
+  text: {
+    body: { value: `#${string}` };
+    header: {
+      normal: { value: `#${string}` };
+      hover: { value: `#${string}` };
     };
-    text: {
-      body: `#${string}`;
-      header: {
-        normal: `#${string}`;
-        hover: `#${string}`;
-      };
+  };
+  button: {
+    sub: {
+      hover: { value: `#${string}` };
     };
-    button: {
-      sub: {
-        hover: `#${string}`;
-      };
-    };
-    border: {
-      card: `#${string}`;
-      badge: `#${string}`;
-    };
-    primary: {
-      main: `#${string}`;
-      light: `#${string}`;
-      dark: `#${string}`;
-    };
-    secondary: {
-      main: `#${string}`;
-      light: `#${string}`;
-    };
-    error: {
-      main: `#${string}`;
-      light: `#${string}`;
-    };
+  };
+  border: {
+    card: { value: `#${string}` };
+    badge: { value: `#${string}` };
+  };
+  primary: {
+    main: { value: `#${string}` };
+    light: { value: `#${string}` };
+    dark: { value: `#${string}` };
+  };
+  secondary: {
+    main: { value: `#${string}` };
+    light: { value: `#${string}` };
+  };
+  error: {
+    main: { value: `#${string}` };
+    light: { value: `#${string}` };
+  };
 
-    semantic: {
-      perfect: `#${string}`;
-      roma: `#${string}`;
-      kana: `#${string}`;
-      flick: `#${string}`;
-      like: `#${string}`;
-      clap: `#${string}`;
-      word: {
-        correct: string;
-        next: string;
-        word: string;
-        completed: string;
-      };
+  semantic: {
+    perfect: { value: `#${string}` };
+    roma: { value: `#${string}` };
+    kana: { value: `#${string}` };
+    flick: { value: `#${string}` };
+    like: { value: `#${string}` };
+    clap: { value: `#${string}` };
+    word: {
+      correct: { value: string };
+      next: { value: string };
+      word: { value: string };
+      completed: { value: string };
     };
+  };
 
-    home: {
-      card: {
-        hover: string;
-      };
+  home: {
+    card: {
+      hover: { value: string };
     };
   };
 }

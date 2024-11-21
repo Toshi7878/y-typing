@@ -1,11 +1,11 @@
-import { ThemeColors } from "@/types";
-import { Box, PlacementWithLogical, Tooltip, useTheme } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
+import { Tooltip } from "../ui/tooltip";
 
 interface CustomToolTipProps {
   tooltipLabel: string | ReactNode;
   children: ReactNode;
-  placement: PlacementWithLogical | undefined;
+  placement: undefined;
   isDisabled?: boolean;
   isOpen?: boolean;
   fontSize?: "sm" | "md" | "lg";
@@ -18,18 +18,16 @@ const CustomToolTip = ({
   fontSize,
   children,
 }: CustomToolTipProps) => {
-  const theme: ThemeColors = useTheme();
-
   return (
     <Tooltip
-      bg={theme.colors.background.body}
-      color={theme.colors.text.body}
+      bg={"background.body"}
+      color={"text.body"}
       borderWidth="1px"
       borderStyle="solid"
-      borderColor={theme.colors.border.card}
+      borderColor={"border.card"}
       css={{
-        "--popper-arrow-bg": theme.colors.background.body,
-        "--popper-arrow-shadow-color": theme.colors.border.card,
+        "--popper-arrow-bg": "background.body",
+        "--popper-arrow-shadow-color": "border.card",
       }}
       hasArrow
       placement={placement}

@@ -36,7 +36,7 @@ export default function TypeTabContent({ className }: TypeTabContentProps) {
       <HStack
         justifyContent="space-between"
         w="100%"
-        borderBottom={`1px solid ${theme.colors.text.body}55`}
+        borderBottom={`1px solid ${"text.body"}55`}
         style={{ userSelect: "none" }}
       >
         <TabList height="33px" px="8" w="100%">
@@ -46,10 +46,10 @@ export default function TypeTabContent({ className }: TypeTabContentProps) {
                 key={index}
                 width="200px"
                 opacity={tabIndex === index ? 1 : 0.5}
-                borderBottom={tabIndex === index ? `1px solid ${theme.colors.text.body}` : ""}
-                color={theme.colors.text.body}
-                _hover={{ bg: "rgba(0, 0, 0, 0.1)", color: theme.colors.text.body }}
-                _selected={{ color: theme.colors.text.body }}
+                borderBottom={tabIndex === index ? `1px solid ${"text.body"}` : ""}
+                color={"text.body"}
+                _hover={{ bg: "rgba(0, 0, 0, 0.1)", color: "text.body" }}
+                _selected={{ color: "text.body" }}
               >
                 {tabName}
               </Tab>

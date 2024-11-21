@@ -18,7 +18,7 @@ const EditIcon = () => {
         <Link
           href={`/edit/${mapId}`}
           onClick={handleLinkClick}
-          _hover={{ color: theme.colors.text.body }}
+          _hover={{ color: "text.body" }}
           cursor="pointer"
         >
           <BiEdit size={36} />

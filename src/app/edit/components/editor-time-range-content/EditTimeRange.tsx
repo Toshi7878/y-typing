@@ -31,7 +31,7 @@ const TimeRange = () => {
     }
 
     const progress = (time / Number(e.target.max)) * 100;
-    e.target.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${theme.colors.text.body}30 ${progress}%)`;
+    e.target.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${"text.body"}30 ${progress}%)`;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,7 +62,7 @@ const TimeRange = () => {
       if (currentRangeRef) {
         rangeRef.current!.value = currentTime;
         const progress = (Number(currentTime) / Number(rangeMaxValue)) * 100;
-        rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${theme.colors.text.body}30 ${progress}%)`;
+        rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${"text.body"}30 ${progress}%)`;
       }
     };
 

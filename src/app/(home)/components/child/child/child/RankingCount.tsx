@@ -19,7 +19,7 @@ const RankingCount = (props: RankingCountProps) => {
           ? theme.colors.semantic.perfect
           : map.myRank
             ? theme.colors.secondary.main
-            : `${theme.colors.text.body}99`
+            : `${"text.body"}99`
       }
       mr={1}
     >

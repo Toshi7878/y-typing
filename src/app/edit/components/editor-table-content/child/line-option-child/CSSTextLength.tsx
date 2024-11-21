@@ -27,7 +27,7 @@ export default function CSSTextLength({
   return (
     <Box
       textAlign="right"
-      color={calcAllCustomStyleLength <= 10000 ? theme.colors.text.body : theme.colors.error.light}
+      color={calcAllCustomStyleLength <= 10000 ? "text.body" : theme.colors.error.light}
     >
       {calcAllCustomStyleLength} / 10000
     </Box>

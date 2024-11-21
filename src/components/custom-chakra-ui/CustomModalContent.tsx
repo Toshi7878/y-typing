@@ -10,8 +10,8 @@ const CustomModalContent = (props: CustomModalContentProps) => {
   const theme: ThemeColors = useTheme();
   return (
     <ModalContent
-      bg={theme.colors.background.body}
-      color={theme.colors.text.body}
+      bg={"background.body"}
+      color={"text.body"}
       maxW={props.maxW ? props.maxW : "auto"}
     >
       {props.children}

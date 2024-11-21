@@ -33,7 +33,7 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
                   as="span"
                   className="typed"
                   data-time={type.t}
-                  _hover={{ bg: `${theme.colors.border.card}70` }}
+                  _hover={{ bg: `${"border.card"}70` }}
                   color={
                     type.is
                       ? lostWord === ""

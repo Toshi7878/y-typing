@@ -30,7 +30,7 @@ function ResultCardFooter({
       <Box>
         miss: {lMiss},{" "}
         <CustomToolTip tooltipLabel={`rkpm:${rkpm}`} placement="top" fontSize="sm">
-          <Text as="span" _hover={{ bg: `${theme.colors.border.card}30` }}>
+          <Text as="span" _hover={{ bg: `${"border.card"}30` }}>
             kpm: {kpm}
           </Text>
         </CustomToolTip>
@@ -40,7 +40,7 @@ function ResultCardFooter({
           placement="top"
           fontSize="sm"
         >
-          <Text as="span" _hover={{ bg: `${theme.colors.border.card}30` }}>
+          <Text as="span" _hover={{ bg: `${"border.card"}30` }}>
             point: {point}
             {tBonus ? `+${tBonus}` : ""} / {maxLinePoint}
           </Text>

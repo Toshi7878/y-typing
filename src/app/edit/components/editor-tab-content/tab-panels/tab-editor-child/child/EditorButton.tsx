@@ -20,8 +20,8 @@ const EditorButton = (props: EditorButtonProps) => {
       size="sm"
       height="35px"
       className="w-[50%] lg:w-[60%] xl:w-[70%]"
-      color={theme.colors.text.body}
-      bg={theme.colors.background.body}
+      color={"text.body"}
+      bg={"background.body"}
       _hover={{ bg: `${props.colorScheme}80` }}
       borderColor={props.colorScheme}
       onClick={props.onClick}

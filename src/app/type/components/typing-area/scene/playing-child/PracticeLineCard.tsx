@@ -64,8 +64,8 @@ const PracticeLineCard = () => {
         height: "fit-content",
       }}
       bg={theme.colors.background.card}
-      color={theme.colors.text.body}
-      outline={`1px solid ${theme.colors.border.card}`}
+      color={"text.body"}
+      outline={`1px solid ${"border.card"}`}
       boxShadow={"lg"}
       _hover={{
         bg: theme.colors.button.sub,

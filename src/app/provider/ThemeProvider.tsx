@@ -1,5 +1,5 @@
 "use client";
-import { getTheme } from "@/lib/theme";
+import { getTheme } from "@/theme";
 import { ThemeColors } from "@/types";
 import { ChakraProvider, ThemeOverride } from "@chakra-ui/react";
 import React from "react";

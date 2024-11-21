@@ -25,7 +25,7 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
   return (
     <CardBody
       color={"color"}
-      bgImage={`linear-gradient(to right,  ${theme.colors.background.body}, ${theme.colors.background.body}dd), url(${src})`} // 画像のみに黒いオーバーレイを追加
+      bgImage={`linear-gradient(to right,  ${"background.body"}, ${"background.body"}dd), url(${src})`} // 画像のみに黒いオーバーレイを追加
       bgSize="cover"
       bgPosition="center" // 画像の位置を20px下に調整
       borderRadius="lg"

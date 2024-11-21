@@ -29,7 +29,7 @@ function LeftMenus({ items }: LeftMenusProps) {
             >
               {item.title}
             </MenuButton>
-            <MenuList bg={theme.colors.background.body} minW="fit-content">
+            <MenuList bg={"background.body"} minW="fit-content">
               {item.menuItem.map((menuItem, index) => {
                 return <LinkMenuItem key={index} title={menuItem.title} href={menuItem.href} />;
               })}

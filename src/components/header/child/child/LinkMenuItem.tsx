@@ -13,11 +13,11 @@ const LinkMenuItem = ({ title, href }: LinkMenuItemProps) => {
     <Link href={href} _hover={{ textDecoration: "none" }}>
       <MenuItem
         fontSize="sm"
-        bg={theme.colors.background.body}
+        bg={"background.body"}
         _hover={{
           bg: "gray.600",
         }}
-        color={theme.colors.text.body}
+        color={"text.body"}
       >
         {title}
       </MenuItem>

@@ -13,7 +13,7 @@ function SiteLogo() {
       href={"/"}
       onClick={pathname === "/" ? () => (window.location.href = "/") : handleLinkClick}
       className="text-2xl relative top-[-2.5px]"
-      color={theme.colors.text.body}
+      color={"text.body"}
       _hover={{
         color: theme.colors.text.header.hover,
         bg: `${theme.colors.secondary.main}30`,

@@ -16,13 +16,7 @@ export default function TabIcons() {
 
   return (
     <>
-      <Box
-        position="absolute"
-        top="-20px"
-        right="5px"
-        color={`${theme.colors.text.body}99`}
-        width="100px"
-      >
+      <Box position="absolute" top="-20px" right="5px" color={`${"text.body"}99`} width="100px">
         <Flex alignItems="center" justifyContent="flex-end">
           {session?.user.id ? <SettingIcon setIsCardVisible={setIsCardVisible} /> : null}
           {session?.user.id ? <LikeIcon /> : null}

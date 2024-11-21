@@ -73,9 +73,7 @@ export default function ConvertOptionButtons() {
                 width="150px"
                 height="50px"
                 name="word-convert-option"
-                bg={
-                  selectedConvertOption === option.value ? undefined : theme.colors.background.body
-                }
+                bg={selectedConvertOption === option.value ? undefined : "background.body"}
                 colorScheme={option.colorScheme}
                 value={option.value}
                 onClick={(e) => {

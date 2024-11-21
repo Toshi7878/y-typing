@@ -16,7 +16,7 @@ function SkeletonCard() {
       size="lg"
     >
       <CardBody
-        color={theme.colors.text.body}
+        color={"text.body"}
         bg={theme.colors.background.card}
         borderRadius="md"
         className="flex items-start"

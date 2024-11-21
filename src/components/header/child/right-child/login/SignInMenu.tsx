@@ -21,12 +21,12 @@ export default function SignInMenu() {
       >
         ログイン
       </MenuButton>
-      <MenuList bg={theme.colors.background.body}>
+      <MenuList bg={"background.body"}>
         <Box as="form" action={() => handleSignIn("discord")}>
           <MenuItem
             _hover={{ bg: "#7289DA", color: "white" }}
-            bg={theme.colors.background.body}
-            color={theme.colors.text.body}
+            bg={"background.body"}
+            color={"text.body"}
             type="submit"
           >
             <Button leftIcon={<BsDiscord size="1.5em" />} variant="">
@@ -37,8 +37,8 @@ export default function SignInMenu() {
         <Box as="form" action={() => handleSignIn("google")}>
           <MenuItem
             _hover={{ bg: "#DB4437", color: "white" }}
-            bg={theme.colors.background.body}
-            color={theme.colors.text.body}
+            bg={"background.body"}
+            color={"text.body"}
             type="submit"
           >
             <Button leftIcon={<BsGoogle size="1.5em" />} variant="">

@@ -15,7 +15,7 @@ const SettingIcon = ({ setIsCardVisible }: SettingIconProps) => {
       <Box
         height="60px"
         display="flex"
-        _hover={{ color: theme.colors.text.body }}
+        _hover={{ color: "text.body" }}
         alignItems="center"
         cursor="pointer"
         id="option_icon"

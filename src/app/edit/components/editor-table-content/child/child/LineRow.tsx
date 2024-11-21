@@ -131,9 +131,9 @@ function LineRow({
               ? `${theme.colors.error.light}35`
               : "transparent"
       }
-      color={theme.colors.text.body}
+      color={"text.body"}
       outline={lineSelectedCount === index ? "1px solid" : "none"}
-      outlineColor={lineSelectedCount === index ? theme.colors.text.body : "none"}
+      outlineColor={lineSelectedCount === index ? "text.body" : "none"}
       _hover={{
         bg:
           lineSelectedCount !== index
@@ -157,8 +157,8 @@ function LineRow({
             size="xs"
             type="number"
             value={editTime}
-            bg={theme.colors.background.body}
-            borderColor={`${theme.colors.border.card}60`}
+            bg={"background.body"}
+            borderColor={`${"border.card"}60`}
             onChange={(e) => {
               const newValue = e.target.value;
               setEditTime(newValue);
@@ -197,8 +197,8 @@ function LineRow({
               autoComplete="off"
               value={selectLyrics}
               onKeyDown={handleEnterAddRuby}
-              bg={theme.colors.background.body}
-              borderColor={`${theme.colors.border.card}60`}
+              bg={"background.body"}
+              borderColor={`${"border.card"}60`}
               onChange={(e) => setLyrics(e.target.value)}
               onSelect={(e) => {
                 const start = e.currentTarget.selectionStart;
@@ -223,7 +223,7 @@ function LineRow({
               size="sm"
               height="35px"
               width="8%"
-              color={theme.colors.text.body}
+              color={"text.body"}
               _hover={{ bg: `${theme.colors.secondary.main}60` }}
               borderColor={theme.colors.secondary.main}
               onClick={wordConvertButtonEvent}
@@ -235,8 +235,8 @@ function LineRow({
               size="sm"
               autoComplete="off"
               value={selectWord}
-              bg={theme.colors.background.body}
-              borderColor={`${theme.colors.border.card}60`}
+              bg={"background.body"}
+              borderColor={`${"border.card"}60`}
               onChange={(e) => setWord(e.target.value)}
             />
           </Flex>

@@ -28,7 +28,7 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
 
   return (
     <HStack
-      borderColor={theme.colors.border.card}
+      borderColor={"border.card"}
       style={{ border: "1px solid" }}
       px={8}
       py={6}

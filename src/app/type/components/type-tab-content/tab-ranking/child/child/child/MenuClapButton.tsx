@@ -48,7 +48,7 @@ const MenuClapButton = ({
         variant="unstyled"
         size="md"
         type="submit"
-        _hover={{ backgroundColor: `${theme.colors.text.body}60` }}
+        _hover={{ backgroundColor: `${"text.body"}60` }}
       >
         {localHasClap ? "拍手済み" : "記録に拍手"}
       </Button>

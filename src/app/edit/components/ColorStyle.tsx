@@ -17,7 +17,7 @@ const ColorStyle = () => {
   outline: none;
   border-radius: 15px;
    height: 6px;
-  background: ${theme.colors.text.body}30;
+  background: ${"text.body"}30;
 }
 
 /* Thumb: webkit */

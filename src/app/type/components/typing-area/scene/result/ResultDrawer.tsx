@@ -37,11 +37,11 @@ function ResultDrawer({ drawerClosure }: ResultDrawerProps) {
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
-      <DrawerContent height={drawerHeight} backgroundColor={`${theme.colors.background.body}dd`}>
-        <DrawerHeader fontSize="md" py={2} color={theme.colors.text.body}>
+      <DrawerContent height={drawerHeight} backgroundColor={`${"background.body"}dd`}>
+        <DrawerHeader fontSize="md" py={2} color={"text.body"}>
           タイピングリザルト
         </DrawerHeader>
-        <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} color={theme.colors.text.body} />
+        <DrawerCloseButton tabIndex={-1} autoFocus={false} mr={5} color={"text.body"} />
         <DrawerBody overflowY="auto" position="relative" ref={modalContentRef}>
           <ResultLineList modalContentRef={modalContentRef} onClose={onClose} />
         </DrawerBody>

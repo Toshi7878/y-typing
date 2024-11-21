@@ -28,7 +28,7 @@ export default function UserMenu() {
       >
         {session!.user!.name}
       </MenuButton>
-      <MenuList bg={theme.colors.background.body} minW="fit-content">
+      <MenuList bg={"background.body"} minW="fit-content">
         {loginMenuItem.map((item, index) => {
           return <LinkMenuItem key={index} title={item.title} href={item.href} />;
         })}
@@ -39,11 +39,11 @@ export default function UserMenu() {
           <MenuItem
             type="submit"
             fontSize="sm"
-            bg={theme.colors.background.body}
+            bg={"background.body"}
             _hover={{
               bg: "gray.600",
             }}
-            color={theme.colors.text.body}
+            color={"text.body"}
           >
             ログアウト
           </MenuItem>

@@ -33,7 +33,7 @@ function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
-      <DrawerContent height={drawerHeight} backgroundColor={`${theme.colors.background.body}dd`}>
+      <DrawerContent height={drawerHeight} backgroundColor={`${"background.body"}dd`}>
         <DrawerHeader fontSize="md" py={2} color={theme.colors.textColor.body}>
           テーマ
         </DrawerHeader>

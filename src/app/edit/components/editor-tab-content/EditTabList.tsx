@@ -63,13 +63,13 @@ export default function EditorTabContent({ className }: EditorTabContentProps) {
       variant="line"
       width="100%"
     >
-      <TabList height="25px" px="8" borderBottom={`1px solid ${theme.colors.text.body}aa`}>
+      <TabList height="25px" px="8" borderBottom={`1px solid ${"text.body"}aa`}>
         {tabLists.map((tabName, index) => {
           return (
             <Tab
               key={index}
               opacity={tabIndex === index ? 1 : 0.5}
-              color={theme.colors.text.body}
+              color={"text.body"}
               _hover={{ bg: "rgba(0, 0, 0, 0.1)" }}
             >
               {tabName}
