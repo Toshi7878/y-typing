@@ -23,6 +23,8 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime } = props;
   const [imgSrc, setImgSrc] = useState(src);
   const videoId = usePreviewVideoIdAtom();
+  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
 
   const setVideoId = useSetPreviewVideoIdAtom();
   const setPreviewTime = useSetPreviewTimeAtom();
@@ -105,8 +107,8 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         borderRadius="lg"
         data-preview-time={mapPreviewTime}
         data-video-id={mapVideoId}
-        onClick={previewYouTube}
-        // onTouchEnd={handleTouchEnd}
+        onClick={!isIOS && !isAndroid ? previewYouTube : undefined}
+        onTouchEnd={isIOS || isAndroid ? handleTouchEnd : undefined}
       >
         {videoId === mapVideoId ? (
           <FaPause color="white" size={35} />
