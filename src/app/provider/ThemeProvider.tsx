@@ -1,17 +1,36 @@
 "use client";
 import theme from "@/theme";
-import { ChakraProvider } from "@chakra-ui/react";
+import { CacheProvider } from "@chakra-ui/next-js";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { setCookie } from "cookies-next";
+
 import React from "react";
 
 interface ThemeProviderProps {
-  // theme: ThemeOverride;
+  colorMode?: any;
   children: React.ReactNode;
 }
 
-const ThemeProvider = ({ children }: ThemeProviderProps) => {
+const ThemeProvider = ({ colorMode, children }: ThemeProviderProps) => {
   return (
     <>
-      <ChakraProvider theme={theme}>{children}</ChakraProvider>
+      <CacheProvider>
+        <ColorModeScript type="cookie" initialColorMode={theme.config.initialColorMode} />
+        <ChakraProvider
+          colorModeManager={{
+            type: "cookie",
+            ssr: true,
+            get: (init) => colorMode ?? init,
+            set: (value) => {
+              setCookie("chakra-ui-color-mode", value);
+            },
+          }}
+          theme={theme}
+        >
+          {children}
+        </ChakraProvider>
+      </CacheProvider>
+
       <style>
         {`#nprogress .bar {
 	  background:${theme.colors.primary.normal};

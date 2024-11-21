@@ -3,13 +3,13 @@ import "@/css/nprogress.css";
 import Header from "@/components/header/Header";
 import { fonts } from "../lib/fonts";
 import { Analytics } from "@vercel/analytics/react";
+import { cookies } from "next/headers";
 
 // export const runtime = "edge";
 
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 import GlobalProvider from "./provider/GlobalProvider";
-import { ColorModeScript } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -21,14 +21,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const theme = getTheme("dark");
+  const cookiesList = cookies();
+  const colorMode = cookiesList.get("chakra-ui-color-mode");
 
   return (
     <html lang="ja">
       <body className={fonts.rubik.variable}>
-        <ColorModeScript initialColorMode={"dark"} />
         <Analytics />
-        <ThemeProvider>
+        <ThemeProvider colorMode={colorMode?.value}>
           <Header />
           <GlobalProvider>{children}</GlobalProvider>
         </ThemeProvider>
