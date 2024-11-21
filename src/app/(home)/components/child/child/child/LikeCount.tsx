@@ -30,7 +30,7 @@ const LikeCount = (props: LikeCountProps) => {
   return (
     <Flex
       as="form"
-      action={session?.user.id ? formAction : undefined}
+      action={session?.user.id ? formAction : ""}
       onClick={session?.user.id ? preventClick : undefined}
     >
       <Flex
@@ -41,7 +41,7 @@ const LikeCount = (props: LikeCountProps) => {
           likeOptimisticState.hasLike ? theme.colors.semantic.like : `${theme.colors.text.body}99`
         }
         rounded="md"
-        _hover={session?.user.id ? { bg: `${theme.colors.semantic.like}60` } : undefined}
+        _hover={session?.user.id ? { bg: `${theme.colors.semantic.like}60` } : ""}
         px={1}
       >
         <Box mr={1} position="relative" top="2.5px">
