@@ -5,7 +5,7 @@ import {
   useSetTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
-import { Dispatch, DispatchWithoutAction, useCallback } from "react";
+import { Dispatch, useCallback } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
 import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
@@ -13,6 +13,7 @@ import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadRe
 import { LineResultData } from "@/app/type/ts/type";
 import MenuClapButton from "./child/MenuClapButton";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
+import { useSession } from "next-auth/react";
 
 interface RankingMenuProps {
   resultId: number;
@@ -33,6 +34,8 @@ const RankingMenu = ({
   toggleClapAction,
 }: RankingMenuProps) => {
   const { gameStateRef, playerRef } = useRefs();
+  const { data: session } = useSession();
+
   const theme: ThemeColors = useTheme();
   const scene = useSceneAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
@@ -101,11 +104,13 @@ const RankingMenu = ({
       >
         リプレイ再生
       </Button>
-      <MenuClapButton
-        resultId={resultId}
-        clapOptimisticState={clapOptimisticState}
-        toggleClapAction={toggleClapAction}
-      />
+      {session?.user.id ? (
+        <MenuClapButton
+          resultId={resultId}
+          clapOptimisticState={clapOptimisticState}
+          toggleClapAction={toggleClapAction}
+        />
+      ) : null}
     </Stack>
   );
 };
