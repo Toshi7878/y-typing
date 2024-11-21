@@ -1,15 +1,11 @@
 import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-server-action";
 import { LocalLikeState, UploadResult } from "@/types";
-import { useOptimistic, useState } from "react";
+import { useOptimistic } from "react";
 
 export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState) => {
-  const [LikeLocalState, setLikeLocalState] = useState<LocalLikeState>({
-    hasLike,
-    likeCount,
-  });
-
+  const likeLocalState = { hasLike, likeCount };
   const [likeOptimisticState, setLikeOptimisticState] = useOptimistic(
-    LikeLocalState,
+    likeLocalState,
     (currentState, newState) => {
       return newState as LocalLikeState;
     },
@@ -28,13 +24,10 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
 
     try {
       const result = await toggleLikeServerAction(mapId);
-      if (result.id) {
-        setLikeLocalState(newOptimisticState);
-      }
 
       return result;
     } catch (error) {
-      // エラーが発生した場合、元の状態に戻す
+      setLikeOptimisticState(likeLocalState);
 
       return Promise.reject(error); // エラーを返す
     }
