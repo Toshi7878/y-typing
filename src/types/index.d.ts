@@ -114,3 +114,7 @@ export interface LocalClapState {
   hasClap: boolean;
   clapCount: number;
 }
+export interface LocalLikeState {
+  hasLike: boolean;
+  likeCount: number;
+}

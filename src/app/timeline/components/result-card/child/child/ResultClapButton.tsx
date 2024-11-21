@@ -1,11 +1,10 @@
 "use client";
-import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
 import { INITIAL_STATE } from "@/config/consts";
-import { ThemeColors, UploadResult } from "@/types";
+import { ThemeColors } from "@/types";
 import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
-import { useState } from "react";
 import { useFormState } from "react-dom";
 import { FaHandsClapping } from "react-icons/fa6";
+import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
 interface ResultClapButtonProps {
   resultId: number;
   clapCount: number;
@@ -14,27 +13,13 @@ interface ResultClapButtonProps {
 
 function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProps) {
   const theme: ThemeColors = useTheme();
-  const [localHasClap, setLocalHasClap] = useState(hasClap);
-  const [localClapCount, setLocalClapCount] = useState(clapCount);
 
-  const toggleClapAction = (state: UploadResult): Promise<UploadResult> => {
-    // 楽観的UI更新
-    const newHasClap = !localHasClap;
-    const newClapCount = newHasClap ? localClapCount + 1 : localClapCount - 1;
-    setLocalHasClap(newHasClap);
-    setLocalClapCount(newClapCount);
+  const { clapOptimisticState, toggleClapAction } = useLocalClapServerActions({
+    hasClap,
+    clapCount,
+  });
 
-    try {
-      return toggleClapServerAction(resultId);
-    } catch (error) {
-      // エラーが発生した場合、元の状態に戻す
-      setLocalHasClap(localHasClap);
-      setLocalClapCount(localClapCount);
-      return Promise.reject(error); // エラーを返す
-    }
-  };
-
-  const [state, formAction] = useFormState(toggleClapAction, INITIAL_STATE);
+  const [state, formAction] = useFormState(() => toggleClapAction(resultId), INITIAL_STATE);
 
   return (
     <Box as="form" action={formAction} display="inline-flex">
@@ -42,12 +27,12 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
         mx={5}
         px={7}
         rounded={50}
-        background={localHasClap ? `${theme.colors.semantic.clap}34` : "transparent"}
+        background={clapOptimisticState.hasClap ? `${theme.colors.semantic.clap}34` : "transparent"}
         _hover={{
           bg: `${theme.colors.semantic.clap}34`,
           color: theme.colors.semantic.clap,
         }}
-        color={localHasClap ? theme.colors.semantic.clap : "white"}
+        color={clapOptimisticState.hasClap ? theme.colors.semantic.clap : "white"}
         cursor="pointer"
         borderColor={theme.colors.border.card}
         border={"1px"}
@@ -57,7 +42,7 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
         <Flex alignItems="center" letterSpacing={1}>
           <FaHandsClapping />
           <Text as="span" ml={1}>
-            ×{localClapCount}
+            ×{clapOptimisticState.clapCount}
           </Text>
         </Flex>
       </Button>

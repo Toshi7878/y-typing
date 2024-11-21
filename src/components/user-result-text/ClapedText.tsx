@@ -3,7 +3,7 @@ import { Text, useTheme } from "@chakra-ui/react";
 import React from "react";
 
 interface ClapedTextProps {
-  optimisticState: LocalClapState;
+  clapOptimisticState: LocalClapState;
 }
 
 const ClapedText = (props: ClapedTextProps) => {
@@ -11,10 +11,10 @@ const ClapedText = (props: ClapedTextProps) => {
   return (
     <Text
       as="span"
-      {...(props.optimisticState.hasClap && { color: theme.colors.semantic.clap })}
-      className={`${props.optimisticState.hasClap ? "outline-text" : ""}`}
+      {...(props.clapOptimisticState.hasClap && { color: theme.colors.semantic.clap })}
+      className={`${props.clapOptimisticState.hasClap ? "outline-text" : ""}`}
     >
-      {props.optimisticState.clapCount}
+      {props.clapOptimisticState.clapCount}
     </Text>
   );
 };

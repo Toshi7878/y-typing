@@ -12,7 +12,7 @@ import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
 import { LineResultData } from "@/app/type/ts/type";
 import MenuClapButton from "./child/MenuClapButton";
-import { LocalClapState, ThemeColors } from "@/types";
+import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 
 interface RankingMenuProps {
   resultId: number;
@@ -20,9 +20,8 @@ interface RankingMenuProps {
   name: string;
   setShowMenu: Dispatch<number | null>;
   setHoveredIndex: Dispatch<number | null>;
-  setClapLocalState: Dispatch<LocalClapState>;
-  optimisticState: LocalClapState;
-  setOptimisticState: Dispatch<LocalClapState>;
+  clapOptimisticState: LocalClapState;
+  toggleClapAction: (resultId: number) => Promise<UploadResult>;
 }
 const RankingMenu = ({
   resultId,
@@ -30,9 +29,8 @@ const RankingMenu = ({
   name,
   setShowMenu,
   setHoveredIndex,
-  setClapLocalState,
-  optimisticState,
-  setOptimisticState,
+  clapOptimisticState,
+  toggleClapAction,
 }: RankingMenuProps) => {
   const { gameStateRef, playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
@@ -105,9 +103,8 @@ const RankingMenu = ({
       </Button>
       <MenuClapButton
         resultId={resultId}
-        setClapLocalState={setClapLocalState}
-        optimisticState={optimisticState}
-        setOptimisticState={setOptimisticState}
+        clapOptimisticState={clapOptimisticState}
+        toggleClapAction={toggleClapAction}
       />
     </Stack>
   );

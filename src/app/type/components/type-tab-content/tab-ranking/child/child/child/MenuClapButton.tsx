@@ -7,45 +7,18 @@ import { useFormState } from "react-dom";
 
 interface MenuClapButtonProps {
   resultId: number;
-  setClapLocalState: Dispatch<LocalClapState>;
-  optimisticState: LocalClapState;
-  setOptimisticState: Dispatch<LocalClapState>;
+  clapOptimisticState: LocalClapState;
+  toggleClapAction: (resultId: number) => Promise<UploadResult>;
 }
 
 const MenuClapButton = ({
   resultId,
-  setClapLocalState,
-  optimisticState,
-  setOptimisticState,
+  clapOptimisticState,
+  toggleClapAction,
 }: MenuClapButtonProps) => {
   const theme: ThemeColors = useTheme();
 
-  const toggleClapAction = async (state: UploadResult): Promise<UploadResult> => {
-    // 楽観的UI更新
-    const newOptimisticState = {
-      hasClap: !optimisticState.hasClap,
-      clapCount: optimisticState.hasClap
-        ? optimisticState.clapCount - 1
-        : optimisticState.clapCount + 1,
-    };
-
-    setOptimisticState(newOptimisticState);
-
-    try {
-      const result = await toggleClapServerAction(resultId);
-      if (result.id) {
-        setClapLocalState(newOptimisticState);
-      }
-
-      return result;
-    } catch (error) {
-      // エラーが発生した場合、元の状態に戻す
-
-      return Promise.reject(error); // エラーを返す
-    }
-  };
-
-  const [state, formAction] = useFormState(toggleClapAction, INITIAL_STATE);
+  const [state, formAction] = useFormState(() => toggleClapAction(resultId), INITIAL_STATE);
   return (
     <Box as="form" action={formAction}>
       {" "}
@@ -56,7 +29,7 @@ const MenuClapButton = ({
         type="submit"
         _hover={{ backgroundColor: `${theme.colors.text.body}60` }}
       >
-        {optimisticState.hasClap ? "拍手済み" : "記録に拍手"}
+        {clapOptimisticState.hasClap ? "拍手済み" : "記録に拍手"}
       </Button>
     </Box>
   );

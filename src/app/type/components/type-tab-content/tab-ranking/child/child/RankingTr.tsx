@@ -15,6 +15,7 @@ import RankText from "@/components/user-result-text/RankText";
 import RankingMenu from "./RankingMenu";
 import { RankingListType } from "@/app/type/ts/type";
 import { useSession } from "next-auth/react";
+import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
 
 interface RankingTrProps {
   result: RankingListType;
@@ -39,17 +40,10 @@ const RankingTr = (props: RankingTrProps) => {
   const theme: ThemeColors = useTheme();
   const { data: session } = useSession();
   const userId = Number(session?.user.id);
-  const [clapLocalState, setClapLocalState] = useState<LocalClapState>({
+  const { clapOptimisticState, toggleClapAction } = useLocalClapServerActions({
     hasClap: props.result.hasClap,
     clapCount: props.result.clapCount,
   });
-
-  const [optimisticState, setOptimisticState] = useOptimistic(
-    clapLocalState,
-    (currentState, newState) => {
-      return newState as LocalClapState;
-    },
-  );
 
   useEffect(() => {
     if (userId === props.result.id) {
@@ -119,7 +113,7 @@ const RankingTr = (props: RankingTrProps) => {
             <UpdateAtText updatedAt={props.result.updatedAt} />
           </Td>
           <Td alignItems="center">
-            <ClapedText optimisticState={optimisticState} />
+            <ClapedText clapOptimisticState={clapOptimisticState} />
           </Td>
         </Tr>
       </CustomToolTip>
@@ -130,9 +124,8 @@ const RankingTr = (props: RankingTrProps) => {
           name={props.result.user.name}
           setShowMenu={props.setShowMenu}
           setHoveredIndex={props.setHoveredIndex}
-          setClapLocalState={setClapLocalState}
-          optimisticState={optimisticState}
-          setOptimisticState={setOptimisticState}
+          clapOptimisticState={clapOptimisticState}
+          toggleClapAction={toggleClapAction}
         />
       )}
     </>
