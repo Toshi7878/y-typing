@@ -1,45 +1,36 @@
-import { NavItem, ThemeColors } from "@/types";
+import { ThemeColors } from "@/types";
 
 import { Box, Button, Menu, MenuButton, MenuList, useTheme } from "@chakra-ui/react";
 import LinkMenuItem from "../child/LinkMenuItem";
-import { leftLink } from "@/config/headerNav";
+import { leftLink, leftMenuItem } from "@/config/headerNav";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 
-interface LeftMenusProps {
-  items: NavItem[];
-}
-function LeftMenus({ items }: LeftMenusProps) {
+function LeftMenus() {
   const theme: ThemeColors = useTheme();
   const handleLinkClick = useLinkClick();
 
   return (
-    <Box as="nav">
-      {items?.map((item, index) => {
-        return (
-          <Menu placement="bottom" key={index}>
-            <MenuButton
-              cursor="pointer"
-              color={theme.colors.text.header.normal}
-              _hover={{
-                color: theme.colors.text.header.hover,
-              }}
-              className="dropdown-toggle"
-              fontSize="sm"
-              _active={{ color: theme.colors.text.header.hover }}
-              ml={5}
-            >
-              {item.title}
-            </MenuButton>
-            <MenuList bg={theme.colors.background.body} minW="fit-content">
-              {item.menuItem.map((menuItem, index) => {
-                return <LinkMenuItem key={index} title={menuItem.title} href={menuItem.href} />;
-              })}
-            </MenuList>
-          </Menu>
-        );
-      })}
-
+    <Box as="nav" display={{ base: "none", md: "block" }}>
+      <Menu placement="bottom">
+        <MenuButton
+          cursor="pointer"
+          color={theme.colors.text.header.normal}
+          _hover={{
+            color: theme.colors.text.header.hover,
+          }}
+          className="dropdown-toggle"
+          fontSize="sm"
+          _active={{ color: theme.colors.text.header.hover }}
+        >
+          Menu
+        </MenuButton>
+        <MenuList bg={theme.colors.background.body} minW="fit-content">
+          {leftMenuItem.map((menuItem, index) => {
+            return <LinkMenuItem key={index} title={menuItem.title} href={menuItem.href} />;
+          })}
+        </MenuList>
+      </Menu>
       {leftLink.map((link, index) => {
         return (
           <Link

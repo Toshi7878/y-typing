@@ -4,6 +4,7 @@ import { BsDiscord } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { ThemeColors } from "@/types";
 import { handleSignIn } from "./authAction";
+import SignInMenuItem from "./child/SignInMenuItem";
 
 export default function SignInMenu() {
   const theme: ThemeColors = useTheme();
@@ -22,30 +23,16 @@ export default function SignInMenu() {
         ログイン
       </MenuButton>
       <MenuList bg={theme.colors.background.body}>
-        <Box as="form" action={() => handleSignIn("discord")}>
-          <MenuItem
-            _hover={{ bg: "#7289DA", color: "white" }}
-            bg={theme.colors.background.body}
-            color={theme.colors.text.body}
-            type="submit"
-          >
-            <Button leftIcon={<BsDiscord size="1.5em" />} variant="">
-              Discordでログイン
-            </Button>
-          </MenuItem>
-        </Box>
-        <Box as="form" action={() => handleSignIn("google")}>
-          <MenuItem
-            _hover={{ bg: "#DB4437", color: "white" }}
-            bg={theme.colors.background.body}
-            color={theme.colors.text.body}
-            type="submit"
-          >
-            <Button leftIcon={<BsGoogle size="1.5em" />} variant="">
-              Googleでログイン
-            </Button>
-          </MenuItem>
-        </Box>
+        <SignInMenuItem
+          _hover={{ bg: "#7289DA", color: "white" }}
+          text={"Discordでログイン"}
+          leftIcon={<BsDiscord size="1.5em" />}
+        />
+        <SignInMenuItem
+          _hover={{ bg: "#DB4437", color: "white" }}
+          text={"Googleでログイン"}
+          leftIcon={<BsGoogle size="1.5em" />}
+        />
       </MenuList>
     </Menu>
   );

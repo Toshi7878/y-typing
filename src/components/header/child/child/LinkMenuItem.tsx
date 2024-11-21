@@ -17,7 +17,7 @@ const LinkMenuItem = ({ title, href }: LinkMenuItemProps) => {
         fontSize="sm"
         bg={theme.colors.background.body}
         _hover={{
-          bg: "gray.600",
+          bg: theme.colors.background.header,
         }}
         color={theme.colors.text.body}
       >

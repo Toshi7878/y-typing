@@ -15,6 +15,7 @@ export const useLinkClick = () => {
     event.stopPropagation(); // バブリングを防ぐ
 
     const currentPath = window.location.pathname;
+    const href = event.currentTarget.getAttribute("href") || "";
 
     if (currentPath.includes("/edit") && canUpload) {
       const confirmUpload = window.confirm(
@@ -23,13 +24,15 @@ export const useLinkClick = () => {
       if (!confirmUpload) {
         return;
       }
+    } else if (currentPath === href) {
+      window.location.reload();
+      return;
     }
 
     NProgress.configure({ showSpinner: false });
     NProgress.configure({ trickle: false });
 
     NProgress.start();
-    const href = event.currentTarget.getAttribute("href") || "";
     router.push(href);
   };
 };
