@@ -25,10 +25,8 @@ export default function RootLayout({
 
   return (
     <html lang="ja">
-      <head>
-        <ColorModeScript initialColorMode={"dark"} />
-      </head>
       <body className={fonts.rubik.variable}>
+        <ColorModeScript initialColorMode={"dark"} />
         <Analytics />
         <ThemeProvider>
           <Header />

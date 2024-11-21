@@ -66,22 +66,17 @@ const darkTheme: ThemeColors = {
   },
 };
 
-export const getTheme = (colorMode: "light" | "dark") => {
-  // const themeColors = colorMode === "light" ? sodaTheme.colors : darkTheme.colors;
-  const theme: ThemeColors = darkTheme;
-
-  return extendTheme({
-    config,
-    colors: theme.colors,
-    styles: {
-      global: {
-        "body, *": {
-          transition: "background-color 0.5s ease",
-        },
-        body: {
-          bg: theme.colors.background.body,
-        },
+export default extendTheme({
+  config,
+  colors: darkTheme.colors,
+  styles: {
+    global: {
+      "body, *": {
+        transition: "background-color 0.5s ease",
+      },
+      body: {
+        bg: darkTheme.colors.background.body,
       },
     },
-  });
-};
+  },
+});

@@ -1,7 +1,6 @@
 "use client";
-import { getTheme } from "@/lib/theme";
-import { ThemeColors } from "@/types";
-import { ChakraProvider, ThemeOverride } from "@chakra-ui/react";
+import theme from "@/theme";
+import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 
 interface ThemeProviderProps {
@@ -10,7 +9,6 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const theme = getTheme("dark");
   return (
     <>
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
