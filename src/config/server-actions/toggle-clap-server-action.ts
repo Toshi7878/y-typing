@@ -3,6 +3,7 @@
 import { PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { UploadResult } from "@/types";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
@@ -76,6 +77,8 @@ export async function toggleClapServerAction(resultId: number): Promise<UploadRe
     const userId = Number(session?.user?.id);
 
     const clapedId = await updateClap(resultId, userId);
+
+    revalidatePath(`/api/users-result-list`);
 
     return {
       id: clapedId,
