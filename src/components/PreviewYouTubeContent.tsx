@@ -50,9 +50,9 @@ const PreviewYouTubeContent = function YouTubeContent({
   }
 
   const onReady = (event: any) => {
+    // event.target.setVolume(volume);
     event.target.mute();
     event.target.playVideo();
-    // event.target.setVolume(volume);
     setRef("playerRef", event.target);
   };
 
@@ -74,7 +74,10 @@ const PreviewYouTubeContent = function YouTubeContent({
           enablejsapi: 1,
           start: Number(previewTime),
           playsinline: 1,
-          autoplay: isIOS ? 0 : 1,
+          autoplay: 1,
+          iv_load_policy: 3,
+          modestbranding: 1,
+          rel: 0,
         },
       }}
       onReady={onReady}
