@@ -24,7 +24,7 @@ const LikeIcon = () => {
     setHasLocalLikeAtom(newHasLike);
 
     try {
-      return toggleLikeServerAction(Number(mapId));
+      return toggleLikeServerAction(Number(mapId), newHasLike);
     } catch (error) {
       // エラーが発生した場合、元の状態に戻す
       setHasLocalLikeAtom(hasLocalLikeAtom);
