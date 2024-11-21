@@ -99,7 +99,7 @@ export async function actions(
         },
       );
 
-    revalidatePath(`/api/map-list?page=0`);
+    revalidatePath(`/api/map-list`);
     return {
       id: mapId === "new" ? newMapId : null,
       title: mapId === "new" ? "アップロード完了" : "アップデート完了",

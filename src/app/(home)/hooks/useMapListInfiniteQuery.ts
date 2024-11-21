@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 async function getMapList(page: number, mapKeyword: string): Promise<MapCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map-list`, {
     params: { page, mapKeyword }, // ページ数をクエリパラメータとして追加
-    // cache: "no-cache", // キャッシュモード
   });
 
   if (response.status !== 200) {
