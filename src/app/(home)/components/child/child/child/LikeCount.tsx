@@ -7,6 +7,7 @@ import { ThemeColors } from "@/types";
 import { useFormState } from "react-dom";
 import { INITIAL_STATE } from "@/config/consts";
 import { useLocalLikeServerActions } from "@/lib/hooks/useLocalLikeServerActions";
+import { useSession } from "next-auth/react";
 
 interface LikeCountProps {
   map: MapCardInfo;
@@ -15,6 +16,7 @@ interface LikeCountProps {
 const LikeCount = (props: LikeCountProps) => {
   const theme: ThemeColors = useTheme();
   const { map } = props;
+  const { data: session } = useSession();
 
   const { likeOptimisticState, toggleLikeAction } = useLocalLikeServerActions({
     hasLike: props.map.hasLike,
@@ -26,16 +28,20 @@ const LikeCount = (props: LikeCountProps) => {
     event.stopPropagation();
   };
   return (
-    <Flex as="form" action={formAction} onClick={preventClick}>
+    <Flex
+      as="form"
+      action={session?.user.id ? formAction : undefined}
+      onClick={session?.user.id ? preventClick : undefined}
+    >
       <Flex
         as="button"
-        type="submit"
+        type={session?.user.id ? "submit" : "button"}
         alignItems="baseline"
         color={
           likeOptimisticState.hasLike ? theme.colors.semantic.like : `${theme.colors.text.body}99`
         }
         rounded="md"
-        _hover={{ bg: `${theme.colors.semantic.like}60` }} // ホバー時に背景色を薄ピンクに設定
+        _hover={session?.user.id ? { bg: `${theme.colors.semantic.like}60` } : undefined}
         px={1}
       >
         <Box mr={1} position="relative" top="2.5px">
