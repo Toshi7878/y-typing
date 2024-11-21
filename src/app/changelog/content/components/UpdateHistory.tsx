@@ -4,6 +4,13 @@ import React from "react";
 
 const updates = [
   {
+    date: "2024-11-21",
+    descriptions: [
+      "初回ページロード時のフラッシュを修正",
+      "Ctrl Shift + リンククリックで別タブ・別ウィンドウ遷移を対応",
+    ],
+  },
+  {
     date: "2024-11-19",
     descriptions: [
       "タイピング設定を追加",

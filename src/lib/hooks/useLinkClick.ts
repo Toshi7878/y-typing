@@ -8,6 +8,9 @@ export const useLinkClick = () => {
   const canUpload = useCanUploadAtom();
 
   return (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (event.ctrlKey || event.altKey) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation(); // バブリングを防ぐ
 
