@@ -48,7 +48,6 @@ const PreviewYouTubeContent = function YouTubeContent({
   }
 
   const onReady = (event: any) => {
-    event.target.seekTo(Number(previewTime));
     event.target.setVolume(volume);
     setRef("playerRef", event.target);
   };
