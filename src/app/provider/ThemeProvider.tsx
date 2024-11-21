@@ -33,7 +33,7 @@ const ThemeProvider = ({ colorMode, children }: ThemeProviderProps) => {
 
       <style>
         {`#nprogress .bar {
-	  background:${theme.colors.primary.normal};
+	  background:${theme.colors.primary.light};
   }`}
       </style>
     </>
