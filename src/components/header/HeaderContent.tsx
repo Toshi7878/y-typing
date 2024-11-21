@@ -12,7 +12,10 @@ const HeaderContent = () => {
       bg={"background.header"}
       width="100vw"
     >
-      <Box className="container md:max-w-[80rem] h-1 py-5 flex items-center justify-between">
+      <Box
+        width={{ base: "90%", xl: "85%" }}
+        className="container h-1 py-5 flex items-center justify-between"
+      >
         <LeftNav />
         <RightNav />
       </Box>
