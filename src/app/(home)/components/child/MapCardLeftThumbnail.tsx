@@ -9,6 +9,7 @@ import {
   useSetPreviewTimeAtom,
   useSetPreviewVideoIdAtom,
 } from "@/components/atom/globalAtoms";
+import { useGlobalRefs } from "@/components/globalRefContext/GlobalRefProvider";
 
 interface MapLeftThumbnailProps {
   src: string;
@@ -24,6 +25,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const [imgSrc, setImgSrc] = useState(src);
   const videoId = usePreviewVideoIdAtom();
   const [isTouchMove, setIsTouchMove] = useState(false);
+  const { playerRef } = useGlobalRefs();
 
   const setVideoId = useSetPreviewVideoIdAtom();
   const setPreviewTime = useSetPreviewTimeAtom();
@@ -53,6 +55,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     if (!isTouchMove) {
       e.stopPropagation();
       previewYouTube(e);
+      playerRef.current.playVideo();
     }
     setIsTouchMove(false);
   };
