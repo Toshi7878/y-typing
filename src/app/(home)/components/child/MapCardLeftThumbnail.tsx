@@ -51,7 +51,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!isTouchMove) {
-      e.preventDefault(); // デフォルトのタッチ動作を防ぐ
+      e.stopPropagation();
       previewYouTube(e);
     }
     setIsTouchMove(false);
