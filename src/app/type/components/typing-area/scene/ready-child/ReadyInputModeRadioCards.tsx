@@ -46,7 +46,7 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
           boxShadow: "outline",
         }}
         px={15}
-        py={12}
+        py="2.6rem"
       >
         {children}
       </Box>
