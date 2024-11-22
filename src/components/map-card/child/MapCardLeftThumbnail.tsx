@@ -20,7 +20,6 @@ interface MapLeftThumbnailProps {
   thumnailWidth: Partial<Record<string, number>>;
   thumnailHeight: Partial<Record<string, number>>;
 }
-
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime, thumnailWidth, thumnailHeight } =
     props; // ここを変更
