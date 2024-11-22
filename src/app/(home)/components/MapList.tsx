@@ -40,12 +40,6 @@ function MapList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  useEffect(() => {
-    return () => {
-      queryClient.removeQueries({ queryKey: ["mapList"] });
-    };
-  }, []);
-
   if (status === "pending") {
     return <LoadingMapCard cardLength={10} />;
   }
