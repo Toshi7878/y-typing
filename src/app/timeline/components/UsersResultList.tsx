@@ -7,6 +7,7 @@ import { Box } from "@chakra-ui/react";
 import SearchContent from "./search/SearchContent";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { queryClient } from "../TimelineProvider";
 
 function UsersResultList() {
   const {
@@ -29,6 +30,12 @@ function UsersResultList() {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({ queryKey: ["usersResultList"] });
+    };
+  }, []);
 
   return (
     <Box as="section">
