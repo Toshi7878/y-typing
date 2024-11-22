@@ -78,6 +78,7 @@
     "@storybook/react": "^8.1.9",
     "@storybook/test": "^8.1.9",
     "@types/node": "^20",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/youtube-player": "^5.5.11",
