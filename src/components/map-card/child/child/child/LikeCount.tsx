@@ -8,7 +8,6 @@ import { useFormState } from "react-dom";
 import { INITIAL_STATE } from "@/config/consts";
 import { useLocalLikeServerActions } from "@/lib/hooks/useLocalLikeServerActions";
 import { useSession } from "next-auth/react";
-import { useSetIsToggleLikedAtom } from "@/app/(home)/atoms/atoms";
 
 interface LikeCountProps {
   map: MapCardInfo;
@@ -17,7 +16,6 @@ interface LikeCountProps {
 const LikeCount = (props: LikeCountProps) => {
   const theme: ThemeColors = useTheme();
   const { map } = props;
-  const setIsToggleLike = useSetIsToggleLikedAtom();
   const { data: session } = useSession();
   const { likeOptimisticState, toggleLikeAction } = useLocalLikeServerActions({
     hasLike: props.map.hasLike,
@@ -26,9 +24,7 @@ const LikeCount = (props: LikeCountProps) => {
 
   const [state, formAction] = useFormState(async () => {
     const result = await toggleLikeAction(map.id);
-    if (result.id) {
-      setIsToggleLike(true);
-    }
+
     return result;
   }, INITIAL_STATE);
   const preventClick = (event: React.MouseEvent) => {
