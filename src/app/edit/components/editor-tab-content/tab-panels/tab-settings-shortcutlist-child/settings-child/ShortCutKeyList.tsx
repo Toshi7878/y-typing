@@ -12,7 +12,7 @@ const shortCutList = [
   { keys: ["Delete"], description: "削除" },
   { keys: ["Esc"], description: "再生・停止" },
   { keys: ["D"], description: "選択ライン解除" },
-  { keys: ["Q"], description: "次の歌詞をセット" },
+  { keys: ["Tab"], description: "次の歌詞をセット" },
   { keys: ["Ctrl+Shift+F"], description: "全体よみ置換" },
   { keys: ["Ctrl+Z"], description: "元に戻す" },
   { keys: ["Ctrl+Y"], description: "繰り返し" },

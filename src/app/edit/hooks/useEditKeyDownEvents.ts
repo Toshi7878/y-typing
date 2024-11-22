@@ -75,7 +75,11 @@ export const useWindowKeydownEvent = () => {
       document.activeElement instanceof HTMLInputElement ||
       document.activeElement instanceof HTMLTextAreaElement;
 
-    if (!iS_FOCUS_TEXTAREA) {
+    if (event.key === "Tab") {
+      setTopLyricsText(undefined);
+      (document.activeElement as HTMLElement)?.blur();
+      event.preventDefault();
+    } else if (!iS_FOCUS_TEXTAREA) {
       const player = playerRef!.current as any;
 
       switch (event.code) {

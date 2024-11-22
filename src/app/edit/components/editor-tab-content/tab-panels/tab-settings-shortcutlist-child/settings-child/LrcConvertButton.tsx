@@ -19,8 +19,6 @@ export default function LrcConvertButton() {
 
   return (
     <HStack alignItems="baseline">
-      <FormLabel fontSize="sm">譜面インポート</FormLabel>
-
       <input
         type="file"
         hidden
@@ -57,7 +55,7 @@ export default function LrcConvertButton() {
       />
 
       <Button colorScheme="teal" size="sm" onClick={() => fileInputRef.current?.click()}>
-        lrcファイルを開く
+        lrcインポート
       </Button>
     </HStack>
   );
