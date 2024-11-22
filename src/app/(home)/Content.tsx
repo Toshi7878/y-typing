@@ -7,6 +7,7 @@ import { Provider } from "jotai";
 import NProgress from "nprogress";
 import React from "react";
 import SearchContent from "./components/SearchContent";
+import { queryClient } from "./HomeProvider";
 
 export default function Content() {
   const [isMobile, setIsMobile] = useState(false);
@@ -19,6 +20,7 @@ export default function Content() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
+      queryClient.removeQueries({ queryKey: ["mapList"] });
     };
   }, []);
 
