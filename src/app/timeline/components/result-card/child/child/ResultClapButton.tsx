@@ -5,7 +5,6 @@ import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
 import { useFormState } from "react-dom";
 import { FaHandsClapping } from "react-icons/fa6";
 import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
-import { queryClient } from "@/app/timeline/TimelineProvider";
 interface ResultClapButtonProps {
   resultId: number;
   clapCount: number;
@@ -22,10 +21,6 @@ function ResultClapButton({ resultId, clapCount, hasClap }: ResultClapButtonProp
 
   const [state, formAction] = useFormState(async () => {
     const result = await toggleClapAction(resultId);
-
-    if (result.id) {
-      queryClient.removeQueries({ queryKey: ["usersResultList"] });
-    }
 
     return result;
   }, INITIAL_STATE);
