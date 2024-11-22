@@ -17,13 +17,14 @@ const LikeCount = (props: LikeCountProps) => {
   const theme: ThemeColors = useTheme();
   const { map } = props;
   const { data: session } = useSession();
-
   const { likeOptimisticState, toggleLikeAction } = useLocalLikeServerActions({
     hasLike: props.map.hasLike,
     likeCount: props.map.likeCount,
   });
 
-  const [state, formAction] = useFormState(() => toggleLikeAction(map.id), INITIAL_STATE);
+  const [state, formAction] = useFormState(() => {
+    return toggleLikeAction(map.id);
+  }, INITIAL_STATE);
   const preventClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };

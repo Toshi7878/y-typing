@@ -6,6 +6,7 @@ import MapCardLayout from "./MapCardLayout";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMapListInfiniteQuery } from "../hooks/useMapListInfiniteQuery";
+import { queryClient } from "../HomeProvider";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
@@ -37,6 +38,10 @@ function MapList() {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    queryClient.removeQueries({ queryKey: ["mapList"] });
+  }, []);
 
   if (status === "pending") {
     return <LoadingMapCard cardLength={10} />;

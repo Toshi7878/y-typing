@@ -2,8 +2,6 @@ import React from "react";
 import { Heart } from "lucide-react";
 import { clsx } from "clsx";
 import "./css/render.css";
-import { ThemeColors } from "@/types";
-import { useTheme } from "@chakra-ui/react";
 
 type LikeButtonProps = {
   size?: number;
@@ -14,7 +12,6 @@ type LikeButtonProps = {
 
 export const LikeButton = ({ size = 50, defaultLiked = false, text, onClick }: LikeButtonProps) => {
   const width = Math.floor(size * 25);
-  const theme: ThemeColors = useTheme();
   const [isLiked, setIsLiked] = React.useState(defaultLiked);
   const [clicked, setClicked] = React.useState(false);
 

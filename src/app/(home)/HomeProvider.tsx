@@ -5,7 +5,7 @@ import { createStore, Provider as JotaiProvider } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { searchMapKeyWordsAtom } from "./atoms/atoms";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 const homeAtomStore = createStore();
 
 export const getHomeAtomStore = () => homeAtomStore;

@@ -69,6 +69,7 @@ export async function toggleLikeServerAction(
 
     const likedId = await updateLike(mapId, userId, optimisticState);
 
+    revalidatePath(`/api/map-info`);
     return {
       id: likedId,
       title: "いいね完了",
