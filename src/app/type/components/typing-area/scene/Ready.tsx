@@ -5,7 +5,7 @@ import ReadyPlaySpeed from "./ready-child/ReadyPlaySpeed";
 import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./ready-child/ReadyPracticeButton";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { CARD_BODY_MIN_HEIGHT } from "../Scene";
+import { CARD_BODY_MIN_HEIGHT } from "../TypingCard";
 
 function Ready() {
   const { playerRef } = useRefs();

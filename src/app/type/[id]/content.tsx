@@ -17,7 +17,7 @@ import {
   useSetTimeOffsetAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
-import TypingCard from "../components/typing-area/Scene";
+import TypingCard from "../components/typing-area/TypingCard";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";

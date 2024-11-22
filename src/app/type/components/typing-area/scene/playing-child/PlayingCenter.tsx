@@ -8,7 +8,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import "@/css/type.css";
-import { CARD_BODY_MIN_HEIGHT } from "../../Scene";
+import { CARD_BODY_MIN_HEIGHT } from "../../TypingCard";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;

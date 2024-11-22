@@ -12,7 +12,7 @@ import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 import { supabase } from "@/lib/supabaseClient";
 import { INITIAL_STATE } from "@/config/consts";
 import { useParams } from "next/navigation";
-import { CARD_BODY_MIN_HEIGHT } from "../Scene";
+import { CARD_BODY_MIN_HEIGHT } from "../TypingCard";
 
 interface EndProps {
   onOpen: () => void;
