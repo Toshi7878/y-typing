@@ -45,7 +45,7 @@ function UsersResultList() {
         loadMore={() => fetchNextPage()}
         // loader={<LoadingMapCard />}
         hasMore={hasNextPage}
-        threshold={1400} // スクロールの閾値を追加
+        threshold={2000} // スクロールの閾値を追加
       >
         <ResultCardLayout>
           {data?.pages.map((page) =>
