@@ -30,7 +30,7 @@ const PreviewTimeInput = () => {
           <Box>
             譜面一覧でのプレビュー再生時に入力されているタイムから再生されるようになります。(サビのタイム推奨です)
           </Box>
-          <Box>↑↓キー: 0.1秒ずつ調整, Enter:再生</Box>
+          <Box>↑↓キー: 0.05ずつ調整, Enter:再生</Box>
         </>
       }
       placement="top"

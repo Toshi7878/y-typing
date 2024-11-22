@@ -1,6 +1,6 @@
 "use client";
 import { Tr, Td, Button, useTheme, Input, Box, UseDisclosureReturn, Flex } from "@chakra-ui/react";
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { LineEdit, ThemeColors } from "@/types";
@@ -47,7 +47,9 @@ function LineRow({
   endAfterLineIndex,
 }: LineRowProps) {
   const [editTime, setEditTime] = useState(line.time);
-
+  const directEditTimeInputRef = useRef<HTMLInputElement | null>(null);
+  const directEditLyricsInputRef = useRef<HTMLInputElement | null>(null);
+  const directEditWordInputRef = useRef<HTMLInputElement | null>(null);
   const setTabIndex = useSetTabIndexAtom();
   const [isLineLyricsSelected, setIsLineLyricsSelected] = useState(false);
   const lineSelectedCount = useEditLineSelectedCountAtom();
@@ -57,9 +59,8 @@ function LineRow({
   const setWord = useSetEditLineWordAtom();
   const directEdit = useEditDirectEditCountAtom();
   const setDirectEdit = useSetEditDirectEditCountAtom();
-  const { editorTimeInputRef } = useRefs();
+  const { editorTimeInputRef, playerRef } = useRefs();
   const timeCount = useEditTimeCountAtom();
-  const refs = useRefs();
   const theme: ThemeColors = useTheme();
   const isConvertButtonDisabled = useIsConvertButtonDisabled();
   const wordConvertButtonEvent = useWordConvertButtonEvent();
@@ -73,7 +74,7 @@ function LineRow({
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();
 
   const selectLine = useCallback(
-    (isCtrlKey: boolean, selectCount: number) => {
+    (event: React.MouseEvent<HTMLTableRowElement>, selectCount: number) => {
       const time = mapData[selectCount].time;
       const lyrics = mapData[selectCount].lyrics;
       const word = mapData[selectCount].word;
@@ -84,8 +85,19 @@ function LineRow({
         lineUpdateButtonEvent();
       }
 
-      if (isCtrlKey && selectCount !== 0 && selectCount !== endAfterLineIndex) {
+      if (event.ctrlKey && selectCount !== 0 && selectCount !== endAfterLineIndex) {
         setDirectEdit(selectCount);
+
+        const cellClassName = (event.target as HTMLElement).classList[0];
+        setTimeout(() => {
+          if (cellClassName === "time-cell") {
+            directEditTimeInputRef.current?.focus(); // フォーカスを設定
+          } else if (cellClassName === "lyrics-cell") {
+            directEditLyricsInputRef.current?.focus(); // フォーカスを設定
+          } else if (cellClassName === "word-cell") {
+            directEditWordInputRef.current?.focus(); // フォーカスを設定
+          }
+        }, 0);
       } else if (directEdit !== selectCount) {
         setDirectEdit(null);
       }
@@ -104,7 +116,7 @@ function LineRow({
   ) => {
     if (directEdit !== index) {
       const time = Number(event.currentTarget.textContent);
-      refs.playerRef.current.seekTo(time);
+      playerRef.current.seekTo(time);
     }
   };
 
@@ -141,7 +153,7 @@ function LineRow({
             : theme.colors.primary.dark,
       }}
       onClick={(event) => {
-        selectLine(event.ctrlKey, index);
+        selectLine(event, index);
         setTabIndex(1);
       }}
       className={lineSelectedCount === index ? "selected-line" : ""}
@@ -153,38 +165,43 @@ function LineRow({
         px={directEdit === index ? 2 : 4}
       >
         {directEdit === index ? (
-          <Input
-            size="xs"
-            type="number"
-            value={editTime}
-            bg={theme.colors.background.body}
-            borderColor={`${theme.colors.border.card}60`}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              setEditTime(newValue);
-              editorTimeInputRef.current!.setTime(newValue);
-            }}
-            onKeyDown={(e) => {
-              const value = e.currentTarget.value;
+          <CustomToolTip tooltipLabel={"↓↑: 0.05ずつ調整, Enter:再生"} placement="top">
+            <Input
+              ref={directEditTimeInputRef}
+              size="xs"
+              type="number"
+              value={editTime}
+              bg={theme.colors.background.body}
+              borderColor={`${theme.colors.border.card}60`}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                setEditTime(newValue);
+                editorTimeInputRef.current!.setTime(newValue);
+              }}
+              onKeyDown={(e) => {
+                const value = e.currentTarget.value;
 
-              if (e.code === "ArrowDown") {
-                const newValue = (Number(value) - 0.1).toFixed(3);
-                setEditTime(newValue);
-                editorTimeInputRef.current!.setTime(newValue);
-                e.preventDefault();
-              } else if (e.code === "ArrowUp") {
-                const newValue = (Number(value) + 0.1).toFixed(3);
-                setEditTime(newValue);
-                editorTimeInputRef.current!.setTime(newValue);
-                e.preventDefault();
-              }
-            }}
-          />
+                if (e.code === "ArrowUp") {
+                  const newValue = (Number(value) - 0.05).toFixed(3);
+                  setEditTime(newValue);
+                  editorTimeInputRef.current!.setTime(newValue);
+                  e.preventDefault();
+                } else if (e.code === "ArrowDown") {
+                  const newValue = (Number(value) + 0.05).toFixed(3);
+                  setEditTime(newValue);
+                  editorTimeInputRef.current!.setTime(newValue);
+                  e.preventDefault();
+                } else if (e.code === "Enter") {
+                  playerRef.current.seekTo(Number(value));
+                }
+              }}
+            />
+          </CustomToolTip>
         ) : (
           line.time
         )}
       </Td>
-      <Td borderRight="1px solid black">
+      <Td className="lyrics-cell" borderRight="1px solid black">
         {directEdit === index ? (
           <CustomToolTip
             tooltipLabel={<Box fontSize="xs">Enterキーを押すとRubyタグを挿入できます。</Box>}
@@ -193,6 +210,7 @@ function LineRow({
             isOpen={isLineLyricsSelected}
           >
             <Input
+              ref={directEditLyricsInputRef}
               size="sm"
               autoComplete="off"
               value={selectLyrics}
@@ -213,7 +231,7 @@ function LineRow({
           parse(line.lyrics)
         )}
       </Td>
-      <Td borderRight="1px solid black">
+      <Td className="word-cell" borderRight="1px solid black">
         {directEdit === index ? (
           <Flex alignItems="center" justifyContent="space-between">
             <Button
@@ -231,6 +249,7 @@ function LineRow({
               変換
             </Button>
             <Input
+              ref={directEditWordInputRef}
               width="91%"
               size="sm"
               autoComplete="off"
