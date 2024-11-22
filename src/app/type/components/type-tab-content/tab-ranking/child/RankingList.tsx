@@ -70,7 +70,7 @@ const RankingList = () => {
   if (isLoading) {
     return (
       <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
-        <Spinner size="xl" />
+        <Spinner size="lg" />
       </Box>
     );
   }

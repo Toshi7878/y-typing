@@ -23,7 +23,7 @@ const ResultToolTipText = (props: ResultToolTipTextProps) => {
   const theme: ThemeColors = useTheme();
 
   return (
-    <Box fontSize="sm">
+    <Box fontSize="sm" lineHeight={7}>
       {props.romaType > 0 && (
         <Box>
           <Text as="span">ローマ字タイプ数</Text>:{" "}
