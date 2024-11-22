@@ -47,7 +47,7 @@ const TabRanking = (props: TabRankingProps) => {
               },
               "tr, td": {
                 paddingY: "0.6rem", // smとmdの間のサイズに調整
-                fontSize: "1.1rem", // smとmdの間のフォントサイズに調整
+                fontSize: "1.13rem", // smとmdの間のフォントサイズに調整
               },
             }}
           >
