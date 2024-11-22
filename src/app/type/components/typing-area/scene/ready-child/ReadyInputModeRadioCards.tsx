@@ -27,8 +27,9 @@ function RadioCard({ option, children, ...props }: RadioCardProps) {
         cursor="pointer"
         borderWidth="1px"
         boxShadow="md"
+        fontWeight="bold"
         borderColor={theme.colors.border.card}
-        className="font-bold select-none"
+        className="select-none"
         _hover={{
           bg: `${selectedBg}80`,
           color: theme.colors.text.body,

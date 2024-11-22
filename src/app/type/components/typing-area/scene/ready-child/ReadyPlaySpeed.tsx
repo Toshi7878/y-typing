@@ -31,7 +31,6 @@ const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
       borderColor={theme.colors.border.card}
       style={{ border: "1px solid" }}
       px={8}
-      py={6}
       className="rounded-lg"
       boxShadow="md"
     >

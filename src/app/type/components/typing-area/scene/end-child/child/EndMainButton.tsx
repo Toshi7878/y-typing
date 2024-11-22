@@ -22,8 +22,8 @@ const EndMainButton = ({
     <Button
       className="cursor-pointer"
       variant="solid"
-      py={12}
-      width="450px"
+      py="3.2rem"
+      width="430px"
       bg={theme.colors.primary.main}
       color={theme.colors.text.body}
       border="1px"

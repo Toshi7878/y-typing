@@ -49,6 +49,10 @@ const TabRanking = (props: TabRankingProps) => {
                 paddingY: "0.6rem", // smとmdの間のサイズに調整
                 fontSize: "1.13rem", // smとmdの間のフォントサイズに調整
               },
+              th: {
+                borderBottom: "1px",
+                borderColor: `${theme.colors.border.card}30`,
+              },
             }}
           >
             <Thead

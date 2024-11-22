@@ -1,4 +1,4 @@
-import { Box, HStack, UseDisclosureReturn } from "@chakra-ui/react";
+import { Box, Flex, HStack, UseDisclosureReturn } from "@chakra-ui/react";
 import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
 import PlayingSkipGuide, { SkipGuideRef } from "../playing-child/child/PlayingSkipGuide";
 import PlayingTotalTime, { PlayingTotalTimeRef } from "../playing-child/child/PlayingTotalTime";
@@ -40,18 +40,26 @@ const PlayingBottom = function ({
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   return (
-    <Box mx="8">
+    <>
       <HStack
-        justify="space-between"
-        className={`mx-2 font-bold ${isPlayed ? "" : "invisible"} bottom-card-text`}
+        justifyContent="space-between"
+        mx={2}
+        fontWeight="bold"
+        className={`${isPlayed ? "" : "invisible"} bottom-card-text`}
       >
         <PlayingSkipGuide ref={skipGuideRef} className="opacity-70" />
         <PlayingTotalTime className="text-2xl font-mono" ref={playingTotalTimeRef} />
       </HStack>
-      <PlayingLineProgress ref={totalTimeProgressRef} id="total_progress" />
-      <HStack
-        justify="space-between"
-        className={`mx-3 mt-2 mb-4 font-bold ${isPlayed ? "" : "invisible"}`}
+      <Box>
+        <PlayingLineProgress ref={totalTimeProgressRef} id="total_progress" />
+      </Box>
+      <Flex
+        justifyContent="space-between"
+        mx={3}
+        mt={2}
+        mb={4}
+        fontWeight="bold"
+        className={`${isPlayed ? "" : "invisible"}`}
       >
         {scene === "practice" ? (
           <PlayingLineSeekBadge
@@ -98,8 +106,8 @@ const PlayingBottom = function ({
           isPauseDisabled={true}
           isKbdHidden={false}
         />
-      </HStack>
-    </Box>
+      </Flex>
+    </>
   );
 };
 

@@ -3,21 +3,23 @@ import React, { memo } from "react";
 
 interface LyricsProps {
   lyrics: string;
-  className?: string;
-  size?: string;
 }
 
-const PlayingLyrics = memo(({ size = "lg", className = "", lyrics }: LyricsProps) => {
+const PlayingLyrics = ({ lyrics }: LyricsProps) => {
   return (
     <Box
+      isTruncated
+      fontWeight="bold"
+      fontSize="2.75rem"
       id="lyrics"
-      className={`${className}`}
+      ml={-8}
+      className={"-inset-5 lyrics-font"}
       dangerouslySetInnerHTML={{
         __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
       }}
     />
   );
-});
+};
 PlayingLyrics.displayName = "PlayingLyrics";
 
-export default PlayingLyrics;
+export default memo(PlayingLyrics);

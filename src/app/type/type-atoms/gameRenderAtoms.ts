@@ -77,16 +77,6 @@ export const useSetPlayingNotifyAtom = () => {
   return useSetAtom(playingNotifyAtom);
 };
 
-const mapIdAtom = atom<number>(0);
-
-export const useMapIdAtom = () => {
-  return useAtomValue(mapIdAtom);
-};
-
-export const useSetMapIdAtom = () => {
-  return useSetAtom(mapIdAtom);
-};
-
 const rankingScoresAtom = atom<number[]>([]);
 export const useRankingScoresAtom = () => {
   return useAtomValue(rankingScoresAtom);

@@ -1,24 +1,17 @@
 import { supabase } from "@/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import {
-  useSetLineResultsAtom,
-  useSetMapAtom,
-  useSetMapIdAtom,
-} from "../../type-atoms/gameRenderAtoms";
+import { useSetLineResultsAtom, useSetMapAtom } from "../../type-atoms/gameRenderAtoms";
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
 
 export const useDownloadMapDataJsonQuery = () => {
   const { id } = useParams();
-  const setMapId = useSetMapIdAtom();
   const setLineResults = useSetLineResultsAtom();
   const setMap = useSetMapAtom();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["mapData", id],
     queryFn: async () => {
-      setMapId(Number(id));
-
       if (!id) return;
       try {
         const timestamp = new Date().getTime(); // 一意のクエリパラメータを生成

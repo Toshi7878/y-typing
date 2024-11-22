@@ -1,10 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Stack } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import ReadyInputModeRadioCards from "./ready-child/ReadyInputModeRadioCards";
 import ReadyPlaySpeed from "./ready-child/ReadyPlaySpeed";
 import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./ready-child/ReadyPracticeButton";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { CARD_BODY_MIN_HEIGHT } from "../Scene";
 
 function Ready() {
   const { playerRef } = useRefs();
@@ -43,19 +44,21 @@ function Ready() {
   }, [playerRef]);
 
   return (
-    <Box className="mx-12 mt-2" flex="1">
-      <Box className="font-bold text-2xl">Enterキー / 動画をクリックして開始</Box>
-      <Flex className="text-3xl text-center mt-6" justifyContent={"center"}>
+    <Stack justifyContent="space-between" direction="column" minH={CARD_BODY_MIN_HEIGHT}>
+      <Box fontWeight="bold" fontSize="2xl">
+        Enterキー / 動画をクリックして開始
+      </Box>
+      <Flex textAlign="center" fontSize="3xl" justifyContent="center">
         <ReadyInputModeRadioCards />
       </Flex>
-      <Flex className=" text-center mt-10" justifyContent="space-between">
+      <Flex textAlign="center" justifyContent="space-between">
         <ReadyPlaySpeed
           speedUpButtonRef={speedUpButtonRef}
           speedDownButtonRef={speedDownButtonRef}
         />
         <ReadyPracticeButton />
       </Flex>
-    </Box>
+    </Stack>
   );
 }
 

@@ -24,7 +24,6 @@ interface TypeYouTubeProps {
 }
 
 const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeYouTubeProps) {
-  console.log("YouTube");
   const scene = useSceneAtom();
   const map = useMapAtom();
   const inputMode = useInputModeAtom();
@@ -78,6 +77,10 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
             playerVars: {
               enablejsapi: 1,
               controls: 0,
+              playsinline: 1,
+              iv_load_policy: 3,
+              modestbranding: 1,
+              rel: 0,
             },
           }}
           onReady={ytReadyEvent}

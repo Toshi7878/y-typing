@@ -17,7 +17,7 @@ import {
   useSetTimeOffsetAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
-import SceneWrapper from "../components/typing-area/Scene";
+import TypingCard from "../components/typing-area/Scene";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
@@ -27,7 +27,7 @@ import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapD
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
   const { videoId, title, creatorComment, tags } = mapInfo;
-  const { id } = useParams();
+  const { id: mapId } = useParams();
   const setMap = useSetMapAtom();
   const setScene = useSetSceneAtom();
   const setRankingScores = useSetRankingScoresAtom();
@@ -43,7 +43,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   useEffect(() => {
     return () => {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
-      queryClient.removeQueries({ queryKey: ["mapData", id] });
+      queryClient.removeQueries({ queryKey: ["mapData", mapId] });
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
       setNotify(Symbol(""));
@@ -59,7 +59,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, queryClient]);
+  }, [mapId, queryClient]);
 
   const style: CSSProperties = {
     transform: `scale(${scale})`,
@@ -90,8 +90,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
                 <TypeTabContent />
               </Box>
             </Flex>
-            <Box className=" mt-5">
-              <SceneWrapper />
+            <Box mt={5}>
+              <TypingCard />
             </Box>
           </Flex>
         </Box>

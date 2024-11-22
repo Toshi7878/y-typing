@@ -1,11 +1,7 @@
 import { Box, Stack } from "@chakra-ui/react";
 import React from "react";
 import { actions } from "@/app/type/ts/scene-ts/end/actions";
-import {
-  useLineResultsAtom,
-  useMapIdAtom,
-  useTypePageSpeedAtom,
-} from "@/app/type/type-atoms/gameRenderAtoms";
+import { useLineResultsAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 
@@ -15,6 +11,8 @@ import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
 import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
 import { supabase } from "@/lib/supabaseClient";
 import { INITIAL_STATE } from "@/config/consts";
+import { useParams } from "next/navigation";
+import { CARD_BODY_MIN_HEIGHT } from "../Scene";
 
 interface EndProps {
   onOpen: () => void;
@@ -23,7 +21,8 @@ interface EndProps {
 const End = ({ onOpen }: EndProps) => {
   const { data: session } = useSession();
 
-  const mapId = useMapIdAtom();
+  const { id: mapId } = useParams();
+
   const speedData = useTypePageSpeedAtom();
   const lineResults = useLineResultsAtom();
 
@@ -51,7 +50,7 @@ const End = ({ onOpen }: EndProps) => {
       clearRate: +statusRef.current!.status.clearRate.toFixed(1),
     };
     const sendData = {
-      mapId: mapId,
+      mapId: Number(mapId),
       status: sendStatus,
     };
 
@@ -89,32 +88,30 @@ const End = ({ onOpen }: EndProps) => {
     speedData.defaultSpeed >= 1 &&
     isPlayingMode;
   return (
-    <Box flex="1" className="text-center mx-6">
-      <Stack display="flex" spacing={8}>
-        <EndText
-          isPerfect={isPerfect}
-          gameStateRef={gameStateRef}
-          session={session}
-          status={status}
-          bestScoreRef={bestScoreRef}
-          speedData={speedData}
-        />
-        <EndMainButtonContainer
-          formAction={formAction}
-          isDisplayRankingButton={isDisplayRankingButton}
-          state={state}
-          onOpen={onOpen}
-          isScoreUpdated={isScoreUpdated}
-          isPlayingMode={isPlayingMode}
-        />
-        <EndSubButtonContainer
-          isPlayingMode={isPlayingMode}
-          isDisplayRankingButton={isDisplayRankingButton}
-          state={state}
-          gameStateRef={gameStateRef}
-        />
-      </Stack>
-    </Box>
+    <Stack minH={CARD_BODY_MIN_HEIGHT} justifyContent="space-between">
+      <EndText
+        isPerfect={isPerfect}
+        gameStateRef={gameStateRef}
+        session={session}
+        status={status}
+        bestScoreRef={bestScoreRef}
+        speedData={speedData}
+      />
+      <EndMainButtonContainer
+        formAction={formAction}
+        isDisplayRankingButton={isDisplayRankingButton}
+        state={state}
+        onOpen={onOpen}
+        isScoreUpdated={isScoreUpdated}
+        isPlayingMode={isPlayingMode}
+      />
+      <EndSubButtonContainer
+        isPlayingMode={isPlayingMode}
+        isDisplayRankingButton={isDisplayRankingButton}
+        state={state}
+        gameStateRef={gameStateRef}
+      />
+    </Stack>
   );
 };
 

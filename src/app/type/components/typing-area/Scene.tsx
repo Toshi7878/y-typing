@@ -1,6 +1,6 @@
 "use client";
 import "../../style/type.scss";
-import React, { useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
 import {
@@ -10,7 +10,15 @@ import {
   useSetTabIndexAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import Ready from "./scene/Ready";
-import { Box, Card, useDisclosure, useTheme } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  useDisclosure,
+  UseDisclosureReturn,
+  useTheme,
+} from "@chakra-ui/react";
 import ResultDrawer from "./scene/result/ResultDrawer";
 import PlayingTop from "./scene/child/PlayingTop";
 import PlayingBottom from "./scene/child/PlayingBottom";
@@ -20,17 +28,21 @@ import { SkipGuideRef } from "./scene/playing-child/child/PlayingSkipGuide";
 import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
 import { ThemeColors } from "@/types";
 
-export const Scene = () => {
+interface TypingCardBodyProps {
+  drawerClosure: UseDisclosureReturn;
+  playingTotalTimeRef: RefObject<PlayingTotalTimeRef>;
+  skipGuideRef: RefObject<SkipGuideRef>;
+  totalTimeProgressRef: RefObject<HTMLProgressElement>;
+}
+
+export const CARD_BODY_MIN_HEIGHT = "335px";
+
+const TypingCardBody = (props: TypingCardBodyProps) => {
+  const { drawerClosure, playingTotalTimeRef, skipGuideRef, totalTimeProgressRef } = props;
   const scene = useSceneAtom();
   const map = useMapAtom();
-  const drawerClosure = useDisclosure();
   const { isOpen, onOpen } = drawerClosure;
   const lineSelectIndex = useLineSelectIndexAtom();
-  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
-  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
-  const skipGuideRef = useRef<SkipGuideRef>(null);
   const setTabIndex = useSetTabIndexAtom();
 
   useEffect(() => {
@@ -42,8 +54,7 @@ export const Scene = () => {
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
   return (
-    <Box display="flex" flexDirection="column" className={isPlayed ? "select-none" : ""}>
-      <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
+    <CardBody mx={8} py={3}>
       {scene === "ready" ? (
         <Ready />
       ) : isPlayed && map ? (
@@ -71,19 +82,18 @@ export const Scene = () => {
           <style>{map!.mapData[0].options?.eternalCSS}</style>
         </>
       ) : null}
-      <PlayingBottom
-        drawerClosure={drawerClosure}
-        skipGuideRef={skipGuideRef}
-        totalTimeProgressRef={totalTimeProgressRef}
-        playingTotalTimeRef={playingTotalTimeRef}
-      />
-    </Box>
+    </CardBody>
   );
 };
 
-function SceneWrapper() {
-  console.log("SceneWrapper");
+function TypingCard() {
   const theme: ThemeColors = useTheme();
+  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
+  const drawerClosure = useDisclosure();
+  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
+  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
+  const skipGuideRef = useRef<SkipGuideRef>(null);
 
   return (
     <Card
@@ -93,9 +103,25 @@ function SceneWrapper() {
       color={theme.colors.text.body}
       boxShadow="lg"
     >
-      <Scene />
+      <CardHeader py={0} mx={3}>
+        <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
+      </CardHeader>
+      <TypingCardBody
+        drawerClosure={drawerClosure}
+        totalTimeProgressRef={totalTimeProgressRef}
+        playingTotalTimeRef={playingTotalTimeRef}
+        skipGuideRef={skipGuideRef}
+      />
+      <CardFooter py={0} mx={3} flexDirection="column">
+        <PlayingBottom
+          drawerClosure={drawerClosure}
+          skipGuideRef={skipGuideRef}
+          totalTimeProgressRef={totalTimeProgressRef}
+          playingTotalTimeRef={playingTotalTimeRef}
+        />
+      </CardFooter>
     </Card>
   );
 }
 
-export default SceneWrapper;
+export default TypingCard;

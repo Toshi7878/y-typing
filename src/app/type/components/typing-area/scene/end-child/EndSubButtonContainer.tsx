@@ -18,7 +18,7 @@ const EndSubButtonContainer = ({
   gameStateRef,
 }: EndSubButtonContainerProps) => {
   return (
-    <HStack spacing={14} justifyContent="flex-end" mx="12" mt="12" id="end_sub_buttons">
+    <HStack spacing={14} justifyContent="flex-end" mx="12" id="end_sub_buttons">
       {isPlayingMode && (
         <EndSubButton
           retryMode="practice"

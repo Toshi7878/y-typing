@@ -1,12 +1,14 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, useTheme, VStack } from "@chakra-ui/react";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import PlayingLyrics from "./child/PlayingLyrics";
 import type { NextLyricsType, WordType } from "@/app/type/ts/type";
 import PlayingWord from "./child/PlayingWord";
 import NextLyrics from "./child/PlayingNextLyrics";
-import { useAtomValue } from "jotai";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { ThemeColors } from "@/types";
+import "@/css/type.css";
+import { CARD_BODY_MIN_HEIGHT } from "../../Scene";
 
 export interface PlayingCenterRef {
   setLineWord: (newLineWord: WordType) => void;
@@ -39,6 +41,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
   const inputMode = useInputModeAtom();
   const { gameStateRef, setRef } = useRefs();
 
+  const theme: ThemeColors = useTheme();
   useEffect(() => {
     if (ref && "current" in ref) {
       setRef("playingCenterRef", ref.current!);
@@ -62,14 +65,18 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
 
   return (
     <VStack
-      mx="4"
-      py="2"
-      className={`truncate ${playMode === "playing" ? "cursor-none" : ""}`}
+      className={`${playMode === "playing" ? "cursor-none" : ""}`}
       flex={flex}
+      isTruncated
+      ml={-2}
       align="start"
+      minH={CARD_BODY_MIN_HEIGHT}
+      justifyContent="space-between"
     >
       <Box
-        className="word-font outline-text text-white ml-6 mb-2 mt-1 text-[2.75rem]"
+        color={theme.colors.text.body}
+        fontSize="2.75rem"
+        className="word-font outline-text"
         style={{ letterSpacing: "0.1em" }}
       >
         <PlayingWord
@@ -85,20 +92,13 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
           correct={lineWord.correct["r"].slice(-16).replace(/ /g, "ˍ")}
           nextChar={lineWord.nextChar["r"][0]}
           word={lineWord.word.map((w) => w["r"][0]).join("")}
-          className={`uppercase ml-1 word-roma ${inputMode === "kana" ? "invisible" : ""}`}
+          className={`uppercase word-roma ${inputMode === "kana" ? "invisible" : ""}`}
         />
       </Box>
 
-      <PlayingLyrics
-        lyrics={lyrics}
-        className="-indent-1 mb-4 font-bold text-[2.75rem] text-truncate lyrics-font"
-      />
+      <PlayingLyrics lyrics={lyrics} />
 
-      <NextLyrics
-        className={"text-gray-400 ml-3 text-3xl lyrics-font"}
-        lyrics={nextLyrics.lyrics}
-        kpm={nextLyrics.kpm}
-      />
+      <NextLyrics lyrics={nextLyrics.lyrics} kpm={nextLyrics.kpm} />
     </VStack>
   );
 });

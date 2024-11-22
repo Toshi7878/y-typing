@@ -1,26 +1,32 @@
-import { Box } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
+import { Box, useTheme } from "@chakra-ui/react";
 import React, { memo } from "react";
-// export interface LyricsHandle {
-//   setLyrics: (lyrics: string) => void;
-// }
+
 interface NextLyricsProps {
   lyrics: string;
-  className?: string;
-  size?: string;
   kpm: string;
 }
 
-const NextLyrics = memo(({ className = "", lyrics, kpm }: NextLyricsProps) => {
+const NextLyrics = memo(({ lyrics, kpm }: NextLyricsProps) => {
+  const theme: ThemeColors = useTheme();
+
   return (
-    <Box className={`${className}`}>
+    <Box
+      color={`${theme.colors.text.body}99`}
+      fontSize="3xl"
+      className="lyrics-font"
+      lineHeight={10}
+      ml={-2}
+    >
       <Box
+        fontWeight="bold"
         id="next_lyrics"
-        className="font-bold -indent-3 ml-[1px]"
+        className="-indent-3"
         dangerouslySetInnerHTML={{
           __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
         }}
       />
-      <Box id="next_kpm" className="ml-4">
+      <Box id="next_kpm" ml={3.5}>
         {Number(kpm) > 0 ? `NEXT: ${kpm}kpm` : ""}
       </Box>
     </Box>
