@@ -1,7 +1,6 @@
 import { useMapAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Box } from "@chakra-ui/react";
-import { useAtomValue } from "jotai";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 interface TotalTimeProps {
