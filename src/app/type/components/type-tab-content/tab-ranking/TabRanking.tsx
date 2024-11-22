@@ -20,7 +20,7 @@ const TabRanking = (props: TabRankingProps) => {
       boxShadow="lg"
       color={theme.colors.text.body}
     >
-      <CardBody className="text-3xl font-bold w-full" pt={2}>
+      <CardBody className="text-3xl font-bold w-full" pt={1} pb={2}>
         <Box
           overflowY="scroll"
           minH={props.height}
@@ -54,7 +54,6 @@ const TabRanking = (props: TabRankingProps) => {
             <Thead
               position="sticky"
               top={0}
-              pt={2}
               zIndex={0}
               background={theme.colors.background.card}
               className="ranking-thead"

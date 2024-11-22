@@ -64,7 +64,7 @@ export default function TypeTabContent({ className }: TypeTabContentProps) {
         </TabPanel>
 
         <TabPanel px={0}>
-          <TabRanking height={"220px"} />
+          <TabRanking height={"236px"} />
         </TabPanel>
       </TabPanels>
     </Tabs>
