@@ -17,16 +17,29 @@ export default function Content() {
     window.getSelection()!.removeAllRanges();
     NProgress.done();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
     <Provider>
-      <Box width={{ base: "100%", lg: "92vw", "2xl": "82vw" }}>
-        <SearchContent />
-        <MapList />
-        <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
-          <PreviewYouTubeContent />
+      <Box
+        as="main"
+        minH="100vh"
+        width={"100%"}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="space-between"
+        pt={16}
+      >
+        <Box width={{ base: "100%", lg: "92vw", "2xl": "82vw" }}>
+          <SearchContent />
+          <MapList />
+          <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
+            <PreviewYouTubeContent />
+          </Box>
         </Box>
       </Box>
     </Provider>

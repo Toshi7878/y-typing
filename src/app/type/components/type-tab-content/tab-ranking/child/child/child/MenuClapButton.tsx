@@ -1,8 +1,7 @@
+import { queryClient } from "@/app/type/[id]/TypeProvider";
 import { INITIAL_STATE } from "@/config/consts";
-import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 import { Box, Button, useTheme } from "@chakra-ui/react";
-import { Dispatch } from "react";
 import { useFormState } from "react-dom";
 
 interface MenuClapButtonProps {
@@ -18,7 +17,15 @@ const MenuClapButton = ({
 }: MenuClapButtonProps) => {
   const theme: ThemeColors = useTheme();
 
-  const [state, formAction] = useFormState(() => toggleClapAction(resultId), INITIAL_STATE);
+  const [state, formAction] = useFormState(async () => {
+    const result = await toggleClapAction(resultId);
+
+    if (result.id) {
+      queryClient.removeQueries({ queryKey: ["userRanking"] });
+    }
+
+    return result;
+  }, INITIAL_STATE);
   return (
     <Box as="form" action={formAction}>
       {" "}

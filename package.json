@@ -41,7 +41,7 @@
     "html-react-parser": "^5.1.16",
     "identicon.js": "^2.3.3",
     "interactjs": "^1.10.27",
-    "jotai": "^2.8.3",
+    "jotai": "^2.10.3",
     "jschardet": "^3.1.2",
     "lucide-react": "^0.460.0",
     "next": "14.2.3",

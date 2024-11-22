@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createStore, Provider as JotaiProvider } from "jotai";
 import { useSearchParams } from "next/navigation";
@@ -7,7 +7,7 @@ import { FilterMode } from "./ts/type";
 import { searchResultKeyWordsAtom, searchResultKpmAtom, searchResultModeAtom } from "./atoms/atoms";
 import { DEFAULT_KPM_SEARCH_RANGE } from "./ts/const/consts";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 const timelineAtomStore = createStore();
 
 export const getTimelineAtomStore = () => timelineAtomStore;
