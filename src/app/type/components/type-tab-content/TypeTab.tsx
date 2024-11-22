@@ -1,30 +1,20 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel, useTheme, HStack, Box } from "@chakra-ui/react";
+import { Tabs, TabPanels, TabPanel, useTheme, HStack } from "@chakra-ui/react";
 import TabRanking from "./tab-ranking/TabRanking";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { ThemeColors } from "@/types";
-import TabStatus from "./tab-status/TabStatus";
+import TabStatusCard from "./tab-status/TabStatusCard";
 import TabIcons from "./child/TabIcons";
 import { useSetTabIndexAtom, useTabIndexAtom } from "../../type-atoms/gameRenderAtoms";
+import TabLists from "./child/TabLists";
 
 interface TypeTabContentProps {
   className?: string;
 }
 
-const tabLists = ["ステータス", "ランキング"];
 export default function TypeTabContent({ className }: TypeTabContentProps) {
-  console.log("Tab");
   const tabIndex = useTabIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
   const theme: ThemeColors = useTheme();
-
-  const tabStatusRef = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      setTabIndex(1);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Tabs
@@ -39,28 +29,13 @@ export default function TypeTabContent({ className }: TypeTabContentProps) {
         borderBottom={`1px solid ${theme.colors.text.body}55`}
         style={{ userSelect: "none" }}
       >
-        <TabList height="33px" px="8" w="100%">
-          {tabLists.map((tabName, index) => {
-            return (
-              <Tab
-                key={index}
-                width="200px"
-                opacity={tabIndex === index ? 1 : 0.5}
-                borderBottom={tabIndex === index ? `1px solid ${theme.colors.text.body}` : ""}
-                color={theme.colors.text.body}
-                _hover={{ bg: "rgba(0, 0, 0, 0.1)", color: theme.colors.text.body }}
-                _selected={{ color: theme.colors.text.body }}
-              >
-                {tabName}
-              </Tab>
-            );
-          })}
-        </TabList>
+        <TabLists tabIndex={tabIndex} />
         <TabIcons />
       </HStack>
+
       <TabPanels>
         <TabPanel px={0}>
-          <TabStatus ref={tabStatusRef} height={"208px"} />
+          <TabStatusCard height={"208px"} />
         </TabPanel>
 
         <TabPanel px={0}>

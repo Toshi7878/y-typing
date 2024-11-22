@@ -16,6 +16,7 @@ import {
   useSceneAtom,
   useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
+import { Box } from "@chakra-ui/react";
 
 interface TypeYouTubeProps {
   className: string;
@@ -67,23 +68,25 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
 
   const memoizedYouTube = useMemo(
     () => (
-      <YouTube
-        className={`${className} `}
-        videoId={videoId}
-        opts={{
-          width: "100%",
-          height: "100%",
-          playerVars: {
-            enablejsapi: 1,
-            controls: 0,
-          },
-        }}
-        onReady={ytReadyEvent}
-        onPlay={ytPlayEvent}
-        onPause={ytPauseEvent}
-        onEnd={ytEndEvent}
-        onStateChange={handleStateChange}
-      />
+      <Box style={{ userSelect: "none" }}>
+        <YouTube
+          className={`${className} `}
+          videoId={videoId}
+          opts={{
+            width: "100%",
+            height: "100%",
+            playerVars: {
+              enablejsapi: 1,
+              controls: 0,
+            },
+          }}
+          onReady={ytReadyEvent}
+          onPlay={ytPlayEvent}
+          onPause={ytPauseEvent}
+          onEnd={ytEndEvent}
+          onStateChange={handleStateChange}
+        />
+      </Box>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [className, videoId, ytPlayEvent, handleStateChange],

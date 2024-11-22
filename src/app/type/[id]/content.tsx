@@ -70,22 +70,22 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
 
   return (
     <LoadingOverlayWrapper active={isLoadingOverlay} spinner={true} text="Loading...">
-      <Box
+      <Flex
         as="main"
         id="main_content"
-        className="flex flex-col items-center pt-16"
+        flexDirection="column"
+        alignItems="center"
+        pt={16}
         width={"100vw"}
         height={"100vh"}
       >
         <Box style={style}>
           <Flex direction="column">
             <Flex gap="6">
-              <Box style={{ userSelect: "none" }}>
-                <TypeYouTubeContent
-                  className={`w-[513px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
-                  videoId={videoId}
-                />
-              </Box>
+              <TypeYouTubeContent
+                className={`w-[513px] ${isLoading ? "invisible" : ""} aspect-video mt-2`}
+                videoId={videoId}
+              />
               <Box flex={{ base: "8" }} flexDirection="column">
                 <TypeTabContent />
               </Box>
@@ -95,7 +95,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
             </Box>
           </Flex>
         </Box>
-      </Box>
+      </Flex>
     </LoadingOverlayWrapper>
   );
 }
