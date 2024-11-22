@@ -93,34 +93,24 @@ const RankingList = () => {
           };
 
           return (
-            <React.Fragment key={index}>
-              <RankingTr
-                result={user}
-                index={index}
-                rank={index + 1}
-                type={type}
-                romaType={romaType}
-                kanaType={kanaType}
-                flickType={flickType}
-                isHighlighted={showMenu === index}
-                isHovered={hoveredIndex === index}
-                showMenu={showMenu}
-                setShowMenu={setShowMenu}
-                setHoveredIndex={setHoveredIndex}
-                handleShowMenu={handleShowMenu}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              />
-              {/* {showMenu === index && (
-                <RankingMenu
-                  resultId={Number(user.id)}
-                  userId={user.userId}
-                  name={user.user.name}
-                  setShowMenu={setShowMenu}
-                  setHoveredIndex={setHoveredIndex}
-                />
-              )} */}
-            </React.Fragment>
+            <RankingTr
+              key={index}
+              result={user}
+              index={index}
+              rank={index + 1}
+              type={type}
+              romaType={romaType}
+              kanaType={kanaType}
+              flickType={flickType}
+              isHighlighted={showMenu === index}
+              isHovered={hoveredIndex === index}
+              showMenu={showMenu}
+              setShowMenu={setShowMenu}
+              setHoveredIndex={setHoveredIndex}
+              handleShowMenu={handleShowMenu}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            />
           );
         })}
     </>

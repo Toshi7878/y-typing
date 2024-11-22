@@ -13,6 +13,7 @@ const RankText = (props: RankTextProps) => {
   return (
     <Text
       as="span"
+      ml={1}
       {...(props.rank === 1 && { color: theme.colors.semantic.perfect })}
       className={`${props.rank === 1 ? "outline-text" : ""}`}
     >

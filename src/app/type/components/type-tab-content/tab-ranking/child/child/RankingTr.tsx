@@ -16,6 +16,7 @@ import RankingMenu from "./RankingMenu";
 import { RankingListType } from "@/app/type/ts/type";
 import { useSession } from "next-auth/react";
 import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
+import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
 
 interface RankingTrProps {
   result: RankingListType;
@@ -87,32 +88,40 @@ const RankingTr = (props: RankingTrProps) => {
           {...(userId === Number(props.result.userId) && {
             color: theme.colors.secondary.main,
           })}
+          height={9}
           onClick={props.handleShowMenu}
           onMouseEnter={props.onMouseEnter}
           onMouseLeave={props.onMouseLeave}
         >
-          <Td pr={5} className="">
+          <Td width={RANKING_COLUMN_WIDTH.rank}>
             <RankText rank={props.rank}>{`#${props.rank}`}</RankText>
           </Td>
-          <Td isTruncated whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-            {props.result.user.name}
-          </Td>
-          <Td>{props.result.score}</Td>
-          <Td>
+          <Td width={RANKING_COLUMN_WIDTH.score}>{props.result.score}</Td>
+          <Td width={RANKING_COLUMN_WIDTH.clearRate}>
             <ClearRateText clearRate={props.result.clearRate} isPerfect={isPerfect} />
           </Td>
-          <Td>{props.result.kpm}</Td>
-          <Td>
+          <Td
+            width={RANKING_COLUMN_WIDTH.userName}
+            isTruncated
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
+            {props.result.user.name}
+          </Td>
+
+          <Td width={RANKING_COLUMN_WIDTH.kpm}>{props.result.kpm}</Td>
+          <Td width={RANKING_COLUMN_WIDTH.inputMode}>
             <UserInputModeText
               kanaType={props.kanaType}
               romaType={props.romaType}
               flickType={props.flickType}
             />
           </Td>
-          <Td>
+          <Td width={RANKING_COLUMN_WIDTH.updatedAt}>
             <UpdateAtText updatedAt={props.result.updatedAt} />
           </Td>
-          <Td alignItems="center">
+          <Td width={RANKING_COLUMN_WIDTH.clapCount} alignItems="center">
             <ClapedText clapOptimisticState={clapOptimisticState} />
           </Td>
         </Tr>

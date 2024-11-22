@@ -3,6 +3,7 @@ import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box, useTheme } from "@cha
 import RankingList from "./child/RankingList";
 import { FaHandsClapping } from "react-icons/fa6";
 import { ThemeColors } from "@/types";
+import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
 
 interface TabRankingProps {
   height: string;
@@ -45,8 +46,8 @@ const TabRanking = (props: TabRankingProps) => {
                 borderColor: theme.colors.border.card,
               },
               "tr, td": {
-                paddingY: "0.5rem", // smとmdの間のサイズに調整
-                fontSize: "1rem", // smとmdの間のフォントサイズに調整
+                paddingY: "0.4rem", // smとmdの間のサイズに調整
+                fontSize: "1.1rem", // smとmdの間のフォントサイズに調整
               },
             }}
           >
@@ -59,29 +60,30 @@ const TabRanking = (props: TabRankingProps) => {
               style={{ userSelect: "none" }}
             >
               <Tr>
-                <Th width="5%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.rank} color={theme.colors.text.body}>
                   順位
                 </Th>
-                <Th width="15%" color={theme.colors.text.body}>
-                  名前
-                </Th>
-                <Th width="10%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.score} color={theme.colors.text.body}>
                   Score
                 </Th>
-                <Th width="7%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.clearRate} color={theme.colors.text.body}>
                   クリア率
                 </Th>
-                <Th width="5%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.userName} color={theme.colors.text.body}>
+                  名前
+                </Th>
+
+                <Th width={RANKING_COLUMN_WIDTH.kpm} color={theme.colors.text.body}>
                   kpm
                 </Th>
-                <Th width="10%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.inputMode} color={theme.colors.text.body}>
                   モード
                 </Th>
-                <Th width="10%" color={theme.colors.text.body}>
+                <Th width={RANKING_COLUMN_WIDTH.updatedAt} color={theme.colors.text.body}>
                   時間
                 </Th>
                 <Th
-                  width="1%"
+                  width={RANKING_COLUMN_WIDTH.clapCount}
                   position="relative"
                   right={1}
                   top={-0.5}
