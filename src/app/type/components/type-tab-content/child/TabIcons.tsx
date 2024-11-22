@@ -8,7 +8,6 @@ import EditIcon from "./icon-child/EditIcon";
 import { useState } from "react";
 
 export default function TabIcons() {
-  console.log("Tab");
   const theme: ThemeColors = useTheme();
 
   const { data: session } = useSession();

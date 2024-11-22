@@ -12,13 +12,3 @@ export const useSearchMapKeyWordsAtom = () => {
 export const useSetSearchMapKeyWordsAtom = () => {
   return useSetAtom(searchMapKeyWordsAtom, { store: homeAtomStore });
 };
-
-const isToggleLikedAtom = atom<boolean>(false);
-
-export const useIsToggleLikedAtom = () => {
-  return useAtomValue(isToggleLikedAtom, { store: homeAtomStore });
-};
-
-export const useSetIsToggleLikedAtom = () => {
-  return useSetAtom(isToggleLikedAtom, { store: homeAtomStore });
-};
