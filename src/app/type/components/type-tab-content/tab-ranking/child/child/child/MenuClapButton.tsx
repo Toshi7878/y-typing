@@ -20,10 +20,6 @@ const MenuClapButton = ({
   const [state, formAction] = useFormState(async () => {
     const result = await toggleClapAction(resultId);
 
-    if (result.id) {
-      queryClient.removeQueries({ queryKey: ["userRanking"] });
-    }
-
     return result;
   }, INITIAL_STATE);
   return (

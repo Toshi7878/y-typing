@@ -44,6 +44,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
     return () => {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
       queryClient.removeQueries({ queryKey: ["mapData", mapId] });
+      queryClient.removeQueries({ queryKey: ["userRanking"] });
+
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");
       setNotify(Symbol(""));
