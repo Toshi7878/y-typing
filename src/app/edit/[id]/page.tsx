@@ -3,7 +3,6 @@ import Content from "../components/Content";
 import EditProvider from "../components/EditProvider";
 import { getMapInfo } from "@/lib/server-fetcher/getMapInfo";
 import { Metadata } from "next";
-import { auth } from "@/lib/auth";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const mapInfo = await getMapInfo(params.id);

@@ -33,6 +33,7 @@ import EditYouTube from "./editor-youtube-content/EditYoutube";
 import { Provider } from "jotai";
 import { db } from "@/lib/db";
 import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
+import { queryClient } from "./EditProvider";
 
 function Content() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function Content() {
   const setLyrics = useSetEditLineLyricsAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
-  const { id } = useParams();
+  const { id: mapId } = useParams();
 
   const { data, isLoading } = useDownloadMapDataQuery();
 
@@ -68,7 +69,7 @@ function Content() {
   }, [data, isLoading]);
 
   useLayoutEffect(() => {
-    if (!id) {
+    if (!mapId) {
       //新規作成譜面に移動したら初期化
       setMapTitle("");
       setArtistName("");
@@ -102,9 +103,12 @@ function Content() {
     return () => {
       setLyrics("");
       setWord("");
+      if (mapId) {
+        queryClient.removeQueries({ queryKey: ["mapData", mapId] });
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, newVideoId]);
+  }, [mapId, newVideoId]);
 
   useEffect(() => {
     window.getSelection()!.removeAllRanges();

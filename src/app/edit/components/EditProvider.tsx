@@ -22,7 +22,7 @@ import { EditorNewMapBackUpInfoData } from "../ts/type";
 import { IndexDBOption } from "@/types";
 import { db } from "@/lib/db";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 const editAtomStore = createStore();
 
 export const getEditAtomStore = () => editAtomStore;
