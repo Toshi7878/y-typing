@@ -35,7 +35,7 @@ interface TypingCardBodyProps {
   totalTimeProgressRef: RefObject<HTMLProgressElement>;
 }
 
-export const CARD_BODY_MIN_HEIGHT = "335px";
+export const CARD_BODY_MIN_HEIGHT = "320px";
 
 const TypingCardBody = (props: TypingCardBodyProps) => {
   const { drawerClosure, playingTotalTimeRef, skipGuideRef, totalTimeProgressRef } = props;
