@@ -30,7 +30,7 @@ const TabRanking = (props: TabRankingProps) => {
               width: "12px",
             },
             "&::-webkit-scrollbar-thumb": {
-              background: theme.colors.border.card,
+              background: theme.colors.text.header.normal,
               borderRadius: "10px", // スクロールバーの角を丸くする
               border: "2px solid transparent", // スクロールバーの内側にスペースを作る
               backgroundClip: "content-box", // 背景をクリップ
@@ -42,10 +42,10 @@ const TabRanking = (props: TabRankingProps) => {
             className="ranking-table"
             size="sm"
             sx={{
-              "th, td": {
-                borderColor: theme.colors.border.card,
-              },
-              "tr, td": {
+              td: {
+                border: "none",
+                borderBottom: "1px",
+                borderColor: `${theme.colors.border.card}cc`,
                 paddingY: "0.6rem", // smとmdの間のサイズに調整
                 fontSize: "1.13rem", // smとmdの間のフォントサイズに調整
               },
@@ -55,7 +55,8 @@ const TabRanking = (props: TabRankingProps) => {
               position="sticky"
               top={0}
               pt={2}
-              zIndex={1}
+              zIndex={0}
+              background={theme.colors.background.card}
               className="ranking-thead"
               style={{ userSelect: "none" }}
             >
