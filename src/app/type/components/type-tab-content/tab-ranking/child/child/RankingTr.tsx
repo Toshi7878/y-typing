@@ -88,7 +88,6 @@ const RankingTr = (props: RankingTrProps) => {
           {...(userId === Number(props.result.userId) && {
             color: theme.colors.secondary.main,
           })}
-          height={9}
           onClick={props.handleShowMenu}
           onMouseEnter={props.onMouseEnter}
           onMouseLeave={props.onMouseLeave}

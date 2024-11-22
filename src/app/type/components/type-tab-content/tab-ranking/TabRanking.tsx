@@ -46,7 +46,7 @@ const TabRanking = (props: TabRankingProps) => {
                 borderColor: theme.colors.border.card,
               },
               "tr, td": {
-                paddingY: "0.4rem", // smとmdの間のサイズに調整
+                paddingY: "0.6rem", // smとmdの間のサイズに調整
                 fontSize: "1.1rem", // smとmdの間のフォントサイズに調整
               },
             }}
