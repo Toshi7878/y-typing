@@ -40,7 +40,9 @@ function MapList() {
   }, [searchParams]);
 
   useEffect(() => {
-    queryClient.removeQueries({ queryKey: ["mapList"] });
+    return () => {
+      queryClient.removeQueries({ queryKey: ["mapList"] });
+    };
   }, []);
 
   if (status === "pending") {
