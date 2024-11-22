@@ -1,7 +1,7 @@
 "use client";
 import InfiniteScroll from "react-infinite-scroller";
-import MapCard from "./MapCard";
-import SkeletonCard from "./SkeletonCard";
+import MapCard from "../../../components/map-card/MapCard";
+import SkeletonCard from "../../../components/map-card/SkeletonCard";
 import MapCardLayout from "./MapCardLayout";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";

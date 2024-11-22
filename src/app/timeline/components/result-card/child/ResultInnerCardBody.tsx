@@ -1,11 +1,12 @@
 import { CardBody, Flex, useBreakpointValue, useTheme } from "@chakra-ui/react";
 import React from "react";
 import UserRank from "./child/UserRank";
-import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
 import MapInfo from "./child/MapInfo";
 import { ThemeColors } from "@/types";
 import { ResultCardInfo } from "@/app/timeline/ts/type";
 import { MapResultBadges } from "./child/MapResultBadgesLayout";
+import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
+import { TIMELINE_THUBNAIL_HEIGHT, TIMELINE_THUBNAIL_WIDTH } from "@/app/timeline/ts/const/consts";
 
 interface ResultInnerCardBodyProps {
   result: ResultCardInfo;
@@ -51,6 +52,8 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
             mapVideoId={result.map.videoId}
             mapPreviewTime={result.map.previewTime}
             thumbnailQuality={result.map.thumbnailQuality}
+            thumnailWidth={TIMELINE_THUBNAIL_WIDTH}
+            thumnailHeight={TIMELINE_THUBNAIL_HEIGHT}
           />
           <MapInfo map={result.map} isToggledInputMode={isToggledInputMode} />
         </Flex>

@@ -1,9 +1,9 @@
 "use client";
 import { Card, CardBody, useTheme } from "@chakra-ui/react";
 
-import MapLeftThumbnail from "./child/MapCardLeftThumbnail";
-import MapCardRightInfo from "./child/MapCardRightInfo";
-import { MapCardInfo } from "../ts/type";
+import MapLeftThumbnail from "../map-card/child/MapCardLeftThumbnail";
+import MapCardRightInfo from "../map-card/child/MapCardRightInfo";
+import { MapCardInfo } from "../../app/(home)/ts/type";
 import { useState } from "react";
 import { ThemeColors } from "@/types";
 

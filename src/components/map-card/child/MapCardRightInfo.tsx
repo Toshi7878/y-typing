@@ -2,7 +2,7 @@
 import { Flex, Stack } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
-import { MapCardInfo } from "../../ts/type";
+import { MapCardInfo } from "../../../app/(home)/ts/type";
 import MapInfo from "./child/MapInfo";
 import MapCreateUser from "./child/MapCreateUser";
 import MapBadges from "./child/MapBadgesLayout";

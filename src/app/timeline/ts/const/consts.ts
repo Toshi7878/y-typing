@@ -1,6 +1,6 @@
-export const THUBNAIL_WIDTH = { base: 120 };
-export const THUBNAIL_HEIGHT = {
-  base: (THUBNAIL_WIDTH.base * 9) / 16,
+export const TIMELINE_THUBNAIL_WIDTH = { base: 120 };
+export const TIMELINE_THUBNAIL_HEIGHT = {
+  base: (TIMELINE_THUBNAIL_WIDTH.base * 9) / 16,
 };
 
 export const DEFAULT_KPM_SEARCH_RANGE = { min: 0, max: 1200 };

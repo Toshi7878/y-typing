@@ -1,9 +1,9 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, ResponsiveValue, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
-import { THUBNAIL_HEIGHT, THUBNAIL_WIDTH } from "../../../../ts/const/consts";
+import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "../../../app/(home)/ts/const/consts";
 import {
   usePreviewVideoIdAtom,
   useSetPreviewTimeAtom,
@@ -17,14 +17,16 @@ interface MapLeftThumbnailProps {
   mapVideoId: string;
   mapPreviewTime: string;
   thumbnailQuality: "maxresdefault" | "mqdefault";
-  className?: string;
+  thumnailWidth: Partial<Record<string, number>>;
+  thumnailHeight: Partial<Record<string, number>>;
 }
 
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
-  const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime } = props;
+  const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime, thumnailWidth, thumnailHeight } =
+    props; // ここを変更
   const [imgSrc, setImgSrc] = useState(src);
-
   const videoId = usePreviewVideoIdAtom();
+  const [isTouchMove, setIsTouchMove] = useState(false);
 
   const setVideoId = useSetPreviewVideoIdAtom();
   const setPreviewTime = useSetPreviewTimeAtom();
@@ -46,20 +48,16 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [videoId],
   );
+  const handleTouchMove = () => {
+    setIsTouchMove(true);
+  };
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      if (!e.changedTouches || e.changedTouches.length === 0) return;
-      const touch = e.changedTouches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLDivElement;
-      if (target && target.getAttribute("data-video-id") === videoId) {
-        setVideoId(target.getAttribute("data-video-id"));
-        setPreviewTime(target.getAttribute("data-preview-time"));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [videoId],
-  );
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isTouchMove) {
+      previewYouTube(e);
+    }
+    setIsTouchMove(false);
+  };
 
   const handleImageLoad = useCallback((src: string) => {
     const img = new window.Image();
@@ -77,14 +75,10 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
-  const width = useBreakpointValue(THUBNAIL_WIDTH);
-  const height = useBreakpointValue(THUBNAIL_HEIGHT);
+  const width = useBreakpointValue(thumnailWidth); // ここを変更
+  const height = useBreakpointValue(thumnailHeight); // ここを変更
   return (
-    <Box
-      className={`relative group ${props.className}`}
-      width={width}
-      style={{ userSelect: "none" }}
-    >
+    <Box position="relative" className="group" width={width} style={{ userSelect: "none" }}>
       <Image
         loader={({ src }) => src}
         alt={alt}
@@ -95,10 +89,15 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         minH={height}
         className="rounded-md"
       />
-      <Box
-        className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
-          videoId === mapVideoId ? "opacity-100" : "opacity-0"
-        } group-hover:opacity-100 transition-opacity duration-300`}
+      <Flex
+        cursor="pointer"
+        position="absolute"
+        alignItems="center"
+        justify="center"
+        inset={0}
+        opacity={videoId === mapVideoId ? 1 : 0}
+        _groupHover={{ opacity: 1 }}
+        transition="opacity 0.3s"
         style={{
           backgroundColor: videoId === mapVideoId ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.3)",
           border: "none",
@@ -107,6 +106,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         data-preview-time={mapPreviewTime}
         data-video-id={mapVideoId}
         onClick={previewYouTube}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         {videoId === mapVideoId ? (
@@ -114,7 +114,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         ) : (
           <FaPlay color="white" size={35} />
         )}
-      </Box>
+      </Flex>
     </Box>
   );
 };

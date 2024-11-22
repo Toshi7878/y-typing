@@ -1,4 +1,4 @@
-import MapCard from "@/app/(home)/components/MapCard";
+import MapCard from "@/components/map-card/MapCard";
 import { useCreatedCheckVideoIdQuery } from "@/lib/hooks/fetcher-hook/useCreatedCheckVideoIdQuery";
 import { Box, Spinner } from "@chakra-ui/react";
 import React from "react";

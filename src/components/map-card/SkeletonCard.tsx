@@ -1,5 +1,5 @@
 import { ThemeColors } from "@/types";
-import { Card, CardBody, useBreakpointValue, useTheme } from "@chakra-ui/react";
+import { Card, CardBody, useTheme } from "@chakra-ui/react";
 import SkeletonThumbnail from "./child/SkeletonThumbnail";
 import SkeletonRightInfo from "./child/SkeletonRightInfo";
 
