@@ -42,7 +42,7 @@ function MapList() {
 
   useEffect(() => {
     return () => {
-      queryClient.removeQueries({ queryKey: ["usersResultList"] });
+      queryClient.removeQueries({ queryKey: ["mapList"] });
     };
   }, []);
 
