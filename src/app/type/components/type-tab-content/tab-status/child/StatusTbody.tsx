@@ -5,8 +5,8 @@ import styled from "@emotion/styled";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { ThemeColors } from "@/types";
 import { Status } from "@/app/type/ts/type";
-import StatusValue from "./StatusValue";
-import StatusPointValue from "./StatusPointValue";
+import StatusValue from "./child/StatusValue";
+import StatusPointValue from "./child/StatusPointValue";
 import { DEFAULT_STATUS, STATUS_LABEL } from "@/app/type/ts/const/consts";
 
 export interface TabStatusRef {
