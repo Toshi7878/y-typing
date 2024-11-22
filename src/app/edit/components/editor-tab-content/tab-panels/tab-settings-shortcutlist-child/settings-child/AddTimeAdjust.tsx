@@ -19,9 +19,10 @@ export default function AddTimeAdjust() {
     <HStack alignItems="baseline">
       <CustomToolTip
         tooltipLabel={
-          <Box>
-            再生中に追加・変更ボタンを押した時に、数値分タイムを補正します(動画停止中は補正しません)
-          </Box>
+          <>
+            <Box>再生中に追加・変更ボタンを押した時に、数値分タイムを補正します</Box>
+            <Box as="small">※動画停止中は補正しません</Box>
+          </>
         }
         placement="top"
       >
