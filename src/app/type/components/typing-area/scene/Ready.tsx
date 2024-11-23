@@ -43,7 +43,7 @@ function Ready() {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerRef]);
+  }, [playerRef, map]);
 
   return (
     <Stack justifyContent="space-between" direction="column" minH={CARD_BODY_MIN_HEIGHT}>
