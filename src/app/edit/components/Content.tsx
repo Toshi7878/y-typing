@@ -6,8 +6,8 @@ import { useParams, useSearchParams } from "next/navigation";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { resetMapData, setMapData } from "../redux/mapDataSlice";
 import { resetUndoRedoData } from "../redux/undoredoSlice";
-import { Box, useTheme } from "@chakra-ui/react";
-import { IndexDBOption, ThemeColors } from "@/types";
+import { Box } from "@chakra-ui/react";
+import { IndexDBOption } from "@/types";
 import EditTable from "./editor-table-content/EditTable";
 import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
@@ -41,7 +41,6 @@ function Content() {
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
-  const theme: ThemeColors = useTheme();
   const isLrcConverting = useIsLrcConvertingAtom();
   const setMapTitle = useSetMapTitleAtom();
   const setCreatorComment = useSetCreatorCommentAtom();

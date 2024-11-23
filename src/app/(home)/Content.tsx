@@ -21,7 +21,6 @@ export default function Content() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-      // queryClient.removeQueries({ queryKey: QUERY_KEYS.mapList });
     };
   }, []);
 
