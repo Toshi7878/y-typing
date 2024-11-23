@@ -9,7 +9,7 @@ const initPosition = {
   width: 500,
   height: 150,
   x: 1000,
-  y: 300,
+  y: -100,
 };
 
 /**
