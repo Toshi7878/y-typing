@@ -24,7 +24,7 @@ export const useGetGeminiMapInfoQuery = () => {
   const isBackUp = searchParams.get("backup") === "true";
 
   const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
-    queryKey: ["generate-gemini-map-info", videoId, newVideoId],
+    queryKey: ["generate-gemini-map-info"],
     queryFn: async () => {
       const ytInfo = await axios.post<GetYouTubeMovieInfo | UploadResult>(
         `${process.env.NEXT_PUBLIC_API_URL}/api/get-youtube-channel-info`,

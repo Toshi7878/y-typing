@@ -1,19 +1,20 @@
+import { QUERY_KEYS } from "@/config/consts";
 import { supabase } from "@/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 export const useDownloadMapDataQuery = () => {
-  const { id } = useParams();
+  const { id: mapId } = useParams();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["mapData", id],
+    queryKey: QUERY_KEYS.mapData(mapId),
     queryFn: async () => {
       try {
         const timestamp = new Date().getTime(); // 一意のクエリパラメータを生成
 
         const { data, error } = await supabase.storage
           .from("map-data") // バケット名を指定
-          .download(`public/${id}.json?timestamp=${timestamp}`);
+          .download(`public/${mapId}.json?timestamp=${timestamp}`);
 
         if (error) {
           console.error("Error downloading from Supabase:", error);
@@ -29,7 +30,7 @@ export const useDownloadMapDataQuery = () => {
         throw error;
       }
     },
-    enabled: !!id, // useQueryをidが存在する場合にのみ実行
+    enabled: !!mapId, // useQueryをidが存在する場合にのみ実行
     staleTime: Infinity, // データを常に新鮮に保つ
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
     refetchOnReconnect: false, // 再接続時に再フェッチしない

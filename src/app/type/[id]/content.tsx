@@ -23,6 +23,7 @@ import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { queryClient } from "./TypeProvider";
 import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
+import { QUERY_KEYS } from "@/config/consts";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -43,8 +44,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   useEffect(() => {
     return () => {
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
-      queryClient.removeQueries({ queryKey: ["mapData", mapId] });
-      queryClient.removeQueries({ queryKey: ["userRanking"] });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.mapRanking(mapId) });
 
       setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
       setScene("ready");

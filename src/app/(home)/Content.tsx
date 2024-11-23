@@ -8,6 +8,7 @@ import NProgress from "nprogress";
 import React from "react";
 import SearchContent from "./components/SearchContent";
 import { queryClient } from "./HomeProvider";
+import { QUERY_KEYS } from "@/config/consts";
 
 export default function Content() {
   const [isMobile, setIsMobile] = useState(false);
@@ -20,7 +21,7 @@ export default function Content() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-      queryClient.removeQueries({ queryKey: ["mapList"] });
+      // queryClient.removeQueries({ queryKey: QUERY_KEYS.mapList });
     };
   }, []);
 

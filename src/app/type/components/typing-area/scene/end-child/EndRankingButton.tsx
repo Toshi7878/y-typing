@@ -1,6 +1,5 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useRef } from "react"; // useRefを追加
 import {
   AlertDialog,
@@ -18,6 +17,9 @@ import AlertDialogButton from "./child/AlertDialogButton";
 import { UploadResult } from "@/types";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import { useSetTabIndexAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { QUERY_KEYS } from "@/config/consts";
+import { useParams } from "next/navigation";
+import { queryClient } from "@/app/type/[id]/TypeProvider";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
@@ -26,7 +28,7 @@ interface UploadButtonProps {
 }
 
 const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProps) => {
-  const queryClient = useQueryClient();
+  const { id: mapId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -36,7 +38,7 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
   useEffect(() => {
     if (state.status === 200) {
       setIsDisabled(true);
-      queryClient.invalidateQueries({ queryKey: ["userRanking"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.mapRanking(mapId) });
       onClose();
     } else {
       setIsDisabled(false);

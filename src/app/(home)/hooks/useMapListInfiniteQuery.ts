@@ -2,6 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { MapCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { QUERY_KEYS } from "@/config/consts";
 
 async function getMapList(page: number, mapKeyword: string): Promise<MapCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map-list`, {
@@ -32,7 +33,7 @@ export const useMapListInfiniteQuery = () => {
     status,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["mapList"],
+    queryKey: QUERY_KEYS.mapList,
     queryFn: ({ pageParam = 0 }) => getMapList(pageParam, mapKeyword), // ページ数を引数として渡す
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

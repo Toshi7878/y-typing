@@ -123,7 +123,7 @@ const Playing = ({
       typeTicker.remove(updateFunction);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData, rankingScores, inputMode, map, scene, lineResults]);
+  }, [speedData, rankingScores, inputMode, map, scene, lineResults, userOptionsAtom]);
 
   useEffect(() => {
     const currentPlayingCenterRef = playingCenterRef.current;

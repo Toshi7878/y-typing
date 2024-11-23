@@ -8,6 +8,7 @@ import SearchContent from "./search/SearchContent";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { queryClient } from "../TimelineProvider";
+import { QUERY_KEYS } from "@/config/consts";
 
 function UsersResultList() {
   const {
@@ -33,7 +34,7 @@ function UsersResultList() {
 
   useEffect(() => {
     return () => {
-      queryClient.removeQueries({ queryKey: ["usersResultList"] });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.usersResultList });
     };
   }, []);
 

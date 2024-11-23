@@ -2,6 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { QUERY_KEYS } from "@/config/consts";
 
 interface GetResultListProps {
   page: number;
@@ -76,7 +77,7 @@ export const useUsersResultInfiniteQuery = () => {
     status,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["usersResultList", searchMode], // 修正: searchModeをqueryKeyに追加
+    queryKey: [QUERY_KEYS.usersResultList],
     queryFn: ({ pageParam = 0 }) =>
       getResultList({
         page: pageParam,

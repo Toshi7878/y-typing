@@ -34,6 +34,7 @@ import { Provider } from "jotai";
 import { db } from "@/lib/db";
 import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
 import { queryClient } from "./EditProvider";
+import { QUERY_KEYS } from "@/config/consts";
 
 function Content() {
   const dispatch = useDispatch();
@@ -104,7 +105,7 @@ function Content() {
       setLyrics("");
       setWord("");
       if (mapId) {
-        queryClient.removeQueries({ queryKey: ["mapData", mapId] });
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,5 +1,5 @@
 import { Box, Flex, useTheme } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { MapCardInfo } from "@/app/(home)/ts/type";
@@ -58,4 +58,4 @@ const LikeCount = (props: LikeCountProps) => {
   );
 };
 
-export default LikeCount;
+export default memo(LikeCount);
