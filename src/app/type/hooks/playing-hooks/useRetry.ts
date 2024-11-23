@@ -5,23 +5,39 @@ import {
   useMapAtom,
   useSceneAtom,
   useSetLineResultsAtom,
+  useSetLyricsAtom,
+  useSetNextLyricsAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
+import {
+  defaultLineWord,
+  defaultNextLyrics,
+} from "../../components/typing-area/scene/playing-child/PlayingCenter";
 
 export const useRetry = () => {
-  const { playingCenterRef, tabStatusRef, playingComboRef, statusRef, gameStateRef, playerRef } =
-    useRefs();
+  const {
+    playingTypingWordsRef,
+    tabStatusRef,
+    playingComboRef,
+    statusRef,
+    gameStateRef,
+    playerRef,
+  } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom();
   const setLineResults = useSetLineResultsAtom();
   const setNotify = useSetPlayingNotifyAtom();
+  const setLyrics = useSetLyricsAtom();
+  const setNextLyrics = useSetNextLyricsAtom();
 
   return () => {
-    const currentPlayingCenterRef = playingCenterRef.current; // 追加
-    currentPlayingCenterRef!.resetWordLyrics();
+    const currentPlayingTypingWordsRef = playingTypingWordsRef.current; // 追加
+    currentPlayingTypingWordsRef!.setLineWord(structuredClone(defaultLineWord));
+    setLyrics("");
+    setNextLyrics(structuredClone(defaultNextLyrics));
 
     tabStatusRef.current!.resetStatus();
     playingComboRef.current?.setCombo(0);

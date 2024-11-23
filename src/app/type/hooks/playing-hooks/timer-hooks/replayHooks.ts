@@ -69,7 +69,7 @@ interface UseKeyReplayProps {
 const useKeyReplay = () => {
   const {
     statusRef,
-    playingCenterRef,
+    playingTypingWordsRef,
     tabStatusRef,
     playingComboRef,
     ytStateRef,
@@ -95,7 +95,7 @@ const useKeyReplay = () => {
     const count = statusRef.current!.status.count;
 
     if (key) {
-      const lineWord = playingCenterRef.current!.getLineWord();
+      const lineWord = playingTypingWordsRef.current!.getLineWord();
       const chars: CharsType = {
         keys: [key],
         key: key,
@@ -151,7 +151,7 @@ const useKeyReplay = () => {
           }
         }
 
-        playingCenterRef.current!.setLineWord(result.newLineWord);
+        playingTypingWordsRef.current!.setLineWord(result.newLineWord);
       } else {
         const newStatus = updateMissStatus(status);
         updateMissRefStatus({ lineConstantTime, failKey: key });

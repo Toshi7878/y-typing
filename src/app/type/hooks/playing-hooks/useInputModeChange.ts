@@ -2,6 +2,8 @@ import {
   useInputModeAtom,
   useMapAtom,
   useSetInputModeAtom,
+  useSetLyricsAtom,
+  useSetNextLyricsAtom,
   useSetPlayingNotifyAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
@@ -11,7 +13,7 @@ import { romaConvert } from "../../ts/scene-ts/ready/createTypingWord";
 import { InputModeType } from "../../ts/type";
 
 export const useInputModeChange = () => {
-  const { playingCenterRef, statusRef } = useRefs();
+  const { playingTypingWordsRef, statusRef } = useRefs();
 
   const map = useMapAtom();
   const speedData = useTypePageSpeedAtom();
@@ -19,6 +21,7 @@ export const useInputModeChange = () => {
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const userOptions = useUserOptionsAtom();
+  const setNextLyrics = useSetNextLyricsAtom();
 
   return (newInputMode: InputModeType, lineTime?: number) => {
     if (newInputMode === inputMode) {
@@ -31,12 +34,12 @@ export const useInputModeChange = () => {
       setNotify(Symbol("KanaMode"));
     } else {
       setNotify(Symbol("Romaji"));
-      const lineWord = playingCenterRef.current!.getLineWord();
+      const lineWord = playingTypingWordsRef.current!.getLineWord();
 
       if (lineWord.nextChar["k"]) {
         const wordFix = romaConvert(lineWord);
 
-        playingCenterRef.current!.setLineWord({
+        playingTypingWordsRef.current!.setLineWord({
           correct: lineWord.correct,
           nextChar: wordFix.nextChar,
           word: wordFix.word,
@@ -51,7 +54,7 @@ export const useInputModeChange = () => {
       (inputMode === "roma" ? map!.mapData[count].kpm["r"] : map!.mapData[count].kpm["k"]) *
       speedData.playSpeed;
     if (nextKpm) {
-      playingCenterRef.current!.setNextLyrics({
+      setNextLyrics({
         lyrics: userOptions.nextDisplay === "word" ? nextLine.kanaWord : nextLine["lyrics"],
         kpm: nextKpm.toFixed(0),
       });

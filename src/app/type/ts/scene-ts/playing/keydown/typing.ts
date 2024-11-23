@@ -584,7 +584,7 @@ export class Typing {
 }
 
 export const useTypeSuccess = () => {
-  const { playingComboRef, statusRef, playingCenterRef, playingLineTimeRef } = useRefs();
+  const { playingComboRef, statusRef, playingTypingWordsRef, playingLineTimeRef } = useRefs();
 
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
@@ -659,7 +659,7 @@ export const useTypeSuccess = () => {
       });
     }
 
-    playingCenterRef.current!.setLineWord(newLineWord);
+    playingTypingWordsRef.current!.setLineWord(newLineWord);
     playingLineTimeRef.current?.setLineKpm(newLineKpm);
   };
 

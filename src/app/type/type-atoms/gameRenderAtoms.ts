@@ -1,6 +1,13 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
-import { InputModeType, LineResultData, SceneType, Speed, UserTypingOptions } from "../ts/type";
+import {
+  InputModeType,
+  LineResultData,
+  NextLyricsType,
+  SceneType,
+  Speed,
+  UserTypingOptions,
+} from "../ts/type";
 import { DEFAULT_SPEED, DEFAULT_USER_OPTIONS } from "../ts/const/typeDefaultValue";
 import { getTypeAtomStore } from "../[id]/TypeProvider";
 const typeAtomStore = getTypeAtomStore();
@@ -134,4 +141,25 @@ export const useTimeOffsetAtom = () => {
 
 export const useSetTimeOffsetAtom = () => {
   return useSetAtom(timeOffsetAtom, { store: typeAtomStore });
+};
+const lyricsAtom = atom<string>("");
+
+export const useLyricsAtom = () => {
+  return useAtomValue(lyricsAtom, { store: typeAtomStore });
+};
+
+export const useSetLyricsAtom = () => {
+  return useSetAtom(lyricsAtom, { store: typeAtomStore });
+};
+const nextLyricsAtom = atom<NextLyricsType>({
+  lyrics: "",
+  kpm: "",
+});
+
+export const useNextLyricsAtom = () => {
+  return useAtomValue(nextLyricsAtom, { store: typeAtomStore });
+};
+
+export const useSetNextLyricsAtom = () => {
+  return useSetAtom(nextLyricsAtom, { store: typeAtomStore });
 };

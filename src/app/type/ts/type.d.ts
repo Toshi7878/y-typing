@@ -1,3 +1,5 @@
+import { PlayingTypingWordsRef } from "../components/typing-area/scene/playing-child/child/PlayingTypingWords";
+
 export type InputModeType = "roma" | "kana" | "flick";
 export type PlayMode = "playing" | "replay" | "practice";
 export type SceneType = "ready" | "playing" | "end" | "replay" | "practice";
@@ -56,7 +58,7 @@ export interface RefsContextType {
   gameStateRef: React.RefObject<GameStateRef>;
   lineProgressRef: React.RefObject<HTMLProgressElement>;
   playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
-  playingCenterRef: React.RefObject<PlayingCenterRef>;
+  playingTypingWordsRef: React.RefObject<PlayingTypingWordsRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 

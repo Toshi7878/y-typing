@@ -14,6 +14,8 @@ import {
   useRankingScoresAtom,
   useSceneAtom,
   useSetLineResultsAtom,
+  useSetLyricsAtom,
+  useSetNextLyricsAtom,
   useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
@@ -25,7 +27,7 @@ import { useGetSeekLineCount } from "./useSeekGetLineCount";
 export const usePlayTimer = () => {
   const {
     statusRef,
-    playingCenterRef,
+    playingTypingWordsRef,
     tabStatusRef,
     gameStateRef,
     lineProgressRef,
@@ -85,13 +87,13 @@ export const usePlayTimer = () => {
 
     const displayRemainTime = playingLineTimeRef.current!.getRemainTime();
     if (Math.abs(nextLineTime / speedData.playSpeed - ytConstantTime - displayRemainTime) >= 0.1) {
-      const currentPlayingCenterRef = playingCenterRef.current;
+      const currentPlayingTypingWordsRef = playingTypingWordsRef.current;
 
-      if (!currentPlayingCenterRef) {
+      if (!currentPlayingTypingWordsRef) {
         return;
       }
 
-      const lineWord = currentPlayingCenterRef!.getLineWord();
+      const lineWord = currentPlayingTypingWordsRef!.getLineWord();
       const status = tabStatusRef.current!.getStatus();
 
       playingLineTimeRef.current?.setRemainTime(lineRemainTime);
@@ -147,7 +149,7 @@ export const usePlayTimer = () => {
 };
 
 export const useCalcLineResult = () => {
-  const { statusRef, playingCenterRef, tabStatusRef, playingComboRef, gameStateRef } = useRefs();
+  const { statusRef, playingTypingWordsRef, tabStatusRef, playingComboRef } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom() as CreateMap;
   const lineResults = useLineResultsAtom();
@@ -157,11 +159,11 @@ export const useCalcLineResult = () => {
   const setLineResults = useSetLineResultsAtom();
 
   return ({ count, lineConstantTime }: { count: number; lineConstantTime: number }) => {
-    const currentPlayingCenterRef = playingCenterRef.current;
+    const currentPlayingTypingWordsRef = playingTypingWordsRef.current;
     const status = tabStatusRef.current!.getStatus();
 
     if (scene === "playing" || scene === "practice") {
-      const lineWord = currentPlayingCenterRef!.getLineWord();
+      const lineWord = currentPlayingTypingWordsRef!.getLineWord();
       const typeSpeed = new CalcTypeSpeed(
         "timer",
         status!,
@@ -263,7 +265,7 @@ export const useCalcLineResult = () => {
 };
 
 export const useUpdateLine = () => {
-  const { statusRef, playingLineTimeRef, playingCenterRef, lineProgressRef, ytStateRef } =
+  const { statusRef, playingLineTimeRef, playingTypingWordsRef, lineProgressRef, ytStateRef } =
     useRefs();
 
   const userOptionsAtom = useUserOptionsAtom();
@@ -272,6 +274,8 @@ export const useUpdateLine = () => {
   const inputMode = useInputModeAtom();
   const speedData = useTypePageSpeedAtom();
   const lineReplayUpdate = useLineReplayUpdate();
+  const setLyrics = useSetLyricsAtom();
+  const setNextLyrics = useSetNextLyricsAtom();
 
   return (newCount: number) => {
     const currentCount = newCount ? newCount - 1 : 0;
@@ -282,20 +286,20 @@ export const useUpdateLine = () => {
     });
     playingLineTimeRef.current?.setLineKpm(0);
     statusRef.current!.lineStatus.latency = 0;
-    playingCenterRef.current!.setLineWord({
+    playingTypingWordsRef.current!.setLineWord({
       correct: { k: "", r: "" },
       nextChar: [...structuredClone(map.mapData[currentCount].word)][0],
       word: [...structuredClone(map.mapData[currentCount].word)].slice(1),
       lineCount: currentCount,
     });
 
-    playingCenterRef.current!.setLyrics(map.mapData[currentCount]["lyrics"]);
+    setLyrics(map.mapData[currentCount]["lyrics"]);
 
     const nextKpm =
       (inputMode === "roma" ? map.mapData[newCount].kpm["r"] : map.mapData[newCount].kpm["k"]) *
       speedData.playSpeed;
     if (nextKpm) {
-      playingCenterRef.current!.setNextLyrics({
+      setNextLyrics({
         lyrics:
           userOptionsAtom.nextDisplay === "word"
             ? map.mapData[newCount].kanaWord
@@ -303,7 +307,7 @@ export const useUpdateLine = () => {
         kpm: nextKpm.toFixed(0),
       });
     } else {
-      playingCenterRef.current!.setNextLyrics({
+      setNextLyrics({
         lyrics: "",
         kpm: "",
       });

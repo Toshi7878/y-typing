@@ -19,7 +19,7 @@ export const RefsContext = createContext<RefsContextType>({
   gameStateRef: { current: structuredClone(DEFAULT_GAME_STATE_REF) },
   lineProgressRef: { current: null },
   playingLineTimeRef: { current: null },
-  playingCenterRef: { current: null },
+  playingTypingWordsRef: { current: null },
 
   setRef: (ref: HTMLElement | any) => {},
 });
@@ -35,7 +35,7 @@ export const RefsProvider = ({ children }) => {
   const gameStateRef = useRef<GameStateRef>(structuredClone(DEFAULT_GAME_STATE_REF));
   const lineProgressRef = useRef(null);
   const playingLineTimeRef = useRef(null);
-  const playingCenterRef = useRef(null);
+  const playingTypingWordsRef = useRef(null);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
@@ -54,8 +54,8 @@ export const RefsProvider = ({ children }) => {
       case "playingLineTimeRef":
         playingLineTimeRef.current = ref;
         break;
-      case "playingCenterRef":
-        playingCenterRef.current = ref;
+      case "playingTypingWordsRef":
+        playingTypingWordsRef.current = ref;
         break;
     }
   };
@@ -68,7 +68,7 @@ export const RefsProvider = ({ children }) => {
         statusRef,
         playingComboRef,
         lineProgressRef,
-        playingCenterRef,
+        playingTypingWordsRef,
         playingLineTimeRef,
         bestScoreRef,
         tabStatusRef,
@@ -92,7 +92,7 @@ export const useRefs = () => {
     playingComboRef: context.playingComboRef,
     lineProgressRef: context.lineProgressRef,
     playingLineTimeRef: context.playingLineTimeRef,
-    playingCenterRef: context.playingCenterRef,
+    playingTypingWordsRef: context.playingTypingWordsRef,
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,
     gameStateRef: context.gameStateRef,

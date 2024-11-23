@@ -1,4 +1,4 @@
-import PlayingCenter, { PlayingCenterRef } from "./playing-child/PlayingCenter";
+import PlayingCenter, { defaultLineWord, defaultNextLyrics } from "./playing-child/PlayingCenter";
 import { RefObject, useEffect, useRef } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
@@ -8,6 +8,8 @@ import {
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
+  useSetLyricsAtom,
+  useSetNextLyricsAtom,
   useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
@@ -37,11 +39,10 @@ const Playing = ({
   totalTimeProgressRef,
 }: PlayingProps) => {
   const { onOpen } = drawerClosure;
-  const { playerRef, statusRef, lineProgressRef, ytStateRef } = useRefs();
+  const { playerRef, statusRef, lineProgressRef, ytStateRef, playingTypingWordsRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
 
-  const playingCenterRef = useRef<PlayingCenterRef>(null);
   const scene = useSceneAtom();
   const speedData = useTypePageSpeedAtom();
   const inputMode = useInputModeAtom();
@@ -56,10 +57,12 @@ const Playing = ({
   const playTimer = usePlayTimer();
   const handleTyping = useHandleTyping();
   const playShortcutKey = usePlayShortcutKey();
+  const setLyrics = useSetLyricsAtom();
+  const setNextLyrics = useSetNextLyricsAtom();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const lineWord = playingCenterRef.current!.getLineWord();
+      const lineWord = playingTypingWordsRef.current!.getLineWord();
       const cloneLineWord = structuredClone(lineWord);
 
       if (!ytStateRef.current?.isPaused) {
@@ -126,7 +129,7 @@ const Playing = ({
   }, [speedData, rankingScores, inputMode, map, scene, lineResults, userOptionsAtom]);
 
   useEffect(() => {
-    const currentPlayingCenterRef = playingCenterRef.current;
+    const currentPlayingTypingWordsRef = playingTypingWordsRef.current;
     const currentTotalTimeProgress = totalTimeProgressRef.current;
     const currentLineProgress = lineProgressRef.current;
 
@@ -148,14 +151,16 @@ const Playing = ({
         typeTicker.stop();
       }
 
-      currentPlayingCenterRef!.resetWordLyrics();
+      currentPlayingTypingWordsRef!.setLineWord(structuredClone(defaultLineWord));
+      setLyrics("");
+      setNextLyrics(structuredClone(defaultNextLyrics));
       currentTotalTimeProgress!.value = 0;
       currentLineProgress!.value = 0;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <PlayingCenter ref={playingCenterRef} flex="1" />;
+  return <PlayingCenter flex="1" />;
 };
 
 export default Playing;
