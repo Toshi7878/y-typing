@@ -6,7 +6,7 @@ import LeftMenus from "./left-child/LeftMenus";
 
 function LeftNav() {
   return (
-    <Flex gap={{ base: 0, md: 10 }} alignItems="center">
+    <Flex gap={10} alignItems="center">
       <SiteLogo />
       <LeftMenus />
     </Flex>
