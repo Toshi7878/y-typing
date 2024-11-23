@@ -73,6 +73,7 @@ const PreviewYouTubeContent = function YouTubeContent({
           enablejsapi: 1,
           start: Number(previewTime),
           playsinline: 1,
+          autoplay: 1,
           iv_load_policy: 3,
           modestbranding: 1,
           rel: 0,
