@@ -8,13 +8,6 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
     clapCount,
   });
 
-  const [clapOptimisticState, setClapOptimisticState] = useOptimistic(
-    clapLocalState,
-    (currentState, newState) => {
-      return newState as LocalClapState;
-    },
-  );
-
   useEffect(() => {
     if (clapLocalState.hasClap !== hasClap) {
       setClapLocalState({ hasClap, clapCount });
@@ -23,7 +16,19 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasClap, clapCount]);
 
+  const [clapOptimisticState, setClapOptimisticState] = useOptimistic(
+    clapLocalState.hasClap !== hasClap ? clapLocalState : { hasClap, clapCount },
+    (currentState, newState) => {
+      return newState as LocalClapState;
+    },
+  );
+
+  const [isToggling, setIsToggling] = useState(false); // 連打対策用のフラグ
+
   const toggleClapAction = async (resultId: number): Promise<UploadResult> => {
+    if (isToggling) return Promise.reject(new Error("Action is already in progress")); // 連打防止
+    setIsToggling(true); // フラグを立てる
+
     // 楽観的UI更新
     const newOptimisticState = {
       hasClap: !clapOptimisticState.hasClap,
@@ -35,6 +40,8 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
     setClapOptimisticState(newOptimisticState);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const result = await toggleClapServerAction(resultId, newOptimisticState.hasClap);
       if (result.id) {
         setClapLocalState(newOptimisticState);
@@ -46,6 +53,8 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
       setClapLocalState(clapLocalState);
 
       return Promise.reject(error); // エラーを返す
+    } finally {
+      setIsToggling(false); // フラグをリセット
     }
   };
 
