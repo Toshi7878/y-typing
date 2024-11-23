@@ -1,11 +1,11 @@
 import { toggleClapServerAction } from "@/config/server-actions/toggle-clap-server-action";
 import { LocalClapState, UploadResult } from "@/types";
-import { useOptimistic, useState } from "react";
+import { useEffect, useOptimistic, useState } from "react";
 
 export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState) => {
   const [clapLocalState, setClapLocalState] = useState<LocalClapState>({
-    hasClap: hasClap,
-    clapCount: clapCount,
+    hasClap,
+    clapCount,
   });
 
   const [clapOptimisticState, setClapOptimisticState] = useOptimistic(
@@ -14,6 +14,14 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
       return newState as LocalClapState;
     },
   );
+
+  useEffect(() => {
+    if (clapLocalState.hasClap !== hasClap) {
+      setClapLocalState({ hasClap, clapCount });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasClap, clapCount]);
 
   const toggleClapAction = async (resultId: number): Promise<UploadResult> => {
     // 楽観的UI更新
@@ -35,6 +43,7 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
       return result;
     } catch (error) {
       // エラーが発生した場合、元の状態に戻す
+      setClapLocalState(clapLocalState);
 
       return Promise.reject(error); // エラーを返す
     }

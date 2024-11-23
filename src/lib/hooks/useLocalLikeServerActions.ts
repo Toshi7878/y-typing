@@ -7,12 +7,6 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
     hasLike,
     likeCount,
   });
-  // const likeLocalStateRef = useRef<LocalLikeState | null>(null);
-  useEffect(() => {
-    if (likeLocalState.hasLike !== hasLike) {
-      setLikeLocalState({ hasLike, likeCount });
-    }
-  }, [hasLike, likeCount, likeLocalState]);
 
   const [likeOptimisticState, setLikeOptimisticState] = useOptimistic(
     likeLocalState || { hasLike, likeCount },
@@ -20,6 +14,13 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
       return newState as LocalLikeState;
     },
   );
+  useEffect(() => {
+    if (likeLocalState.hasLike !== hasLike) {
+      setLikeLocalState({ hasLike, likeCount });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasLike, likeCount]);
 
   const toggleLikeAction = async (mapId: number): Promise<UploadResult> => {
     // 楽観的UI更新
@@ -35,8 +36,6 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
     try {
       const result = await toggleLikeServerAction(mapId, newOptimisticState.hasLike);
       if (result.id) {
-        // likeLocalStateRef.current = newOptimisticState;
-
         setLikeLocalState(newOptimisticState);
       }
 
@@ -44,7 +43,6 @@ export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState
     } catch (error) {
       // エラーが発生した場合、元の状態に戻す
       setLikeLocalState(likeLocalState);
-      // setLikeOptimisticState(likeLocalStateRef.current!);
 
       return Promise.reject(error); // エラーを返す
     }
