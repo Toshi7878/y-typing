@@ -1,14 +1,14 @@
 "use client";
-import React, { useLayoutEffect } from "react";
 import { getGlobalAtomStore, volumeAtom } from "@/components/atom/globalAtoms";
 import { Provider as JotaiProvider } from "jotai";
 import { db } from "@/lib/db";
 import { GlobalRefProvider } from "@/components/globalRefContext/GlobalRefProvider";
+import { useEffect } from "react";
 
 const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const globalAtomStore = getGlobalAtomStore();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const getUserVolume = async () => {
       try {
         const entry = await db.globalOption.where("optionName").equals("volume-range").first();
@@ -24,6 +24,7 @@ const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     getUserVolume();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

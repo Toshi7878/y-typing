@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import TimeRange from "./editor-time-range-content/EditTimeRange";
 import { useParams, useSearchParams } from "next/navigation";
@@ -69,7 +69,7 @@ function Content() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isLoading]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!mapId) {
       //新規作成譜面に移動したら初期化
       setMapTitle("");
