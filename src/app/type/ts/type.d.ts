@@ -25,7 +25,7 @@ export interface LineData {
 
 export interface RankingListType {
   id: number;
-  userId: string;
+  userId: number;
   user: { name: string };
   romaType: number;
   kanaType: number;

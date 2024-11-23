@@ -1,38 +1,37 @@
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Button, useTheme } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
-import {
-  useSetIsLoadingOverlayAtom,
-  useSetLineResultsAtom,
-} from "@/app/type/type-atoms/gameRenderAtoms";
-import { useUserResultIdQuery } from "@/app/type/hooks/data-query/useUserResultIdQuery";
 import { ThemeColors } from "@/types";
+import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDownloadResultJsonQuery";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { RankingListType } from "@/app/type/ts/type";
 
 const ReadyPracticeButton = () => {
   const { data: session } = useSession();
+  const { id: mapId } = useParams();
+  const userId = Number(session?.user.id);
 
+  const [resultId, setResultId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
   const { gameStateRef, playerRef } = useRefs();
-  const getUserResultId = useUserResultIdQuery(Number(session?.user?.id));
-  const downloadResultJson = useDownloadResultJson();
-  const setLineResults = useSetLineResultsAtom();
-  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
-
+  const { data, error, isLoading } = useDownloadPlayDataJsonQuery(resultId);
   const theme: ThemeColors = useTheme();
 
-  const handleClick = useCallback(async () => {
-    if (gameStateRef.current!.practice.hasMyRankingData) {
-      setIsLoadingOverlay(true);
-      const { data: resultData } = await getUserResultId?.refetch();
-      const resultId = resultData?.id; // resultIdを取得
-      const result = await downloadResultJson(resultId as number);
-      setLineResults(result);
-      setIsLoadingOverlay(false);
+  const handleClick = useCallback(() => {
+    const result: RankingListType[] | undefined = queryClient.getQueryData(["mapRanking", mapId]);
+    if (gameStateRef.current!.practice.hasMyRankingData && result) {
+      for (let i = 0; i < result.length; i++) {
+        if (userId === result[i].userId) {
+          setResultId(result[i].id);
+          break;
+        }
+      }
+    } else {
+      playerRef.current.playVideo();
     }
-
     gameStateRef.current!.playMode = "practice";
-    playerRef.current.playVideo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

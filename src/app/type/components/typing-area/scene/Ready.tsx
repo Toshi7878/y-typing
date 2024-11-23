@@ -6,17 +6,19 @@ import "../../../style/fKey.scss";
 import ReadyPracticeButton from "./ready-child/ReadyPracticeButton";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { CARD_BODY_MIN_HEIGHT } from "../TypingCard";
+import { useMapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 function Ready() {
   const { playerRef } = useRefs();
   const speedUpButtonRef = useRef<HTMLButtonElement>(null);
   const speedDownButtonRef = useRef<HTMLButtonElement>(null);
+  const map = useMapAtom();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.code) {
         case "Enter":
-          if (playerRef.current) {
+          if (playerRef.current && map) {
             playerRef.current.playVideo();
           }
           event.preventDefault();

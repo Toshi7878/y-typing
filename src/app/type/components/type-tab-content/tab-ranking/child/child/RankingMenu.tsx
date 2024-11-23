@@ -1,16 +1,7 @@
-import {
-  useSceneAtom,
-  useSetIsLoadingOverlayAtom,
-  useSetLineResultsAtom,
-  useSetTypePageSpeedAtom,
-} from "@/app/type/type-atoms/gameRenderAtoms";
+import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
-import { Dispatch, useCallback } from "react";
+import { Dispatch } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { YTSpeedController } from "@/app/type/ts/ytHandleEvents";
-import { useProceedRetry } from "@/app/type/hooks/playing-hooks/useRetry";
-import { useDownloadResultJson } from "@/app/type/hooks/data-query/useDownloadResultJson";
-import { LineResultData } from "@/app/type/ts/type";
 import MenuClapButton from "./child/MenuClapButton";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 import { useSession } from "next-auth/react";
@@ -23,6 +14,7 @@ interface RankingMenuProps {
   setHoveredIndex: Dispatch<number | null>;
   clapOptimisticState: LocalClapState;
   toggleClapAction: (resultId: number) => Promise<UploadResult>;
+  setReplayId: Dispatch<number | null>;
 }
 const RankingMenu = ({
   resultId,
@@ -32,47 +24,20 @@ const RankingMenu = ({
   setHoveredIndex,
   clapOptimisticState,
   toggleClapAction,
+  setReplayId,
 }: RankingMenuProps) => {
-  const { gameStateRef, playerRef } = useRefs();
+  const { gameStateRef } = useRefs();
   const { data: session } = useSession();
-
   const theme: ThemeColors = useTheme();
   const scene = useSceneAtom();
-  const setSpeedData = useSetTypePageSpeedAtom();
-  const proceedRetry = useProceedRetry();
-  const downloadResultJson = useDownloadResultJson();
-  const setLineResults = useSetLineResultsAtom();
-  const setIsLoadingOverlay = useSetIsLoadingOverlayAtom();
 
-  const handleReplayClick = useCallback(
-    async (name: string) => {
-      setIsLoadingOverlay(true);
-      const result: LineResultData[] = await downloadResultJson(resultId);
-      setIsLoadingOverlay(false);
-
-      if (result) {
-        if (scene === "end") {
-          proceedRetry("replay");
-        }
-        setShowMenu(null);
-        setHoveredIndex(null);
-        gameStateRef.current!.replay.userName = name;
-        gameStateRef.current!.playMode = "replay";
-        const defaultSpeed = result[0].status?.sp;
-
-        new YTSpeedController("setDefaultSpeed", {
-          setSpeedData,
-          playerRef: playerRef.current,
-          speed: defaultSpeed,
-          defaultSpeed: defaultSpeed,
-        });
-        setLineResults(result);
-        playerRef.current.playVideo();
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const handleReplayClick = (name: string, resultId: number) => {
+    setShowMenu(null);
+    setHoveredIndex(null);
+    gameStateRef.current!.replay.userName = name;
+    gameStateRef.current!.playMode = "replay";
+    setReplayId(resultId);
+  };
   return (
     <Stack
       className="rounded-md"
@@ -99,7 +64,7 @@ const RankingMenu = ({
         variant="unstyled"
         size="md"
         _hover={{ backgroundColor: theme.colors.button.sub.hover }}
-        onClick={() => handleReplayClick(name)}
+        onClick={() => handleReplayClick(name, resultId)}
         isDisabled={scene === "playing" || scene === "replay" || scene === "practice"}
       >
         リプレイ再生

@@ -108,7 +108,6 @@ export const useUsersResultInfiniteQuery = () => {
 
       return undefined;
     },
-    staleTime: Infinity, // データを常に新鮮に保つ
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
     refetchOnReconnect: false, // 再接続時に再フェッチしない
     refetchOnMount: true,

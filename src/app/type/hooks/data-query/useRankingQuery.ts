@@ -23,7 +23,6 @@ export const useRankingQuery = () => {
     },
 
     enabled: !!mapId, // useQueryをidが存在する場合にのみ実行
-    staleTime: Infinity, // データを常に新鮮に保つ
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
     refetchOnReconnect: false, // 再接続時に再フェッチしない
     refetchOnMount: false, // マウント時に再フェッチしない

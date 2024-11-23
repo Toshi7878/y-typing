@@ -17,7 +17,6 @@ export function useCreatedCheckVideoIdQuery(videoId: string) {
     },
 
     enabled: !!videoId, // videoIdが存在する場合にのみ実行
-    staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,

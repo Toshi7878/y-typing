@@ -4,9 +4,9 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import ClearRateText from "@/components/user-result-text/ClearRateText";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
-import { LocalClapState, ThemeColors } from "@/types";
+import { ThemeColors } from "@/types";
 import { Td, Tr, useTheme } from "@chakra-ui/react";
-import React, { Dispatch, useOptimistic, useState } from "react";
+import React, { Dispatch, useState } from "react";
 import { useEffect } from "react";
 import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
 import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
@@ -17,6 +17,7 @@ import { RankingListType } from "@/app/type/ts/type";
 import { useSession } from "next-auth/react";
 import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
 import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
+import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDownloadResultJsonQuery";
 
 interface RankingTrProps {
   result: RankingListType;
@@ -45,9 +46,11 @@ const RankingTr = (props: RankingTrProps) => {
     hasClap: props.result.hasClap,
     clapCount: props.result.clapCount,
   });
+  const [replayId, setReplayId] = useState<number | null>(null);
+  const { data, error, isLoading } = useDownloadPlayDataJsonQuery(replayId);
 
   useEffect(() => {
-    if (userId === props.result.id) {
+    if (userId === props.result.userId) {
       gameStateRef.current!.practice.hasMyRankingData = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,8 +87,9 @@ const RankingTr = (props: RankingTrProps) => {
         <Tr
           _hover={{ backgroundColor: theme.colors.button.sub.hover }}
           backgroundColor={props.isHighlighted ? theme.colors.button.sub.hover : "transparent"}
-          className={`cursor-pointer ${userId === Number(props.result.userId) ? "my-result" : ""}`}
-          {...(userId === Number(props.result.userId) && {
+          cursor="pointer"
+          className={`${userId === props.result.userId ? "my-result" : ""}`}
+          {...(userId === props.result.userId && {
             color: theme.colors.secondary.main,
           })}
           zIndex={5}
@@ -129,12 +133,13 @@ const RankingTr = (props: RankingTrProps) => {
       {props.showMenu === props.index && (
         <RankingMenu
           resultId={props.result.id}
-          userId={Number(props.result.userId)}
+          userId={props.result.userId}
           name={props.result.user.name}
           setShowMenu={props.setShowMenu}
           setHoveredIndex={props.setHoveredIndex}
           clapOptimisticState={clapOptimisticState}
           toggleClapAction={toggleClapAction}
+          setReplayId={setReplayId}
         />
       )}
     </>
