@@ -4,6 +4,7 @@ import {
   useSetInputModeAtom,
   useSetPlayingNotifyAtom,
   useTypePageSpeedAtom,
+  useUserOptionsAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
 import { romaConvert } from "../../ts/scene-ts/ready/createTypingWord";
@@ -17,6 +18,7 @@ export const useInputModeChange = () => {
   const inputMode = useInputModeAtom();
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
+  const userOptions = useUserOptionsAtom();
 
   return (newInputMode: InputModeType, lineTime?: number) => {
     if (newInputMode === inputMode) {
@@ -50,7 +52,7 @@ export const useInputModeChange = () => {
       speedData.playSpeed;
     if (nextKpm) {
       playingCenterRef.current!.setNextLyrics({
-        lyrics: nextLine["lyrics"],
+        lyrics: userOptions.nextDisplay === "word" ? nextLine.kanaWord : nextLine["lyrics"],
         kpm: nextKpm.toFixed(0),
       });
     }
