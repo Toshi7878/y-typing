@@ -72,6 +72,7 @@ const PlayingCenter = forwardRef<PlayingCenterRef, Props>(({ flex }, ref) => {
       align="start"
       minH={CARD_BODY_MIN_HEIGHT}
       justifyContent="space-between"
+      style={{ userSelect: "none", cursor: "none" }}
     >
       <Box
         color={theme.colors.text.body}
