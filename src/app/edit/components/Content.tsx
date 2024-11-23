@@ -14,6 +14,7 @@ import {
   useIsLrcConvertingAtom,
   useSetCanUploadAtom,
   useSetCreatorCommentAtom,
+  useSetEditDirectEditCountAtom as useSetDirectEditCountAtom,
   useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
   useSetEditLineWordAtom,
@@ -57,6 +58,7 @@ function Content() {
   const setLyrics = useSetEditLineLyricsAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
+  const setDirectEditCountAtom = useSetDirectEditCountAtom();
   const { id: mapId } = useParams();
 
   const { data, isLoading } = useDownloadMapDataQuery();
@@ -103,6 +105,7 @@ function Content() {
     return () => {
       setLyrics("");
       setWord("");
+      setDirectEditCountAtom(null);
       if (mapId) {
         queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       }
