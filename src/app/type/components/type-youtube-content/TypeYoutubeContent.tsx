@@ -65,6 +65,11 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
     [scene, map, inputMode, speedData, lineResults],
   );
 
+  // YouTubeコンポーネントのエラーハンドリングを追加
+  const handleError = useCallback((event: any) => {
+    console.error("YouTube Player Error:", event.data);
+  }, []);
+
   const memoizedYouTube = useMemo(
     () => (
       <Box style={{ userSelect: "none" }}>
@@ -88,6 +93,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
           onPause={ytPauseEvent}
           onEnd={ytEndEvent}
           onStateChange={handleStateChange}
+          onError={handleError} // エラーハンドリングを追加
         />
       </Box>
     ),

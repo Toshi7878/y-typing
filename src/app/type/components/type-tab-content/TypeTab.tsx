@@ -1,6 +1,5 @@
 import { Tabs, TabPanels, TabPanel, useTheme, HStack } from "@chakra-ui/react";
 import TabRanking from "./tab-ranking/TabRanking";
-import { useRef } from "react";
 import { ThemeColors } from "@/types";
 import TabStatusCard from "./tab-status/TabStatusCard";
 import TabIcons from "./child/TabIcons";

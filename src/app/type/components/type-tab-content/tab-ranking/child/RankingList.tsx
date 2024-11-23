@@ -6,6 +6,7 @@ import { RankingListType } from "@/app/type/ts/type";
 import RankingTr from "./child/RankingTr";
 import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRankingQuery } from "@/app/type/hooks/data-query/useRankingQuery";
+import RankingTable from "../RankingTable";
 
 const RankingList = () => {
   const { data: session } = useSession();
@@ -76,8 +77,10 @@ const RankingList = () => {
   }
   if (error) return <div>Error loading data</div>;
 
+  if (!data) return null; // データが存在しない場合はnullを返す
+
   return (
-    <>
+    <RankingTable>
       {data &&
         data.map((user: RankingListType, index: number) => {
           const romaType = user.romaType;
@@ -113,10 +116,8 @@ const RankingList = () => {
             />
           );
         })}
-    </>
+    </RankingTable>
   );
 };
-
-RankingList.displayName = "RankingList";
 
 export default RankingList;

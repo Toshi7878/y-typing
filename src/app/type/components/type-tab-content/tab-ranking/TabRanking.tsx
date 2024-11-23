@@ -1,9 +1,7 @@
-import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Card, CardBody, Box, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
 
 import RankingList from "./child/RankingList";
-import { FaHandsClapping } from "react-icons/fa6";
 import { ThemeColors } from "@/types";
-import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
 
 interface TabRankingProps {
   height: string;
@@ -20,7 +18,7 @@ const TabRanking = (props: TabRankingProps) => {
       boxShadow="lg"
       color={theme.colors.text.body}
     >
-      <CardBody className="text-3xl font-bold w-full" pt={1} pb={2}>
+      <CardBody fontSize="3xl" fontWeight="bold" width="full" pt={1} pb={2}>
         <Box
           overflowY="scroll"
           minH={props.height}
@@ -31,82 +29,17 @@ const TabRanking = (props: TabRankingProps) => {
             },
             "&::-webkit-scrollbar-thumb": {
               background: theme.colors.text.header.normal,
-              borderRadius: "10px", // スクロールバーの角を丸くする
-              border: "2px solid transparent", // スクロールバーの内側にスペースを作る
-              backgroundClip: "content-box", // 背景をクリップ
+              borderRadius: "10px",
+              border: "2px solid transparent",
+              backgroundClip: "content-box",
             },
           }}
         >
-          <Table
-            variant="simple"
-            className="ranking-table"
-            size="sm"
-            sx={{
-              td: {
-                border: "none",
-                borderBottom: "1px",
-                borderColor: `${theme.colors.border.card}cc`,
-                paddingY: "0.6rem", // smとmdの間のサイズに調整
-                fontSize: "1.13rem", // smとmdの間のフォントサイズに調整
-              },
-              th: {
-                borderBottom: "1px",
-                borderColor: `${theme.colors.border.card}30`,
-              },
-            }}
-          >
-            <Thead
-              position="sticky"
-              top={0}
-              zIndex={0}
-              background={theme.colors.background.card}
-              className="ranking-thead"
-              style={{ userSelect: "none" }}
-            >
-              <Tr>
-                <Th width={RANKING_COLUMN_WIDTH.rank} color={theme.colors.text.body}>
-                  順位
-                </Th>
-                <Th width={RANKING_COLUMN_WIDTH.score} color={theme.colors.text.body}>
-                  Score
-                </Th>
-                <Th width={RANKING_COLUMN_WIDTH.clearRate} color={theme.colors.text.body}>
-                  クリア率
-                </Th>
-                <Th width={RANKING_COLUMN_WIDTH.userName} color={theme.colors.text.body}>
-                  名前
-                </Th>
-
-                <Th width={RANKING_COLUMN_WIDTH.kpm} color={theme.colors.text.body}>
-                  kpm
-                </Th>
-                <Th width={RANKING_COLUMN_WIDTH.inputMode} color={theme.colors.text.body}>
-                  モード
-                </Th>
-                <Th width={RANKING_COLUMN_WIDTH.updatedAt} color={theme.colors.text.body}>
-                  時間
-                </Th>
-                <Th
-                  width={RANKING_COLUMN_WIDTH.clapCount}
-                  position="relative"
-                  right={1}
-                  top={-0.5}
-                  color={theme.colors.text.body}
-                >
-                  <FaHandsClapping size={"1rem"} />
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <RankingList />
-            </Tbody>
-          </Table>
+          <RankingList />
         </Box>
       </CardBody>
     </Card>
   );
 };
-
-TabRanking.displayName = "TabRanking";
 
 export default TabRanking;
