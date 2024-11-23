@@ -1,16 +1,18 @@
 "use client";
 import { RefsProvider } from "../type-contexts/refsProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createStore, Provider as JotaiProvider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
 import { GetInfoData } from "@/types/api";
 import { useEffect } from "react";
-import { hasLocalLikeAtom, userOptionsAtom } from "../type-atoms/gameRenderAtoms";
-import { UserTypingOptions } from "../ts/type";
+import {
+  getTypeAtomStore,
+  hasLocalLikeAtom,
+  inputModeAtom,
+  userOptionsAtom,
+} from "../type-atoms/gameRenderAtoms";
+import { InputModeType, UserTypingOptions } from "../ts/type";
 
 export const queryClient = new QueryClient();
-const typeAtomStore = createStore();
-
-export const getTypeAtomStore = () => typeAtomStore;
 
 interface TypeProviderProps {
   mapInfo?: GetInfoData;
@@ -18,14 +20,20 @@ interface TypeProviderProps {
   children: React.ReactNode;
 }
 const TypeProvider = ({ mapInfo, userTypingOptions, children }: TypeProviderProps) => {
+  const typeAtomStore = getTypeAtomStore();
   typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.hasLike);
+  useEffect(() => {
+    window.getSelection()!.removeAllRanges();
+    typeAtomStore.set(
+      inputModeAtom,
+      (localStorage.getItem("inputMode") || "roma") as InputModeType,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (userTypingOptions) {
     typeAtomStore.set(userOptionsAtom, userTypingOptions);
   }
 
-  useEffect(() => {
-    window.getSelection()!.removeAllRanges();
-  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <RefsProvider>

@@ -1,4 +1,4 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import {
   InputModeType,
@@ -9,8 +9,9 @@ import {
   UserTypingOptions,
 } from "../ts/type";
 import { DEFAULT_SPEED, DEFAULT_USER_OPTIONS } from "../ts/const/typeDefaultValue";
-import { getTypeAtomStore } from "../[id]/TypeProvider";
-const typeAtomStore = getTypeAtomStore();
+const typeAtomStore = createStore();
+
+export const getTypeAtomStore = () => typeAtomStore;
 
 const mapAtom = atom<CreateMap | null>(null);
 
@@ -52,16 +53,14 @@ export const useSetTabIndexAtom = () => {
   return useSetAtom(tabIndexAtom);
 };
 
-const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
-
-const inputModeAtom = atom<InputModeType>(inputMode);
+export const inputModeAtom = atom<InputModeType>("roma");
 
 export const useInputModeAtom = () => {
-  return useAtomValue(inputModeAtom);
+  return useAtomValue(inputModeAtom, { store: typeAtomStore });
 };
 
 export const useSetInputModeAtom = () => {
-  return useSetAtom(inputModeAtom);
+  return useSetAtom(inputModeAtom, { store: typeAtomStore });
 };
 
 const isLoadingOverlayAtom = atom<boolean>(false);
