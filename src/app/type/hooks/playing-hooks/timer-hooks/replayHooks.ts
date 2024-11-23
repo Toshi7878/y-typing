@@ -153,7 +153,6 @@ const useKeyReplay = () => {
 
         playingCenterRef.current!.setLineWord(result.newLineWord);
       } else {
-        console.log("update replay failed");
         const newStatus = updateMissStatus(status);
         updateMissRefStatus({ lineConstantTime, failKey: key });
         tabStatusRef.current!.setStatus(newStatus);
@@ -163,8 +162,6 @@ const useKeyReplay = () => {
         }
       }
     } else if (option) {
-      console.log("update replay option");
-
       switch (option) {
         case "roma":
           inputModeChange("roma");

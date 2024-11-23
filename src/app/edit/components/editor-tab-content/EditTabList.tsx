@@ -22,8 +22,6 @@ interface EditorTabContentProps {
 
 const tabLists = ["情報 & 保存", "エディター", "設定 & ショートカットキー"];
 export default function EditorTabContent({ className }: EditorTabContentProps) {
-  console.log("Tab");
-
   const tabIndex = useTabIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
 

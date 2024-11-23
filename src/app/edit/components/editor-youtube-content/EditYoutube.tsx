@@ -20,7 +20,6 @@ interface EditorYouTubeProps {
 export const editTicker = new Ticker();
 
 const EditYouTube = function ({ className }: EditorYouTubeProps) {
-  console.log("YouTube");
   const isYTStarted = useIsEditYTStartedAtom();
   const videoId = useVideoIdAtom();
   const mapData = useSelector((state: RootState) => state.mapData.value);

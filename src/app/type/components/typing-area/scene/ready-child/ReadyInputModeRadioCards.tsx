@@ -75,7 +75,6 @@ function ReadyInputModeRadioCards() {
     name: "inputMode",
     defaultValue: defaultInputMode,
     onChange: (value) => {
-      console.log(value);
       setInputMode(value as InputModeType);
       localStorage.setItem("inputMode", value);
     },

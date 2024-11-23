@@ -20,7 +20,6 @@ interface TypeProviderProps {
 const TypeProvider = ({ mapInfo, userTypingOptions, children }: TypeProviderProps) => {
   typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.hasLike);
   if (userTypingOptions) {
-    console.log(userTypingOptions);
     typeAtomStore.set(userOptionsAtom, userTypingOptions);
   }
 

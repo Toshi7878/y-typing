@@ -52,9 +52,7 @@ export const config: NextAuthConfig = {
         }
 
         return true;
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
     async jwt({ token, trigger, session, user }) {
       if (trigger === "update") {

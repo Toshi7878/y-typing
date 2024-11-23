@@ -11,7 +11,6 @@ export function useCreatedCheckVideoIdQuery(videoId: string) {
       const response = await axios.get("/api/check-created-youtube-id", {
         params: { videoId },
       });
-      console.log("Response:", response.data);
 
       return response.data;
     },

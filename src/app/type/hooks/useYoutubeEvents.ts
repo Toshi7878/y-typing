@@ -110,7 +110,6 @@ export const useYTSeekEvent = () => {
       if (isSeekedLine) {
         gameStateRef.current!.isSeekedLine = false;
         const newCount = getSeekLineCount(time);
-        console.log(newCount);
         statusRef.current!.status.count = newCount;
         updateLine(newCount);
         if (typeTicker.started) {

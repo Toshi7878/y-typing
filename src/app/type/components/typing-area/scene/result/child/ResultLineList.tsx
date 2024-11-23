@@ -71,7 +71,6 @@ function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
         const lastTypedChildClassList = typedElements[typedElements.length - 1].classList;
 
         if (lastTypedChildClassList[lastTypedChildClassList.length - 1] === "invisible") {
-          console.log("再生中");
           return;
         }
         for (let i = 0; i < typedElements.length; i++) {

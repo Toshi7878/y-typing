@@ -8,8 +8,6 @@ import { ThemeColors } from "@/types";
 import { useIsEditYTReadyAtom, useIsEditYTStartedAtom } from "../../edit-atom/editAtom";
 import EditSpeedChange from "./child/EditSpeedChange";
 const TimeRange = () => {
-  console.log("range");
-
   const { playerRef } = useRefs();
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);

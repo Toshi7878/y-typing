@@ -29,7 +29,6 @@ function ResultDrawer({ isOpen, onClose }: ResultDrawerProps) {
 
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
-  console.log("drawer Open");
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay backgroundColor="transparent" />
