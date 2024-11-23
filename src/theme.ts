@@ -9,7 +9,7 @@ const config: ThemeConfig = {
 const darkTheme: ThemeColors = {
   colors: {
     background: {
-      body: "#212529",
+      body: "#1f2427",
       card: "#2b3035",
       header: "#375a7f",
     },
