@@ -1,7 +1,7 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
-import { getHomeAtomStore } from "../HomeProvider";
+import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
 
-const homeAtomStore = getHomeAtomStore();
+const homeAtomStore = createStore();
+export const getHomeAtomStore = () => homeAtomStore;
 
 export const searchMapKeyWordsAtom = atom<string>("");
 

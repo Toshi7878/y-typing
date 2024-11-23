@@ -5,10 +5,14 @@ import LinkMenuItem from "../child/LinkMenuItem";
 import { leftLink, leftMenuItem } from "@/config/headerNav";
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
+import { useInvalidateQueryLink } from "@/lib/hooks/fetcher-hook/useInvalidateQueryLink";
+import { queryClient } from "@/app/timeline/TimelineProvider";
+import { QUERY_KEYS } from "@/config/consts";
 
 function LeftMenus() {
   const theme: ThemeColors = useTheme();
   const handleLinkClick = useLinkClick();
+  const invalidateQueryLink = useInvalidateQueryLink();
 
   return (
     <Box as="nav" display={{ base: "none", md: "block" }}>
@@ -45,7 +49,11 @@ function LeftMenus() {
             fontSize="sm"
             _active={{ color: theme.colors.text.header.hover }}
             ml={5}
-            onClick={handleLinkClick}
+            onClick={
+              link.href === "/timeline"
+                ? (event) => invalidateQueryLink(event, queryClient, QUERY_KEYS.usersResultList)
+                : handleLinkClick
+            }
           >
             {link.title}
           </Link>

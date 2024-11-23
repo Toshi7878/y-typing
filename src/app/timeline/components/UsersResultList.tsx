@@ -7,6 +7,7 @@ import { Box } from "@chakra-ui/react";
 import SearchContent from "./search/SearchContent";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import nProgress from "nprogress";
 
 function UsersResultList() {
   const {
@@ -29,6 +30,12 @@ function UsersResultList() {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+  useEffect(() => {
+    if (!isFetching) {
+      // ここに最初の取得に成功したときの処理を追加
+      nProgress.done();
+    }
+  }, [isFetching]);
 
   return (
     <Box as="section">

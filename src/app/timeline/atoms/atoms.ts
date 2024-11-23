@@ -1,9 +1,8 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
 import { FilterMode, SearchResultKeyWords, SearchResultRange } from "../ts/type";
 import { DEFAULT_CLEAR_RATE_SEARCH_RANGE, DEFAULT_KPM_SEARCH_RANGE } from "../ts/const/consts";
-import { getTimelineAtomStore } from "../TimelineProvider";
-
-const timelineAtomStore = getTimelineAtomStore();
+const timelineAtomStore = createStore();
+export const getTimelineAtomStore = () => timelineAtomStore;
 
 export const searchResultKeyWordsAtom = atom<SearchResultKeyWords>({
   mapKeyWord: "",

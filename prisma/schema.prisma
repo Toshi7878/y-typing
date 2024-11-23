@@ -37,6 +37,20 @@ model Result {
 
 }
 
+model UserTypingData {
+    id                 Int    @id @default(autoincrement())
+    userId             Int    @unique
+    totalTypingTime    Float  @default(0)
+    kanaTypeTotalCount Int    @default(0)
+    romaTypeTotalCount Int    @default(0)
+    totalPlayCount     Int    @default(0)
+    maxCombo           Int    @default(0)
+    clapCount          Int    @default(0)
+    createdAt          DateTime @default(now())
+    user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
+
+}
+
 model TypingOption {
     id             Int @id @default(autoincrement())
     userId         Int @unique
@@ -117,4 +131,5 @@ model User {
   clap          Clap[]
   mapLike       MapLike[]
   typingOption  TypingOption[]
+  userTypingData UserTypingData[]
 }

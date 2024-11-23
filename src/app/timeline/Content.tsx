@@ -3,7 +3,6 @@ import { Box } from "@chakra-ui/react";
 import UsersResultList from "./components/UsersResultList";
 import { useEffect, useState } from "react";
 import { Provider } from "jotai";
-import NProgress from "nprogress";
 import React from "react";
 import PreviewYouTubeContent from "@/components/PreviewYouTubeContent";
 
@@ -14,7 +13,6 @@ export default function Content() {
     const handleResize = () => setIsMobile(window.innerWidth <= 480);
     handleResize(); // 初期値を設定
     window.getSelection()!.removeAllRanges();
-    NProgress.done();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
