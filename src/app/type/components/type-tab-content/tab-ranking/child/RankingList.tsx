@@ -94,7 +94,7 @@ const RankingList = () => {
 
           return (
             <RankingTr
-              key={index}
+              key={user.userId}
               result={user}
               index={index}
               rank={index + 1}
