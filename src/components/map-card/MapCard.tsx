@@ -3,10 +3,9 @@ import { Card, CardBody, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
 
 interface MapCardProps {
-  maxW: string;
   children: React.ReactNode;
 }
-function MapCard({ maxW, children }: MapCardProps) {
+function MapCard({ children }: MapCardProps) {
   const theme: ThemeColors = useTheme();
 
   return (
@@ -16,7 +15,7 @@ function MapCard({ maxW, children }: MapCardProps) {
       _hover={{
         boxShadow: theme.colors.home.card.hover,
       }}
-      maxW={maxW}
+      maxW="100%"
     >
       <CardBody
         color={theme.colors.text.body}

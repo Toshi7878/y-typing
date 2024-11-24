@@ -1,13 +1,8 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import { FaPlay } from "react-icons/fa";
-import { FaPause } from "react-icons/fa";
-import {
-  usePreviewVideoIdAtom,
-  useSetPreviewTimeAtom,
-  useSetPreviewVideoIdAtom,
-} from "@/components/atom/globalAtoms";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import ThumbnailPreviewCover from "./child/ThumbnailPreviewCover";
+import SkeletonThumbnail from "./SkeletonThumbnail";
 
 interface MapLeftThumbnailProps {
   src: string;
@@ -22,40 +17,8 @@ interface MapLeftThumbnailProps {
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime, thumnailWidth, thumnailHeight } =
     props;
-  const [imgSrc, setImgSrc] = useState(fallbackSrc); //高画質: src 低画質: fallbackSrc
-  const videoId = usePreviewVideoIdAtom();
-  const [isTouchMove, setIsTouchMove] = useState(false);
 
-  const setVideoId = useSetPreviewVideoIdAtom();
-  const setPreviewTime = useSetPreviewTimeAtom();
-
-  const previewYouTube = useCallback(
-    (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-      const target = e.currentTarget as HTMLDivElement;
-      const targetPreviewTime = target.getAttribute("data-preview-time");
-      const targetVideoId = target.getAttribute("data-video-id");
-
-      if (targetVideoId !== videoId) {
-        setVideoId(targetVideoId);
-        setPreviewTime(targetPreviewTime);
-      } else {
-        setVideoId(null);
-        setPreviewTime(null);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [videoId],
-  );
-  const handleTouchMove = () => {
-    setIsTouchMove(true);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!isTouchMove) {
-      previewYouTube(e);
-    }
-    setIsTouchMove(false);
-  };
+  // const [imgSrc, setImgSrc] = useState(fallbackSrc); //高画質: src 低画質: fallbackSrc
 
   // const handleImageLoad = useCallback((src: string) => {
   //   const img = new window.Image();
@@ -73,46 +36,25 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [src]);
 
+  // const [isLoading, setIsLoading] = useState(true); // 画像の読み込み状態を管理
+
+  // const handleImageLoad = () => {
+  //   setIsLoading(false); // 画像が読み込まれたら、ローディング状態を解除
+  // };
+
   const width = useBreakpointValue(thumnailWidth); // ここを変更
   const height = useBreakpointValue(thumnailHeight); // ここを変更
   return (
-    <Box position="relative" className="group" width={width} style={{ userSelect: "none" }}>
+    <Box position="relative" className="group" minW={width} minH={height}>
       <Image
         loader={({ src }) => src}
         alt={alt}
-        src={imgSrc}
+        src={fallbackSrc}
         width={width}
         height={height}
-        minW={width}
-        minH={height}
-        className="rounded-md"
+        rounded="md"
       />
-      <Flex
-        cursor="pointer"
-        position="absolute"
-        alignItems="center"
-        justify="center"
-        inset={0}
-        opacity={videoId === mapVideoId ? 1 : 0}
-        _groupHover={{ opacity: 1 }}
-        transition="opacity 0.3s"
-        style={{
-          backgroundColor: videoId === mapVideoId ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.3)",
-          border: "none",
-        }}
-        borderRadius="lg"
-        data-preview-time={mapPreviewTime}
-        data-video-id={mapVideoId}
-        onClick={previewYouTube}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {videoId === mapVideoId ? (
-          <FaPause color="white" size={35} />
-        ) : (
-          <FaPlay color="white" size={35} />
-        )}
-      </Flex>
+      <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} />
     </Box>
   );
 };

@@ -29,7 +29,7 @@ function MapCardRightInfo({ map }: MapCardProps) {
       _hover={{ textDecoration: "none" }}
     >
       <MapInfo map={map} />
-      <Stack justifyContent="space-between" flexDirection={{ base: "row", md: "column" }} my={1}>
+      <Stack justifyContent="space-between" flexDirection={{ base: "row", md: "column" }}>
         <MapCreateUser map={map} />
         <MapBadges map={map} />
       </Stack>

@@ -1,7 +1,6 @@
 "use client";
 import InfiniteScroll from "react-infinite-scroller";
 import MapCard from "../../../components/map-card/MapCard";
-import SkeletonCard from "../../../components/map-card/SkeletonCard";
 import MapCardLayout from "./MapCardLayout";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,6 +10,7 @@ import MapCardRightInfo from "@/components/map-card/child/MapCardRightInfo";
 import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "../ts/const/consts";
 import { MapCardInfo } from "../ts/type";
+import SkeletonCard from "@/components/map-card/SkeletonCard";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
@@ -62,6 +62,7 @@ function MapList() {
       hasMore={hasNextPage}
       threshold={1800} // スクロールの閾値を追加
     >
+      {/* <LoadingMapCard cardLength={10} /> */}
       <MapCardLayout>
         {data?.pages.map((page: MapCardInfo[]) =>
           page.map((map: MapCardInfo) => {
@@ -71,7 +72,7 @@ function MapList() {
                 : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
 
             return (
-              <MapCard key={map.id} maxW="100%">
+              <MapCard key={map.id}>
                 <>
                   <MapLeftThumbnail
                     alt={map.title}
