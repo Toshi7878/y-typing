@@ -73,19 +73,17 @@ function MapList() {
 
             return (
               <MapCard key={map.id}>
-                <>
-                  <MapLeftThumbnail
-                    alt={map.title}
-                    fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
-                    src={src}
-                    mapVideoId={map.videoId}
-                    mapPreviewTime={map.previewTime}
-                    thumbnailQuality={map.thumbnailQuality}
-                    thumnailWidth={HOME_THUBNAIL_WIDTH}
-                    thumnailHeight={HOME_THUBNAIL_HEIGHT}
-                  />
-                  <MapCardRightInfo map={map} />
-                </>
+                <MapLeftThumbnail
+                  alt={map.title}
+                  fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
+                  src={src}
+                  mapVideoId={map.videoId}
+                  mapPreviewTime={map.previewTime}
+                  thumbnailQuality={map.thumbnailQuality}
+                  thumnailWidth={HOME_THUBNAIL_WIDTH}
+                  thumnailHeight={HOME_THUBNAIL_HEIGHT}
+                />
+                <MapCardRightInfo map={map} />
               </MapCard>
             );
           }),
