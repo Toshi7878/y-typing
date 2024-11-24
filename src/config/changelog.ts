@@ -1,5 +1,9 @@
 export const changelog = [
   {
+    date: "2024-11-25",
+    descriptions: ["通知デモ追加"],
+  },
+  {
     date: "2024-11-24",
     descriptions: ["譜面一覧読み込み時のレイアウト崩れを修正", "背景色を#212529→#1f2427に変更"],
   },

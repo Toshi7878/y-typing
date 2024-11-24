@@ -3,8 +3,9 @@
 import { PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { resultSendSchema } from "./validationSchema";
-import { SendResultData } from "../../type";
+import { LineResultData, SendResultData } from "../../type";
 import { UploadResult } from "@/types";
+import { supabase } from "@/lib/supabaseClient";
 
 const prisma = new PrismaClient();
 
@@ -25,10 +26,12 @@ const calcRank = async (mapId: number, userId: number) => {
   for (let i = 0; i < rankingList.length; i++) {
     const newRank = i + 1;
 
-    await prisma.result.updateMany({
+    await prisma.result.update({
       where: {
-        mapId: mapId,
-        userId: rankingList[i].userId,
+        userId_mapId: {
+          mapId: mapId,
+          userId: rankingList[i].userId,
+        },
       },
       data: {
         rank: newRank,
@@ -81,6 +84,22 @@ const calcRank = async (mapId: number, userId: number) => {
   });
 };
 
+const sendLineResult = async (mapId: number, lineResults: LineResultData[]) => {
+  const jsonString = JSON.stringify(lineResults, null, 2);
+
+  // Supabaseストレージにアップロード
+  const { error } = await supabase.storage
+    .from("user-result") // バケット名を指定
+    .upload(`public/${mapId}.json`, new Blob([jsonString], { type: "application/json" }), {
+      upsert: true, // 既存のファイルを上書きするオプションを追加
+    });
+
+  if (error) {
+    console.error("Error uploading to Supabase:", error);
+    throw error;
+  }
+};
+
 const sendNewResult = async (data: SendResultData, userId: number) => {
   const upsertResult = await prisma.result.upsert({
     where: {
@@ -102,7 +121,10 @@ const sendNewResult = async (data: SendResultData, userId: number) => {
   return upsertResult.id;
 };
 
-export async function actions(data: SendResultData): Promise<UploadResult> {
+export async function actions(
+  data: SendResultData,
+  lineResults: LineResultData[],
+): Promise<UploadResult> {
   const session = await auth();
 
   const validatedFields = resultSendSchema.safeParse({
@@ -120,10 +142,12 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
   }
   try {
     const userId = Number(session?.user?.id);
-    const newId = await sendNewResult(data, userId);
-    await calcRank(data.mapId, userId);
+    const mapId = await sendNewResult(data, userId);
+    await sendLineResult(mapId, lineResults);
+
+    calcRank(data.mapId, userId);
     return {
-      id: newId,
+      id: mapId,
       title: "ランキング登録が完了しました",
       message: "",
       status: 200,

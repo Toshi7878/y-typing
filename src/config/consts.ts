@@ -11,6 +11,11 @@ export const PREVIEW_YOUTUBE_HEIGHT = {
   xl: (PREVIEW_YOUTUBE_WIDTH.xl * 9) / 16,
 };
 
+export const NOTIFICATION_MAP_THUBNAIL_WIDTH = { base: 160 };
+export const NOTIFICATION_MAP_THUBNAIL_HEIGHT = {
+  base: (NOTIFICATION_MAP_THUBNAIL_WIDTH.base * 9) / 16,
+};
+
 export const QUERY_KEYS = {
   mapList: ["mapList"] as const,
   usersResultList: ["usersResultList"] as const,
@@ -18,4 +23,5 @@ export const QUERY_KEYS = {
   mapRanking: (mapId: string | string[]) => ["mapRanking", mapId] as const,
   userPlayData: (resultId: string | string[]) => ["userPlayData", resultId] as const,
   mapCreatedCheck: (videoId: string) => ["createdCheck", videoId] as const,
+  notification: ["notification"] as const,
 };

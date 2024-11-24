@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 export const useSendResult = () => {
   const { id: mapId } = useParams();
-  const { bestScoreRef, statusRef, tabStatusRef, gameStateRef } = useRefs();
+  const { statusRef, tabStatusRef } = useRefs();
   const status: Status = tabStatusRef.current!.getStatus();
   const lineResults = useLineResultsAtom();
 
@@ -37,23 +37,8 @@ export const useSendResult = () => {
       status: sendStatus,
     };
 
-    const result = await actions(sendData);
+    const result = await actions(sendData, lineResults);
 
-    const jsonString = JSON.stringify(lineResults, null, 2);
-
-    if (result) {
-      // Supabaseストレージにアップロード
-      const { data, error } = await supabase.storage
-        .from("user-result") // バケット名を指定
-        .upload(`public/${result.id}.json`, new Blob([jsonString], { type: "application/json" }), {
-          upsert: true, // 既存のファイルを上書きするオプションを追加
-        });
-
-      if (error) {
-        console.error("Error uploading to Supabase:", error);
-        throw error;
-      }
-    }
     return result;
   };
 };

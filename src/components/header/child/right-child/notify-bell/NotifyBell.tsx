@@ -13,6 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaBell } from "react-icons/fa";
+import NotifyDrawerInnerContent from "./child/NotifyDrawerInnerContent";
 
 export default function NotifyBell() {
   const theme: ThemeColors = useTheme();
@@ -34,10 +35,8 @@ export default function NotifyBell() {
       </CustomToolTip>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-        <CustomDrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>通知</DrawerHeader>
-          <DrawerBody>{/* 通知内容をここに追加 */}</DrawerBody>
+        <CustomDrawerContent width="400px">
+          <NotifyDrawerInnerContent />
         </CustomDrawerContent>
       </Drawer>
     </>

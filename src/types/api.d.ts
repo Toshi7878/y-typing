@@ -1,3 +1,5 @@
+import { MapCardInfo } from "@/app/(home)/ts/type";
+
 export interface GetInfoData {
   videoId: string;
   title: string;
@@ -9,3 +11,20 @@ export interface GetInfoData {
   tags?: string[];
   previewTime: string;
 }
+
+type NotificationSelect = {
+  createdAt: Date;
+  action: string;
+  visitor: {
+    name: string;
+  };
+  visitedResult: {
+    score: number;
+    rank: number;
+  };
+  visitorResult: {
+    score: number;
+    rank: number;
+  };
+  map: MapCardInfo;
+};

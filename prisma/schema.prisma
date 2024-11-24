@@ -31,7 +31,11 @@ model Result {
   clapCount      Int @default(0)
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
+
   clap           Clap[]
+  visitorNotifications Notification[] @relation("VisitorResult")
+  visitedNotifications Notification[] @relation("VisitedResult")
+
 
   @@unique([userId, mapId]) // 複合ユニーク制約を追加
 
@@ -99,8 +103,9 @@ model Notification {
   checked        Boolean @default(false)
   createdAt      DateTime @default(now())
   visitor        User @relation("Visitor", fields: [visitor_id], references: [id], onDelete: Cascade)
-  visited        User @relation("Visited", fields: [visited_id], references: [id], onDelete: Cascade)
-
+  visitorResult  Result @relation("VisitorResult", fields: [visitor_id,mapId], references: [userId, mapId], onDelete: Cascade)
+  visitedResult  Result @relation("VisitedResult", fields: [visited_id,mapId], references: [userId, mapId], onDelete: Cascade)
+  map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
   @@unique([visitor_id, visited_id, mapId, action])
 }
 
@@ -131,6 +136,7 @@ model Map {
   user             User @relation(fields: [creatorId], references: [id])
   result           Result[]
   mapLike          MapLike[]
+  notification     Notification[]
 }
 
 
@@ -149,5 +155,4 @@ model User {
   typingOption  TypingOption[]
   userTypingStats UserTypingStats[]
   visitorNotifications Notification[] @relation("Visitor")
-  visitedNotifications Notification[] @relation("Visited")
 }
