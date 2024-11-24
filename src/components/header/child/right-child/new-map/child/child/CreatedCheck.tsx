@@ -1,4 +1,5 @@
 import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "@/app/(home)/ts/const/consts";
+import MapInfo from "@/components/map-card/child/child/MapInfo";
 import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import MapCardRightInfo from "@/components/map-card/child/MapCardRightInfo";
 import MapCard from "@/components/map-card/MapCard";
@@ -42,7 +43,9 @@ const CreatedCheck = (props: CreatedCheckProps) => {
                   thumnailWidth={HOME_THUBNAIL_WIDTH}
                   thumnailHeight={HOME_THUBNAIL_HEIGHT}
                 />
-                <MapCardRightInfo map={map} />
+                <MapCardRightInfo>
+                  <MapInfo map={map} />
+                </MapCardRightInfo>
               </MapCard>
             </Box>
           );
