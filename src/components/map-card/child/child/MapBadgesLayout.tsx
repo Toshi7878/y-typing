@@ -12,7 +12,7 @@ interface MapBadgesProps {
 
 const MapBadges = (props: MapBadgesProps) => {
   const { map } = props;
-  const showBadges = useBreakpointValue({ base: false, sm: true });
+  const showBadges = useBreakpointValue({ base: false, md: true });
 
   return (
     <Flex justifyContent="space-between" mr={3}>

@@ -1,39 +1,23 @@
 "use client";
-import { Flex, Stack } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/next-js";
-import { useLinkClick } from "@/lib/hooks/useLinkClick";
-import { MapCardInfo } from "../../../app/(home)/ts/type";
-import MapInfo from "./child/MapInfo";
-import MapCreateUser from "./child/MapCreateUser";
-import MapBadges from "./child/MapBadgesLayout";
+import { Flex } from "@chakra-ui/react";
 
 interface MapCardProps {
-  map: MapCardInfo;
+  children: React.ReactNode;
 }
-function MapCardRightInfo({ map }: MapCardProps) {
-  const handleLinkClick = useLinkClick();
-
+function MapCardRightInfo({ children }: MapCardProps) {
   return (
-    <Link
-      href={`/type/${map.id}`}
-      onClick={handleLinkClick}
-      as={Flex}
-      display="flex"
+    <Flex
       flexDirection="column"
       justifyContent="space-between"
-      h="full"
-      width={{ base: "100%", lg: "55%", "2xl": "65%" }} // 2xlを追加
+      overflowX="hidden"
+      width="100%"
+      height="100%"
       pl={3}
       pt={2}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
-      _hover={{ textDecoration: "none" }}
     >
-      <MapInfo map={map} />
-      <Stack justifyContent="space-between" flexDirection={{ base: "row", md: "column" }}>
-        <MapCreateUser map={map} />
-        <MapBadges map={map} />
-      </Stack>
-    </Link>
+      {children}
+    </Flex>
   );
 }
 

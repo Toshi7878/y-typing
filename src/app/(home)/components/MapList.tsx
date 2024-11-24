@@ -11,6 +11,7 @@ import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "../ts/const/consts";
 import { MapCardInfo } from "../ts/type";
 import SkeletonCard from "@/components/map-card/SkeletonCard";
+import MapInfo from "@/components/map-card/child/child/MapInfo";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
@@ -62,7 +63,6 @@ function MapList() {
       hasMore={hasNextPage}
       threshold={1800} // スクロールの閾値を追加
     >
-      {/* <LoadingMapCard cardLength={10} /> */}
       <MapCardLayout>
         {data?.pages.map((page: MapCardInfo[]) =>
           page.map((map: MapCardInfo) => {
@@ -83,7 +83,9 @@ function MapList() {
                   thumnailWidth={HOME_THUBNAIL_WIDTH}
                   thumnailHeight={HOME_THUBNAIL_HEIGHT}
                 />
-                <MapCardRightInfo map={map} />
+                <MapCardRightInfo>
+                  <MapInfo map={map} />
+                </MapCardRightInfo>
               </MapCard>
             );
           }),

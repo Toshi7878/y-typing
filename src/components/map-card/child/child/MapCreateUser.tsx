@@ -3,7 +3,7 @@ import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { ThemeColors } from "@/types";
 import { Link } from "@chakra-ui/next-js";
-import { Text, useTheme } from "@chakra-ui/react";
+import { Box, Text, useTheme } from "@chakra-ui/react";
 import React from "react";
 
 interface MapCreateUserProps {
@@ -16,6 +16,9 @@ const MapCreateUser = (props: MapCreateUserProps) => {
 
   return (
     <Text as="small" mt={2}>
+      <Text as="span" mr={1} fontSize="xs" display={{ base: "inline-block", sm: "none" }}>
+        by.
+      </Text>
       <Link
         href={`/user/${props.map.user.id}`}
         onClick={handleLinkClick}
@@ -23,10 +26,10 @@ const MapCreateUser = (props: MapCreateUserProps) => {
       >
         {props.map.user.name}
       </Link>
-
-      <Text as="span" fontSize="xs">
-        {" "}
-        - <UpdateAtText updatedAt={props.map.updatedAt} />
+      <Text as="span" fontSize="xs" display={{ base: "none", sm: "inline-block" }}>
+        <Box mx={1}>
+          - <UpdateAtText updatedAt={props.map.updatedAt} />
+        </Box>
       </Text>
     </Text>
   );
