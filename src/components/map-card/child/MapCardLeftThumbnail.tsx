@@ -1,8 +1,7 @@
 import { Image } from "@chakra-ui/next-js";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ThumbnailPreviewCover from "./child/ThumbnailPreviewCover";
-import SkeletonThumbnail from "./SkeletonThumbnail";
 
 interface MapLeftThumbnailProps {
   src: string;
@@ -42,8 +41,8 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   //   setIsLoading(false); // 画像が読み込まれたら、ローディング状態を解除
   // };
 
-  const width = useBreakpointValue(thumnailWidth); // ここを変更
-  const height = useBreakpointValue(thumnailHeight); // ここを変更
+  const width = useBreakpointValue(thumnailWidth, { ssr: false }); // ここを変更
+  const height = useBreakpointValue(thumnailHeight, { ssr: false }); // ここを変更
   return (
     <Box position="relative" className="group" minW={width} minH={height}>
       <Image
@@ -52,6 +51,8 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         src={fallbackSrc}
         width={width}
         height={height}
+        minW={width}
+        minH={height}
         rounded="md"
       />
       <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} />
