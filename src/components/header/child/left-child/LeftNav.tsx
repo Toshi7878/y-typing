@@ -1,8 +1,8 @@
 "use client";
 
 import { Flex } from "@chakra-ui/react";
-import SiteLogo from "./left-child/SiteLogo";
-import LeftMenus from "./left-child/LeftMenus";
+import SiteLogo from "./SiteLogo";
+import LeftMenus from "./LeftMenus";
 
 function LeftNav() {
   return (

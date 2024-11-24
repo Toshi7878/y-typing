@@ -25,7 +25,7 @@ const darkTheme: ThemeColors = {
     text: {
       body: "#FFFFFF",
       header: {
-        normal: "#cccccc",
+        normal: "#d3dae3",
         hover: "#FFFFFF",
       },
     },

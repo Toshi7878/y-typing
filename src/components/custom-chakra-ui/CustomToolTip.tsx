@@ -8,7 +8,8 @@ interface CustomToolTipProps {
   placement: PlacementWithLogical | undefined;
   isDisabled?: boolean;
   isOpen?: boolean;
-  fontSize?: "sm" | "md" | "lg";
+  fontSize?: "xs" | "sm" | "md" | "lg";
+  openDelay?: number;
 }
 const CustomToolTip = ({
   tooltipLabel,
@@ -16,6 +17,7 @@ const CustomToolTip = ({
   isDisabled,
   isOpen,
   fontSize,
+  openDelay = 0,
   children,
 }: CustomToolTipProps) => {
   const theme: ThemeColors = useTheme();
@@ -37,6 +39,7 @@ const CustomToolTip = ({
       isDisabled={isDisabled}
       isOpen={isOpen}
       fontSize={fontSize}
+      openDelay={openDelay}
       minWidth="fit-content"
     >
       {children}

@@ -1,5 +1,5 @@
 "use client";
-import LeftNav from "./child/LeftNav";
+import LeftNav from "./child/left-child/LeftNav";
 import RightNav from "./child/RightNav";
 import {
   IconButton,

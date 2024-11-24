@@ -2,26 +2,28 @@
 
 import { ThemeColors } from "@/types";
 import { useDisclosure, Box, useTheme } from "@chakra-ui/react";
-import { MdAddBox } from "react-icons/md";
+import { RiAddBoxFill } from "react-icons/ri";
 import NewCreateModal from "./child/NewCreateModal";
+import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
 
 export default function NewMap() {
   const newCreateModalDisclosure = useDisclosure();
-
   const theme: ThemeColors = useTheme();
 
   return (
     <>
-      <Box
-        color={theme.colors.text.header.normal}
-        _hover={{
-          color: theme.colors.text.header.hover,
-        }}
-        className="cursor-pointer text-xl"
-        onClick={newCreateModalDisclosure.onOpen}
-      >
-        <MdAddBox />
-      </Box>
+      <CustomToolTip placement="bottom" tooltipLabel="譜面新規作成" fontSize="xs" openDelay={600}>
+        <Box
+          color={theme.colors.text.header.normal}
+          _hover={{
+            color: theme.colors.text.header.hover,
+          }}
+          cursor="pointer"
+          onClick={newCreateModalDisclosure.onOpen}
+        >
+          <RiAddBoxFill size={20} />
+        </Box>
+      </CustomToolTip>
 
       {newCreateModalDisclosure.isOpen && (
         <NewCreateModal newCreateModalDisclosure={newCreateModalDisclosure} />

@@ -8,7 +8,7 @@ import { UploadResult } from "@/types";
 
 const prisma = new PrismaClient();
 
-const calcRank = async (mapId: number) => {
+const calcRank = async (mapId: number, userId: number) => {
   const rankingList = await prisma.result.findMany({
     where: {
       mapId: mapId,
@@ -16,22 +16,49 @@ const calcRank = async (mapId: number) => {
     select: {
       userId: true,
       score: true,
+      rank: true,
       updatedAt: true,
     },
     orderBy: { score: "desc" },
   });
 
   for (let i = 0; i < rankingList.length; i++) {
+    const newRank = i + 1;
+
     await prisma.result.updateMany({
       where: {
         mapId: mapId,
         userId: rankingList[i].userId,
       },
       data: {
-        rank: i + 1,
+        rank: newRank,
         updatedAt: rankingList[i].updatedAt, // 現在のupdatedAtの値を再設定
       },
     });
+
+    const isOtherUser = rankingList[i].userId !== userId;
+    if (isOtherUser && rankingList[i].rank <= 5 && rankingList[i].rank !== newRank) {
+      await prisma.notification.upsert({
+        where: {
+          visitor_id_visited_id_mapId_action: {
+            visitor_id: userId,
+            visited_id: rankingList[i].userId,
+            mapId: mapId,
+            action: "ot",
+          },
+        },
+        update: {
+          checked: false,
+          createdAt: new Date(),
+        },
+        create: {
+          visitor_id: userId,
+          visited_id: rankingList[i].userId,
+          mapId: mapId,
+          action: "ot",
+        },
+      });
+    }
   }
 
   const mapData = await prisma.map.findUnique({
@@ -94,7 +121,7 @@ export async function actions(data: SendResultData): Promise<UploadResult> {
   try {
     const userId = Number(session?.user?.id);
     const newId = await sendNewResult(data, userId);
-    await calcRank(data.mapId);
+    await calcRank(data.mapId, userId);
     return {
       id: newId,
       title: "ランキング登録が完了しました",
