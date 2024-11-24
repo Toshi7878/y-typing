@@ -54,7 +54,11 @@ function MapInfo({ map }: MapCardProps) {
           {map.musicSource ? `【${map.musicSource}】` : "\u00A0"}
         </Box>
       </Flex>
-      <Stack justifyContent="space-between" flexDirection={{ base: "row", md: "column" }}>
+      <Stack
+        justifyContent="space-between"
+        alignItems="baseline"
+        flexDirection={{ base: "row", md: "column" }}
+      >
         <MapCreateUser map={map} />
         <MapBadges map={map} />
       </Stack>

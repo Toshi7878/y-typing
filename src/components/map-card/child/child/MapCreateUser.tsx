@@ -16,9 +16,6 @@ const MapCreateUser = (props: MapCreateUserProps) => {
 
   return (
     <Text as="small" mt={2}>
-      <Text as="span" mr={1} fontSize="xs" display={{ base: "inline-block", sm: "none" }}>
-        by.
-      </Text>
       <Link
         href={`/user/${props.map.user.id}`}
         onClick={handleLinkClick}

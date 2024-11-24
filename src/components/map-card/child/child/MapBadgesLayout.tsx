@@ -1,6 +1,6 @@
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
-import { Box, Flex, HStack, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import MapBadge from "./MapBadge";
 import LikeCount from "./child/LikeCount";
@@ -25,7 +25,12 @@ const MapBadges = (props: MapBadgesProps) => {
           }
           placement="top"
         >
-          <MapBadge>★{(map.romaKpmMedian / 100).toFixed(1)}</MapBadge>
+          <MapBadge>
+            <Text as="span" fontSize="xs" display={{ base: "none", sm: "inline-block" }}>
+              ★
+            </Text>
+            {(map.romaKpmMedian / 100).toFixed(1)}
+          </MapBadge>
         </CustomToolTip>
         {showBadges && (
           <MapBadge>{new Date(map.totalTime * 1000).toISOString().slice(14, 19)}</MapBadge>
