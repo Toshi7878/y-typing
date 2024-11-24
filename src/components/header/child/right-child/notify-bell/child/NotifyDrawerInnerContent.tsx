@@ -68,7 +68,7 @@ const NotifyDrawerInnerContent = () => {
                 );
               })
             ) : (
-              <Box>通知はありません</Box>
+              <Box>まだ通知はありません</Box>
             )}
           </>
         )}
