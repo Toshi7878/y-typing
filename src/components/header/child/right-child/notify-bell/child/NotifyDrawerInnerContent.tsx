@@ -21,16 +21,13 @@ const NotifyDrawerInnerContent = () => {
   return (
     <>
       <DrawerCloseButton />
-      <DrawerHeader>通知</DrawerHeader>
+      <DrawerHeader>通知(仮)</DrawerHeader>
 
       <DrawerBody>
         {isLoading ? (
           <Spinner />
         ) : (
           <>
-            <Heading fontSize="lg" mb={3}>
-              通知 デモ
-            </Heading>
             {data?.length ? (
               data.map((notify, index: number) => {
                 const { map } = notify;
