@@ -21,7 +21,7 @@ async function updateTypingOption(userId: number, updateData: UserTypingOptions)
     },
   });
 
-  return updated.id;
+  return updated;
 }
 
 export async function POST(req: NextRequest): Promise<Response> {

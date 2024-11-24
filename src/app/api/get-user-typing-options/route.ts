@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
   try {
     const userTypingOptions = await prisma.typingOption.findUnique({
-      where: { id: userId },
+      where: { userId },
       select: null, // 全てのカラムを取得するためにselectをnullに設定
     });
     return new Response(JSON.stringify(userTypingOptions), {
