@@ -17,7 +17,7 @@ function ResultCard(props: ResultCardProps) {
   const { data: session } = useSession();
 
   const theme: ThemeColors = useTheme();
-  const showBadges = useBreakpointValue({ base: false, md: true });
+  const showBadges = useBreakpointValue({ base: false, md: true }, { ssr: false });
 
   return (
     <Card

@@ -21,7 +21,7 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
       : `https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`;
 
   const isToggledInputMode = result.romaType != 0 && result.kanaType != 0;
-  const showBadges = useBreakpointValue({ base: false, md: true });
+  const showBadges = useBreakpointValue({ base: false, md: true }, { ssr: false });
 
   return (
     <CardBody
