@@ -8,7 +8,7 @@ export default async function Home() {
       <Box
         as="main"
         minH="100vh"
-        width={"100%"}
+        width="100%"
         display="flex"
         flexDirection="column"
         alignItems="center"

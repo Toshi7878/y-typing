@@ -1,7 +1,7 @@
 import { ThemeColors } from "@/types";
 import { Text, useTheme } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
-import { queryClient } from "@/app/(home)/HomeProvider";
+import { queryClient } from "@/app/(home)/HomeClientProvider";
 import { QUERY_KEYS } from "@/config/consts";
 import { useInvalidateQueryLink } from "@/lib/hooks/fetcher-hook/useInvalidateQueryLink";
 

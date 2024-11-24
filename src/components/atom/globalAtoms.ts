@@ -23,7 +23,7 @@ export const useSetVolumeAtom = () => {
   return useSetAtom(volumeAtom, { store: globalAtomStore });
 };
 
-const previewVideoIdAtom = atom<string | null>(null);
+export const previewVideoIdAtom = atom<string | null>(null);
 
 export const usePreviewVideoIdAtom = () => {
   return useAtomValue(previewVideoIdAtom, { store: globalAtomStore });

@@ -79,8 +79,8 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
         flexDirection="column"
         alignItems="center"
         pt={16}
-        width={"100vw"}
-        height={"100vh"}
+        width="100vw"
+        height="100vh"
       >
         <Box style={style}>
           <Flex direction="column">

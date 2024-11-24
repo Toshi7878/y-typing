@@ -6,7 +6,7 @@ import MapCardLayout from "./MapCardLayout";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMapListInfiniteQuery } from "../hooks/useMapListInfiniteQuery";
-import { queryClient } from "../HomeProvider";
+import { queryClient } from "../HomeClientProvider";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (

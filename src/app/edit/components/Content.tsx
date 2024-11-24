@@ -31,7 +31,6 @@ import {
 } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
-import { Provider } from "jotai";
 import { db } from "@/lib/db";
 import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
 import { queryClient } from "./EditProvider";
@@ -118,37 +117,30 @@ function Content() {
   }, []);
 
   return (
-    <Provider>
-      <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
-        <Box
-          as="main"
-          display="flex"
-          minHeight="100vh"
-          paddingX={{ base: 0, md: 14 }}
-          flexDirection="column"
-          alignItems="center"
-          paddingTop="55px"
-          width={"100vw"}
-        >
-          <Box
-            as="section"
-            display="flex"
-            flexDirection={{ base: "column", lg: "row" }}
-            width="100%"
-          >
-            <EditYouTube className="mt-1 md:mr-5 md:min-w-[416px] md:min-h-[234px] md:max-h-[234px]" />
-            <EditorTabContent />
-          </Box>
-          <Box as="section" width="100%" my={1}>
-            <TimeRange />
-          </Box>
-          <Box as="section" width="100%" mt={0}>
-            <EditTable mapLoading={isLoading} />
-          </Box>
+    <LoadingOverlayWrapper active={isLrcConverting} spinner={true} text="Loading...">
+      <Box
+        as="main"
+        display="flex"
+        minHeight="100vh"
+        paddingX={{ base: 0, md: 14 }}
+        flexDirection="column"
+        alignItems="center"
+        paddingTop="55px"
+        width={"100vw"}
+      >
+        <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
+          <EditYouTube className="mt-1 md:mr-5 md:min-w-[416px] md:min-h-[234px] md:max-h-[234px]" />
+          <EditorTabContent />
         </Box>
-        <ColorStyle />
-      </LoadingOverlayWrapper>
-    </Provider>
+        <Box as="section" width="100%" my={1}>
+          <TimeRange />
+        </Box>
+        <Box as="section" width="100%" mt={0}>
+          <EditTable mapLoading={isLoading} />
+        </Box>
+      </Box>
+      <ColorStyle />
+    </LoadingOverlayWrapper>
   );
 }
 

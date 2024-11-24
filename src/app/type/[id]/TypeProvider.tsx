@@ -6,6 +6,7 @@ import { GetInfoData } from "@/types/api";
 import { useEffect } from "react";
 import { hasLocalLikeAtom, userOptionsAtom } from "../type-atoms/gameRenderAtoms";
 import { UserTypingOptions } from "../ts/type";
+import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
 
 const typeAtomStore = createStore();
 export const getTypeAtomStore = () => typeAtomStore;
@@ -17,6 +18,8 @@ interface TypeProviderProps {
   children: React.ReactNode;
 }
 const TypeProvider = ({ mapInfo, userTypingOptions, children }: TypeProviderProps) => {
+  const globalAtomStore = getGlobalAtomStore();
+  globalAtomStore.set(previewVideoIdAtom, null);
   typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.hasLike);
   useEffect(() => {
     window.getSelection()!.removeAllRanges();

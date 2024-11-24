@@ -12,6 +12,7 @@ import ThemeProvider from "./provider/ThemeProvider";
 import GlobalProvider from "./provider/GlobalProvider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth";
+import PreviewYouTubeContent from "@/components/PreviewYouTubeContent";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -34,7 +35,10 @@ export default async function RootLayout({
         <ThemeProvider colorMode={colorMode?.value}>
           <SessionProvider session={session}>
             <Header />
-            <GlobalProvider>{children}</GlobalProvider>
+            <GlobalProvider>
+              {children}
+              <PreviewYouTubeContent />
+            </GlobalProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

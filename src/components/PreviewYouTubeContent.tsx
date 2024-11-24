@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useGlobalRefs } from "./globalRefContext/GlobalRefProvider";
 import { usePreviewYouTubeKeyDown } from "@/lib/hooks/usePreviewYouTubeKeyDown";
 import { useRouter } from "next/navigation";
+import { Box } from "@chakra-ui/react";
 
 interface PreviewYouTubeContentProps {
   className?: string;
@@ -63,24 +64,26 @@ const PreviewYouTubeContent = function YouTubeContent({
   const isMobile = window.innerWidth <= 480;
 
   return (
-    <YouTube
-      className={className}
-      videoId={videoId}
-      opts={{
-        width: isMobile ? WIDTH_MOBILE : WIDTH_DESKTOP,
-        height: isMobile ? HEIGHT_MOBILE : HEIGHT_DESKTOP,
-        playerVars: {
-          enablejsapi: 1,
-          start: Number(previewTime),
-          playsinline: 1,
-          autoplay: 1,
-          iv_load_policy: 3,
-          modestbranding: 1,
-          rel: 0,
-        },
-      }}
-      onReady={onReady}
-    />
+    <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
+      <YouTube
+        className={className}
+        videoId={videoId}
+        opts={{
+          width: isMobile ? WIDTH_MOBILE : WIDTH_DESKTOP,
+          height: isMobile ? HEIGHT_MOBILE : HEIGHT_DESKTOP,
+          playerVars: {
+            enablejsapi: 1,
+            start: Number(previewTime),
+            playsinline: 1,
+            autoplay: 1,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            rel: 0,
+          },
+        }}
+        onReady={onReady}
+      />
+    </Box>
   );
 };
 

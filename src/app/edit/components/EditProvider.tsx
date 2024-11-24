@@ -21,6 +21,7 @@ import { useSearchParams } from "next/navigation";
 import { EditorNewMapBackUpInfoData } from "../ts/type";
 import { IndexDBOption } from "@/types";
 import { db } from "@/lib/db";
+import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
 
 export const queryClient = new QueryClient();
 const editAtomStore = createStore();
@@ -36,6 +37,9 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
+
+  const globalAtomStore = getGlobalAtomStore();
+  globalAtomStore.set(previewVideoIdAtom, null);
 
   if (mapInfo) {
     editAtomStore.set(editMapTitleAtom, mapInfo.title);
