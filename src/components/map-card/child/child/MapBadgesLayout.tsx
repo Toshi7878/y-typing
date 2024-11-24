@@ -15,7 +15,11 @@ const MapBadges = (props: MapBadgesProps) => {
   const showBadges = useBreakpointValue({ base: false, md: true });
 
   return (
-    <Flex justifyContent="space-between" mr={3}>
+    <Flex
+      justifyContent={{ base: "flex-end", md: "space-between" }}
+      width={{ base: "fit-content", lg: "98%" }}
+      mr={3}
+    >
       <HStack mr={2}>
         <CustomToolTip
           tooltipLabel={

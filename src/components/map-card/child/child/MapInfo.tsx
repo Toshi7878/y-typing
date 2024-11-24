@@ -57,7 +57,7 @@ function MapInfo({ map }: MapCardProps) {
       <Stack
         justifyContent="space-between"
         alignItems="baseline"
-        flexDirection={{ base: "row", md: "column" }}
+        flexDirection={{ base: "row", lg: "column" }}
       >
         <MapCreateUser map={map} />
         <MapBadges map={map} />
