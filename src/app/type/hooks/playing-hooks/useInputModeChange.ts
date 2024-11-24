@@ -51,7 +51,7 @@ export const useInputModeChange = () => {
     const count = statusRef.current!.status.count;
     const nextLine = map!.mapData[count];
     const nextKpm =
-      (inputMode === "roma" ? map!.mapData[count].kpm["r"] : map!.mapData[count].kpm["k"]) *
+      (newInputMode === "roma" ? map!.mapData[count].kpm["r"] : map!.mapData[count].kpm["k"]) *
       speedData.playSpeed;
     if (nextKpm) {
       setNextLyrics({
