@@ -5,8 +5,14 @@ const SkeletonThumbnail = () => {
   const width = useBreakpointValue(HOME_THUBNAIL_WIDTH);
   const height = useBreakpointValue(HOME_THUBNAIL_HEIGHT);
   return (
-    <Box className="relative group" width={width} style={{ userSelect: "none" }}>
-      <Box width={width} height={height} minW={width} minH={height} className="rounded-md" />
+    <Box
+      position="relative"
+      className="group"
+      minW={width}
+      minH={height}
+      style={{ userSelect: "none" }}
+    >
+      <Box width={width} height={height} minW={width} minH={height} rounded="md" />
     </Box>
   );
 };

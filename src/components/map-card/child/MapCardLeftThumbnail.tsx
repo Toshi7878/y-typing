@@ -54,7 +54,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         height={height}
         rounded="md"
       />
-      {/* <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} /> */}
+      <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} />
     </Box>
   );
 };
