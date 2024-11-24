@@ -11,14 +11,14 @@ import { useEffect } from "react";
 import { useGlobalRefs } from "./globalRefContext/GlobalRefProvider";
 import { usePreviewYouTubeKeyDown } from "@/lib/hooks/usePreviewYouTubeKeyDown";
 import { useRouter } from "next/navigation";
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
+import {
+  PREVIEW_YOUTUBE_HEIGHT,
+  PREVIEW_YOUTUBE_POSITION,
+  PREVIEW_YOUTUBE_WIDTH,
+} from "@/config/consts";
 
-interface PreviewYouTubeContentProps {
-  className?: string;
-}
-const PreviewYouTubeContent = function YouTubeContent({
-  className = "",
-}: PreviewYouTubeContentProps) {
+const PreviewYouTubeContent = function YouTubeContent() {
   const router = useRouter(); // 追加
 
   const videoId = usePreviewVideoIdAtom();
@@ -44,6 +44,9 @@ const PreviewYouTubeContent = function YouTubeContent({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+  const width = useBreakpointValue(PREVIEW_YOUTUBE_WIDTH, { ssr: false });
+  const height = useBreakpointValue(PREVIEW_YOUTUBE_HEIGHT, { ssr: false });
+  const fixedPosition = useBreakpointValue(PREVIEW_YOUTUBE_POSITION, { ssr: false });
 
   if (!videoId) {
     return null;
@@ -56,21 +59,13 @@ const PreviewYouTubeContent = function YouTubeContent({
     setRef("playerRef", event.target);
   };
 
-  const WIDTH_DESKTOP = "448px";
-  const HEIGHT_DESKTOP = "252px"; // 16:9の比率に調整
-  const WIDTH_MOBILE = "256px";
-  const HEIGHT_MOBILE = "144px"; // 16:9の比率に調整
-
-  const isMobile = window.innerWidth <= 480;
-
   return (
-    <Box position="fixed" bottom={isMobile ? "2" : "5"} right={isMobile ? "2" : "5"}>
+    <Box position="fixed" bottom={fixedPosition} right={fixedPosition}>
       <YouTube
-        className={className}
         videoId={videoId}
         opts={{
-          width: isMobile ? WIDTH_MOBILE : WIDTH_DESKTOP,
-          height: isMobile ? HEIGHT_MOBILE : HEIGHT_DESKTOP,
+          width: `${width}px`,
+          height: `${height}px`,
           playerVars: {
             enablejsapi: 1,
             start: Number(previewTime),

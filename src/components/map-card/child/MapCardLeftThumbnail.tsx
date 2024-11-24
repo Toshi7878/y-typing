@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/next-js";
 import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import {
