@@ -37,8 +37,7 @@ model Result {
 
 }
 
-model UserTypingData {
-    id                 Int    @id @default(autoincrement())
+model UserTypingStats {
     userId             Int    @unique
     totalTypingTime    Float  @default(0)
     kanaTypeTotalCount Int    @default(0)
@@ -48,11 +47,9 @@ model UserTypingData {
     clapCount          Int    @default(0)
     createdAt          DateTime @default(now())
     user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
-
 }
 
 model TypingOption {
-    id             Int @id @default(autoincrement())
     userId         Int @unique
     timeOffset     Float @default(0)
     typeSound      Boolean @default(false)
@@ -62,6 +59,12 @@ model TypingOption {
     timeOffsetKey  String @default("ctrl-left-right")
     toggleInputModeKey String @default("alt-kana")
     user           User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
+}
+
+model UserOption {
+    userId         Int @unique
+    mapLikeNotify  Boolean @default(true)
+    overTakeNotify Int     @default(5)
 }
 
 
@@ -87,6 +90,17 @@ model MapLike {
     @@unique([userId, mapId]) // 複合ユニーク制約を追加
 }
 
+model Notification {
+  id             Int @id @default(autoincrement())
+  visitor_id     Int
+  visited_id     Int
+  mapId          Int
+  action         String // like, ot(overtake)
+  checked        Boolean @default(false)
+  createdAt      DateTime @default(now())
+  visitor        User @relation("Visitor", fields: [visitor_id], references: [id], onDelete: Cascade)
+  visited        User @relation("Visited", fields: [visited_id], references: [id], onDelete: Cascade)
+}
 
 model Map {
   id               Int @id @default(autoincrement())
@@ -131,5 +145,7 @@ model User {
   clap          Clap[]
   mapLike       MapLike[]
   typingOption  TypingOption[]
-  userTypingData UserTypingData[]
+  userTypingStats UserTypingStats[]
+  visitorNotifications Notification[] @relation("Visitor")
+  visitedNotifications Notification[] @relation("Visited")
 }
