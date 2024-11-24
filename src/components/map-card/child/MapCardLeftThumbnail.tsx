@@ -1,9 +1,8 @@
 import { Image } from "@chakra-ui/next-js";
-import { Box, Flex, ResponsiveValue, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
-import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "../../../app/(home)/ts/const/consts";
 import {
   usePreviewVideoIdAtom,
   useSetPreviewTimeAtom,
@@ -22,8 +21,8 @@ interface MapLeftThumbnailProps {
 }
 const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
   const { src, fallbackSrc, alt, mapVideoId, mapPreviewTime, thumnailWidth, thumnailHeight } =
-    props; // ここを変更
-  const [imgSrc, setImgSrc] = useState(src);
+    props;
+  const [imgSrc, setImgSrc] = useState(fallbackSrc); //高画質: src 低画質: fallbackSrc
   const videoId = usePreviewVideoIdAtom();
   const [isTouchMove, setIsTouchMove] = useState(false);
 
@@ -58,21 +57,21 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     setIsTouchMove(false);
   };
 
-  const handleImageLoad = useCallback((src: string) => {
-    const img = new window.Image();
-    img.src = src;
-    img.onload = () => {
-      if (img.width === 120) {
-        setImgSrc(fallbackSrc);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // const handleImageLoad = useCallback((src: string) => {
+  //   const img = new window.Image();
+  //   img.src = src;
+  //   img.onload = () => {
+  //     if (img.width === 120) {
+  //       setImgSrc(fallbackSrc);
+  //     }
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    handleImageLoad(src);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src]);
+  // useEffect(() => {
+  //   handleImageLoad(src);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [src]);
 
   const width = useBreakpointValue(thumnailWidth); // ここを変更
   const height = useBreakpointValue(thumnailHeight); // ここを変更

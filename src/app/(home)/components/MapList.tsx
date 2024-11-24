@@ -7,6 +7,10 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMapListInfiniteQuery } from "../hooks/useMapListInfiniteQuery";
 import nProgress from "nprogress";
+import MapCardRightInfo from "@/components/map-card/child/MapCardRightInfo";
+import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
+import { HOME_THUBNAIL_HEIGHT, HOME_THUBNAIL_WIDTH } from "../ts/const/consts";
+import { MapCardInfo } from "../ts/type";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
@@ -56,11 +60,34 @@ function MapList() {
       loadMore={() => fetchNextPage()}
       loader={<LoadingMapCard cardLength={2} />}
       hasMore={hasNextPage}
-      threshold={1400} // スクロールの閾値を追加
+      threshold={1800} // スクロールの閾値を追加
     >
       <MapCardLayout>
-        {data?.pages.map((page) =>
-          page.map((map) => <MapCard key={map.id} map={map} maxW={"100%"} />),
+        {data?.pages.map((page: MapCardInfo[]) =>
+          page.map((map: MapCardInfo) => {
+            const src =
+              map.thumbnailQuality === "maxresdefault"
+                ? `https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`
+                : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
+
+            return (
+              <MapCard key={map.id} maxW="100%">
+                <>
+                  <MapLeftThumbnail
+                    alt={map.title}
+                    fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
+                    src={src}
+                    mapVideoId={map.videoId}
+                    mapPreviewTime={map.previewTime}
+                    thumbnailQuality={map.thumbnailQuality}
+                    thumnailWidth={HOME_THUBNAIL_WIDTH}
+                    thumnailHeight={HOME_THUBNAIL_HEIGHT}
+                  />
+                  <MapCardRightInfo map={map} />
+                </>
+              </MapCard>
+            );
+          }),
         )}
       </MapCardLayout>
     </InfiniteScroll>

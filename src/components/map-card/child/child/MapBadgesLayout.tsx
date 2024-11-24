@@ -8,7 +8,6 @@ import RankingCount from "./child/RankingCount";
 
 interface MapBadgesProps {
   map: MapCardInfo;
-  isCardHover: boolean;
 }
 
 const MapBadges = (props: MapBadgesProps) => {
