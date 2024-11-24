@@ -42,9 +42,9 @@ const NotifyDrawerInnerContent = () => {
                       <UpdateAtText updatedAt={notify.createdAt} />
                     </Box>
                     <Box>
-                      {notify.visitor.name}さんに
+                      {notify.visitor.name}さんが
                       {notify.visitedResult.rank - notify.visitorResult.rank}
-                      位の記録が抜かされました
+                      位の記録を抜かしました。
                       <Box>スコア差: {notify.visitorResult.score - notify.visitedResult.score}</Box>
                     </Box>
                     <Box mb={2} maxW="610px">
