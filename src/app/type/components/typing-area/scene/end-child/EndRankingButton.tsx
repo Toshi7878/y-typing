@@ -19,7 +19,7 @@ import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import { useSetTabIndexAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { QUERY_KEYS } from "@/config/consts";
 import { useParams } from "next/navigation";
-import { queryClient } from "@/app/type/[id]/TypeProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UploadButtonProps {
   isScoreUpdated: boolean;
@@ -34,6 +34,7 @@ const EndUploadButton = ({ isScoreUpdated, formAction, state }: UploadButtonProp
   const [isDisabled, setIsDisabled] = useState(false);
   const setTabIndex = useSetTabIndexAtom();
   const successToast = useSuccessToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (state.status === 200) {

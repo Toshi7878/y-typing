@@ -33,8 +33,8 @@ import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
 import { db } from "@/lib/db";
 import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
-import { queryClient } from "./EditProvider";
 import { QUERY_KEYS } from "@/config/consts";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Content() {
   const dispatch = useDispatch();
@@ -58,6 +58,7 @@ function Content() {
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
   const setDirectEditCountAtom = useSetDirectEditCountAtom();
+  const queryClient = useQueryClient();
   const { id: mapId } = useParams();
 
   const { data, isLoading } = useDownloadMapDataQuery();

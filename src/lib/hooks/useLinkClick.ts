@@ -1,9 +1,10 @@
 import { useCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import NProgress from "nprogress";
 
 export const useLinkClick = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const canUpload = useCanUploadAtom();
 
@@ -14,18 +15,14 @@ export const useLinkClick = () => {
     event.preventDefault();
     event.stopPropagation(); // バブリングを防ぐ
 
-    const currentPath = window.location.pathname;
-    const href = event.currentTarget.getAttribute("href") || "";
-
-    if (currentPath.includes("/edit") && canUpload) {
+    if (pathname.includes("/edit") && canUpload) {
       const confirmUpload = window.confirm(
         "このページを離れると、行った変更が保存されない可能性があります。",
       );
       if (!confirmUpload) {
         return;
       }
-    } else if (currentPath === href) {
-      window.location.reload();
+    } else if (pathname === event.currentTarget.pathname) {
       return;
     }
 
@@ -33,6 +30,6 @@ export const useLinkClick = () => {
     NProgress.configure({ trickle: false });
 
     NProgress.start();
-    router.push(href);
+    router.push(event.currentTarget.href);
   };
 };

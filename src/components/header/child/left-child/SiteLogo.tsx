@@ -1,18 +1,15 @@
 import { ThemeColors } from "@/types";
 import { Text, useTheme } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
-import { queryClient } from "@/app/(home)/HomeClientProvider";
-import { QUERY_KEYS } from "@/config/consts";
-import { useInvalidateQueryLink } from "@/lib/hooks/fetcher-hook/useInvalidateQueryLink";
+import { useLinkClick } from "@/lib/hooks/useLinkClick";
 
 function SiteLogo() {
   const theme: ThemeColors = useTheme();
-  const invalidateQueryLink = useInvalidateQueryLink();
-
+  const handleLinkClick = useLinkClick();
   return (
     <Link
       href={"/"}
-      onClick={(event) => invalidateQueryLink(event, queryClient, QUERY_KEYS.mapList)}
+      onClick={handleLinkClick}
       fontSize="2xl"
       position="relative"
       top={"-2.5px"}

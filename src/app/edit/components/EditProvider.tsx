@@ -23,7 +23,7 @@ import { IndexDBOption } from "@/types";
 import { db } from "@/lib/db";
 import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 const editAtomStore = createStore();
 
 export const getEditAtomStore = () => editAtomStore;

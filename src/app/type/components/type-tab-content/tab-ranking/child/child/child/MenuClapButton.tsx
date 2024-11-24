@@ -1,4 +1,3 @@
-import { queryClient } from "@/app/type/[id]/TypeProvider";
 import { INITIAL_STATE } from "@/config/consts";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 import { Box, Button, useTheme } from "@chakra-ui/react";

@@ -21,9 +21,9 @@ import TypingCard from "../components/typing-area/TypingCard";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { queryClient } from "./TypeProvider";
 import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
 import { QUERY_KEYS } from "@/config/consts";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -40,6 +40,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const setTimeOffset = useSetTimeOffsetAtom();
   const { isLoading } = useDownloadMapDataJsonQuery();
   const isLoadingOverlay = useIsLoadingOverlayAtom();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     return () => {

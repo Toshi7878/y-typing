@@ -5,7 +5,7 @@ import { Provider as JotaiProvider } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { getHomeAtomStore, searchMapKeyWordsAtom } from "./atoms/atoms";
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 interface TimelineProviderProps {
   children: React.ReactNode;

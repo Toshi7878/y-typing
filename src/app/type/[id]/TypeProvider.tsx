@@ -10,7 +10,7 @@ import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/global
 
 const typeAtomStore = createStore();
 export const getTypeAtomStore = () => typeAtomStore;
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 interface TypeProviderProps {
   mapInfo?: GetInfoData;

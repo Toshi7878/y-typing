@@ -6,7 +6,7 @@ import MapCardLayout from "./MapCardLayout";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMapListInfiniteQuery } from "../hooks/useMapListInfiniteQuery";
-import { queryClient } from "../HomeClientProvider";
+import nProgress from "nprogress";
 
 function LoadingMapCard({ cardLength }: { cardLength: number }) {
   return (
@@ -39,6 +39,13 @@ function MapList() {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!isFetching) {
+      // ここに最初の取得に成功したときの処理を追加
+      nProgress.done();
+    }
+  }, [isFetching]);
 
   if (status === "pending") {
     return <LoadingMapCard cardLength={10} />;
