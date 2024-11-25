@@ -2,6 +2,8 @@ import { Image } from "@chakra-ui/next-js";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import ThumbnailPreviewCover from "./child/ThumbnailPreviewCover";
+import { usePathname } from "next/navigation";
+import { PREVIEW_DISABLE_PATHNAMES } from "@/config/consts";
 
 interface MapLeftThumbnailProps {
   src?: string;
@@ -23,6 +25,9 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     thumnailWidth,
     thumnailHeight,
   } = props;
+
+  const pathname = usePathname();
+  const pathSegment = pathname.split("/")[1];
 
   // const [imgSrc, setImgSrc] = useState(fallbackSrc); //高画質: src 低画質: fallbackSrc
 
@@ -60,7 +65,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
       ) : (
         <Box width={width} height={height} minW={width} minH={height} rounded="md" />
       )}
-      {mapVideoId && mapPreviewTime && (
+      {mapVideoId && mapPreviewTime && !PREVIEW_DISABLE_PATHNAMES.includes(pathSegment) && (
         <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} />
       )}
     </Box>

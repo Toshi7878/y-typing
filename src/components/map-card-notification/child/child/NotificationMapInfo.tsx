@@ -1,9 +1,8 @@
 "use client";
-import { Box, Flex, Stack, useTheme } from "@chakra-ui/react";
+import { Box, Flex, useTheme } from "@chakra-ui/react";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import { ThemeColors } from "@/types";
-import MapCreateUser from "./MapCreateUser";
 import MapBadges from "./MapBadgesLayout";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { Link } from "@chakra-ui/next-js";
@@ -19,13 +18,14 @@ function NotificationMapInfo({ map }: MapCardProps) {
     <Link
       display="flex"
       justifyContent="space-between"
+      boxSizing="border-box" // 追加
       flexDirection="column"
-      height="95%"
+      height="100%"
       _hover={{ textDecoration: "none" }}
       href={`/type/${map.id}`}
       onClick={handleLinkClick}
     >
-      <Flex direction="column">
+      <Flex direction="column" gap={1}>
         <CustomToolTip
           tooltipLabel={`${map.title} / ${map.artistName}${map.musicSource ? `【${map.musicSource}】` : ""}`}
           placement="top"
@@ -41,16 +41,18 @@ function NotificationMapInfo({ map }: MapCardProps) {
             {map.title}
           </Box>
         </CustomToolTip>
+        <Box
+          fontSize={{ base: "xs", sm: "sm" }}
+          color={theme.colors.secondary.main}
+          fontWeight="bold"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+        >
+          {map.artistName || "\u00A0"}
+        </Box>
       </Flex>
-      <Stack
-        justifyContent="space-between"
-        alignItems="baseline"
-        flexDirection="column"
-        gap="0.4rem"
-      >
-        <MapCreateUser map={map} />
-        <MapBadges map={map} />
-      </Stack>
+      <MapBadges map={map} />
     </Link>
   );
 }

@@ -20,7 +20,7 @@ function MapInfo({ map }: MapCardProps) {
       display="flex"
       justifyContent="space-between"
       flexDirection="column"
-      height="95%"
+      height="100%"
       _hover={{ textDecoration: "none" }}
       href={`/type/${map.id}`}
       onClick={handleLinkClick}

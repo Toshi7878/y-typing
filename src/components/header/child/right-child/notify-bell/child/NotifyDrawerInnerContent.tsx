@@ -1,8 +1,8 @@
 import UpdateAtText from "@/components/custom-ui/UpdateAtText";
 import NotificationMapInfo from "@/components/map-card-notification/child/child/NotificationMapInfo";
-import NotificationMapCardLeftThumbnail from "@/components/map-card-notification/child/NotificationMapCardLeftThumbnail";
 import NotificationMapCardRightInfo from "@/components/map-card-notification/child/NotificationMapCardRightInfo";
 import NotificationMapCard from "@/components/map-card-notification/NotificationMapCard";
+import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import { NOTIFICATION_MAP_THUBNAIL_HEIGHT, NOTIFICATION_MAP_THUBNAIL_WIDTH } from "@/config/consts";
 import { useNotifyQuery } from "@/lib/hooks/fetcher-hook/useNotifyQuery";
 import { ThemeColors } from "@/types";
@@ -28,7 +28,9 @@ const NotifyDrawerInnerContent = () => {
 
       <DrawerBody px={3}>
         {isLoading ? (
-          <Spinner />
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Spinner />
+          </Box>
         ) : (
           <>
             {data?.length ? (
@@ -43,7 +45,7 @@ const NotifyDrawerInnerContent = () => {
                   <Box key={index} mb={4}>
                     <Box mb={2}>
                       <NotificationMapCard notify={notify}>
-                        <NotificationMapCardLeftThumbnail
+                        <MapLeftThumbnail
                           alt={map.title}
                           fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
                           src={src}

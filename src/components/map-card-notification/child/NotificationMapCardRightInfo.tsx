@@ -11,9 +11,8 @@ function NotificationMapCardRightInfo({ children }: MapCardProps) {
       justifyContent="space-between"
       overflowX="hidden"
       width="100%"
-      height="100%"
       pl={3}
-      pt={0}
+      py={1}
       fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
     >
       {children}

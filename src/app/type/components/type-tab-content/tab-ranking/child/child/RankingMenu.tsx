@@ -53,6 +53,7 @@ const RankingMenu = ({
     >
       <Button
         as="a"
+        display="flex"
         href={`/user/${userId}`}
         variant="unstyled"
         size="md"

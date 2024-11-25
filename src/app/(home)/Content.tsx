@@ -21,7 +21,7 @@ export default function Content() {
       justifyContent="space-between"
       pt={16}
     >
-      <Box width={{ base: "100%", lg: "92vw", "2xl": "82vw" }}>
+      <Box width={{ base: "100%", md: "92vw", "2xl": "82vw" }}>
         <SearchContent />
         <MapList />
       </Box>

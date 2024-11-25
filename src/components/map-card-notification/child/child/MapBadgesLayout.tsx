@@ -14,8 +14,8 @@ const MapBadges = (props: MapBadgesProps) => {
   const { map } = props;
 
   return (
-    <Flex justifyContent="space-between" width="98%" mr={3}>
-      <HStack mr={2}>
+    <Flex justifyContent="space-between" width="98%">
+      <HStack>
         <CustomToolTip
           tooltipLabel={
             <Box>
