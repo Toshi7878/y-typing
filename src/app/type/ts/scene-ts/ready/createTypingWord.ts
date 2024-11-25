@@ -120,6 +120,13 @@ const NN_LIST = [
   "o",
   "y",
   "n",
+  "A",
+  "I",
+  "U",
+  "E",
+  "O",
+  "Y",
+  "N",
 ];
 const SOKUON_JOIN_LIST = [
   "ヰ",
