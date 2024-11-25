@@ -8,8 +8,8 @@ import { revalidatePath } from "next/cache";
 const prisma = new PrismaClient();
 
 async function updateLike(mapId: number, userId: number, optimisticState: boolean) {
-  const likedId = await prisma.$transaction(async (prisma) => {
-    const claped = await prisma.mapLike.upsert({
+  await prisma.$transaction(async (prisma) => {
+    const liked = await prisma.mapLike.upsert({
       where: {
         userId_mapId: {
           userId,
@@ -51,11 +51,7 @@ async function updateLike(mapId: number, userId: number, optimisticState: boolea
         updatedAt: updatedAt?.updatedAt,
       },
     });
-
-    return claped.id;
   });
-
-  return likedId;
 }
 
 export async function toggleLikeServerAction(
@@ -67,11 +63,11 @@ export async function toggleLikeServerAction(
   try {
     const userId = Number(session?.user?.id);
 
-    const likedId = await updateLike(mapId, userId, optimisticState);
+    await updateLike(mapId, userId, optimisticState);
 
     revalidatePath(`/api/map-info`);
     return {
-      id: likedId,
+      id: null,
       title: "いいね完了",
       message: "",
       status: 200,
