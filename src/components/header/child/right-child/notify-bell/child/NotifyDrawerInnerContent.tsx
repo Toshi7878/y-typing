@@ -28,7 +28,7 @@ const NotifyDrawerInnerContent = () => {
 
       <DrawerBody px={3}>
         {isLoading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+          <Box display="flex" mt={10} justifyContent="center" alignItems="center">
             <Spinner />
           </Box>
         ) : (
