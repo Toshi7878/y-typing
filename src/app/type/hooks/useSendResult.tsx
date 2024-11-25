@@ -3,12 +3,10 @@ import { actions } from "../ts/scene-ts/end/actions";
 import { Status } from "../ts/type";
 import { useLineResultsAtom, useTypePageSpeedAtom } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
-import { supabase } from "@/lib/supabaseClient";
 
 export const useSendResult = () => {
   const { id: mapId } = useParams();
   const { statusRef, tabStatusRef } = useRefs();
-  const status: Status = tabStatusRef.current!.getStatus();
   const lineResults = useLineResultsAtom();
 
   const speedData = useTypePageSpeedAtom();
@@ -17,6 +15,7 @@ export const useSendResult = () => {
     const totalTypeTime = statusRef.current!.status.totalTypeTime;
     const rkpmTime = totalTypeTime - statusRef.current!.status.totalLatency;
     const kanaToRomaConvertCount = statusRef.current!.status.kanaToRomaConvertCount;
+    const status: Status = tabStatusRef.current!.getStatus();
 
     const sendStatus = {
       score: status.score,
