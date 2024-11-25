@@ -54,8 +54,10 @@ const End = ({ onOpen }: EndProps) => {
   const status: Status = tabStatusRef.current?.getStatus();
 
   if (status === undefined) {
+    //タイピングページ　→　タイピングページに遷移時returnしないとclient errorがでる
     return;
   }
+
   const isPerfect = status.miss === 0 && status.lost === 0;
   const isPlayingMode = gameStateRef.current!.playMode === "playing";
 

@@ -41,11 +41,6 @@ const NotifyDrawerInnerContent = () => {
                     ? `https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`
                     : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
 
-                const scoreDiff = notify.visitorResult.score - notify.visitedResult.score;
-
-                if (scoreDiff < 0) {
-                  return;
-                }
                 return (
                   <Box key={index} mb={4}>
                     <Box mb={2}>

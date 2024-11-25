@@ -23,6 +23,42 @@ const calcRank = async (mapId: number, userId: number) => {
     orderBy: { score: "desc" },
   });
 
+  const overtakeNotify = await prisma.notification.findMany({
+    where: {
+      visited_id: userId,
+      mapId: mapId,
+      action: "ot",
+    },
+    select: {
+      visitorResult: {
+        select: {
+          userId: true,
+          score: true,
+        },
+      },
+    },
+  });
+
+  const myResult = rankingList.find((record) => record.userId === userId);
+
+  for (let i = 0; i < overtakeNotify.length; i++) {
+    const visitorScore = overtakeNotify[i].visitorResult.score;
+    const myScore = myResult?.score;
+    if (visitorScore - Number(myScore) <= 0) {
+      const visitorId = overtakeNotify[i].visitorResult.userId;
+      await prisma.notification.delete({
+        where: {
+          visitor_id_visited_id_mapId_action: {
+            visitor_id: visitorId,
+            visited_id: userId,
+            mapId: mapId,
+            action: "ot",
+          },
+        },
+      });
+    }
+  }
+
   for (let i = 0; i < rankingList.length; i++) {
     const newRank = i + 1;
 

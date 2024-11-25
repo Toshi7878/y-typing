@@ -1,23 +1,10 @@
 "use client";
 import LeftNav from "./child/left-child/LeftNav";
 import RightNav from "./child/RightNav";
-import {
-  IconButton,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
-  Flex,
-  Box,
-} from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { Flex, Box } from "@chakra-ui/react";
 import HamburgerMenu from "./hamburger-menu/HamburgerMenu";
 
 const HeaderContent = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <Box
       as="header"
@@ -36,7 +23,6 @@ const HeaderContent = () => {
       >
         <LeftNav />
         <RightNav display={{ base: "none", md: "flex" }} />
-
         <HamburgerMenu display={{ base: "block", md: "none" }} />
       </Flex>
     </Box>

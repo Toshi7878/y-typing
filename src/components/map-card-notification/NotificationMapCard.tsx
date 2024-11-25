@@ -22,9 +22,8 @@ function NotificationMapCard({ notify, children }: MapCardProps) {
     >
       <CardHeader fontSize="sm" py={2} px={2} bg={theme.colors.background.header} roundedTop="md">
         <UserLinkText userId={notify.visitor_id} userName={notify.visitor.name} />
-        さんが スコア {notify.visitorResult.score - notify.visitedResult.score} 差で
-        {Number(notify.oldRank)}
-        位の記録を抜かしました
+        さんがスコア {notify.visitorResult.score - notify.visitedResult.score} 差で{" "}
+        {Number(notify.oldRank)}位 の記録を抜かしました
       </CardHeader>
       <CardBody
         color={theme.colors.text.body}

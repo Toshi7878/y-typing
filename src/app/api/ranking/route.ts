@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         },
         clap: {
           where: {
-            userId,
+            userId: userId ? userId : undefined,
           },
           select: {
             isClaped: true,
