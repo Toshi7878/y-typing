@@ -52,10 +52,10 @@ const ActiveLikeButton = ({ likeOptimisticState }: LikeButtonProps) => {
       _hover={session?.user.id ? { bg: `${theme.colors.semantic.like}60` } : ""}
       pr={1}
     >
-      <Box m={-1} mt={-4} position="relative" top="10px">
+      <Box m={-1} mt={-4} position="relative" top="10.25px">
         <LikeButton defaultLiked={likeOptimisticState.hasLike} size={34} />
       </Box>
-      <Box fontSize="lg" fontFamily="monospace">
+      <Box fontSize="lg" fontFamily="monospace" position="relative" top="0px">
         {likeOptimisticState.likeCount}
       </Box>
     </Flex>
