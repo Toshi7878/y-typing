@@ -147,7 +147,7 @@ export async function actions(
     const mapId = await sendNewResult(data, userId);
     await sendLineResult(mapId, lineResults);
 
-    calcRank(data.mapId, userId);
+    await calcRank(data.mapId, userId);
     return {
       id: mapId,
       title: "ランキング登録が完了しました",
