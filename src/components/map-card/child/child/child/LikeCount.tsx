@@ -21,7 +21,7 @@ const LogoutLikeButton = ({ likeOptimisticState }: LikeButtonProps) => {
       as="button"
       type="button"
       alignItems="baseline"
-      color={theme.colors.text.body}
+      color={`${theme.colors.text.body}99`}
       rounded="md"
       px={1}
     >
