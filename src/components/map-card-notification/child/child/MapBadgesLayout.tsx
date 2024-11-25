@@ -2,9 +2,9 @@ import { MapCardInfo } from "@/app/(home)/ts/type";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { Box, Flex, HStack, Text } from "@chakra-ui/react";
 import React from "react";
-import MapBadge from "./MapBadge";
-import LikeCount from "./child/LikeCount";
-import RankingCount from "./child/RankingCount";
+import MapBadge from "@/components/map-card/child/child/MapBadge";
+import RankingCount from "@/components/map-card/child/child/child/RankingCount";
+import LikeCount from "@/components/map-card/child/child/child/LikeCount";
 
 interface MapBadgesProps {
   map: MapCardInfo;

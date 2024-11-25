@@ -11,7 +11,7 @@ export interface GetInfoData {
   previewTime: string;
   mapLike: {
     isLiked: boolean;
-  };
+  }[];
 }
 
 type NotificationSelect = {

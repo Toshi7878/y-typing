@@ -18,7 +18,6 @@ function NotificationMapInfo({ map }: MapCardProps) {
     <Link
       display="flex"
       justifyContent="space-between"
-      boxSizing="border-box" // 追加
       flexDirection="column"
       height="100%"
       _hover={{ textDecoration: "none" }}

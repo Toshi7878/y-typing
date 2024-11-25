@@ -12,8 +12,12 @@ export interface MapCardInfo {
   totalTime: number;
   likeCount: number;
   rankingCount: number;
-  hasLike: boolean;
-  myRank: number;
+  mapLike: {
+    isLiked: boolean;
+  };
+  result: {
+    rank: number;
+  };
   thumbnailQuality: "maxresdefault" | "mqdefault";
   user: {
     id: number;

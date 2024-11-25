@@ -18,7 +18,7 @@ const LikeCount = (props: LikeCountProps) => {
   const { map } = props;
   const { data: session } = useSession();
   const { likeOptimisticState, toggleLikeAction } = useLocalLikeServerActions({
-    hasLike: props.map.hasLike,
+    hasLike: !!props.map.mapLike?.isLiked,
     likeCount: props.map.likeCount,
   });
 

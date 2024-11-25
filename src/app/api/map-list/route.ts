@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-const CONTENT_LENGTH = 50;
+const CONTENT_LENGTH = 40;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -32,20 +32,22 @@ export async function GET(req: NextRequest) {
     "Map"."likeCount",
     "Map"."rankingCount",
     json_build_object('id', "User"."id", 'name', "User"."name") as "user",
-    (
+    json_build_object(
+      'isLiked',(
         SELECT "isLiked"
         FROM "MapLike"
         WHERE "MapLike"."mapId" = "Map"."id"
         AND "MapLike"."userId" = ${userId}
         LIMIT 1
-    ) as "hasLike",
-    (
+      )) as "mapLike",
+      json_build_object(
+        'rank',(
         SELECT "rank"
         FROM "Result"
         WHERE "Result"."mapId" = "Map"."id"
         AND "Result"."userId" = ${userId}
         LIMIT 1
-    ) as "myRank"
+      )) as "result"
     FROM "Map"
     JOIN "User" ON "Map"."creatorId" = "User"."id"
     WHERE (

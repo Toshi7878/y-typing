@@ -31,14 +31,14 @@ export async function GET(request: Request) {
         WHERE "MapLike"."mapId" = "Map"."id"
         AND "MapLike"."userId" = ${userId}
         LIMIT 1
-    ) as "hasLike",
+    ) as "mapLike","isLiked",
     (
         SELECT "rank"
         FROM "Result"
         WHERE "Result"."mapId" = "Map"."id"
         AND "Result"."userId" = ${userId}
         LIMIT 1
-    ) as "myRank"
+    ) as "result","rank"
     FROM "Map"
     JOIN "User" ON "Map"."creatorId" = "User"."id"
     WHERE "Map"."videoId" = ${checkVideoId}

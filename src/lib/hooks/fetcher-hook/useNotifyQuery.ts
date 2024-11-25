@@ -9,14 +9,23 @@ export const useNotifyQuery = () => {
   const { data, error, isLoading } = useQuery<NotificationSelect[]>({
     queryKey: QUERY_KEYS.notification,
     queryFn: async () => {
-      const { data }: { data: NotificationSelect[] } = await axios.get(
-        "/api/get-user-notification",
-        {
-          params: { userId: session?.user.id },
-        },
-      );
+      const { data } = await axios.get("/api/get-user-notification", {
+        params: { userId: session?.user.id },
+      });
 
-      return data;
+      const newData = data.map((notifyData) => {
+        if (Array.isArray(notifyData.map.mapLike)) {
+          notifyData.map.mapLike = notifyData.map.mapLike[0]; // 配列の最初の要素を取得
+        }
+
+        if (Array.isArray(notifyData.map.result)) {
+          notifyData.map.result = notifyData.map.result[0]; // 配列の最初の要素を取得
+        }
+
+        return notifyData;
+      });
+
+      return newData; // 修正後のデータを返す
     },
 
     enabled: !!session?.user.id,
