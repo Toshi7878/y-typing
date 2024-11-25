@@ -1,5 +1,5 @@
 import { useHasLocalLikeAtom, useSetHasLocalLikeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { LikeButton } from "@/components/like-button/LikeButton";
 import { INITIAL_STATE } from "@/config/consts";
 import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-server-action";

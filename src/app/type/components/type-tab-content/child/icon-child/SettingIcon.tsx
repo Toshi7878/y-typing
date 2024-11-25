@@ -1,4 +1,4 @@
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, useTheme } from "@chakra-ui/react";
 import React, { Dispatch } from "react";

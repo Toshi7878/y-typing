@@ -4,7 +4,7 @@ import { ThemeColors } from "@/types";
 import { useDisclosure, Box, useTheme } from "@chakra-ui/react";
 import { RiAddBoxFill } from "react-icons/ri";
 import NewCreateModal from "./child/NewCreateModal";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 
 export default function NewMap() {
   const newCreateModalDisclosure = useDisclosure();

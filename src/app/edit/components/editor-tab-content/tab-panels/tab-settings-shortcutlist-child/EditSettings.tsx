@@ -4,7 +4,7 @@ import LrcConvertButton from "./settings-child/LrcConvertButton";
 import ConvertOptionButtons from "./settings-child/ConvertOptionButtons";
 import TotalTimeAdjust from "./settings-child/TotalTimeAdjust";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import VolumeRange from "@/components/custom-chakra-ui/VolumeRange";
+import VolumeRange from "@/components/custom-ui/VolumeRange";
 
 export default function EditSettings() {
   const { playerRef } = useRefs();

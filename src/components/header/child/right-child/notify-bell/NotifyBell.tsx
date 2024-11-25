@@ -1,7 +1,7 @@
 "use client";
 
-import CustomDrawerContent from "@/components/custom-chakra-ui/CustomDrawerContent";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomDrawerContent from "@/components/custom-ui/CustomDrawerContent";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import {
   Box,

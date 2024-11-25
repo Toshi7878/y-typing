@@ -1,4 +1,5 @@
-import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
+import UpdateAtText from "@/components/custom-ui/UpdateAtText";
+import UserLinkText from "@/components/custom-ui/UserLinkText";
 import MapInfo from "@/components/map-card/child/child/MapInfo";
 import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import MapCardRightInfo from "@/components/map-card/child/MapCardRightInfo";
@@ -42,10 +43,10 @@ const NotifyDrawerInnerContent = () => {
                       <UpdateAtText updatedAt={notify.createdAt} />
                     </Box>
                     <Box>
-                      {notify.visitor.name}さんが
+                      <UserLinkText userId={notify.visitor_id} userName={notify.visitor.name} />
+                      さんが スコア {notify.visitorResult.score - notify.visitedResult.score} 差で
                       {notify.visitedResult.rank - notify.visitorResult.rank}
                       位の記録を抜かしました。
-                      <Box>スコア差: {notify.visitorResult.score - notify.visitedResult.score}</Box>
                     </Box>
                     <Box mb={2} maxW="610px">
                       <MapCard>

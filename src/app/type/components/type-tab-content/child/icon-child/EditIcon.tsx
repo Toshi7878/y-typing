@@ -1,4 +1,4 @@
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";
 import { ThemeColors } from "@/types";
 import { Link } from "@chakra-ui/next-js";

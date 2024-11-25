@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React from "react";
 import SearchInputs from "./search/SearchInputs";
-import VolumeRange from "@/components/custom-chakra-ui/VolumeRange";
+import VolumeRange from "@/components/custom-ui/VolumeRange";
 import { useGlobalRefs } from "@/components/globalRefContext/GlobalRefProvider";
 
 const SearchContent = () => {

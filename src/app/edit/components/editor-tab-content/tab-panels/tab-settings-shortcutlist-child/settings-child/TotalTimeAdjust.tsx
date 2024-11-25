@@ -8,7 +8,7 @@ import { useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
 import { ThemeColors } from "@/types";
 import { useState } from "react";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 
 export default function TotalTimeAdjust() {
   const dispatch = useDispatch();

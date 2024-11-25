@@ -12,7 +12,7 @@ import ThemeProvider from "./provider/ThemeProvider";
 import GlobalProvider from "./provider/GlobalProvider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth";
-import PreviewYouTubeContent from "@/components/PreviewYouTubeContent";
+import PreviewYouTubeContent from "@/components/custom-ui/PreviewYouTubeContent";
 
 export const metadata: Metadata = {
   title: "YTyping",

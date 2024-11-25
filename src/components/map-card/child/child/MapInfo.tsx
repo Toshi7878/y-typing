@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex, Stack, useTheme } from "@chakra-ui/react";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { MapCardInfo } from "@/app/(home)/ts/type";
 import { ThemeColors } from "@/types";
 import MapCreateUser from "./MapCreateUser";

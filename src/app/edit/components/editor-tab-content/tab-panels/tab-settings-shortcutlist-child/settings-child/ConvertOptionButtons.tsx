@@ -9,7 +9,7 @@ import {
   useSetEditWordConvertOptionAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { sendEditorOptionIndexedDBData } from "@/lib/db";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 
 export default function ConvertOptionButtons() {
   const theme: ThemeColors = useTheme();

@@ -14,7 +14,7 @@ import { IndexDBOption } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
 import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
-import CustomModalContent from "@/components/custom-chakra-ui/CustomModalContent";
+import CustomModalContent from "@/components/custom-ui/CustomModalContent";
 import CreateMapBackUpButton from "./child/CreateMapBackUpButton";
 import NewCreateButton from "./child/NewCreateButton";
 import NewCreateVideoIdInputBox from "./child/NewCreateVideoIdInputBox";

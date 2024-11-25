@@ -3,7 +3,7 @@ import React from "react";
 import SearchCard from "./child/SearchModal";
 import SearchInputs from "./child/SearchInputs";
 import { useGlobalRefs } from "@/components/globalRefContext/GlobalRefProvider";
-import VolumeRange from "@/components/custom-chakra-ui/VolumeRange";
+import VolumeRange from "@/components/custom-ui/VolumeRange";
 
 const SearchContent = () => {
   const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);

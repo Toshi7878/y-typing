@@ -17,6 +17,7 @@ export async function GET(request: Request) {
       select: {
         createdAt: true,
         action: true,
+        visitor_id: true,
         visitor: {
           select: {
             name: true,

@@ -2,14 +2,14 @@
 
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import ClearRateText from "@/components/user-result-text/ClearRateText";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
 import { ThemeColors } from "@/types";
 import { Td, Tr, useTheme } from "@chakra-ui/react";
 import React, { Dispatch, useState } from "react";
 import { useEffect } from "react";
 import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
-import UpdateAtText from "@/components/custom-chakra-ui/UpdateAtText";
+import UpdateAtText from "@/components/custom-ui/UpdateAtText";
 import ClapedText from "@/components/user-result-text/ClapedText";
 import RankText from "@/components/user-result-text/RankText";
 import RankingMenu from "./RankingMenu";

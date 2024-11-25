@@ -6,7 +6,7 @@ import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
 import UserSoundEffectCheckbox from "./child/UserSoundEffectCheckbox";
 import UserShortcutKeyCheckbox from "./child/UserShortcutKeyCheckbox";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import VolumeRange from "@/components/custom-chakra-ui/VolumeRange";
+import VolumeRange from "@/components/custom-ui/VolumeRange";
 
 interface SettingCardProps {
   isCardVisible: boolean;

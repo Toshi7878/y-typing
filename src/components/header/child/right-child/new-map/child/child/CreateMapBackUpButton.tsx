@@ -2,7 +2,7 @@
 
 import { Button, Box, useTheme, UseDisclosureReturn } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 
 import { Link } from "@chakra-ui/next-js";
 import { useLinkClick } from "@/lib/hooks/useLinkClick";

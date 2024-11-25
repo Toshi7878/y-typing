@@ -7,7 +7,7 @@ import {
   useSetTypePageSpeedAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import CustomToolTip from "@/components/custom-chakra-ui/CustomToolTip";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 
 interface ReadyPlaySpeedProps {
   speedUpButtonRef: React.RefObject<HTMLButtonElement>;

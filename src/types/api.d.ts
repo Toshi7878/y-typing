@@ -15,6 +15,7 @@ export interface GetInfoData {
 type NotificationSelect = {
   createdAt: Date;
   action: string;
+  visitor_id: number;
   visitor: {
     name: string;
   };

@@ -6,9 +6,9 @@ import {
   usePreviewVideoIdAtom,
   useSetPreviewVideoIdAtom,
   useVolumeAtom,
-} from "./atom/globalAtoms";
+} from "../atom/globalAtoms";
 import { useEffect } from "react";
-import { useGlobalRefs } from "./globalRefContext/GlobalRefProvider";
+import { useGlobalRefs } from "../globalRefContext/GlobalRefProvider";
 import { usePreviewYouTubeKeyDown } from "@/lib/hooks/usePreviewYouTubeKeyDown";
 import { useRouter } from "next/navigation";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
