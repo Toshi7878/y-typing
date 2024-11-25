@@ -43,7 +43,7 @@ export const useLocalClapServerActions = ({ hasClap, clapCount }: LocalClapState
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const result = await toggleClapServerAction(resultId, newOptimisticState.hasClap);
-      if (result.id) {
+      if (result.status === 200) {
         setClapLocalState(newOptimisticState);
       }
 

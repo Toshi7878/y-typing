@@ -3,12 +3,11 @@
 import { PrismaClient } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { UploadResult } from "@/types";
-import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
 async function updateClap(resultId: number, userId: number, optimisticState: boolean) {
-  const clapedId = await prisma.$transaction(async (prisma) => {
+  await prisma.$transaction(async (prisma) => {
     const claped = await prisma.clap.upsert({
       where: {
         userId_resultId: {
@@ -52,10 +51,8 @@ async function updateClap(resultId: number, userId: number, optimisticState: boo
       },
     });
 
-    return claped.id;
+    return claped;
   });
-
-  return clapedId;
 }
 
 export async function toggleClapServerAction(
@@ -70,7 +67,7 @@ export async function toggleClapServerAction(
     const clapedId = await updateClap(resultId, userId, optimisticState);
 
     return {
-      id: clapedId,
+      id: null,
       title: "拍手完了",
       message: "",
       status: 200,
