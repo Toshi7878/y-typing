@@ -2,7 +2,15 @@ import { toggleLikeServerAction } from "@/config/server-actions/toggle-like-serv
 import { LocalLikeState, UploadResult } from "@/types";
 import { useEffect, useOptimistic, useState } from "react";
 
-export const useLocalLikeServerActions = ({ hasLike, likeCount }: LocalLikeState) => {
+interface useLocalLikeServerActionsProps {
+  hasLike: LocalLikeState["hasLike"];
+  likeCount: LocalLikeState["likeCount"];
+}
+
+export const useLocalLikeServerActions = ({
+  hasLike,
+  likeCount,
+}: useLocalLikeServerActionsProps) => {
   const [likeLocalState, setLikeLocalState] = useState<LocalLikeState>({
     hasLike,
     likeCount,

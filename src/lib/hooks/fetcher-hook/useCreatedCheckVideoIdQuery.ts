@@ -8,11 +8,23 @@ export function useCreatedCheckVideoIdQuery(videoId: string) {
   const { data, error, isLoading } = useQuery<MapCardInfo[] | undefined>({
     queryKey: QUERY_KEYS.mapCreatedCheck(videoId),
     queryFn: async () => {
-      const response = await axios.get("/api/check-created-youtube-id", {
+      const { data } = await axios.get("/api/check-created-youtube-id", {
         params: { videoId },
       });
 
-      return response.data;
+      const newData = data.map((map) => {
+        if (Array.isArray(map.mapLike)) {
+          map.mapLike = map.mapLike[0]; // 配列の最初の要素を取得
+        }
+
+        if (Array.isArray(map.result)) {
+          map.result = map.result[0]; // 配列の最初の要素を取得
+        }
+
+        return map;
+      });
+
+      return newData; // 修正後のデータを返す
     },
 
     enabled: !!videoId, // videoIdが存在する場合にのみ実行

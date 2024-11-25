@@ -4,45 +4,56 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const checkVideoId = url.searchParams.get("videoId");
+  const checkVideoId = url.searchParams.get("videoId") || "";
   const sessionId = await auth();
   const userId = Number(sessionId?.user.id);
 
   try {
-    const mapList = await prisma.$queryRaw`
-    SELECT
-    "Map"."id",
-    "Map"."title",
-    "Map"."artistName",
-    "Map"."musicSource",
-    "Map"."romaKpmMedian",
-    "Map"."romaKpmMax",
-    "Map"."videoId",
-    "Map"."updatedAt",
-    "Map"."previewTime",
-    "Map"."totalTime",
-    "Map"."thumbnailQuality",
-    "Map"."likeCount",
-    "Map"."rankingCount",
-    json_build_object('id', "User"."id", 'name', "User"."name") as "user",
-    (
-        SELECT "isLiked"
-        FROM "MapLike"
-        WHERE "MapLike"."mapId" = "Map"."id"
-        AND "MapLike"."userId" = ${userId}
-        LIMIT 1
-    ) as "mapLike","isLiked",
-    (
-        SELECT "rank"
-        FROM "Result"
-        WHERE "Result"."mapId" = "Map"."id"
-        AND "Result"."userId" = ${userId}
-        LIMIT 1
-    ) as "result","rank"
-    FROM "Map"
-    JOIN "User" ON "Map"."creatorId" = "User"."id"
-    WHERE "Map"."videoId" = ${checkVideoId}
-    ORDER BY "Map"."id" DESC`;
+    const mapList = await prisma.map.findMany({
+      where: {
+        videoId: checkVideoId,
+      },
+      select: {
+        id: true,
+        title: true,
+        artistName: true,
+        musicSource: true,
+        romaKpmMedian: true,
+        romaKpmMax: true,
+        videoId: true,
+        updatedAt: true,
+        previewTime: true,
+        totalTime: true,
+        thumbnailQuality: true,
+        likeCount: true,
+        rankingCount: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mapLike: {
+          where: {
+            userId,
+          },
+          select: {
+            isLiked: true,
+          },
+        },
+        result: {
+          where: {
+            userId,
+          },
+          select: {
+            rank: true,
+          },
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+    });
 
     if (!mapList) {
       return new Response("Map not found", { status: 404 });
