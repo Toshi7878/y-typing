@@ -1,7 +1,10 @@
 export const changelog = [
   {
     date: "2024-11-25",
-    descriptions: ["通知デモ追加"],
+    descriptions: [
+      "ランキングで抜かされた通知の元々のランクの表示が正しくない時がある問題を修正",
+      "通知デモ追加",
+    ],
   },
   {
     date: "2024-11-24",
