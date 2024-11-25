@@ -8,6 +8,7 @@ import { useFormState } from "react-dom";
 import { INITIAL_STATE } from "@/config/consts";
 import { useLocalLikeServerActions } from "@/lib/hooks/useLocalLikeServerActions";
 import { useSession } from "next-auth/react";
+import { LikeButton } from "@/components/like-button/LikeButton";
 
 interface LikeCountProps {
   map: MapCardInfo;
@@ -45,10 +46,10 @@ const LikeCount = (props: LikeCountProps) => {
         }
         rounded="md"
         _hover={session?.user.id ? { bg: `${theme.colors.semantic.like}60` } : ""}
-        px={1}
+        pr={1}
       >
-        <Box mr={1} position="relative" top="2.5px">
-          {likeOptimisticState.hasLike ? <FaHeart size={16} /> : <FiHeart size={17} />}
+        <Box m={-1} mt={-4} position="relative" top="10px">
+          <LikeButton defaultLiked={likeOptimisticState.hasLike} size={34} />
         </Box>
         <Box fontSize="lg" fontFamily="monospace">
           {likeOptimisticState.likeCount}

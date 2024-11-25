@@ -9,7 +9,7 @@ function MapCardRightInfo({ children }: MapCardProps) {
     <Flex
       flexDirection="column"
       justifyContent="space-between"
-      overflowX="hidden"
+      overflow="hidden"
       width="100%"
       height="100%"
       pl={3}
