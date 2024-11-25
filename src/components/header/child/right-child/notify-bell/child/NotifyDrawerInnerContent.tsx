@@ -6,14 +6,7 @@ import MapCardRightInfo from "@/components/map-card/child/MapCardRightInfo";
 import MapCard from "@/components/map-card/MapCard";
 import { NOTIFICATION_MAP_THUBNAIL_HEIGHT, NOTIFICATION_MAP_THUBNAIL_WIDTH } from "@/config/consts";
 import { useNotifyQuery } from "@/lib/hooks/fetcher-hook/useNotifyQuery";
-import {
-  Box,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerHeader,
-  Heading,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, DrawerBody, DrawerCloseButton, DrawerHeader, Spinner } from "@chakra-ui/react";
 import React from "react";
 
 const NotifyDrawerInnerContent = () => {
