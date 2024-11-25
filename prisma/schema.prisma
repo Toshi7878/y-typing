@@ -73,7 +73,6 @@ model UserOption {
 
 
 model Clap {
-    id             Int @id @default(autoincrement())
     userId         Int
     resultId       Int
     isClaped       Boolean
@@ -84,7 +83,6 @@ model Clap {
 }
 
 model MapLike {
-    id             Int @id @default(autoincrement())
     userId         Int
     mapId          Int
     isLiked        Boolean
@@ -100,6 +98,7 @@ model Notification {
   visited_id     Int
   mapId          Int
   action         String // like, ot(overtake)
+  oldRank        Int?
   checked        Boolean @default(false)
   createdAt      DateTime @default(now())
   visitor        User @relation("Visitor", fields: [visitor_id], references: [id], onDelete: Cascade)

@@ -43,7 +43,10 @@ export interface RankingListType {
   defaultSpeed: number;
   clapCount: number;
   score: number;
-  hasClap: boolean;
+  clap: {
+    isClaped: true;
+  };
+
   updatedAt: Date;
 }
 

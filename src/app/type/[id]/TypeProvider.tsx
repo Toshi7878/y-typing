@@ -20,7 +20,7 @@ interface TypeProviderProps {
 const TypeProvider = ({ mapInfo, userTypingOptions, children }: TypeProviderProps) => {
   const globalAtomStore = getGlobalAtomStore();
   globalAtomStore.set(previewVideoIdAtom, null);
-  typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.hasLike);
+  typeAtomStore.set(hasLocalLikeAtom, !!mapInfo?.mapLike[0]?.isLiked);
   useEffect(() => {
     window.getSelection()!.removeAllRanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps

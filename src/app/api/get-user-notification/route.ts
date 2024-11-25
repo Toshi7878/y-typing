@@ -18,6 +18,7 @@ export async function GET(request: Request) {
         createdAt: true,
         action: true,
         visitor_id: true,
+        oldRank: true,
         visitor: {
           select: {
             name: true,
@@ -26,13 +27,11 @@ export async function GET(request: Request) {
         visitedResult: {
           select: {
             score: true,
-            rank: true,
           },
         },
         visitorResult: {
           select: {
             score: true,
-            rank: true,
           },
         },
         map: {

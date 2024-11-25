@@ -53,12 +53,14 @@ const calcRank = async (mapId: number, userId: number) => {
         update: {
           checked: false,
           createdAt: new Date(),
+          oldRank: rankingList[i].rank,
         },
         create: {
           visitor_id: userId,
           visited_id: rankingList[i].userId,
           mapId: mapId,
           action: "ot",
+          oldRank: rankingList[i].rank,
         },
       });
     }

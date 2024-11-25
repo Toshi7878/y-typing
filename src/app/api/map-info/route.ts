@@ -11,32 +11,28 @@ export async function GET(request: Request) {
   }
 
   try {
-    const mapContents = await prisma.$queryRaw`
-    SELECT
-    "Map"."title",
-    "Map"."artistName",
-    "Map"."musicSource",
-    "Map"."creatorComment",
-    "Map"."creatorId",
-    "Map"."tags",
-    "Map"."videoId",
-    "Map"."previewTime",
-    (
-        SELECT "isLiked"
-        FROM "MapLike"
-        WHERE "MapLike"."mapId" = "Map"."id"
-        AND "MapLike"."userId" = ${userId}
-        LIMIT 1
-      ) as "hasLike"
-    FROM "Map"
-    WHERE "Map"."id" = ${Number(mapId)}
-  `;
+    const mapContents = await prisma.map.findUnique({
+      where: { id: mapId },
+      select: {
+        title: true,
+        artistName: true,
+        musicSource: true,
+        creatorComment: true,
+        creatorId: true,
+        tags: true,
+        videoId: true,
+        previewTime: true,
+        mapLike: {
+          select: { isLiked: true },
+        },
+      },
+    });
 
     if (!mapContents) {
       return new Response("Map not found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(mapContents[0]), {
+    return new Response(JSON.stringify(mapContents), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {

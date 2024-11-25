@@ -38,7 +38,7 @@ const NotifyDrawerInnerContent = () => {
                     <Box>
                       <UserLinkText userId={notify.visitor_id} userName={notify.visitor.name} />
                       さんが スコア {notify.visitorResult.score - notify.visitedResult.score} 差で
-                      {notify.visitedResult.rank - notify.visitorResult.rank}
+                      {Number(notify.oldRank)}
                       位の記録を抜かしました。
                     </Box>
                     <Box mb={2} maxW="610px">
