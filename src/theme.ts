@@ -76,6 +76,7 @@ export default extendTheme({
       },
       body: {
         bg: darkTheme.colors.background.body,
+        overflowX: "hidden",
       },
     },
   },
