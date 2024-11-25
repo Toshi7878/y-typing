@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { actions } from "../ts/scene-ts/end/actions";
+import { actions } from "../ts/scene-ts/end/send-result-server-actions";
 import { Status } from "../ts/type";
 import { useLineResultsAtom, useTypePageSpeedAtom } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";

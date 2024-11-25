@@ -1,6 +1,6 @@
 import { Box, Stack } from "@chakra-ui/react";
 import React from "react";
-import { actions } from "@/app/type/ts/scene-ts/end/actions";
+import { actions } from "@/app/type/ts/scene-ts/end/send-result-server-actions";
 import { useLineResultsAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useFormState } from "react-dom";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
