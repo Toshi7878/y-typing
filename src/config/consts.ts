@@ -11,9 +11,9 @@ export const PREVIEW_YOUTUBE_HEIGHT = {
   xl: (PREVIEW_YOUTUBE_WIDTH.xl * 9) / 16,
 };
 
-export const NOTIFICATION_MAP_THUBNAIL_WIDTH = { base: 160 };
+export const NOTIFICATION_MAP_THUBNAIL_WIDTH = { base: 120 };
 export const NOTIFICATION_MAP_THUBNAIL_HEIGHT = {
-  base: (NOTIFICATION_MAP_THUBNAIL_WIDTH.base * 9) / 16,
+  base: (NOTIFICATION_MAP_THUBNAIL_WIDTH.base * 4) / 24,
 };
 
 export const QUERY_KEYS = {
@@ -25,3 +25,5 @@ export const QUERY_KEYS = {
   mapCreatedCheck: (videoId: string) => ["createdCheck", videoId] as const,
   notification: ["notification"] as const,
 };
+
+export const PREVIEW_DISABLE_PATHNAMES = ["type", "edit"];

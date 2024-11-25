@@ -3,15 +3,7 @@
 import CustomDrawerContent from "@/components/custom-ui/CustomDrawerContent";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
-import {
-  Box,
-  useTheme,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, useTheme, Drawer, useDisclosure } from "@chakra-ui/react";
 import { FaBell } from "react-icons/fa";
 import NotifyDrawerInnerContent from "./child/NotifyDrawerInnerContent";
 
@@ -35,7 +27,7 @@ export default function NotifyBell() {
       </CustomToolTip>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-        <CustomDrawerContent width="400px">
+        <CustomDrawerContent width="450px">
           <NotifyDrawerInnerContent />
         </CustomDrawerContent>
       </Drawer>
