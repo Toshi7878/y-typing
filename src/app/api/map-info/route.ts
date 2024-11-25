@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         videoId: true,
         previewTime: true,
         mapLike: {
+          where: { userId },
           select: { isLiked: true },
         },
       },

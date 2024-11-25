@@ -50,6 +50,22 @@ export async function GET(request: Request) {
             thumbnailQuality: true,
             likeCount: true,
             rankingCount: true,
+            mapLike: {
+              where: {
+                userId,
+              },
+              select: {
+                isLiked: true,
+              },
+            },
+            result: {
+              where: {
+                userId,
+              },
+              select: {
+                rank: true,
+              },
+            },
             user: {
               select: {
                 id: true,

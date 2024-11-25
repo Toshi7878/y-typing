@@ -37,13 +37,12 @@ export async function GET(request: Request) {
           },
         },
         clap: {
+          where: {
+            userId,
+          },
           select: {
             isClaped: true,
           },
-          where: {
-            userId: userId,
-          },
-          take: 1,
         },
       },
       orderBy: {
