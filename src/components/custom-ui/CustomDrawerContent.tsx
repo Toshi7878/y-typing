@@ -3,11 +3,11 @@ import { DrawerContent, DrawerOverlay, useTheme } from "@chakra-ui/react";
 import React from "react";
 
 interface CustomDrawerContentProps {
-  width?: string;
+  width?: { base: string; lg: string };
   children: React.ReactNode;
 }
 
-const CustomDrawerContent = ({ children, width = "auto" }: CustomDrawerContentProps) => {
+const CustomDrawerContent = ({ children, width }: CustomDrawerContentProps) => {
   const theme: ThemeColors = useTheme();
   return (
     <>

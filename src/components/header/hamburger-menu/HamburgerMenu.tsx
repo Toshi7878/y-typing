@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Flex,
   IconButton,
   Menu,
   MenuButton,
@@ -20,6 +21,7 @@ import { useSession } from "next-auth/react";
 import SignInMenuItem from "../child/right-child/login/child/SignInMenuItem";
 import { BsDiscord, BsGoogle } from "react-icons/bs";
 import NewCreateModal from "../child/right-child/new-map/child/NewCreateModal";
+import NotifyBell from "../child/right-child/notify-bell/NotifyBell";
 
 interface HamburgerMenuProps {
   display: ResponsiveValue<string>;
@@ -33,13 +35,13 @@ const HamburgerMenu = ({ display }: HamburgerMenuProps) => {
 
   const menus = leftMenuItem.concat(leftLink);
   return (
-    <>
+    <Flex display={display} alignItems="center" gap={5}>
+      {session?.user?.id && <NotifyBell />}
       <Menu>
         <MenuButton
           as={IconButton}
           aria-label="Open menu"
           icon={<HamburgerIcon />}
-          display={display}
           onClick={onOpen}
           size={"sm"}
           variant={"outline"}
@@ -84,7 +86,7 @@ const HamburgerMenu = ({ display }: HamburgerMenuProps) => {
       {newCreateModalDisclosure.isOpen && (
         <NewCreateModal newCreateModalDisclosure={newCreateModalDisclosure} />
       )}
-    </>
+    </Flex>
   );
 };
 

@@ -34,7 +34,7 @@ export default function NotifyBell() {
       </CustomToolTip>
 
       <Drawer isOpen={isOpen} placement="right" onClose={nofityDrawerClose}>
-        <CustomDrawerContent width="450px">
+        <CustomDrawerContent width={{ base: "auto", lg: "450px" }}>
           <NotifyDrawerInnerContent />
         </CustomDrawerContent>
       </Drawer>

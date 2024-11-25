@@ -23,7 +23,7 @@ const HeaderContent = () => {
       >
         <LeftNav />
         <RightNav display={{ base: "none", md: "flex" }} />
-        <HamburgerMenu display={{ base: "block", md: "none" }} />
+        <HamburgerMenu display={{ base: "flex", md: "none" }} />
       </Flex>
     </Box>
   );
