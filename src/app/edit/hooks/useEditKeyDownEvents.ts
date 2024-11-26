@@ -75,8 +75,10 @@ export const useWindowKeydownEvent = () => {
     const iS_FOCUS_TEXTAREA = document.activeElement instanceof HTMLTextAreaElement;
 
     if (event.key === "Tab") {
-      if (!iS_FOCUS_TEXTAREA && !IS_FOCUS_INPUT) {
-        setTopLyricsText(undefined);
+      if (!iS_FOCUS_TEXTAREA) {
+        if (!IS_FOCUS_INPUT) {
+          setTopLyricsText(undefined);
+        }
       } else if (iS_FOCUS_TEXTAREA) {
         if (!isAddButtonDisabled) {
           lineAddButtonEvent(event.shiftKey);
