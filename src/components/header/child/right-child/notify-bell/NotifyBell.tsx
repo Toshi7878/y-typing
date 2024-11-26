@@ -10,6 +10,7 @@ import { Bell, BellDot } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useClientNewNotifyCheck } from "@/lib/hooks/fetcher-hook/useClientNewNotifyCheck";
+import axios from "axios";
 
 interface NotifyBellProps {
   isNewNotification: boolean;
@@ -29,6 +30,7 @@ export default function NotifyBell({ isNewNotification }: NotifyBellProps) {
   }, []);
 
   const notificationOpen = useCallback(() => {
+    axios.post("/api/post-user-notification-read");
     isSetNewBadge(false);
     onOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -4,7 +4,7 @@ import NotificationMapCardRightInfo from "@/components/map-card-notification/chi
 import NotificationMapCard from "@/components/map-card-notification/NotificationMapCard";
 import MapLeftThumbnail from "@/components/map-card/child/MapCardLeftThumbnail";
 import { NOTIFICATION_MAP_THUBNAIL_HEIGHT, NOTIFICATION_MAP_THUBNAIL_WIDTH } from "@/config/consts";
-import { useNotifyQuery } from "@/lib/hooks/fetcher-hook/useNotifyQuery";
+import { useNotifyInfiniteQuery } from "@/lib/hooks/fetcher-hook/useNotifyInfiniteQuery";
 import { ThemeColors } from "@/types";
 import {
   Box,
@@ -15,9 +15,21 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import React from "react";
+import InfiniteScroll from "react-infinite-scroller";
 
 const NotifyDrawerInnerContent = () => {
-  const { data, isLoading } = useNotifyQuery();
+  const {
+    data,
+    error,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    isLoading,
+  } = useNotifyInfiniteQuery();
 
   const theme: ThemeColors = useTheme();
 
@@ -32,44 +44,51 @@ const NotifyDrawerInnerContent = () => {
             <Spinner />
           </Box>
         ) : (
-          <>
-            {data?.length ? (
-              data.map((notify, index: number) => {
-                const { map } = notify;
-                const src =
-                  map.thumbnailQuality === "maxresdefault"
-                    ? `https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`
-                    : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
+          <InfiniteScroll
+            loadMore={() => fetchNextPage()}
+            // loader={<LoadingMapCard />}
+            hasMore={hasNextPage}
+            threshold={500} // スクロールの閾値を追加
+          >
+            {data?.pages.length ? (
+              data.pages.map((page, index: number) => {
+                return page.map((notify, index: number) => {
+                  const { map } = notify;
+                  const src =
+                    map.thumbnailQuality === "maxresdefault"
+                      ? `https://i.ytimg.com/vi_webp/${map.videoId}/maxresdefault.webp`
+                      : `https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`;
 
-                return (
-                  <Box key={index} mb={4}>
-                    <Box mb={2}>
-                      <NotificationMapCard notify={notify}>
-                        <MapLeftThumbnail
-                          alt={map.title}
-                          fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
-                          src={src}
-                          mapVideoId={map.videoId}
-                          mapPreviewTime={map.previewTime}
-                          thumbnailQuality={map.thumbnailQuality}
-                          thumnailWidth={NOTIFICATION_MAP_THUBNAIL_WIDTH}
-                          thumnailHeight={NOTIFICATION_MAP_THUBNAIL_HEIGHT}
-                        />
-                        <NotificationMapCardRightInfo>
-                          <NotificationMapInfo map={map} />
-                        </NotificationMapCardRightInfo>
-                      </NotificationMapCard>
-                      <Box textAlign="end" color={`${theme.colors.text.body}cc`}>
-                        <UpdateAtText updatedAt={notify.createdAt} />
+                  return (
+                    <Box key={index} mb={4}>
+                      <Box mb={2}>
+                        <NotificationMapCard notify={notify}>
+                          <MapLeftThumbnail
+                            alt={map.title}
+                            fallbackSrc={`https://i.ytimg.com/vi/${map.videoId}/mqdefault.jpg`}
+                            src={src}
+                            mapVideoId={map.videoId}
+                            mapPreviewTime={map.previewTime}
+                            thumbnailQuality={map.thumbnailQuality}
+                            thumnailWidth={NOTIFICATION_MAP_THUBNAIL_WIDTH}
+                            thumnailHeight={NOTIFICATION_MAP_THUBNAIL_HEIGHT}
+                          />
+                          <NotificationMapCardRightInfo>
+                            <NotificationMapInfo map={map} />
+                          </NotificationMapCardRightInfo>
+                        </NotificationMapCard>
+                        <Box textAlign="end" color={`${theme.colors.text.body}cc`}>
+                          <UpdateAtText updatedAt={notify.createdAt} />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                );
+                  );
+                });
               })
             ) : (
               <Box>まだ通知はありません</Box>
             )}
-          </>
+          </InfiniteScroll>
         )}
       </DrawerBody>
     </>

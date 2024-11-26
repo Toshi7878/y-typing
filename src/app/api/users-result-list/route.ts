@@ -11,7 +11,7 @@ import { auth } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
-const CONTENT_LENGTH = 30;
+export const USERS_RESULT_LIST_TAKE_LENGTH = 30;
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   const minSpeed = Number(searchParams.get("minSpeed") ?? 1);
   const maxSpeed = Number(searchParams.get("maxSpeed"));
 
-  const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
+  const offset = USERS_RESULT_LIST_TAKE_LENGTH * Number(page); // 20件ずつ読み込むように変更
 
   try {
     const resultList = await prisma.$queryRaw`
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
         END
       )
       ORDER BY "Result"."updatedAt" DESC
-      LIMIT ${CONTENT_LENGTH} OFFSET ${offset}
+      LIMIT ${USERS_RESULT_LIST_TAKE_LENGTH} OFFSET ${offset}
     `;
 
     return new Response(JSON.stringify(resultList), {

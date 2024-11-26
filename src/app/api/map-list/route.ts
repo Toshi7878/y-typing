@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-const CONTENT_LENGTH = 40;
+export const MAP_LIST_TAKE_LENGTH = 40;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   const page = searchParams.get("page") ?? "0";
   const mapKeyword = searchParams.get("mapKeyword") ?? "";
-  const offset = CONTENT_LENGTH * Number(page); // 20件ずつ読み込むように変更
+  const offset = MAP_LIST_TAKE_LENGTH * Number(page); // 20件ずつ読み込むように変更
   try {
     const mapList = await prisma.$queryRaw`
     SELECT
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
               END
           )
     ORDER BY "Map"."id" DESC
-    LIMIT ${CONTENT_LENGTH} OFFSET ${offset}`;
+    LIMIT ${MAP_LIST_TAKE_LENGTH} OFFSET ${offset}`;
 
     return new Response(JSON.stringify(mapList), {
       headers: { "Content-Type": "application/json" },

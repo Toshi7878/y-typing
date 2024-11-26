@@ -81,6 +81,7 @@
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-infinite-scroller": "^1.2.5",
     "@types/youtube-player": "^5.5.11",
     "eslint": "^8",
     "eslint-config-airbnb": "^19.0.4",

@@ -3,6 +3,7 @@ import { MapCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { QUERY_KEYS } from "@/config/consts";
+import { MAP_LIST_TAKE_LENGTH } from "@/app/api/map-list/route";
 
 async function getMapList(page: number, mapKeyword: string): Promise<MapCardInfo[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/map-list`, {
@@ -37,9 +38,7 @@ export const useMapListInfiniteQuery = () => {
     queryFn: ({ pageParam = 0 }) => getMapList(pageParam, mapKeyword), // ページ数を引数として渡す
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      // ページング処理を修正
-
-      if (lastPage.length > 0) {
+      if (lastPage.length === MAP_LIST_TAKE_LENGTH) {
         const nextPage = allPages.length;
         return nextPage;
       }

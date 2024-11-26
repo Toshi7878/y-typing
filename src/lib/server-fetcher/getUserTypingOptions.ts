@@ -6,12 +6,9 @@ import { auth } from "../auth";
 
 export const getUserTypingOptions = cache(async (): Promise<UserTypingOptions> => {
   const session = await auth();
+  const userId = session?.user.id.toString() || "";
   const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/get-user-typing-options`); // URLを変数に格納
-
-  const params: Record<string, string> = {};
-  if (session?.user.id !== undefined) {
-    params.userId = session.user.id.toString();
-  }
+  const params: Record<string, string> = { userId };
 
   url.search = new URLSearchParams(params).toString();
 
