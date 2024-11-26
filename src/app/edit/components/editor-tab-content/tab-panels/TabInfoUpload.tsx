@@ -25,7 +25,6 @@ import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
 import TypeLinkButton from "./tab-info-child/TypeLinkButton";
 import InfoTag from "./tab-info-child/InfoTag";
 import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
-import { supabase } from "@/lib/supabaseClient";
 import { useGetGeminiMapInfoQuery } from "@/app/edit/hooks/query/useGetGeminiMapInfoQuery";
 
 const TabInfoUpload = () => {

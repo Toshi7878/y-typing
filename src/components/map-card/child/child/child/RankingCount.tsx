@@ -15,9 +15,9 @@ const RankingCount = (props: RankingCountProps) => {
     <Flex
       alignItems="baseline"
       color={
-        map.result.rank === 1
+        map.result?.rank === 1
           ? theme.colors.semantic.perfect
-          : map.result.rank
+          : map.result?.rank
             ? theme.colors.secondary.main
             : `${theme.colors.text.body}99`
       }

@@ -109,6 +109,8 @@ function Content() {
       if (mapId) {
         queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       }
+
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.generateMapInfoGemini });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapId, newVideoId]);

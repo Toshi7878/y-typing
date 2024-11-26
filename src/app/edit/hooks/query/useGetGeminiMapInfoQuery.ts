@@ -11,6 +11,7 @@ import {
 } from "../../edit-atom/editAtom";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import { useSearchParams } from "next/navigation";
+import { QUERY_KEYS } from "@/config/consts";
 
 export const useGetGeminiMapInfoQuery = () => {
   const setMapTitle = useSetMapTitleAtom();
@@ -24,7 +25,7 @@ export const useGetGeminiMapInfoQuery = () => {
   const isBackUp = searchParams.get("backup") === "true";
 
   const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
-    queryKey: ["generate-gemini-map-info"],
+    queryKey: QUERY_KEYS.generateMapInfoGemini,
     queryFn: async () => {
       const ytInfo = await axios.post<GetYouTubeMovieInfo | UploadResult>(
         `${process.env.NEXT_PUBLIC_API_URL}/api/get-youtube-channel-info`,
