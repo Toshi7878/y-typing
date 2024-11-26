@@ -24,7 +24,7 @@ const NotifyDrawerInnerContent = () => {
   return (
     <>
       <DrawerCloseButton />
-      <DrawerHeader>通知(仮)</DrawerHeader>
+      <DrawerHeader>通知</DrawerHeader>
 
       <DrawerBody px={3}>
         {isLoading ? (
