@@ -15,10 +15,10 @@ const safetySettings: SafetySetting[] = [
 ];
 
 const TEXT_PROMPT = `以下のJSONデータ情報を解析して{musicTitle:string; artistName:string; musicSource:string; otherTags:string[];}の形式で出力してください。\n
-  アニメ・ドラマ・映画のタイトルが存在する場合はmusicSourceに出力してください。。情報が見つかった場合のみ出力してください。\n
+  アニメ・ドラマ・映画のタイトルが存在する場合はmusicSourceに出力してください。タイトル名のみ出力してください。情報が見つかった場合のみ出力してください。\n
   channelTitleはその曲のアーティスト名とは限りません。\n
-  ボーカロイドや歌手とアーティストが異なる場合はmusicTitleにfeat.で歌っている人の名前を追加してください\n
-  descriptionなどに記載されているアーティストや曲に関連する単語をotherTagsに格納してください。アーティストの所属するグループ名は重要です。\n
+  ボーカロイドや歌手とアーティストが異なる場合はmusicTitleにfeat.で歌っている人の名前を追加してください。musicTitleは曲名のみいれてください\n
+  descriptionなどに記載されているアーティストや曲に関連する単語をotherTagsに格納してください。otherTagsに格納する情報についてアーティストの所属するグループ名などは重要です。\n
   出力するJSONデータはJSON.parseができるように改行を使用せずに出力してください。`;
 
 export async function POST(req: Request) {
