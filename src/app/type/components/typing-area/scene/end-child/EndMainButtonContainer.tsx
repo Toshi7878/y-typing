@@ -28,7 +28,7 @@ const EndMainButtonContainer = ({
       )}
 
       <EndMainButton text={"詳細リザルトを見る"} onClick={onOpen} />
-      {isPlayingMode && <EndMainButton text={"結果をXにポスト"} onClick={() => {}} />}
+      {/* {isPlayingMode && <EndMainButton text={"結果をXにポスト"} onClick={() => {}} />} */}
     </HStack>
   );
 };
