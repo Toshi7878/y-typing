@@ -11,7 +11,7 @@ import { auth } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
-export const USERS_RESULT_LIST_TAKE_LENGTH = 30;
+const USERS_RESULT_LIST_TAKE_LENGTH = 30; //ここを編集したらInfiniteQueryのgetNextPageParamも編集する
 
 export async function GET(req: NextRequest) {
   const session = await auth();

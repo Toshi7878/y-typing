@@ -3,7 +3,6 @@ import { FilterMode, ResultCardInfo } from "../ts/type";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { QUERY_KEYS } from "@/config/consts";
-import { USERS_RESULT_LIST_TAKE_LENGTH } from "@/app/api/users-result-list/route";
 
 interface GetResultListProps {
   page: number;
@@ -94,7 +93,7 @@ export const useUsersResultInfiniteQuery = () => {
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === USERS_RESULT_LIST_TAKE_LENGTH) {
+      if (lastPage.length === 30) {
         const nextPage = allPages.length;
         return nextPage;
       }

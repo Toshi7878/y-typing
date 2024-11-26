@@ -1,4 +1,3 @@
-import { NOTIFICATION_TAKE_LENGTH } from "@/app/api/get-user-notification/route";
 import { QUERY_KEYS } from "@/config/consts";
 import { NotificationSelect } from "@/types/api";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -41,7 +40,7 @@ export const useNotifyInfiniteQuery = () => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === NOTIFICATION_TAKE_LENGTH) {
+      if (lastPage.length === 20) {
         const nextPage = allPages.length;
         return nextPage;
       }

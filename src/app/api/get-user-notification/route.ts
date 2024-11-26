@@ -2,21 +2,20 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const NOTIFICATION_TAKE_LENGTH = 20;
-
+const take = 20; //ここを編集したらInfiniteQueryのgetNextPageParamも編集する
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const userId = Number(url.searchParams.get("userId")) || 0; // クエリからidを取得
   const { searchParams } = new URL(request.url);
   const page = searchParams.get("page") ?? "0";
-  const skip = NOTIFICATION_TAKE_LENGTH * Number(page);
+  const skip = take * Number(page);
   try {
     const notifyList = await prisma.notification.findMany({
       where: {
         visited_id: userId,
       },
       skip,
-      take: NOTIFICATION_TAKE_LENGTH,
+      take,
       orderBy: {
         createdAt: "desc", // 作成日時の新しい順にソート
       },

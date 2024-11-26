@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-export const MAP_LIST_TAKE_LENGTH = 40;
+const MAP_LIST_TAKE_LENGTH = 40; //ここを編集したらInfiniteQueryのgetNextPageParamも編集する
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
