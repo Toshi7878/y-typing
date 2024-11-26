@@ -13,16 +13,11 @@ import { useSearchParams } from "next/navigation";
 import { QUERY_KEYS } from "@/config/consts";
 
 export const useGetGeminiMapInfoQuery = (videoId: string) => {
-  const setMapTitle = useSetMapTitleAtom();
-  const setMapArtistName = useSetMapArtistNameAtom();
-  const setMusicSouce = useSetEditMusicSourceAtom();
-  const setGeminiTags = useSetGeminiTagsAtom();
   const successToast = useSuccessToast();
   const searchParams = useSearchParams();
   const isNewCreate = !!searchParams.get("new");
-  const isBackUp = searchParams.get("backup") === "true";
 
-  const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
+  const { data, error, isLoading } = useQuery<GeminiMapInfo | null>({
     queryKey: QUERY_KEYS.generateMapInfoGemini(videoId),
     queryFn: async () => {
       const ytInfo = await axios.post<GetYouTubeMovieInfo | UploadResult>(
@@ -42,16 +37,8 @@ export const useGetGeminiMapInfoQuery = (videoId: string) => {
 
         const mapInfoData: GeminiMapInfo = JSON.parse(geminiMapInfo.data.message);
 
-        if (isNewCreate && !isBackUp) {
-          setMapTitle(mapInfoData.musicTitle);
-          setMapArtistName(mapInfoData.artistName);
-          setMusicSouce(mapInfoData.musicSource);
-        }
-
-        setGeminiTags(mapInfoData.otherTags);
+        return mapInfoData;
       }
-
-      return ytInfo.data;
     },
 
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再フェッチしない
@@ -59,5 +46,5 @@ export const useGetGeminiMapInfoQuery = (videoId: string) => {
     refetchOnMount: false, // マウント時に再フェッチしない
   });
 
-  return { isLoading };
+  return { isLoading, data };
 };

@@ -7,6 +7,7 @@ import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDow
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { RankingListType } from "@/app/type/ts/type";
+import { QUERY_KEYS } from "@/config/consts";
 
 const ReadyPracticeButton = () => {
   const { data: session } = useSession();
@@ -20,7 +21,9 @@ const ReadyPracticeButton = () => {
   const theme: ThemeColors = useTheme();
 
   const handleClick = useCallback(() => {
-    const result: RankingListType[] | undefined = queryClient.getQueryData(["mapRanking", mapId]);
+    const result: RankingListType[] | undefined = queryClient.getQueryData(
+      QUERY_KEYS.mapRanking(mapId),
+    );
     if (gameStateRef.current!.practice.hasMyRankingData && result) {
       for (let i = 0; i < result.length; i++) {
         if (userId === result[i].userId) {

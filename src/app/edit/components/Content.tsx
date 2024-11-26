@@ -13,21 +13,14 @@ import EditorTabContent from "./editor-tab-content/EditTabList";
 import {
   useIsLrcConvertingAtom,
   useSetCanUploadAtom,
-  useSetCreatorCommentAtom,
   useSetEditDirectEditCountAtom as useSetDirectEditCountAtom,
   useSetEditLineLyricsAtom,
   useSetEditLineSelectedCountAtom,
   useSetEditLineWordAtom,
-  useSetEditMusicSourceAtom,
-  useSetEditPreviewTimeInputAtom,
   useSetEditTimeCountAtom,
-  useSetGeminiTagsAtom,
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
-  useSetMapArtistNameAtom,
-  useSetMapTitleAtom,
-  useSetTagsAtom,
 } from "../edit-atom/editAtom";
 import ColorStyle from "./ColorStyle";
 import EditYouTube from "./editor-youtube-content/EditYoutube";
@@ -42,18 +35,11 @@ function Content() {
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
   const isLrcConverting = useIsLrcConvertingAtom();
-  const setMapTitle = useSetMapTitleAtom();
-  const setCreatorComment = useSetCreatorCommentAtom();
-  const setPreviewTime = useSetEditPreviewTimeInputAtom();
-  const setTags = useSetTagsAtom();
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setIsYTReady = useSetIsEditYTReadyAtom();
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setTimeCount = useSetEditTimeCountAtom();
   const setSelectedCount = useSetEditLineSelectedCountAtom();
-  const setGeminiTags = useSetGeminiTagsAtom();
-  const setArtistName = useSetMapArtistNameAtom();
-  const setMusicSouce = useSetEditMusicSourceAtom();
   const setLyrics = useSetEditLineLyricsAtom();
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
@@ -71,15 +57,15 @@ function Content() {
   }, [data, isLoading]);
 
   useEffect(() => {
+    setIsYTStarted(false);
+    setIsYTReady(false);
+    setIsYTPlaying(false);
+    setSelectedCount(null);
+    setTimeCount(0);
+
     if (!mapId) {
       //新規作成譜面に移動したら初期化
-      setMapTitle("");
-      setArtistName("");
-      setMusicSouce("");
-      setCreatorComment("");
-      setTags({ type: "reset" });
       dispatch(resetUndoRedoData());
-      setPreviewTime("");
     }
 
     if (isBackUp) {
@@ -95,12 +81,6 @@ function Content() {
       dispatch(resetMapData());
       setCanUpload(false);
     }
-    setIsYTStarted(false);
-    setIsYTReady(false);
-    setIsYTPlaying(false);
-    setSelectedCount(null);
-    setTimeCount(0);
-    setGeminiTags([]);
 
     return () => {
       setLyrics("");
@@ -127,7 +107,7 @@ function Content() {
         flexDirection="column"
         alignItems="center"
         paddingTop="55px"
-        width={"100vw"}
+        width="100vw"
       >
         <Box as="section" display="flex" flexDirection={{ base: "column", lg: "row" }} width="100%">
           <EditYouTube className="mt-1 md:mr-5 md:min-w-[416px] md:min-h-[234px] md:max-h-[234px]" />

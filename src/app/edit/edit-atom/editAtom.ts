@@ -1,4 +1,4 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
 import {
   ConvertOptionsType,
   EditTabIndex,
@@ -8,12 +8,13 @@ import {
 } from "../ts/type";
 import { Tag, YouTubeSpeed } from "@/types";
 import { atomWithReducer } from "jotai/utils"; // 追加
-import { getEditAtomStore } from "../components/EditProvider";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { DEFAULT_ADD_ADJUST_TIME } from "../ts/const/editDefaultValues";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-const editAtomStore = getEditAtomStore();
+
+const editAtomStore = createStore();
+export const getEditAtomStore = () => editAtomStore;
 
 const editTabIndexAtom = atom<EditTabIndex>(0);
 export const useTabIndexAtom = () => {
@@ -120,6 +121,7 @@ export const useSetTagsAtom = () => {
   return useSetAtom(editTagsAtom, { store: editAtomStore });
 };
 
+//編集権限の有無確認
 export const editCreatorIdAtom = atom<number | null>(null);
 
 export const useCreatorIdAtom = () => {

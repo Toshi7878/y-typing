@@ -18,6 +18,10 @@ import {
   useEditPreviewTimeInputAtom,
   useMapArtistNameAtom,
   useMapTitleAtom,
+  useSetEditMusicSourceAtom,
+  useSetGeminiTagsAtom,
+  useSetMapArtistNameAtom,
+  useSetMapTitleAtom,
   useTagsAtom,
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
@@ -27,6 +31,7 @@ import TypeLinkButton from "./tab-info-child/TypeLinkButton";
 import InfoTag from "./tab-info-child/InfoTag";
 import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
 import { useGetGeminiMapInfoQuery } from "@/app/edit/hooks/query/useGetGeminiMapInfoQuery";
+import { useEffect } from "react";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -43,12 +48,32 @@ const TabInfoUpload = () => {
   const theme: ThemeColors = useTheme();
   const searchParams = useSearchParams();
   const isNewCreate = !!searchParams.get("new");
+  const isBackUp = searchParams.get("backup") === "true";
+
   const videoId = useVideoIdAtom();
 
   const { playerRef } = useRefs();
   const { id: mapId } = useParams();
 
-  const { isLoading } = useGetGeminiMapInfoQuery(videoId);
+  const { data, isLoading } = useGetGeminiMapInfoQuery(videoId);
+
+  const setMapTitle = useSetMapTitleAtom();
+  const setMapArtistName = useSetMapArtistNameAtom();
+  const setMusicSouce = useSetEditMusicSourceAtom();
+  const setGeminiTags = useSetGeminiTagsAtom();
+
+  useEffect(() => {
+    if (data) {
+      if (isNewCreate && !isBackUp) {
+        setMapTitle(data.musicTitle);
+        setMapArtistName(data.artistName);
+        setMusicSouce(data.musicSource);
+      }
+
+      setGeminiTags(data.otherTags);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const upload = async () => {
     const map = new CreateMap(mapData);

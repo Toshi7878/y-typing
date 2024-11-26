@@ -5,28 +5,28 @@ import { RefsProvider } from "../edit-contexts/refsProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import editStore from "../redux/store";
 import { Provider as ReduxProvider } from "react-redux";
-import { createStore, Provider as JotaiProvider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
 import { GetInfoData } from "@/types/api";
 import {
   editCreatorCommentAtom,
   editCreatorIdAtom,
+  editGeminiTagsAtom,
   editMapArtistNameAtom,
   editMapTitleAtom,
   editMusicSourceAtom,
   editPreviewTimeInputAtom,
   editTagsAtom,
   editVideoIdAtom,
+  getEditAtomStore,
 } from "../edit-atom/editAtom";
 import { useSearchParams } from "next/navigation";
-import { EditorNewMapBackUpInfoData } from "../ts/type";
+import { EditorNewMapBackUpInfoData, GeminiMapInfo } from "../ts/type";
 import { IndexDBOption } from "@/types";
 import { db } from "@/lib/db";
 import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
+import { QUERY_KEYS } from "@/config/consts";
 
 const queryClient = new QueryClient();
-const editAtomStore = createStore();
-
-export const getEditAtomStore = () => editAtomStore;
 
 interface EditProviderProps {
   mapInfo?: GetInfoData;
@@ -34,12 +34,18 @@ interface EditProviderProps {
 }
 
 const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
+  const editAtomStore = getEditAtomStore();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const isBackUp = searchParams.get("backup") === "true";
 
   const globalAtomStore = getGlobalAtomStore();
   globalAtomStore.set(previewVideoIdAtom, null);
+  const geminiQueryData: GeminiMapInfo | undefined = queryClient.getQueryData(
+    QUERY_KEYS.generateMapInfoGemini(mapInfo ? mapInfo.videoId : newVideoId),
+  );
+
+  editAtomStore.set(editGeminiTagsAtom, geminiQueryData?.otherTags || []);
 
   if (mapInfo) {
     editAtomStore.set(editMapTitleAtom, mapInfo.title);
@@ -66,8 +72,8 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
 
             editAtomStore.set(editMapTitleAtom, backupMap.title);
             editAtomStore.set(editMapArtistNameAtom, backupMap.artistName);
-            editAtomStore.set(editCreatorCommentAtom, backupMap.creatorComment);
             editAtomStore.set(editMusicSourceAtom, backupMap.musicSource);
+            editAtomStore.set(editCreatorCommentAtom, backupMap.creatorComment);
             editAtomStore.set(editPreviewTimeInputAtom, backupMap.previewTime);
             editAtomStore.set(editTagsAtom, {
               type: "set",
@@ -75,6 +81,16 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
             });
           }
         });
+    } else {
+      //完全新規作成時
+      editAtomStore.set(editMapTitleAtom, geminiQueryData?.musicTitle || "");
+      editAtomStore.set(editMapArtistNameAtom, geminiQueryData?.artistName || "");
+      editAtomStore.set(editMusicSourceAtom, geminiQueryData?.musicSource || "");
+      editAtomStore.set(editCreatorCommentAtom, "");
+      editAtomStore.set(editPreviewTimeInputAtom, "");
+      editAtomStore.set(editTagsAtom, {
+        type: "reset",
+      });
     }
   }
 

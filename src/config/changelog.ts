@@ -1,5 +1,9 @@
 export const changelog = [
   {
+    date: "2024-11-26",
+    descriptions: ["譜面式作成時の情報生成の動作を改善"],
+  },
+  {
     date: "2024-11-25",
     descriptions: [
       "譜面一覧のいいねボタンにアニメーション追加",
