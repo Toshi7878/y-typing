@@ -41,6 +41,12 @@ export const MapResultBadges = ({ props }: ResultCardProps) => {
         </ResultBadge>
       </Stack>
       <Stack direction="row">
+        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.border.badge}>
+          {props.defaultSpeed.toFixed(2)}
+          <Text as="span" ml={1} letterSpacing={2}>
+            倍速
+          </Text>
+        </ResultBadge>
         <ResultBadge
           color={theme.colors.text.body}
           letterSpacing={1}
@@ -49,12 +55,6 @@ export const MapResultBadges = ({ props }: ResultCardProps) => {
           {props.kpm}
           <Text as="span" ml={1} letterSpacing={2}>
             kpm
-          </Text>
-        </ResultBadge>
-        <ResultBadge color={theme.colors.text.body} borderColor={theme.colors.border.badge}>
-          {props.defaultSpeed.toFixed(2)}
-          <Text as="span" ml={1} letterSpacing={2}>
-            倍速
           </Text>
         </ResultBadge>
       </Stack>
