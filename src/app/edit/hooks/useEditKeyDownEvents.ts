@@ -71,15 +71,20 @@ export const useWindowKeydownEvent = () => {
   const tbodyScroll = useTbodyScroll();
 
   return (event: KeyboardEvent) => {
-    const iS_FOCUS_TEXTAREA =
-      document.activeElement instanceof HTMLInputElement ||
-      document.activeElement instanceof HTMLTextAreaElement;
+    const IS_FOCUS_INPUT = document.activeElement instanceof HTMLInputElement;
+    const iS_FOCUS_TEXTAREA = document.activeElement instanceof HTMLTextAreaElement;
 
     if (event.key === "Tab") {
-      setTopLyricsText(undefined);
-      (document.activeElement as HTMLElement)?.blur();
+      if (!iS_FOCUS_TEXTAREA && !IS_FOCUS_INPUT) {
+        setTopLyricsText(undefined);
+      } else if (iS_FOCUS_TEXTAREA) {
+        if (!isAddButtonDisabled) {
+          lineAddButtonEvent(event.shiftKey);
+        }
+        (document.activeElement as HTMLElement)?.blur();
+      }
       event.preventDefault();
-    } else if (!iS_FOCUS_TEXTAREA) {
+    } else if (!iS_FOCUS_TEXTAREA && !IS_FOCUS_INPUT) {
       const player = playerRef!.current as any;
 
       switch (event.code) {
