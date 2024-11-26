@@ -22,15 +22,16 @@ const GeminiTagSuggestions = (props: GeminiTagSuggestionsProps) => {
     return (
       <Flex direction="column" wrap="wrap">
         <Stack direction="row" spacing={3} wrap="wrap">
-          {geminiTags.map((label, index) => {
-            const isSelected = tags.some((tag) => tag.id === label);
+          {geminiTags &&
+            geminiTags.map((label, index) => {
+              const isSelected = tags.some((tag) => tag.id === label);
 
-            if (isSelected) {
-              return "";
-            } else {
-              return <TagBadge key={index} label={label} bg="cyan.400" />;
-            }
-          })}
+              if (isSelected) {
+                return "";
+              } else {
+                return <TagBadge key={index} label={label} bg="cyan.400" />;
+              }
+            })}
         </Stack>
       </Flex>
     );
