@@ -24,6 +24,7 @@ import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
 import { QUERY_KEYS } from "@/config/consts";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -41,9 +42,13 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { isLoading } = useDownloadMapDataJsonQuery();
   const isLoadingOverlay = useIsLoadingOverlayAtom();
   const queryClient = useQueryClient();
+  const disableKeyHandle = useDisableKeyHandle();
 
   useEffect(() => {
+    window.addEventListener("keydown", disableKeyHandle);
+
     return () => {
+      window.removeEventListener("keydown", disableKeyHandle);
       // コンポーネントのアンマウント時にクエリキャッシュをクリア
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapRanking(mapId) });

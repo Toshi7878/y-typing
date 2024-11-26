@@ -199,11 +199,7 @@ export const usePlayShortcutKey = () => {
     const isCtrlAltLeftRight =
       userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
 
-    if (
-      disableKeys.includes(event.code) ||
-      (event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) ||
-      event.altKey
-    ) {
+    if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
       event.preventDefault();
     } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
       return;
