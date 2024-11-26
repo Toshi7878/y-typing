@@ -7,7 +7,9 @@ import NotifyDrawerInnerContent from "./child/NotifyDrawerInnerContent";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/config/consts";
 import { Bell, BellDot } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useClientNewNotifyCheck } from "@/lib/hooks/fetcher-hook/useClientNewNotifyCheck";
 
 interface NotifyBellProps {
   isNewNotification: boolean;
@@ -18,7 +20,8 @@ export default function NotifyBell({ isNewNotification }: NotifyBellProps) {
   const theme: ThemeColors = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure(); // Drawerの開閉状態を管理
   const queryClient = useQueryClient();
-
+  const router = useRouter();
+  const { data } = useClientNewNotifyCheck();
   const nofityDrawerClose = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notification });
     onClose();
@@ -30,6 +33,12 @@ export default function NotifyBell({ isNewNotification }: NotifyBellProps) {
     onOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      isSetNewBadge(true);
+    }
+  }, [router, data]);
   return (
     <>
       <CustomToolTip placement="bottom" tooltipLabel="通知" fontSize="xs" openDelay={600}>

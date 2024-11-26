@@ -25,6 +25,7 @@ export const QUERY_KEYS = {
   mapCreatedCheck: (videoId: string) => ["createdCheck", videoId] as const,
   notification: ["notification"] as const,
   generateMapInfoGemini: (videoId: string) => ["generate-gemini-map-info", videoId] as const,
+  clientNewNotifyCheck: ["client-new-notify-check"] as const,
 };
 
 export const PREVIEW_DISABLE_PATHNAMES = ["type", "edit"];

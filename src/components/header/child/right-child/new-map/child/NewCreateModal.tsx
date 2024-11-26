@@ -24,9 +24,6 @@ interface NewCreateModalProps {
   newCreateModalDisclosure: UseDisclosureReturn;
 }
 
-const BACKUP_OVERWRITE_WARNING =
-  "新規作成すると前回のバックアップデータが失われますがよろしいですか？";
-
 export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateModalProps) {
   const [createMapBackUpInfo, setCreateMapBackUpInfo] = useState({ title: "", videoId: "" });
   const [createYTURL, setCreateYTURL] = useState("");
