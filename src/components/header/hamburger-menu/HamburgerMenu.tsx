@@ -25,9 +25,10 @@ import NotifyBell from "../child/right-child/notify-bell/NotifyBell";
 
 interface HamburgerMenuProps {
   display: ResponsiveValue<string>;
+  isNewNotification: boolean;
 }
 
-const HamburgerMenu = ({ display }: HamburgerMenuProps) => {
+const HamburgerMenu = ({ display, isNewNotification }: HamburgerMenuProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const theme: ThemeColors = useTheme();
   const { data: session } = useSession();
@@ -36,7 +37,7 @@ const HamburgerMenu = ({ display }: HamburgerMenuProps) => {
   const menus = leftMenuItem.concat(leftLink);
   return (
     <Flex display={display} alignItems="center" gap={5}>
-      {session?.user?.id && <NotifyBell />}
+      {session?.user?.id && <NotifyBell isNewNotification={isNewNotification} />}
       <Menu>
         <MenuButton
           as={IconButton}

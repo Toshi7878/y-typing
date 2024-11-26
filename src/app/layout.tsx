@@ -34,7 +34,7 @@ export default async function RootLayout({
         <Analytics />
         <ThemeProvider colorMode={colorMode?.value}>
           <SessionProvider session={session}>
-            <Header />
+            <Header session={session} />
             <GlobalProvider>
               {children}
               <PreviewYouTubeContent />

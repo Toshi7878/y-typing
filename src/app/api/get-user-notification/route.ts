@@ -77,7 +77,7 @@ export async function GET(request: Request) {
       },
     });
 
-    prisma.notification.updateMany({
+    await prisma.notification.updateMany({
       where: {
         visited_id: userId,
         checked: false,

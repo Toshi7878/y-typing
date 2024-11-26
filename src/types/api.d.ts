@@ -30,3 +30,7 @@ type NotificationSelect = {
   };
   map: MapCardInfo;
 };
+
+interface NewNotificationCheck {
+  checked: boolean;
+}

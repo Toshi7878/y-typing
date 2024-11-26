@@ -4,7 +4,11 @@ import RightNav from "./child/RightNav";
 import { Flex, Box } from "@chakra-ui/react";
 import HamburgerMenu from "./hamburger-menu/HamburgerMenu";
 
-const HeaderContent = () => {
+interface HeaderContentProps {
+  isNewNotification: boolean;
+}
+
+const HeaderContent = ({ isNewNotification }: HeaderContentProps) => {
   return (
     <Box
       as="header"
@@ -22,8 +26,11 @@ const HeaderContent = () => {
         justifyContent="space-between"
       >
         <LeftNav />
-        <RightNav display={{ base: "none", md: "flex" }} />
-        <HamburgerMenu display={{ base: "flex", md: "none" }} />
+        <RightNav display={{ base: "none", md: "flex" }} isNewNotification={isNewNotification} />
+        <HamburgerMenu
+          display={{ base: "flex", md: "none" }}
+          isNewNotification={isNewNotification}
+        />
       </Flex>
     </Box>
   );
