@@ -1,7 +1,7 @@
 import { GameStateRef, Speed, Status } from "@/app/type/ts/type";
 import { Box, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { HAPPY_EMOJI } from "@/config/emoji";
 
 interface EndTextProps {
@@ -23,10 +23,10 @@ const EndText = ({
 }: EndTextProps) => {
   const playMode = gameStateRef.current!.playMode;
 
-  const getRandomEmoji = () => {
+  const getRandomEmoji = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * HAPPY_EMOJI.length);
     return HAPPY_EMOJI[randomIndex];
-  };
+  }, []);
 
   return (
     <Box textAlign="left" fontSize="3xl" mx={2} id="end_text">
@@ -46,7 +46,8 @@ const EndText = ({
         ) : status.score > bestScoreRef.current! ? (
           <>
             おめでとうございます！最高スコアが {bestScoreRef.current} から {status.score}{" "}
-            に更新されました！ {getRandomEmoji()}
+            に更新されました！ <Text as="span" fontFamily="Roboto, sans-serif"></Text>
+            {getRandomEmoji()}
           </>
         ) : (
           <>
@@ -60,4 +61,4 @@ const EndText = ({
   );
 };
 
-export default EndText;
+export default memo(EndText);
