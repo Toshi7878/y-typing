@@ -19,6 +19,7 @@ import {
   useMapArtistNameAtom,
   useMapTitleAtom,
   useTagsAtom,
+  useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useSession } from "next-auth/react";
 import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
@@ -41,12 +42,13 @@ const TabInfoUpload = () => {
   const previewTime = useEditPreviewTimeInputAtom();
   const theme: ThemeColors = useTheme();
   const searchParams = useSearchParams();
-  const isNewCreateMap = !!searchParams.get("new");
+  const isNewCreate = !!searchParams.get("new");
+  const videoId = useVideoIdAtom();
 
   const { playerRef } = useRefs();
-  const { id } = useParams();
+  const { id: mapId } = useParams();
 
-  const { isLoading } = useGetGeminiMapInfoQuery();
+  const { isLoading } = useGetGeminiMapInfoQuery(videoId);
 
   const upload = async () => {
     const map = new CreateMap(mapData);
@@ -74,7 +76,7 @@ const TabInfoUpload = () => {
     const result: UploadResult = await actions(
       sendData,
       mapData,
-      Array.isArray(id) ? id[0] : id || "new",
+      Array.isArray(mapId) ? mapId[0] : mapId || "new",
     );
 
     return result;
@@ -96,15 +98,15 @@ const TabInfoUpload = () => {
     >
       <CardBody>
         <Stack display="flex" flexDirection="column" gap="6">
-          <InfoInputForm isGeminiLoading={isLoading && isNewCreateMap} />
+          <InfoInputForm isGeminiLoading={isLoading && isNewCreate} />
           <InfoTag isGeminiLoading={isLoading} />
           <HStack justifyContent="space-between">
             {isDisplayUploadButton ? (
               <form action={formAction}>
                 <UploadButton state={state} />
-                {id ? <TypeLinkButton /> : ""}
+                {mapId ? <TypeLinkButton /> : ""}
               </form>
-            ) : id ? (
+            ) : mapId ? (
               <TypeLinkButton />
             ) : (
               ""

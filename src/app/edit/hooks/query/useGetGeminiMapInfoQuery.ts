@@ -7,29 +7,27 @@ import {
   useSetGeminiTagsAtom,
   useSetMapArtistNameAtom,
   useSetMapTitleAtom,
-  useVideoIdAtom,
 } from "../../edit-atom/editAtom";
 import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
 import { useSearchParams } from "next/navigation";
 import { QUERY_KEYS } from "@/config/consts";
 
-export const useGetGeminiMapInfoQuery = () => {
+export const useGetGeminiMapInfoQuery = (videoId: string) => {
   const setMapTitle = useSetMapTitleAtom();
   const setMapArtistName = useSetMapArtistNameAtom();
   const setMusicSouce = useSetEditMusicSourceAtom();
   const setGeminiTags = useSetGeminiTagsAtom();
   const successToast = useSuccessToast();
-  const videoId = useVideoIdAtom();
   const searchParams = useSearchParams();
-  const newVideoId = searchParams.get("new");
+  const isNewCreate = !!searchParams.get("new");
   const isBackUp = searchParams.get("backup") === "true";
 
   const { data, error, isLoading } = useQuery<GetYouTubeMovieInfo | UploadResult | null>({
-    queryKey: QUERY_KEYS.generateMapInfoGemini,
+    queryKey: QUERY_KEYS.generateMapInfoGemini(videoId),
     queryFn: async () => {
       const ytInfo = await axios.post<GetYouTubeMovieInfo | UploadResult>(
         `${process.env.NEXT_PUBLIC_API_URL}/api/get-youtube-channel-info`,
-        { videoId: newVideoId ? newVideoId : videoId },
+        { videoId },
       );
 
       if ("status" in ytInfo.data && ytInfo.data.status === 404) {
@@ -44,7 +42,7 @@ export const useGetGeminiMapInfoQuery = () => {
 
         const mapInfoData: GeminiMapInfo = JSON.parse(geminiMapInfo.data.message);
 
-        if (newVideoId && !isBackUp) {
+        if (isNewCreate && !isBackUp) {
           setMapTitle(mapInfoData.musicTitle);
           setMapArtistName(mapInfoData.artistName);
           setMusicSouce(mapInfoData.musicSource);
