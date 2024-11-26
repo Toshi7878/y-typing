@@ -19,6 +19,7 @@ function SiteLogo() {
         bg: `${theme.colors.secondary.main}30`,
       }}
       px={2}
+      userSelect="none"
     >
       <Text as="span" fontWeight="bold">
         Y
