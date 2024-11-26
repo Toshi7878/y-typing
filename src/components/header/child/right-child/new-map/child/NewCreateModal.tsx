@@ -29,6 +29,13 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
   const [createYTURL, setCreateYTURL] = useState("");
   const [newID, setNewID] = useState("");
   const createBtnRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (newCreateModalDisclosure.isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [newCreateModalDisclosure.isOpen]);
 
   useEffect(() => {
     db.editorNewCreateBak
@@ -53,7 +60,6 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
       <ModalOverlay />
       <CustomModalContent maxW="640px">
         <ModalHeader>譜面新規作成ウィンドウ</ModalHeader>
-        <ModalCloseButton />
         <ModalBody>
           <NewCreateVideoIdInputBox
             newCreateModalDisclosure={newCreateModalDisclosure}
@@ -61,6 +67,7 @@ export default function NewCreateModal({ newCreateModalDisclosure }: NewCreateMo
             createYTURL={createYTURL}
             setCreateYTURL={setCreateYTURL}
             setNewID={setNewID}
+            inputRef={inputRef}
           />
         </ModalBody>
 

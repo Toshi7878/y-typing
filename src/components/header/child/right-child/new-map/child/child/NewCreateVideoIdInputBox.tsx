@@ -10,6 +10,7 @@ interface NewCreateVideoIdInputBoxProps {
   createYTURL: string;
   setCreateYTURL: Dispatch<string>;
   setNewID: Dispatch<string>;
+  inputRef: React.RefObject<HTMLInputElement>;
 }
 
 export default function NewCreateVideoIdInputBox(props: NewCreateVideoIdInputBoxProps) {
@@ -17,6 +18,7 @@ export default function NewCreateVideoIdInputBox(props: NewCreateVideoIdInputBox
     <Box>
       譜面を作成したいYouTube動画のURLを入力
       <Input
+        ref={props.inputRef}
         value={props.createYTURL}
         placeholder="YouTube URLを入力"
         onChange={async (event) => {
