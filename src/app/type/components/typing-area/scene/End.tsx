@@ -19,28 +19,6 @@ interface EndProps {
   onOpen: () => void;
 }
 
-// const useDisplaySendRanking = () => {
-//   const { bestScoreRef, tabStatusRef, gameStateRef } = useRefs();
-//   const { data: session } = useSession();
-//   const speedData = useTypePageSpeedAtom();
-
-//   return () => {
-//     const status: Status = tabStatusRef.current!.getStatus();
-
-//     const isPerfect = status.miss === 0 && status.lost === 0;
-//     const isPlayingMode = gameStateRef.current!.playMode === "playing";
-
-//     const isScoreUpdated = status.score >= bestScoreRef.current;
-
-//     const isDisplayRankingButton: boolean =
-//       !!session &&
-//       status.score > 0 &&
-//       (isScoreUpdated || isPerfect) &&
-//       speedData.defaultSpeed >= 1 &&
-//       isPlayingMode;
-//   };
-// };
-
 const End = ({ onOpen }: EndProps) => {
   const { data: session } = useSession();
 
