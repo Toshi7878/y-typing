@@ -37,6 +37,7 @@ export const DEFAULT_GAME_STATE_REF: GameStateRef = {
   retryCount: 1,
   isSeekedLine: false,
   playMode: "playing" as PlayMode,
+  startPlaySpeed: 1, //練習モード→本番モード移行時の初期スピード設定 (1倍速以上)
   replay: {
     replayKeyCount: 0,
     userName: "",

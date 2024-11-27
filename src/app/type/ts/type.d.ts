@@ -95,6 +95,7 @@ export interface GameStateRef {
   retryCount: number;
   isSeekedLine: boolean;
   playMode: PlayMode;
+  startPlaySpeed: number;
   replay: {
     replayKeyCount: number;
     userName: string;

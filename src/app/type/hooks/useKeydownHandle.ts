@@ -6,12 +6,10 @@ import { CalcTypeSpeed } from "../ts/scene-ts/playing/calcTypeSpeed";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
-import { useRealTimeSpeedChange } from "@/app/type/hooks/playing-hooks/useSpeedChange";
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
 import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
 import { useChangePlayMode } from "@/app/type/hooks/playing-hooks/useChangePlayMode";
-import { useChangePracticeSpeed } from "@/app/type/hooks/playing-hooks/usePracticeSpeedChange";
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import {
   useInputModeAtom,
@@ -29,6 +27,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useSoundEffect } from "@/app/type/hooks/playing-hooks/useSoundEffect";
 import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../ts/const/typeDefaultValue";
+import { useVideoSpeedChange } from "./useVideoSpeedChange";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -155,34 +154,20 @@ export const useHandleTyping = () => {
   };
 };
 
-const disableKeys = [
-  "Home",
-  "End",
-  "PageUp",
-  "PageDown",
-  "CapsLock",
-  "Backquote",
-  "F3",
-  "F6",
-  "Space",
-];
-
 const keyWhiteList = ["F5"];
 
 export const usePlayShortcutKey = () => {
-  const { statusRef } = useRefs();
   const scene = useSceneAtom();
   const inputMode = useInputModeAtom();
   const userOptionsAtom = useUserOptionsAtom();
 
   const retry = useRetry();
   const pressSkip = usePressSkip();
-  const realTimeSpeedChange = useRealTimeSpeedChange();
   const gamePause = useGamePause();
   const inputModeChange = useInputModeChange();
   const toggleLineListDrawer = useToggleLineList();
   const changePlayMode = useChangePlayMode();
-  const changePracticeSpeed = useChangePracticeSpeed();
+  const { defaultSpeedChange, playingSpeedChange } = useVideoSpeedChange();
   const { movePrevLine, moveNextLine, moveSetLine } = useMoveLine();
   const setTimeOffset = useSetTimeOffsetAtom();
   const setNotify = useSetPlayingNotifyAtom();
@@ -262,21 +247,17 @@ export const usePlayShortcutKey = () => {
         changePlayMode(drawerClosure);
         event.preventDefault();
         break;
-      case "F9": //F9で低速(練習モード)
+      case "F9":
         if (scene === "practice") {
-          changePracticeSpeed("down");
+          defaultSpeedChange("down");
         }
         event.preventDefault();
         break;
       case "F10":
         if (scene === "playing") {
-          realTimeSpeedChange();
-          statusRef.current!.lineStatus.typeResult.push({
-            op: "speedChange",
-            t: Math.round(lineTime * 1000) / 1000,
-          });
+          playingSpeedChange();
         } else if (scene === "practice") {
-          changePracticeSpeed("up");
+          defaultSpeedChange("up");
         }
         event.preventDefault();
         break;

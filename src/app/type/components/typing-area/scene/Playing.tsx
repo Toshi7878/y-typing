@@ -1,5 +1,5 @@
 import PlayingCenter, { defaultLineWord, defaultNextLyrics } from "./playing-child/PlayingCenter";
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
   useInputModeAtom,
@@ -10,7 +10,6 @@ import {
   useSceneAtom,
   useSetLyricsAtom,
   useSetNextLyricsAtom,
-  useTimeOffsetAtom,
   useTypePageSpeedAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
@@ -25,6 +24,7 @@ import { useHandleTyping, usePlayShortcutKey } from "@/app/type/hooks/useKeydown
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
+import { useGetCurrentLineTime } from "@/app/type/hooks/useGetCurrentLineTime";
 
 interface PlayingProps {
   drawerClosure: UseDisclosureReturn;
@@ -39,7 +39,7 @@ const Playing = ({
   totalTimeProgressRef,
 }: PlayingProps) => {
   const { onOpen } = drawerClosure;
-  const { playerRef, statusRef, lineProgressRef, ytStateRef, playingTypingWordsRef } = useRefs();
+  const { statusRef, lineProgressRef, ytStateRef, playingTypingWordsRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
 
@@ -50,7 +50,7 @@ const Playing = ({
   const lineResults = useLineResultsAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
   const userOptionsAtom = useUserOptionsAtom();
-  const timeOffset = useTimeOffsetAtom();
+  const getCurrentLineTime = useGetCurrentLineTime();
 
   const gamePause = useGamePause();
   const toggleLineListDrawer = useToggleLineList();
@@ -72,10 +72,8 @@ const Playing = ({
         if (count - 1 < 0) {
           return;
         }
-        const prevLine = map!.mapData[count - 1];
-        const currentTime =
-          playerRef.current.getCurrentTime() - userOptionsAtom.timeOffset - timeOffset;
-        const lineTime = currentTime - Number(prevLine.time);
+
+        const lineTime = getCurrentLineTime();
 
         if (
           count - 1 == lineWord.lineCount &&

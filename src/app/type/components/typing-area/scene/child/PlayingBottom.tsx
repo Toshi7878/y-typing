@@ -10,10 +10,9 @@ import {
 import PlayingBottomBadge from "../playing-child/child/PlayingBottomBadge";
 import PlayingLineSeekBadge from "../playing-child/child/PlayingLineSeekBadge";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
-import { useRealTimeSpeedChange } from "@/app/type/hooks/playing-hooks/useSpeedChange";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
-import { useChangePracticeSpeed } from "@/app/type/hooks/playing-hooks/usePracticeSpeedChange";
+import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
 
 interface PlayingBottomRef {
   drawerClosure: UseDisclosureReturn;
@@ -32,9 +31,8 @@ const PlayingBottom = function ({
   const scene = useSceneAtom();
   const speedData = useTypePageSpeedAtom();
   const retry = useRetry();
-  const realTimeSpeedChange = useRealTimeSpeedChange();
   const toggleLineListDrawer = useToggleLineList();
-  const changePracticeSpeed = useChangePracticeSpeed();
+  const { defaultSpeedChange, playingSpeedChange } = useVideoSpeedChange();
   const { movePrevLine, moveNextLine } = useMoveLine();
   const userOptionsAtom = useUserOptionsAtom();
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
@@ -67,14 +65,14 @@ const PlayingBottom = function ({
             kbdTextPrev="F9-"
             kbdTextNext="+F10"
             onClick={() => {}}
-            onClickPrev={() => changePracticeSpeed("down")}
-            onClickNext={() => changePracticeSpeed("up")}
+            onClickPrev={() => defaultSpeedChange("down")}
+            onClickNext={() => defaultSpeedChange("up")}
           />
         ) : (
           <PlayingBottomBadge
             badgeText={speedData.playSpeed.toFixed(2) + "倍速"}
             kbdText="F10"
-            onClick={realTimeSpeedChange}
+            onClick={() => playingSpeedChange()}
             isPauseDisabled={true}
             isKbdHidden={scene === "replay" ? true : false}
           />

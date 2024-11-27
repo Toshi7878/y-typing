@@ -2,25 +2,22 @@ import {
   useSceneAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
-  useSetTypePageSpeedAtom,
-  useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
-import { DEFAULT_GAME_STATE_REF, DEFAULT_SPEED } from "../../ts/const/typeDefaultValue";
+import { DEFAULT_GAME_STATE_REF } from "../../ts/const/typeDefaultValue";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useRetry } from "./useRetry";
-import { YTSpeedController } from "../../ts/ytHandleEvents";
+import { useVideoSpeedChange } from "../useVideoSpeedChange";
 
 export const useChangePlayMode = () => {
-  const { gameStateRef, playerRef } = useRefs();
+  const { gameStateRef } = useRefs();
 
   const scene = useSceneAtom();
 
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const retry = useRetry();
-  const speedData = useTypePageSpeedAtom();
-  const setSpeedData = useSetTypePageSpeedAtom();
+  const { defaultSpeedChange } = useVideoSpeedChange();
 
   return (drawerClosure: UseDisclosureReturn) => {
     if (scene === "playing") {
@@ -38,15 +35,7 @@ export const useChangePlayMode = () => {
         setScene("playing");
         drawerClosure.onClose();
         retry();
-        if (speedData.defaultSpeed < 1) {
-          new YTSpeedController("setDefaultSpeed", {
-            setSpeedData,
-            playerRef: playerRef.current,
-            speed: 1,
-            defaultSpeed: 1,
-          });
-        }
-        setSpeedData(DEFAULT_SPEED);
+        defaultSpeedChange("set", gameStateRef.current?.startPlaySpeed);
       }
       setNotify(Symbol(""));
     }

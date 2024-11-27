@@ -17,12 +17,9 @@ import {
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import {
-  useRealTimeSpeedChange,
-  useSetRealTimeSpeed,
-} from "@/app/type/hooks/playing-hooks/useSpeedChange";
 import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
 import { useSoundEffect } from "../useSoundEffect";
+import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
 
 export const updateReplayStatus = (
   count: number,
@@ -83,7 +80,8 @@ const useKeyReplay = () => {
   const userOptionsAtom = useUserOptionsAtom();
 
   const inputModeChange = useInputModeChange();
-  const realTimeSpeedChange = useRealTimeSpeedChange();
+  const { playingSpeedChange } = useVideoSpeedChange();
+
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
   const { clearTypeSoundPlay, typeSoundPlay, missSoundPlay } = useSoundEffect();
@@ -170,7 +168,7 @@ const useKeyReplay = () => {
           inputModeChange("kana");
           break;
         case "speedChange":
-          realTimeSpeedChange();
+          playingSpeedChange();
           break;
       }
     }
@@ -209,7 +207,7 @@ export const useReplay = () => {
 export const useLineReplayUpdate = () => {
   const { gameStateRef } = useRefs();
   const lineResults = useLineResultsAtom();
-  const setRealTimeSpeed = useSetRealTimeSpeed();
+  const { playingSpeedChange } = useVideoSpeedChange();
   const inputModeChange = useInputModeChange();
 
   return (newCount: number) => {
@@ -218,7 +216,7 @@ export const useLineReplayUpdate = () => {
     const speed = lineResult.status!.sp;
 
     inputModeChange(lineInputMode);
-    setRealTimeSpeed(speed);
+    playingSpeedChange("set", speed);
 
     gameStateRef.current!.replay.replayKeyCount = 0;
   };
