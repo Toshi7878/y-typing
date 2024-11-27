@@ -40,3 +40,12 @@ export const usePreviewTimeAtom = () => {
 export const useSetPreviewTimeAtom = () => {
   return useSetAtom(previewTimeAtom, { store: globalAtomStore });
 };
+
+const previewSpeedAtom = atom<number | null>(null);
+
+export const usePreviewSpeedAtom = () => {
+  return useAtomValue(previewSpeedAtom, { store: globalAtomStore });
+};
+export const useSetPreviewSpeedAtom = () => {
+  return useSetAtom(previewSpeedAtom, { store: globalAtomStore });
+};

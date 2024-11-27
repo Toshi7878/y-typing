@@ -4,6 +4,7 @@ import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import {
   usePreviewVideoIdAtom,
+  useSetPreviewSpeedAtom,
   useSetPreviewTimeAtom,
   useSetPreviewVideoIdAtom,
 } from "@/components/atom/globalAtoms";
@@ -11,14 +12,16 @@ import {
 interface MapLeftThumbnailProps {
   mapVideoId: string;
   mapPreviewTime: string;
+  mapPreviewSpeed?: number;
 }
 const ThumbnailPreviewCover = (props: MapLeftThumbnailProps) => {
-  const { mapVideoId, mapPreviewTime } = props;
+  const { mapVideoId, mapPreviewTime, mapPreviewSpeed = 1 } = props;
   const videoId = usePreviewVideoIdAtom();
   const [isTouchMove, setIsTouchMove] = useState(false);
 
   const setVideoId = useSetPreviewVideoIdAtom();
   const setPreviewTime = useSetPreviewTimeAtom();
+  const setPreviewSpeed = useSetPreviewSpeedAtom();
 
   const previewYouTube = useCallback(
     () => {
@@ -29,6 +32,7 @@ const ThumbnailPreviewCover = (props: MapLeftThumbnailProps) => {
         setVideoId(null);
         setPreviewTime(null);
       }
+      setPreviewSpeed(mapPreviewSpeed);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [videoId],

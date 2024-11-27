@@ -1,15 +1,19 @@
 import { useParams } from "next/navigation";
 import { actions } from "../ts/scene-ts/end/send-result-server-actions";
-import { Status } from "../ts/type";
-import { useLineResultsAtom, useTypePageSpeedAtom } from "../type-atoms/gameRenderAtoms";
+import { LineResultData, Status } from "../ts/type";
+import { useLineResultsAtom } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
 
 export const useSendResult = () => {
   const { id: mapId } = useParams();
   const { statusRef, tabStatusRef } = useRefs();
-  const lineResults = useLineResultsAtom();
-
-  const speedData = useTypePageSpeedAtom();
+  const lineResults: LineResultData[] = useLineResultsAtom();
+  const minSp = lineResults.reduce((min, result) => {
+    if (result.status!.tTime !== 0) {
+      return Math.min(min, result.status!.sp);
+    }
+    return min;
+  }, Infinity);
 
   return async (): Promise<ReturnType<typeof actions>> => {
     const totalTypeTime = statusRef.current!.status.totalTypeTime;
@@ -28,7 +32,7 @@ export const useSendResult = () => {
       maxCombo: statusRef.current!.status.maxCombo,
       kpm: status.kpm,
       romaKpm: Math.round((kanaToRomaConvertCount / totalTypeTime) * 60),
-      defaultSpeed: speedData.defaultSpeed,
+      defaultSpeed: minSp,
       clearRate: +statusRef.current!.status.clearRate.toFixed(1),
     };
     const sendData = {

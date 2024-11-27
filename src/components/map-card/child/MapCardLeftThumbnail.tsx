@@ -11,6 +11,7 @@ interface MapLeftThumbnailProps {
   alt?: string;
   mapVideoId?: string;
   mapPreviewTime?: string;
+  mapPreviewSpeed?: number;
   thumbnailQuality?: "maxresdefault" | "mqdefault";
   thumnailWidth: Partial<Record<string, number>>;
   thumnailHeight: Partial<Record<string, number>>;
@@ -22,6 +23,7 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
     alt = "",
     mapVideoId,
     mapPreviewTime,
+    mapPreviewSpeed = 1,
     thumnailWidth,
     thumnailHeight,
   } = props;
@@ -66,7 +68,11 @@ const MapLeftThumbnail = (props: MapLeftThumbnailProps) => {
         <Box width={width} height={height} minW={width} minH={height} rounded="md" />
       )}
       {mapVideoId && mapPreviewTime && !PREVIEW_DISABLE_PATHNAMES.includes(pathSegment) && (
-        <ThumbnailPreviewCover mapPreviewTime={mapPreviewTime} mapVideoId={mapVideoId} />
+        <ThumbnailPreviewCover
+          mapPreviewTime={mapPreviewTime}
+          mapVideoId={mapVideoId}
+          mapPreviewSpeed={mapPreviewSpeed}
+        />
       )}
     </Box>
   );

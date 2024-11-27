@@ -2,6 +2,7 @@
 
 import YouTube from "react-youtube";
 import {
+  usePreviewSpeedAtom,
   usePreviewTimeAtom,
   usePreviewVideoIdAtom,
   useSetPreviewVideoIdAtom,
@@ -23,6 +24,7 @@ const PreviewYouTubeContent = function YouTubeContent() {
 
   const videoId = usePreviewVideoIdAtom();
   const previewTime = usePreviewTimeAtom();
+  const previewSpeed = usePreviewSpeedAtom();
   const volume = useVolumeAtom();
   const { setRef } = useGlobalRefs();
   const setPreviewVideoId = useSetPreviewVideoIdAtom();
@@ -57,6 +59,9 @@ const PreviewYouTubeContent = function YouTubeContent() {
     event.target.playVideo();
     setRef("playerRef", event.target);
   };
+  const onPlay = (event: any) => {
+    event.target.setPlaybackRate(previewSpeed);
+  };
 
   return (
     <Box position="fixed" bottom={fixedPosition} right={fixedPosition}>
@@ -76,6 +81,7 @@ const PreviewYouTubeContent = function YouTubeContent() {
           },
         }}
         onReady={onReady}
+        onPlay={onPlay}
       />
     </Box>
   );

@@ -51,6 +51,7 @@ const ResultInnerCardBody = (props: ResultInnerCardBodyProps) => {
             fallbackSrc={`https://i.ytimg.com/vi/${result.map.videoId}/mqdefault.jpg`}
             mapVideoId={result.map.videoId}
             mapPreviewTime={result.map.previewTime}
+            mapPreviewSpeed={result.defaultSpeed}
             thumbnailQuality={result.map.thumbnailQuality}
             thumnailWidth={TIMELINE_THUBNAIL_WIDTH}
             thumnailHeight={TIMELINE_THUBNAIL_HEIGHT}
