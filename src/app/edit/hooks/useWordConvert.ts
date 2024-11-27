@@ -29,9 +29,10 @@ export const addSymbol: string[] = [
   "＋",
   "/",
   "・",
-  "￥",
 ];
 export const addSymbolAll: string[] = [
+  "\\",
+  "￥",
   '"',
   "＂",
   "[",
@@ -177,31 +178,32 @@ class WordConvert {
     let result: string[] = [];
 
     for (let i = 0; i < LIST.length; i++) {
-      const IS_ZENKAKU = /^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i][0]);
-      const IS_ADD_SYMBOL = this.symbolList.includes(LIST[i][0].slice(0, 1));
-      const IS_SYMBOL = nonSymbol.concat(addSymbol).concat(addSymbolAll).includes(LIST[i][0]);
+      const char = { kanji: LIST[i][0].replace("\\\\", "\\"), kana: LIST[i][1] };
+      const IS_ZENKAKU = /^[^\x01-\x7E\xA1-\xDF]+$/.test(char.kanji);
+      const IS_ADD_SYMBOL = this.symbolList.includes(char.kanji.slice(0, 1));
+      const IS_SYMBOL = nonSymbol.concat(addSymbol).concat(addSymbolAll).includes(char.kanji);
       if (IS_ADD_SYMBOL) {
         //記号
         //半角の後にスペースがある場合はスペース挿入
-        if (this.convertMode != "add_symbol_all" && LIST[i][0] == " ") {
+        if (this.convertMode != "add_symbol_all" && char.kanji == " ") {
           const IS_HANKAKU = !/^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i - 1][0]);
           const IS_NEXT_ZENKAKU = /^[^\x01-\x7E\xA1-\xDF]+$/.test(LIST[i + 1]?.[0][0] ?? "");
           if (IS_HANKAKU && !IS_NEXT_ZENKAKU) {
-            result.push(LIST[i][0]);
+            result.push(char.kanji);
           }
         } else {
-          result.push(LIST[i][0]);
+          result.push(char.kanji);
         }
       } else if (IS_ZENKAKU) {
         // 全角文字の時の処理を記述
-        result.push(this.kanaToHira(LIST[i][1]));
+        result.push(this.kanaToHira(char.kana));
       } else {
         // 半角文字の時の処理を記述
         const NON_ADD_SYMBOL = !IS_ADD_SYMBOL && IS_SYMBOL;
         if (NON_ADD_SYMBOL) {
           continue;
         }
-        result.push(LIST[i][0].replace("\\\\", "\\"));
+        result.push(char.kanji);
       }
     }
 
