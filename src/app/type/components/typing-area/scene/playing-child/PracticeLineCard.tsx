@@ -1,5 +1,5 @@
 import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
-import { useInteractJS } from "@/app/type/ts/scene-ts/hooks";
+import { useInteractJS } from "@/app/type/hooks/useInteractJS";
 import { ThemeColors } from "@/types";
 import ResultCardBody from "../result/child/child/ResultCardBody";
 import {
