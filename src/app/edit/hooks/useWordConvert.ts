@@ -158,7 +158,10 @@ class WordConvert {
 
       const responseData = await response.json();
 
-      let LIST = responseData.word_list.flat().slice(1, -1);
+      let LIST = responseData.word_list
+        .flat()
+        .slice(1, -1)
+        .filter((charAry: string[]) => charAry[0] !== "\\");
 
       return this.createWord(LIST).join("");
     } catch (error: unknown) {
