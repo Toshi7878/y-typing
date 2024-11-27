@@ -1,6 +1,6 @@
 "use client";
 import "../../style/type.scss";
-import React, { RefObject, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
 import {
@@ -22,23 +22,17 @@ import {
 import ResultDrawer from "./scene/result/ResultDrawer";
 import PlayingTop from "./scene/child/PlayingTop";
 import PlayingBottom from "./scene/child/PlayingBottom";
-import { PlayingLineTimeRef } from "./scene/playing-child/child/PlayingLineTime";
-import { PlayingTotalTimeRef } from "./scene/playing-child/child/PlayingTotalTime";
-import { SkipGuideRef } from "./scene/playing-child/child/PlayingSkipGuide";
 import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
 import { ThemeColors } from "@/types";
 
 interface TypingCardBodyProps {
   drawerClosure: UseDisclosureReturn;
-  playingTotalTimeRef: RefObject<PlayingTotalTimeRef>;
-  skipGuideRef: RefObject<SkipGuideRef>;
-  totalTimeProgressRef: RefObject<HTMLProgressElement>;
 }
 
 export const CARD_BODY_MIN_HEIGHT = "320px";
 
 const TypingCardBody = (props: TypingCardBodyProps) => {
-  const { drawerClosure, playingTotalTimeRef, skipGuideRef, totalTimeProgressRef } = props;
+  const { drawerClosure } = props;
   const scene = useSceneAtom();
   const map = useMapAtom();
   const { isOpen, onOpen } = drawerClosure;
@@ -59,12 +53,7 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
         <Ready />
       ) : isPlayed && map ? (
         <>
-          <Playing
-            drawerClosure={drawerClosure}
-            playingTotalTimeRef={playingTotalTimeRef}
-            skipGuideRef={skipGuideRef}
-            totalTimeProgressRef={totalTimeProgressRef}
-          />
+          <Playing drawerClosure={drawerClosure} />
 
           {isOpen && <ResultDrawer drawerClosure={drawerClosure} />}
           {lineSelectIndex !== null && scene === "practice" && <PracticeLineCard />}
@@ -88,12 +77,7 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
 
 function TypingCard() {
   const theme: ThemeColors = useTheme();
-  const lineProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingLineTimeRef = useRef<PlayingLineTimeRef>(null);
   const drawerClosure = useDisclosure();
-  const totalTimeProgressRef = useRef<HTMLProgressElement | null>(null);
-  const playingTotalTimeRef = useRef<PlayingTotalTimeRef>(null);
-  const skipGuideRef = useRef<SkipGuideRef>(null);
 
   return (
     <Card
@@ -104,21 +88,11 @@ function TypingCard() {
       boxShadow="lg"
     >
       <CardHeader py={0} mx={3}>
-        <PlayingTop lineProgressRef={lineProgressRef} PlayingRemainTimeRef={playingLineTimeRef} />
+        <PlayingTop />
       </CardHeader>
-      <TypingCardBody
-        drawerClosure={drawerClosure}
-        totalTimeProgressRef={totalTimeProgressRef}
-        playingTotalTimeRef={playingTotalTimeRef}
-        skipGuideRef={skipGuideRef}
-      />
+      <TypingCardBody drawerClosure={drawerClosure} />
       <CardFooter py={0} mx={3} flexDirection="column">
-        <PlayingBottom
-          drawerClosure={drawerClosure}
-          skipGuideRef={skipGuideRef}
-          totalTimeProgressRef={totalTimeProgressRef}
-          playingTotalTimeRef={playingTotalTimeRef}
-        />
+        <PlayingBottom drawerClosure={drawerClosure} />
       </CardFooter>
     </Card>
   );

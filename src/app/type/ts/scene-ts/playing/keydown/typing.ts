@@ -10,11 +10,17 @@ import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWor
 import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
+  lineWordAtom,
+  useComboAtom,
   useInputModeAtom,
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
+  useSetComboAtom,
+  useSetDisplayLineKpmAtom,
+  useSetLineWordAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useStore } from "jotai";
 
 const keyboardCharacters = [
   "0",
@@ -584,16 +590,20 @@ export class Typing {
 }
 
 export const useTypeSuccess = () => {
-  const { playingComboRef, statusRef, playingTypingWordsRef, playingLineTimeRef } = useRefs();
+  const { statusRef } = useRefs();
 
   const inputMode = useInputModeAtom();
   const rankingScores = useRankingScoresAtom();
   const map = useMapAtom() as CreateMap;
   const scene = useSceneAtom();
+  const combo = useComboAtom();
+  const setLineWord = useSetLineWordAtom();
+  const setDisplayLineKpm = useSetDisplayLineKpmAtom();
+  const setCombo = useSetComboAtom();
 
   const updateSuccessStatus = ({
     newLineWord,
-    lineRemainTime,
+    lineRemainConstantTime,
     updatePoint,
     totalKpm,
     status,
@@ -609,7 +619,7 @@ export const useTypeSuccess = () => {
     newStatus.type++;
 
     if (!newLineWord.nextChar["k"]) {
-      const timeBonus = Math.round(lineRemainTime * 1 * 100);
+      const timeBonus = Math.round(lineRemainConstantTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
       newStatus.score += newStatus.point + timeBonus;
       newStatus.line =
@@ -621,15 +631,15 @@ export const useTypeSuccess = () => {
     return newStatus;
   };
 
-  const updateSuccessRefStatus = ({ lineConstantTime, newLineWord, successKey, newLineKpm }) => {
+  const updateSuccessRefStatus = ({ constantLineTime, newLineWord, successKey, newLineKpm }) => {
     if (statusRef.current!.lineStatus.lineType === 0) {
-      statusRef.current!.lineStatus.latency = lineConstantTime;
+      statusRef.current!.lineStatus.latency = constantLineTime;
     }
 
     statusRef.current!.status.missCombo = 0;
-    const newCombo = playingComboRef.current!.getCombo() + 1;
+    const newCombo = combo + 1;
 
-    playingComboRef.current?.setCombo(newCombo);
+    setCombo(newCombo);
 
     if (newCombo > statusRef.current!.status.maxCombo) {
       statusRef.current!.status.maxCombo = newCombo;
@@ -647,7 +657,7 @@ export const useTypeSuccess = () => {
 
     //ライン打ち切り
     if (!newLineWord.nextChar["k"]) {
-      statusRef.current!.lineStatus.lineClearTime = lineConstantTime;
+      statusRef.current!.lineStatus.lineClearTime = constantLineTime;
       statusRef.current!.status.completeCount++;
     }
 
@@ -655,12 +665,12 @@ export const useTypeSuccess = () => {
       statusRef.current!.lineStatus.typeResult.push({
         c: successKey,
         is: true,
-        t: lineConstantTime,
+        t: constantLineTime,
       });
     }
 
-    playingTypingWordsRef.current!.setLineWord(newLineWord);
-    playingLineTimeRef.current?.setLineKpm(newLineKpm);
+    setLineWord(newLineWord);
+    setDisplayLineKpm(newLineKpm);
   };
 
   return { updateSuccessStatus, updateSuccessStatusRefs: updateSuccessRefStatus };
@@ -673,9 +683,9 @@ export function getRank(scores: number[], currentScore: number): number {
 }
 
 export const useTypeMiss = () => {
-  const { playingComboRef, statusRef } = useRefs();
-
+  const { statusRef } = useRefs();
   const map = useMapAtom() as CreateMap;
+  const setCombo = useSetComboAtom();
 
   const updateMissStatus = (status: Status) => {
     const newStatus = { ...status };
@@ -686,33 +696,38 @@ export const useTypeMiss = () => {
     return newStatus;
   };
 
-  const updateMissRefStatus = ({ lineConstantTime, failKey }) => {
+  const updateMissRefStatus = ({ constantLineTime, failKey }) => {
     statusRef.current!.status.clearRate -= map.missRate;
     statusRef.current!.lineStatus.typeResult.push({
       c: failKey,
-      t: lineConstantTime,
+      t: constantLineTime,
     });
     statusRef.current!.lineStatus.lineMiss++;
     statusRef.current!.status.missCombo++;
-    playingComboRef.current?.setCombo(0);
+    setCombo(0);
   };
 
   return { updateMissStatus, updateMissRefStatus };
 };
 
-export function isTyped({ event, lineWord }: TypingEvent) {
-  const KEY_CODE = event.keyCode;
-  const CODE = event.code;
+export const useIsKeydownTyped = () => {
+  const typeAtomStore = useStore();
 
-  // isTyped
-  const IS_TYPE =
-    (KEY_CODE >= 65 && KEY_CODE <= 90) || CODES.includes(CODE) || TENKEYS.includes(CODE);
-  //event.keyが"Process"になるブラウザの不具合が昔はあったので場合によっては追加する
-  //ChatGPT「'Process' キーは通常、国際的なキーボードで入力方法やプロセスのキーを指すために使用されます。」
+  return (event: KeyboardEvent) => {
+    const KEY_CODE = event.keyCode;
+    const CODE = event.code;
 
-  const ACTIVE_ELEMENT = document.activeElement as HTMLInputElement;
-  const HAS_FOCUS = ACTIVE_ELEMENT && ACTIVE_ELEMENT.type != "text";
-  const KANA = lineWord.nextChar["k"];
+    const IS_TYPE =
+      (KEY_CODE >= 65 && KEY_CODE <= 90) || CODES.includes(CODE) || TENKEYS.includes(CODE);
+    //event.keyが"Process"になるブラウザの不具合が昔はあったので場合によっては追加する
+    //ChatGPT「'Process' キーは通常、国際的なキーボードで入力方法やプロセスのキーを指すために使用されます。」
 
-  return IS_TYPE && HAS_FOCUS && KANA;
-}
+    const ACTIVE_ELEMENT = document.activeElement as HTMLInputElement;
+    const HAS_FOCUS = ACTIVE_ELEMENT && ACTIVE_ELEMENT.type != "text";
+    const lineWord = typeAtomStore.get(lineWordAtom);
+
+    const KANA = lineWord.nextChar["k"];
+
+    return IS_TYPE && HAS_FOCUS && KANA;
+  };
+};

@@ -1,29 +1,36 @@
 import {
-  useInputModeAtom,
+  inputModeAtom,
+  lineWordAtom,
+  sceneAtom,
+  speedAtom,
   useMapAtom,
+  userOptionsAtom,
   useSetInputModeAtom,
-  useSetLyricsAtom,
+  useSetLineWordAtom,
   useSetNextLyricsAtom,
   useSetPlayingNotifyAtom,
-  useTypePageSpeedAtom,
-  useUserOptionsAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
 import { romaConvert } from "../../ts/scene-ts/ready/createTypingWord";
 import { InputModeType } from "../../ts/type";
+import { useGetTime } from "../useGetTime";
+import { useStore } from "jotai";
 
 export const useInputModeChange = () => {
-  const { playingTypingWordsRef, statusRef } = useRefs();
+  const { statusRef } = useRefs();
 
   const map = useMapAtom();
-  const speedData = useTypePageSpeedAtom();
-  const inputMode = useInputModeAtom();
+  const typeAtomStore = useStore();
+
   const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
-  const userOptions = useUserOptionsAtom();
   const setNextLyrics = useSetNextLyricsAtom();
+  const { getCurrentLineTime, getCurrentOffsettedYTTime } = useGetTime();
+  const setLineWord = useSetLineWordAtom();
 
-  return (newInputMode: InputModeType, lineTime?: number) => {
+  return (newInputMode: InputModeType) => {
+    const inputMode = typeAtomStore.get(inputModeAtom);
+
     if (newInputMode === inputMode) {
       return;
     }
@@ -34,12 +41,12 @@ export const useInputModeChange = () => {
       setNotify(Symbol("KanaMode"));
     } else {
       setNotify(Symbol("Romaji"));
-      const lineWord = playingTypingWordsRef.current!.getLineWord();
+      const lineWord = typeAtomStore.get(lineWordAtom);
 
       if (lineWord.nextChar["k"]) {
         const wordFix = romaConvert(lineWord);
 
-        playingTypingWordsRef.current!.setLineWord({
+        setLineWord({
           correct: lineWord.correct,
           nextChar: wordFix.nextChar,
           word: wordFix.word,
@@ -50,17 +57,25 @@ export const useInputModeChange = () => {
 
     const count = statusRef.current!.status.count;
     const nextLine = map!.mapData[count];
+    const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
+
     const nextKpm =
       (newInputMode === "roma" ? map!.mapData[count].kpm["r"] : map!.mapData[count].kpm["k"]) *
-      speedData.playSpeed;
+      playSpeed;
     if (nextKpm) {
+      const userOptions = typeAtomStore.get(userOptionsAtom);
+
       setNextLyrics({
         lyrics: userOptions.nextDisplay === "word" ? nextLine.kanaWord : nextLine["lyrics"],
         kpm: nextKpm.toFixed(0),
       });
     }
 
-    if (lineTime) {
+    const scene = typeAtomStore.get(sceneAtom);
+
+    if (scene === "playing") {
+      const lineTime = getCurrentLineTime(getCurrentOffsettedYTTime());
+
       statusRef.current!.lineStatus.typeResult.push({
         op: newInputMode,
         t: Math.round(lineTime * 1000) / 1000,

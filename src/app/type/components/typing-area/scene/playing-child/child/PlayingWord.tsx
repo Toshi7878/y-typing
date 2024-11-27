@@ -1,6 +1,6 @@
 import { ThemeColors } from "@/types";
 import { Box, Text, useTheme } from "@chakra-ui/react";
-import React, { memo } from "react";
+import React from "react";
 
 interface WordProps {
   correct: string;
@@ -36,6 +36,5 @@ const PlayingWord = ({ correct, nextChar, word, className, id = "" }: WordProps)
     </Box>
   );
 };
-PlayingWord.displayName = "PlayingWord";
 
-export default memo(PlayingWord);
+export default PlayingWord;

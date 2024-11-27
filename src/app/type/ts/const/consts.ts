@@ -1,4 +1,4 @@
-import { Status } from "../type";
+import { NextLyricsType, Status, WordType } from "../type";
 
 export const RANKING_COLUMN_WIDTH = {
   rank: "7%",
@@ -26,4 +26,16 @@ export const DEFAULT_STATUS: Status = {
   kpm: 0,
   rank: 1,
   line: 0,
+};
+
+export const defaultLineWord: WordType = {
+  correct: { k: "", r: "" },
+  nextChar: { k: "", r: [""], p: 0 },
+  word: [{ k: "", r: [""], p: 0 }],
+  lineCount: 0,
+};
+
+export const defaultNextLyrics: NextLyricsType = {
+  lyrics: "",
+  kpm: "",
 };

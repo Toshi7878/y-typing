@@ -441,7 +441,7 @@ export class CreateMap {
         }
         lineLength++;
         typingLineNumbers.push(i);
-        const remainTime = +data[i + 1]["time"] - +time;
+        const remainTime = Number(data[i + 1]["time"]) - Number(time);
 
         const createLineWord = new TypingWord(wordRomaMap[i] as [string, ...string[]]);
 

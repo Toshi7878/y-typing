@@ -1,24 +1,22 @@
 import { Ticker } from "@pixi/ticker";
-import {
-  useSceneAtom,
-  useSetPlayingNotifyAtom,
-  useSetSceneAtom,
-} from "../type-atoms/gameRenderAtoms";
+import { sceneAtom, useSetPlayingNotifyAtom, useSetSceneAtom } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
 import { useUpdateLine } from "./playing-hooks/timer-hooks/useTimer";
 import NProgress from "nprogress";
 import { useGetSeekLineCount } from "./playing-hooks/timer-hooks/useSeekGetLineCount";
 import { useVolumeAtom } from "@/components/atom/globalAtoms";
+import { useStore } from "jotai";
 
 export const typeTicker = new Ticker();
 
 export const useYTPlayEvent = () => {
   const { ytStateRef, playerRef, gameStateRef } = useRefs();
-  const scene = useSceneAtom();
+  const typeAtomStore = useStore();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
   return () => {
     console.log("再生 1");
+    const scene = typeAtomStore.get(sceneAtom);
 
     if (scene === "ready") {
       if (ytStateRef.current) {
@@ -97,13 +95,14 @@ export const useYTPauseEvent = () => {
 
 export const useYTSeekEvent = () => {
   const { gameStateRef, statusRef, playerRef } = useRefs();
-  const scene = useSceneAtom();
+  const typeAtomStore = useStore();
   const updateLine = useUpdateLine();
   const getSeekLineCount = useGetSeekLineCount();
 
   return () => {
     const time = playerRef.current.getCurrentTime();
 
+    const scene = typeAtomStore.get(sceneAtom);
     if (scene === "replay" || scene === "practice") {
       const isSeekedLine = gameStateRef.current!.isSeekedLine;
 
@@ -135,7 +134,6 @@ export const useYTReadyEvent = () => {
     const player = event.target;
     NProgress.done();
     setRef("playerRef", player);
-    console.log("ready");
     player.setVolume(volumeAtom);
   };
 };

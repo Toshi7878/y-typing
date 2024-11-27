@@ -1,35 +1,46 @@
 import { Box, useTheme } from "@chakra-ui/react";
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect } from "react";
 import PlayingWord from "./PlayingWord";
-import { useInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useInputModeAtom,
+  useLineResultsAtom,
+  useLineSelectIndexAtom,
+  useLineWordAtom,
+  useMapAtom,
+  useRankingScoresAtom,
+  useSceneAtom,
+  useSkipAtom,
+  useUserOptionsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { defaultLineWord } from "../PlayingCenter";
-import { WordType } from "@/app/type/ts/type";
+import { useHandleKeydown } from "@/app/type/hooks/playing-hooks/keydown-hooks/useHandleKeydown";
+import { usePlayTimer } from "@/app/type/hooks/playing-hooks/timer-hooks/useTimer";
+import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
 
-export interface PlayingTypingWordsRef {
-  setLineWord: (newLineWord: WordType) => void;
-  getLineWord: () => WordType;
-}
-
-const PlayingTypingWords = forwardRef<PlayingTypingWordsRef>((props, ref) => {
-  const { setRef } = useRefs();
-  const [lineWord, setLineWord] = useState(structuredClone(defaultLineWord));
-
-  useEffect(() => {
-    if (ref && "current" in ref) {
-      setRef("playingTypingWordsRef", ref.current!);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lineWord]);
-
-  useImperativeHandle(ref, () => ({
-    setLineWord: (newLineWord) => setLineWord(newLineWord),
-    getLineWord: () => lineWord,
-  }));
-
+const PlayingTypingWords = () => {
+  const lineWord = useLineWordAtom();
   const inputMode = useInputModeAtom();
   const theme: ThemeColors = useTheme();
+  const playTimer = usePlayTimer();
+
+  const handleKeydown = useHandleKeydown();
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    typeTicker.add(playTimer);
+
+    return () => {
+      typeTicker.remove(playTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box
@@ -55,8 +66,6 @@ const PlayingTypingWords = forwardRef<PlayingTypingWordsRef>((props, ref) => {
       />
     </Box>
   );
-});
-
-PlayingTypingWords.displayName = "PlayingTypingWords";
+};
 
 export default PlayingTypingWords;

@@ -1,11 +1,10 @@
+import { useLyricsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
-import React, { memo } from "react";
+import React from "react";
 
-interface LyricsProps {
-  lyrics: string;
-}
+const PlayingLyrics = () => {
+  const lyrics = useLyricsAtom();
 
-const PlayingLyrics = ({ lyrics }: LyricsProps) => {
   return (
     <Box
       isTruncated
@@ -22,4 +21,4 @@ const PlayingLyrics = ({ lyrics }: LyricsProps) => {
 };
 PlayingLyrics.displayName = "PlayingLyrics";
 
-export default memo(PlayingLyrics);
+export default PlayingLyrics;

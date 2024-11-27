@@ -18,6 +18,7 @@ import {
   PREVIEW_YOUTUBE_POSITION,
   PREVIEW_YOUTUBE_WIDTH,
 } from "@/config/consts";
+import { RESET } from "jotai/utils";
 
 const PreviewYouTubeContent = function YouTubeContent() {
   const router = useRouter(); // 追加

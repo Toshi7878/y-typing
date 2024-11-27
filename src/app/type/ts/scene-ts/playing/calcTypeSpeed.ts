@@ -1,34 +1,46 @@
-import { Status, StatusRef } from "../../type";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 
-export class CalcTypeSpeed {
-  lineKpm: number;
-  lineRkpm: number;
-  totalKpm: number;
-  constructor(
-    updateText: "keydown" | "timer" = "timer",
-    status: Status,
-    lineConstantTime: number,
-    statusRef: React.RefObject<StatusRef>,
-  ) {
-    const lineTypeCount =
-      updateText === "keydown"
-        ? statusRef.current!.lineStatus.lineType + 1
-        : statusRef.current!.lineStatus.lineType;
-    const totalTypeCount = updateText === "keydown" ? status.type + 1 : status.type;
-    this.lineKpm = lineConstantTime ? Math.round((lineTypeCount / lineConstantTime) * 60) : 0;
+export const useCalcTypeSpeed = () => {
+  const { statusRef } = useRefs();
+
+  const calcLineKpm = ({ constantLineTime, newLineTypeCount }) => {
+    const lineKpm = constantLineTime ? Math.round((newLineTypeCount / constantLineTime) * 60) : 0;
+    return lineKpm;
+  };
+
+  const calcLineRkpm = ({ lineKpm, newLineTypeCount, rkpmTime }) => {
+    const lineRkpm =
+      newLineTypeCount != 0 ? Math.round((newLineTypeCount / rkpmTime) * 60) : lineKpm;
+    return lineRkpm;
+  };
+
+  const calcTotalKpm = ({ newTotalTypeCount, totalTypeTime }) => {
+    return totalTypeTime ? Math.round((newTotalTypeCount / totalTypeTime) * 60) : 0;
+  };
+
+  return ({
+    updateType = "timer",
+    constantLineTime,
+    totalTypeCount,
+  }: {
+    updateType: "keydown" | "timer";
+    constantLineTime: number;
+    totalTypeCount: number;
+  }) => {
+    const lineTypeCount = statusRef.current!.lineStatus.lineType;
+    const newLineTypeCount = updateType === "keydown" ? lineTypeCount + 1 : lineTypeCount;
+
+    const newTotalTypeCount = updateType === "keydown" ? totalTypeCount + 1 : totalTypeCount;
+    const lineKpm = calcLineKpm({ constantLineTime, newLineTypeCount });
 
     const lineLatency = statusRef.current!.lineStatus.latency;
-    const rkpmTime = lineConstantTime - lineLatency;
-    this.lineRkpm = lineTypeCount != 0 ? Math.round((lineTypeCount / rkpmTime) * 60) : this.lineKpm;
-    this.totalKpm = this.updateTotalKpm(totalTypeCount, lineConstantTime, statusRef);
-  }
+    const rkpmTime = constantLineTime - lineLatency;
 
-  private updateTotalKpm(
-    totalTypeCount: number,
-    lineConstantTime: number,
-    statusRef: React.RefObject<StatusRef>,
-  ) {
-    const totalTypeTime = lineConstantTime + statusRef.current!.status.totalTypeTime;
-    return totalTypeTime ? Math.round((totalTypeCount / totalTypeTime) * 60) : 0;
-  }
-}
+    const lineRkpm = calcLineRkpm({ rkpmTime, newLineTypeCount, lineKpm });
+    const totalTypeTime = constantLineTime + statusRef.current!.status.totalTypeTime;
+
+    const totalKpm = calcTotalKpm({ newTotalTypeCount, totalTypeTime });
+
+    return { lineKpm, lineRkpm, totalKpm };
+  };
+};

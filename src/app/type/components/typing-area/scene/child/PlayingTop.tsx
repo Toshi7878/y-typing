@@ -1,20 +1,13 @@
-import { Box, HStack } from "@chakra-ui/react";
-import PlayingLineProgress from "../playing-child/child/PlayingLineProgress";
+import { HStack } from "@chakra-ui/react";
+import PlayingProgress from "../playing-child/child/PlayingProgress";
 
-import PlayingCombo from "../playing-child/child/PlayingCombo";
-import PlayingLineTime, { PlayingLineTimeRef } from "../playing-child/child/PlayingLineTime";
-import PlayingNotify from "../playing-child/child/PlayingNotify";
-import { useRef } from "react";
+import PlayingCombo from "./top-child/PlayingCombo";
+import PlayingLineTime from "./top-child/PlayingLineTime";
+import PlayingNotify from "./top-child/PlayingNotify";
 import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
-interface PlayingTopProps {
-  lineProgressRef: React.RefObject<HTMLProgressElement>;
-  PlayingRemainTimeRef: React.RefObject<PlayingLineTimeRef>;
-}
-function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) {
+function PlayingTop() {
   const scene = useSceneAtom();
-
-  const playingComboRef = useRef(null);
 
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
@@ -29,11 +22,11 @@ function PlayingTop({ lineProgressRef, PlayingRemainTimeRef }: PlayingTopProps) 
         fontFamily="mono"
         className={`${isPlayed ? "" : "invisible"} top-card-text`}
       >
-        <PlayingCombo className="text-3xl" ref={playingComboRef} />
-        <PlayingNotify className="text-3xl text-center" />
-        <PlayingLineTime className="text-3xl" ref={PlayingRemainTimeRef} />
+        <PlayingCombo />
+        <PlayingNotify />
+        <PlayingLineTime />
       </HStack>
-      <PlayingLineProgress ref={lineProgressRef} id="line_progress" />
+      <PlayingProgress id="line_progress" />
     </>
   );
 }

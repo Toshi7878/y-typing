@@ -1,5 +1,6 @@
 import { DEFAULT_VOLUME } from "@/config/consts";
 import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
+import { atomWithReset, atomWithStorage } from "jotai/utils";
 const globalAtomStore = createStore();
 export const getGlobalAtomStore = () => globalAtomStore;
 
@@ -13,7 +14,7 @@ const getInitialTheme = (): "light" | "dark" => {
 
 export const themeAtom = atom<"light" | "dark">(getInitialTheme());
 
-export const volumeAtom = atom<number>(DEFAULT_VOLUME);
+const volumeAtom = atomWithStorage<number>("volume", DEFAULT_VOLUME);
 
 export const useVolumeAtom = () => {
   return useAtomValue(volumeAtom, { store: globalAtomStore });
@@ -32,7 +33,7 @@ export const useSetPreviewVideoIdAtom = () => {
   return useSetAtom(previewVideoIdAtom, { store: globalAtomStore });
 };
 
-const previewTimeAtom = atom<string | null>(null);
+const previewTimeAtom = atomWithReset<string | null>(null);
 
 export const usePreviewTimeAtom = () => {
   return useAtomValue(previewTimeAtom, { store: globalAtomStore });

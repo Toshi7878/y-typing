@@ -2,7 +2,7 @@
 import { InputModeType } from "@/app/type/ts/type";
 import { Box, HStack, useRadio, useRadioGroup, UseRadioProps, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
-import { useSetInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useInputModeAtom, useSetInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import React, { useMemo } from "react";
 
 interface RadioCardProps extends UseRadioProps {
@@ -63,21 +63,12 @@ function ReadyInputModeRadioCards() {
     { value: "flick", label: "フリック入力" },
   ];
 
+  const inputMode = useInputModeAtom();
   const setInputMode = useSetInputModeAtom();
-
-  const defaultInputMode = useMemo(() => {
-    if (typeof window !== "undefined") {
-      const inputModeStorage = localStorage.getItem("inputMode");
-      return inputModeStorage && ["roma", "kana", "flick"].includes(inputModeStorage)
-        ? (inputModeStorage as InputModeType)
-        : "roma";
-    }
-    return "roma";
-  }, []);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "inputMode",
-    defaultValue: defaultInputMode,
+    defaultValue: inputMode,
     onChange: (value) => {
       setInputMode(value as InputModeType);
       localStorage.setItem("inputMode", value);

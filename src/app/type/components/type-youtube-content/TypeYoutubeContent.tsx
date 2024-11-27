@@ -9,14 +9,9 @@ import {
   useYTSeekEvent,
   useYTStopEvent,
 } from "../../hooks/useYoutubeEvents";
-import {
-  useInputModeAtom,
-  useLineResultsAtom,
-  useMapAtom,
-  useSceneAtom,
-  useTypePageSpeedAtom,
-} from "../../type-atoms/gameRenderAtoms";
+import { sceneAtom } from "../../type-atoms/gameRenderAtoms";
 import { Box } from "@chakra-ui/react";
+import { useStore } from "jotai";
 
 interface TypeYouTubeProps {
   className: string;
@@ -24,11 +19,7 @@ interface TypeYouTubeProps {
 }
 
 const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeYouTubeProps) {
-  const scene = useSceneAtom();
-  const map = useMapAtom();
-  const inputMode = useInputModeAtom();
-  const speedData = useTypePageSpeedAtom();
-  const lineResults = useLineResultsAtom();
+  const typeAtomStore = useStore();
 
   const ytReadyEvent = useYTReadyEvent();
   const ytPlayEvent = useYTPlayEvent();
@@ -53,6 +44,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
         //	未スタート、他の動画に切り替えた時など
         console.log("未スタート -1");
 
+        const scene = typeAtomStore.get(sceneAtom);
         if (scene === "ready") {
           event.target.seekTo(0);
         }
@@ -62,7 +54,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [scene, map, inputMode, speedData, lineResults],
+    [],
   );
 
   // YouTubeコンポーネントのエラーハンドリングを追加
@@ -98,7 +90,7 @@ const TypeYouTubeContent = function YouTubeContent({ className, videoId }: TypeY
       </Box>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [className, videoId, ytPlayEvent, handleStateChange],
+    [className, videoId],
   );
 
   return memoizedYouTube;

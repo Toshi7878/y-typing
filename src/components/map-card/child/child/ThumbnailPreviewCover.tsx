@@ -8,6 +8,7 @@ import {
   useSetPreviewTimeAtom,
   useSetPreviewVideoIdAtom,
 } from "@/components/atom/globalAtoms";
+import { RESET } from "jotai/utils";
 
 interface MapLeftThumbnailProps {
   mapVideoId: string;
@@ -30,7 +31,7 @@ const ThumbnailPreviewCover = (props: MapLeftThumbnailProps) => {
         setPreviewTime(mapPreviewTime);
       } else {
         setVideoId(null);
-        setPreviewTime(null);
+        setPreviewTime(RESET);
       }
       setPreviewSpeed(mapPreviewSpeed);
     },

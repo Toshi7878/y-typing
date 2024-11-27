@@ -53,15 +53,12 @@ export interface RankingListType {
 export interface RefsContextType {
   playerRef: any;
   tabStatusRef: React.RefObject<TabStatusRef>;
-  playingComboRef: React.RefObject<PlayingComboRef>;
-  lineCountRef: React.MutableRefObject<number>;
   bestScoreRef: React.MutableRefObject<number>;
   statusRef: React.RefObject<StatusRef>;
   ytStateRef: React.RefObject<YTStateRef>;
   gameStateRef: React.RefObject<GameStateRef>;
   lineProgressRef: React.RefObject<HTMLProgressElement>;
-  playingLineTimeRef: React.RefObject<PlayingLineTimeRef>;
-  playingTypingWordsRef: React.RefObject<PlayingTypingWordsRef>;
+  totalProgressRef: React.RefObject<HTMLProgressElement>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
@@ -96,6 +93,7 @@ export interface GameStateRef {
   isSeekedLine: boolean;
   playMode: PlayMode;
   startPlaySpeed: number;
+  displayLineTimeCount: number;
   replay: {
     replayKeyCount: number;
     userName: string;
@@ -134,7 +132,6 @@ export interface StatusRef {
 
 export interface YTStateRef {
   isPaused: boolean;
-  currentTime: number;
   movieDuration: number;
 }
 

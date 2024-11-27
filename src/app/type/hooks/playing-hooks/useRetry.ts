@@ -2,9 +2,11 @@ import { DEFAULT_STATUS_REF } from "../../ts/const/typeDefaultValue";
 import { StatusRef } from "../../ts/type";
 import { typeTicker } from "../useYoutubeEvents";
 import {
+  sceneAtom,
   useMapAtom,
-  useSceneAtom,
+  useSetComboAtom,
   useSetLineResultsAtom,
+  useSetLineWordAtom,
   useSetLyricsAtom,
   useSetNextLyricsAtom,
   useSetPlayingNotifyAtom,
@@ -12,37 +14,31 @@ import {
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
-import {
-  defaultLineWord,
-  defaultNextLyrics,
-} from "../../components/typing-area/scene/playing-child/PlayingCenter";
+import { defaultLineWord, defaultNextLyrics } from "../../ts/const/consts";
+import { useStore } from "jotai";
 
 export const useRetry = () => {
-  const {
-    playingTypingWordsRef,
-    tabStatusRef,
-    playingComboRef,
-    statusRef,
-    gameStateRef,
-    playerRef,
-  } = useRefs();
-  const scene = useSceneAtom();
+  const { tabStatusRef, statusRef, gameStateRef, playerRef } = useRefs();
   const map = useMapAtom();
+  const typeAtomStore = useStore();
+
   const setLineResults = useSetLineResultsAtom();
+  const setCombo = useSetComboAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const setLyrics = useSetLyricsAtom();
   const setNextLyrics = useSetNextLyricsAtom();
+  const setLineWord = useSetLineWordAtom();
 
   return () => {
-    const currentPlayingTypingWordsRef = playingTypingWordsRef.current; // 追加
-    currentPlayingTypingWordsRef!.setLineWord(structuredClone(defaultLineWord));
+    setLineWord(structuredClone(defaultLineWord));
     setLyrics("");
     setNextLyrics(structuredClone(defaultNextLyrics));
 
     tabStatusRef.current!.resetStatus();
-    playingComboRef.current?.setCombo(0);
+    setCombo(0);
     (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
 
+    const scene = typeAtomStore.get(sceneAtom);
     if (scene !== "replay") {
       setLineResults(structuredClone(map!.defaultLineResultData));
     }
@@ -66,7 +62,8 @@ export const useRetry = () => {
 };
 
 export const useProceedRetry = () => {
-  const { statusRef, tabStatusRef, gameStateRef, playerRef, playingComboRef } = useRefs();
+  const { statusRef, tabStatusRef, gameStateRef, playerRef } = useRefs();
+  const setCombo = useSetComboAtom();
 
   const map = useMapAtom() as CreateMap;
   const setLineResults = useSetLineResultsAtom();
@@ -80,7 +77,7 @@ export const useProceedRetry = () => {
     }
 
     tabStatusRef.current.resetStatus();
-    playingComboRef.current.setCombo(0);
+    setCombo(0);
     gameStateRef.current!.replay.replayKeyCount = 0;
     (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
     gameStateRef.current!.isRetrySkip = true;

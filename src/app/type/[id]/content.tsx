@@ -7,7 +7,6 @@ import { Box, Flex } from "@chakra-ui/react";
 import { GetInfoData } from "@/types/api";
 import {
   useIsLoadingOverlayAtom,
-  useSetInputModeAtom,
   useSetLineResultsAtom,
   useSetLineSelectIndexAtom,
   useSetMapAtom,
@@ -19,12 +18,12 @@ import {
 } from "../type-atoms/gameRenderAtoms";
 import TypingCard from "../components/typing-area/TypingCard";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
-import { InputModeType } from "../ts/type";
 import LoadingOverlayWrapper from "react-loading-overlay-ts";
 import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
 import { QUERY_KEYS } from "@/config/consts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
+import { RESET } from "jotai/utils";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -34,7 +33,6 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const setScene = useSetSceneAtom();
   const setRankingScores = useSetRankingScoresAtom();
   const setSpeedData = useSetTypePageSpeedAtom();
-  const setInputMode = useSetInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const setLineResults = useSetLineResultsAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
@@ -53,13 +51,11 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapRanking(mapId) });
 
-      setMap(null); // 追加: アンマウント時にsetMap(null)を呼び出す
-      setScene("ready");
-      setNotify(Symbol(""));
+      setMap(RESET);
+      setScene(RESET);
+      setNotify(RESET);
       setLineResults([]);
-      const inputMode = (localStorage.getItem("inputMode") as InputModeType) || "roma";
       setLineSelectIndex(null);
-      setInputMode(inputMode);
       setTimeOffset(0);
       setRankingScores([]);
       setSpeedData({

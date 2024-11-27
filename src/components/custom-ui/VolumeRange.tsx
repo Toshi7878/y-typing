@@ -12,7 +12,6 @@ import {
 
 import { ThemeColors } from "@/types";
 import { useSetVolumeAtom, useVolumeAtom } from "@/components/atom/globalAtoms";
-import { db } from "@/lib/db";
 import { IoMdVolumeMute } from "react-icons/io";
 import { IoMdVolumeLow } from "react-icons/io";
 import { IoMdVolumeHigh } from "react-icons/io";
@@ -33,7 +32,6 @@ export default function VolumeRange({ playerRef }: VolumeRangeProps) {
     if (playerRef.current) {
       playerRef.current.setVolume(value);
     }
-    db.globalOption.put({ optionName: "volume-range", value });
   };
   return (
     <HStack alignItems="center">

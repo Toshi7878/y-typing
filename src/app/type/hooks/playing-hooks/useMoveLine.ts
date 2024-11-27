@@ -1,22 +1,23 @@
 import { useRefs } from "../../type-contexts/refsProvider";
 import {
+  speedAtom,
   useLineSelectIndexAtom,
   useMapAtom,
   useSceneAtom,
   useSetLineSelectIndexAtom,
   useSetPlayingNotifyAtom,
-  useTypePageSpeedAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { typeTicker } from "../useYoutubeEvents";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useUpdateLine } from "./timer-hooks/useTimer";
 import { useGetSeekLineCount } from "./timer-hooks/useSeekGetLineCount";
+import { useStore } from "jotai";
 
 export const useMoveLine = () => {
   const { gameStateRef, statusRef, playerRef } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom();
-  const speedData = useTypePageSpeedAtom();
+  const typeAtomStore = useStore();
   const lineSelectIndex = useLineSelectIndexAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setNotify = useSetPlayingNotifyAtom();
@@ -35,8 +36,9 @@ export const useMoveLine = () => {
     if (prevCount === undefined) {
       return;
     }
+    const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
 
-    const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
+    const seekBuffer = scene === "practice" ? 1 * playSpeed : 0;
     const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
     setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
     if (typeTicker.started) {
@@ -69,11 +71,13 @@ export const useMoveLine = () => {
       return;
     }
 
+    const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
+
     const prevLineTime =
       (nextCount > 1 ? map!.mapData[nextCount]["time"] - map!.mapData[nextCount - 1]["time"] : 0) /
-      speedData.playSpeed;
+      playSpeed;
 
-    const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * speedData.playSpeed : 0;
+    const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * playSpeed : 0;
     const nextTime = Number(map!.mapData[nextCount]["time"]) - seekBuffer;
 
     const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
@@ -102,7 +106,9 @@ export const useMoveLine = () => {
 
     const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
 
-    const seekBuffer = scene === "practice" ? 1 * speedData.playSpeed : 0;
+    const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
+
+    const seekBuffer = scene === "practice" ? 1 * playSpeed : 0;
 
     const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
 

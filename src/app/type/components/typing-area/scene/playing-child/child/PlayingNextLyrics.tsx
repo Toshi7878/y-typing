@@ -1,18 +1,16 @@
+import { useNextLyricsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Box, useTheme } from "@chakra-ui/react";
-import React, { memo } from "react";
+import React from "react";
 
-interface NextLyricsProps {
-  lyrics: string;
-  kpm: string;
-}
-
-const NextLyrics = memo(({ lyrics, kpm }: NextLyricsProps) => {
+const NextLyrics = () => {
   const theme: ThemeColors = useTheme();
+  const { lyrics, kpm } = useNextLyricsAtom();
 
   return (
     <Box
-      color={`${theme.colors.text.body}99`}
+      color={`${theme.colors.text.body}`}
+      opacity={0.6}
       fontSize="3xl"
       className="lyrics-font"
       lineHeight={10}
@@ -31,7 +29,6 @@ const NextLyrics = memo(({ lyrics, kpm }: NextLyricsProps) => {
       </Box>
     </Box>
   );
-});
-NextLyrics.displayName = "NextLyrics";
+};
 
 export default NextLyrics;

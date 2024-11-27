@@ -1,9 +1,7 @@
-import { SkipGuideRef } from "@/app/type/components/typing-area/scene/playing-child/child/PlayingSkipGuide";
-import { WordType } from "../ts/type";
-import { updateReplayStatus } from "./playing-hooks/timer-hooks/replayHooks";
-import { Typing, useTypeMiss, useTypeSuccess } from "../ts/scene-ts/playing/keydown/typing";
-import { CalcTypeSpeed } from "../ts/scene-ts/playing/calcTypeSpeed";
-import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
+import { Status } from "../../../ts/type";
+import { updateReplayStatus } from "../timer-hooks/replayHooks";
+import { Typing, useTypeMiss, useTypeSuccess } from "../../../ts/scene-ts/playing/keydown/typing";
+import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
 import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
@@ -12,61 +10,78 @@ import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineL
 import { useChangePlayMode } from "@/app/type/hooks/playing-hooks/useChangePlayMode";
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import {
+  comboAtom,
+  inputModeAtom,
+  lineResultsAtom,
+  lineWordAtom,
+  rankingScoresAtom,
+  sceneAtom,
+  skipAtom,
+  speedAtom,
+  useComboAtom,
   useInputModeAtom,
   useLineResultsAtom,
+  useLineWordAtom,
   useMapAtom,
   useRankingScoresAtom,
+  userOptionsAtom,
   useSceneAtom,
   useSetLineResultsAtom,
   useSetPlayingNotifyAtom,
   useSetTimeOffsetAtom,
-  useTypePageSpeedAtom,
+  useSkipAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useSoundEffect } from "@/app/type/hooks/playing-hooks/useSoundEffect";
-import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../ts/const/typeDefaultValue";
-import { useVideoSpeedChange } from "./useVideoSpeedChange";
+import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../../../ts/const/typeDefaultValue";
+import { useVideoSpeedChange } from "../../useVideoSpeedChange";
+import { useGetTime } from "../../useGetTime";
+import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
+import { useStore } from "jotai";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
-  cloneLineWord: WordType;
-  lineTime: number;
   count: number;
 }
 
-export const useHandleTyping = () => {
-  const { playingComboRef, tabStatusRef, statusRef, ytStateRef } = useRefs();
+export const useTyping = () => {
+  const { tabStatusRef, statusRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
-  const scene = useSceneAtom();
-  const speedData = useTypePageSpeedAtom();
-  const inputMode = useInputModeAtom();
-  const rankingScores = useRankingScoresAtom();
-  const lineResults = useLineResultsAtom();
-  const userOptionsAtom = useUserOptionsAtom();
+  const typeAtomStore = useStore();
 
   const setLineResults = useSetLineResultsAtom();
-  const { clearTypeSoundPlay, typeSoundPlay, missSoundPlay } = useSoundEffect();
+  const { triggerTypingSound, triggerMissSound } = useSoundEffect();
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
+  const {
+    getCurrentLineTime,
+    getCurrentOffsettedYTTime,
+    getConstantLineTime,
+    getConstantRemainLineTime,
+  } = useGetTime();
+  const calcTypeSpeed = useCalcTypeSpeed();
 
-  return ({ event, cloneLineWord, lineTime, count }: HandleTypingParams) => {
-    const result = new Typing({ event, lineWord: cloneLineWord, inputMode });
-    const lineConstantTime = Math.round((lineTime / speedData.playSpeed) * 1000) / 1000;
+  return ({ event, count }: HandleTypingParams) => {
+    const lineWord = typeAtomStore.get(lineWordAtom);
+    const inputMode = typeAtomStore.get(inputModeAtom);
 
-    const status = tabStatusRef.current!.getStatus();
+    const result = new Typing({ event, lineWord, inputMode });
+    const lineTime = getCurrentLineTime(getCurrentOffsettedYTTime());
+    const constantLineTime = getConstantLineTime(lineTime);
+
+    const status: Status = tabStatusRef.current!.getStatus();
 
     if (result.successKey) {
-      const nextLine = map!.mapData[count];
-      const currentLine = map!.mapData[count - 1];
-      const movieDuration = ytStateRef.current!.movieDuration;
-      const nextLineTime = nextLine.time > movieDuration ? movieDuration : nextLine.time;
-      const lineRemainTime = nextLineTime - currentLine.time - lineConstantTime;
-      const typeSpeed = new CalcTypeSpeed("keydown", status!, lineConstantTime, statusRef);
+      const lineRemainConstantTime = getConstantRemainLineTime(constantLineTime);
+      const typeSpeed = calcTypeSpeed({
+        updateType: "keydown",
+        constantLineTime,
+        totalTypeCount: status.type,
+      });
       updateSuccessStatusRefs({
-        lineConstantTime,
+        constantLineTime,
         newLineWord: result.newLineWord,
         successKey: result.successKey,
         newLineKpm: typeSpeed.lineKpm,
@@ -74,26 +89,22 @@ export const useHandleTyping = () => {
 
       const newStatus = updateSuccessStatus({
         newLineWord: result.newLineWord,
-        lineRemainTime,
+        lineRemainConstantTime,
         updatePoint: result.updatePoint,
         totalKpm: typeSpeed.totalKpm,
         status,
       });
 
-      if (!result.newLineWord.nextChar["k"]) {
-        if (userOptionsAtom.lineClearSound) {
-          clearTypeSoundPlay();
-        } else if (userOptionsAtom.typeSound) {
-          typeSoundPlay();
-        }
-      } else {
-        if (userOptionsAtom.typeSound) {
-          typeSoundPlay();
-        }
-      }
+      const isLineCompleted = !result.newLineWord.nextChar["k"];
+      triggerTypingSound({ isLineCompleted });
 
-      if (scene === "practice" && speedData.playSpeed >= 1 && !result.newLineWord.nextChar["k"]) {
-        const combo = playingComboRef.current!.getCombo();
+      const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
+
+      const scene = typeAtomStore.get(sceneAtom);
+
+      if (scene === "practice" && playSpeed >= 1 && !result.newLineWord.nextChar["k"]) {
+        const lineResults = typeAtomStore.get(lineResultsAtom);
+
         const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
         const mode = statusRef.current!.lineStatus.lineStartInputMode;
         const sp = statusRef.current!.lineStatus.lineStartSpeed;
@@ -108,6 +119,8 @@ export const useHandleTyping = () => {
         const newLineResults = [...lineResults];
 
         if (isUpdateResult) {
+          const combo = typeAtomStore.get(comboAtom);
+
           newLineResults[count - 1] = {
             status: {
               p: newStatus.point,
@@ -128,6 +141,8 @@ export const useHandleTyping = () => {
           setLineResults(newLineResults);
         }
 
+        const rankingScores = typeAtomStore.get(rankingScoresAtom);
+
         const newStatusReplay = updateReplayStatus(
           map!.mapData.length - 1,
           newLineResults,
@@ -144,22 +159,18 @@ export const useHandleTyping = () => {
       }
     } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
       const newStatus = updateMissStatus(status);
-      updateMissRefStatus({ lineConstantTime, failKey: result.failKey });
+      updateMissRefStatus({ constantLineTime, failKey: result.failKey });
       tabStatusRef.current!.setStatus(newStatus);
 
-      if (userOptionsAtom.missSound) {
-        missSoundPlay();
-      }
+      triggerMissSound();
     }
   };
 };
 
 const keyWhiteList = ["F5"];
 
-export const usePlayShortcutKey = () => {
-  const scene = useSceneAtom();
-  const inputMode = useInputModeAtom();
-  const userOptionsAtom = useUserOptionsAtom();
+export const usePlayingShortcutKey = () => {
+  const typeAtomStore = useStore();
 
   const retry = useRetry();
   const pressSkip = usePressSkip();
@@ -172,21 +183,21 @@ export const usePlayShortcutKey = () => {
   const setTimeOffset = useSetTimeOffsetAtom();
   const setNotify = useSetPlayingNotifyAtom();
 
-  return (
-    event: KeyboardEvent,
-    skipGuideRef: React.RefObject<SkipGuideRef>,
-    lineTime: number,
-    drawerClosure: UseDisclosureReturn,
-  ) => {
+  return (event: KeyboardEvent) => {
     //間奏スキップ
-    const skip = skipGuideRef.current?.getSkipGuide?.();
-    const isCtrlLeftRight = userOptionsAtom.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
-    const isCtrlAltLeftRight =
-      userOptionsAtom.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
+    const userOptions = typeAtomStore.get(userOptionsAtom);
+    const scene = typeAtomStore.get(sceneAtom);
+    const inputMode = typeAtomStore.get(inputModeAtom);
+    const skip = typeAtomStore.get(skipAtom);
 
-    if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
-      event.preventDefault();
-    } else if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
+    const isCtrlLeftRight = userOptions.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;
+    const isCtrlAltLeftRight =
+      userOptions.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
+
+    // if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
+    //   event.preventDefault();
+    // }
+    if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
       return;
     }
 
@@ -205,11 +216,11 @@ export const usePlayShortcutKey = () => {
         if (isCtrlLeftRight || isCtrlAltLeftRight) {
           setTimeOffset((prev) => {
             const newValue = Math.round((prev + TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
-            setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+            setNotify(Symbol(`時間調整:${(newValue + userOptions.timeOffset).toFixed(2)}`));
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          moveNextLine(drawerClosure);
+          // moveNextLine(drawerClosure);
         }
 
         event.preventDefault();
@@ -218,22 +229,22 @@ export const usePlayShortcutKey = () => {
         if (isCtrlLeftRight || isCtrlAltLeftRight) {
           setTimeOffset((prev) => {
             const newValue = Math.round((prev - TIME_OFFSET_SHORTCUTKEY_RANGE) * 100) / 100;
-            setNotify(Symbol(`時間調整:${(newValue + userOptionsAtom.timeOffset).toFixed(2)}`));
+            setNotify(Symbol(`時間調整:${(newValue + userOptions.timeOffset).toFixed(2)}`));
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          movePrevLine(drawerClosure);
+          // movePrevLine(drawerClosure);
         }
         event.preventDefault();
         break;
       case skip:
-        pressSkip(skipGuideRef);
+        pressSkip();
         event.preventDefault();
         break;
       case "F1":
-        if (userOptionsAtom.toggleInputModeKey === "tab") {
+        if (userOptions.toggleInputModeKey === "tab") {
           if (scene === "replay" || scene === "practice") {
-            toggleLineListDrawer(drawerClosure);
+            // toggleLineListDrawer(drawerClosure);
           }
         }
         event.preventDefault();
@@ -244,7 +255,7 @@ export const usePlayShortcutKey = () => {
         event.preventDefault();
         break;
       case "F7":
-        changePlayMode(drawerClosure);
+        // changePlayMode(drawerClosure);
         event.preventDefault();
         break;
       case "F9":
@@ -263,12 +274,12 @@ export const usePlayShortcutKey = () => {
         break;
       case "KanaMode":
       case "Romaji":
-        if (userOptionsAtom.toggleInputModeKey === "alt-kana") {
+        if (userOptions.toggleInputModeKey === "alt-kana") {
           if (scene !== "replay") {
             if (inputMode === "roma") {
-              inputModeChange("kana", lineTime);
+              inputModeChange("kana");
             } else {
-              inputModeChange("roma", lineTime);
+              inputModeChange("roma");
             }
           }
         }
@@ -282,17 +293,17 @@ export const usePlayShortcutKey = () => {
         break;
 
       case "Tab":
-        if (userOptionsAtom.toggleInputModeKey === "tab") {
+        if (userOptions.toggleInputModeKey === "tab") {
           if (scene !== "replay") {
             if (inputMode === "roma") {
-              inputModeChange("kana", lineTime);
+              inputModeChange("kana");
             } else {
-              inputModeChange("roma", lineTime);
+              inputModeChange("roma");
             }
           }
         } else {
           if (scene === "replay" || scene === "practice") {
-            toggleLineListDrawer(drawerClosure);
+            // toggleLineListDrawer(drawerClosure);
           }
         }
         event.preventDefault();
