@@ -105,7 +105,7 @@ export const useSetLineResultsAtom = () => {
   return useSetAtom(lineResultsAtom, { store: typeAtomStore });
 };
 
-const lineSelectIndexAtom = atom<number | null>(null);
+export const lineSelectIndexAtom = atom<number | null>(null);
 
 export const useLineSelectIndexAtom = () => {
   return useAtomValue(lineSelectIndexAtom);

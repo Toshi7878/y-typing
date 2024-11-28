@@ -1,24 +1,23 @@
-import { useRefs } from "../../type-contexts/refsProvider";
+import { UseDisclosureReturn } from "@chakra-ui/react";
+import { useStore } from "jotai";
 import {
+  lineSelectIndexAtom,
   speedAtom,
-  useLineSelectIndexAtom,
   useMapAtom,
   useSceneAtom,
   useSetLineSelectIndexAtom,
   useSetPlayingNotifyAtom,
 } from "../../type-atoms/gameRenderAtoms";
+import { useRefs } from "../../type-contexts/refsProvider";
 import { typeTicker } from "../useYoutubeEvents";
-import { UseDisclosureReturn } from "@chakra-ui/react";
-import { useUpdateLine } from "./timer-hooks/useTimer";
 import { useGetSeekLineCount } from "./timer-hooks/useSeekGetLineCount";
-import { useStore } from "jotai";
+import { useUpdateLine } from "./timer-hooks/useTimer";
 
 export const useMoveLine = () => {
   const { gameStateRef, statusRef, playerRef } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom();
   const typeAtomStore = useStore();
-  const lineSelectIndex = useLineSelectIndexAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const updateLine = useUpdateLine();
@@ -61,6 +60,8 @@ export const useMoveLine = () => {
     if (drawerClosure.isOpen && gameStateRef.current!.isSeekedLine) {
       return;
     }
+
+    const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
     const seekCount = lineSelectIndex ? map!.typingLineNumbers[lineSelectIndex - 1] : null;
     const seekCountAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
 
@@ -99,6 +100,8 @@ export const useMoveLine = () => {
   };
 
   const moveSetLine = () => {
+    const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
+
     if (!lineSelectIndex) {
       return;
     }
