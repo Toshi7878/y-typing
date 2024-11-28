@@ -1,6 +1,10 @@
 import { useRankingQuery } from "@/app/type/hooks/data-query/useRankingQuery";
 import { RankingListType } from "@/app/type/ts/type";
-import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useSceneAtom,
+  useSetRankingScoresAtom,
+  useSetStatusAtoms,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { Box, Spinner } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
@@ -16,6 +20,7 @@ const RankingList = () => {
   const setRankingScores = useSetRankingScoresAtom();
   const scene = useSceneAtom();
   const { data, error, isLoading } = useRankingQuery();
+  const { setStatusValues } = useSetStatusAtoms();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,6 +56,8 @@ const RankingList = () => {
     const scores = data ? data.map((result: RankingListType) => result.score) : [];
 
     setRankingScores(scores);
+
+    setStatusValues({ rank: scores.length + 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

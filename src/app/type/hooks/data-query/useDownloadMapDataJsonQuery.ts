@@ -1,14 +1,19 @@
+import { QUERY_KEYS } from "@/config/consts";
 import { supabase } from "@/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useSetLineResultsAtom, useSetMapAtom } from "../../type-atoms/gameRenderAtoms";
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
-import { QUERY_KEYS } from "@/config/consts";
+import {
+  useSetLineResultsAtom,
+  useSetMapAtom,
+  useSetStatusAtoms,
+} from "../../type-atoms/gameRenderAtoms";
 
 export const useDownloadMapDataJsonQuery = () => {
   const { id: mapId } = useParams();
   const setLineResults = useSetLineResultsAtom();
   const setMap = useSetMapAtom();
+  const { setStatusValues } = useSetStatusAtoms();
 
   const { data, error, isLoading } = useQuery({
     queryKey: QUERY_KEYS.mapData(mapId),
@@ -32,6 +37,7 @@ export const useDownloadMapDataJsonQuery = () => {
         const map = new CreateMap(jsonData);
         setMap(map);
         setLineResults(map.defaultLineResultData);
+        setStatusValues({ line: map.lineLength });
         return jsonData;
       } catch (error) {
         console.error("Error processing the downloaded file:", error);

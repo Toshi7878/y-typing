@@ -1,8 +1,8 @@
+import { QUERY_KEYS } from "@/config/consts";
 import { useQuery } from "@tanstack/react-query";
-import { RankingListType } from "../../ts/type";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { QUERY_KEYS } from "@/config/consts";
+import { RankingListType } from "../../ts/type";
 
 export const useRankingQuery = () => {
   const { id: mapId } = useParams();
@@ -10,7 +10,7 @@ export const useRankingQuery = () => {
   const { data, error, isLoading } = useQuery<RankingListType[]>({
     queryKey: QUERY_KEYS.mapRanking(mapId),
     queryFn: async () => {
-      const { data } = await axios.get(
+      const { data }: { data: RankingListType[] } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/ranking?id=${mapId}`,
         {
           headers: {
