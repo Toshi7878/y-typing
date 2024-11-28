@@ -1,16 +1,16 @@
 "use client";
 import CustomDrawerContent from "@/components/custom-ui/CustomDrawerContent";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
-import { ThemeColors } from "@/types";
-import { Box, useTheme, Drawer, useDisclosure } from "@chakra-ui/react";
-import NotifyDrawerInnerContent from "./child/NotifyDrawerInnerContent";
-import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/config/consts";
-import { Bell, BellDot } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useClientNewNotifyCheck } from "@/lib/hooks/fetcher-hook/useClientNewNotifyCheck";
+import { ThemeColors } from "@/types";
+import { Box, Drawer, useDisclosure, useTheme } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { Bell, BellDot } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import NotifyDrawerInnerContent from "./child/NotifyDrawerInnerContent";
 
 interface NotifyBellProps {
   isNewNotification: boolean;
@@ -43,7 +43,13 @@ export default function NotifyBell({ isNewNotification }: NotifyBellProps) {
   }, [router, data]);
   return (
     <>
-      <CustomToolTip placement="bottom" tooltipLabel="通知" fontSize="xs" openDelay={600}>
+      <CustomToolTip
+        key={isNewBadge ? "new" : "old"}
+        placement="bottom"
+        tooltipLabel="通知"
+        fontSize="xs"
+        openDelay={600}
+      >
         <Box
           color={theme.colors.text.header.normal}
           _hover={{
