@@ -1,5 +1,5 @@
-export default {
-  // ... existing configuration ...
+const nextConfig = {
+  transpilePackages: ["jotai-devtools"],
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.(wav|mp3)$/,
@@ -16,3 +16,5 @@ export default {
     return config;
   },
 };
+
+export default nextConfig;

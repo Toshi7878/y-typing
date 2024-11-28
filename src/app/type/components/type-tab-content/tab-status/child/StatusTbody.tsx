@@ -8,36 +8,11 @@ import StatusPointValue from "./child/StatusPointValue";
 import StatusValue from "./child/StatusValue";
 
 const StatusTbody = () => {
-  // const map = useMapAtom() as CreateMap;
-  // const rankingScores = useRankingScoresAtom();
   const theme: ThemeColors = useTheme();
 
   const capitalizeFirstLetter = useCallback((string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }, []);
-
-  // useEffect(() => {
-  //   if (map) {
-  //     const newStatus = { ...status };
-  //     newStatus.line = map.lineLength;
-  //     DEFAULT_STATUS.line = map.lineLength;
-  //     setStatus(newStatus);
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [map]);
-
-  // useEffect(() => {
-  //   if (rankingScores.length) {
-  //     const newStatus = { ...status };
-
-  //     newStatus.rank = rankingScores.length + 1;
-  //     DEFAULT_STATUS.rank = rankingScores.length + 1;
-  //     setStatus(newStatus);
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rankingScores]);
 
   const Label = styled.span<{ label: string }>`
     position: relative;

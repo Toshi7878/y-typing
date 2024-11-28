@@ -1,12 +1,13 @@
 "use client";
-import { RefsProvider } from "../type-contexts/refsProvider";
+import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
+import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createStore, Provider as JotaiProvider } from "jotai";
-import { GetInfoData } from "@/types/api";
+import { DevTools } from "jotai-devtools";
 import { useEffect } from "react";
-import { hasLocalLikeAtom, userOptionsAtom } from "../type-atoms/gameRenderAtoms";
 import { UserTypingOptions } from "../ts/type";
-import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
+import { hasLocalLikeAtom, userOptionsAtom } from "../type-atoms/gameRenderAtoms";
+import { RefsProvider } from "../type-contexts/refsProvider";
 
 const typeAtomStore = createStore();
 export const getTypeAtomStore = () => typeAtomStore;
@@ -32,7 +33,10 @@ const TypeProvider = ({ mapInfo, userTypingOptions, children }: TypeProviderProp
   return (
     <QueryClientProvider client={queryClient}>
       <RefsProvider>
-        <JotaiProvider store={typeAtomStore}>{children}</JotaiProvider>
+        <JotaiProvider store={typeAtomStore}>
+          <DevTools />
+          {children}
+        </JotaiProvider>
       </RefsProvider>
     </QueryClientProvider>
   );
