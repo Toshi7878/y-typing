@@ -4,11 +4,7 @@ import PlayingSpeedBadge from "./child/PlayingSpeedBadge";
 import PlayingRetryBadge from "./child/PlayingRetryBadge";
 import PlayingPracticeBadge from "./child/PlayingPracticeBadge";
 
-interface PlayingBottomRef {
-  drawerClosure: UseDisclosureReturn;
-}
-
-const PlayingBottomBadgeLayout = function ({ drawerClosure }: PlayingBottomRef) {
+const PlayingBottomBadgeLayout = function () {
   const scene = useSceneAtom();
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
@@ -22,7 +18,7 @@ const PlayingBottomBadgeLayout = function ({ drawerClosure }: PlayingBottomRef) 
       className={`${isPlayed ? "" : "invisible"}`}
     >
       <PlayingSpeedBadge />
-      <PlayingPracticeBadge drawerClosure={drawerClosure} />
+      <PlayingPracticeBadge />
       <PlayingRetryBadge />
     </Flex>
   );

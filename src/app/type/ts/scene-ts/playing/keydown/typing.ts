@@ -1,15 +1,4 @@
 import {
-  Dakuten,
-  HanDakuten,
-  InputModeType,
-  NormalizeHirakana,
-  Status,
-  WordType,
-} from "../../../type";
-import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWord";
-import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import {
   lineWordAtom,
   useComboAtom,
   useInputModeAtom,
@@ -19,8 +8,21 @@ import {
   useSetComboAtom,
   useSetDisplayLineKpmAtom,
   useSetLineWordAtom,
+  useSetStatusAtoms,
+  useStatusAtomsValues,
 } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useStore } from "jotai";
+import { CODE_TO_KANA, KEY_TO_KANA } from "../../../const/kanaKeyMap";
+import {
+  Dakuten,
+  HanDakuten,
+  InputModeType,
+  LineWord,
+  NormalizeHirakana,
+  Status,
+} from "../../../type";
+import { CHAR_POINT, CreateMap, MISS_PENALTY } from "../../ready/createTypingWord";
 
 const keyboardCharacters = [
   "0",
@@ -164,7 +166,7 @@ const Z_COMMAND_MAP = {
 };
 
 class ProcessedLineWord {
-  newLineWord: WordType;
+  newLineWord: LineWord;
   updatePoint: number;
 
   constructor({ chars, lineWord }: JudgeType) {
@@ -245,10 +247,10 @@ export interface CharsType {
 
 interface JudgeType {
   chars: CharsType;
-  lineWord: WordType;
+  lineWord: LineWord;
 }
 export class RomaInput {
-  newLineWord: WordType;
+  newLineWord: LineWord;
   updatePoint: number;
   successKey: string;
   failKey: string;
@@ -256,12 +258,12 @@ export class RomaInput {
     const processed = new ProcessedLineWord({ chars, lineWord });
     this.updatePoint = processed.updatePoint;
     const result = this.hasRomaPattern(chars, processed.newLineWord);
-    this.newLineWord = result.newLineWord as WordType;
+    this.newLineWord = result.newLineWord as LineWord;
     this.successKey = result.successKey;
     this.failKey = result.failKey ?? "";
   }
-  private hasRomaPattern(chars: CharsType, lineWord: WordType) {
-    let newLineWord = { ...lineWord } as WordType;
+  private hasRomaPattern(chars: CharsType, lineWord: LineWord) {
+    let newLineWord = { ...lineWord } as LineWord;
     const nextRomaPattern: string[] = newLineWord.nextChar["r"];
     const kana = lineWord.nextChar["k"];
     const IS_SUCCESS = nextRomaPattern.some(
@@ -301,7 +303,7 @@ export class RomaInput {
     return nextRomaPattern;
   }
 
-  private kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: WordType) {
+  private kanaFilter(kana: string, char: string, romaPattern: string[], newLineWord: LineWord) {
     if (kana.length >= 2 && romaPattern.length) {
       const isSokuonYouon =
         (kana[0] != "っ" && (romaPattern[0][0] === "x" || romaPattern[0][0] === "l")) ||
@@ -324,7 +326,7 @@ export class RomaInput {
   }
 
   // xnで「ん」を打鍵する場合、次の文字から[nn, n']の打鍵パターンを除外する
-  private nextNNFilter(char: string, newLineWord: WordType) {
+  private nextNNFilter(char: string, newLineWord: LineWord) {
     const NEXT_TO_NEXT_CHAR = newLineWord.word[0]["r"];
     const isXN =
       char == "x" &&
@@ -341,7 +343,7 @@ export class RomaInput {
     }
   }
 
-  private wordUpdate(chars: CharsType, newLineWord: WordType) {
+  private wordUpdate(chars: CharsType, newLineWord: LineWord) {
     const kana = newLineWord.nextChar["k"];
     const romaPattern = newLineWord.nextChar["r"];
     // const POINT = newLineWord.nextChar["point"];
@@ -367,7 +369,7 @@ type DakuHandakuData = {
 };
 
 export class KanaInput {
-  newLineWord: WordType;
+  newLineWord: LineWord;
   updatePoint: number;
   successKey: string;
   failKey: string;
@@ -375,7 +377,7 @@ export class KanaInput {
   constructor({ chars, lineWord }: JudgeType) {
     this.updatePoint = 0;
     const result = this.hasKana({ chars, lineWord });
-    this.newLineWord = result.newLineWord as WordType;
+    this.newLineWord = result.newLineWord as LineWord;
     this.successKey = result.successKey;
     this.failKey = result.failKey ?? "";
   }
@@ -441,7 +443,7 @@ export class KanaInput {
     return { type, normalized, dakuHandaku };
   }
 
-  private wordUpdate(char: string, newLineWord: WordType) {
+  private wordUpdate(char: string, newLineWord: LineWord) {
     const romaPattern = newLineWord.nextChar["r"];
 
     newLineWord.correct["k"] += char;
@@ -502,13 +504,13 @@ const TENKEYS = [
 
 interface TypingEvent {
   event: KeyboardEvent;
-  lineWord: WordType;
+  lineWord: LineWord;
   inputMode?: InputModeType;
 }
 
 export class Typing {
   chars: CharsType;
-  newLineWord: WordType;
+  newLineWord: LineWord;
   updatePoint: number;
   successKey: string;
   failKey: string;
@@ -600,20 +602,33 @@ export const useTypeSuccess = () => {
   const setLineWord = useSetLineWordAtom();
   const setDisplayLineKpm = useSetDisplayLineKpmAtom();
   const setCombo = useSetComboAtom();
+  const { setStatusValues } = useSetStatusAtoms();
+  const statusAtomsValues = useStatusAtomsValues();
 
   const updateSuccessStatus = ({
     newLineWord,
     lineRemainConstantTime,
     updatePoint,
     totalKpm,
-    status,
   }): Status => {
+    const status = statusAtomsValues();
     const newStatus = { ...status };
+    const isUp = {
+      point: false,
+      score: false,
+      kpm: true,
+      type: true,
+      line: false,
+      rank: false,
+      timeBonus: false,
+    };
 
     if (statusRef.current!.lineStatus.lineType === 1) {
       newStatus.point = updatePoint;
+      isUp.point = true;
     } else if (updatePoint > 0) {
       newStatus.point += updatePoint;
+      isUp.point = true;
     }
     newStatus.kpm = totalKpm;
     newStatus.type++;
@@ -621,26 +636,42 @@ export const useTypeSuccess = () => {
     if (!newLineWord.nextChar["k"]) {
       const timeBonus = Math.round(lineRemainConstantTime * 1 * 100);
       newStatus.timeBonus = timeBonus; //speed;
+      isUp.timeBonus = true;
       newStatus.score += newStatus.point + timeBonus;
+      isUp.score = true;
+
       newStatus.line =
         map.lineLength -
         (statusRef.current!.status.completeCount + statusRef.current!.status.failureCount);
+      isUp.line = true;
+
       newStatus.rank = getRank(rankingScores, newStatus.score);
+
+      isUp.rank = newStatus.rank !== status.rank ? true : false;
     }
+    // isUpがtrueの項目だけをセット
+    const updatedStatus = {};
+    for (const key in isUp) {
+      if (isUp[key]) {
+        updatedStatus[key] = newStatus[key];
+      }
+    }
+
+    setStatusValues(updatedStatus);
+    const newCombo = combo + 1;
+    setCombo(newCombo);
 
     return newStatus;
   };
 
-  const updateSuccessRefStatus = ({ constantLineTime, newLineWord, successKey, newLineKpm }) => {
+  const updateSuccessStatusRefs = ({ constantLineTime, newLineWord, successKey, newLineKpm }) => {
     if (statusRef.current!.lineStatus.lineType === 0) {
       statusRef.current!.lineStatus.latency = constantLineTime;
     }
 
     statusRef.current!.status.missCombo = 0;
+
     const newCombo = combo + 1;
-
-    setCombo(newCombo);
-
     if (newCombo > statusRef.current!.status.maxCombo) {
       statusRef.current!.status.maxCombo = newCombo;
     }
@@ -673,7 +704,7 @@ export const useTypeSuccess = () => {
     setDisplayLineKpm(newLineKpm);
   };
 
-  return { updateSuccessStatus, updateSuccessStatusRefs: updateSuccessRefStatus };
+  return { updateSuccessStatus, updateSuccessStatusRefs };
 };
 
 export function getRank(scores: number[], currentScore: number): number {
@@ -686,14 +717,19 @@ export const useTypeMiss = () => {
   const { statusRef } = useRefs();
   const map = useMapAtom() as CreateMap;
   const setCombo = useSetComboAtom();
+  const statusAtomsValues = useStatusAtomsValues();
+  const { setStatusValues } = useSetStatusAtoms();
 
-  const updateMissStatus = (status: Status) => {
+  const updateMissStatus = () => {
+    const status = statusAtomsValues();
+
     const newStatus = { ...status };
 
     newStatus.miss++;
     newStatus.point -= MISS_PENALTY;
 
-    return newStatus;
+    setCombo(0);
+    setStatusValues({ miss: newStatus.miss, point: newStatus.point });
   };
 
   const updateMissRefStatus = ({ constantLineTime, failKey }) => {
@@ -704,7 +740,6 @@ export const useTypeMiss = () => {
     });
     statusRef.current!.lineStatus.lineMiss++;
     statusRef.current!.status.missCombo++;
-    setCombo(0);
   };
 
   return { updateMissStatus, updateMissRefStatus };

@@ -1,14 +1,11 @@
-import { Status } from "../../../ts/type";
-import { updateReplayStatus } from "../timer-hooks/replayHooks";
-import { Typing, useTypeMiss, useTypeSuccess } from "../../../ts/scene-ts/playing/keydown/typing";
-import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
-import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
-import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
+import { drawerClosureAtom } from "@/app/type/components/typing-area/TypingCard";
+import { useChangePlayMode } from "@/app/type/hooks/playing-hooks/useChangePlayMode";
 import { useGamePause } from "@/app/type/hooks/playing-hooks/useGamePause";
 import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
-import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
-import { useChangePlayMode } from "@/app/type/hooks/playing-hooks/useChangePlayMode";
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
+import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
+import { useRetry } from "@/app/type/hooks/playing-hooks/useRetry";
+import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
 import {
   comboAtom,
   inputModeAtom,
@@ -18,27 +15,25 @@ import {
   sceneAtom,
   skipAtom,
   speedAtom,
-  useComboAtom,
-  useInputModeAtom,
-  useLineResultsAtom,
-  useLineWordAtom,
+  statusAtoms,
   useMapAtom,
-  useRankingScoresAtom,
   userOptionsAtom,
-  useSceneAtom,
   useSetLineResultsAtom,
   useSetPlayingNotifyAtom,
+  useSetStatusAtoms,
   useSetTimeOffsetAtom,
-  useSkipAtom,
-  useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { useSoundEffect } from "@/app/type/hooks/playing-hooks/useSoundEffect";
-import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../../../ts/const/typeDefaultValue";
-import { useVideoSpeedChange } from "../../useVideoSpeedChange";
-import { useGetTime } from "../../useGetTime";
-import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
+import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useStore } from "jotai";
+import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../../../ts/const/typeDefaultValue";
+import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
+import { Typing, useTypeMiss, useTypeSuccess } from "../../../ts/scene-ts/playing/keydown/typing";
+import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
+import { useGetTime } from "../../useGetTime";
+import { useVideoSpeedChange } from "../../useVideoSpeedChange";
+import { updateReplayStatus } from "../timer-hooks/replayHooks";
+import { useSoundEffect } from "../useSoundEffect";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -46,14 +41,16 @@ interface HandleTypingParams {
 }
 
 export const useTyping = () => {
-  const { tabStatusRef, statusRef } = useRefs();
+  const { statusRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
   const typeAtomStore = useStore();
 
   const setLineResults = useSetLineResultsAtom();
   const { triggerTypingSound, triggerMissSound } = useSoundEffect();
+
   const { updateSuccessStatus, updateSuccessStatusRefs } = useTypeSuccess();
+
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
   const {
     getCurrentLineTime,
@@ -62,47 +59,47 @@ export const useTyping = () => {
     getConstantRemainLineTime,
   } = useGetTime();
   const calcTypeSpeed = useCalcTypeSpeed();
+  const { setStatusValues } = useSetStatusAtoms();
 
   return ({ event, count }: HandleTypingParams) => {
     const lineWord = typeAtomStore.get(lineWordAtom);
     const inputMode = typeAtomStore.get(inputModeAtom);
 
-    const result = new Typing({ event, lineWord, inputMode });
     const lineTime = getCurrentLineTime(getCurrentOffsettedYTTime());
     const constantLineTime = getConstantLineTime(lineTime);
 
-    const status: Status = tabStatusRef.current!.getStatus();
-
-    if (result.successKey) {
-      const lineRemainConstantTime = getConstantRemainLineTime(constantLineTime);
+    const typingResult = new Typing({ event, lineWord, inputMode });
+    if (typingResult.successKey) {
+      const statusType = typeAtomStore.get(statusAtoms.type);
       const typeSpeed = calcTypeSpeed({
         updateType: "keydown",
         constantLineTime,
-        totalTypeCount: status.type,
+        totalTypeCount: statusType,
       });
+
       updateSuccessStatusRefs({
         constantLineTime,
-        newLineWord: result.newLineWord,
-        successKey: result.successKey,
+        newLineWord: typingResult.newLineWord,
+        successKey: typingResult.successKey,
         newLineKpm: typeSpeed.lineKpm,
       });
 
+      const lineRemainConstantTime = getConstantRemainLineTime(constantLineTime);
+
       const newStatus = updateSuccessStatus({
-        newLineWord: result.newLineWord,
+        newLineWord: typingResult.newLineWord,
         lineRemainConstantTime,
-        updatePoint: result.updatePoint,
+        updatePoint: typingResult.updatePoint,
         totalKpm: typeSpeed.totalKpm,
-        status,
       });
 
-      const isLineCompleted = !result.newLineWord.nextChar["k"];
+      const isLineCompleted = !typingResult.newLineWord.nextChar["k"];
       triggerTypingSound({ isLineCompleted });
 
       const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
-
       const scene = typeAtomStore.get(sceneAtom);
 
-      if (scene === "practice" && playSpeed >= 1 && !result.newLineWord.nextChar["k"]) {
+      if (scene === "practice" && playSpeed >= 1 && !typingResult.newLineWord.nextChar["k"]) {
         const lineResults = typeAtomStore.get(lineResultsAtom);
 
         const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;
@@ -149,18 +146,15 @@ export const useTyping = () => {
           map!,
           rankingScores,
         );
-        tabStatusRef.current!.setStatus({
+        setStatusValues({
           ...newStatusReplay,
           point: newStatus.point,
           timeBonus: newStatus.timeBonus,
         });
-      } else {
-        tabStatusRef.current!.setStatus(newStatus);
       }
-    } else if (result.newLineWord.correct["r"] || result.newLineWord.correct["k"]) {
-      const newStatus = updateMissStatus(status);
-      updateMissRefStatus({ constantLineTime, failKey: result.failKey });
-      tabStatusRef.current!.setStatus(newStatus);
+    } else if (typingResult.newLineWord.correct["r"] || typingResult.newLineWord.correct["k"]) {
+      updateMissStatus();
+      updateMissRefStatus({ constantLineTime, failKey: typingResult.failKey });
 
       triggerMissSound();
     }
@@ -194,9 +188,11 @@ export const usePlayingShortcutKey = () => {
     const isCtrlAltLeftRight =
       userOptions.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
 
-    // if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
-    //   event.preventDefault();
-    // }
+    const drawerClosure = typeAtomStore.get(drawerClosureAtom) as UseDisclosureReturn;
+
+    if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
+      event.preventDefault();
+    }
     if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
       return;
     }
@@ -220,7 +216,7 @@ export const usePlayingShortcutKey = () => {
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          // moveNextLine(drawerClosure);
+          moveNextLine(drawerClosure);
         }
 
         event.preventDefault();
@@ -233,7 +229,7 @@ export const usePlayingShortcutKey = () => {
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          // movePrevLine(drawerClosure);
+          movePrevLine(drawerClosure);
         }
         event.preventDefault();
         break;
@@ -244,7 +240,7 @@ export const usePlayingShortcutKey = () => {
       case "F1":
         if (userOptions.toggleInputModeKey === "tab") {
           if (scene === "replay" || scene === "practice") {
-            // toggleLineListDrawer(drawerClosure);
+            toggleLineListDrawer();
           }
         }
         event.preventDefault();
@@ -255,7 +251,7 @@ export const usePlayingShortcutKey = () => {
         event.preventDefault();
         break;
       case "F7":
-        // changePlayMode(drawerClosure);
+        changePlayMode();
         event.preventDefault();
         break;
       case "F9":
@@ -303,7 +299,7 @@ export const usePlayingShortcutKey = () => {
           }
         } else {
           if (scene === "replay" || scene === "practice") {
-            // toggleLineListDrawer(drawerClosure);
+            toggleLineListDrawer();
           }
         }
         event.preventDefault();

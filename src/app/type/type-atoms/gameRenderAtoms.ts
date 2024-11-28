@@ -1,18 +1,19 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atomWithReset, atomWithStorage } from "jotai/utils";
+import { getTypeAtomStore } from "../[id]/TypeProvider";
+import { defaultLineWord } from "../ts/const/consts";
+import { DEFAULT_SPEED, DEFAULT_USER_OPTIONS } from "../ts/const/typeDefaultValue";
 import { CreateMap } from "../ts/scene-ts/ready/createTypingWord";
 import {
   InputModeType,
   LineResultData,
+  LineWord,
   NextLyricsType,
   SceneType,
   Speed,
   UserTypingOptions,
-  WordType,
+  useSetStatusValueProps,
 } from "../ts/type";
-import { DEFAULT_SPEED, DEFAULT_USER_OPTIONS } from "../ts/const/typeDefaultValue";
-import { getTypeAtomStore } from "../[id]/TypeProvider";
-import { defaultLineWord } from "../ts/const/consts";
-import { atomWithReset, atomWithStorage } from "jotai/utils";
 const typeAtomStore = getTypeAtomStore();
 
 const mapAtom = atomWithReset<CreateMap | null>(null);
@@ -165,7 +166,7 @@ export const useSetNextLyricsAtom = () => {
   return useSetAtom(nextLyricsAtom, { store: typeAtomStore });
 };
 
-export const lineWordAtom = atom<WordType>(structuredClone(defaultLineWord));
+export const lineWordAtom = atom<LineWord>(structuredClone(defaultLineWord));
 
 export const useLineWordAtom = () => {
   return useAtomValue(lineWordAtom, { store: typeAtomStore });
@@ -222,4 +223,103 @@ export const useComboAtom = () => {
 
 export const useSetComboAtom = () => {
   return useSetAtom(comboAtom, { store: typeAtomStore });
+};
+
+// Status Atoms
+
+const scoreAtom = atomWithReset(0);
+const typeAtom = atomWithReset(0);
+const totalKpmAtom = atomWithReset(0);
+const rankAtom = atomWithReset(0);
+const pointAtom = atomWithReset(0);
+const missAtom = atomWithReset(0);
+const lostAtom = atomWithReset(0);
+const lineCountAtom = atomWithReset(0);
+const timeBonusAtom = atomWithReset(0);
+
+export const statusAtoms = {
+  score: scoreAtom,
+  type: typeAtom,
+  kpm: totalKpmAtom,
+  rank: rankAtom,
+  point: pointAtom,
+  miss: missAtom,
+  lost: lostAtom,
+  line: lineCountAtom,
+  timeBonus: timeBonusAtom,
+};
+
+export const useStatusAtomsValues = () => {
+  return () => {
+    return {
+      score: typeAtomStore.get(scoreAtom),
+      type: typeAtomStore.get(typeAtom),
+      kpm: typeAtomStore.get(totalKpmAtom),
+      rank: typeAtomStore.get(rankAtom),
+      point: typeAtomStore.get(pointAtom),
+      miss: typeAtomStore.get(missAtom),
+      lost: typeAtomStore.get(lostAtom),
+      line: typeAtomStore.get(lineCountAtom),
+      timeBonus: typeAtomStore.get(timeBonusAtom),
+    };
+  };
+};
+
+export const useSetStatusAtoms = () => {
+  const statusSetters = {
+    score: useSetAtom(scoreAtom, { store: typeAtomStore }),
+    type: useSetAtom(typeAtom, { store: typeAtomStore }),
+    kpm: useSetAtom(totalKpmAtom, { store: typeAtomStore }),
+    rank: useSetAtom(rankAtom, { store: typeAtomStore }),
+    point: useSetAtom(pointAtom, { store: typeAtomStore }),
+    miss: useSetAtom(missAtom, { store: typeAtomStore }),
+    lost: useSetAtom(lostAtom, { store: typeAtomStore }),
+    line: useSetAtom(lineCountAtom, { store: typeAtomStore }),
+    timeBonus: useSetAtom(timeBonusAtom, { store: typeAtomStore }),
+  };
+
+  const setStatusValues = (props: useSetStatusValueProps) => {
+    if (props.score !== undefined) {
+      statusSetters.score(props.score);
+    }
+    if (props.type !== undefined) {
+      statusSetters.type(props.type);
+    }
+    if (props.kpm !== undefined) {
+      statusSetters.kpm(props.kpm);
+    }
+    if (props.rank !== undefined) {
+      statusSetters.rank(props.rank);
+    }
+    if (props.point !== undefined) {
+      statusSetters.point(props.point);
+    }
+    if (props.miss !== undefined) {
+      statusSetters.miss(props.miss);
+    }
+    if (props.lost !== undefined) {
+      statusSetters.lost(props.lost);
+    }
+    if (props.line !== undefined) {
+      statusSetters.line(props.line);
+    }
+    if (props.timeBonus !== undefined) {
+      statusSetters.timeBonus(props.timeBonus);
+    }
+  };
+
+  // 新しい関数: statusValuesをリセットする
+  const resetStatusValues = () => {
+    statusSetters.score(0);
+    statusSetters.type(0);
+    statusSetters.kpm(0);
+    statusSetters.rank(0);
+    statusSetters.point(0);
+    statusSetters.miss(0);
+    statusSetters.lost(0);
+    statusSetters.line(0);
+    statusSetters.timeBonus(0);
+  };
+
+  return { setStatusValues, resetStatusValues };
 };

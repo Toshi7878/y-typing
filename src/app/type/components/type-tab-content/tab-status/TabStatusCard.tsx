@@ -1,14 +1,6 @@
-import React, { useRef } from "react";
-import { Table, TableContainer, Card, CardBody, useTheme } from "@chakra-ui/react"; // Card, CardBodyを追加
-import { Status } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
+import { Card, CardBody, Table, TableContainer, useTheme } from "@chakra-ui/react";
 import StatusTbody from "./child/StatusTbody";
-
-export interface TabStatusRef {
-  getStatus: () => Status;
-  setStatus: (newStatus: Status) => void;
-  resetStatus: () => void;
-}
 
 interface TabStatusProps {
   height: string;
@@ -16,7 +8,6 @@ interface TabStatusProps {
 
 const TabStatusCard = (props: TabStatusProps) => {
   const theme: ThemeColors = useTheme();
-  const tabStatusRef = useRef(null);
 
   return (
     <Card
@@ -34,7 +25,7 @@ const TabStatusCard = (props: TabStatusProps) => {
             className="table-fixed overflow-hidden"
             overflowY="auto"
           >
-            <StatusTbody ref={tabStatusRef} />
+            <StatusTbody />
           </Table>
         </TableContainer>
       </CardBody>

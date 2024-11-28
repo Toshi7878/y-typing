@@ -1,4 +1,4 @@
-import { InputModeType, SceneType, Status, StatusRef, WordType } from "../../type";
+import { InputModeType, LineWord, SceneType, Status, StatusRef } from "../../type";
 import { CHAR_POINT, CreateMap } from "../ready/createTypingWord";
 import { getRank } from "./keydown/typing";
 
@@ -10,7 +10,7 @@ export class LineResult {
   constructor(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    lineWord: WordType,
+    lineWord: LineWord,
     inputMode: InputModeType,
     map: CreateMap,
     totalTypeSpeed: number,
@@ -38,7 +38,7 @@ export class LineResult {
   private updateStatus(
     status: Status,
     statusRef: React.RefObject<StatusRef>,
-    lineWord: WordType,
+    lineWord: LineWord,
     lostLen: number,
     map: CreateMap,
     totalTypeSpeed: number,
@@ -68,7 +68,7 @@ export class LineResult {
     return newStatus;
   }
 
-  private setLostWord(lineWord: WordType, inputMode: InputModeType) {
+  private setLostWord(lineWord: LineWord, inputMode: InputModeType) {
     if (lineWord.nextChar["k"]) {
       const romaLostWord = lineWord.nextChar["r"][0] + lineWord.word.map((w) => w["r"][0]).join("");
       const kanaLostWord = lineWord.nextChar["k"] + lineWord.word.map((w) => w["k"]).join("");

@@ -11,7 +11,6 @@ import {
 import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
 import { UseDisclosureReturn } from "@chakra-ui/react";
 import { defaultLineWord, defaultNextLyrics } from "@/app/type/ts/const/consts";
-import { useHandleKeydown } from "@/app/type/hooks/playing-hooks/keydown-hooks/useHandleKeydown";
 
 interface PlayingProps {
   drawerClosure: UseDisclosureReturn;

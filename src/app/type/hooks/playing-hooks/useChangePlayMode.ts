@@ -1,15 +1,14 @@
+import { useStore } from "jotai";
+import { drawerClosureAtom } from "../../components/typing-area/TypingCard";
+import { DEFAULT_GAME_STATE_REF } from "../../ts/const/typeDefaultValue";
 import {
   sceneAtom,
-  useSceneAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
-import { DEFAULT_GAME_STATE_REF } from "../../ts/const/typeDefaultValue";
-import { UseDisclosureReturn } from "@chakra-ui/react";
-import { useRetry } from "./useRetry";
 import { useVideoSpeedChange } from "../useVideoSpeedChange";
-import { useStore } from "jotai";
+import { useRetry } from "./useRetry";
 
 export const useChangePlayMode = () => {
   const { gameStateRef } = useRefs();
@@ -20,7 +19,7 @@ export const useChangePlayMode = () => {
   const { defaultSpeedChange } = useVideoSpeedChange();
   const typeAtomStore = useStore();
 
-  return (drawerClosure: UseDisclosureReturn) => {
+  return () => {
     const scene = typeAtomStore.get(sceneAtom);
     if (scene === "playing") {
       const confirmMessage = "練習モードに移動しますか？";
@@ -35,7 +34,11 @@ export const useChangePlayMode = () => {
         gameStateRef.current!.replay = structuredClone(DEFAULT_GAME_STATE_REF.replay);
         gameStateRef.current!.playMode = "playing";
         setScene("playing");
-        drawerClosure.onClose();
+        const drawerClosure = typeAtomStore.get(drawerClosureAtom);
+
+        if (drawerClosure) {
+          drawerClosure.onClose();
+        }
         retry();
         defaultSpeedChange("set", gameStateRef.current?.startPlaySpeed);
       }

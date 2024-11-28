@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const userId = Number(url.searchParams.get("userId"));
 
   try {
-    const firstNewNotification = prisma.notification.findFirst({
+    const firstNewNotification = await prisma.notification.findFirst({
       where: {
         visited_id: userId,
         checked: false,

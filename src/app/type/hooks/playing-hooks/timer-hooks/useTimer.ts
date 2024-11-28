@@ -1,10 +1,4 @@
-import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
-import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
-import { LineResult } from "../../../ts/scene-ts/playing/lineResult";
-import { InputModeType } from "../../../ts/type";
-import { updateReplayStatus, useLineReplayUpdate, useReplay } from "./replayHooks";
-import { typeTicker } from "../../useYoutubeEvents";
-import { DEFAULT_STATUS_REF } from "../../../ts/const/typeDefaultValue";
+import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/useDisplaySkipGuide";
 import {
   comboAtom,
   currentTimeSSMMAtom,
@@ -24,23 +18,24 @@ import {
   useSetLineWordAtom,
   useSetLyricsAtom,
   useSetNextLyricsAtom,
+  useSetStatusAtoms,
+  useStatusAtomsValues,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/useDisplaySkipGuide";
-import { useGetSeekLineCount } from "./useSeekGetLineCount";
-import { useGetTime } from "../../useGetTime";
 import { useStore } from "jotai";
+import { DEFAULT_STATUS_REF } from "../../../ts/const/typeDefaultValue";
+import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
+import { LineResult } from "../../../ts/scene-ts/playing/lineResult";
+import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
+import { InputModeType, Status } from "../../../ts/type";
+import { useGetTime } from "../../useGetTime";
+import { typeTicker } from "../../useYoutubeEvents";
+import { updateReplayStatus, useLineReplayUpdate, useReplay } from "./replayHooks";
+import { useGetSeekLineCount } from "./useSeekGetLineCount";
 
 export const usePlayTimer = () => {
-  const {
-    statusRef,
-    tabStatusRef,
-    gameStateRef,
-    lineProgressRef,
-    totalProgressRef,
-    ytStateRef,
-    playerRef,
-  } = useRefs();
+  const { statusRef, gameStateRef, lineProgressRef, totalProgressRef, ytStateRef, playerRef } =
+    useRefs();
   const map = useMapAtom() as CreateMap;
 
   const typeAtomStore = useStore();
@@ -61,6 +56,7 @@ export const usePlayTimer = () => {
     getConstantLineTime,
   } = useGetTime();
   const calcTypeSpeed = useCalcTypeSpeed();
+  const statusAtomsValues = useStatusAtomsValues();
 
   return () => {
     const count = statusRef.current!.status.count;
@@ -109,8 +105,7 @@ export const usePlayTimer = () => {
       const lineWord = typeAtomStore.get(lineWordAtom);
 
       if (lineWord.nextChar["k"]) {
-        console.log(lineWord.nextChar["k"]);
-        const status = tabStatusRef.current!.getStatus();
+        const status = statusAtomsValues();
 
         const typeSpeed = calcTypeSpeed({
           updateType: "timer",
@@ -173,16 +168,17 @@ export const usePlayTimer = () => {
 };
 
 export const useCalcLineResult = () => {
-  const { statusRef, tabStatusRef } = useRefs();
+  const { statusRef } = useRefs();
   const map = useMapAtom() as CreateMap;
   const typeAtomStore = useStore();
   const setLineResults = useSetLineResultsAtom();
   const calcTypeSpeed = useCalcTypeSpeed();
   const setCombo = useSetComboAtom();
+  const { setStatusValues } = useSetStatusAtoms();
+  const statusAtomsValues = useStatusAtomsValues();
 
   return ({ count, lineConstantTime }: { count: number; lineConstantTime: number }) => {
-    const status = tabStatusRef.current!.getStatus();
-
+    const status: Status = statusAtomsValues();
     const scene = typeAtomStore.get(sceneAtom);
     const lineResults = typeAtomStore.get(lineResultsAtom);
     const rankingScores = typeAtomStore.get(rankingScoresAtom);
@@ -269,7 +265,7 @@ export const useCalcLineResult = () => {
       }
 
       if (scene === "playing") {
-        tabStatusRef.current!.setStatus(lineResult.newStatus);
+        setStatusValues(lineResult.newStatus);
       } else if (scene === "practice") {
         const newStatus = updateReplayStatus(
           map!.mapData.length - 1,
@@ -277,11 +273,11 @@ export const useCalcLineResult = () => {
           map,
           rankingScores,
         );
-        tabStatusRef.current!.setStatus(newStatus);
+        setStatusValues(newStatus);
       }
     } else if (scene === "replay") {
       const newStatus = updateReplayStatus(count, lineResults, map, rankingScores);
-      tabStatusRef.current!.setStatus(newStatus);
+      setStatusValues(newStatus);
       if (count > 0) {
         const lineResult = lineResults[count - 1];
         setCombo(lineResult.status!.combo as number);

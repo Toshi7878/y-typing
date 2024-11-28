@@ -1,7 +1,7 @@
-import { Card, CardBody, Box, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Box, Card, CardBody, useTheme } from "@chakra-ui/react";
 
-import RankingList from "./child/RankingList";
 import { ThemeColors } from "@/types";
+import RankingList from "./child/RankingList";
 
 interface TabRankingProps {
   height: string;

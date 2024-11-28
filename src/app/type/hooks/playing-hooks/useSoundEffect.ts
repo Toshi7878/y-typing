@@ -7,17 +7,16 @@ import { useStore } from "jotai";
 import { userOptionsAtom } from "../../type-atoms/gameRenderAtoms";
 
 export const useSoundEffect = () => {
-  const volume = useVolumeAtom();
+  const volume = useVolumeAtom() / 100;
 
   const typeAtomStore = useStore();
 
-  const [clearTypeSoundPlay] = useSound(clearTypeSound, { volume: volume / 100 });
-  const [typeSoundPlay] = useSound(typeSound, { volume: volume / 100 });
-  const [missSoundPlay] = useSound(missSound, { volume: volume / 100 });
+  const [clearTypeSoundPlay] = useSound(clearTypeSound, { volume });
+  const [typeSoundPlay] = useSound(typeSound, { volume });
+  const [missSoundPlay] = useSound(missSound, { volume });
 
   const triggerTypingSound = ({ isLineCompleted }: { isLineCompleted: boolean }) => {
     const userOptions = typeAtomStore.get(userOptionsAtom);
-    console.log(userOptions);
     if (isLineCompleted) {
       if (userOptions.lineClearSound) {
         clearTypeSoundPlay();

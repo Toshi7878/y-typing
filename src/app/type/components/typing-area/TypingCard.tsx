@@ -1,6 +1,6 @@
 "use client";
 import "../../style/type.scss";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import Playing from "./scene/Playing";
 import End from "./scene/End";
 import {
@@ -24,6 +24,8 @@ import PlayingTop from "./scene/child/PlayingTop";
 import PlayingBottom from "./scene/child/PlayingBottom";
 import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
 import { ThemeColors } from "@/types";
+import { atom, useSetAtom } from "jotai";
+import { getTypeAtomStore } from "../../[id]/TypeProvider";
 
 interface TypingCardBodyProps {
   drawerClosure: UseDisclosureReturn;
@@ -75,10 +77,22 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
   );
 };
 
+export const drawerClosureAtom = atom<UseDisclosureReturn | null>(null);
+const typeAtomStore = getTypeAtomStore();
+
+export const useSetDrawerClosureAtom = () => {
+  return useSetAtom(drawerClosureAtom, { store: typeAtomStore });
+};
+
 function TypingCard() {
   const theme: ThemeColors = useTheme();
   const drawerClosure = useDisclosure();
+  const setDrawerClosure = useSetDrawerClosureAtom();
 
+  useEffect(() => {
+    setDrawerClosure(drawerClosure);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drawerClosure]);
   return (
     <Card
       className="typing-card"
@@ -92,7 +106,7 @@ function TypingCard() {
       </CardHeader>
       <TypingCardBody drawerClosure={drawerClosure} />
       <CardFooter py={0} mx={3} flexDirection="column">
-        <PlayingBottom drawerClosure={drawerClosure} />
+        <PlayingBottom />
       </CardFooter>
     </Card>
   );

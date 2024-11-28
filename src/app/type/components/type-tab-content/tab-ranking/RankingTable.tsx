@@ -1,9 +1,8 @@
-import { Card, CardBody, Table, Thead, Tbody, Tr, Th, Box, useTheme } from "@chakra-ui/react"; // Boxコンポーネントを追加
+import { Table, Tbody, Th, Thead, Tr, useTheme } from "@chakra-ui/react";
 
-import RankingList from "./child/RankingList";
-import { FaHandsClapping } from "react-icons/fa6";
-import { ThemeColors } from "@/types";
 import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
+import { ThemeColors } from "@/types";
+import { FaHandsClapping } from "react-icons/fa6";
 
 interface RankingTableProps {
   children: React.ReactNode;

@@ -1,19 +1,20 @@
-import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useSceneAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
 import PlayingBottomBadge from "./child/PlayingBottomBadge";
+import { useStore } from "jotai";
+import { drawerClosureAtom } from "@/app/type/components/typing-area/TypingCard";
+import { UseDisclosureReturn } from "@chakra-ui/react";
 
-interface PlayingPracticeBadgeProps {
-  drawerClosure: UseDisclosureReturn;
-}
-
-const PlayingPracticeBadge = function ({ drawerClosure }: PlayingPracticeBadgeProps) {
+const PlayingPracticeBadge = function () {
   const scene = useSceneAtom();
   const toggleLineListDrawer = useToggleLineList();
   const { movePrevLine, moveNextLine } = useMoveLine();
   const userOptionsAtom = useUserOptionsAtom();
+  const typeAtomStore = useStore();
+
+  const drawerClosure = typeAtomStore.get(drawerClosureAtom) as UseDisclosureReturn;
 
   return (
     <>
@@ -30,7 +31,7 @@ const PlayingPracticeBadge = function ({ drawerClosure }: PlayingPracticeBadgePr
           <PlayingBottomBadge
             badgeText="ライン一覧"
             kbdText={userOptionsAtom.toggleInputModeKey === "tab" ? "F1" : "Tab"}
-            onClick={() => toggleLineListDrawer(drawerClosure)}
+            onClick={() => toggleLineListDrawer()}
             isPauseDisabled={false}
             isKbdHidden={false}
           />

@@ -1,5 +1,3 @@
-import { PlayingTypingWordsRef } from "../components/typing-area/scene/playing-child/child/PlayingTypingWords";
-
 export type InputModeType = "roma" | "kana" | "flick";
 export type PlayMode = "playing" | "replay" | "practice";
 export type SceneType = "ready" | "playing" | "end" | "replay" | "practice";
@@ -52,7 +50,6 @@ export interface RankingListType {
 
 export interface RefsContextType {
   playerRef: any;
-  tabStatusRef: React.RefObject<TabStatusRef>;
   bestScoreRef: React.MutableRefObject<number>;
   statusRef: React.RefObject<StatusRef>;
   ytStateRef: React.RefObject<YTStateRef>;
@@ -62,7 +59,7 @@ export interface RefsContextType {
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
-export interface WordType {
+export interface LineWord {
   correct: { k: string; r: string };
   nextChar: TypeChank;
   word: TypeChank[];
@@ -190,6 +187,18 @@ export interface UserTypingOptions {
 export interface Speed {
   defaultSpeed: number;
   playSpeed: number;
+}
+
+export interface useSetStatusValueProps {
+  score?: number;
+  type?: number;
+  kpm?: number;
+  rank?: number;
+  point?: number;
+  miss?: number;
+  lost?: number;
+  line?: number;
+  timeBonus?: number;
 }
 
 export type Dakuten =

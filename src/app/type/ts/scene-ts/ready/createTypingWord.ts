@@ -3,10 +3,10 @@ import {
   InputModeType,
   LineData,
   LineResultData,
+  LineWord,
   MapData,
   SpeedDifficulty,
   TypeChank,
-  WordType,
 } from "../../type";
 
 const ZENKAKU_LIST = [
@@ -593,7 +593,7 @@ export class CreateMap {
   }
 }
 
-export function romaConvert(lineWord: WordType) {
+export function romaConvert(lineWord: LineWord) {
   const dakuten = lineWord.kanaDakuten;
   let kanaWord =
     (dakuten ? dakuten : lineWord.nextChar["k"]) + lineWord.word.map((char) => char["k"]).join("");

@@ -1,66 +1,43 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
-import { Tbody, Tr, Td, useTheme } from "@chakra-ui/react"; // Card, CardBodyを追加
-import { useMapAtom, useRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import styled from "@emotion/styled";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { STATUS_LABEL } from "@/app/type/ts/const/consts";
+import { statusAtoms } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
-import { Status } from "@/app/type/ts/type";
-import StatusValue from "./child/StatusValue";
+import { Tbody, Td, Tr, useTheme } from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { useCallback } from "react";
 import StatusPointValue from "./child/StatusPointValue";
-import { DEFAULT_STATUS, STATUS_LABEL } from "@/app/type/ts/const/consts";
+import StatusValue from "./child/StatusValue";
 
-export interface TabStatusRef {
-  getStatus: () => Status;
-  setStatus: (newStatus: Status) => void;
-  resetStatus: () => void;
-}
-
-const StatusTbody = forwardRef((props, ref) => {
-  const map = useMapAtom();
-  const rankingScores = useRankingScoresAtom();
+const StatusTbody = () => {
+  // const map = useMapAtom() as CreateMap;
+  // const rankingScores = useRankingScoresAtom();
   const theme: ThemeColors = useTheme();
-  const { setRef } = useRefs();
-  const [status, setStatus] = useState(DEFAULT_STATUS);
-
-  useEffect(() => {
-    if (ref && "current" in ref) {
-      setRef("tabStatusRef", ref.current!);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
-
-  useImperativeHandle(ref, () => ({
-    getStatus: () => status,
-    setStatus: (newStatus: Status) => setStatus(newStatus),
-    resetStatus: () => setStatus(structuredClone(DEFAULT_STATUS)),
-  }));
 
   const capitalizeFirstLetter = useCallback((string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }, []);
 
-  useEffect(() => {
-    if (map) {
-      const newStatus = { ...status };
-      newStatus.line = map.lineLength;
-      DEFAULT_STATUS.line = map.lineLength;
-      setStatus(newStatus);
-    }
+  // useEffect(() => {
+  //   if (map) {
+  //     const newStatus = { ...status };
+  //     newStatus.line = map.lineLength;
+  //     DEFAULT_STATUS.line = map.lineLength;
+  //     setStatus(newStatus);
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [map]);
 
-  useEffect(() => {
-    if (rankingScores.length) {
-      const newStatus = { ...status };
+  // useEffect(() => {
+  //   if (rankingScores.length) {
+  //     const newStatus = { ...status };
 
-      newStatus.rank = rankingScores.length + 1;
-      DEFAULT_STATUS.rank = rankingScores.length + 1;
-      setStatus(newStatus);
-    }
+  //     newStatus.rank = rankingScores.length + 1;
+  //     DEFAULT_STATUS.rank = rankingScores.length + 1;
+  //     setStatus(newStatus);
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rankingScores]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rankingScores]);
 
   const Label = styled.span<{ label: string }>`
     position: relative;
@@ -100,7 +77,7 @@ const StatusTbody = forwardRef((props, ref) => {
               </Label>
 
               <UnderlinedSpan label={label} className="status-underline">
-                <StatusValue value={status[label]} />
+                <StatusValue atom={statusAtoms[label]} />
               </UnderlinedSpan>
             </TdStyled>
           );
@@ -117,9 +94,12 @@ const StatusTbody = forwardRef((props, ref) => {
 
               <UnderlinedSpan label={label} className="status-underline">
                 {label === "point" ? (
-                  <StatusPointValue value={status[label]} timeBonusValue={status["timeBonus"]} />
+                  <StatusPointValue
+                    atom={statusAtoms[label]}
+                    timeBonusAtom={statusAtoms["timeBonus"]}
+                  />
                 ) : (
-                  <StatusValue value={status[label]} />
+                  <StatusValue atom={statusAtoms[label]} />
                 )}
               </UnderlinedSpan>
             </TdStyled>
@@ -128,8 +108,6 @@ const StatusTbody = forwardRef((props, ref) => {
       </Tr>
     </Tbody>
   );
-});
-
-StatusTbody.displayName = "StatusTr";
+};
 
 export default StatusTbody;

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Box, Spinner } from "@chakra-ui/react"; // Boxコンポーネントを追加
-import { useSession } from "next-auth/react";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { RankingListType } from "@/app/type/ts/type";
-import RankingTr from "./child/RankingTr";
-import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRankingQuery } from "@/app/type/hooks/data-query/useRankingQuery";
+import { RankingListType } from "@/app/type/ts/type";
+import { useSceneAtom, useSetRankingScoresAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { Box, Spinner } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import RankingTable from "../RankingTable";
+import RankingTr from "./child/RankingTr";
 
 const RankingList = () => {
   const { data: session } = useSession();
@@ -77,7 +77,7 @@ const RankingList = () => {
   }
   if (error) return <div>Error loading data</div>;
 
-  if (!data) return null; // データが存在しない場合はnullを返す
+  if (!data) return null;
 
   return (
     <RankingTable>

@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState, CSSProperties } from "react";
 import interact from "interactjs";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 
 type Partial<T> = {
   [P in keyof T]?: T[P];
@@ -33,7 +33,7 @@ export function useInteractJS(position: Partial<typeof initPosition> = initPosit
       .draggable({
         inertia: false,
         cursorChecker: (interacting) => {
-          return interacting ? "move" : "pointer"; // カーソルを変更
+          return interacting ? "move" : "pointer";
         },
       })
       .resizable({

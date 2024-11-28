@@ -1,19 +1,15 @@
-import { Box, Stack } from "@chakra-ui/react";
-import React from "react";
-import { actions } from "@/app/type/ts/scene-ts/end/send-result-server-actions";
-import { useLineResultsAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useFormState } from "react-dom";
+import { useStatusAtomsValues, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import { Stack } from "@chakra-ui/react";
+import { useFormState } from "react-dom";
 
-import { useSession } from "next-auth/react";
-import EndText from "./end-child/EndText";
-import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
-import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
-import { supabase } from "@/lib/supabaseClient";
-import { INITIAL_STATE } from "@/config/consts";
-import { CARD_BODY_MIN_HEIGHT } from "../TypingCard";
-import { Status } from "@/app/type/ts/type";
 import { useSendResult } from "@/app/type/hooks/useSendResult";
+import { INITIAL_STATE } from "@/config/consts";
+import { useSession } from "next-auth/react";
+import { CARD_BODY_MIN_HEIGHT } from "../TypingCard";
+import EndMainButtonContainer from "./end-child/EndMainButtonContainer";
+import EndSubButtonContainer from "./end-child/EndSubButtonContainer";
+import EndText from "./end-child/EndText";
 
 interface EndProps {
   onOpen: () => void;
@@ -25,11 +21,13 @@ const End = ({ onOpen }: EndProps) => {
   const speedData = useTypePageSpeedAtom();
 
   const sendResult = useSendResult();
+  const statusAtomsValues = useStatusAtomsValues();
+
   const [state, formAction] = useFormState(sendResult, INITIAL_STATE);
 
-  const { bestScoreRef, tabStatusRef, gameStateRef } = useRefs();
+  const { bestScoreRef, gameStateRef } = useRefs();
 
-  const status: Status = tabStatusRef.current?.getStatus();
+  const status = statusAtomsValues();
 
   if (status === undefined) {
     //タイピングページ　→　タイピングページに遷移時returnしないとclient errorがでる

@@ -1,13 +1,6 @@
-import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
-import {
-  CharsType,
-  getRank,
-  KanaInput,
-  RomaInput,
-  useTypeMiss,
-  useTypeSuccess,
-} from "../../../ts/scene-ts/playing/keydown/typing";
-import { LineResultData, Status, TypeResult } from "../../../ts/type";
+import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
+import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
+import { useCalcTypeSpeed } from "@/app/type/ts/scene-ts/playing/calcTypeSpeed";
 import {
   inputModeAtom,
   lineResultsAtom,
@@ -17,14 +10,23 @@ import {
   useSetComboAtom,
   useSetDisplayLineKpmAtom,
   useSetLineWordAtom,
+  useSetStatusAtoms,
+  useStatusAtomsValues,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { useInputModeChange } from "@/app/type/hooks/playing-hooks/useInputModeChange";
-import { useSoundEffect } from "../useSoundEffect";
-import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
-import { useGetTime } from "../../useGetTime";
-import { useCalcTypeSpeed } from "@/app/type/ts/scene-ts/playing/calcTypeSpeed";
 import { useStore } from "jotai";
+import {
+  CharsType,
+  getRank,
+  KanaInput,
+  RomaInput,
+  useTypeMiss,
+  useTypeSuccess,
+} from "../../../ts/scene-ts/playing/keydown/typing";
+import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
+import { LineResultData, Status, TypeResult } from "../../../ts/type";
+import { useGetTime } from "../../useGetTime";
+import { useSoundEffect } from "../useSoundEffect";
 
 export const updateReplayStatus = (
   count: number,
@@ -69,13 +71,15 @@ interface UseKeyReplayProps {
 }
 
 const useKeyReplay = () => {
-  const { statusRef, tabStatusRef } = useRefs();
+  const { statusRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
   const typeAtomStore = useStore();
 
   const setLineWord = useSetLineWordAtom();
   const setDisplayLineKpm = useSetDisplayLineKpmAtom();
+  const setCombo = useSetComboAtom();
+  const { setStatusValues } = useSetStatusAtoms();
 
   const inputModeChange = useInputModeChange();
   const { playingSpeedChange } = useVideoSpeedChange();
@@ -85,7 +89,7 @@ const useKeyReplay = () => {
   const { updateMissStatus, updateMissRefStatus } = useTypeMiss();
   const { triggerTypingSound, triggerMissSound } = useSoundEffect();
   const calcTypeSpeed = useCalcTypeSpeed();
-  const setCombo = useSetComboAtom();
+  const statusAtomsValues = useStatusAtomsValues();
 
   return ({ constantLineTime, lineResult, typeData }: UseKeyReplayProps) => {
     const key = typeData.c;
@@ -99,7 +103,8 @@ const useKeyReplay = () => {
         key: key,
         code: `Key${key.toUpperCase()}`,
       };
-      const status = tabStatusRef.current!.getStatus();
+
+      const status = statusAtomsValues();
 
       if (isSuccess) {
         const inputMode = typeAtomStore.get(inputModeAtom);
@@ -131,12 +136,10 @@ const useKeyReplay = () => {
             lineRemainConstantTime,
             updatePoint: result.updatePoint,
             totalKpm: typeSpeed.totalKpm,
-            status,
           });
 
           triggerTypingSound({ isLineCompleted: false });
 
-          tabStatusRef.current!.setStatus(newStatus);
           setDisplayLineKpm(typeSpeed.lineKpm);
         } else {
           const rankingScores = typeAtomStore.get(rankingScoresAtom);
@@ -145,7 +148,7 @@ const useKeyReplay = () => {
           newStatusReplay.point = lineResult.status!.p as number;
           newStatusReplay.timeBonus = lineResult.status!.tBonus as number;
 
-          tabStatusRef.current!.setStatus(newStatusReplay);
+          setStatusValues(newStatusReplay);
           setCombo(lineResult.status!.combo as number);
           setDisplayLineKpm(lineResult.status!.lKpm as number);
           statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
@@ -154,10 +157,8 @@ const useKeyReplay = () => {
 
         setLineWord(result.newLineWord);
       } else {
-        const newStatus = updateMissStatus(status);
+        updateMissStatus();
         updateMissRefStatus({ constantLineTime, failKey: key });
-        tabStatusRef.current!.setStatus(newStatus);
-
         triggerMissSound();
       }
     } else if (option) {

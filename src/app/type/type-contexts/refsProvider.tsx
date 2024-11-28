@@ -1,15 +1,14 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { GameStateRef, RefsContextType, StatusRef, YTStateRef } from "../ts/type";
 import {
   DEFAULT_GAME_STATE_REF,
   DEFAULT_STATUS_REF,
   DEFAULT_YT_STATE_REF,
 } from "../ts/const/typeDefaultValue";
+import { GameStateRef, RefsContextType, StatusRef, YTStateRef } from "../ts/type";
 
 export const RefsContext = createContext<RefsContextType>({
   playerRef: null,
-  tabStatusRef: { current: null },
   bestScoreRef: { current: 0 },
   statusRef: { current: structuredClone(DEFAULT_STATUS_REF) },
   ytStateRef: { current: structuredClone(DEFAULT_YT_STATE_REF) },
@@ -22,7 +21,6 @@ export const RefsContext = createContext<RefsContextType>({
 
 export const RefsProvider = ({ children }) => {
   const playerRef = useRef(null);
-  const tabStatusRef = useRef(null);
   const bestScoreRef = useRef(0);
   const statusRef = useRef<StatusRef>(structuredClone(DEFAULT_STATUS_REF));
   const ytStateRef = useRef<YTStateRef>(structuredClone(DEFAULT_YT_STATE_REF));
@@ -34,9 +32,6 @@ export const RefsProvider = ({ children }) => {
     switch (key) {
       case "playerRef":
         playerRef.current = ref;
-        break;
-      case "tabStatusRef":
-        tabStatusRef.current = ref;
         break;
       case "line_progress":
         lineProgressRef.current = ref;
@@ -56,7 +51,6 @@ export const RefsProvider = ({ children }) => {
         lineProgressRef,
         totalProgressRef,
         bestScoreRef,
-        tabStatusRef,
         playerRef,
         setRef,
       }}
@@ -71,7 +65,6 @@ export const useRefs = () => {
   return {
     playerRef: context.playerRef,
     bestScoreRef: context.bestScoreRef,
-    tabStatusRef: context.tabStatusRef,
     lineProgressRef: context.lineProgressRef,
     totalProgressRef: context.totalProgressRef,
     statusRef: context.statusRef,

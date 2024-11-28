@@ -1,12 +1,12 @@
 import { useParams } from "next/navigation";
 import { actions } from "../ts/scene-ts/end/send-result-server-actions";
-import { LineResultData, Status } from "../ts/type";
-import { useLineResultsAtom } from "../type-atoms/gameRenderAtoms";
+import { LineResultData } from "../ts/type";
+import { useLineResultsAtom, useStatusAtomsValues } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
 
 export const useSendResult = () => {
   const { id: mapId } = useParams();
-  const { statusRef, tabStatusRef } = useRefs();
+  const { statusRef } = useRefs();
   const lineResults: LineResultData[] = useLineResultsAtom();
   const minSp = lineResults.reduce((min, result) => {
     if (result.status!.tTime !== 0) {
@@ -14,12 +14,13 @@ export const useSendResult = () => {
     }
     return min;
   }, Infinity);
+  const statusAtomsValue = useStatusAtomsValues();
 
   return async (): Promise<ReturnType<typeof actions>> => {
     const totalTypeTime = statusRef.current!.status.totalTypeTime;
     const rkpmTime = totalTypeTime - statusRef.current!.status.totalLatency;
     const kanaToRomaConvertCount = statusRef.current!.status.kanaToRomaConvertCount;
-    const status: Status = tabStatusRef.current!.getStatus();
+    const status = statusAtomsValue();
 
     const sendStatus = {
       score: status.score,
