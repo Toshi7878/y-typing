@@ -318,8 +318,8 @@ export const useSetStatusAtoms = () => {
     statusSetters.point(0);
     statusSetters.miss(0);
     statusSetters.lost(0);
-    statusSetters.rank(rankingScores.length);
-    statusSetters.line(map.lineLength + 1);
+    statusSetters.rank(rankingScores.length + 1);
+    statusSetters.line(map.lineLength);
     statusSetters.timeBonus(0);
   };
 
