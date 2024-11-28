@@ -1,12 +1,12 @@
-import { useRefs } from "../type-contexts/refsProvider";
+import { useStore } from "jotai";
 import {
   sceneAtom,
   speedAtom,
   useSetPlayingNotifyAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
+import { useRefs } from "../type-contexts/refsProvider";
 import { useGetTime } from "./useGetTime";
-import { useStore } from "jotai";
 
 export const useVideoSpeedChange = () => {
   const typeAtomStore = useStore();
@@ -33,9 +33,11 @@ export const useVideoSpeedChange = () => {
 
     const scene = typeAtomStore.get(sceneAtom);
 
+    const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
+
     if (scene === "ready" && gameStateRef.current) {
       gameStateRef.current.startPlaySpeed = setSpeed;
-    } else if (scene === "playing") {
+    } else if (isPlayed) {
       setNotify(Symbol(`${setSpeed.toFixed(2)}x`));
     }
   };
