@@ -16,7 +16,7 @@ import {
 } from "../ts/type";
 const typeAtomStore = getTypeAtomStore();
 
-const mapAtom = atomWithReset<CreateMap | null>(null);
+export const mapAtom = atom<CreateMap | null>(null);
 
 export const useMapAtom = () => {
   return useAtomValue(mapAtom);
@@ -105,7 +105,7 @@ export const useSetLineResultsAtom = () => {
   return useSetAtom(lineResultsAtom, { store: typeAtomStore });
 };
 
-export const lineSelectIndexAtom = atom<number | null>(null);
+export const lineSelectIndexAtom = atom<number>(0);
 
 export const useLineSelectIndexAtom = () => {
   return useAtomValue(lineSelectIndexAtom);

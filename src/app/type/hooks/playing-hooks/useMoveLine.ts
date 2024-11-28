@@ -1,4 +1,5 @@
-import { UseDisclosureReturn } from "@chakra-ui/react";
+import { ThemeColors } from "@/types";
+import { UseDisclosureReturn, useTheme } from "@chakra-ui/react";
 import { useStore } from "jotai";
 import {
   lineSelectIndexAtom,
@@ -14,19 +15,17 @@ import { useGetSeekLineCount } from "./timer-hooks/useSeekGetLineCount";
 import { useUpdateLine } from "./timer-hooks/useTimer";
 
 export const useMoveLine = () => {
-  const { gameStateRef, statusRef, playerRef } = useRefs();
+  const { statusRef, playerRef, cardRefs } = useRefs();
   const scene = useSceneAtom();
   const map = useMapAtom();
   const typeAtomStore = useStore();
+  const theme: ThemeColors = useTheme();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const updateLine = useUpdateLine();
   const getSeekLineCount = useGetSeekLineCount();
 
   const movePrevLine = (drawerClosure: UseDisclosureReturn) => {
-    if (drawerClosure.isOpen && gameStateRef.current!.isSeekedLine) {
-      return;
-    }
     const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
     const prevCount = structuredClone(map!.typingLineNumbers)
       .reverse()
@@ -39,28 +38,22 @@ export const useMoveLine = () => {
 
     const seekBuffer = scene === "practice" ? 1 * playSpeed : 0;
     const prevTime = Number(map!.mapData[prevCount]["time"]) - seekBuffer;
-    setLineSelectIndex(map!.typingLineNumbers.indexOf(prevCount) + 1);
+    const newLineSelectIndex = map!.typingLineNumbers.indexOf(prevCount) + 1;
+    setLineSelectIndex(newLineSelectIndex);
     if (typeTicker.started) {
       typeTicker.stop();
     }
 
-    if (!drawerClosure.isOpen) {
-      const newCount = getSeekLineCount(prevTime);
-      statusRef.current!.status.count = newCount;
-      updateLine(newCount);
-    } else {
-      gameStateRef.current!.isSeekedLine = true;
-    }
+    const newCount = getSeekLineCount(prevTime);
+    statusRef.current!.status.count = newCount;
+    updateLine(newCount);
 
     playerRef.current.seekTo(prevTime);
     setNotify(Symbol(`◁`));
+    drawerSelectColorChange(newLineSelectIndex);
   };
 
   const moveNextLine = (drawerClosure: UseDisclosureReturn) => {
-    if (drawerClosure.isOpen && gameStateRef.current!.isSeekedLine) {
-      return;
-    }
-
     const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
     const seekCount = lineSelectIndex ? map!.typingLineNumbers[lineSelectIndex - 1] : null;
     const seekCountAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
@@ -81,22 +74,20 @@ export const useMoveLine = () => {
     const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * playSpeed : 0;
     const nextTime = Number(map!.mapData[nextCount]["time"]) - seekBuffer;
 
-    const typingLineCount = map!.typingLineNumbers.indexOf(nextCount) + 1;
+    const newLineSelectIndex = map!.typingLineNumbers.indexOf(nextCount) + 1;
 
-    setLineSelectIndex(typingLineCount);
+    setLineSelectIndex(newLineSelectIndex);
     if (typeTicker.started) {
       typeTicker.stop();
     }
 
-    if (!drawerClosure.isOpen) {
-      const newCount = getSeekLineCount(nextTime);
-      statusRef.current!.status.count = newCount;
-      updateLine(newCount);
-    } else {
-      gameStateRef.current!.isSeekedLine = true;
-    }
+    const newCount = getSeekLineCount(nextTime);
+    statusRef.current!.status.count = newCount;
+    updateLine(newCount);
+
     playerRef.current.seekTo(nextTime);
     setNotify(Symbol(`▷`));
+    drawerSelectColorChange(newLineSelectIndex);
   };
 
   const moveSetLine = () => {
@@ -105,17 +96,29 @@ export const useMoveLine = () => {
     if (!lineSelectIndex) {
       return;
     }
-    gameStateRef.current!.isSeekedLine = true;
 
     const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
-
     const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
-
     const seekBuffer = scene === "practice" ? 1 * playSpeed : 0;
-
     const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
 
+    drawerSelectColorChange(seekCount);
     playerRef.current.seekTo(seekTime);
+    const newCount = getSeekLineCount(seekTime);
+    statusRef.current!.status.count = newCount;
+    updateLine(newCount);
+    typeTicker.stop();
   };
+
+  const drawerSelectColorChange = (newLineSelectIndex: number) => {
+    for (let i = 1; i < cardRefs.current!.length; i++) {
+      if (newLineSelectIndex === i) {
+        cardRefs.current![i].style.outline = `3px solid ${theme.colors.semantic.word.correct}`;
+      } else {
+        cardRefs.current![i].style.outline = ``;
+      }
+    }
+  };
+
   return { movePrevLine, moveNextLine, moveSetLine };
 };

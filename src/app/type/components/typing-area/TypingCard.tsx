@@ -10,18 +10,14 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import { atom, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { getTypeAtomStore } from "../../[id]/TypeProvider";
 import { useHandleKeydown } from "../../hooks/playing-hooks/keydown-hooks/useHandleKeydown";
 import { usePlayTimer } from "../../hooks/playing-hooks/timer-hooks/useTimer";
 import { typeTicker } from "../../hooks/useYoutubeEvents";
 import "../../style/type.scss";
-import {
-  useLineSelectIndexAtom,
-  useMapAtom,
-  useSceneAtom,
-  useSetTabIndexAtom,
-} from "../../type-atoms/gameRenderAtoms";
+import { useMapAtom, useSceneAtom, useSetTabIndexAtom } from "../../type-atoms/gameRenderAtoms";
+import { useRefs } from "../../type-contexts/refsProvider";
 import PlayingBottom from "./scene/child/PlayingBottom";
 import PlayingTop from "./scene/child/PlayingTop";
 import End from "./scene/End";
@@ -38,11 +34,12 @@ export const CARD_BODY_MIN_HEIGHT = "320px";
 
 const TypingCardBody = (props: TypingCardBodyProps) => {
   const { drawerClosure } = props;
-  const scene = useSceneAtom();
   const map = useMapAtom();
   const { isOpen, onOpen } = drawerClosure;
-  const lineSelectIndex = useLineSelectIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
+  const { setRef } = useRefs();
+  const scene = useSceneAtom();
+  const modalContentRef = useRef(null);
   const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
   const playTimer = usePlayTimer();
@@ -77,6 +74,13 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
+  useEffect(() => {
+    if ((scene === "practice" || scene === "replay") && modalContentRef.current) {
+      setRef("modalContentRef", modalContentRef.current);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene]);
+
   return (
     <CardBody mx={8} py={3}>
       {scene === "ready" ? (
@@ -85,8 +89,10 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
         <>
           <Playing drawerClosure={drawerClosure} />
 
-          {isOpen && <ResultDrawer drawerClosure={drawerClosure} />}
-          {lineSelectIndex !== null && scene === "practice" && <PracticeLineCard />}
+          {isOpen && (
+            <ResultDrawer drawerClosure={drawerClosure} modalContentRef={modalContentRef} />
+          )}
+          {scene === "practice" && <PracticeLineCard />}
 
           {map!.mapData[0].options?.eternalCSS && (
             <style>{map!.mapData[0].options?.eternalCSS}</style>
@@ -96,7 +102,9 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
         <>
           <End onOpen={onOpen} />
 
-          {isOpen && <ResultDrawer drawerClosure={drawerClosure} />}
+          {isOpen && (
+            <ResultDrawer drawerClosure={drawerClosure} modalContentRef={modalContentRef} />
+          )}
 
           <style>{map!.mapData[0].options?.eternalCSS}</style>
         </>

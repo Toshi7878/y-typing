@@ -1,7 +1,6 @@
-import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
+import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import { useInteractJS } from "@/app/type/hooks/useInteractJS";
-import { ThemeColors } from "@/types";
-import ResultCardBody from "../result/child/child/ResultCardBody";
+import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import {
   useInputModeAtom,
   useLineResultsAtom,
@@ -9,27 +8,30 @@ import {
   useMapAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import ResultCardFooter from "../result/child/child/ResultCardFooter";
-import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
-import ResultCardHeader from "../result/child/child/ResultCardHeader";
+import { ThemeColors } from "@/types";
+import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
-import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
+import ResultCardBody from "../result/child/child/ResultCardBody";
+import ResultCardFooter from "../result/child/child/ResultCardFooter";
+import ResultCardHeader from "../result/child/child/ResultCardHeader";
 
 const PracticeLineCard = () => {
-  const interact = useInteractJS();
   const map = useMapAtom();
   const lineResults = useLineResultsAtom();
   const speedData = useTypePageSpeedAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
   const inputMode = useInputModeAtom();
-  const index = map!.typingLineNumbers[(lineSelectIndex! - 1) as number];
+  const theme: ThemeColors = useTheme();
+  const [isDragging, setIsDragging] = useState(false);
+  const { moveSetLine } = useMoveLine();
+  const interact = useInteractJS();
+
+  const index = map!.typingLineNumbers[lineSelectIndex - 1];
+
   const lineResult = lineResults[index as number];
   const lineInputMode = lineResult.status?.mode ?? inputMode;
 
   const lineData = map!.mapData[index];
-  const theme: ThemeColors = useTheme();
-  const [isDragging, setIsDragging] = useState(false);
-  const { moveSetLine } = useMoveLine();
 
   // mapのLineデータ
   const maxLinePoint = lineData.notes.r * CHAR_POINT;
@@ -53,20 +55,20 @@ const PracticeLineCard = () => {
 
   return (
     <Card
-      ref={interact.ref}
+      ref={interact?.ref}
       py={4}
       pl={1}
       mb={4}
       gap={1}
       zIndex={100}
       style={{
-        ...interact.style,
+        ...interact?.style,
         height: "fit-content",
       }}
       bg={theme.colors.background.card}
       color={theme.colors.text.body}
       outline={`1px solid ${theme.colors.border.card}`}
-      boxShadow={"lg"}
+      boxShadow="lg"
       _hover={{
         bg: theme.colors.button.sub,
       }}
@@ -82,7 +84,7 @@ const PracticeLineCard = () => {
       <CardHeader py={0}>
         <ResultCardHeader
           index={index}
-          lineCount={lineSelectIndex!}
+          lineCount={index}
           lineNotes={lineNotes}
           lineInputMode={lineInputMode}
           lineTime={lineTime}
@@ -90,7 +92,7 @@ const PracticeLineCard = () => {
           lineSpeed={lineSpeed}
         />
       </CardHeader>
-      <CardBody py={0} className="text-md word-font">
+      <CardBody py={0} fontSize="md" className="word-font">
         <ResultCardBody
           lineKanaWord={lineKanaWord}
           typeResult={lineResult.typeResult}
@@ -98,7 +100,7 @@ const PracticeLineCard = () => {
           lostWord={lostWord!}
         />
       </CardBody>
-      <CardFooter py={0} className="ml-1 font-semibold text-lg">
+      <CardFooter py={0} ml={1} fontWeight="semibold" fontSize="lg">
         <ResultCardFooter
           point={point!}
           tBonus={tBonus!}

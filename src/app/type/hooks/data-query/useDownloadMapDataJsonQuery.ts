@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { CreateMap } from "../../ts/scene-ts/ready/createTypingWord";
 import {
   useSetLineResultsAtom,
+  useSetLineSelectIndexAtom,
   useSetMapAtom,
   useSetStatusAtoms,
 } from "../../type-atoms/gameRenderAtoms";
@@ -13,6 +14,7 @@ import { useRefs } from "../../type-contexts/refsProvider";
 export const useDownloadMapDataJsonQuery = () => {
   const { id: mapId } = useParams();
   const setLineResults = useSetLineResultsAtom();
+  const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setMap = useSetMapAtom();
   const { setStatusValues } = useSetStatusAtoms();
   const { totalProgressRef } = useRefs();
@@ -40,6 +42,7 @@ export const useDownloadMapDataJsonQuery = () => {
         setMap(map);
         setLineResults(map.defaultLineResultData);
         setStatusValues({ line: map.lineLength });
+        setLineSelectIndex(map.typingLineNumbers[0]);
         totalProgressRef.current!.max = map.movieTotalTime;
         return jsonData;
       } catch (error) {

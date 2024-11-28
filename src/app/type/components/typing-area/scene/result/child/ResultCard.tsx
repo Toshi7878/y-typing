@@ -1,18 +1,18 @@
 "use client";
+import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
+import { LineData, LineResultData } from "@/app/type/ts/type";
 import {
   useInputModeAtom,
   useMapAtom,
   useSceneAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
-import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
-import { LineData, LineResultData } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
 import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
 import { memo } from "react";
-import ResultCardHeader from "./child/ResultCardHeader";
-import ResultCardFooter from "./child/ResultCardFooter";
 import ResultCardBody from "./child/ResultCardBody";
+import ResultCardFooter from "./child/ResultCardFooter";
+import ResultCardHeader from "./child/ResultCardHeader";
 
 interface ResultCardProps {
   lineResult: LineResultData;
@@ -21,7 +21,6 @@ interface ResultCardProps {
   scoreCount: number;
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
-  lineSelectIndex: number | null;
   handleCardClick: (seekTime: number, index: number) => void;
 }
 
@@ -32,7 +31,6 @@ function ResultCard({
   scoreCount,
   lineData,
   cardRefs,
-  lineSelectIndex,
   handleCardClick,
 }: ResultCardProps) {
   const map = useMapAtom();
@@ -83,16 +81,8 @@ function ResultCard({
       cursor="pointer"
       bg={theme.colors.background.card}
       color={theme.colors.text.body}
-      outline={
-        lineSelectIndex === lineNumber
-          ? `3px solid ${theme.colors.semantic.word.correct}`
-          : "1px solid transparent"
-      }
       _hover={{
-        outline:
-          lineSelectIndex === lineNumber
-            ? `3px solid ${theme.colors.semantic.word.correct}`
-            : `1px solid ${theme.colors.border.card}`,
+        outline: `1px solid ${theme.colors.border.card}`,
       }}
       onClick={() => handleCardClick(seekTime, lineNumber)}
     >
@@ -107,7 +97,7 @@ function ResultCard({
           lineSpeed={lineSpeed}
         />
       </CardHeader>
-      <CardBody py={0} className="text-md word-font">
+      <CardBody py={0} fontSize="md" className="word-font">
         <ResultCardBody
           lineKanaWord={lineKanaWord}
           typeResult={lineResult.typeResult}
@@ -115,7 +105,7 @@ function ResultCard({
           lostWord={lostWord!}
         />
       </CardBody>
-      <CardFooter py={0} className="ml-1 font-semibold text-lg">
+      <CardFooter py={0} ml={1} fontSize="lg" fontWeight="semibold">
         <ResultCardFooter
           scoreCount={scoreCount}
           point={point!}

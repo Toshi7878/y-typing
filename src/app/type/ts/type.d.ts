@@ -56,6 +56,8 @@ export interface RefsContextType {
   gameStateRef: React.RefObject<GameStateRef>;
   lineProgressRef: React.RefObject<HTMLProgressElement>;
   totalProgressRef: React.RefObject<HTMLProgressElement>;
+  modalContentRef: React.RefObject<HTMLDivElement>;
+  cardRefs: React.RefObject<HTMLDivElement[]>;
   setRef: (key: string, ref: HTMLElement | any) => void;
 }
 
@@ -91,6 +93,7 @@ export interface GameStateRef {
   playMode: PlayMode;
   startPlaySpeed: number;
   displayLineTimeCount: number;
+  resultDrawerManualScroll: boolean;
   replay: {
     replayKeyCount: number;
     userName: string;

@@ -1,54 +1,37 @@
 "use client";
+import { LineResultData } from "@/app/type/ts/type";
 import {
   useLineResultsAtom,
-  useLineSelectIndexAtom,
   useMapAtom,
   useSceneAtom,
   useSetLineSelectIndexAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { LineResultData } from "@/app/type/ts/type";
 
+import { Ticker } from "@pixi/ticker";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
-import { Ticker } from "@pixi/ticker";
-import React from "react";
 
 interface ResultLineListProps {
-  modalContentRef: React.RefObject<HTMLDivElement>;
   onClose: () => void;
 }
 
-function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
+function ResultLineList({ onClose }: ResultLineListProps) {
   const map = useMapAtom();
   const scene = useSceneAtom();
-  const { playerRef, gameStateRef } = useRefs();
+  const { playerRef, gameStateRef, setRef } = useRefs();
   const lineResults = useLineResultsAtom();
 
-  const lineSelectIndex = useLineSelectIndexAtom();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
 
   const cardRefs = useRef<HTMLDivElement[]>([]);
-  const isManualScrollRef = useRef(false);
-  const scrollToCard = useCallback((newIndex: number) => {
-    const card = cardRefs.current[newIndex];
-    if (modalContentRef.current && card) {
-      const scrollHeight = modalContentRef.current.scrollHeight;
-      modalContentRef.current.scrollTop =
-        (scrollHeight * (newIndex - 2)) / map!.typingLineNumbers.length;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
-    if (lineSelectIndex && isManualScrollRef.current === false) {
-      scrollToCard(lineSelectIndex);
+    if (scene === "practice" || scene == "replay") {
+      setRef("cardRefs", cardRefs.current);
     }
-
-    isManualScrollRef.current = false;
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lineSelectIndex]);
+  }, [scene]);
 
   const handleCardClick = useCallback(
     (seekTime: number, lineNumber: number) => {
@@ -60,7 +43,7 @@ function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
         } else {
           playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
         }
-        isManualScrollRef.current = true;
+        gameStateRef.current!.resultDrawerManualScroll = true;
         setLineSelectIndex(lineNumber);
       } else {
         let nextTypedCount = 0;
@@ -134,13 +117,12 @@ function ResultLineList({ modalContentRef, onClose }: ResultLineListProps) {
             lineCount={lineCount}
             scoreCount={scoreCount}
             cardRefs={cardRefs}
-            lineSelectIndex={lineSelectIndex}
             handleCardClick={handleCardClick}
           />
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lineResults, map, lineSelectIndex],
+    [lineResults, map],
   );
 
   return <>{memoizedResultCards}</>;

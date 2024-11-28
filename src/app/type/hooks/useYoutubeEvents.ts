@@ -1,11 +1,9 @@
+import { useVolumeAtom } from "@/components/atom/globalAtoms";
 import { Ticker } from "@pixi/ticker";
+import { useStore } from "jotai";
+import NProgress from "nprogress";
 import { sceneAtom, useSetPlayingNotifyAtom, useSetSceneAtom } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
-import { useUpdateLine } from "./playing-hooks/timer-hooks/useTimer";
-import NProgress from "nprogress";
-import { useGetSeekLineCount } from "./playing-hooks/timer-hooks/useSeekGetLineCount";
-import { useVolumeAtom } from "@/components/atom/globalAtoms";
-import { useStore } from "jotai";
 
 export const typeTicker = new Ticker();
 
@@ -95,28 +93,9 @@ export const useYTPauseEvent = () => {
 
 export const useYTSeekEvent = () => {
   const { gameStateRef, statusRef, playerRef } = useRefs();
-  const typeAtomStore = useStore();
-  const updateLine = useUpdateLine();
-  const getSeekLineCount = useGetSeekLineCount();
 
   return () => {
     const time = playerRef.current.getCurrentTime();
-
-    const scene = typeAtomStore.get(sceneAtom);
-    if (scene === "replay" || scene === "practice") {
-      const isSeekedLine = gameStateRef.current!.isSeekedLine;
-
-      if (isSeekedLine) {
-        gameStateRef.current!.isSeekedLine = false;
-        const newCount = getSeekLineCount(time);
-        statusRef.current!.status.count = newCount;
-        updateLine(newCount);
-        if (typeTicker.started) {
-          typeTicker.stop();
-        }
-      }
-    }
-
     const isRetrySkip = gameStateRef.current!.isRetrySkip;
 
     if (isRetrySkip && time === 0) {
