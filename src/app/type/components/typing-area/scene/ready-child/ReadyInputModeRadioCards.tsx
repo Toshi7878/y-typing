@@ -1,9 +1,9 @@
 "use client";
 import { InputModeType } from "@/app/type/ts/type";
-import { Box, HStack, useRadio, useRadioGroup, UseRadioProps, useTheme } from "@chakra-ui/react";
-import { ThemeColors } from "@/types";
 import { useInputModeAtom, useSetInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import React, { useMemo } from "react";
+import { ThemeColors } from "@/types";
+import { Box, HStack, useRadio, useRadioGroup, UseRadioProps, useTheme } from "@chakra-ui/react";
+import React from "react";
 
 interface RadioCardProps extends UseRadioProps {
   option: InputModeType;
@@ -71,14 +71,13 @@ function ReadyInputModeRadioCards() {
     defaultValue: inputMode,
     onChange: (value) => {
       setInputMode(value as InputModeType);
-      localStorage.setItem("inputMode", value);
     },
   });
 
   const group = getRootProps();
 
   return (
-    <HStack {...group} spacing={0} width={"100%"}>
+    <HStack {...group} spacing={0} width="100%">
       {options.map((option) => {
         const radio = getRadioProps({ value: option.value });
         return (

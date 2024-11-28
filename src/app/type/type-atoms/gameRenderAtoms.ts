@@ -56,7 +56,9 @@ export const useSetTabIndexAtom = () => {
   return useSetAtom(tabIndexAtom);
 };
 
-export const inputModeAtom = atomWithStorage<InputModeType>("inputMode", "roma");
+export const inputModeAtom = atomWithStorage<InputModeType>("inputMode", "roma", undefined, {
+  getOnInit: true,
+});
 
 export const useInputModeAtom = () => {
   return useAtomValue(inputModeAtom, { store: typeAtomStore });
