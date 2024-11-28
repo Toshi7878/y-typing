@@ -11,7 +11,6 @@ import {
   inputModeAtom,
   lineResultsAtom,
   lineWordAtom,
-  rankingScoresAtom,
   sceneAtom,
   skipAtom,
   speedAtom,
@@ -28,12 +27,13 @@ import { UseDisclosureReturn } from "@chakra-ui/react";
 import { useStore } from "jotai";
 import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "../../../ts/const/typeDefaultValue";
 import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
-import { Typing, useTypeMiss, useTypeSuccess } from "../../../ts/scene-ts/playing/keydown/typing";
+import { Typing } from "../../../ts/scene-ts/playing/keydown/typingJudge";
 import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import { useGetTime } from "../../useGetTime";
 import { useVideoSpeedChange } from "../../useVideoSpeedChange";
-import { updateReplayStatus } from "../timer-hooks/replayHooks";
+import { useUpdateAllStatus } from "../timer-hooks/replayHooks";
 import { useSoundEffect } from "../useSoundEffect";
+import { useTypeMiss, useTypeSuccess } from "../useUpdateStatus";
 
 interface HandleTypingParams {
   event: KeyboardEvent;
@@ -60,6 +60,7 @@ export const useTyping = () => {
   } = useGetTime();
   const calcTypeSpeed = useCalcTypeSpeed();
   const { setStatusValues } = useSetStatusAtoms();
+  const updateAllStatus = useUpdateAllStatus();
 
   return ({ event, count }: HandleTypingParams) => {
     const lineWord = typeAtomStore.get(lineWordAtom);
@@ -138,14 +139,11 @@ export const useTyping = () => {
           setLineResults(newLineResults);
         }
 
-        const rankingScores = typeAtomStore.get(rankingScoresAtom);
-
-        const newStatusReplay = updateReplayStatus(
-          map!.mapData.length - 1,
+        const newStatusReplay = updateAllStatus({
+          count: map!.mapData.length - 1,
           newLineResults,
-          map!,
-          rankingScores,
-        );
+        });
+
         setStatusValues({
           ...newStatusReplay,
           point: newStatus.point,

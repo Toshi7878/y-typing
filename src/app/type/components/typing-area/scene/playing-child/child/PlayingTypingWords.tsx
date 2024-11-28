@@ -1,36 +1,12 @@
-import { Box, useTheme } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import PlayingWord from "./PlayingWord";
 import { useInputModeAtom, useLineWordAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
-import { useHandleKeydown } from "@/app/type/hooks/playing-hooks/keydown-hooks/useHandleKeydown";
-import { usePlayTimer } from "@/app/type/hooks/playing-hooks/timer-hooks/useTimer";
-import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
+import { Box, useTheme } from "@chakra-ui/react";
+import PlayingWord from "./PlayingWord";
 
 const PlayingTypingWords = () => {
   const lineWord = useLineWordAtom();
   const inputMode = useInputModeAtom();
   const theme: ThemeColors = useTheme();
-  const playTimer = usePlayTimer();
-
-  const handleKeydown = useHandleKeydown();
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeydown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lineWord]);
-
-  useEffect(() => {
-    typeTicker.add(playTimer);
-
-    return () => {
-      typeTicker.remove(playTimer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Box

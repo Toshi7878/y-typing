@@ -5,7 +5,6 @@ import {
   inputModeAtom,
   lineResultsAtom,
   lineWordAtom,
-  rankingScoresAtom,
   useMapAtom,
   useSetComboAtom,
   useSetDisplayLineKpmAtom,
@@ -15,53 +14,48 @@ import {
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useStore } from "jotai";
-import {
-  CharsType,
-  getRank,
-  KanaInput,
-  RomaInput,
-  useTypeMiss,
-  useTypeSuccess,
-} from "../../../ts/scene-ts/playing/keydown/typing";
+import { CharsType, KanaInput, RomaInput } from "../../../ts/scene-ts/playing/keydown/typingJudge";
 import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
 import { LineResultData, Status, TypeResult } from "../../../ts/type";
 import { useGetTime } from "../../useGetTime";
 import { useSoundEffect } from "../useSoundEffect";
+import { useCalcCurrentRank, useTypeMiss, useTypeSuccess } from "../useUpdateStatus";
 
-export const updateReplayStatus = (
-  count: number,
-  lineResults: LineResultData[],
-  map: CreateMap,
-  rankingScores: number[],
-) => {
-  const newStatus: Status = {
-    score: 0,
-    point: 0,
-    timeBonus: 0,
-    type: 0,
-    miss: 0,
-    lost: 0,
-    kpm: 0,
-    rank: 0,
-    line: map.lineLength,
-  };
+export const useUpdateAllStatus = () => {
+  const map = useMapAtom() as CreateMap;
+  const calcCurrentRank = useCalcCurrentRank();
 
-  if (0 >= count) {
+  return ({ count, newLineResults }) => {
+    const newStatus: Status = {
+      score: 0,
+      point: 0,
+      timeBonus: 0,
+      type: 0,
+      miss: 0,
+      lost: 0,
+      kpm: 0,
+      rank: 0,
+      line: map.lineLength,
+    };
+
+    if (0 >= count) {
+      return newStatus;
+    }
+
+    for (let i = 0; i <= count - 1; i++) {
+      newStatus.score +=
+        (newLineResults[i].status?.p ?? 0) + (newLineResults[i].status?.tBonus ?? 0);
+      newStatus.type += newLineResults[i].status?.lType ?? 0;
+      newStatus.miss += newLineResults[i].status?.lMiss ?? 0;
+      newStatus.lost += newLineResults[i].status?.lLost ?? 0;
+      newStatus.line -= newLineResults[i].status?.lType != null ? 1 : 0;
+    }
+    const totalTypeTime = newLineResults[count - 1].status?.tTime;
+    newStatus.kpm = totalTypeTime ? Math.round((newStatus.type / totalTypeTime!) * 60) : 0;
+    newStatus.rank = calcCurrentRank(newStatus.score);
+
     return newStatus;
-  }
-
-  for (let i = 0; i <= count - 1; i++) {
-    newStatus.score += (lineResults[i].status?.p ?? 0) + (lineResults[i].status?.tBonus ?? 0);
-    newStatus.type += lineResults[i].status?.lType ?? 0;
-    newStatus.miss += lineResults[i].status?.lMiss ?? 0;
-    newStatus.lost += lineResults[i].status?.lLost ?? 0;
-    newStatus.line -= lineResults[i].status?.lType != null ? 1 : 0;
-  }
-  const totalTypeTime = lineResults[count - 1].status?.tTime;
-  newStatus.kpm = totalTypeTime ? Math.round((newStatus.type / totalTypeTime!) * 60) : 0;
-  newStatus.rank = getRank(rankingScores, newStatus.score);
-
-  return newStatus;
+  };
 };
 
 interface UseKeyReplayProps {
@@ -72,8 +66,6 @@ interface UseKeyReplayProps {
 
 const useKeyReplay = () => {
   const { statusRef } = useRefs();
-
-  const map = useMapAtom() as CreateMap;
   const typeAtomStore = useStore();
 
   const setLineWord = useSetLineWordAtom();
@@ -90,6 +82,7 @@ const useKeyReplay = () => {
   const { triggerTypingSound, triggerMissSound } = useSoundEffect();
   const calcTypeSpeed = useCalcTypeSpeed();
   const statusAtomsValues = useStatusAtomsValues();
+  const updateAllStatus = useUpdateAllStatus();
 
   return ({ constantLineTime, lineResult, typeData }: UseKeyReplayProps) => {
     const key = typeData.c;
@@ -131,7 +124,7 @@ const useKeyReplay = () => {
             newLineKpm: typeSpeed.lineKpm,
           });
 
-          const newStatus = updateSuccessStatus({
+          updateSuccessStatus({
             newLineWord: result.newLineWord,
             lineRemainConstantTime,
             updatePoint: result.updatePoint,
@@ -142,9 +135,7 @@ const useKeyReplay = () => {
 
           setDisplayLineKpm(typeSpeed.lineKpm);
         } else {
-          const rankingScores = typeAtomStore.get(rankingScoresAtom);
-
-          const newStatusReplay = updateReplayStatus(count, lineResults, map, rankingScores);
+          const newStatusReplay = updateAllStatus({ count, newLineResults: lineResults });
           newStatusReplay.point = lineResult.status!.p as number;
           newStatusReplay.timeBonus = lineResult.status!.tBonus as number;
 

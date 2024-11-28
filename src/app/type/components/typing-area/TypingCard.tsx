@@ -1,15 +1,5 @@
 "use client";
-import "../../style/type.scss";
-import React, { useEffect } from "react";
-import Playing from "./scene/Playing";
-import End from "./scene/End";
-import {
-  useLineSelectIndexAtom,
-  useMapAtom,
-  useSceneAtom,
-  useSetTabIndexAtom,
-} from "../../type-atoms/gameRenderAtoms";
-import Ready from "./scene/Ready";
+import { ThemeColors } from "@/types";
 import {
   Card,
   CardBody,
@@ -19,13 +9,26 @@ import {
   UseDisclosureReturn,
   useTheme,
 } from "@chakra-ui/react";
-import ResultDrawer from "./scene/result/ResultDrawer";
-import PlayingTop from "./scene/child/PlayingTop";
-import PlayingBottom from "./scene/child/PlayingBottom";
-import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
-import { ThemeColors } from "@/types";
 import { atom, useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { getTypeAtomStore } from "../../[id]/TypeProvider";
+import { useHandleKeydown } from "../../hooks/playing-hooks/keydown-hooks/useHandleKeydown";
+import { usePlayTimer } from "../../hooks/playing-hooks/timer-hooks/useTimer";
+import { typeTicker } from "../../hooks/useYoutubeEvents";
+import "../../style/type.scss";
+import {
+  useLineSelectIndexAtom,
+  useMapAtom,
+  useSceneAtom,
+  useSetTabIndexAtom,
+} from "../../type-atoms/gameRenderAtoms";
+import PlayingBottom from "./scene/child/PlayingBottom";
+import PlayingTop from "./scene/child/PlayingTop";
+import End from "./scene/End";
+import Playing from "./scene/Playing";
+import PracticeLineCard from "./scene/playing-child/PracticeLineCard";
+import Ready from "./scene/Ready";
+import ResultDrawer from "./scene/result/ResultDrawer";
 
 interface TypingCardBodyProps {
   drawerClosure: UseDisclosureReturn;
@@ -40,6 +43,32 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
   const { isOpen, onOpen } = drawerClosure;
   const lineSelectIndex = useLineSelectIndexAtom();
   const setTabIndex = useSetTabIndexAtom();
+  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
+
+  const playTimer = usePlayTimer();
+
+  const handleKeydown = useHandleKeydown();
+  useEffect(() => {
+    if (isPlayed) {
+      window.addEventListener("keydown", handleKeydown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene]);
+
+  useEffect(() => {
+    if (isPlayed) {
+      typeTicker.add(playTimer);
+    }
+
+    return () => {
+      typeTicker.remove(playTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene]);
 
   useEffect(() => {
     if (isPlayed) {
@@ -48,7 +77,6 @@ const TypingCardBody = (props: TypingCardBodyProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
-  const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
   return (
     <CardBody mx={8} py={3}>
       {scene === "ready" ? (
@@ -93,6 +121,7 @@ function TypingCard() {
     setDrawerClosure(drawerClosure);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawerClosure]);
+
   return (
     <Card
       className="typing-card"

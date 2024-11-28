@@ -25,12 +25,12 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { useStore } from "jotai";
 import { DEFAULT_STATUS_REF } from "../../../ts/const/typeDefaultValue";
 import { useCalcTypeSpeed } from "../../../ts/scene-ts/playing/calcTypeSpeed";
-import { LineResult } from "../../../ts/scene-ts/playing/lineResult";
 import { CreateMap } from "../../../ts/scene-ts/ready/createTypingWord";
-import { InputModeType, Status } from "../../../ts/type";
+import { Status } from "../../../ts/type";
 import { useGetTime } from "../../useGetTime";
 import { typeTicker } from "../../useYoutubeEvents";
-import { updateReplayStatus, useLineReplayUpdate, useReplay } from "./replayHooks";
+import { useOutPutLineResult } from "../useOutPutLineResult";
+import { useLineReplayUpdate, useReplay, useUpdateAllStatus } from "./replayHooks";
 import { useGetSeekLineCount } from "./useSeekGetLineCount";
 
 export const usePlayTimer = () => {
@@ -176,6 +176,8 @@ export const useCalcLineResult = () => {
   const setCombo = useSetComboAtom();
   const { setStatusValues } = useSetStatusAtoms();
   const statusAtomsValues = useStatusAtomsValues();
+  const outPutLineResult = useOutPutLineResult();
+  const updateAllStatus = useUpdateAllStatus();
 
   return ({ count, lineConstantTime }: { count: number; lineConstantTime: number }) => {
     const status: Status = statusAtomsValues();
@@ -191,18 +193,11 @@ export const useCalcLineResult = () => {
       });
 
       const lineWord = typeAtomStore.get(lineWordAtom);
-      const inputMode = typeAtomStore.get(inputModeAtom);
 
-      const lineResult = new LineResult(
-        status!,
-        statusRef,
-        lineWord,
-        inputMode as InputModeType,
-        map,
-        typeSpeed.totalKpm,
-        rankingScores,
-        scene,
-      );
+      const currentLineResult = outPutLineResult({
+        newLineWord: lineWord,
+        totalTypeSpeed: typeSpeed.totalKpm,
+      });
 
       if (count > 0) {
         statusRef.current!.status.totalTypeTime += lineWord.nextChar["k"]
@@ -238,8 +233,8 @@ export const useCalcLineResult = () => {
                 lMiss,
                 lRkpm: typeSpeed.lineRkpm,
                 lKpm: typeSpeed.lineKpm,
-                lostW: lineResult.lostW,
-                lLost: lineResult.lostLen,
+                lostW: currentLineResult.lostWord,
+                lLost: currentLineResult.lostLength,
                 combo,
                 tTime,
                 mode,
@@ -265,23 +260,21 @@ export const useCalcLineResult = () => {
       }
 
       if (scene === "playing") {
-        setStatusValues(lineResult.newStatus);
+        setStatusValues(currentLineResult.newStatus);
       } else if (scene === "practice") {
-        const newStatus = updateReplayStatus(
-          map!.mapData.length - 1,
-          lineResults,
-          map,
-          rankingScores,
-        );
+        const newStatus = updateAllStatus({
+          count: map!.mapData.length - 1,
+          newLineResults: lineResults,
+        });
         setStatusValues(newStatus);
       }
     } else if (scene === "replay") {
-      const newStatus = updateReplayStatus(count, lineResults, map, rankingScores);
+      const newStatus = updateAllStatus({ count, newLineResults: lineResults });
       setStatusValues(newStatus);
       if (count > 0) {
-        const lineResult = lineResults[count - 1];
-        setCombo(lineResult.status!.combo as number);
-        statusRef.current!.status.totalTypeTime = lineResult.status!.tTime;
+        const currentReplayLineResult = lineResults[count - 1];
+        setCombo(currentReplayLineResult.status!.combo as number);
+        statusRef.current!.status.totalTypeTime = currentReplayLineResult.status!.tTime;
       }
     }
   };

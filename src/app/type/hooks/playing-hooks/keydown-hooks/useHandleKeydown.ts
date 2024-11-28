@@ -1,9 +1,9 @@
-import { useIsKeydownTyped } from "@/app/type/ts/scene-ts/playing/keydown/typing";
+import { useIsKeydownTyped } from "@/app/type/ts/scene-ts/playing/keydown/typingJudge";
 import { lineWordAtom, sceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { useTyping, usePlayingShortcutKey } from "./useTyping";
-import { useGamePause } from "../useGamePause";
 import { useStore } from "jotai";
+import { useGamePause } from "../useGamePause";
+import { usePlayingShortcutKey, useTyping } from "./useTyping";
 
 export const useHandleKeydown = () => {
   const { ytStateRef, statusRef } = useRefs();
