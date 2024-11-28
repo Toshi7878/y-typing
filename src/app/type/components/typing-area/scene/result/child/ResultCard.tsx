@@ -89,7 +89,6 @@ function ResultCard({
       <CardHeader py={0}>
         <ResultCardHeader
           index={index}
-          lineCount={lineCount}
           lineNotes={lineNotes}
           lineInputMode={lineInputMode}
           lineTime={lineTime}

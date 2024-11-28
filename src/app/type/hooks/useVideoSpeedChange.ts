@@ -21,10 +21,14 @@ export const useVideoSpeedChange = () => {
     if (type === "up") {
       if (defaultSpeed < 2) {
         setSpeed = defaultSpeed + 0.25;
+      } else {
+        return;
       }
     } else if (type === "down") {
       if (defaultSpeed > 0.25) {
         setSpeed = defaultSpeed - 0.25;
+      } else {
+        return;
       }
     }
 

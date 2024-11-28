@@ -84,7 +84,6 @@ const PracticeLineCard = () => {
       <CardHeader py={0}>
         <ResultCardHeader
           index={index}
-          lineCount={index}
           lineNotes={lineNotes}
           lineInputMode={lineInputMode}
           lineTime={lineTime}

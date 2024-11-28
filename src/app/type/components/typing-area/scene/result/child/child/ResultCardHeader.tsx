@@ -8,7 +8,6 @@ import { memo } from "react";
 
 interface ResultCardHeaderdProps {
   index: number;
-  lineCount: number;
   lineNotes: number;
   lineInputMode: InputModeType;
   lineTime: number;
@@ -18,7 +17,6 @@ interface ResultCardHeaderdProps {
 
 function ResultCardHeader({
   index,
-  lineCount,
   lineNotes,
   lineInputMode,
   lineTime,
