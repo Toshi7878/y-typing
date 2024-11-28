@@ -41,7 +41,7 @@ interface HandleTypingParams {
 }
 
 export const useTyping = () => {
-  const { statusRef } = useRefs();
+  const { statusRef, ytStateRef } = useRefs();
 
   const map = useMapAtom() as CreateMap;
   const typeAtomStore = useStore();
@@ -100,7 +100,8 @@ export const useTyping = () => {
       const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
       const scene = typeAtomStore.get(sceneAtom);
 
-      if (scene === "practice" && playSpeed >= 1 && !typingResult.newLineWord.nextChar["k"]) {
+      const isPaused = ytStateRef.current?.isPaused;
+      if (scene === "practice" && playSpeed >= 1 && !isPaused && isLineCompleted) {
         const lineResults = typeAtomStore.get(lineResultsAtom);
 
         const tTime = Math.round(statusRef.current!.status.totalTypeTime * 1000) / 1000;

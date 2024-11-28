@@ -48,7 +48,8 @@ export const useOutPutLineResult = () => {
 
     newStatus.timeBonus = 0;
 
-    if (newLineWord.nextChar["k"]) {
+    const isLineFailure = newLineWord.nextChar["k"];
+    if (isLineFailure) {
       newStatus.kpm = totalTypeSpeed;
       statusRef.current!.status.failureCount++;
       newStatus.line =

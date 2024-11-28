@@ -14,7 +14,9 @@ export const useHandleKeydown = () => {
   const typeAtomStore = useStore();
 
   return (event: KeyboardEvent) => {
-    if (!ytStateRef.current?.isPaused) {
+    const scene = typeAtomStore.get(sceneAtom);
+
+    if (!ytStateRef.current?.isPaused || scene === "practice") {
       const count = statusRef.current!.status.count;
       const currentLineCount = count - 1;
 
@@ -24,7 +26,6 @@ export const useHandleKeydown = () => {
       }
 
       const lineWord = typeAtomStore.get(lineWordAtom);
-      const scene = typeAtomStore.get(sceneAtom);
 
       if (currentLineCount == lineWord.lineCount && isKeydownTyped(event) && scene !== "replay") {
         event.preventDefault();

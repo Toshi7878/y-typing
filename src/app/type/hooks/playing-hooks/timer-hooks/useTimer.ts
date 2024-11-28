@@ -5,7 +5,6 @@ import {
   inputModeAtom,
   lineResultsAtom,
   lineWordAtom,
-  rankingScoresAtom,
   sceneAtom,
   speedAtom,
   useMapAtom,
@@ -183,7 +182,6 @@ export const useCalcLineResult = () => {
     const status: Status = statusAtomsValues();
     const scene = typeAtomStore.get(sceneAtom);
     const lineResults = typeAtomStore.get(lineResultsAtom);
-    const rankingScores = typeAtomStore.get(rankingScoresAtom);
 
     if (scene === "playing" || scene === "practice") {
       const typeSpeed = calcTypeSpeed({
