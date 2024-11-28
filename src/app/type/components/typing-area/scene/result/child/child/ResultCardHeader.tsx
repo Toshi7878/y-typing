@@ -1,11 +1,10 @@
 "use client";
 import { InputModeType } from "@/app/type/ts/type";
+import { useMapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import { ThemeColors } from "@/types";
 import { Box, Text, useTheme } from "@chakra-ui/react";
-import { useAtomValue } from "jotai";
 import { memo } from "react";
-import CustomToolTip from "@/components/custom-ui/CustomToolTip";
-import { useMapAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 
 interface ResultCardHeaderdProps {
   index: number;
@@ -32,7 +31,7 @@ function ResultCardHeader({
   return (
     <Box>
       <Text as="span" data-list-number={index}>
-        {lineCount}/{map!.lineLength}
+        {index}/{map!.lineLength}
       </Text>
       <Text as="span" mx={2}>
         {"|"}
