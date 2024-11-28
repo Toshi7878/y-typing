@@ -285,7 +285,7 @@ export const useSetStatusAtoms = () => {
     line: useSetAtom(lineCountAtom, { store: typeAtomStore }),
     timeBonus: useSetAtom(timeBonusAtom, { store: typeAtomStore }),
   };
-  const map = useMapAtom() as CreateMap;
+  const map = useMapAtom();
   const rankingScores = useRankingScoresAtom();
 
   const setStatusValues = (props: useSetStatusValueProps) => {
@@ -327,7 +327,7 @@ export const useSetStatusAtoms = () => {
     statusSetters.miss(0);
     statusSetters.lost(0);
     statusSetters.rank(rankingScores.length + 1);
-    statusSetters.line(map.lineLength);
+    statusSetters.line(map?.lineLength || 0);
     statusSetters.timeBonus(0);
   };
 
