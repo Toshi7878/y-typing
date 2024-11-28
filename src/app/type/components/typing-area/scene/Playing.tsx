@@ -1,23 +1,21 @@
-import PlayingCenter from "./playing-child/PlayingCenter";
-import { useEffect } from "react";
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import {
   useSceneAtom,
   useSetLineWordAtom,
   useSetLyricsAtom,
   useSetNextLyricsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useEffect } from "react";
+import PlayingCenter from "./playing-child/PlayingCenter";
 
 import { typeTicker } from "@/app/type/hooks/useYoutubeEvents";
-import { UseDisclosureReturn } from "@chakra-ui/react";
 import { defaultLineWord, defaultNextLyrics } from "@/app/type/ts/const/consts";
+import { UseDisclosureReturn } from "@chakra-ui/react";
 
 interface PlayingProps {
   drawerClosure: UseDisclosureReturn;
 }
 const Playing = ({ drawerClosure }: PlayingProps) => {
   const { onOpen } = drawerClosure;
-  const { lineProgressRef, totalProgressRef } = useRefs();
 
   const scene = useSceneAtom();
   const setLineWord = useSetLineWordAtom();
@@ -33,9 +31,6 @@ const Playing = ({ drawerClosure }: PlayingProps) => {
       onOpen();
     }
 
-    const totalProgress = totalProgressRef.current;
-    const lineProgress = lineProgressRef.current;
-
     return () => {
       if (typeTicker.started) {
         typeTicker.stop();
@@ -44,8 +39,6 @@ const Playing = ({ drawerClosure }: PlayingProps) => {
       setLineWord(structuredClone(defaultLineWord));
       setLyrics("");
       setNextLyrics(structuredClone(defaultNextLyrics));
-      if (totalProgress) totalProgress.value = 0;
-      if (lineProgress) lineProgress.value = 0;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
