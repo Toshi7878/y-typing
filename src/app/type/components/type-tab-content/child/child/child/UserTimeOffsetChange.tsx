@@ -1,8 +1,11 @@
 "use client";
 import "@/app/edit/style/editor.scss";
-import { sendUpdateData } from "@/app/type/hooks/sendTypingOptionData";
 import { CHANGE_TIME_OFFSET_VALUE } from "@/app/type/ts/const/typeDefaultValue";
-import { useSetUserOptionsAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import {
+  useSetIsOptionEdited,
+  useSetUserOptionsAtom,
+  useUserOptionsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Box, Button, Flex, Text, useTheme } from "@chakra-ui/react";
 
@@ -10,6 +13,7 @@ const UserTimeOffsetChange = () => {
   const theme: ThemeColors = useTheme();
   const setUserOptionsAtom = useSetUserOptionsAtom();
   const userOptionsAtom = useUserOptionsAtom();
+  const setIsOptionEdited = useSetIsOptionEdited();
 
   const decrement = () => {
     const newUserOptions = {
@@ -17,8 +21,7 @@ const UserTimeOffsetChange = () => {
       timeOffset: Math.round((userOptionsAtom.timeOffset - CHANGE_TIME_OFFSET_VALUE) * 100) / 100,
     };
     setUserOptionsAtom(newUserOptions);
-
-    sendUpdateData(newUserOptions);
+    setIsOptionEdited(true);
   };
   const increment = () => {
     const newUserOptions = {
@@ -27,8 +30,7 @@ const UserTimeOffsetChange = () => {
     };
 
     setUserOptionsAtom(newUserOptions);
-
-    sendUpdateData(newUserOptions);
+    setIsOptionEdited(true);
   };
 
   return (

@@ -1,12 +1,19 @@
-import React, { Dispatch, useEffect, useRef } from "react";
-import { Card, CardBody, Divider, useTheme } from "@chakra-ui/react";
-import { ThemeColors } from "@/types";
-import UserTimeOffsetChange from "./child/UserTimeOffsetChange";
-import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
-import UserSoundEffectCheckbox from "./child/UserSoundEffectCheckbox";
-import UserShortcutKeyCheckbox from "./child/UserShortcutKeyCheckbox";
+import { sendUpdateData } from "@/app/type/hooks/sendTypingOptionData";
+import {
+  isOptionEditedAtom,
+  userOptionsAtom,
+  useSetIsOptionEdited,
+} from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import VolumeRange from "@/components/custom-ui/VolumeRange";
+import { ThemeColors } from "@/types";
+import { Card, CardBody, Divider, useTheme } from "@chakra-ui/react";
+import { useStore } from "jotai";
+import { Dispatch, useEffect, useRef } from "react";
+import UserNextDisplayRadioButton from "./child/UserNextDisplayRadioButton";
+import UserShortcutKeyCheckbox from "./child/UserShortcutKeyCheckbox";
+import UserSoundEffectCheckbox from "./child/UserSoundEffectCheckbox";
+import UserTimeOffsetChange from "./child/UserTimeOffsetChange";
 
 interface SettingCardProps {
   isCardVisible: boolean;
@@ -19,6 +26,10 @@ const SettingCard = (props: SettingCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  const typeAtomStore = useStore();
+
+  const setIsOptionEdited = useSetIsOptionEdited();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -28,6 +39,12 @@ const SettingCard = (props: SettingCardProps) => {
         !cardRef.current.contains(target)
       ) {
         props.setIsCardVisible(false);
+        const isOptionEdited = typeAtomStore.get(isOptionEditedAtom);
+        if (isOptionEdited) {
+          const userOptions = typeAtomStore.get(userOptionsAtom);
+          sendUpdateData(userOptions);
+          setIsOptionEdited(false);
+        }
       }
     };
 

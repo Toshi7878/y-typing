@@ -1,12 +1,16 @@
-import React from "react";
-import { Box, Flex, Select, Text } from "@chakra-ui/react";
-import { useSetUserOptionsAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { UserTypingOptions } from "@/app/type/ts/type";
-import { sendUpdateData } from "@/app/type/hooks/sendTypingOptionData";
+import {
+  useSetIsOptionEdited,
+  useSetUserOptionsAtom,
+  useUserOptionsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
+import { Box, Flex, Select, Text } from "@chakra-ui/react";
+import React from "react";
 
 const UserShortcutKeyCheckbox = () => {
   const userOptionsAtom = useUserOptionsAtom();
   const setUserOptionsAtom = useSetUserOptionsAtom();
+  const setIsOptionEdited = useSetIsOptionEdited();
 
   const changeTimeOffsetKey = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value; // 選択された値を取得
@@ -15,8 +19,7 @@ const UserShortcutKeyCheckbox = () => {
       timeOffsetKey: value as UserTypingOptions["timeOffsetKey"], // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
-
-    sendUpdateData(newUserOptions);
+    setIsOptionEdited(true);
   };
 
   const changeInputModeKey = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -26,8 +29,6 @@ const UserShortcutKeyCheckbox = () => {
       toggleInputModeKey: value as UserTypingOptions["toggleInputModeKey"], // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
-
-    sendUpdateData(newUserOptions);
   };
   return (
     <Flex>

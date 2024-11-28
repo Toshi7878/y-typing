@@ -225,6 +225,12 @@ export const useSetComboAtom = () => {
   return useSetAtom(comboAtom, { store: typeAtomStore });
 };
 
+export const isOptionEditedAtom = atom<boolean>(false);
+
+export const useSetIsOptionEdited = () => {
+  return useSetAtom(isOptionEditedAtom, { store: typeAtomStore });
+};
+
 // Status Atoms
 
 const scoreAtom = atomWithReset(0);

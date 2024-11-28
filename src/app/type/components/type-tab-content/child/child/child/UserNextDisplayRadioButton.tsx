@@ -1,12 +1,15 @@
-import React from "react";
-import { Box, Radio, RadioGroup, Stack, Text } from "@chakra-ui/react";
-import { useSetUserOptionsAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { sendUpdateData } from "@/app/type/hooks/sendTypingOptionData";
 import { UserTypingOptions } from "@/app/type/ts/type";
+import {
+  useSetIsOptionEdited,
+  useSetUserOptionsAtom,
+  useUserOptionsAtom,
+} from "@/app/type/type-atoms/gameRenderAtoms";
+import { Box, Radio, RadioGroup, Stack, Text } from "@chakra-ui/react";
 
 const UserNextDisplayRadioButton = () => {
   const setUserOptionsAtom = useSetUserOptionsAtom();
   const userOptionsAtom = useUserOptionsAtom();
+  const setIsOptionEdited = useSetIsOptionEdited();
 
   const changeRadio = (value: string) => {
     // 引数を追加
@@ -15,8 +18,7 @@ const UserNextDisplayRadioButton = () => {
       nextDisplay: value as UserTypingOptions["nextDisplay"], // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
-
-    sendUpdateData(newUserOptions);
+    setIsOptionEdited(true);
   };
   return (
     <Box>
