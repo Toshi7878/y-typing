@@ -1,7 +1,7 @@
 "use server";
+import { NewNotificationCheck } from "@/types/api";
 import "server-only";
 import { auth } from "../auth";
-import { NewNotificationCheck } from "@/types/api";
 
 export const getNewNotificationCheck = async (): Promise<boolean> => {
   const session = await auth();
@@ -12,12 +12,20 @@ export const getNewNotificationCheck = async (): Promise<boolean> => {
   const params: Record<string, string> = { userId };
 
   url.search = new URLSearchParams(params).toString();
-
   const response = await fetch(url.toString(), {
     cache: "no-cache",
   });
 
-  const json: NewNotificationCheck = await response.json();
+  if (!response.ok) {
+    console.error("Network response was not ok:", response.statusText);
+    return false;
+  }
 
-  return json.checked === undefined ? false : true;
+  try {
+    const json: NewNotificationCheck = await response.json();
+    return json.checked === undefined ? false : true;
+  } catch (error) {
+    console.error("Failed to parse JSON:", error);
+    return false;
+  }
 };
