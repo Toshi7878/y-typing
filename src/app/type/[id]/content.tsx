@@ -20,6 +20,7 @@ import {
   useSetPlayingNotifyAtom,
   useSetRankingScoresAtom,
   useSetSceneAtom,
+  useSetStatusAtoms,
   useSetTimeOffsetAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
@@ -41,6 +42,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const isLoadingOverlay = useIsLoadingOverlayAtom();
   const queryClient = useQueryClient();
   const disableKeyHandle = useDisableKeyHandle();
+  const { resetStatusValues } = useSetStatusAtoms();
 
   useEffect(() => {
     window.addEventListener("keydown", disableKeyHandle);
@@ -62,9 +64,10 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
         defaultSpeed: 1,
         playSpeed: 1,
       });
+      resetStatusValues();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapId, queryClient]);
+  }, [mapId]);
 
   const style: CSSProperties = {
     transform: `scale(${scale})`,
