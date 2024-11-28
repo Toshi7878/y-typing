@@ -14,6 +14,7 @@ import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapD
 import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
 import {
   useIsLoadingOverlayAtom,
+  useSetComboAtom,
   useSetLineResultsAtom,
   useSetLineSelectIndexAtom,
   useSetMapAtom,
@@ -43,6 +44,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const queryClient = useQueryClient();
   const disableKeyHandle = useDisableKeyHandle();
   const { resetStatusValues } = useSetStatusAtoms();
+  const setCombo = useSetComboAtom();
 
   useEffect(() => {
     window.addEventListener("keydown", disableKeyHandle);
@@ -65,6 +67,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
         playSpeed: 1,
       });
       resetStatusValues();
+      setCombo(0);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapId]);
