@@ -1,10 +1,17 @@
 "use client";
-import React, { CSSProperties, useEffect } from "react";
-import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeContent";
-import { useParams } from "next/navigation";
-import TypeTabContent from "../components/type-tab-content/TypeTab";
-import { Box, Flex } from "@chakra-ui/react";
+import { QUERY_KEYS } from "@/config/consts";
 import { GetInfoData } from "@/types/api";
+import { Box, Flex } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { RESET } from "jotai/utils";
+import { useParams } from "next/navigation";
+import { CSSProperties, useEffect } from "react";
+import LoadingOverlayWrapper from "react-loading-overlay-ts";
+import TypeTabContent from "../components/type-tab-content/TypeTab";
+import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeContent";
+import TypingCard from "../components/typing-area/TypingCard";
+import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
+import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
 import {
   useIsLoadingOverlayAtom,
   useSetLineResultsAtom,
@@ -16,14 +23,7 @@ import {
   useSetTimeOffsetAtom,
   useSetTypePageSpeedAtom,
 } from "../type-atoms/gameRenderAtoms";
-import TypingCard from "../components/typing-area/TypingCard";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
-import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
-import { QUERY_KEYS } from "@/config/consts";
-import { useQueryClient } from "@tanstack/react-query";
-import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
-import { RESET } from "jotai/utils";
 
 function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { scale } = useWindowScale();
@@ -51,11 +51,11 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapData(mapId) });
       queryClient.removeQueries({ queryKey: QUERY_KEYS.mapRanking(mapId) });
 
-      setMap(RESET);
+      setMap(null);
       setScene(RESET);
       setNotify(RESET);
       setLineResults([]);
-      setLineSelectIndex(null);
+      setLineSelectIndex(0);
       setTimeOffset(0);
       setRankingScores([]);
       setSpeedData({
