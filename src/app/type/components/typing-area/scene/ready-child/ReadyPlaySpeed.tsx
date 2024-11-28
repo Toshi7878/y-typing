@@ -1,10 +1,10 @@
+import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
+import { useSceneAtom, useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
+import { ThemeColors } from "@/types";
 import { Box, Button, HStack, Text, useTheme } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { ThemeColors } from "@/types";
-import { useTypePageSpeedAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import CustomToolTip from "@/components/custom-ui/CustomToolTip";
-import { useVideoSpeedChange } from "@/app/type/hooks/useVideoSpeedChange";
 
 interface ReadyPlaySpeedProps {
   speedUpButtonRef: React.RefObject<HTMLButtonElement>;
@@ -12,16 +12,21 @@ interface ReadyPlaySpeedProps {
 }
 const ReadyPlaySpeed = (props: ReadyPlaySpeedProps) => {
   const speedData = useTypePageSpeedAtom();
+  const scene = useSceneAtom();
   const { defaultSpeedChange } = useVideoSpeedChange();
   const { gameStateRef } = useRefs();
   const theme: ThemeColors = useTheme();
 
   useEffect(() => {
-    if (speedData.defaultSpeed < 1) {
-      gameStateRef.current!.playMode = "practice";
+    if (scene === "ready") {
+      if (speedData.defaultSpeed < 1) {
+        gameStateRef.current!.playMode = "practice";
+      } else {
+        gameStateRef.current!.playMode = "playing";
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speedData.defaultSpeed]);
+  }, [speedData.defaultSpeed, scene]);
 
   return (
     <HStack

@@ -39,8 +39,8 @@ export const useVideoSpeedChange = () => {
 
     const isPlayed = scene === "playing" || scene === "replay" || scene === "practice";
 
-    if (scene === "ready" && gameStateRef.current) {
-      gameStateRef.current.startPlaySpeed = setSpeed;
+    if (scene === "ready") {
+      gameStateRef.current!.startPlaySpeed = setSpeed;
     } else if (isPlayed) {
       setNotify(Symbol(`${setSpeed.toFixed(2)}x`));
     }

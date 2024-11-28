@@ -1,13 +1,13 @@
-import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import { Button, useTheme } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import { useSession } from "next-auth/react";
-import { ThemeColors } from "@/types";
 import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDownloadResultJsonQuery";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import { RankingListType } from "@/app/type/ts/type";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { QUERY_KEYS } from "@/config/consts";
+import { ThemeColors } from "@/types";
+import { Button, useTheme } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
+import { useCallback, useState } from "react";
 
 const ReadyPracticeButton = () => {
   const { data: session } = useSession();
@@ -45,7 +45,7 @@ const ReadyPracticeButton = () => {
       px={16}
       py={6}
       size="xl"
-      className="text-3xl"
+      fontSize="3xl"
       _hover={{
         bg: theme.colors.button.sub.hover,
       }}
