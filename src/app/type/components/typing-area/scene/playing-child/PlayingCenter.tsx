@@ -1,9 +1,10 @@
-import { VStack } from "@chakra-ui/react";
-import PlayingLyrics from "./child/PlayingLyrics";
-import NextLyrics from "./child/PlayingNextLyrics";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import "@/css/type.css";
+import { VStack } from "@chakra-ui/react";
 import { CARD_BODY_MIN_HEIGHT } from "../../TypingCard";
+import PlayingChangeCSS from "./child/PlayingChangeCSS";
+import PlayingLyrics from "./child/PlayingLyrics";
+import NextLyrics from "./child/PlayingNextLyrics";
 import PlayingTypingWords from "./child/PlayingTypingWords";
 
 interface PlayingCenterProps {
@@ -28,8 +29,8 @@ const PlayingCenter = ({ flex }: PlayingCenterProps) => {
     >
       <PlayingTypingWords />
       <PlayingLyrics />
-
       <NextLyrics />
+      <PlayingChangeCSS />
     </VStack>
   );
 };

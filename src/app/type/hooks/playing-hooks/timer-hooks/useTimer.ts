@@ -9,6 +9,7 @@ import {
   speedAtom,
   useMapAtom,
   userOptionsAtom,
+  useSetChangeCSSCountAtom,
   useSetComboAtom,
   useSetCurrentTimeSSMMAtom,
   useSetDisplayLineKpmAtom,
@@ -290,6 +291,7 @@ export const useUpdateLine = () => {
   const setNextLyrics = useSetNextLyricsAtom();
   const setLineWord = useSetLineWordAtom();
   const setDisplayLineKpm = useSetDisplayLineKpmAtom();
+  const setChangeCSSCount = useSetChangeCSSCountAtom();
 
   const lineReplayUpdate = useLineReplayUpdate();
   return (newCount: number) => {
@@ -331,6 +333,12 @@ export const useUpdateLine = () => {
         lyrics: "",
         kpm: "",
       });
+    }
+
+    const isChangeCSS = map.mapData[newCount].options?.isChangeCSS;
+
+    if (isChangeCSS) {
+      setChangeCSSCount(newCount);
     }
 
     if (lineProgressRef.current) {

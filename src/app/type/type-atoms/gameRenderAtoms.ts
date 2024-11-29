@@ -227,6 +227,16 @@ export const useSetComboAtom = () => {
   return useSetAtom(comboAtom, { store: typeAtomStore });
 };
 
+export const changeCSSCountAtom = atom<number>(0);
+
+export const useChangeCSSCountAtom = () => {
+  return useAtomValue(changeCSSCountAtom, { store: typeAtomStore });
+};
+
+export const useSetChangeCSSCountAtom = () => {
+  return useSetAtom(changeCSSCountAtom, { store: typeAtomStore });
+};
+
 export const isOptionEditedAtom = atom<boolean>(false);
 
 export const useSetIsOptionEdited = () => {
