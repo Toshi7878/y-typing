@@ -113,8 +113,7 @@ export const usePlayTimer = () => {
           constantLineTime,
           totalTypeCount: status.type,
         });
-        setDisplayLineKpm(typeSpeed.lineKpm);
-        setStatusValues({ kpm: typeSpeed.totalKpm });
+        setDisplayLineKpm(typeSpeed!.lineKpm);
       }
 
       const isRetrySkip = gameStateRef.current!.isRetrySkip;
@@ -188,7 +187,7 @@ export const useCalcLineResult = () => {
 
     if (scene === "playing" || scene === "practice") {
       const typeSpeed = calcTypeSpeed({
-        updateType: "timer",
+        updateType: "lineUpdate",
         constantLineTime: statusRef.current!.lineStatus.lineClearTime,
         totalTypeCount: status.type,
       });
@@ -197,7 +196,7 @@ export const useCalcLineResult = () => {
 
       const currentLineResult = outPutLineResult({
         newLineWord: lineWord,
-        totalTypeSpeed: typeSpeed.totalKpm,
+        totalTypeSpeed: typeSpeed!.totalKpm as number,
       });
 
       if (count > 0) {
@@ -232,8 +231,8 @@ export const useCalcLineResult = () => {
                 tBonus: status!.timeBonus,
                 lType: statusRef.current!.lineStatus.lineType,
                 lMiss,
-                lRkpm: typeSpeed.lineRkpm,
-                lKpm: typeSpeed.lineKpm,
+                lRkpm: typeSpeed!.lineRkpm,
+                lKpm: typeSpeed!.lineKpm,
                 lostW: currentLineResult.lostWord,
                 lLost: currentLineResult.lostLength,
                 combo,

@@ -121,19 +121,19 @@ const useKeyReplay = () => {
             constantLineTime,
             newLineWord: result.newLineWord,
             successKey: result.successKey,
-            newLineKpm: typeSpeed.lineKpm,
+            newLineKpm: typeSpeed!.lineKpm,
           });
 
           updateSuccessStatus({
             newLineWord: result.newLineWord,
             lineRemainConstantTime,
             updatePoint: result.updatePoint,
-            totalKpm: typeSpeed.totalKpm,
+            totalKpm: typeSpeed!.totalKpm,
           });
 
           triggerTypingSound({ isLineCompleted: false });
 
-          setDisplayLineKpm(typeSpeed.lineKpm);
+          setDisplayLineKpm(typeSpeed!.lineKpm);
         } else {
           const newStatusReplay = updateAllStatus({ count, newLineResults: lineResults });
           newStatusReplay.point = lineResult.status!.p as number;

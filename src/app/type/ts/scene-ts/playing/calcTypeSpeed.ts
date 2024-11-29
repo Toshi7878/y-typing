@@ -23,24 +23,35 @@ export const useCalcTypeSpeed = () => {
     constantLineTime,
     totalTypeCount,
   }: {
-    updateType: "keydown" | "timer";
+    updateType: "keydown" | "completed" | "timer" | "lineUpdate";
     constantLineTime: number;
     totalTypeCount: number;
   }) => {
-    const lineTypeCount = statusRef.current!.lineStatus.lineType;
-    const newLineTypeCount = updateType === "keydown" ? lineTypeCount + 1 : lineTypeCount;
+    const isAddTypeCount = updateType === "keydown" || updateType === "completed";
 
-    const newTotalTypeCount = updateType === "keydown" ? totalTypeCount + 1 : totalTypeCount;
+    const lineTypeCount = statusRef.current!.lineStatus.lineType;
+
+    const newLineTypeCount = isAddTypeCount ? lineTypeCount + 1 : lineTypeCount;
     const lineKpm = calcLineKpm({ constantLineTime, newLineTypeCount });
 
-    const lineLatency = statusRef.current!.lineStatus.latency;
-    const rkpmTime = constantLineTime - lineLatency;
+    if (updateType === "timer") {
+      return { lineKpm };
+    }
 
-    const lineRkpm = calcLineRkpm({ rkpmTime, newLineTypeCount, lineKpm });
+    const newTotalTypeCount = isAddTypeCount ? totalTypeCount + 1 : totalTypeCount;
     const totalTypeTime = constantLineTime + statusRef.current!.status.totalTypeTime;
-
     const totalKpm = calcTotalKpm({ newTotalTypeCount, totalTypeTime });
 
-    return { lineKpm, lineRkpm, totalKpm };
+    if (updateType === "keydown") {
+      return { lineKpm, totalKpm };
+    }
+
+    if (updateType === "lineUpdate" || updateType === "completed") {
+      //ラインアップデート時、ラインクリア時はラインのrkpmも計算する
+      const lineLatency = statusRef.current!.lineStatus.latency;
+      const rkpmTime = constantLineTime - lineLatency;
+      const lineRkpm = calcLineRkpm({ rkpmTime, newLineTypeCount, lineKpm });
+      return { lineKpm, lineRkpm, totalKpm };
+    }
   };
 };

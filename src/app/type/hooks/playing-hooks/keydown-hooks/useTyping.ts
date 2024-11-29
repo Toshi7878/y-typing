@@ -57,8 +57,10 @@ export const useTyping = () => {
     const typingResult = new Typing({ event, lineWord, inputMode });
     if (typingResult.successKey) {
       const statusType = typeAtomStore.get(statusAtoms.type);
+      const isLineCompleted = !typingResult.newLineWord.nextChar["k"];
+
       const typeSpeed = calcTypeSpeed({
-        updateType: "keydown",
+        updateType: isLineCompleted ? "completed" : "keydown",
         constantLineTime,
         totalTypeCount: statusType,
       });
@@ -67,7 +69,7 @@ export const useTyping = () => {
         constantLineTime,
         newLineWord: typingResult.newLineWord,
         successKey: typingResult.successKey,
-        newLineKpm: typeSpeed.lineKpm,
+        newLineKpm: typeSpeed!.lineKpm,
       });
 
       const lineRemainConstantTime = getConstantRemainLineTime(constantLineTime);
@@ -76,10 +78,9 @@ export const useTyping = () => {
         newLineWord: typingResult.newLineWord,
         lineRemainConstantTime,
         updatePoint: typingResult.updatePoint,
-        totalKpm: typeSpeed.totalKpm,
+        totalKpm: typeSpeed!.totalKpm,
       });
 
-      const isLineCompleted = !typingResult.newLineWord.nextChar["k"];
       triggerTypingSound({ isLineCompleted });
 
       const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
@@ -111,8 +112,8 @@ export const useTyping = () => {
               tBonus: newStatus.timeBonus,
               lType: statusRef.current!.lineStatus.lineType,
               lMiss,
-              lRkpm: typeSpeed.lineRkpm,
-              lKpm: typeSpeed.lineKpm,
+              lRkpm: typeSpeed?.lineRkpm || 0,
+              lKpm: typeSpeed!.lineKpm,
               lostW: "",
               lLost: 0,
               combo,
