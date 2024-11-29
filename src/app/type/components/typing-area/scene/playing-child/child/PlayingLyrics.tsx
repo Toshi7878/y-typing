@@ -5,20 +5,17 @@ const PlayingLyrics = () => {
   const lyrics = useLyricsAtom();
 
   return (
-    <>
-      <Box
-        isTruncated
-        fontWeight="bold"
-        fontSize="2.75rem"
-        id="lyrics"
-        ml={-8}
-        width="100%"
-        className={"-inset-5 lyrics-font"}
-        dangerouslySetInnerHTML={{
-          __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
-        }}
-      />
-    </>
+    <Box
+      fontWeight="bold"
+      fontSize="2.75rem"
+      id="lyrics"
+      ml={-8}
+      width="105%"
+      className={"-inset-5 lyrics-font"}
+      dangerouslySetInnerHTML={{
+        __html: `<ruby class="invisible">あ<rt>あ<rt></ruby>${lyrics}`,
+      }}
+    />
   );
 };
 PlayingLyrics.displayName = "PlayingLyrics";

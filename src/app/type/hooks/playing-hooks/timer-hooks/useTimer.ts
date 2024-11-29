@@ -338,7 +338,7 @@ export const useUpdateLine = () => {
     const isChangeCSS = map.mapData[currentCount].options?.isChangeCSS;
 
     if (isChangeCSS) {
-      setChangeCSSCount(newCount);
+      setChangeCSSCount(currentCount);
     }
 
     if (lineProgressRef.current) {
