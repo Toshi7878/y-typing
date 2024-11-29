@@ -335,10 +335,14 @@ export const useUpdateLine = () => {
       });
     }
 
-    const isChangeCSS = map.mapData[currentCount].options?.isChangeCSS;
+    if (map.mapChangeCSSCounts.length) {
+      //changeCSSの現在のstyle適用ラインカウントを取得
 
-    if (isChangeCSS) {
-      setChangeCSSCount(currentCount);
+      // currentCountに一番近い最小の数字を見つける
+      const closestMin = map.mapChangeCSSCounts
+        .filter((count) => count <= currentCount)
+        .reduce((prev, curr) => (prev === undefined || curr > prev ? curr : prev), 0);
+      setChangeCSSCount(closestMin);
     }
 
     if (lineProgressRef.current) {

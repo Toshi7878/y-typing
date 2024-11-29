@@ -392,6 +392,7 @@ export class CreateMap {
   startLine: number;
   lineLength: number;
   typingLineNumbers: number[];
+  mapChangeCSSCounts: number[];
   defaultLineResultData: LineResultData[];
   totalNotes: LineData["notes"];
   speedDifficulty: SpeedDifficulty;
@@ -410,6 +411,7 @@ export class CreateMap {
 
     this.lineLength = result.lineLength;
     this.typingLineNumbers = result.typingLineNumbers;
+    this.mapChangeCSSCounts = result.mapChangeCSSCounts;
 
     this.defaultLineResultData = result.defaultLineResultData;
     this.totalNotes = this.calculateTotalNotes(result.words);
@@ -425,6 +427,7 @@ export class CreateMap {
     const mapData: LineData[] = [];
     const defaultLineResultData: LineResultData[] = [];
     const typingLineNumbers: number[] = [];
+    const mapChangeCSSCounts: number[] = [];
     const inputMode = (localStorage.getItem("inputMode") ?? "roma") as InputModeType;
     const validatedInputMode = ["roma", "kana", "flick"].includes(inputMode) ? inputMode : "roma";
     let startLine = 0;
@@ -435,6 +438,9 @@ export class CreateMap {
       const kanaWord = data[i]["word"];
       const options = data[i]["options"];
 
+      if (options?.isChangeCSS) {
+        mapChangeCSSCounts.push(i);
+      }
       if (wordRomaMap[i].length && lyrics !== "end") {
         if (startLine == 0) {
           startLine = i;
@@ -442,7 +448,6 @@ export class CreateMap {
         lineLength++;
         typingLineNumbers.push(i);
         const remainTime = Number(data[i + 1]["time"]) - Number(time);
-
         const createLineWord = new TypingWord(wordRomaMap[i] as [string, ...string[]]);
 
         const word: LineData["word"] = createLineWord.word;
@@ -499,7 +504,14 @@ export class CreateMap {
       }
     }
 
-    return { words: mapData, startLine, lineLength, defaultLineResultData, typingLineNumbers };
+    return {
+      words: mapData,
+      startLine,
+      lineLength,
+      defaultLineResultData,
+      typingLineNumbers,
+      mapChangeCSSCounts,
+    };
   }
 
   private calcLineKpm(notes: LineData["notes"], remainTime: number) {
