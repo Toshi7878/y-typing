@@ -1,7 +1,6 @@
 import { useNextLyricsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Box, useTheme } from "@chakra-ui/react";
-import React from "react";
 
 const NextLyrics = () => {
   const theme: ThemeColors = useTheme();
@@ -10,6 +9,7 @@ const NextLyrics = () => {
   return (
     <Box
       color={`${theme.colors.text.body}`}
+      id="next_lyrics_kpm"
       opacity={0.6}
       fontSize="3xl"
       className="lyrics-font"
