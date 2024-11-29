@@ -1,13 +1,4 @@
 "use client";
-import { useDisclosure, useTheme } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import LineOptionModal from "./LineOptionModal";
-import { ThemeColors } from "@/types";
-import { RootState } from "@/app/edit/redux/store";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
-import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditAddLyricsTextAtom,
   useEditDirectEditCountAtom,
@@ -21,15 +12,23 @@ import {
   useSetEditTimeCountAtom,
   useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
 import {
   useIsAddButtonDisabled,
   useIsDeleteButtonDisabled,
   useIsUpdateButtonDisabled,
 } from "@/app/edit/hooks/useEditorButtonEvents";
+import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
+import { RootState } from "@/app/edit/redux/store";
+import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import { MapData } from "@/app/type/ts/type";
+import { ThemeColors } from "@/types";
+import { useDisclosure, useTheme } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import LineRow from "./child/LineRow";
-import React from "react";
+import LineOptionModal from "./LineOptionModal";
 
 function MapTableBody() {
   const dispatch = useDispatch();
