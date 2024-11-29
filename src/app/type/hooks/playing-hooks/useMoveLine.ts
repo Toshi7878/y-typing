@@ -1,11 +1,11 @@
 import { ThemeColors } from "@/types";
-import { UseDisclosureReturn, useTheme } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 import { useStore } from "jotai";
 import {
   lineSelectIndexAtom,
+  sceneAtom,
   speedAtom,
   useMapAtom,
-  useSceneAtom,
   useSetLineSelectIndexAtom,
   useSetPlayingNotifyAtom,
 } from "../../type-atoms/gameRenderAtoms";
@@ -16,7 +16,6 @@ import { useUpdateLine } from "./timer-hooks/useTimer";
 
 export const useMoveLine = () => {
   const { statusRef, playerRef, cardRefs } = useRefs();
-  const scene = useSceneAtom();
   const map = useMapAtom();
   const typeAtomStore = useStore();
   const theme: ThemeColors = useTheme();
@@ -25,7 +24,8 @@ export const useMoveLine = () => {
   const updateLine = useUpdateLine();
   const getSeekLineCount = useGetSeekLineCount();
 
-  const movePrevLine = (drawerClosure: UseDisclosureReturn) => {
+  const movePrevLine = () => {
+    const scene = typeAtomStore.get(sceneAtom);
     const count = statusRef.current!.status.count - (scene === "replay" ? 1 : 0);
     const prevCount = structuredClone(map!.typingLineNumbers)
       .reverse()
@@ -53,7 +53,7 @@ export const useMoveLine = () => {
     drawerSelectColorChange(newLineSelectIndex);
   };
 
-  const moveNextLine = (drawerClosure: UseDisclosureReturn) => {
+  const moveNextLine = () => {
     const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
     const seekCount = lineSelectIndex ? map!.typingLineNumbers[lineSelectIndex - 1] : null;
     const seekCountAdjust = seekCount && seekCount === statusRef.current!.status.count ? 0 : -1;
@@ -71,6 +71,7 @@ export const useMoveLine = () => {
       (nextCount > 1 ? map!.mapData[nextCount]["time"] - map!.mapData[nextCount - 1]["time"] : 0) /
       playSpeed;
 
+    const scene = typeAtomStore.get(sceneAtom);
     const seekBuffer = scene === "practice" && prevLineTime > 1 ? 1 * playSpeed : 0;
     const nextTime = Number(map!.mapData[nextCount]["time"]) - seekBuffer;
 
@@ -90,19 +91,18 @@ export const useMoveLine = () => {
     drawerSelectColorChange(newLineSelectIndex);
   };
 
-  const moveSetLine = () => {
-    const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
-
-    if (!lineSelectIndex) {
-      return;
-    }
-
-    const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
+  const moveSetLine = (seekCount: number) => {
     const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
+    const scene = typeAtomStore.get(sceneAtom);
     const seekBuffer = scene === "practice" ? 1 * playSpeed : 0;
     const seekTime = Number(map!.mapData[seekCount]["time"]) - seekBuffer;
 
-    drawerSelectColorChange(seekCount);
+    const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
+
+    if (lineSelectIndex !== seekCount) {
+      console.log("colorchange");
+      drawerSelectColorChange(seekCount);
+    }
     playerRef.current.seekTo(seekTime);
     const newCount = getSeekLineCount(seekTime);
     statusRef.current!.status.count = newCount;

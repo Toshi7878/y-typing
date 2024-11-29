@@ -19,7 +19,13 @@ function ResultCardBody({ lineKanaWord, typeResult, lineTypeWord, lostWord }: Re
       <Box className="kana-word">
         <Box>{lineKanaWord}</Box>
       </Box>
-      <Box className="word-result outline-text text-white uppercase ml-1" letterSpacing="0.1em">
+      <Box
+        color={theme.colors.text.body}
+        ml={1}
+        textTransform="uppercase"
+        className="word-result outline-text"
+        letterSpacing="0.1em"
+      >
         {typeResult.map(
           (type: TypeResult, index: number) =>
             type.c && (

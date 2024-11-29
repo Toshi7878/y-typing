@@ -39,14 +39,7 @@ export const useRetry = () => {
     setLyrics("");
     setNextLyrics(structuredClone(defaultNextLyrics));
 
-    resetStatusValues();
-    setCombo(0);
-    (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
-
     const scene = typeAtomStore.get(sceneAtom);
-    if (scene !== "replay") {
-      setLineResults(structuredClone(map!.defaultLineResultData));
-    }
 
     if (scene === "playing") {
       const status = statusAtomsValues();
@@ -54,6 +47,10 @@ export const useRetry = () => {
         gameStateRef.current!.retryCount++;
       }
       setNotify(Symbol(`Retry(${gameStateRef.current!.retryCount})`));
+      setLineResults(structuredClone(map!.defaultLineResultData));
+      (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
+      resetStatusValues();
+      setCombo(0);
     }
 
     gameStateRef.current!.replay.replayKeyCount = 0;
@@ -81,13 +78,13 @@ export const useProceedRetry = () => {
     if (playMode === "playing") {
       setLineResults(structuredClone(map.defaultLineResultData));
     }
-
-    resetStatusValues();
-    setCombo(0);
+    if (playMode !== "practice") {
+      resetStatusValues();
+      setCombo(0);
+      (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
+    }
     gameStateRef.current!.replay.replayKeyCount = 0;
-    (statusRef.current as StatusRef) = structuredClone(DEFAULT_STATUS_REF);
     gameStateRef.current!.isRetrySkip = true;
-
     playerRef.current.seekTo(0);
     playerRef.current.playVideo();
   };

@@ -36,8 +36,6 @@ export const useYTPlayEvent = () => {
       if (!typeTicker.started) {
         typeTicker.start();
       }
-
-      gameStateRef.current!.isSeekedLine = false;
     }
     const isPaused = ytStateRef.current!.isPaused;
 

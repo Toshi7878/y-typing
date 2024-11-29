@@ -8,6 +8,7 @@ import {
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 
+import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import { Ticker } from "@pixi/ticker";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
@@ -19,9 +20,9 @@ interface ResultLineListProps {
 function ResultLineList({ onClose }: ResultLineListProps) {
   const map = useMapAtom();
   const scene = useSceneAtom();
-  const { playerRef, gameStateRef, setRef } = useRefs();
   const lineResults = useLineResultsAtom();
-
+  const { gameStateRef, setRef } = useRefs();
+  const { moveSetLine } = useMoveLine();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
 
   const cardRefs = useRef<HTMLDivElement[]>([]);
@@ -33,63 +34,58 @@ function ResultLineList({ onClose }: ResultLineListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
-  const handleCardClick = useCallback(
-    (seekTime: number, lineNumber: number) => {
-      if (scene !== "end") {
-        onClose();
-        gameStateRef.current!.isSeekedLine = true;
-        if (scene === "replay") {
-          playerRef.current.seekTo(seekTime);
-        } else {
-          playerRef.current.seekTo(0 > seekTime ? 0 : seekTime);
-        }
-        gameStateRef.current!.resultDrawerManualScroll = true;
-        setLineSelectIndex(lineNumber);
-      } else {
-        let nextTypedCount = 0;
-        const typedElements = cardRefs.current[lineNumber].querySelectorAll(
-          ".typed",
-        ) as NodeListOf<HTMLElement>;
-
-        const lastTypedChildClassList = typedElements[typedElements.length - 1].classList;
-
-        if (lastTypedChildClassList[lastTypedChildClassList.length - 1] === "invisible") {
-          return;
-        }
-        for (let i = 0; i < typedElements.length; i++) {
-          typedElements[i].classList.add("invisible");
-        }
-        const date = new Date().getTime();
-        const handleTick = () => handleResultCardReplay(date, typedElements);
-
-        const ticker = new Ticker();
-        const handleResultCardReplay = (date: number, typedElements: NodeListOf<HTMLElement>) => {
-          const currentTime = (new Date().getTime() - date) / 1000;
-          const nextCharElement = typedElements[nextTypedCount];
-
-          if (typedElements.length - 1 < nextTypedCount) {
-            ticker.stop();
-            ticker.remove(handleTick);
-            return;
-          }
-
-          const nextTime = nextCharElement.dataset.time;
-
-          if (currentTime > Number(nextTime)) {
-            nextCharElement.classList.remove("invisible");
-            nextTypedCount++;
-          }
-        };
-
-        if (!ticker.started) {
-          ticker.add(handleTick);
-          ticker.start();
-        }
-      }
+  const practiceReplayCardClick = useCallback(
+    (lineNumber: number) => {
+      onClose();
+      moveSetLine(lineNumber);
+      gameStateRef.current!.resultDrawerManualScroll = true;
+      setLineSelectIndex(lineNumber);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [scene, onClose],
+    [],
   );
+
+  const endCardClick = useCallback((lineNumber: number) => {
+    let nextTypedCount = 0;
+    const typedElements = cardRefs.current[lineNumber].querySelectorAll(
+      ".typed",
+    ) as NodeListOf<HTMLElement>;
+
+    const lastTypedChildClassList = typedElements[typedElements.length - 1].classList;
+
+    if (lastTypedChildClassList[lastTypedChildClassList.length - 1] === "invisible") {
+      return;
+    }
+    for (let i = 0; i < typedElements.length; i++) {
+      typedElements[i].classList.add("invisible");
+    }
+    const date = new Date().getTime();
+    const handleTick = () => handleResultCardReplay(date, typedElements);
+
+    const ticker = new Ticker();
+    const handleResultCardReplay = (date: number, typedElements: NodeListOf<HTMLElement>) => {
+      const currentTime = (new Date().getTime() - date) / 1000;
+      const nextCharElement = typedElements[nextTypedCount];
+
+      if (typedElements.length - 1 < nextTypedCount) {
+        ticker.stop();
+        ticker.remove(handleTick);
+        return;
+      }
+
+      const nextTime = nextCharElement.dataset.time;
+
+      if (currentTime > Number(nextTime)) {
+        nextCharElement.classList.remove("invisible");
+        nextTypedCount++;
+      }
+    };
+
+    if (!ticker.started) {
+      ticker.add(handleTick);
+      ticker.start();
+    }
+  }, []);
 
   let lineCount = 0;
   let scoreCount = 0;
@@ -117,12 +113,12 @@ function ResultLineList({ onClose }: ResultLineListProps) {
             lineCount={lineCount}
             scoreCount={scoreCount}
             cardRefs={cardRefs}
-            handleCardClick={handleCardClick}
+            handleCardClick={scene === "end" ? endCardClick : practiceReplayCardClick}
           />
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lineResults, map],
+    [lineResults, scene],
   );
 
   return <>{memoizedResultCards}</>;

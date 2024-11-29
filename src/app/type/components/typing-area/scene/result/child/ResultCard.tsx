@@ -21,7 +21,7 @@ interface ResultCardProps {
   scoreCount: number;
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
-  handleCardClick: (seekTime: number, index: number) => void;
+  handleCardClick: (lineNumber: number) => void;
 }
 
 function ResultCard({
@@ -84,7 +84,7 @@ function ResultCard({
       _hover={{
         outline: `1px solid ${theme.colors.border.card}`,
       }}
-      onClick={() => handleCardClick(seekTime, lineNumber)}
+      onClick={() => handleCardClick(lineNumber)}
     >
       <CardHeader py={0}>
         <ResultCardHeader

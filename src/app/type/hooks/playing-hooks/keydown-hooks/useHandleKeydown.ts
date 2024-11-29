@@ -1,11 +1,14 @@
 import { drawerClosureAtom } from "@/app/type/components/typing-area/TypingCard";
 import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "@/app/type/ts/const/typeDefaultValue";
 import { useIsKeydownTyped } from "@/app/type/ts/scene-ts/playing/keydown/typingJudge";
+import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import {
   inputModeAtom,
+  lineSelectIndexAtom,
   lineWordAtom,
   sceneAtom,
   skipAtom,
+  useMapAtom,
   userOptionsAtom,
   useSetPlayingNotifyAtom,
   useSetTimeOffsetAtom,
@@ -28,13 +31,14 @@ export const useHandleKeydown = () => {
   const isKeydownTyped = useIsKeydownTyped();
   const typing = useTyping();
   const playingShortcutKey = usePlayingShortcutKey();
-  const gamePause = useGamePause();
+  const pauseShortcutKey = usePauseShortcutKey();
   const typeAtomStore = useStore();
 
   return (event: KeyboardEvent) => {
     const scene = typeAtomStore.get(sceneAtom);
 
-    if (!ytStateRef.current?.isPaused || scene === "practice") {
+    const isPaused = ytStateRef.current?.isPaused;
+    if (!isPaused || scene === "practice") {
       const count = statusRef.current!.status.count;
       const currentLineCount = count - 1;
 
@@ -55,16 +59,20 @@ export const useHandleKeydown = () => {
       } else {
         playingShortcutKey(event);
       }
-    } else if (event.key === "Escape") {
-      gamePause();
+    } else if (isPaused) {
+      pauseShortcutKey(event);
     }
   };
 };
 
 const keyWhiteList = ["F5"];
+const ctrlKeyWhiteCodeList = ["KeyC"];
+const altKeyWhiteCodeList = ["ArrowLeft", "ArrowRight"];
+const openDrawerCtrlKeyCodeList = ["KeyF"];
 
-export const usePlayingShortcutKey = () => {
+const usePlayingShortcutKey = () => {
   const typeAtomStore = useStore();
+  const map = useMapAtom() as CreateMap;
 
   const retry = useRetry();
   const pressSkip = usePressSkip();
@@ -78,7 +86,16 @@ export const usePlayingShortcutKey = () => {
   const setNotify = useSetPlayingNotifyAtom();
 
   return (event: KeyboardEvent) => {
-    //間奏スキップ
+    const drawerClosure = typeAtomStore.get(drawerClosureAtom) as UseDisclosureReturn;
+
+    if (
+      keyWhiteList.includes(event.code) ||
+      (event.ctrlKey && ctrlKeyWhiteCodeList.includes(event.code)) ||
+      (event.altKey && altKeyWhiteCodeList.includes(event.code)) ||
+      (event.ctrlKey && openDrawerCtrlKeyCodeList.includes(event.code) && drawerClosure.isOpen)
+    ) {
+      return;
+    }
     const userOptions = typeAtomStore.get(userOptionsAtom);
     const scene = typeAtomStore.get(sceneAtom);
     const inputMode = typeAtomStore.get(inputModeAtom);
@@ -88,25 +105,13 @@ export const usePlayingShortcutKey = () => {
     const isCtrlAltLeftRight =
       userOptions.timeOffsetKey === "ctrl-alt-left-right" && event.ctrlKey && event.altKey;
 
-    const drawerClosure = typeAtomStore.get(drawerClosureAtom) as UseDisclosureReturn;
-
-    if ((event.ctrlKey && event.code == "KeyF" && !drawerClosure.isOpen) || event.altKey) {
-      event.preventDefault();
-    }
-    if (keyWhiteList.includes(event.code) || (event.ctrlKey && event.code == "KeyC")) {
-      return;
-    }
-
     switch (event.code) {
       case "Escape": //Escでポーズ
         gamePause();
-        event.preventDefault();
         break;
       case "ArrowUp":
-        event.preventDefault();
         break;
       case "ArrowDown":
-        event.preventDefault();
         break;
       case "ArrowRight":
         if (isCtrlLeftRight || isCtrlAltLeftRight) {
@@ -116,10 +121,9 @@ export const usePlayingShortcutKey = () => {
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          moveNextLine(drawerClosure);
+          moveNextLine();
         }
 
-        event.preventDefault();
         break;
       case "ArrowLeft":
         if (isCtrlLeftRight || isCtrlAltLeftRight) {
@@ -129,13 +133,11 @@ export const usePlayingShortcutKey = () => {
             return newValue;
           });
         } else if (scene === "replay" || scene === "practice") {
-          movePrevLine(drawerClosure);
+          movePrevLine();
         }
-        event.preventDefault();
         break;
       case skip:
         pressSkip();
-        event.preventDefault();
         break;
       case "F1":
         if (userOptions.toggleInputModeKey === "tab") {
@@ -143,22 +145,18 @@ export const usePlayingShortcutKey = () => {
             toggleLineListDrawer();
           }
         }
-        event.preventDefault();
         break;
 
       case "F4":
         retry();
-        event.preventDefault();
         break;
       case "F7":
         changePlayMode();
-        event.preventDefault();
         break;
       case "F9":
         if (scene === "practice") {
           defaultSpeedChange("down");
         }
-        event.preventDefault();
         break;
       case "F10":
         if (scene === "playing") {
@@ -166,7 +164,6 @@ export const usePlayingShortcutKey = () => {
         } else if (scene === "practice") {
           defaultSpeedChange("up");
         }
-        event.preventDefault();
         break;
       case "KanaMode":
       case "Romaji":
@@ -179,13 +176,13 @@ export const usePlayingShortcutKey = () => {
             }
           }
         }
-        event.preventDefault();
         break;
       case "Backspace":
         if (scene === "replay" || scene === "practice") {
-          moveSetLine();
+          const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
+          const seekCount = map.typingLineNumbers[lineSelectIndex - 1];
+          moveSetLine(seekCount);
         }
-        event.preventDefault();
         break;
 
       case "Tab":
@@ -202,6 +199,19 @@ export const usePlayingShortcutKey = () => {
             toggleLineListDrawer();
           }
         }
+        break;
+    }
+    event.preventDefault();
+  };
+};
+
+const usePauseShortcutKey = () => {
+  const gamePause = useGamePause();
+
+  return (event: KeyboardEvent) => {
+    switch (event.code) {
+      case "Escape": //Escでポーズ
+        gamePause();
         event.preventDefault();
         break;
     }

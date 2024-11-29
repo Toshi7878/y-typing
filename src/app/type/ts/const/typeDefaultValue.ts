@@ -34,7 +34,6 @@ export const DEFAULT_YT_STATE_REF: YTStateRef = {
 export const DEFAULT_GAME_STATE_REF: GameStateRef = {
   isRetrySkip: false,
   retryCount: 1,
-  isSeekedLine: false,
   playMode: "playing" as PlayMode,
   startPlaySpeed: 1, //練習モード→本番モード移行時の初期スピード設定 (1倍速以上)
   displayLineTimeCount: 0, //0.1秒ごとにlineKpm/残り時間の表示を更新するためのプロパティ

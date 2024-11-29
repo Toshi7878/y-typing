@@ -77,7 +77,8 @@ const PracticeLineCard = () => {
       onMouseMove={() => setIsDragging(true)}
       onClick={() => {
         if (!isDragging) {
-          moveSetLine();
+          const seekCount = map!.typingLineNumbers[lineSelectIndex - 1];
+          moveSetLine(seekCount);
         }
       }}
     >

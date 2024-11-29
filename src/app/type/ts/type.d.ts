@@ -89,7 +89,6 @@ export interface Status {
 export interface GameStateRef {
   isRetrySkip: boolean;
   retryCount: number;
-  isSeekedLine: boolean;
   playMode: PlayMode;
   startPlaySpeed: number;
   displayLineTimeCount: number;

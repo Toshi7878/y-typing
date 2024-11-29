@@ -575,6 +575,10 @@ export const useIsKeydownTyped = () => {
   const typeAtomStore = useStore();
 
   return (event: KeyboardEvent) => {
+    if (event.ctrlKey || event.altKey) {
+      return false;
+    }
+
     const KEY_CODE = event.keyCode;
     const CODE = event.code;
 
