@@ -136,5 +136,5 @@ export const useMoveLine = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  return { movePrevLine, moveNextLine, moveSetLine, scrollToCard };
+  return { movePrevLine, moveNextLine, moveSetLine, scrollToCard, drawerSelectColorChange };
 };

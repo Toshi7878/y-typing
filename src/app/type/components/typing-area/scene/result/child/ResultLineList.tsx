@@ -26,15 +26,13 @@ function ResultLineList({ onClose }: ResultLineListProps) {
   const typeAtomStore = useStore();
 
   const { gameStateRef, setRef } = useRefs();
-  const { moveSetLine, scrollToCard } = useMoveLine();
+  const { moveSetLine, scrollToCard, drawerSelectColorChange } = useMoveLine();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
 
   const cardRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    if (scene === "practice" || scene == "replay") {
-      setRef("cardRefs", cardRefs.current);
-    }
+    setRef("cardRefs", cardRefs.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
 
@@ -94,6 +92,7 @@ function ResultLineList({ onClose }: ResultLineListProps) {
     if (!ticker.started) {
       ticker.add(handleTick);
       ticker.start();
+      drawerSelectColorChange(lineNumber);
     }
   }, []);
 
