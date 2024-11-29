@@ -335,7 +335,7 @@ export const useUpdateLine = () => {
       });
     }
 
-    const isChangeCSS = map.mapData[newCount].options?.isChangeCSS;
+    const isChangeCSS = map.mapData[currentCount].options?.isChangeCSS;
 
     if (isChangeCSS) {
       setChangeCSSCount(newCount);
