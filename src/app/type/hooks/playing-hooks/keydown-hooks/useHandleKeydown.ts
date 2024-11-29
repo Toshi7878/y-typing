@@ -137,7 +137,9 @@ const usePlayingShortcutKey = () => {
         }
         break;
       case skip:
-        pressSkip();
+        if (skip === "Space") {
+          pressSkip();
+        }
         break;
       case "F1":
         if (userOptions.toggleInputModeKey === "tab") {
