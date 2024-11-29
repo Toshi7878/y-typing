@@ -1,5 +1,3 @@
-import { useState, useEffect, Dispatch } from "react";
-// ... existing code ...
 import {
   Button,
   Modal,
@@ -9,7 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 interface LineOptionModalCloseButton {

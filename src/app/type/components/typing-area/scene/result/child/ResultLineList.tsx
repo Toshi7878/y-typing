@@ -95,6 +95,7 @@ function ResultLineList({ onClose }: ResultLineListProps) {
       ticker.start();
       drawerSelectColorChange(lineNumber);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let lineCount = 0;

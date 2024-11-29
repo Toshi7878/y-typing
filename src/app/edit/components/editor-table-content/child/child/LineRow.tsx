@@ -1,11 +1,8 @@
 "use client";
-import { Tr, Td, Button, useTheme, Input, Box, UseDisclosureReturn, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Td, Tr, UseDisclosureReturn, useTheme } from "@chakra-ui/react";
 import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { LineEdit, ThemeColors } from "@/types";
-import { RootState } from "@/app/edit/redux/store";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import {
   useEditDirectEditCountAtom,
   useEditLineLyricsAtom,
@@ -20,14 +17,17 @@ import {
   useSetEditLineWordAtom,
   useSetTabIndexAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { useAddRubyTagEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
-import parse from "html-react-parser";
-import CustomToolTip from "@/components/custom-ui/CustomToolTip";
 import {
   useIsConvertButtonDisabled,
   useLineUpdateButtonEvent,
   useWordConvertButtonEvent,
 } from "@/app/edit/hooks/useEditorButtonEvents";
+import { RootState } from "@/app/edit/redux/store";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
+import { LineEdit, ThemeColors } from "@/types";
+import parse from "html-react-parser";
 
 interface LineRowProps {
   index: number;
@@ -127,6 +127,7 @@ function LineRow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [directEdit]);
 
+  const isOptionEdited = line.options?.isChangeCSS || line.options?.eternalCSS;
   return (
     <Tr
       key={index}
@@ -266,8 +267,13 @@ function LineRow({
       <Td>
         <Button
           disabled={mapData.length - 1 === index}
-          variant={line.options ? "solid" : "outline"}
-          colorScheme="green"
+          variant={isOptionEdited ? "solid" : "outline"}
+          color={isOptionEdited ? theme.colors.text.body : theme.colors.secondary.main}
+          bg={isOptionEdited ? theme.colors.secondary.main : ""}
+          borderColor={isOptionEdited ? theme.colors.secondary.main : ""}
+          _hover={{
+            bg: isOptionEdited ? theme.colors.secondary.light : "",
+          }}
           size="sm"
           onClick={() => {
             if (mapData.length - 1 !== index) {
@@ -277,7 +283,7 @@ function LineRow({
             }
           }}
         >
-          {line.options ? "設定有" : "未設定"}
+          {isOptionEdited ? "設定有" : "未設定"}
         </Button>
       </Td>
     </Tr>

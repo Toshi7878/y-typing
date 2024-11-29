@@ -6,7 +6,7 @@ export type MapData = {
   time: string;
   lyrics: string;
   word: string;
-  options?: { eternalCSS?: string; changeCSS?: string };
+  options?: { eternalCSS?: string; changeCSS?: string; isChangeCSS?: boolean };
 };
 export type TypeChank = { k: string; r: string[]; p: number };
 

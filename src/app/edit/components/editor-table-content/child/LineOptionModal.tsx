@@ -1,27 +1,28 @@
 "use client";
 
+import { MapData } from "@/app/type/ts/type";
+import { ThemeColors } from "@/types";
 import {
+  Badge,
+  Box,
+  Checkbox,
+  FormLabel,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalContent,
   ModalFooter,
-  FormLabel,
-  Box,
+  ModalHeader,
+  ModalOverlay,
   Stack,
-  Badge,
   useDisclosure,
   useTheme,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { MapData } from "@/app/type/ts/type";
-import CSSTextLength from "./line-option-child/CSSTextLength";
 import CSSInput from "./line-option-child/CSSInput";
-import SaveOptionButton from "./line-option-child/SaveOptionButton";
+import CSSTextLength from "./line-option-child/CSSTextLength";
 import LineOptionModalCloseButton from "./line-option-child/LineOptionModalCloseButton";
-import { ThemeColors } from "@/types";
+import SaveOptionButton from "./line-option-child/SaveOptionButton";
 
 interface LineOptionModalProps {
   isOpen: boolean;
@@ -39,6 +40,7 @@ export default function LineOptionModal({
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");
   const [eternalCSS, setEternalCSS] = useState(lineOptions?.eternalCSS || "");
   const [isEditedCSS, setIsEditedCSS] = useState(false);
+  const [isChangeCSS, setIsEditChangeCSS] = useState(lineOptions?.isChangeCSS || false);
   const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
 
   const theme: ThemeColors = useTheme();
@@ -57,19 +59,22 @@ export default function LineOptionModal({
 
         <ModalCloseButton onClick={handleModalClose} />
         <ModalBody>
-          <Badge colorScheme="teal" fontSize="1em">
+          <Badge colorScheme="teal" fontSize="1em" mb={2}>
             選択ライン: {optionModalIndex}
           </Badge>
 
-          <Stack spacing={10}>
+          <Stack spacing={2}>
             {optionModalIndex === 0 && (
               <Box>
-                <FormLabel>永続的に適用するCSSを入力</FormLabel>
-                <CSSInput
-                  CSSText={eternalCSS}
-                  setCSSText={setEternalCSS}
-                  setIsEditedCSS={setIsEditedCSS}
-                />
+                <FormLabel>
+                  永続的に適用するCSSを入力
+                  <CSSInput
+                    disabled={false}
+                    CSSText={eternalCSS}
+                    setCSSText={setEternalCSS}
+                    setIsEditedCSS={setIsEditedCSS}
+                  />
+                </FormLabel>
                 <CSSTextLength
                   eternalCSSText={eternalCSS}
                   changeCSSText={changeCSS}
@@ -79,12 +84,23 @@ export default function LineOptionModal({
             )}
 
             <Box>
-              <FormLabel>選択ラインから適用するCSSを入力</FormLabel>
-              <CSSInput
-                CSSText={changeCSS}
-                setCSSText={setChangeCSS}
-                setIsEditedCSS={setIsEditedCSS}
-              />
+              <FormLabel display="flex" alignItems="baseline">
+                <Checkbox
+                  isChecked={isChangeCSS}
+                  onChange={(event) => setIsEditChangeCSS(event.target.checked)}
+                  mr={1}
+                />
+                ライン切り替えを有効化
+              </FormLabel>
+              <FormLabel>
+                選択ラインから適用するCSSを入力
+                <CSSInput
+                  disabled={!isChangeCSS}
+                  CSSText={changeCSS}
+                  setCSSText={setChangeCSS}
+                  setIsEditedCSS={setIsEditedCSS}
+                />
+              </FormLabel>
               <CSSTextLength
                 eternalCSSText={eternalCSS}
                 changeCSSText={changeCSS}
@@ -96,6 +112,7 @@ export default function LineOptionModal({
               eternalCSS={eternalCSS}
               changeCSS={changeCSS}
               isEditedCSS={isEditedCSS}
+              isChangeCSS={isChangeCSS}
               optionModalIndex={optionModalIndex}
               onClose={onClose}
               setIsEditedCSS={setIsEditedCSS}

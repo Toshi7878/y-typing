@@ -1,4 +1,4 @@
-import { EditorNewMapBackUpInfoData, EditorSendData } from "@/app/edit/ts/type";
+import { EditorNewMapBackUpInfoData } from "@/app/edit/ts/type";
 
 export type HeaderMenu = { title: string; href: string };
 
@@ -24,7 +24,7 @@ export interface LineEdit {
   lyrics: string;
   word: string;
   selectedLineCount?: number;
-  options?: { eternalCSS?: string; changeCSS?: string };
+  options?: { eternalCSS?: string; changeCSS?: string; isChangeCSS?: boolean };
 }
 
 // react-tag-input Tag 型は時前で定義しなければならない
