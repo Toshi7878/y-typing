@@ -91,7 +91,6 @@ export interface GameStateRef {
   playMode: PlayMode;
   startPlaySpeed: number;
   displayLineTimeCount: number;
-  resultDrawerManualScroll: boolean;
   replay: {
     replayKeyCount: number;
     userName: string;
