@@ -1,4 +1,6 @@
 "use client";
+import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { ThemeColors } from "@/types";
 import {
   Drawer,
@@ -10,18 +12,34 @@ import {
   UseDisclosureReturn,
   useTheme,
 } from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
 import ResultLineList from "./child/ResultLineList";
 
 interface ResultDrawerProps {
   drawerClosure: UseDisclosureReturn;
-  modalContentRef: React.RefObject<HTMLDivElement>;
 }
 
-function ResultDrawer({ drawerClosure, modalContentRef }: ResultDrawerProps) {
+function ResultDrawer({ drawerClosure }: ResultDrawerProps) {
   const { isOpen, onClose } = drawerClosure;
   // const [drawerHeight, setDrawerHeight] = useState("100vh");
   const theme: ThemeColors = useTheme();
+  const { setRef } = useRefs();
+  const scene = useSceneAtom();
 
+  const modalContentRef = useRef(null);
+
+  // useEffect(() => {
+  //   if ((scene === "practice" || scene === "replay") && modalContentRef.current) {
+  //     setRef("modalContentRef", modalContentRef.current);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [scene]);
+
+  useEffect(() => {
+    if (modalContentRef.current) {
+      console.log(modalContentRef.current);
+    }
+  }, [modalContentRef]);
   // useEffect(() => {
   //   const updateHeight = () => {
   //     setDrawerHeight(`${window.innerHeight}px`);
@@ -44,6 +62,17 @@ function ResultDrawer({ drawerClosure, modalContentRef }: ResultDrawerProps) {
           <ResultLineList onClose={onClose} />
         </DrawerBody>
       </DrawerContent>
+      <style>
+        {`
+        .result-line-select-outline {
+          outline:3px solid ${theme.colors.primary.main};
+        }
+
+        .result-line-hover:hover {
+          outline:1px solid ${theme.colors.text.body};
+        }
+        `}
+      </style>
     </Drawer>
   );
 }

@@ -2,13 +2,14 @@
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData } from "@/app/type/ts/type";
 import {
-  useInputModeAtom,
+  inputModeAtom,
+  speedAtom,
   useMapAtom,
   useSceneAtom,
-  useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Card, CardBody, CardFooter, CardHeader, useTheme } from "@chakra-ui/react";
+import { useStore } from "jotai";
 import { memo } from "react";
 import ResultCardBody from "./child/ResultCardBody";
 import ResultCardFooter from "./child/ResultCardFooter";
@@ -21,6 +22,7 @@ interface ResultCardProps {
   scoreCount: number;
   lineData: LineData;
   cardRefs: React.RefObject<HTMLDivElement[]>;
+  selectIndex: number;
   handleCardClick: (lineNumber: number) => void;
 }
 
@@ -30,15 +32,17 @@ function ResultCard({
   lineCount,
   scoreCount,
   lineData,
+  selectIndex,
   cardRefs,
   handleCardClick,
 }: ResultCardProps) {
   const map = useMapAtom();
-  const inputMode = useInputModeAtom();
   const scene = useSceneAtom();
-  const speedData = useTypePageSpeedAtom();
   const theme: ThemeColors = useTheme();
+  const typeAtomStore = useStore();
 
+  const speedData = typeAtomStore.get(speedAtom);
+  const inputMode = typeAtomStore.get(inputModeAtom);
   const lineSpeed =
     lineResult.status!.sp > speedData.defaultSpeed ? lineResult.status!.sp : speedData.defaultSpeed;
   const lineInputMode = lineResult.status?.mode ?? inputMode;
@@ -76,19 +80,18 @@ function ResultCard({
       data-seek-time={seekTime}
       data-line-number={lineNumber}
       data-count={index}
-      size={"sm"}
+      size="sm"
       boxShadow="md"
       cursor="pointer"
       bg={theme.colors.background.card}
       color={theme.colors.text.body}
-      _hover={{
-        outline: `1px solid ${theme.colors.border.card}`,
-      }}
+      className={`${selectIndex === lineNumber ? "result-line-select-outline" : "result-line-hover"}`}
       onClick={() => handleCardClick(lineNumber)}
     >
       <CardHeader py={0}>
         <ResultCardHeader
           index={index}
+          lineCount={lineCount}
           lineNotes={lineNotes}
           lineInputMode={lineInputMode}
           lineTime={lineTime}

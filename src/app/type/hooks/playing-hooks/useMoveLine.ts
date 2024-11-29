@@ -111,14 +111,20 @@ export const useMoveLine = () => {
   };
 
   const drawerSelectColorChange = (newLineSelectIndex: number) => {
-    for (let i = 1; i < cardRefs.current!.length; i++) {
+    for (let i = 0; i < cardRefs.current!.length; i++) {
+      const card = cardRefs.current![i];
+
+      if (!card) {
+        continue;
+      }
       if (newLineSelectIndex === i) {
-        cardRefs.current![i].style.outline = `3px solid ${theme.colors.semantic.word.correct}`;
+        cardRefs.current![i].classList.add("result-line-select-outline");
+        cardRefs.current![i].classList.remove("result-line-hover");
       } else {
-        cardRefs.current![i].style.outline = ``;
+        cardRefs.current![i].classList.add("result-line-hover");
+        cardRefs.current![i].classList.remove("result-line-select-outline");
       }
     }
   };
-
   return { movePrevLine, moveNextLine, moveSetLine };
 };

@@ -9,6 +9,7 @@ import { memo } from "react";
 interface ResultCardHeaderdProps {
   index: number;
   lineNotes: number;
+  lineCount: number;
   lineInputMode: InputModeType;
   lineTime: number;
   lineKpm: number;
@@ -18,6 +19,7 @@ interface ResultCardHeaderdProps {
 function ResultCardHeader({
   index,
   lineNotes,
+  lineCount,
   lineInputMode,
   lineTime,
   lineKpm,
@@ -29,7 +31,7 @@ function ResultCardHeader({
   return (
     <Box>
       <Text as="span" data-list-number={index}>
-        {index}/{map!.lineLength}
+        {lineCount}/{map!.lineLength}
       </Text>
       <Text as="span" mx={2}>
         {"|"}

@@ -1,6 +1,7 @@
 "use client";
 import { LineResultData } from "@/app/type/ts/type";
 import {
+  lineSelectIndexAtom,
   useLineResultsAtom,
   useMapAtom,
   useSceneAtom,
@@ -10,6 +11,7 @@ import { useRefs } from "@/app/type/type-contexts/refsProvider";
 
 import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import { Ticker } from "@pixi/ticker";
+import { useStore } from "jotai";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import ResultCard from "./ResultCard";
 
@@ -21,6 +23,8 @@ function ResultLineList({ onClose }: ResultLineListProps) {
   const map = useMapAtom();
   const scene = useSceneAtom();
   const lineResults = useLineResultsAtom();
+  const typeAtomStore = useStore();
+
   const { gameStateRef, setRef } = useRefs();
   const { moveSetLine } = useMoveLine();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
@@ -36,7 +40,7 @@ function ResultLineList({ onClose }: ResultLineListProps) {
 
   const practiceReplayCardClick = useCallback(
     (lineNumber: number) => {
-      onClose();
+      // onClose();
       moveSetLine(lineNumber);
       gameStateRef.current!.resultDrawerManualScroll = true;
       setLineSelectIndex(lineNumber);
@@ -103,7 +107,8 @@ function ResultLineList({ onClose }: ResultLineListProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         scoreCount += lineResult.status!.p! + lineResult.status!.tBonus!;
 
-        lineResult;
+        const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
+
         return (
           <ResultCard
             key={index}
@@ -114,6 +119,7 @@ function ResultLineList({ onClose }: ResultLineListProps) {
             scoreCount={scoreCount}
             cardRefs={cardRefs}
             handleCardClick={scene === "end" ? endCardClick : practiceReplayCardClick}
+            selectIndex={lineSelectIndex}
           />
         );
       }),
