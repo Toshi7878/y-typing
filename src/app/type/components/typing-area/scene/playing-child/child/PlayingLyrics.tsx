@@ -18,6 +18,5 @@ const PlayingLyrics = () => {
     />
   );
 };
-PlayingLyrics.displayName = "PlayingLyrics";
 
 export default PlayingLyrics;

@@ -8,11 +8,12 @@ const PlayingTypingWords = () => {
   const inputMode = useInputModeAtom();
   const theme: ThemeColors = useTheme();
 
+  const lineCompleted = !lineWord.nextChar.k;
   return (
     <Box
       color={theme.colors.text.body}
       fontSize="2.75rem"
-      className="word-font outline-text"
+      className={`word-font outline-text ${lineCompleted ? "word-area-completed" : ""}`}
       style={{ letterSpacing: "0.1em" }}
     >
       <PlayingWord
