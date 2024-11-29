@@ -26,7 +26,7 @@ function ResultLineList({ onClose }: ResultLineListProps) {
   const typeAtomStore = useStore();
 
   const { gameStateRef, setRef } = useRefs();
-  const { moveSetLine } = useMoveLine();
+  const { moveSetLine, scrollToCard } = useMoveLine();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
 
   const cardRefs = useRef<HTMLDivElement[]>([]);
@@ -37,6 +37,12 @@ function ResultLineList({ onClose }: ResultLineListProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
+
+  useEffect(() => {
+    const lineSelectIndex = typeAtomStore.get(lineSelectIndexAtom);
+    scrollToCard(lineSelectIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const practiceReplayCardClick = useCallback(
     (lineNumber: number) => {

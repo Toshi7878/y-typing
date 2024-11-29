@@ -15,9 +15,7 @@ export const RefsContext = createContext<RefsContextType>({
   gameStateRef: { current: structuredClone(DEFAULT_GAME_STATE_REF) },
   lineProgressRef: { current: null },
   totalProgressRef: { current: null },
-  modalContentRef: { current: null },
   cardRefs: { current: [] },
-
   setRef: (ref: HTMLElement | any) => {},
 });
 
@@ -29,7 +27,6 @@ export const RefsProvider = ({ children }) => {
   const gameStateRef = useRef<GameStateRef>(structuredClone(DEFAULT_GAME_STATE_REF));
   const lineProgressRef = useRef(null);
   const totalProgressRef = useRef(null);
-  const modalContentRef = useRef(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
 
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
@@ -46,9 +43,6 @@ export const RefsProvider = ({ children }) => {
       case "cardRefs":
         cardRefs.current = ref;
         break;
-      case "modalContentRef":
-        modalContentRef.current = ref;
-        break;
     }
   };
 
@@ -60,7 +54,6 @@ export const RefsProvider = ({ children }) => {
         statusRef,
         lineProgressRef,
         totalProgressRef,
-        modalContentRef,
         cardRefs,
         bestScoreRef,
         playerRef,
@@ -82,7 +75,6 @@ export const useRefs = () => {
     statusRef: context.statusRef,
     ytStateRef: context.ytStateRef,
     gameStateRef: context.gameStateRef,
-    modalContentRef: context.modalContentRef,
     cardRefs: context.cardRefs,
     setRef: context.setRef,
   };

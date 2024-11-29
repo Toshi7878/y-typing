@@ -1,5 +1,3 @@
-import { ThemeColors } from "@/types";
-import { useTheme } from "@chakra-ui/react";
 import { useStore } from "jotai";
 import {
   lineSelectIndexAtom,
@@ -18,7 +16,6 @@ export const useMoveLine = () => {
   const { statusRef, playerRef, cardRefs } = useRefs();
   const map = useMapAtom();
   const typeAtomStore = useStore();
-  const theme: ThemeColors = useTheme();
   const setLineSelectIndex = useSetLineSelectIndexAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const updateLine = useUpdateLine();
@@ -51,6 +48,7 @@ export const useMoveLine = () => {
     playerRef.current.seekTo(prevTime);
     setNotify(Symbol(`◁`));
     drawerSelectColorChange(newLineSelectIndex);
+    scrollToCard(newLineSelectIndex);
   };
 
   const moveNextLine = () => {
@@ -89,6 +87,7 @@ export const useMoveLine = () => {
     playerRef.current.seekTo(nextTime);
     setNotify(Symbol(`▷`));
     drawerSelectColorChange(newLineSelectIndex);
+    scrollToCard(newLineSelectIndex);
   };
 
   const moveSetLine = (seekCount: number) => {
@@ -126,5 +125,16 @@ export const useMoveLine = () => {
       }
     }
   };
-  return { movePrevLine, moveNextLine, moveSetLine };
+  const scrollToCard = (newIndex: number) => {
+    const card: HTMLDivElement = cardRefs.current![newIndex];
+
+    if (card) {
+      const drawerBody = card.parentNode as HTMLDivElement;
+      const scrollHeight = drawerBody.scrollHeight;
+      drawerBody.scrollTop = (scrollHeight * (newIndex - 2)) / map!.typingLineNumbers.length;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
+
+  return { movePrevLine, moveNextLine, moveSetLine, scrollToCard };
 };

@@ -1,5 +1,9 @@
 export const changelog = [
   {
+    date: "2024-11-29",
+    descriptions: ["練習モードのラインリスト表示(Tab)の動作を改善"],
+  },
+  {
     date: "2024-11-28",
     descriptions: [
       "↓の修正によりkpmの値が不備が発生する問題を修正？",
