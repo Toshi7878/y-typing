@@ -1,11 +1,11 @@
-import { useSceneAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
-import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
-import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
-import PlayingBottomBadge from "./child/PlayingBottomBadge";
-import { useStore } from "jotai";
 import { drawerClosureAtom } from "@/app/type/components/typing-area/TypingCard";
+import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
+import { useToggleLineList } from "@/app/type/hooks/playing-hooks/useToggleLineList";
+import { useSceneAtom, useUserOptionsAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { UseDisclosureReturn } from "@chakra-ui/react";
+import { useStore } from "jotai";
+import PlayingBottomBadge from "./child/PlayingBottomBadge";
+import PlayingLineSeekBadge from "./child/PlayingLineSeekBadge";
 
 const PlayingPracticeBadge = function () {
   const scene = useSceneAtom();
@@ -25,8 +25,8 @@ const PlayingPracticeBadge = function () {
             kbdTextPrev="←"
             kbdTextNext="→"
             onClick={() => {}}
-            onClickPrev={() => movePrevLine(drawerClosure)}
-            onClickNext={() => moveNextLine(drawerClosure)}
+            onClickPrev={() => movePrevLine()}
+            onClickNext={() => moveNextLine()}
           />
           <PlayingBottomBadge
             badgeText="ライン一覧"
