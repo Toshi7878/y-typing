@@ -8,7 +8,7 @@ const PlayingTypingWords = () => {
   const inputMode = useInputModeAtom();
   const theme: ThemeColors = useTheme();
 
-  const lineCompleted = !lineWord.nextChar.k;
+  const lineCompleted = !lineWord.nextChar.k && lineWord.correct.k;
   return (
     <Box
       color={theme.colors.text.body}
