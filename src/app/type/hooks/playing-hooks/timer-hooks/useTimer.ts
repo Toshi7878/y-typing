@@ -47,6 +47,8 @@ export const usePlayTimer = () => {
   const calcLineResult = useCalcLineResult();
   const replay = useReplay();
   const getSeekLineCount = useGetSeekLineCount();
+  const { setStatusValues } = useSetStatusAtoms();
+
   const {
     getCurrentOffsettedYTTime,
     getConstantOffsettedYTTime,
@@ -112,6 +114,7 @@ export const usePlayTimer = () => {
           totalTypeCount: status.type,
         });
         setDisplayLineKpm(typeSpeed.lineKpm);
+        setStatusValues({ kpm: typeSpeed.totalKpm });
       }
 
       const isRetrySkip = gameStateRef.current!.isRetrySkip;
