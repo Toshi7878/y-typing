@@ -68,7 +68,7 @@ export const useSetInputModeAtom = () => {
   return useSetAtom(inputModeAtom, { store: typeAtomStore });
 };
 
-const isLoadingOverlayAtom = atom<boolean>(false);
+export const isLoadingOverlayAtom = atom<boolean>(false);
 
 export const useIsLoadingOverlayAtom = () => {
   return useAtomValue(isLoadingOverlayAtom);

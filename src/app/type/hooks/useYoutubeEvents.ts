@@ -2,7 +2,12 @@ import { useVolumeAtom } from "@/components/atom/globalAtoms";
 import { Ticker } from "@pixi/ticker";
 import { useStore } from "jotai";
 import NProgress from "nprogress";
-import { sceneAtom, useSetPlayingNotifyAtom, useSetSceneAtom } from "../type-atoms/gameRenderAtoms";
+import {
+  isLoadingOverlayAtom,
+  sceneAtom,
+  useSetPlayingNotifyAtom,
+  useSetSceneAtom,
+} from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
 
 export const typeTicker = new Ticker();
@@ -12,7 +17,7 @@ export const useYTPlayEvent = () => {
   const typeAtomStore = useStore();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
-  return () => {
+  return (event) => {
     console.log("再生 1");
     const scene = typeAtomStore.get(sceneAtom);
 
@@ -22,6 +27,13 @@ export const useYTPlayEvent = () => {
       }
 
       const playMode = gameStateRef.current!.playMode;
+
+      const isPlayDataLoad = typeAtomStore.get(isLoadingOverlayAtom);
+
+      if (isPlayDataLoad) {
+        event.target.pauseVideo();
+        return;
+      }
 
       if (playMode === "replay") {
         setScene("replay");
