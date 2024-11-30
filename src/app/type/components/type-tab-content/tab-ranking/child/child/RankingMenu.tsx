@@ -1,10 +1,10 @@
 import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
-import { Button, Stack, useTheme } from "@chakra-ui/react";
-import { Dispatch } from "react";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import MenuClapButton from "./child/MenuClapButton";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
+import { Button, Stack, useTheme } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { Dispatch } from "react";
+import MenuClapButton from "./child/MenuClapButton";
 
 interface RankingMenuProps {
   resultId: number;
@@ -26,7 +26,7 @@ const RankingMenu = ({
   toggleClapAction,
   setReplayId,
 }: RankingMenuProps) => {
-  const { gameStateRef } = useRefs();
+  const { gameStateRef, playerRef } = useRefs();
   const { data: session } = useSession();
   const theme: ThemeColors = useTheme();
   const scene = useSceneAtom();
@@ -37,6 +37,7 @@ const RankingMenu = ({
     gameStateRef.current!.replay.userName = name;
     gameStateRef.current!.playMode = "replay";
     setReplayId(resultId);
+    playerRef.current.playVideo();
   };
   return (
     <Stack
