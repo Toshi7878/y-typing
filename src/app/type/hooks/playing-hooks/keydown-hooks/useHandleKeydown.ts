@@ -91,7 +91,7 @@ const usePlayingShortcutKey = () => {
     if (
       keyWhiteList.includes(event.code) ||
       (event.ctrlKey && ctrlKeyWhiteCodeList.includes(event.code)) ||
-      (event.altKey && altKeyWhiteCodeList.includes(event.code)) ||
+      (event.altKey && !event.ctrlKey && altKeyWhiteCodeList.includes(event.code)) ||
       (event.ctrlKey && openDrawerCtrlKeyCodeList.includes(event.code) && drawerClosure.isOpen)
     ) {
       return;
@@ -137,7 +137,7 @@ const usePlayingShortcutKey = () => {
         }
         break;
       case skip:
-        if (skip === "Space") {
+        if (skip !== "") {
           pressSkip();
         }
         break;
