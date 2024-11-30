@@ -1,13 +1,16 @@
-import useSound from "use-sound";
 import clearTypeSound from "@/asset/wav/clear_type.wav";
 import typeSound from "@/asset/wav/key_type.wav";
 import missSound from "@/asset/wav/miss_type.wav";
 import { useVolumeAtom } from "@/components/atom/globalAtoms";
 import { useStore } from "jotai";
+import useSound from "use-sound";
 import { userOptionsAtom } from "../../type-atoms/gameRenderAtoms";
 
 export const useSoundEffect = () => {
-  const volume = useVolumeAtom() / 100;
+  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  const volumeAtom = useVolumeAtom();
+  const volume = isIOS || isAndroid ? 100 : volumeAtom / 100;
 
   const typeAtomStore = useStore();
 
