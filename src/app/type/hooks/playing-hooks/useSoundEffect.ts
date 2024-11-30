@@ -10,7 +10,7 @@ export const useSoundEffect = () => {
   const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
   const volumeAtom = useVolumeAtom();
-  const volume = isIOS || isAndroid ? 50 : volumeAtom / 100;
+  const volume = isIOS || isAndroid ? 30 : volumeAtom / 100;
 
   const typeAtomStore = useStore();
 
