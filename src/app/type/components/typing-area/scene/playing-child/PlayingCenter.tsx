@@ -26,6 +26,7 @@ const PlayingCenter = ({ flex }: PlayingCenterProps) => {
       minH={CARD_BODY_MIN_HEIGHT}
       justifyContent="space-between"
       style={{ userSelect: "none", cursor: "none" }}
+      id="typing_scene"
     >
       <PlayingTypingWords />
       <PlayingLyrics />
