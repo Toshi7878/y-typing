@@ -1,4 +1,11 @@
-import { atom, createStore, useAtomValue, useSetAtom } from "jotai";
+import { Tag, YouTubeSpeed } from "@/types";
+import { atom, createStore, useAtomValue, useStore as useJotaiStore, useSetAtom } from "jotai";
+import { atomWithReducer } from "jotai/utils";
+import { useSelector } from "react-redux";
+import { useRefs } from "../edit-contexts/refsProvider";
+import { RootState } from "../redux/store";
+
+import { DEFAULT_ADD_ADJUST_TIME } from "../ts/const/editDefaultValues";
 import {
   ConvertOptionsType,
   EditTabIndex,
@@ -6,12 +13,6 @@ import {
   TagsReducerAction,
   YTSpeedReducerActionType,
 } from "../ts/type";
-import { Tag, YouTubeSpeed } from "@/types";
-import { atomWithReducer } from "jotai/utils"; // 追加
-import { useRefs } from "../edit-contexts/refsProvider";
-import { DEFAULT_ADD_ADJUST_TIME } from "../ts/const/editDefaultValues";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 
 const editAtomStore = createStore();
 export const getEditAtomStore = () => editAtomStore;
@@ -132,7 +133,7 @@ export const useSetCreatorIdAtom = () => {
   return useSetAtom(editCreatorIdAtom, { store: editAtomStore });
 };
 
-const editSpeedAtom = atom<YouTubeSpeed>(1);
+export const editSpeedAtom = atom<YouTubeSpeed>(1);
 
 export const useEditYTSpeedAtom = () => {
   return useAtomValue(editSpeedAtom, { store: editAtomStore });
@@ -143,11 +144,13 @@ const useSetEditYTSpeedAtom = () => {
 };
 
 export const useSpeedReducer = () => {
-  const speed = useEditYTSpeedAtom();
+  const editAtomStore = useJotaiStore();
   const setYTSpeedAtom = useSetEditYTSpeedAtom();
   const { playerRef } = useRefs();
 
   return (actionType: YTSpeedReducerActionType) => {
+    const speed = editAtomStore.get(editSpeedAtom);
+
     switch (actionType) {
       case "up":
         {
@@ -197,7 +200,7 @@ export const useSetIsEditYTStartedAtom = () => {
   return useSetAtom(isEditYouTubeStartedAtom, { store: editAtomStore });
 };
 
-const isEditYouTubePlayingAtom = atom<boolean>(false);
+export const isEditYouTubePlayingAtom = atom<boolean>(false);
 
 export const useIsEditYTPlayingAtom = () => {
   return useAtomValue(isEditYouTubePlayingAtom, { store: editAtomStore });
@@ -207,9 +210,9 @@ export const useSetIsEditYTPlayingAtom = () => {
   return useSetAtom(isEditYouTubePlayingAtom, { store: editAtomStore });
 };
 
-const editLineLyricsAtom = atom<string>("");
-const editLineWordAtom = atom<string>("");
-const editLineSelectedCountAtom = atom<number | null>(null);
+export const editLineLyricsAtom = atom<string>("");
+export const editLineWordAtom = atom<string>("");
+export const editLineSelectedCountAtom = atom<number | null>(null);
 
 const isLineNotSelectAtom = atom<boolean>((get) => {
   const count = get(editLineSelectedCountAtom);
@@ -288,7 +291,7 @@ export const useLineInputReducer = () => {
   };
 };
 
-const editTimeCountAtom = atom<number>(0);
+export const editTimeCountAtom = atom<number>(0);
 
 export const useEditTimeCountAtom = () => {
   return useAtomValue(editTimeCountAtom, { store: editAtomStore });
@@ -298,7 +301,7 @@ export const useSetEditTimeCountAtom = () => {
   return useSetAtom(editTimeCountAtom, { store: editAtomStore });
 };
 
-const editAddLyricsTextAtom = atom<string>("");
+export const editAddLyricsTextAtom = atom<string>("");
 
 export const useEditAddLyricsTextAtom = () => {
   return useAtomValue(editAddLyricsTextAtom, { store: editAtomStore });
@@ -338,7 +341,7 @@ export const useSetCanUploadAtom = () => {
   return useSetAtom(editCanUploadAtom, { store: editAtomStore });
 };
 
-const editAddTimeOffsetAtom = atom<number>(DEFAULT_ADD_ADJUST_TIME);
+export const editAddTimeOffsetAtom = atom<number>(DEFAULT_ADD_ADJUST_TIME);
 
 export const useEditAddTimeOffsetAtom = () => {
   return useAtomValue(editAddTimeOffsetAtom, { store: editAtomStore });
@@ -358,7 +361,41 @@ export const useSetEditWordConvertOptionAtom = () => {
   return useSetAtom(editWordConvertOptionAtom, { store: editAtomStore });
 };
 
-const editIsTimeInputValidAtom = atom<boolean>(false);
+export const editIsTimeInputValidAtom = atom<boolean>(false);
+
+export const isAddButtonDisabledAtom = atom((get) => {
+  const isTimeInputValid = get(editIsTimeInputValidAtom);
+  return !isTimeInputValid;
+});
+
+// 新しい派生atomを使用するフックを作成
+export const useIsAddButtonDisabled = () => {
+  return useAtomValue(isAddButtonDisabledAtom, { store: editAtomStore });
+};
+
+export const isDeleteButtonDisabledAtom = atom((get) => {
+  const isTimeInputValid = get(editIsTimeInputValidAtom);
+  const isLineNotSelect = get(isLineNotSelectAtom);
+  // const isLineLastSelect = get(useIsLineLastSelect());
+  return !isTimeInputValid || isLineNotSelect; // || isLineLastSelect;
+});
+
+// 新しい派生atomを使用するフックを作成
+export const useIsDeleteButtonDisabledAtom = () => {
+  return useAtomValue(isDeleteButtonDisabledAtom, { store: editAtomStore });
+};
+
+export const isUpdateButtonDisabledAtom = atom((get) => {
+  const isTimeInputValid = get(editIsTimeInputValidAtom);
+  const isLineNotSelect = get(isLineNotSelectAtom);
+  // const isLineLastSelect = get(useIsLineLastSelect()); 最後のendラインを選択したときにUpdateボタンを無効にするフラグ
+  return !isTimeInputValid || isLineNotSelect; //|| isLineLastSelect;
+});
+
+// 新しい派生atomを使用するフックを作成
+export const useIsUpdateButtonDisabledAtom = () => {
+  return useAtomValue(isUpdateButtonDisabledAtom, { store: editAtomStore });
+};
 
 export const useEditIsTimeInputValidAtom = () => {
   return useAtomValue(editIsTimeInputValidAtom, { store: editAtomStore });
@@ -388,7 +425,7 @@ export const useSetEditCustomStyleLengthAtom = () => {
   return useSetAtom(editCustomStyleLengthAtom, { store: editAtomStore });
 };
 
-const editDirectEditCountAtom = atom<number | null>(null);
+export const editDirectEditCountAtom = atom<number | null>(null);
 
 export const useEditDirectEditCountAtom = () => {
   return useAtomValue(editDirectEditCountAtom, { store: editAtomStore });

@@ -1,6 +1,7 @@
+import { useStore as useJotaiStore } from "jotai";
 import {
-  useEditAddLyricsTextAtom,
-  useEditLineLyricsAtom,
+  editAddLyricsTextAtom,
+  editLineLyricsAtom,
   useLineInputReducer,
   useSetEditAddLyricsTextAtom,
   useSetIsLoadWordConvertAtom,
@@ -8,12 +9,15 @@ import {
 import { useWordConvert } from "./useWordConvert";
 
 export function useSetTopLyricsText() {
+  const editAtomStore = useJotaiStore();
+
   const lineInputReducer = useLineInputReducer();
-  const lyricsText = useEditAddLyricsTextAtom();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const wordConvert = useWordConvert();
 
   return async (newLyrics?: string | undefined) => {
+    const lyricsText = editAtomStore.get(editAddLyricsTextAtom);
+
     const lines = lyricsText.split("\n");
     const lyrics = newLyrics === undefined ? lines[0].replace(/\r$/, "") : newLyrics;
 
@@ -26,15 +30,18 @@ export function useSetTopLyricsText() {
 }
 
 export const useSetAddLyrics = () => {
-  const lyrics = useEditLineLyricsAtom();
-  const lyricsText = useEditAddLyricsTextAtom();
   const setLyricsText = useSetEditAddLyricsTextAtom();
   const setTopLyricsText = useSetTopLyricsText();
+  const editAtomStore = useJotaiStore();
 
   return (newLyricsText: string | null) => {
     if (newLyricsText !== null) {
       setLyricsText(newLyricsText);
     }
+
+    const lyricsText = editAtomStore.get(editAddLyricsTextAtom);
+    const lyrics = editAtomStore.get(editLineLyricsAtom);
+
     const lines = (newLyricsText !== null ? newLyricsText : lyricsText).split("\n");
     const topLyrics = lines[0].replace(/\r$/, "");
     if (topLyrics !== lyrics) {
@@ -46,9 +53,11 @@ export const useSetAddLyrics = () => {
 export const useDeleteTopLyricsText = () => {
   const setLyricsText = useSetEditAddLyricsTextAtom();
   const setTopLyricsText = useSetTopLyricsText();
-  const lyricsText = useEditAddLyricsTextAtom();
+  const editAtomStore = useJotaiStore();
 
   return (lyrics: string) => {
+    const lyricsText = editAtomStore.get(editAddLyricsTextAtom);
+
     const lines = lyricsText.split("\n") || [];
     const topLine = lines[0];
     const newText = lines.slice(1).join("\n");

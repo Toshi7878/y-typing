@@ -1,27 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useStore as useJotaiStore } from "jotai";
+import { useDispatch, useStore as useReduxStore } from "react-redux";
 import {
+  editAddTimeOffsetAtom,
+  editLineLyricsAtom,
+  editLineSelectedCountAtom,
+  editLineWordAtom,
+  isEditYouTubePlayingAtom,
   useEditAddTimeOffsetAtom,
-  useEditIsTimeInputValidAtom,
-  useEditLineLyricsAtom,
-  useEditLineSelectedCountAtom,
-  useEditLineWordAtom,
   useIsEditYTPlayingAtom,
   useIsLineLastSelect,
-  useIsLineNotSelectAtom,
   useLineInputReducer,
   useSetCanUploadAtom,
   useSetEditDirectEditCountAtom,
   useSetIsLoadWordConvertAtom,
-  useSpeedAtom,
 } from "../edit-atom/editAtom";
-import { useDeleteTopLyricsText } from "./useEditAddLyricsTextHooks";
-import { RootState } from "../redux/store";
-import { setLastAddedTime, setMapData } from "../redux/mapDataSlice";
-import { useRefs } from "../edit-contexts/refsProvider";
-import { addHistory } from "../redux/undoredoSlice";
-import { useWordConvert } from "./useWordConvert";
+
 import { useSearchParams } from "next/navigation";
+import { useRefs } from "../edit-contexts/refsProvider";
+import { setLastAddedTime, setMapData } from "../redux/mapDataSlice";
+import { RootState } from "../redux/store";
+import { addHistory } from "../redux/undoredoSlice";
+import { useDeleteTopLyricsText } from "./useEditAddLyricsTextHooks";
 import { useUpdateNewMapBackUp } from "./useUpdateNewMapBackUp";
+import { useWordConvert } from "./useWordConvert";
 
 const timeValidate = (
   time: number,
@@ -40,11 +41,9 @@ const timeValidate = (
 };
 
 export const useLineAddButtonEvent = () => {
-  const isYTPlaying = useIsEditYTPlayingAtom();
-  const addTimeOffset = useEditAddTimeOffsetAtom();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const lyrics = useEditLineLyricsAtom();
-  const word = useEditLineWordAtom();
+  const editAtomStore = useJotaiStore();
+  const editReduxStore = useReduxStore<RootState>();
+
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
@@ -55,20 +54,27 @@ export const useLineAddButtonEvent = () => {
   const setCanUpload = useSetCanUploadAtom();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
-  const endAfterLineIndex =
-    mapData.length -
-    1 -
-    mapData
-      .slice()
-      .reverse()
-      .findIndex((line) => line.lyrics === "end");
 
   return async (isShiftKey: boolean) => {
+    const mapData = editReduxStore.getState().mapData.value;
+
+    const endAfterLineIndex =
+      mapData.length -
+      1 -
+      mapData
+        .slice()
+        .reverse()
+        .findIndex((line) => line.lyrics === "end");
+
+    const isYTPlaying = editAtomStore.get(isEditYouTubePlayingAtom);
+    const addTimeOffset = editAtomStore.get(editAddTimeOffsetAtom);
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
     const time_ = isYTPlaying
       ? playerRef.current.getCurrentTime()
       : editorTimeInputRef.current!.getTime();
 
+    const lyrics = editAtomStore.get(editLineLyricsAtom);
+    const word = editAtomStore.get(editLineWordAtom);
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
     const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
     const addLineMap = [...mapData, newLine].sort(
@@ -99,10 +105,9 @@ export const useLineAddButtonEvent = () => {
 };
 
 export const useLineUpdateButtonEvent = () => {
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const lyrics = useEditLineLyricsAtom();
-  const word = useEditLineWordAtom();
-  const selectedLineCount = useEditLineSelectedCountAtom() as number;
+  const editAtomStore = useJotaiStore();
+  const editReduxStore = useReduxStore<RootState>();
+
   const { editorTimeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
@@ -115,14 +120,18 @@ export const useLineUpdateButtonEvent = () => {
   const isYTPlaying = useIsEditYTPlayingAtom();
   const addTimeOffset = useEditAddTimeOffsetAtom();
 
-  const endAfterLineIndex =
-    mapData.length -
-    1 -
-    mapData
-      .slice()
-      .reverse()
-      .findIndex((line) => line.lyrics === "end");
   return async () => {
+    const mapData = editReduxStore.getState().mapData.value;
+
+    const endAfterLineIndex =
+      mapData.length -
+      1 -
+      mapData
+        .slice()
+        .reverse()
+        .findIndex((line) => line.lyrics === "end");
+
+    const selectedLineCount = editAtomStore.get(editLineSelectedCountAtom) as number;
     const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) : 0;
     const time_ =
       isYTPlaying && !selectedLineCount
@@ -131,6 +140,8 @@ export const useLineUpdateButtonEvent = () => {
 
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
+    const lyrics = editAtomStore.get(editLineLyricsAtom);
+    const word = editAtomStore.get(editLineWordAtom);
     const updatedLine = {
       time,
       lyrics,
@@ -170,13 +181,15 @@ export const useLineUpdateButtonEvent = () => {
 };
 
 export const useWordConvertButtonEvent = () => {
-  const lyrics = useEditLineLyricsAtom();
+  const editAtomStore = useJotaiStore();
+
   const lineInputReducer = useLineInputReducer();
   const setIsLoadWordConvert = useSetIsLoadWordConvertAtom();
   const wordConvert = useWordConvert();
 
   return async () => {
     setIsLoadWordConvert(true);
+    const lyrics = editAtomStore.get(editLineLyricsAtom);
     const word = await wordConvert(lyrics);
     setIsLoadWordConvert(false);
     lineInputReducer({ type: "set", payload: { word } });
@@ -184,8 +197,8 @@ export const useWordConvertButtonEvent = () => {
 };
 
 export const useLineDelete = () => {
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const selectedLineCount = useEditLineSelectedCountAtom();
+  const editAtomStore = useJotaiStore();
+  const editReduxStore = useReduxStore<RootState>();
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
@@ -195,7 +208,11 @@ export const useLineDelete = () => {
   const updateNewMapBackUp = useUpdateNewMapBackUp();
 
   return () => {
+    const selectedLineCount = editAtomStore.get(editLineSelectedCountAtom);
+
     if (selectedLineCount) {
+      const mapData = editReduxStore.getState().mapData.value;
+
       const newValue = mapData.filter((_, index) => index !== selectedLineCount);
 
       dispatch(setMapData(newValue));
@@ -219,28 +236,7 @@ export const useLineDelete = () => {
   };
 };
 
-export const useIsAddButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  return !isTimeInputValid;
-};
-
-export const useIsUpdateButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  const isLineNotSelect = useIsLineNotSelectAtom();
-  const isLineLastSelect = useIsLineLastSelect();
-
-  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
-};
-
-export const useIsConvertButtonDisabled = () => {
+export const useIsConvertButtonDisabledAtom = () => {
   const isLineLastSelect = useIsLineLastSelect();
   return isLineLastSelect;
-};
-
-export const useIsDeleteButtonDisabled = () => {
-  const isTimeInputValid = useEditIsTimeInputValidAtom();
-  const isLineNotSelect = useIsLineNotSelectAtom();
-  const isLineLastSelect = useIsLineLastSelect();
-
-  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 };

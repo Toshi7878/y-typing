@@ -1,10 +1,8 @@
 import { useVolumeAtom } from "@/components/atom/globalAtoms";
-import { LineEdit } from "@/types";
 import NProgress from "nprogress";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useStore as useReduxStore } from "react-redux";
 import { editTicker } from "../components/editor-youtube-content/EditYoutube";
 import {
-  useSetEditTimeCountAtom,
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
@@ -13,14 +11,15 @@ import {
 import { useRefs } from "../edit-contexts/refsProvider";
 import { updateLine } from "../redux/mapDataSlice";
 import { RootState } from "../redux/store";
-import { editTimer } from "../ts/youtube-ts/editTimer";
+import { useGetSeekCount } from "./useGetSeekCount";
+import { useUpdateCurrentLine } from "./useUpdateCurrentLine";
 
 export const useYTReadyEvent = () => {
   const { setRef } = useRefs();
   const setIsReady = useSetIsEditYTReadyAtom();
   const dispatch = useDispatch();
   const volume = useVolumeAtom();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const editReduxStore = useReduxStore<RootState>();
 
   return (event) => {
     console.log("ready");
@@ -31,6 +30,7 @@ export const useYTReadyEvent = () => {
     player.setVolume(volume);
     setIsReady(true);
 
+    const mapData = editReduxStore.getState().mapData.value;
     if (mapData.length === 2) {
       dispatch(
         updateLine({
@@ -45,11 +45,10 @@ export const useYTReadyEvent = () => {
 };
 
 export const useYTPlayEvent = () => {
-  const { editStatus, playerRef } = useRefs();
+  const { editStatus } = useRefs();
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setTabIndex = useSetTabIndexAtom();
-  const tickerFunction = () => editTimer.update(playerRef);
 
   const onPlay = (event) => {
     console.log("再生 1");
@@ -64,7 +63,7 @@ export const useYTPlayEvent = () => {
     editStatus.current!.isNotAutoTabToggle = false;
   };
 
-  return { onPlay, tickerFunction };
+  return { onPlay };
 };
 
 export const useYTPauseEvent = () => {
@@ -88,29 +87,12 @@ export const useYTEndStopEvent = () => {
 };
 
 export const useYTSeekEvent = () => {
-  const setTimeCount = useSetEditTimeCountAtom();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const getSeekCount = useGetSeekCount();
+  const updateCurrentLine = useUpdateCurrentLine();
 
   return (event: any) => {
     const time = event.target.getCurrentTime()!;
     console.log(`シークtime: ${time}`);
-    setTimeCount(getCount(time, mapData));
+    updateCurrentLine(getSeekCount(time));
   };
 };
-
-function getCount(time: number, mapData: LineEdit[]) {
-  let count = 0;
-
-  for (let i = 0; i < mapData.length; i++) {
-    if (Number(mapData[i]["time"]) - time >= 0) {
-      count = i - 1;
-      break;
-    }
-  }
-
-  if (count < 0) {
-    count = 0;
-  }
-
-  return count;
-}

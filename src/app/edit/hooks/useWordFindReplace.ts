@@ -1,19 +1,20 @@
 import { Action } from "@reduxjs/toolkit";
-import { RootState } from "../redux/store";
+import { Dispatch } from "react";
+import { useDispatch, useStore as useReduxStore } from "react-redux";
+import { useSetCanUploadAtom } from "../edit-atom/editAtom";
 import { RefsContextType, useRefs } from "../edit-contexts/refsProvider";
 import { updateLine } from "../redux/mapDataSlice";
+import { RootState } from "../redux/store";
 import { addHistory } from "../redux/undoredoSlice";
-import { Dispatch } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useSetCanUploadAtom } from "../edit-atom/editAtom";
 
 export const useWordFindReplace = () => {
   const { tbodyRef } = useRefs();
   const dispatch = useDispatch();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const editReduxStore = useReduxStore<RootState>();
   const setCanUpload = useSetCanUploadAtom();
 
   return () => {
+    const mapData = editReduxStore.getState().mapData.value;
     new WordReplace(mapData, tbodyRef, dispatch, setCanUpload).wordSearchReplace();
   };
 };

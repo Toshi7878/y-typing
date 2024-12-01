@@ -1,63 +1,49 @@
 "use client";
 import {
-  useEditAddLyricsTextAtom,
-  useEditDirectEditCountAtom,
-  useEditLineLyricsAtom,
-  useEditLineSelectedCountAtom,
-  useEditLineWordAtom,
-  useEditTimeCountAtom,
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
   useSetEditCustomStyleLengthAtom,
-  useSetEditTimeCountAtom,
-  useSpeedAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
-import {
-  useIsAddButtonDisabled,
-  useIsDeleteButtonDisabled,
-  useIsUpdateButtonDisabled,
-} from "@/app/edit/hooks/useEditorButtonEvents";
 import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { RootState } from "@/app/edit/redux/store";
-import { editTimer } from "@/app/edit/ts/youtube-ts/editTimer";
 import { MapData } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
 import { useDisclosure, useTheme } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { editTicker } from "../../editor-youtube-content/EditYoutube";
 import LineRow from "./child/LineRow";
 import LineOptionModal from "./LineOptionModal";
 
 function MapTableBody() {
   const dispatch = useDispatch();
-  const optionClosure = useDisclosure();
-  const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
-
-  const [lineOptions, setLineOptions] = useState<MapData["options"] | null>(null);
-  const lineSelectedCount = useEditLineSelectedCountAtom();
-  const setTimeCount = useSetEditTimeCountAtom();
-  const setCustomStyleLength = useSetEditCustomStyleLengthAtom();
-  const timeCount = useEditTimeCountAtom();
-  const isYTStarted = useIsEditYTStartedAtom();
-  const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
-  const { tbodyRef, playerRef } = useRefs();
   const theme: ThemeColors = useTheme();
+
+  const [optionModalIndex, setOptionModalIndex] = useState<number | null>(null);
+  const [lineOptions, setLineOptions] = useState<MapData["options"] | null>(null);
+  const lastAddedTime = useSelector((state: RootState) => state.mapData.lastAddedTime);
+  const mapData = useSelector((state: RootState) => state.mapData.value);
+  const isYTStarted = useIsEditYTStartedAtom();
+  const isYTPlaying = useIsEditYTPlayingAtom();
+  const optionClosure = useDisclosure();
+
+  const { tbodyRef, playerRef } = useRefs();
+  const setCustomStyleLength = useSetEditCustomStyleLengthAtom();
   const windowKeydownEvent = useWindowKeydownEvent();
 
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const undoredoState = useSelector((state: RootState) => state.undoRedo);
-  const speed = useSpeedAtom();
-  const isYTPlaying = useIsEditYTPlayingAtom();
-  const selectLyrics = useEditLineLyricsAtom();
-  const selectWord = useEditLineWordAtom();
+  useEffect(() => {
+    if (isYTPlaying && !editTicker.started) {
+      editTicker.start();
+    }
 
-  const addLyricsText = useEditAddLyricsTextAtom();
-  const isAddButtonDisabled = useIsAddButtonDisabled();
-  const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
-  const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
-  const directEdit = useEditDirectEditCountAtom();
+    return () => {
+      if (editTicker.started) {
+        editTicker.stop();
+      }
+    };
+  }, [isYTPlaying]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => windowKeydownEvent(event, optionModalIndex);
@@ -66,19 +52,7 @@ function MapTableBody() {
       window.removeEventListener("keydown", onKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    optionModalIndex,
-    mapData,
-    undoredoState,
-    speed,
-    isYTPlaying,
-    selectLyrics,
-    addLyricsText,
-    isAddButtonDisabled,
-    isUpdateButtonDisabled,
-    isDeleteButtonDisabled,
-    directEdit,
-  ]);
+  }, []);
 
   useEffect(() => {
     if (mapData.length > 0) {
@@ -134,21 +108,6 @@ function MapTableBody() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTStarted]);
 
-  useEffect(() => {
-    const updateTimeBg = (currentTime: string) => {
-      const nextLine = mapData[timeCount + 1];
-      if (nextLine && Number(currentTime) >= Number(nextLine["time"])) {
-        setTimeCount(timeCount + 1);
-      }
-    };
-
-    editTimer.addListener(updateTimeBg);
-    return () => {
-      editTimer.removeListener(updateTimeBg);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeCount, mapData]);
-
   const renderedRows = useMemo(
     () => {
       let customStyleLength = 0;
@@ -183,12 +142,34 @@ function MapTableBody() {
       return rows;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mapData, lineSelectedCount, timeCount, theme, directEdit, selectLyrics, selectWord],
+    [mapData],
   );
 
   return (
     <>
       {renderedRows}
+      <style>
+        {`
+
+      .current-time-line {
+        background: ${theme.colors.secondary.light}40;
+      }
+
+        .selected-line {
+        outline: 1px solid ${theme.colors.text.body};
+        background: ${theme.colors.primary.dark};
+      }
+
+      [id*="line_"]:hover:not(.selected-line) {
+      background:${theme.colors.primary.dark}50;
+      }
+
+
+      .error-line {
+      background: ${theme.colors.error.light}35;
+      }
+      `}
+      </style>
 
       {optionClosure.isOpen && (
         <LineOptionModal

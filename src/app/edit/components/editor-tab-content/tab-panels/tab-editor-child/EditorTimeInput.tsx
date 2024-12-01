@@ -1,5 +1,5 @@
 import { Input, useTheme } from "@chakra-ui/react";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import {
@@ -11,7 +11,6 @@ import {
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { RootState } from "@/app/edit/redux/store";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
-import { editTimer } from "@/app/edit/ts/youtube-ts/editTimer";
 import { LineEdit, ThemeColors } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
@@ -57,23 +56,23 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isValid]);
 
-    const updateTimeValue = useCallback(
-      (currentTime: string) => {
-        if (directEdit === null) {
-          setValue("time", currentTime, { shouldValidate: true });
-        }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [directEdit],
-    );
+    // const updateTimeValue = useCallback(
+    //   (currentTime: string) => {
+    //     if (directEdit === null) {
+    //       setValue("time", currentTime, { shouldValidate: true });
+    //     }
+    //   },
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   [directEdit],
+    // );
 
-    useEffect(() => {
-      editTimer.addListener(updateTimeValue);
+    // useEffect(() => {
+    //   editTimeTicker.addListener(updateTimeValue);
 
-      return () => {
-        editTimer.removeListener(updateTimeValue);
-      };
-    }, [updateTimeValue]);
+    //   return () => {
+    //     editTimeTicker.removeListener(updateTimeValue);
+    //   };
+    // }, [updateTimeValue]);
 
     useEffect(() => {
       if (maxTime === "0") {

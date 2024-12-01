@@ -48,7 +48,6 @@ export const usePlayTimer = () => {
   const calcLineResult = useCalcLineResult();
   const replay = useReplay();
   const getSeekLineCount = useGetSeekLineCount();
-  const { setStatusValues } = useSetStatusAtoms();
 
   const {
     getCurrentOffsettedYTTime,

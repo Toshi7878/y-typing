@@ -1,16 +1,18 @@
-import { Flex, useTheme } from "@chakra-ui/react";
-import { ThemeColors } from "@/types";
-import { useIsLoadWordConvertAtom } from "@/app/edit/edit-atom/editAtom";
 import {
   useIsAddButtonDisabled,
-  useIsConvertButtonDisabled,
-  useIsDeleteButtonDisabled,
-  useIsUpdateButtonDisabled,
+  useIsDeleteButtonDisabledAtom,
+  useIsLoadWordConvertAtom,
+  useIsUpdateButtonDisabledAtom,
+} from "@/app/edit/edit-atom/editAtom";
+import {
+  useIsConvertButtonDisabledAtom,
   useLineAddButtonEvent,
   useLineDelete,
   useLineUpdateButtonEvent,
   useWordConvertButtonEvent,
 } from "@/app/edit/hooks/useEditorButtonEvents";
+import { ThemeColors } from "@/types";
+import { Flex, useTheme } from "@chakra-ui/react";
 import React from "react";
 import EditorButton from "./child/EditorButton";
 
@@ -18,9 +20,9 @@ const EditorButtons = () => {
   const theme: ThemeColors = useTheme();
 
   const isAddButtonDisabled = useIsAddButtonDisabled();
-  const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
-  const isConvertButtonDisabled = useIsConvertButtonDisabled();
-  const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
+  const isConvertButtonDisabled = useIsConvertButtonDisabledAtom();
+  const isUpdateButtonDisabled = useIsUpdateButtonDisabledAtom();
+  const isDeleteButtonDisabled = useIsDeleteButtonDisabledAtom();
 
   const lineAddButtonEvent = useLineAddButtonEvent();
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();

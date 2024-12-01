@@ -1,16 +1,5 @@
 import { Card, CardBody, HStack, Stack, useTheme } from "@chakra-ui/react";
 
-import InfoInputForm from "./tab-info-child/InfoInputFrom";
-import UploadButton from "./tab-info-child/UploadButton";
-import { useSelector } from "react-redux";
-import { useFormState } from "react-dom";
-import { useParams, useSearchParams } from "next/navigation";
-import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
-import { RootState } from "@/app/edit/redux/store";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQuality";
-import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
-import { ThemeColors, UploadResult } from "@/types";
 import {
   useCreatorCommentAtom,
   useCreatorIdAtom,
@@ -21,12 +10,23 @@ import {
   useTagsAtom,
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { useGetGeminiMapInfoQuery } from "@/app/edit/hooks/query/useGetGeminiMapInfoQuery";
+import { RootState } from "@/app/edit/redux/store";
+import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
+import { getThumbnailQuality } from "@/app/edit/ts/tab/info-upload/getThumbailQuality";
+import { actions } from "@/app/edit/ts/tab/info-upload/serverActions";
+import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
+import { ThemeColors, UploadResult } from "@/types";
 import { useSession } from "next-auth/react";
+import { useParams, useSearchParams } from "next/navigation";
+import { useFormState } from "react-dom";
+import { useSelector } from "react-redux";
+import InfoInputForm from "./tab-info-child/InfoInputFrom";
+import InfoTag from "./tab-info-child/InfoTag";
 import PreviewTimeInput from "./tab-info-child/PreviewTimeInput";
 import TypeLinkButton from "./tab-info-child/TypeLinkButton";
-import InfoTag from "./tab-info-child/InfoTag";
-import { INITIAL_SERVER_ACTIONS_STATE } from "@/app/edit/ts/const/editDefaultValues";
-import { useGetGeminiMapInfoQuery } from "@/app/edit/hooks/query/useGetGeminiMapInfoQuery";
+import UploadButton from "./tab-info-child/UploadButton";
 
 const TabInfoUpload = () => {
   const tags = useTagsAtom();
@@ -35,10 +35,8 @@ const TabInfoUpload = () => {
   const mapData = useSelector((state: RootState) => state.mapData.value);
   const mapTitle = useMapTitleAtom();
   const artistName = useMapArtistNameAtom();
-
   const creatorComment = useCreatorCommentAtom();
   const musicSource = useEditMusicSourceAtom();
-
   const previewTime = useEditPreviewTimeInputAtom();
   const theme: ThemeColors = useTheme();
   const searchParams = useSearchParams();

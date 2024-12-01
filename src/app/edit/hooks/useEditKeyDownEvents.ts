@@ -1,13 +1,18 @@
 import { LineEdit } from "@/types";
-import { useDispatch, useSelector } from "react-redux";
+import { useStore as useJotaiStore } from "jotai";
+import { useDispatch, useStore as useReduxStore } from "react-redux";
+
 import {
-  useEditAddLyricsTextAtom,
-  useEditDirectEditCountAtom,
-  useIsEditYTPlayingAtom,
+  editAddLyricsTextAtom,
+  editDirectEditCountAtom,
+  editSpeedAtom,
+  isAddButtonDisabledAtom,
+  isDeleteButtonDisabledAtom,
+  isEditYouTubePlayingAtom,
+  isUpdateButtonDisabledAtom,
   useLineInputReducer,
   useSetEditDirectEditCountAtom,
   useSetEditLineLyricsAtom,
-  useSpeedAtom,
   useSpeedReducer,
 } from "../edit-atom/editAtom";
 import { useRefs } from "../edit-contexts/refsProvider";
@@ -15,10 +20,8 @@ import { mapDataRedo, mapDataUndo } from "../redux/mapDataSlice";
 import { RootState } from "../redux/store";
 import { redo, undo } from "../redux/undoredoSlice";
 import { useDeleteTopLyricsText, useSetTopLyricsText } from "./useEditAddLyricsTextHooks";
+
 import {
-  useIsAddButtonDisabled,
-  useIsDeleteButtonDisabled,
-  useIsUpdateButtonDisabled,
   useLineAddButtonEvent,
   useLineDelete,
   useLineUpdateButtonEvent,
@@ -46,15 +49,9 @@ export const useTbodyScroll = () => {
 
 export const useWindowKeydownEvent = () => {
   const { tbodyRef, playerRef } = useRefs();
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const undoredoState = useSelector((state: RootState) => state.undoRedo);
-  const speed = useSpeedAtom();
-  const isYTPlaying = useIsEditYTPlayingAtom();
-  const addLyricsText = useEditAddLyricsTextAtom();
-  const isAddButtonDisabled = useIsAddButtonDisabled();
-  const isUpdateButtonDisabled = useIsUpdateButtonDisabled();
-  const isDeleteButtonDisabled = useIsDeleteButtonDisabled();
-  const directEdit = useEditDirectEditCountAtom();
+  const editReduxStore = useReduxStore<RootState>();
+  const editAtomStore = useJotaiStore();
+
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
   const speedReducer = useSpeedReducer();
@@ -78,6 +75,7 @@ export const useWindowKeydownEvent = () => {
       if (!iS_FOCUS_ADD_LYRICS_TEXTAREA) {
         setTopLyricsText(undefined);
       } else if (iS_FOCUS_ADD_LYRICS_TEXTAREA) {
+        const isAddButtonDisabled = editAtomStore.get(isAddButtonDisabledAtom);
         if (!isAddButtonDisabled) {
           lineAddButtonEvent(event.shiftKey);
         }
@@ -86,6 +84,9 @@ export const useWindowKeydownEvent = () => {
       event.preventDefault();
     } else if (!IS_FOCUS_INPUT && optionModalIndex === null) {
       const player = playerRef!.current as any;
+      const mapData = editReduxStore.getState().mapData.value;
+      const undoredoState = editReduxStore.getState().undoRedo;
+      const directEdit = editAtomStore.get(editDirectEditCountAtom);
 
       switch (event.code) {
         case "ArrowUp":
@@ -137,6 +138,8 @@ export const useWindowKeydownEvent = () => {
         case "ArrowLeft":
           {
             const time = player.getCurrentTime();
+            const speed = editAtomStore.get(editSpeedAtom);
+
             player.seekTo(time - 3 * speed);
             event.preventDefault();
           }
@@ -146,6 +149,7 @@ export const useWindowKeydownEvent = () => {
         case "ArrowRight":
           {
             const time = player.getCurrentTime();
+            const speed = editAtomStore.get(editSpeedAtom);
             player.seekTo(time + 3 * speed);
             event.preventDefault();
           }
@@ -153,6 +157,8 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "KeyS":
+          const isAddButtonDisabled = editAtomStore.get(isAddButtonDisabledAtom);
+
           if (!isAddButtonDisabled) {
             lineAddButtonEvent(event.shiftKey);
           }
@@ -160,6 +166,8 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "KeyU":
+          const isUpdateButtonDisabled = editAtomStore.get(isUpdateButtonDisabledAtom);
+
           if (!isUpdateButtonDisabled) {
             lineUpdateButtonEvent();
           }
@@ -173,7 +181,10 @@ export const useWindowKeydownEvent = () => {
 
               dispatch(mapDataUndo(undoredoState.present));
               if (undoredoState.present.type === "add") {
+                const addLyricsText = editAtomStore.get(editAddLyricsTextAtom);
+
                 undoLine(data, addLyricsText);
+                const speed = editAtomStore.get(editSpeedAtom);
                 playerRef.current.seekTo(Number(data.time) - 3 * speed);
               }
 
@@ -211,6 +222,8 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "Delete":
+          const isDeleteButtonDisabled = editAtomStore.get(isDeleteButtonDisabledAtom);
+
           if (!isDeleteButtonDisabled) {
             lineDelete();
           }
@@ -232,6 +245,8 @@ export const useWindowKeydownEvent = () => {
           break;
 
         case "Escape":
+          const isYTPlaying = editAtomStore.get(isEditYouTubePlayingAtom);
+
           if (!isYTPlaying) {
             player.playVideo();
           } else {
