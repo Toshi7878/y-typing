@@ -19,6 +19,7 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import { Dispatch, useState } from "react";
+import ChangeLineVideoSpeedOption from "./line-option-child/ChangeLineVideoSpeedOption";
 import CSSInput from "./line-option-child/CSSInput";
 import CSSTextLength from "./line-option-child/CSSTextLength";
 import LineOptionModalCloseButton from "./line-option-child/LineOptionModalCloseButton";
@@ -42,6 +43,7 @@ export default function LineOptionModal({
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");
   const [eternalCSS, setEternalCSS] = useState(lineOptions?.eternalCSS || "");
   const [isEditedCSS, setIsEditedCSS] = useState(false);
+  const [changeVideoSpeed, setChangeVideoSpeed] = useState(0);
   const [isChangeCSS, setIsEditChangeCSS] = useState(lineOptions?.isChangeCSS || false);
   const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
 
@@ -67,6 +69,10 @@ export default function LineOptionModal({
           </Badge>
 
           <Stack spacing={2}>
+            <ChangeLineVideoSpeedOption
+              changeVideoSpeed={changeVideoSpeed}
+              setChangeVideoSpeed={setChangeVideoSpeed}
+            />
             {optionModalIndex === 0 && (
               <Box>
                 <FormLabel>
@@ -120,9 +126,11 @@ export default function LineOptionModal({
               setOptionModalIndex={setOptionModalIndex}
               onClose={onClose}
               setIsEditedCSS={setIsEditedCSS}
+              changeVideoSpeed={changeVideoSpeed}
             />
           </Stack>
         </ModalBody>
+
         <ModalFooter></ModalFooter>
       </ModalContent>
       <LineOptionModalCloseButton

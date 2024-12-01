@@ -1,20 +1,26 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { timer } from "../../ts/youtube-ts/editTimer";
 import "@/app/edit/style/editor.scss";
-import { Box, useTheme } from "@chakra-ui/react";
-import { useRefs } from "../../edit-contexts/refsProvider";
 import { ThemeColors } from "@/types";
+import { Box, useTheme } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useIsEditYTReadyAtom, useIsEditYTStartedAtom } from "../../edit-atom/editAtom";
+import { useRefs } from "../../edit-contexts/refsProvider";
+import { editTimer } from "../../ts/youtube-ts/editTimer";
 import EditSpeedChange from "./child/EditSpeedChange";
 const TimeRange = () => {
-  const { playerRef } = useRefs();
+  const { playerRef, setRef } = useRefs();
+
   const [rangeMaxValue, setRangeMaxValue] = useState("0");
   const rangeRef = useRef<HTMLInputElement>(null);
   const theme: ThemeColors = useTheme();
 
   const isYTStarted = useIsEditYTStartedAtom();
   const isYTReady = useIsEditYTReadyAtom();
+
+  useEffect(() => {
+    setRef("rangeRef", rangeRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const time = Number(e.target.value);
@@ -64,12 +70,12 @@ const TimeRange = () => {
       }
     };
 
-    timer.addListener(updateRangeValue);
+    editTimer.addListener(updateRangeValue);
     return () => {
-      timer.removeListener(updateRangeValue);
+      editTimer.removeListener(updateRangeValue);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rangeMaxValue, theme]);
+  }, [rangeMaxValue]);
 
   return (
     <Box display="grid" gridTemplateColumns="1fr auto" gap-y="1px" alignItems="center">

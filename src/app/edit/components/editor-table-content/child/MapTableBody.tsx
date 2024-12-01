@@ -21,7 +21,7 @@ import {
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import { setMapData, updateLine } from "@/app/edit/redux/mapDataSlice";
 import { RootState } from "@/app/edit/redux/store";
-import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
+import { editTimer } from "@/app/edit/ts/youtube-ts/editTimer";
 import { MapData } from "@/app/type/ts/type";
 import { ThemeColors } from "@/types";
 import { useDisclosure, useTheme } from "@chakra-ui/react";
@@ -142,9 +142,9 @@ function MapTableBody() {
       }
     };
 
-    timer.addListener(updateTimeBg);
+    editTimer.addListener(updateTimeBg);
     return () => {
-      timer.removeListener(updateTimeBg);
+      editTimer.removeListener(updateTimeBg);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeCount, mapData]);

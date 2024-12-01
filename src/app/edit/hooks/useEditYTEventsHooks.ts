@@ -1,4 +1,8 @@
+import { useVolumeAtom } from "@/components/atom/globalAtoms";
+import { LineEdit } from "@/types";
+import NProgress from "nprogress";
 import { useDispatch, useSelector } from "react-redux";
+import { editTicker } from "../components/editor-youtube-content/EditYoutube";
 import {
   useSetEditTimeCountAtom,
   useSetIsEditYTPlayingAtom,
@@ -7,13 +11,9 @@ import {
   useSetTabIndexAtom,
 } from "../edit-atom/editAtom";
 import { useRefs } from "../edit-contexts/refsProvider";
-import { timer } from "../ts/youtube-ts/editTimer";
-import { RootState } from "../redux/store";
-import { LineEdit } from "@/types";
 import { updateLine } from "../redux/mapDataSlice";
-import NProgress from "nprogress";
-import { useVolumeAtom } from "@/components/atom/globalAtoms";
-import { editTicker } from "../components/editor-youtube-content/EditYoutube";
+import { RootState } from "../redux/store";
+import { editTimer } from "../ts/youtube-ts/editTimer";
 
 export const useYTReadyEvent = () => {
   const { setRef } = useRefs();
@@ -49,7 +49,7 @@ export const useYTPlayEvent = () => {
   const setIsYTPlaying = useSetIsEditYTPlayingAtom();
   const setIsYTStarted = useSetIsEditYTStartedAtom();
   const setTabIndex = useSetTabIndexAtom();
-  const tickerFunction = () => timer.update(playerRef);
+  const tickerFunction = () => editTimer.update(playerRef);
 
   const onPlay = (event) => {
     console.log("再生 1");

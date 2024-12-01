@@ -1,21 +1,21 @@
-import { FormProvider, useForm } from "react-hook-form";
 import { Input, useTheme } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState, useImperativeHandle, forwardRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
-import { useSelector } from "react-redux";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LineEdit, ThemeColors } from "@/types";
-import { RootState } from "@/app/edit/redux/store";
-import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
-import { timer } from "@/app/edit/ts/youtube-ts/editTimer";
 import {
   useEditDirectEditCountAtom,
   useEditLineSelectedCountAtom,
   useIsEditYTPlayingAtom,
   useSetEditIsTimeInputValidAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import { RootState } from "@/app/edit/redux/store";
 import { EditorTimeInputRef } from "@/app/edit/ts/type";
+import { editTimer } from "@/app/edit/ts/youtube-ts/editTimer";
+import { LineEdit, ThemeColors } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSelector } from "react-redux";
+import { z } from "zod";
 
 const schema = z.object({
   time: z.string().min(1),
@@ -68,10 +68,10 @@ const EditorTimeInput = forwardRef<EditorTimeInputRef, unknown>(
     );
 
     useEffect(() => {
-      timer.addListener(updateTimeValue);
+      editTimer.addListener(updateTimeValue);
 
       return () => {
-        timer.removeListener(updateTimeValue);
+        editTimer.removeListener(updateTimeValue);
       };
     }, [updateTimeValue]);
 

@@ -31,4 +31,4 @@ class Timer extends TimerEvent {
   }
 }
 
-export const timer = new Timer();
+export const editTimer = new Timer();

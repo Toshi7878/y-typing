@@ -1,11 +1,12 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
-import { EditorTimeInputRef, EditStatusRef } from "../ts/type";
 import { DEFAULT_EDIT_STATUS_REF } from "../ts/const/editDefaultValues";
+import { EditorTimeInputRef, EditStatusRef } from "../ts/type";
 
 export interface RefsContextType {
   editorTimeInputRef: React.RefObject<EditorTimeInputRef>;
   tbodyRef: React.RefObject<HTMLElement>;
+  rangeRef: React.RefObject<HTMLInputElement>;
   playerRef: any;
   editStatus: React.RefObject<EditStatusRef>;
   setRef: (key: string, ref: HTMLElement | any) => void;
@@ -14,6 +15,7 @@ export interface RefsContextType {
 const RefsContext = createContext<RefsContextType>({
   editorTimeInputRef: { current: null },
   tbodyRef: { current: null },
+  rangeRef: { current: null },
   playerRef: null,
   editStatus: { current: DEFAULT_EDIT_STATUS_REF },
   setRef: (ref: HTMLElement | any) => {},
@@ -22,6 +24,7 @@ export const RefsProvider = ({ children }) => {
   const editorTimeInputRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
+  const rangeRef = useRef(null);
   const editStatus = useRef(DEFAULT_EDIT_STATUS_REF);
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
@@ -34,6 +37,9 @@ export const RefsProvider = ({ children }) => {
       case "playerRef":
         playerRef.current = ref;
         break;
+      case "rangeRef":
+        rangeRef.current = ref;
+        break;
     }
   };
 
@@ -41,6 +47,7 @@ export const RefsProvider = ({ children }) => {
     <RefsContext.Provider
       value={{
         tbodyRef,
+        rangeRef,
         playerRef,
         editStatus,
         editorTimeInputRef,
@@ -56,6 +63,7 @@ export const useRefs = () => {
   const context = useContext(RefsContext);
   return {
     tbodyRef: context.tbodyRef,
+    rangeRef: context.rangeRef,
     playerRef: context.playerRef,
     editorTimeInputRef: context.editorTimeInputRef,
     editStatus: context.editStatus,

@@ -14,17 +14,31 @@ interface SaveOptionButtonProps {
   isEditedCSS: boolean;
   isChangeCSS: boolean;
   setIsEditedCSS: Dispatch<boolean>;
+  changeVideoSpeed: number;
 }
 
 export default function SaveOptionButton(props: SaveOptionButtonProps) {
-  const { changeCSS, eternalCSS, isChangeCSS, optionModalIndex, onClose, setIsEditedCSS } = props;
+  const {
+    changeCSS,
+    eternalCSS,
+    isChangeCSS,
+    changeVideoSpeed,
+    optionModalIndex,
+    onClose,
+    setIsEditedCSS,
+  } = props;
   const dispatch = useDispatch();
   const setCanUpload = useSetCanUploadAtom();
 
   const handleBtnClick = () => {
     dispatch(
       setLineOption({
-        options: { changeCSS, eternalCSS, isChangeCSS },
+        options: {
+          ...(changeCSS && { changeCSS }),
+          ...(eternalCSS && { eternalCSS }),
+          ...(isChangeCSS && { isChangeCSS }),
+          ...(changeVideoSpeed && { changeVideoSpeed }),
+        },
         number: optionModalIndex,
       }),
     );
@@ -37,7 +51,7 @@ export default function SaveOptionButton(props: SaveOptionButtonProps) {
   return (
     <Box display="flex" justifyContent="flex-end">
       <Button colorScheme="teal" onClick={handleBtnClick}>
-        CSSオプションを保存
+        ラインオプションを保存
       </Button>
     </Box>
   );
