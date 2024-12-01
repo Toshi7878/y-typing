@@ -60,12 +60,14 @@ function MapTableBody() {
   const directEdit = useEditDirectEditCountAtom();
 
   useEffect(() => {
-    window.addEventListener("keydown", windowKeydownEvent);
+    const onKeyDown = (event: KeyboardEvent) => windowKeydownEvent(event, optionModalIndex);
+    window.addEventListener("keydown", onKeyDown);
     return () => {
-      window.removeEventListener("keydown", windowKeydownEvent);
+      window.removeEventListener("keydown", onKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    optionModalIndex,
     mapData,
     undoredoState,
     speed,
@@ -193,6 +195,7 @@ function MapTableBody() {
           isOpen={optionClosure.isOpen}
           onClose={optionClosure.onClose}
           optionModalIndex={optionModalIndex}
+          setOptionModalIndex={setOptionModalIndex}
           lineOptions={lineOptions}
         />
       )}

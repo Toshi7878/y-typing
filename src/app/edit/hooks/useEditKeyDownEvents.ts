@@ -1,8 +1,7 @@
+import { LineEdit } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
-import { useRefs } from "../edit-contexts/refsProvider";
-import { RootState } from "../redux/store";
 import {
-  useEditAddLyricsTextAtom as useEditAddLyricsTextAtom,
+  useEditAddLyricsTextAtom,
   useEditDirectEditCountAtom,
   useIsEditYTPlayingAtom,
   useLineInputReducer,
@@ -11,12 +10,11 @@ import {
   useSpeedAtom,
   useSpeedReducer,
 } from "../edit-atom/editAtom";
-import { useDeleteTopLyricsText, useSetTopLyricsText } from "./useEditAddLyricsTextHooks";
-import { redo, undo } from "../redux/undoredoSlice";
+import { useRefs } from "../edit-contexts/refsProvider";
 import { mapDataRedo, mapDataUndo } from "../redux/mapDataSlice";
-import { useUndoLine } from "./useEditUndoRedoHooks";
-import { LineEdit } from "@/types";
-import { useWordFindReplace } from "./useWordFindReplace";
+import { RootState } from "../redux/store";
+import { redo, undo } from "../redux/undoredoSlice";
+import { useDeleteTopLyricsText, useSetTopLyricsText } from "./useEditAddLyricsTextHooks";
 import {
   useIsAddButtonDisabled,
   useIsDeleteButtonDisabled,
@@ -25,6 +23,8 @@ import {
   useLineDelete,
   useLineUpdateButtonEvent,
 } from "./useEditorButtonEvents";
+import { useUndoLine } from "./useEditUndoRedoHooks";
+import { useWordFindReplace } from "./useWordFindReplace";
 
 export const useTbodyScroll = () => {
   const { tbodyRef } = useRefs();
@@ -70,23 +70,21 @@ export const useWindowKeydownEvent = () => {
   const lineDelete = useLineDelete();
   const tbodyScroll = useTbodyScroll();
 
-  return (event: KeyboardEvent) => {
+  return (event: KeyboardEvent, optionModalIndex: number | null) => {
     const IS_FOCUS_INPUT = document.activeElement instanceof HTMLInputElement;
-    const iS_FOCUS_TEXTAREA = document.activeElement instanceof HTMLTextAreaElement;
+    const iS_FOCUS_ADD_LYRICS_TEXTAREA = document.activeElement!.id === "add_lyrics_text";
 
     if (event.key === "Tab") {
-      if (!iS_FOCUS_TEXTAREA) {
-        if (!IS_FOCUS_INPUT) {
-          setTopLyricsText(undefined);
-        }
-      } else if (iS_FOCUS_TEXTAREA) {
+      if (!iS_FOCUS_ADD_LYRICS_TEXTAREA) {
+        setTopLyricsText(undefined);
+      } else if (iS_FOCUS_ADD_LYRICS_TEXTAREA) {
         if (!isAddButtonDisabled) {
           lineAddButtonEvent(event.shiftKey);
         }
         (document.activeElement as HTMLElement)?.blur();
       }
       event.preventDefault();
-    } else if (!iS_FOCUS_TEXTAREA && !IS_FOCUS_INPUT) {
+    } else if (!IS_FOCUS_INPUT && optionModalIndex === null) {
       const player = playerRef!.current as any;
 
       switch (event.code) {

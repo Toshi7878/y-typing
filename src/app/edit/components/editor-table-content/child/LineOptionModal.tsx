@@ -18,7 +18,7 @@ import {
   useDisclosure,
   useTheme,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import CSSInput from "./line-option-child/CSSInput";
 import CSSTextLength from "./line-option-child/CSSTextLength";
 import LineOptionModalCloseButton from "./line-option-child/LineOptionModalCloseButton";
@@ -28,6 +28,7 @@ interface LineOptionModalProps {
   isOpen: boolean;
   onClose: () => void;
   optionModalIndex: number | null;
+  setOptionModalIndex: Dispatch<number | null>;
   lineOptions: MapData["options"] | null;
 }
 
@@ -35,6 +36,7 @@ export default function LineOptionModal({
   isOpen,
   onClose,
   optionModalIndex,
+  setOptionModalIndex,
   lineOptions,
 }: LineOptionModalProps) {
   const [changeCSS, setChangeCSS] = useState(lineOptions?.changeCSS || "");
@@ -49,6 +51,7 @@ export default function LineOptionModal({
       onConfirmOpen();
     } else {
       onClose();
+      setOptionModalIndex(null);
     }
   };
   return (
@@ -114,6 +117,7 @@ export default function LineOptionModal({
               isEditedCSS={isEditedCSS}
               isChangeCSS={isChangeCSS}
               optionModalIndex={optionModalIndex}
+              setOptionModalIndex={setOptionModalIndex}
               onClose={onClose}
               setIsEditedCSS={setIsEditedCSS}
             />
@@ -125,6 +129,7 @@ export default function LineOptionModal({
         onClose={onClose}
         isConfirmOpen={isConfirmOpen}
         onConfirmClose={onConfirmClose}
+        setOptionModalIndex={setOptionModalIndex}
       />
     </Modal>
   );

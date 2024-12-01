@@ -8,21 +8,25 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import { Dispatch } from "react";
 
 interface LineOptionModalCloseButton {
   onClose: () => void;
   isConfirmOpen: boolean;
   onConfirmClose: () => void;
+  setOptionModalIndex: Dispatch<number | null>;
 }
 
 export default function LineOptionModalCloseButton({
   onClose,
   isConfirmOpen,
   onConfirmClose,
+  setOptionModalIndex,
 }: LineOptionModalCloseButton) {
   const handleConfirmClose = () => {
     onClose();
     onConfirmClose();
+    setOptionModalIndex(null);
   };
 
   return (

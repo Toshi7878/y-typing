@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 interface SaveOptionButtonProps {
   onClose: () => void;
   optionModalIndex: number | null;
+  setOptionModalIndex: Dispatch<number | null>;
   changeCSS: string;
   eternalCSS: string;
   isEditedCSS: boolean;
@@ -30,6 +31,7 @@ export default function SaveOptionButton(props: SaveOptionButtonProps) {
     setCanUpload(true);
     setIsEditedCSS(false);
     onClose();
+    props.setOptionModalIndex(null);
   };
 
   return (
