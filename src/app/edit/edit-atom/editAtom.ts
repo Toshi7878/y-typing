@@ -1,7 +1,7 @@
 import { Tag, YouTubeSpeed } from "@/types";
 import { atom, createStore, useAtomValue, useStore as useJotaiStore, useSetAtom } from "jotai";
 import { atomWithReducer } from "jotai/utils";
-import { useSelector } from "react-redux";
+import { useStore as useReduxStore } from "react-redux";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { RootState } from "../redux/store";
 
@@ -80,7 +80,7 @@ export const useSetEditMusicSourceAtom = () => {
   return useSetAtom(editMusicSourceAtom, { store: editAtomStore });
 };
 
-//制作者コメント
+//制作者コメン���
 export const editGeminiTagsAtom = atom<string[]>([]);
 
 export const useGeminiTagsAtom = () => {
@@ -223,9 +223,9 @@ export const useIsLineNotSelectAtom = () => {
   return useAtomValue(isLineNotSelectAtom, { store: editAtomStore });
 };
 
-export const useIsLineLastSelect = () => {
-  const mapData = useSelector((state: RootState) => state.mapData.value);
-  const selectedLineCount = useEditLineSelectedCountAtom();
+const isLineLastSelectAtom = atom((get) => {
+  const mapData = get(editReduxStoreAtom).getState().mapData.value;
+  const selectedLineCount = get(editLineSelectedCountAtom);
   const endAfterLineIndex =
     mapData.length -
     1 -
@@ -234,7 +234,15 @@ export const useIsLineLastSelect = () => {
       .reverse()
       .findIndex((line) => line.lyrics === "end");
 
+  if (selectedLineCount === null) {
+    return false;
+  }
+
   return selectedLineCount === endAfterLineIndex;
+});
+
+export const useIsLineLastSelectAtom = () => {
+  return useAtomValue(isLineLastSelectAtom, { store: editAtomStore });
 };
 
 export const useEditLineLyricsAtom = () => {
@@ -260,8 +268,10 @@ export const useSetEditLineSelectedCountAtom = () => {
 export const useLineInputReducer = () => {
   const setEditLineLyrics = useSetEditLineLyricsAtom();
   const setEditLineWord = useSetEditLineWordAtom();
-  const { editorTimeInputRef } = useRefs();
+  const { timeInputRef } = useRefs();
   const setEditLineCount = useSetEditLineSelectedCountAtom();
+  const setEditIsTimeInputValid = useSetEditIsTimeInputValidAtom();
+  const editReduxStore = useReduxStore<RootState>();
 
   return ({ type, payload }: LineInputReducerAction) => {
     switch (type) {
@@ -272,15 +282,19 @@ export const useLineInputReducer = () => {
             setEditLineLyrics(payload.lyrics);
           }
           if (typeof payload.selectCount === "number") {
-            editorTimeInputRef.current!.setSelectedTime(payload.selectCount);
+            const mapData = editReduxStore.getState().mapData.value;
+            timeInputRef.current!.value = mapData[payload.selectCount].time;
+            setEditIsTimeInputValid(false);
             setEditLineCount(payload.selectCount);
           } else if (typeof payload.time === "string") {
-            editorTimeInputRef.current!.setTime(payload.time);
+            timeInputRef.current!.value = payload.time;
+            setEditIsTimeInputValid(false);
           }
         }
         break;
       case "reset":
-        editorTimeInputRef.current!.setSelectedTime(null);
+        timeInputRef.current!.value = "";
+        setEditIsTimeInputValid(true);
         setEditLineLyrics("");
         setEditLineCount(null);
         setEditLineWord("");
@@ -361,11 +375,15 @@ export const useSetEditWordConvertOptionAtom = () => {
   return useSetAtom(editWordConvertOptionAtom, { store: editAtomStore });
 };
 
-export const editIsTimeInputValidAtom = atom<boolean>(false);
+const editIsTimeInputValidAtom = atom<boolean>(false);
+
+export const useSetEditIsTimeInputValidAtom = () => {
+  return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
+};
 
 export const isAddButtonDisabledAtom = atom((get) => {
   const isTimeInputValid = get(editIsTimeInputValidAtom);
-  return !isTimeInputValid;
+  return isTimeInputValid;
 });
 
 // 新しい派生atomを使用するフックを作成
@@ -374,13 +392,12 @@ export const useIsAddButtonDisabled = () => {
 };
 
 export const isDeleteButtonDisabledAtom = atom((get) => {
-  const isTimeInputValid = get(editIsTimeInputValidAtom);
   const isLineNotSelect = get(isLineNotSelectAtom);
-  // const isLineLastSelect = get(useIsLineLastSelect());
-  return !isTimeInputValid || isLineNotSelect; // || isLineLastSelect;
+  const isLineLastSelect = get(isLineLastSelectAtom);
+
+  return isLineNotSelect || isLineLastSelect;
 });
 
-// 新しい派生atomを使用するフックを作成
 export const useIsDeleteButtonDisabledAtom = () => {
   return useAtomValue(isDeleteButtonDisabledAtom, { store: editAtomStore });
 };
@@ -388,8 +405,10 @@ export const useIsDeleteButtonDisabledAtom = () => {
 export const isUpdateButtonDisabledAtom = atom((get) => {
   const isTimeInputValid = get(editIsTimeInputValidAtom);
   const isLineNotSelect = get(isLineNotSelectAtom);
-  // const isLineLastSelect = get(useIsLineLastSelect()); 最後のendラインを選択したときにUpdateボタンを無効にするフラグ
-  return !isTimeInputValid || isLineNotSelect; //|| isLineLastSelect;
+  const isLineLastSelect = get(isLineLastSelectAtom);
+  return isLineNotSelect || isLineLastSelect;
+
+  // return !isTimeInputValid || isLineNotSelect; //|| isLineLastSelect;
 });
 
 // 新しい派生atomを使用するフックを作成
@@ -397,13 +416,13 @@ export const useIsUpdateButtonDisabledAtom = () => {
   return useAtomValue(isUpdateButtonDisabledAtom, { store: editAtomStore });
 };
 
-export const useEditIsTimeInputValidAtom = () => {
-  return useAtomValue(editIsTimeInputValidAtom, { store: editAtomStore });
-};
+// export const useEditIsTimeInputValidAtom = () => {
+//   return useAtomValue(editIsTimeInputValidAtom, { store: editAtomStore });
+// };
 
-export const useSetEditIsTimeInputValidAtom = () => {
-  return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
-};
+// export const useSetEditIsTimeInputValidAtom = () => {
+//   return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
+// };
 
 export const editPreviewTimeInputAtom = atom<string>("");
 
@@ -434,3 +453,6 @@ export const useEditDirectEditCountAtom = () => {
 export const useSetEditDirectEditCountAtom = () => {
   return useSetAtom(editDirectEditCountAtom, { store: editAtomStore });
 };
+
+// Reduxストアを管理するための新しいatomを作成
+const editReduxStoreAtom = atom(() => useReduxStore<RootState>());

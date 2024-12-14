@@ -1,10 +1,10 @@
 "use client";
 import React, { createContext, useContext, useRef } from "react";
 import { DEFAULT_EDIT_STATUS_REF } from "../ts/const/editDefaultValues";
-import { EditorTimeInputRef, EditStatusRef } from "../ts/type";
+import { EditStatusRef } from "../ts/type";
 
 export interface RefsContextType {
-  editorTimeInputRef: React.RefObject<EditorTimeInputRef>;
+  timeInputRef: React.RefObject<HTMLInputElement>;
   tbodyRef: React.RefObject<HTMLElement>;
   rangeRef: React.RefObject<HTMLInputElement>;
   playerRef: any;
@@ -13,7 +13,7 @@ export interface RefsContextType {
 }
 
 const RefsContext = createContext<RefsContextType>({
-  editorTimeInputRef: { current: null },
+  timeInputRef: { current: null },
   tbodyRef: { current: null },
   rangeRef: { current: null },
   playerRef: null,
@@ -21,15 +21,15 @@ const RefsContext = createContext<RefsContextType>({
   setRef: (ref: HTMLElement | any) => {},
 });
 export const RefsProvider = ({ children }) => {
-  const editorTimeInputRef = useRef(null);
+  const timeInputRef = useRef(null);
   const tbodyRef = useRef(null);
   const playerRef = useRef(null);
   const rangeRef = useRef(null);
   const editStatus = useRef(DEFAULT_EDIT_STATUS_REF);
   const setRef = (key: string, ref: React.RefObject<HTMLElement> | any) => {
     switch (key) {
-      case "editorTimeInputRef":
-        editorTimeInputRef.current = ref;
+      case "timeInputRef":
+        timeInputRef.current = ref;
         break;
       case "tbody":
         tbodyRef.current = ref;
@@ -50,7 +50,7 @@ export const RefsProvider = ({ children }) => {
         rangeRef,
         playerRef,
         editStatus,
-        editorTimeInputRef,
+        timeInputRef,
         setRef,
       }}
     >
@@ -65,7 +65,7 @@ export const useRefs = () => {
     tbodyRef: context.tbodyRef,
     rangeRef: context.rangeRef,
     playerRef: context.playerRef,
-    editorTimeInputRef: context.editorTimeInputRef,
+    timeInputRef: context.timeInputRef,
     editStatus: context.editStatus,
     setRef: context.setRef,
   };

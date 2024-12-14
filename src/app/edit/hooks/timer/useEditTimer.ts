@@ -8,7 +8,7 @@ import { RootState } from "../../redux/store";
 import { useUpdateCurrentLine } from "../useUpdateCurrentLine";
 
 export const useEditTimer = () => {
-  const { playerRef, rangeRef } = useRefs();
+  const { playerRef, rangeRef, timeInputRef } = useRefs();
   const theme: ThemeColors = useTheme();
   const editAtomStore = useJotaiStore();
   const editReduxStore = useReduxStore<RootState>();
@@ -16,13 +16,14 @@ export const useEditTimer = () => {
   const updateCurrentLine = useUpdateCurrentLine();
 
   return () => {
-    const currentTime = playerRef.current.getCurrentTime();
+    const currentTime = playerRef.current.getCurrentTime().toFixed(3);
 
     rangeRef.current!.value = currentTime;
     const rangeMaxValue = rangeRef.current!.max;
     const progress = (Number(currentTime) / Number(rangeMaxValue)) * 100;
 
     rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${theme.colors.text.body}30 ${progress}%)`;
+    timeInputRef.current!.value = currentTime;
 
     const count = editAtomStore.get(editTimeCountAtom);
     const nextCount = count + 1;

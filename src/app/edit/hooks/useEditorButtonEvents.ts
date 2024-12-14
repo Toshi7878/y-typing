@@ -6,9 +6,6 @@ import {
   editLineSelectedCountAtom,
   editLineWordAtom,
   isEditYouTubePlayingAtom,
-  useEditAddTimeOffsetAtom,
-  useIsEditYTPlayingAtom,
-  useIsLineLastSelect,
   useLineInputReducer,
   useSetCanUploadAtom,
   useSetEditDirectEditCountAtom,
@@ -50,7 +47,7 @@ export const useLineAddButtonEvent = () => {
   const dispatch = useDispatch();
   const setDirectEdit = useSetEditDirectEditCountAtom();
 
-  const { editorTimeInputRef, playerRef } = useRefs();
+  const { timeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const lineInputReducer = useLineInputReducer();
   const deleteTopLyricsText = useDeleteTopLyricsText();
@@ -69,9 +66,9 @@ export const useLineAddButtonEvent = () => {
     const isYTPlaying = editAtomStore.get(isEditYouTubePlayingAtom);
     const addTimeOffset = editAtomStore.get(editAddTimeOffsetAtom);
     const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
-    const time_ = isYTPlaying
-      ? playerRef.current.getCurrentTime()
-      : editorTimeInputRef.current!.getTime();
+    const time_ = Number(
+      isYTPlaying ? playerRef.current.getCurrentTime() : timeInputRef.current!.value,
+    );
 
     const lyrics = editAtomStore.get(editLineLyricsAtom);
     const word = editAtomStore.get(editLineWordAtom);
@@ -108,7 +105,7 @@ export const useLineUpdateButtonEvent = () => {
   const editAtomStore = useJotaiStore();
   const editReduxStore = useReduxStore<RootState>();
 
-  const { editorTimeInputRef, playerRef } = useRefs();
+  const { timeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
@@ -117,8 +114,7 @@ export const useLineUpdateButtonEvent = () => {
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
-  const isYTPlaying = useIsEditYTPlayingAtom();
-  const addTimeOffset = useEditAddTimeOffsetAtom();
+  const editJotaiStore = useJotaiStore();
 
   return async () => {
     const mapData = editReduxStore.getState().mapData.value;
@@ -132,11 +128,14 @@ export const useLineUpdateButtonEvent = () => {
         .findIndex((line) => line.lyrics === "end");
 
     const selectedLineCount = editAtomStore.get(editLineSelectedCountAtom) as number;
+    const isYTPlaying = editJotaiStore.get(isEditYouTubePlayingAtom);
+    const addTimeOffset = editJotaiStore.get(editAddTimeOffsetAtom);
     const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) : 0;
-    const time_ =
+    const time_ = Number(
       isYTPlaying && !selectedLineCount
         ? playerRef.current.getCurrentTime()
-        : editorTimeInputRef.current!.getTime();
+        : timeInputRef.current!.value,
+    );
 
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
@@ -234,9 +233,4 @@ export const useLineDelete = () => {
 
     lineInputReducer({ type: "reset" });
   };
-};
-
-export const useIsConvertButtonDisabledAtom = () => {
-  const isLineLastSelect = useIsLineLastSelect();
-  return isLineLastSelect;
 };

@@ -75,14 +75,11 @@ export const useWindowKeydownEvent = () => {
       if (!iS_FOCUS_ADD_LYRICS_TEXTAREA) {
         setTopLyricsText(undefined);
       } else if (iS_FOCUS_ADD_LYRICS_TEXTAREA) {
-        const isAddButtonDisabled = editAtomStore.get(isAddButtonDisabledAtom);
-        if (!isAddButtonDisabled) {
-          lineAddButtonEvent(event.shiftKey);
-        }
+        lineAddButtonEvent(event.shiftKey);
         (document.activeElement as HTMLElement)?.blur();
       }
       event.preventDefault();
-    } else if (!IS_FOCUS_INPUT && optionModalIndex === null) {
+    } else if (!iS_FOCUS_ADD_LYRICS_TEXTAREA && !IS_FOCUS_INPUT && optionModalIndex === null) {
       const player = playerRef!.current as any;
       const mapData = editReduxStore.getState().mapData.value;
       const undoredoState = editReduxStore.getState().undoRedo;

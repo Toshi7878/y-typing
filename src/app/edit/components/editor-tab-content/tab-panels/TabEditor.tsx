@@ -1,9 +1,9 @@
-import { Box, Card, CardBody, Flex, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
+import { Box, Card, CardBody, Flex, useTheme } from "@chakra-ui/react";
 
-import EditorButtons from "./tab-editor-child/EditorButtons";
-import EditorLineInput from "./tab-editor-child/EditorLineInput";
 import EditorAddLyricsInput from "./tab-editor-child/EditorAddLyricsInput";
+import EditorButtons from "./tab-editor-child/EditorButtons";
+import EditorLineInput from "./tab-editor-child/EditorInputs";
 import AddTimeAdjust from "./tab-settings-shortcutlist-child/settings-child/AddTimeAdjust";
 
 const TabEditor = () => {

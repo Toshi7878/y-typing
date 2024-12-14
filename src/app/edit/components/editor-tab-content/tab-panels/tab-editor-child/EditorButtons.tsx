@@ -5,7 +5,6 @@ import {
   useIsUpdateButtonDisabledAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import {
-  useIsConvertButtonDisabledAtom,
   useLineAddButtonEvent,
   useLineDelete,
   useLineUpdateButtonEvent,
@@ -20,7 +19,6 @@ const EditorButtons = () => {
   const theme: ThemeColors = useTheme();
 
   const isAddButtonDisabled = useIsAddButtonDisabled();
-  const isConvertButtonDisabled = useIsConvertButtonDisabledAtom();
   const isUpdateButtonDisabled = useIsUpdateButtonDisabledAtom();
   const isDeleteButtonDisabled = useIsDeleteButtonDisabledAtom();
 
@@ -55,7 +53,7 @@ const EditorButtons = () => {
       isLoading: false,
     },
     wordConvert: {
-      isDisabled: isConvertButtonDisabled,
+      isDisabled: false,
       ref: undefined,
       isLoading: isLoadWordConvert,
       colorScheme: theme.colors.primary.dark,

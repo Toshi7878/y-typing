@@ -3,6 +3,7 @@ import {
   useIsEditYTPlayingAtom,
   useIsEditYTStartedAtom,
   useSetEditCustomStyleLengthAtom,
+  useSetEditIsTimeInputValidAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
 import { useWindowKeydownEvent } from "@/app/edit/hooks/useEditKeyDownEvents";
@@ -32,10 +33,12 @@ function MapTableBody() {
   const { tbodyRef, playerRef } = useRefs();
   const setCustomStyleLength = useSetEditCustomStyleLengthAtom();
   const windowKeydownEvent = useWindowKeydownEvent();
+  const setEditIsTimeInputValid = useSetEditIsTimeInputValidAtom();
 
   useEffect(() => {
     if (isYTPlaying && !editTicker.started) {
       editTicker.start();
+      setEditIsTimeInputValid(false);
     }
 
     return () => {
@@ -43,6 +46,7 @@ function MapTableBody() {
         editTicker.stop();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYTPlaying]);
 
   useEffect(() => {

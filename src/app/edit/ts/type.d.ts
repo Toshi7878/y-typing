@@ -1,7 +1,3 @@
-import { MapData } from "@/app/type/ts/type";
-import { YouTubeSpeed } from "@/types";
-import { Dispatch } from "react";
-
 export type ConvertOptionsType = "non_symbol" | "add_symbol" | "add_symbol_all";
 export interface EditorSendData {
   title: string;
@@ -32,13 +28,6 @@ export interface EditorNewMapBackUpInfoData {
 }
 
 export type EditTabIndex = 0 | 1 | 2;
-
-export interface EditorTimeInputRef {
-  clearTime: () => void;
-  getTime: () => number;
-  setSelectedTime: (count: number | null) => void;
-  setTime: (time: string) => void;
-}
 
 export interface EditStatusRef {
   isNotAutoTabToggle: boolean;

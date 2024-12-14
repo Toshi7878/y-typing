@@ -1,9 +1,9 @@
 "use server";
 
-import { auth } from "../../../lib/auth";
-import { PrismaClient } from "@prisma/client";
-import { nameSchema } from "./validationSchema";
 import { UploadResult } from "@/types";
+import { PrismaClient } from "@prisma/client";
+import { auth } from "../../../lib/auth";
+import { nameSchema } from "./validationSchema";
 const prisma = new PrismaClient();
 
 const sendUserName = async (email_hash: string, newName: string) => {

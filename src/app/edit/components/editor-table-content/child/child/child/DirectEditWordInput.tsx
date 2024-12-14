@@ -4,7 +4,7 @@ import {
   useSetEditLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
 import {
-  useIsConvertButtonDisabledAtom,
+  useIsConvertButtonDisabled,
   useWordConvertButtonEvent,
 } from "@/app/edit/hooks/useEditorButtonEvents";
 import { ThemeColors } from "@/types";
@@ -16,7 +16,7 @@ interface DirectEditWordInputProps {
 
 const DirectEditWordInput = (props: DirectEditWordInputProps) => {
   const theme: ThemeColors = useTheme();
-  const isConvertButtonDisabled = useIsConvertButtonDisabledAtom();
+  const isConvertButtonDisabled = useIsConvertButtonDisabled();
   const isLoadWordConvert = useIsLoadWordConvertAtom();
   const selectWord = useEditLineWordAtom();
 
