@@ -4,7 +4,7 @@ import {
   currentTimeSSMMAtom,
   lineResultsAtom,
   lineWordAtom,
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   sceneAtom,
   speedAtom,
   useMapAtom,
@@ -295,7 +295,7 @@ export const useUpdateLine = () => {
   const lineReplayUpdate = useLineReplayUpdate();
   return (newCount: number) => {
     const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
-    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+    const inputMode = typeAtomStore.get(playingInputModeAtom);
     const scene = typeAtomStore.get(sceneAtom);
     const userOptions = typeAtomStore.get(userOptionsAtom);
 

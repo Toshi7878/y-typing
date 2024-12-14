@@ -1,6 +1,6 @@
 import { useCalcCurrentRank } from "@/app/type/hooks/playing-hooks/useUpdateStatus";
 import {
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   sceneAtom,
   useMapAtom,
   useStatusAtomsValues,
@@ -30,7 +30,7 @@ export const useOutPutLineResult = () => {
         newLineWord.nextChar["r"][0] + newLineWord.word.map((w) => w["r"][0]).join("");
       const kanaLostWord = newLineWord.nextChar["k"] + newLineWord.word.map((w) => w["k"]).join("");
 
-      const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+      const inputMode = typeAtomStore.get(playingInputModeAtom);
       return inputMode === "roma" ? romaLostWord : kanaLostWord;
     } else {
       return "";

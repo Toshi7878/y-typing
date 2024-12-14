@@ -4,7 +4,7 @@ import { useCalcTypeSpeed } from "@/app/type/ts/scene-ts/playing/calcTypeSpeed";
 import {
   lineResultsAtom,
   lineWordAtom,
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   useMapAtom,
   useSetComboAtom,
   useSetDisplayLineKpmAtom,
@@ -100,7 +100,7 @@ const useKeyReplay = () => {
       const status = statusAtomsValues();
 
       if (isSuccess) {
-        const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+        const inputMode = typeAtomStore.get(playingInputModeAtom);
         const lineWord = typeAtomStore.get(lineWordAtom);
         const result =
           inputMode === "roma"

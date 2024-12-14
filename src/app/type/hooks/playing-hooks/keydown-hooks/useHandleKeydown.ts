@@ -5,7 +5,7 @@ import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import {
   lineSelectIndexAtom,
   lineWordAtom,
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   sceneAtom,
   skipAtom,
   useMapAtom,
@@ -98,7 +98,7 @@ const usePlayingShortcutKey = () => {
     }
     const userOptions = typeAtomStore.get(userOptionsAtom);
     const scene = typeAtomStore.get(sceneAtom);
-    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+    const inputMode = typeAtomStore.get(playingInputModeAtom);
     const skip = typeAtomStore.get(skipAtom);
 
     const isCtrlLeftRight = userOptions.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;

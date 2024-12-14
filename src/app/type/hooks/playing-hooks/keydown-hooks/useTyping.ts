@@ -2,7 +2,7 @@ import {
   comboAtom,
   lineResultsAtom,
   lineWordAtom,
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   sceneAtom,
   speedAtom,
   statusAtoms,
@@ -49,7 +49,7 @@ export const useTyping = () => {
 
   return ({ event, count }: HandleTypingParams) => {
     const lineWord = typeAtomStore.get(lineWordAtom);
-    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+    const inputMode = typeAtomStore.get(playingInputModeAtom);
 
     const lineTime = getCurrentLineTime(getCurrentOffsettedYTTime());
     const constantLineTime = getConstantLineTime(lineTime);

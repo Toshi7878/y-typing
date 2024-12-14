@@ -2,7 +2,7 @@
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import { LineData, LineResultData } from "@/app/type/ts/type";
 import {
-  readyRadioInputModeAtom,
+  playingInputModeAtom,
   speedAtom,
   useMapAtom,
   useSceneAtom,
@@ -42,7 +42,7 @@ function ResultCard({
   const typeAtomStore = useStore();
 
   const speedData = typeAtomStore.get(speedAtom);
-  const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
+  const inputMode = typeAtomStore.get(playingInputModeAtom);
   const lineSpeed =
     lineResult.status!.sp > speedData.defaultSpeed ? lineResult.status!.sp : speedData.defaultSpeed;
   const lineInputMode = lineResult.status?.mode ?? inputMode;

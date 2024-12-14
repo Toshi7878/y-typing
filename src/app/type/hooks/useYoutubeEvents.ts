@@ -4,7 +4,9 @@ import { useStore } from "jotai";
 import NProgress from "nprogress";
 import {
   isLoadingOverlayAtom,
+  readyRadioInputModeAtom,
   sceneAtom,
+  useSetPlayingInputModeAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
 } from "../type-atoms/gameRenderAtoms";
@@ -17,6 +19,7 @@ export const useYTPlayEvent = () => {
   const typeAtomStore = useStore();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
+  const setPlayingInputMode = useSetPlayingInputModeAtom();
   return (event) => {
     console.log("再生 1");
     const scene = typeAtomStore.get(sceneAtom);
@@ -46,6 +49,8 @@ export const useYTPlayEvent = () => {
 
     if (scene === "playing" || scene === "replay" || scene === "practice") {
       if (!typeTicker.started) {
+        const readyInputMode = typeAtomStore.get(readyRadioInputModeAtom);
+        setPlayingInputMode(readyInputMode);
         typeTicker.start();
       }
     }

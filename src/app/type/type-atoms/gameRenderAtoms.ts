@@ -73,14 +73,15 @@ export const useReadySetInputModeAtom = () => {
   return useSetAtom(readyRadioInputModeAtom, { store: typeAtomStore });
 };
 
-export const playingInputModeAtom = atom<InputModeType>((get) => get(readyRadioInputModeAtom));
-
+export const playingInputModeAtom = atom<InputModeType>(
+  (localStorage.getItem("inputMode") as InputModeType) || "roma",
+);
 export const usePlayingInputModeAtom = () => {
-  return useAtomValue(readyRadioInputModeAtom, { store: typeAtomStore });
+  return useAtomValue(playingInputModeAtom, { store: typeAtomStore });
 };
 
 export const useSetPlayingInputModeAtom = () => {
-  return useSetAtom(readyRadioInputModeAtom, { store: typeAtomStore });
+  return useSetAtom(playingInputModeAtom, { store: typeAtomStore });
 };
 
 export const isLoadingOverlayAtom = atom<boolean>(false);
