@@ -272,6 +272,7 @@ export const useLineInputReducer = () => {
   const setEditLineCount = useSetEditLineSelectedCountAtom();
   const setEditIsTimeInputValid = useSetEditIsTimeInputValidAtom();
   const editReduxStore = useReduxStore<RootState>();
+  const editJotaiStore = useJotaiStore();
 
   return ({ type, payload }: LineInputReducerAction) => {
     switch (type) {
@@ -293,8 +294,12 @@ export const useLineInputReducer = () => {
         }
         break;
       case "reset":
-        timeInputRef.current!.value = "";
-        setEditIsTimeInputValid(true);
+        const isYTPlaying = editJotaiStore.get(isEditYouTubePlayingAtom);
+
+        if (!isYTPlaying) {
+          timeInputRef.current!.value = "";
+          setEditIsTimeInputValid(true);
+        }
         setEditLineLyrics("");
         setEditLineCount(null);
         setEditLineWord("");
@@ -406,9 +411,8 @@ export const isUpdateButtonDisabledAtom = atom((get) => {
   const isTimeInputValid = get(editIsTimeInputValidAtom);
   const isLineNotSelect = get(isLineNotSelectAtom);
   const isLineLastSelect = get(isLineLastSelectAtom);
-  return isLineNotSelect || isLineLastSelect;
 
-  // return !isTimeInputValid || isLineNotSelect; //|| isLineLastSelect;
+  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
 });
 
 // 新しい派生atomを使用するフックを作成

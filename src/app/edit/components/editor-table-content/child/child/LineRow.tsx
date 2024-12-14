@@ -108,13 +108,6 @@ function LineRow({
     }
   };
 
-  // useEffect(() => {
-  //   if (directEdit === index) {
-  //     setEditTime(line.time);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [directEdit]);
-
   const isOptionEdited = line.options?.isChangeCSS || line.options?.eternalCSS;
   return (
     <Tr

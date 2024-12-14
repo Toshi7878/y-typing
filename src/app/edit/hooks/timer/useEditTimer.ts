@@ -2,7 +2,7 @@ import { ThemeColors } from "@/types";
 import { useTheme } from "@chakra-ui/react";
 import { useStore as useJotaiStore } from "jotai";
 import { useStore as useReduxStore } from "react-redux";
-import { editTimeCountAtom } from "../../edit-atom/editAtom";
+import { editDirectEditCountAtom, editTimeCountAtom } from "../../edit-atom/editAtom";
 import { useRefs } from "../../edit-contexts/refsProvider";
 import { RootState } from "../../redux/store";
 import { useUpdateCurrentLine } from "../useUpdateCurrentLine";
@@ -23,7 +23,11 @@ export const useEditTimer = () => {
     const progress = (Number(currentTime) / Number(rangeMaxValue)) * 100;
 
     rangeRef.current!.style.background = `linear-gradient(to right, ${theme.colors.primary.main} ${progress}%, ${theme.colors.text.body}30 ${progress}%)`;
-    timeInputRef.current!.value = currentTime;
+
+    const isDirectEditing = editAtomStore.get(editDirectEditCountAtom);
+    if (!isDirectEditing) {
+      timeInputRef.current!.value = currentTime;
+    }
 
     const count = editAtomStore.get(editTimeCountAtom);
     const nextCount = count + 1;

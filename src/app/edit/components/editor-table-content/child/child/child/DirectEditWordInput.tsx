@@ -3,10 +3,7 @@ import {
   useIsLoadWordConvertAtom,
   useSetEditLineWordAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import {
-  useIsConvertButtonDisabled,
-  useWordConvertButtonEvent,
-} from "@/app/edit/hooks/useEditorButtonEvents";
+import { useWordConvertButtonEvent } from "@/app/edit/hooks/useEditorButtonEvents";
 import { ThemeColors } from "@/types";
 import { Button, Flex, Input, useTheme } from "@chakra-ui/react";
 
@@ -16,7 +13,7 @@ interface DirectEditWordInputProps {
 
 const DirectEditWordInput = (props: DirectEditWordInputProps) => {
   const theme: ThemeColors = useTheme();
-  const isConvertButtonDisabled = useIsConvertButtonDisabled();
+  // const isConvertButtonDisabled = useIsConvertButtonDisabled();
   const isLoadWordConvert = useIsLoadWordConvertAtom();
   const selectWord = useEditLineWordAtom();
 
@@ -26,7 +23,7 @@ const DirectEditWordInput = (props: DirectEditWordInputProps) => {
   return (
     <Flex alignItems="center" justifyContent="space-between">
       <Button
-        isDisabled={isConvertButtonDisabled}
+        isDisabled={false}
         isLoading={isLoadWordConvert}
         variant="outline"
         size="sm"

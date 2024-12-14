@@ -1,22 +1,33 @@
-import { Input, FormLabel, Button, InputLeftAddon, InputGroup, useTheme } from "@chakra-ui/react";
-import { useState } from "react";
-import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
-import { z } from "zod";
 import {
   useSetIsEditYTStartedAtom,
   useSetVideoIdAtom,
   useVideoIdAtom,
 } from "@/app/edit/edit-atom/editAtom";
+import { extractYouTubeVideoId } from "@/components/header/child/right-child/new-map/extractYTId";
 import { ThemeColors } from "@/types";
+import {
+  Button,
+  Flex,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  useTheme,
+} from "@chakra-ui/react";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { z } from "zod";
 
 const videoIdSchema = z
   .string()
   .length(11)
   .regex(/^[!-~]+$/);
 
-interface VideoIdInputProps {}
-const VideoIdInput = (props: VideoIdInputProps) => {
+const VideoIdInput = () => {
   const theme: ThemeColors = useTheme();
+  const searchParams = useSearchParams();
+  const isNewCreateMap = !!searchParams.get("new");
+
   const videoId = useVideoIdAtom();
   const [changeVideoId, setChangeVideoId] = useState(videoId); // atomの値を初期値に設定
   const setIsYTStarted = useSetIsEditYTStartedAtom();
@@ -24,7 +35,7 @@ const VideoIdInput = (props: VideoIdInputProps) => {
   const canChangeVideo =
     videoIdSchema.safeParse(changeVideoId).success && videoId !== changeVideoId;
   return (
-    <>
+    <Flex alignItems="center" hidden={isNewCreateMap ? true : false}>
       <FormLabel mb="0" width="150px" fontWeight="bold">
         YouTube URL
       </FormLabel>
@@ -65,7 +76,7 @@ const VideoIdInput = (props: VideoIdInputProps) => {
           切替
         </Button>
       </InputGroup>
-    </>
+    </Flex>
   );
 };
 
