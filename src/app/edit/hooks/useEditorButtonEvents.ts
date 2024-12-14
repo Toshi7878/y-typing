@@ -83,7 +83,7 @@ export const useLineAddButtonEvent = () => {
     dispatch(addHistory({ type: "add", data: newLine }));
 
     if (newVideoId) {
-      updateNewMapBackUp(newVideoId, addLineMap);
+      updateNewMapBackUp(newVideoId);
     }
 
     if (!isShiftKey) {
@@ -171,7 +171,7 @@ export const useLineUpdateButtonEvent = () => {
     dispatch(setMapData(newValue));
 
     if (newVideoId) {
-      updateNewMapBackUp(newVideoId, newValue);
+      updateNewMapBackUp(newVideoId);
     }
 
     lineInputReducer({ type: "reset" });
@@ -227,7 +227,7 @@ export const useLineDelete = () => {
       );
 
       if (newVideoId) {
-        updateNewMapBackUp(newVideoId, newValue);
+        updateNewMapBackUp(newVideoId);
       }
     }
 
