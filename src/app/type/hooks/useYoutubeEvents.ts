@@ -2,6 +2,7 @@ import { useVolumeAtom } from "@/components/atom/globalAtoms";
 import { Ticker } from "@pixi/ticker";
 import { useStore } from "jotai";
 import NProgress from "nprogress";
+import { InputModeType } from "../ts/type";
 import {
   isLoadingOverlayAtom,
   readyRadioInputModeAtom,
@@ -50,7 +51,7 @@ export const useYTPlayEvent = () => {
     if (scene === "playing" || scene === "replay" || scene === "practice") {
       if (!typeTicker.started) {
         const readyInputMode = typeAtomStore.get(readyRadioInputModeAtom);
-        setPlayingInputMode(readyInputMode);
+        setPlayingInputMode(readyInputMode.replace(/""/g, '"') as InputModeType);
         typeTicker.start();
       }
     }
