@@ -46,7 +46,6 @@ function LineRow({
   const setDirectEdit = useSetEditDirectEditCountAtom();
   const { playerRef, tbodyRef } = useRefs();
   const theme: ThemeColors = useTheme();
-
   const mapData = useSelector((state: RootState) => state.mapData.value);
 
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();
@@ -109,6 +108,8 @@ function LineRow({
   };
 
   const isOptionEdited = line.options?.isChangeCSS || line.options?.eternalCSS;
+
+  const isLastLine = mapData.length - 1 === index;
   return (
     <Tr
       id={`line_${index}`}
@@ -122,7 +123,7 @@ function LineRow({
       }}
     >
       <Td
-        borderBottom="1px solid"
+        borderBottom={isLastLine ? "" : "1px solid"}
         borderRight="1px solid"
         borderRightColor={`${theme.colors.border.editorTable.right}`}
         borderBottomColor={theme.colors.border.editorTable.bottom}
@@ -141,7 +142,7 @@ function LineRow({
       </Td>
       <Td
         className="lyrics-cell"
-        borderBottom="1px solid"
+        borderBottom={isLastLine ? "" : "1px solid"}
         borderRight="1px solid"
         borderRightColor={`${theme.colors.border.editorTable.right}`}
         borderBottomColor={theme.colors.border.editorTable.bottom}
@@ -154,10 +155,10 @@ function LineRow({
       </Td>
       <Td
         className="word-cell"
-        borderBottom="1px solid"
+        borderBottom={isLastLine ? "" : "1px solid"}
+        borderBottomColor={theme.colors.border.editorTable.bottom}
         borderRight="1px solid"
         borderRightColor={`${theme.colors.border.editorTable.right}`}
-        borderBottomColor={theme.colors.border.editorTable.bottom}
       >
         {directEdit === index ? (
           <DirectEditWordInput directEditWordInputRef={directEditWordInputRef} />
@@ -166,9 +167,8 @@ function LineRow({
         )}
       </Td>
       <Td
-        borderRight="1px solid"
-        borderRightColor={`${theme.colors.border.editorTable.right}`}
-        borderColor={theme.colors.border.editorTable.bottom}
+        borderBottom={isLastLine ? "" : "1px solid"}
+        borderBottomColor={theme.colors.border.editorTable.bottom}
       >
         <Button
           disabled={mapData.length - 1 === index}
