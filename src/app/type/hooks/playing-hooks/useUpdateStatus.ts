@@ -3,7 +3,7 @@ import { CreateMap, MISS_PENALTY } from "../../ts/scene-ts/ready/createTypingWor
 import { Status } from "../../ts/type";
 import {
   comboAtom,
-  inputModeAtom,
+  readyRadioInputModeAtom,
   useMapAtom,
   useRankingScoresAtom,
   useSceneAtom,
@@ -102,7 +102,7 @@ export const useTypeSuccess = () => {
       statusRef.current!.status.maxCombo = newCombo;
     }
 
-    const inputMode = typeAtomStore.get(inputModeAtom);
+    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
     if (inputMode === "roma") {
       statusRef.current!.status.romaType++;
     } else if (inputMode === "kana") {

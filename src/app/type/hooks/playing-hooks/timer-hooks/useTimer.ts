@@ -2,9 +2,9 @@ import { useDisplaySkipGuide } from "@/app/type/hooks/playing-hooks/timer-hooks/
 import {
   comboAtom,
   currentTimeSSMMAtom,
-  inputModeAtom,
   lineResultsAtom,
   lineWordAtom,
+  readyRadioInputModeAtom,
   sceneAtom,
   speedAtom,
   useMapAtom,
@@ -295,7 +295,7 @@ export const useUpdateLine = () => {
   const lineReplayUpdate = useLineReplayUpdate();
   return (newCount: number) => {
     const playSpeed = typeAtomStore.get(speedAtom).playSpeed;
-    const inputMode = typeAtomStore.get(inputModeAtom);
+    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
     const scene = typeAtomStore.get(sceneAtom);
     const userOptions = typeAtomStore.get(userOptionsAtom);
 

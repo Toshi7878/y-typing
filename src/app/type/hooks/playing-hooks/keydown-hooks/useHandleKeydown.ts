@@ -3,9 +3,9 @@ import { TIME_OFFSET_SHORTCUTKEY_RANGE } from "@/app/type/ts/const/typeDefaultVa
 import { useIsKeydownTyped } from "@/app/type/ts/scene-ts/playing/keydown/typingJudge";
 import { CreateMap } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import {
-  inputModeAtom,
   lineSelectIndexAtom,
   lineWordAtom,
+  readyRadioInputModeAtom,
   sceneAtom,
   skipAtom,
   useMapAtom,
@@ -98,7 +98,7 @@ const usePlayingShortcutKey = () => {
     }
     const userOptions = typeAtomStore.get(userOptionsAtom);
     const scene = typeAtomStore.get(sceneAtom);
-    const inputMode = typeAtomStore.get(inputModeAtom);
+    const inputMode = typeAtomStore.get(readyRadioInputModeAtom);
     const skip = typeAtomStore.get(skipAtom);
 
     const isCtrlLeftRight = userOptions.timeOffsetKey === "ctrl-left-right" && event.ctrlKey;

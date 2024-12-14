@@ -1,11 +1,11 @@
-import { useInputModeAtom, useLineWordAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { useLineWordAtom, usePlayingInputModeAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
 import { Box, useTheme } from "@chakra-ui/react";
 import PlayingWord from "./PlayingWord";
 
 const PlayingTypingWords = () => {
   const lineWord = useLineWordAtom();
-  const inputMode = useInputModeAtom();
+  const inputMode = usePlayingInputModeAtom();
   const theme: ThemeColors = useTheme();
 
   const lineCompleted = !lineWord.nextChar.k && lineWord.correct.k;

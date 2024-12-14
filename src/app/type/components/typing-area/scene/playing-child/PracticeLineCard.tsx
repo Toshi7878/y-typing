@@ -2,10 +2,10 @@ import { useMoveLine } from "@/app/type/hooks/playing-hooks/useMoveLine";
 import { useInteractJS } from "@/app/type/hooks/useInteractJS";
 import { CHAR_POINT } from "@/app/type/ts/scene-ts/ready/createTypingWord";
 import {
-  useInputModeAtom,
   useLineResultsAtom,
   useLineSelectIndexAtom,
   useMapAtom,
+  usePlayingInputModeAtom,
   useTypePageSpeedAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
 import { ThemeColors } from "@/types";
@@ -20,7 +20,7 @@ const PracticeLineCard = () => {
   const lineResults = useLineResultsAtom();
   const speedData = useTypePageSpeedAtom();
   const lineSelectIndex = useLineSelectIndexAtom();
-  const inputMode = useInputModeAtom();
+  const inputMode = usePlayingInputModeAtom();
   const theme: ThemeColors = useTheme();
   const [isDragging, setIsDragging] = useState(false);
   const { moveSetLine } = useMoveLine();
