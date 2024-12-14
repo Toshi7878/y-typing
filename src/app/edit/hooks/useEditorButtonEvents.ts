@@ -68,7 +68,7 @@ export const useLineAddButtonEvent = () => {
 
     const lyrics = editAtomStore.get(editLineLyricsAtom);
     const word = editAtomStore.get(editLineWordAtom);
-    const timeOffset = isYTPlaying && word ? Number(addTimeOffset) : 0;
+    const timeOffset = isYTPlaying && word && !isShiftKey ? Number(addTimeOffset) : 0;
     const time_ = Number(
       isYTPlaying ? playerRef.current.getCurrentTime() : timeInputRef.current!.value,
     );
