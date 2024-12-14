@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
-import InfoTabProvider from "../edit-contexts/InfoTabProvider";
-import { RefsProvider } from "../edit-contexts/refsProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import editStore from "../redux/store";
-import { Provider as ReduxProvider } from "react-redux";
-import { Provider as JotaiProvider } from "jotai";
+import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
+import { QUERY_KEYS } from "@/config/consts";
+import { db } from "@/lib/db";
+import { IndexDBOption } from "@/types";
 import { GetInfoData } from "@/types/api";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Provider as JotaiProvider } from "jotai";
+import { useSearchParams } from "next/navigation";
+import React from "react";
+import { Provider as ReduxProvider } from "react-redux";
 import {
   editCreatorCommentAtom,
   editCreatorIdAtom,
@@ -19,12 +21,9 @@ import {
   editVideoIdAtom,
   getEditAtomStore,
 } from "../edit-atom/editAtom";
-import { useSearchParams } from "next/navigation";
+import { RefsProvider } from "../edit-contexts/refsProvider";
+import editStore from "../redux/store";
 import { EditorNewMapBackUpInfoData, GeminiMapInfo } from "../ts/type";
-import { IndexDBOption } from "@/types";
-import { db } from "@/lib/db";
-import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
-import { QUERY_KEYS } from "@/config/consts";
 
 const queryClient = new QueryClient();
 
@@ -95,15 +94,15 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
   }
 
   return (
-    <InfoTabProvider>
-      <RefsProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReduxProvider store={editStore}>
-            <JotaiProvider store={editAtomStore}>{children}</JotaiProvider>
-          </ReduxProvider>
-        </QueryClientProvider>
-      </RefsProvider>
-    </InfoTabProvider>
+    // <InfoTabProvider>
+    <RefsProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReduxProvider store={editStore}>
+          <JotaiProvider store={editAtomStore}>{children}</JotaiProvider>
+        </ReduxProvider>
+      </QueryClientProvider>
+    </RefsProvider>
+    // </InfoTabProvider>
   );
 };
 

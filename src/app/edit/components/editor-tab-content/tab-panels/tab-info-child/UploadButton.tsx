@@ -1,16 +1,15 @@
 "use client";
 import { Button, useTheme } from "@chakra-ui/react";
 
+import { useCanUploadAtom, useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
+import { useUpdateNewMapBackUp } from "@/app/edit/hooks/useUpdateNewMapBackUp";
+import { useInitializeEditorCreateBak } from "@/lib/db";
+import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
+import { ThemeColors, UploadResult } from "@/types";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { useCanUploadAtom, useSetCanUploadAtom } from "@/app/edit/edit-atom/editAtom";
-import { useSuccessToast } from "@/lib/hooks/useSuccessToast";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ThemeColors, UploadResult } from "@/types";
-import { useInitializeEditorCreateBak } from "@/lib/db";
-import { useUpdateNewMapBackUp } from "@/app/edit/hooks/useUpdateNewMapBackUp";
-import { RootState } from "@/app/edit/redux/store";
-import { useSelector } from "react-redux";
+
 interface UploadButtonProps {
   state: UploadResult;
 }
@@ -25,7 +24,6 @@ const UploadButton = ({ state }: UploadButtonProps) => {
   const updateNewMapBackUp = useUpdateNewMapBackUp();
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
-  const mapData = useSelector((state: RootState) => state.mapData.value);
 
   useEffect(() => {
     if (state.status !== 0) {
@@ -41,7 +39,7 @@ const UploadButton = ({ state }: UploadButtonProps) => {
         }
       } else if (state.status === 500) {
         if (newVideoId) {
-          updateNewMapBackUp(newVideoId, mapData);
+          updateNewMapBackUp(newVideoId);
         }
       }
     }

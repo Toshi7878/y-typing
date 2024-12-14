@@ -57,6 +57,10 @@ interface ThemeColors {
     border: {
       card: `#${string}`;
       badge: `#${string}`;
+      editorTable: {
+        right: `#${string}`;
+        bottom: `#${string}`;
+      };
     };
     primary: {
       main: `#${string}`;

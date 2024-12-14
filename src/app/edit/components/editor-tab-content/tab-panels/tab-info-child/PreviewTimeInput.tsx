@@ -1,14 +1,14 @@
 import { Box, FormLabel, HStack, Input, Text, useTheme } from "@chakra-ui/react";
 
-import CustomToolTip from "@/components/custom-ui/CustomToolTip";
-import { ThemeColors } from "@/types";
 import {
   useEditPreviewTimeInputAtom,
   useSetCanUploadAtom,
   useSetEditPreviewTimeInputAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { FaPlay } from "react-icons/fa";
 import { useRefs } from "@/app/edit/edit-contexts/refsProvider";
+import CustomToolTip from "@/components/custom-ui/CustomToolTip";
+import { ThemeColors } from "@/types";
+import { FaPlay } from "react-icons/fa";
 
 const PreviewTimeInput = () => {
   const theme: ThemeColors = useTheme();
@@ -43,7 +43,7 @@ const PreviewTimeInput = () => {
             </Text>
 
             <Input
-              isInvalid={isNaN(Number(previewTime))}
+              isInvalid={previewTime === ""}
               value={previewTime}
               width="80px"
               bg={theme.colors.background.body}

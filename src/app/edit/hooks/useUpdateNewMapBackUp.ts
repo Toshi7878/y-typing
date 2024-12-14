@@ -1,23 +1,31 @@
-import {
-  useCreatorCommentAtom,
-  useEditMusicSourceAtom,
-  useEditPreviewTimeInputAtom,
-  useMapArtistNameAtom,
-  useMapTitleAtom,
-  useTagsAtom,
-} from "../edit-atom/editAtom";
 import { sendEditorNewCreateBakIndexedDBData } from "@/lib/db";
 import { Tag } from "@/types";
-import { MapData } from "@/app/type/ts/type";
+import { useStore as useJotaiStore } from "jotai";
+import { useStore as useReduxStore } from "react-redux";
+import {
+  editCreatorCommentAtom,
+  editMapArtistNameAtom,
+  editMapTitleAtom,
+  editMusicSourceAtom,
+  editPreviewTimeInputAtom,
+  editTagsAtom,
+} from "../edit-atom/editAtom";
+
+import { RootState } from "../redux/store";
 
 export const useUpdateNewMapBackUp = () => {
-  const tags: Tag[] = useTagsAtom();
-  const title = useMapTitleAtom();
-  const artistName = useMapArtistNameAtom();
-  const musicSource = useEditMusicSourceAtom();
-  const creatorComment = useCreatorCommentAtom();
-  const previewTime = useEditPreviewTimeInputAtom();
-  return (newVideoId: string, newMapData: MapData[]) => {
+  const editAtomStore = useJotaiStore();
+  const editReduxStore = useReduxStore<RootState>();
+
+  return (newVideoId: string) => {
+    const mapData = editReduxStore.getState().mapData.value;
+    const tags = editAtomStore.get(editTagsAtom);
+    const title = editAtomStore.get(editMapTitleAtom);
+    const artistName = editAtomStore.get(editMapArtistNameAtom);
+    const musicSource = editAtomStore.get(editMusicSourceAtom);
+    const creatorComment = editAtomStore.get(editCreatorCommentAtom);
+    const previewTime = editAtomStore.get(editPreviewTimeInputAtom);
+
     sendEditorNewCreateBakIndexedDBData(
       {
         title,
@@ -28,7 +36,7 @@ export const useUpdateNewMapBackUp = () => {
         previewTime,
         tags: tags.map((tag: Tag) => tag.id),
       },
-      newMapData,
+      mapData,
     );
   };
 };

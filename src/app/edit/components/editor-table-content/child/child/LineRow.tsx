@@ -122,7 +122,10 @@ function LineRow({
       }}
     >
       <Td
-        borderRight="1px solid black"
+        borderBottom="1px solid"
+        borderRight="1px solid"
+        borderRightColor={`${theme.colors.border.editorTable.right}`}
+        borderBottomColor={theme.colors.border.editorTable.bottom}
         className="time-cell"
         onClick={(event) => clickTimeCell(event, index)}
         px={directEdit === index ? 2 : 4}
@@ -136,21 +139,37 @@ function LineRow({
           line.time
         )}
       </Td>
-      <Td className="lyrics-cell" borderRight="1px solid black">
+      <Td
+        className="lyrics-cell"
+        borderBottom="1px solid"
+        borderRight="1px solid"
+        borderRightColor={`${theme.colors.border.editorTable.right}`}
+        borderBottomColor={theme.colors.border.editorTable.bottom}
+      >
         {directEdit === index ? (
           <DirectEditLyricsInput directEditLyricsInputRef={directEditLyricsInputRef} />
         ) : (
           parse(line.lyrics)
         )}
       </Td>
-      <Td className="word-cell" borderRight="1px solid black">
+      <Td
+        className="word-cell"
+        borderBottom="1px solid"
+        borderRight="1px solid"
+        borderRightColor={`${theme.colors.border.editorTable.right}`}
+        borderBottomColor={theme.colors.border.editorTable.bottom}
+      >
         {directEdit === index ? (
           <DirectEditWordInput directEditWordInputRef={directEditWordInputRef} />
         ) : (
           line.word
         )}
       </Td>
-      <Td>
+      <Td
+        borderRight="1px solid"
+        borderRightColor={`${theme.colors.border.editorTable.right}`}
+        borderColor={theme.colors.border.editorTable.bottom}
+      >
         <Button
           disabled={mapData.length - 1 === index}
           variant={isOptionEdited ? "solid" : "outline"}

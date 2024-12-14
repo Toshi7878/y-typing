@@ -5,6 +5,7 @@ import { useDispatch, useStore as useReduxStore } from "react-redux";
 import {
   editAddLyricsTextAtom,
   editDirectEditCountAtom,
+  editLineSelectedCountAtom,
   editSpeedAtom,
   isAddButtonDisabledAtom,
   isDeleteButtonDisabledAtom,
@@ -66,6 +67,7 @@ export const useWindowKeydownEvent = () => {
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();
   const lineDelete = useLineDelete();
   const tbodyScroll = useTbodyScroll();
+  const seekNextPrev = useSeekNextPrev();
 
   return (event: KeyboardEvent, optionModalIndex: number | null) => {
     const IS_FOCUS_INPUT = document.activeElement instanceof HTMLInputElement;
@@ -81,53 +83,17 @@ export const useWindowKeydownEvent = () => {
       event.preventDefault();
     } else if (!iS_FOCUS_ADD_LYRICS_TEXTAREA && !IS_FOCUS_INPUT && optionModalIndex === null) {
       const player = playerRef!.current as any;
-      const mapData = editReduxStore.getState().mapData.value;
       const undoredoState = editReduxStore.getState().undoRedo;
-      const directEdit = editAtomStore.get(editDirectEditCountAtom);
 
       switch (event.code) {
         case "ArrowUp":
-          {
-            const selectedLine = tbodyRef.current!.getElementsByClassName("selected-line")[0];
-
-            if (selectedLine && !directEdit) {
-              const prevCount = Number((selectedLine as HTMLElement).dataset.lineIndex) - 1;
-              const prevLine = mapData[prevCount];
-              if (prevLine) {
-                player.seekTo(Number(prevLine.time));
-                lineInputReducer({
-                  type: "set",
-                  payload: { lyrics: prevLine.lyrics, word: prevLine.word, selectCount: prevCount },
-                });
-                tbodyScroll(prevCount);
-              }
-            }
-          }
+          seekNextPrev("prev");
           event.preventDefault();
 
           break;
 
         case "ArrowDown":
-          {
-            const selectedLine = tbodyRef.current!.getElementsByClassName("selected-line")[0];
-
-            if (selectedLine && !directEdit) {
-              const nextCount = Number((selectedLine as HTMLElement).dataset.lineIndex) + 1;
-              const nextLine = mapData[nextCount];
-              if (nextLine) {
-                player.seekTo(Number(nextLine.time));
-                lineInputReducer({
-                  type: "set",
-                  payload: {
-                    lyrics: nextLine.lyrics,
-                    word: nextLine.word,
-                    selectCount: nextCount,
-                  },
-                });
-                tbodyScroll(nextCount);
-              }
-            }
-          }
+          seekNextPrev("next");
           event.preventDefault();
 
           break;
@@ -269,6 +235,46 @@ export const useWindowKeydownEvent = () => {
     }
   };
 };
+
+function useSeekNextPrev() {
+  const { tbodyRef, playerRef } = useRefs();
+  const editAtomStore = useJotaiStore();
+  const editReduxStore = useReduxStore<RootState>();
+  const lineInputReducer = useLineInputReducer();
+  const tbodyScroll = useTbodyScroll();
+
+  return (type: "next" | "prev") => {
+    const mapData = editReduxStore.getState().mapData.value;
+    const directEdit = editAtomStore.get(editDirectEditCountAtom);
+
+    const selectedIndex = editAtomStore.get(editLineSelectedCountAtom);
+    if (selectedIndex !== null && !directEdit) {
+      const seekCount = selectedIndex + (type === "next" ? 1 : -1);
+      const seekLine = mapData[seekCount];
+      if (seekLine) {
+        playerRef.current.seekTo(Number(seekLine.time));
+        lineInputReducer({
+          type: "set",
+          payload: {
+            lyrics: seekLine.lyrics,
+            word: seekLine.word,
+            selectCount: seekCount,
+          },
+        });
+        tbodyScroll(seekCount);
+        const currentTimeLine = tbodyRef.current!.querySelector(".current-time-line");
+        const selectedLine = tbodyRef.current!.querySelector(".selected-line");
+        if (selectedLine) {
+          selectedLine.classList.remove("selected-line");
+        }
+        if (currentTimeLine) {
+          currentTimeLine.classList.remove("current-time-line");
+        }
+        tbodyRef.current!.children[seekCount].classList.add("selected-line", "current-time-line");
+      }
+    }
+  };
+}
 
 export function useAddRubyTagEvent() {
   const setLyrics = useSetEditLineLyricsAtom();

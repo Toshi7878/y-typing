@@ -21,6 +21,10 @@ const darkTheme: ThemeColors = {
     border: {
       card: "#FFFFFF",
       badge: "#FFFFFF",
+      editorTable: {
+        right: "#00000020",
+        bottom: "#000000",
+      },
     },
     text: {
       body: "#FFFFFF",

@@ -33,12 +33,31 @@ export default function EditTable(props: EditTableProps) {
           <Table size="sm" variant="simple">
             <Thead>
               <Tr>
-                <Th width="5%" borderRight="1px solid black">
+                <Th
+                  width="5%"
+                  borderRight="1px solid"
+                  borderRightColor={`${theme.colors.border.editorTable.right}`}
+                >
                   Time
                 </Th>
-                <Th borderRight="1px solid black">歌詞</Th>
-                <Th borderRight="1px solid black">ワード</Th>
-                <Th width="3%" textAlign="center">
+                <Th
+                  borderRight="1px solid"
+                  borderRightColor={`${theme.colors.border.editorTable.right}`}
+                >
+                  歌詞
+                </Th>
+                <Th
+                  borderRight="1px solid"
+                  borderRightColor={`${theme.colors.border.editorTable.right}`}
+                >
+                  ワード
+                </Th>
+                <Th
+                  width="3%"
+                  textAlign="center"
+                  borderRight="1px solid"
+                  borderRightColor={`${theme.colors.border.editorTable.right}`}
+                >
                   オプション
                 </Th>
               </Tr>
