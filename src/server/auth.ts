@@ -1,4 +1,4 @@
-import { serverApi } from "@/app/_trpc/server-api";
+import { serverApi } from "@/trpc/server";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
 import Google from "next-auth/providers/google";

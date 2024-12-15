@@ -1,9 +1,9 @@
 import CryptoJS from "crypto-js";
 import { z } from "zod";
-import { db } from "../db";
-import { publicProcedure, router } from "../trpc";
+import { db } from "../../db";
+import { publicProcedure } from "../trpc";
 
-export const authRouter = router({
+export const authRouter = {
   create: publicProcedure.input(z.object({ email: z.string() })).mutation(async ({ input }) => {
     const email_hash = CryptoJS.MD5(input.email).toString();
     const UserData = await db.user.findUnique({
@@ -36,4 +36,4 @@ export const authRouter = router({
 
     return UserData;
   }),
-});
+};

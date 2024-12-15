@@ -1,7 +1,7 @@
 "use server";
 import { NewNotificationCheck } from "@/types/api";
 import "server-only";
-import { auth } from "../auth";
+import { auth } from "../../server/auth";
 
 export const getNewNotificationCheck = async (): Promise<boolean> => {
   const session = await auth();

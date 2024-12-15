@@ -1,7 +1,7 @@
 import { usePressSkip } from "@/app/type/hooks/playing-hooks/usePressSkip";
 import { skipAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import "@/css/type.css";
+import "@/styles/type.css";
 import { VStack } from "@chakra-ui/react";
 import { useStore } from "jotai";
 import { CARD_BODY_MIN_HEIGHT } from "../../TypingCard";

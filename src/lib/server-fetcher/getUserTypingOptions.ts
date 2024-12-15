@@ -1,8 +1,8 @@
 "use server";
-import "server-only";
-import { cache } from "react";
 import { UserTypingOptions } from "@/app/type/ts/type";
-import { auth } from "../auth";
+import { cache } from "react";
+import "server-only";
+import { auth } from "../../server/auth";
 
 export const getUserTypingOptions = cache(async (): Promise<UserTypingOptions> => {
   const session = await auth();

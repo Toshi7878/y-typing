@@ -1,8 +1,8 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import { auth } from "@/lib/auth";
 import { UserTypingOptions } from "@/app/type/ts/type";
+import { auth } from "@/server/auth";
+import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();

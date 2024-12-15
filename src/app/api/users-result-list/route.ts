@@ -2,12 +2,12 @@ import { PrismaClient } from "@prisma/client";
 
 import { NextRequest } from "next/server";
 
-import { FilterMode } from "@/app/timeline/ts/type";
 import {
   DEFAULT_CLEAR_RATE_SEARCH_RANGE,
   DEFAULT_KPM_SEARCH_RANGE,
 } from "@/app/timeline/ts/const/consts";
-import { auth } from "@/lib/auth";
+import { FilterMode } from "@/app/timeline/ts/type";
+import { auth } from "@/server/auth";
 
 const prisma = new PrismaClient();
 

@@ -1,11 +1,11 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import { auth } from "@/lib/auth";
-import { resultSendSchema } from "./validationSchema";
-import { LineResultData, SendResultData } from "../../type";
-import { UploadResult } from "@/types";
 import { supabase } from "@/lib/supabaseClient";
+import { auth } from "@/server/auth";
+import { UploadResult } from "@/types";
+import { PrismaClient } from "@prisma/client";
+import { LineResultData, SendResultData } from "../../type";
+import { resultSendSchema } from "./validationSchema";
 
 const prisma = new PrismaClient();
 

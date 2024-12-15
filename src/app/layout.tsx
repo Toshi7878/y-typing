@@ -1,6 +1,6 @@
 import Header from "@/components/header/Header";
-import "@/css/globals.css";
-import "@/css/nprogress.css";
+import "@/styles/globals.css";
+import "@/styles/nprogress.css";
 import { Analytics } from "@vercel/analytics/react";
 import { cookies } from "next/headers";
 import { fonts } from "../lib/fonts";
@@ -9,9 +9,9 @@ import { fonts } from "../lib/fonts";
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 
-import TRPCProvider from "@/app/_trpc/provider";
 import PreviewYouTubeContent from "@/components/custom-ui/PreviewYouTubeContent";
-import { auth } from "@/lib/auth";
+import { auth } from "@/server/auth";
+import TRPCProvider from "@/trpc/provider";
 import { SessionProvider } from "next-auth/react";
 import GlobalProvider from "./provider/GlobalProvider";
 

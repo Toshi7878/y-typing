@@ -2,7 +2,7 @@
 
 import { UploadResult } from "@/types";
 import { PrismaClient } from "@prisma/client";
-import { auth } from "../../../lib/auth";
+import { auth } from "../../../server/auth";
 import { nameSchema } from "./validationSchema";
 const prisma = new PrismaClient();
 

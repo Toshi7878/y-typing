@@ -1,8 +1,8 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import { auth } from "@/lib/auth";
+import { auth } from "@/server/auth";
 import { UploadResult } from "@/types";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

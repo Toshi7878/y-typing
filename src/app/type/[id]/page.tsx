@@ -1,9 +1,9 @@
-import Content from "./content";
-import { Metadata } from "next";
 import { getMapInfo } from "@/lib/server-fetcher/getMapInfo";
-import TypeProvider from "./TypeProvider";
-import { auth } from "@/lib/auth";
 import { getUserTypingOptions } from "@/lib/server-fetcher/getUserTypingOptions";
+import { auth } from "@/server/auth";
+import { Metadata } from "next";
+import Content from "./content";
+import TypeProvider from "./TypeProvider";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const mapInfo = await getMapInfo(params.id);

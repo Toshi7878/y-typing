@@ -1,5 +1,4 @@
 import NewNameDialog from "./NewNameDialog";
-import { auth } from "@/lib/auth";
 
 export default async function Home() {
   return (
