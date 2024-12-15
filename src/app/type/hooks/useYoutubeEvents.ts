@@ -2,14 +2,16 @@ import { useVolumeAtom } from "@/components/atom/globalAtoms";
 import { Ticker } from "@pixi/ticker";
 import { useStore } from "jotai";
 import NProgress from "nprogress";
+import { InputModeType } from "../ts/type";
 import {
   isLoadingOverlayAtom,
+  readyRadioInputModeAtom,
   sceneAtom,
+  useSetPlayingInputModeAtom,
   useSetPlayingNotifyAtom,
   useSetSceneAtom,
 } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
-import { useStartTimer } from "./playing-hooks/timer-hooks/useStartTimer";
 
 export const typeTicker = new Ticker();
 
@@ -18,7 +20,7 @@ export const useYTPlayEvent = () => {
   const typeAtomStore = useStore();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
-  const startTimer = useStartTimer();
+  const setPlayingInputMode = useSetPlayingInputModeAtom();
   return (event) => {
     console.log("再生 1");
     const scene = typeAtomStore.get(sceneAtom);
@@ -47,7 +49,11 @@ export const useYTPlayEvent = () => {
     }
 
     if (scene === "playing" || scene === "replay" || scene === "practice") {
-      startTimer();
+      if (!typeTicker.started) {
+        const readyInputMode = typeAtomStore.get(readyRadioInputModeAtom);
+        setPlayingInputMode(readyInputMode.replace(/""/g, '"') as InputModeType);
+        typeTicker.start();
+      }
     }
     const isPaused = ytStateRef.current!.isPaused;
 
