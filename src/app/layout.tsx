@@ -1,18 +1,20 @@
+import Header from "@/components/header/Header";
 import "@/css/globals.css";
 import "@/css/nprogress.css";
-import Header from "@/components/header/Header";
-import { fonts } from "../lib/fonts";
 import { Analytics } from "@vercel/analytics/react";
 import { cookies } from "next/headers";
+import { fonts } from "../lib/fonts";
 
 // export const runtime = "edge";
 
+import { Provider as TRPCProvider } from "@/utils/trpc/Provider";
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
-import GlobalProvider from "./provider/GlobalProvider";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/lib/auth";
+
 import PreviewYouTubeContent from "@/components/custom-ui/PreviewYouTubeContent";
+import { auth } from "@/lib/auth";
+import { SessionProvider } from "next-auth/react";
+import GlobalProvider from "./provider/GlobalProvider";
 
 export const metadata: Metadata = {
   title: "YTyping",
@@ -32,15 +34,17 @@ export default async function RootLayout({
     <html lang="ja">
       <body className={fonts.rubik.variable}>
         <Analytics />
-        <ThemeProvider colorMode={colorMode?.value}>
-          <SessionProvider session={session}>
-            <Header session={session} />
-            <GlobalProvider>
-              {children}
-              <PreviewYouTubeContent />
-            </GlobalProvider>
-          </SessionProvider>
-        </ThemeProvider>
+        <TRPCProvider>
+          <ThemeProvider colorMode={colorMode?.value}>
+            <SessionProvider session={session}>
+              <Header session={session} />
+              <GlobalProvider>
+                {children}
+                <PreviewYouTubeContent />
+              </GlobalProvider>
+            </SessionProvider>
+          </ThemeProvider>
+        </TRPCProvider>
       </body>
     </html>
   );
