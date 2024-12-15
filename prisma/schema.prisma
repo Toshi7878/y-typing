@@ -111,11 +111,11 @@ model Notification {
 
 model Map {
   id               Int @id @default(autoincrement())
-  videoId          String
-  title            String
-  artistName       String? @default("")
+  videoId          String @default("")
+  title            String @default("")
+  artistName       String @default("")
   musicSource      String? @default("")
-  creatorComment   String
+  creatorComment   String @default("")
   tags             String[] //分ける
   creatorId        Int
   previewTime      String @default("0")
@@ -132,8 +132,7 @@ model Map {
   category         String[] // "css", speedShift
   thumbnailQuality String @default("mqdefault")
   createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
-  mapDataUpdatedAt DateTime @default(now()) @updatedAt
+  updatedAt        DateTime @default(now())
   user             User @relation(fields: [creatorId], references: [id])
   result           Result[]
   mapLike          MapLike[]

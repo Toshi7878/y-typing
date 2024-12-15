@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Map" ALTER COLUMN "videoId" SET DEFAULT '',
+ALTER COLUMN "title" SET DEFAULT '',
+ALTER COLUMN "creatorComment" SET DEFAULT '';
