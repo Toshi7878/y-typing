@@ -412,7 +412,7 @@ export const isUpdateButtonDisabledAtom = atom((get) => {
   const isLineNotSelect = get(isLineNotSelectAtom);
   const isLineLastSelect = get(isLineLastSelectAtom);
 
-  return !isTimeInputValid || isLineNotSelect || isLineLastSelect;
+  return isTimeInputValid || isLineNotSelect || isLineLastSelect;
 });
 
 // 新しい派生atomを使用するフックを作成
