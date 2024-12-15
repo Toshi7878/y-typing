@@ -1,9 +1,8 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import Google from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
-import generateIdenticon from "./generateIdenticon";
 import CryptoJS from "crypto-js";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
+import Google from "next-auth/providers/google";
 
 // export const runtime = "edge";
 
@@ -14,20 +13,17 @@ export const config: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
-      const hash = CryptoJS.MD5(user.email!).toString();
+      const email_hash = CryptoJS.MD5(user.email!).toString();
       const UserData = await prisma.user.findUnique({
-        where: { email_hash: hash },
+        where: { email_hash },
       });
 
       if (!UserData) {
         try {
-          const identicon = generateIdenticon(user.email);
-
           await prisma.user.create({
             data: {
-              email_hash: hash!,
+              email_hash,
               name: null,
-              image: identicon,
               role: "user",
             },
           });
@@ -59,9 +55,9 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
-        const hash = CryptoJS.MD5(user.email!).toString();
+        const email_hash = CryptoJS.MD5(user.email!).toString();
         const dbUser = await prisma.user.findUnique({
-          where: { email_hash: hash },
+          where: { email_hash },
         });
         if (dbUser) {
           token.uid = dbUser.id.toString();
@@ -70,7 +66,6 @@ export const config: NextAuthConfig = {
 
         token.name = dbUser?.name ?? null;
         token.role = dbUser?.role ?? "user";
-        token.picture = dbUser?.image ?? generateIdenticon(user.email);
       }
 
       return token;
