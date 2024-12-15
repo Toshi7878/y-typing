@@ -1,13 +1,16 @@
 "use server";
 
-import { UserTypingOptions } from "@/app/type/ts/type";
+import { RouterOutPuts } from "@/server/api/trpc";
 import { auth } from "@/server/auth";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-async function updateTypingOption(userId: number, updateData: UserTypingOptions) {
+async function updateTypingOption(
+  userId: number,
+  updateData: RouterOutPuts["userOption"]["getUserTypingOptions"],
+) {
   const updated = await prisma.typingOption.upsert({
     where: {
       userId,
@@ -27,7 +30,7 @@ async function updateTypingOption(userId: number, updateData: UserTypingOptions)
 export async function POST(req: NextRequest): Promise<Response> {
   const session = await auth();
 
-  const updateData: UserTypingOptions = await req.json();
+  const updateData: RouterOutPuts["userOption"]["getUserTypingOptions"] = await req.json();
 
   try {
     const userId = Number(session?.user?.id);
