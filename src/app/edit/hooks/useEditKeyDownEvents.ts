@@ -49,7 +49,7 @@ export const useTbodyScroll = () => {
 };
 
 export const useWindowKeydownEvent = () => {
-  const { tbodyRef, playerRef } = useRefs();
+  const { playerRef } = useRefs();
   const editReduxStore = useReduxStore<RootState>();
   const editAtomStore = useJotaiStore();
 
@@ -66,7 +66,6 @@ export const useWindowKeydownEvent = () => {
   const lineAddButtonEvent = useLineAddButtonEvent();
   const lineUpdateButtonEvent = useLineUpdateButtonEvent();
   const lineDelete = useLineDelete();
-  const tbodyScroll = useTbodyScroll();
   const seekNextPrev = useSeekNextPrev();
 
   return (event: KeyboardEvent, optionModalIndex: number | null) => {

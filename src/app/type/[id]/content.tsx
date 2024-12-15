@@ -12,6 +12,7 @@ import TypeYouTubeContent from "../components/type-youtube-content/TypeYoutubeCo
 import TypingCard from "../components/typing-area/TypingCard";
 import { useDownloadMapDataJsonQuery } from "../hooks/data-query/useDownloadMapDataJsonQuery";
 import { useDisableKeyHandle } from "../hooks/useDisableKeyHandle";
+import { InputModeType } from "../ts/type";
 import {
   useIsLoadingOverlayAtom,
   useSetChangeCSSCountAtom,
@@ -19,6 +20,7 @@ import {
   useSetLineResultsAtom,
   useSetLineSelectIndexAtom,
   useSetMapAtom,
+  useSetPlayingInputModeAtom,
   useSetPlayingNotifyAtom,
   useSetRankingScoresAtom,
   useSetSceneAtom,
@@ -47,6 +49,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
   const { resetStatusValues } = useSetStatusAtoms();
   const setCombo = useSetComboAtom();
   const setChangeCSSCount = useSetChangeCSSCountAtom();
+  const setPlayingInputMode = useSetPlayingInputModeAtom();
 
   useEffect(() => {
     window.addEventListener("keydown", disableKeyHandle);
@@ -71,6 +74,7 @@ function Content({ mapInfo }: { mapInfo: GetInfoData }) {
       resetStatusValues();
       setCombo(0);
       setChangeCSSCount(0);
+      setPlayingInputMode((localStorage.getItem("inputMode") as InputModeType) || "roma");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapId]);

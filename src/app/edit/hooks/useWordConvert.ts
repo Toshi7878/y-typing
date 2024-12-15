@@ -1,4 +1,5 @@
-import { useEditWordConvertOptionAtom } from "@/app/edit/edit-atom/editAtom";
+import { editWordConvertOptionAtom } from "@/app/edit/edit-atom/editAtom";
+import { useStore as useJotaiStore } from "jotai";
 
 const convertChar = ["ゔ"];
 
@@ -70,9 +71,10 @@ export const addSymbolAll: string[] = [
 ];
 
 export const useWordConvert = () => {
-  const convertOption = useEditWordConvertOptionAtom();
+  const editAtomStore = useJotaiStore();
 
   return async (lyrics: string) => {
+    const convertOption = editAtomStore.get(editWordConvertOptionAtom);
     const wordConvert = new WordConvert(convertOption);
     const word = lyrics ? await wordConvert.convert(lyrics) : "";
     return word ?? "";

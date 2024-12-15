@@ -370,7 +370,7 @@ export const useSetEditAddTimeOffsetAtom = () => {
   return useSetAtom(editAddTimeOffsetAtom, { store: editAtomStore });
 };
 
-const editWordConvertOptionAtom = atom<ConvertOptionsType>("non_symbol");
+export const editWordConvertOptionAtom = atom<ConvertOptionsType>("non_symbol");
 
 export const useEditWordConvertOptionAtom = () => {
   return useAtomValue(editWordConvertOptionAtom, { store: editAtomStore });

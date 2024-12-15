@@ -1,20 +1,20 @@
+import { useStore } from "jotai";
+import { romaConvert } from "../../ts/scene-ts/ready/createTypingWord";
+import { InputModeType } from "../../ts/type";
 import {
-  inputModeAtom,
   lineWordAtom,
+  playingInputModeAtom,
   sceneAtom,
   speedAtom,
   useMapAtom,
   userOptionsAtom,
-  useSetInputModeAtom,
   useSetLineWordAtom,
   useSetNextLyricsAtom,
+  useSetPlayingInputModeAtom,
   useSetPlayingNotifyAtom,
 } from "../../type-atoms/gameRenderAtoms";
 import { useRefs } from "../../type-contexts/refsProvider";
-import { romaConvert } from "../../ts/scene-ts/ready/createTypingWord";
-import { InputModeType } from "../../ts/type";
 import { useGetTime } from "../useGetTime";
-import { useStore } from "jotai";
 
 export const useInputModeChange = () => {
   const { statusRef } = useRefs();
@@ -22,20 +22,20 @@ export const useInputModeChange = () => {
   const map = useMapAtom();
   const typeAtomStore = useStore();
 
-  const setInputMode = useSetInputModeAtom();
+  const setPlayingInputMode = useSetPlayingInputModeAtom();
   const setNotify = useSetPlayingNotifyAtom();
   const setNextLyrics = useSetNextLyricsAtom();
   const { getCurrentLineTime, getCurrentOffsettedYTTime } = useGetTime();
   const setLineWord = useSetLineWordAtom();
 
   return (newInputMode: InputModeType) => {
-    const inputMode = typeAtomStore.get(inputModeAtom);
+    const playingInputMode = typeAtomStore.get(playingInputModeAtom);
 
-    if (newInputMode === inputMode) {
+    if (newInputMode === playingInputMode) {
       return;
     }
 
-    setInputMode(newInputMode);
+    setPlayingInputMode(newInputMode);
 
     if (newInputMode === "kana") {
       setNotify(Symbol("KanaMode"));

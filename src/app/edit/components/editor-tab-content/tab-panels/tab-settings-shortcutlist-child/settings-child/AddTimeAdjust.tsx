@@ -1,13 +1,13 @@
 "use client";
-import { FormLabel, Input, HStack, Box, useTheme } from "@chakra-ui/react";
 import { ThemeColors } from "@/types";
+import { Box, FormLabel, HStack, Input, useTheme } from "@chakra-ui/react";
 
 import {
   useEditAddTimeOffsetAtom,
   useSetEditAddTimeOffsetAtom,
 } from "@/app/edit/edit-atom/editAtom";
-import { sendEditorOptionIndexedDBData } from "@/lib/db";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
+import { sendEditorOptionIndexedDBData } from "@/lib/db";
 
 export default function AddTimeAdjust() {
   const theme: ThemeColors = useTheme();

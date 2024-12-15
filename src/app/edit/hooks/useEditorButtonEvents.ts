@@ -65,13 +65,13 @@ export const useLineAddButtonEvent = () => {
 
     const isYTPlaying = editAtomStore.get(isEditYouTubePlayingAtom);
     const addTimeOffset = editAtomStore.get(editAddTimeOffsetAtom);
-    const timeOffset = isYTPlaying ? Number(addTimeOffset) : 0;
-    const time_ = Number(
-      isYTPlaying ? playerRef.current.getCurrentTime() : timeInputRef.current!.value,
-    );
 
     const lyrics = editAtomStore.get(editLineLyricsAtom);
     const word = editAtomStore.get(editLineWordAtom);
+    const timeOffset = isYTPlaying && word && !isShiftKey ? Number(addTimeOffset) : 0;
+    const time_ = Number(
+      isYTPlaying ? playerRef.current.getCurrentTime() : timeInputRef.current!.value,
+    );
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
     const newLine = !isShiftKey ? { time, lyrics, word } : { time, lyrics: "", word: "" };
     const addLineMap = [...mapData, newLine].sort(
@@ -130,7 +130,9 @@ export const useLineUpdateButtonEvent = () => {
     const selectedLineCount = editAtomStore.get(editLineSelectedCountAtom) as number;
     const isYTPlaying = editJotaiStore.get(isEditYouTubePlayingAtom);
     const addTimeOffset = editJotaiStore.get(editAddTimeOffsetAtom);
-    const timeOffset = isYTPlaying && !selectedLineCount ? Number(addTimeOffset) : 0;
+    const lyrics = editAtomStore.get(editLineLyricsAtom);
+    const word = editAtomStore.get(editLineWordAtom);
+    const timeOffset = isYTPlaying && word && !selectedLineCount ? Number(addTimeOffset) : 0;
     const time_ = Number(
       isYTPlaying && !selectedLineCount
         ? playerRef.current.getCurrentTime()
@@ -139,8 +141,6 @@ export const useLineUpdateButtonEvent = () => {
 
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
-    const lyrics = editAtomStore.get(editLineLyricsAtom);
-    const word = editAtomStore.get(editLineWordAtom);
     const updatedLine = {
       time,
       lyrics,

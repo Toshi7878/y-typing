@@ -9,6 +9,7 @@ import {
   useSetSceneAtom,
 } from "../type-atoms/gameRenderAtoms";
 import { useRefs } from "../type-contexts/refsProvider";
+import { useStartTimer } from "./playing-hooks/timer-hooks/useStartTimer";
 
 export const typeTicker = new Ticker();
 
@@ -17,6 +18,7 @@ export const useYTPlayEvent = () => {
   const typeAtomStore = useStore();
   const setScene = useSetSceneAtom();
   const setNotify = useSetPlayingNotifyAtom();
+  const startTimer = useStartTimer();
   return (event) => {
     console.log("再生 1");
     const scene = typeAtomStore.get(sceneAtom);
@@ -45,9 +47,7 @@ export const useYTPlayEvent = () => {
     }
 
     if (scene === "playing" || scene === "replay" || scene === "practice") {
-      if (!typeTicker.started) {
-        typeTicker.start();
-      }
+      startTimer();
     }
     const isPaused = ytStateRef.current!.isPaused;
 
