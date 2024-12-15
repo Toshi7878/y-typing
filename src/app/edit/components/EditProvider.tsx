@@ -28,7 +28,7 @@ import { EditorNewMapBackUpInfoData, GeminiMapInfo } from "../ts/type";
 const queryClient = new QueryClient();
 
 interface EditProviderProps {
-  mapInfo: RouterOutPuts["map"]["getMapInfo"];
+  mapInfo?: RouterOutPuts["map"]["getMapInfo"];
   children: React.ReactNode;
 }
 
