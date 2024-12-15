@@ -4,12 +4,12 @@ import "@/css/nprogress.css";
 import { Analytics } from "@vercel/analytics/react";
 import { cookies } from "next/headers";
 import { fonts } from "../lib/fonts";
-
 // export const runtime = "edge";
 
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 
+import TRPCProvider from "@/app/_trpc/provider";
 import PreviewYouTubeContent from "@/components/custom-ui/PreviewYouTubeContent";
 import { auth } from "@/lib/auth";
 import { SessionProvider } from "next-auth/react";
@@ -37,7 +37,7 @@ export default async function RootLayout({
           <SessionProvider session={session}>
             <Header session={session} />
             <GlobalProvider>
-              {children}
+              <TRPCProvider>{children}</TRPCProvider>
               <PreviewYouTubeContent />
             </GlobalProvider>
           </SessionProvider>
