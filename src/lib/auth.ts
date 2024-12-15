@@ -1,22 +1,39 @@
-import { serverApi } from "@/server/server-api";
+import { PrismaClient } from "@prisma/client";
+import CryptoJS from "crypto-js";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
 import Google from "next-auth/providers/google";
 
 // export const runtime = "edge";
 
+const prisma = new PrismaClient();
+
 export const config: NextAuthConfig = {
   providers: [Discord, Google],
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
-      try {
-        await serverApi.user.createUser({ email: user.email! });
-        return true;
-      } catch (err) {
-        console.error("Error during user registration:", err);
-        return false;
+      const email_hash = CryptoJS.MD5(user.email!).toString();
+      const UserData = await prisma.user.findUnique({
+        where: { email_hash },
+      });
+
+      if (!UserData) {
+        try {
+          await prisma.user.create({
+            data: {
+              email_hash,
+              name: null,
+              role: "user",
+            },
+          });
+        } catch (err) {
+          console.error("Error generating identicon:", err);
+          return false;
+        }
       }
+
+      return true;
     },
     authorized({ request, auth }) {
       try {
@@ -38,7 +55,10 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
-        const dbUser = await serverApi.user.getUser({ email: user.email! });
+        const email_hash = CryptoJS.MD5(user.email!).toString();
+        const dbUser = await prisma.user.findUnique({
+          where: { email_hash },
+        });
         if (dbUser) {
           token.uid = dbUser.id.toString();
           token.email_hash = dbUser.email_hash;

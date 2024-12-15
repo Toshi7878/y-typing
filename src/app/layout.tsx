@@ -7,7 +7,6 @@ import { fonts } from "../lib/fonts";
 
 // export const runtime = "edge";
 
-import { Provider as TRPCProvider } from "@/utils/trpc/Provider";
 import type { Metadata } from "next";
 import ThemeProvider from "./provider/ThemeProvider";
 
@@ -34,17 +33,15 @@ export default async function RootLayout({
     <html lang="ja">
       <body className={fonts.rubik.variable}>
         <Analytics />
-        <TRPCProvider>
-          <ThemeProvider colorMode={colorMode?.value}>
-            <SessionProvider session={session}>
-              <Header session={session} />
-              <GlobalProvider>
-                {children}
-                <PreviewYouTubeContent />
-              </GlobalProvider>
-            </SessionProvider>
-          </ThemeProvider>
-        </TRPCProvider>
+        <ThemeProvider colorMode={colorMode?.value}>
+          <SessionProvider session={session}>
+            <Header session={session} />
+            <GlobalProvider>
+              {children}
+              <PreviewYouTubeContent />
+            </GlobalProvider>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

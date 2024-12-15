@@ -7,11 +7,7 @@ export const userRouter = router({
   getUser: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ input }) => {
-      const email_hash = CryptoJS.MD5(input.email!).toString();
-      return await db.user.findUnique({
-        where: { email_hash },
-      });
-    }),
+
   createUser: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input }) => {
