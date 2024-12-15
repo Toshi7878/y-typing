@@ -10,6 +10,7 @@ import {
   useSetCanUploadAtom,
   useSetEditDirectEditCountAtom,
   useSetIsLoadWordConvertAtom,
+  useSetIsMapDataEditedAtom,
 } from "../edit-atom/editAtom";
 
 import { useSearchParams } from "next/navigation";
@@ -46,6 +47,7 @@ export const useLineAddButtonEvent = () => {
   const updateNewMapBackUp = useUpdateNewMapBackUp();
   const dispatch = useDispatch();
   const setDirectEdit = useSetEditDirectEditCountAtom();
+  const setIsMapDataEdited = useSetIsMapDataEditedAtom();
 
   const { timeInputRef, playerRef } = useRefs();
   const setCanUpload = useSetCanUploadAtom();
@@ -94,6 +96,7 @@ export const useLineAddButtonEvent = () => {
     }
 
     setCanUpload(true);
+    setIsMapDataEdited(true);
     setDirectEdit(null);
 
     //フォーカスを外さないとクリック時にテーブルがスクロールされない
@@ -115,6 +118,7 @@ export const useLineUpdateButtonEvent = () => {
   const newVideoId = searchParams.get("new") || "";
   const updateNewMapBackUp = useUpdateNewMapBackUp();
   const editJotaiStore = useJotaiStore();
+  const setIsMapDataEdited = useSetIsMapDataEditedAtom();
 
   return async () => {
     const mapData = editReduxStore.getState().mapData.value;
@@ -141,12 +145,13 @@ export const useLineUpdateButtonEvent = () => {
 
     const time = timeValidate(time_ + timeOffset, mapData, endAfterLineIndex).toFixed(3);
 
+    const oldLine = mapData[selectedLineCount];
     const updatedLine = {
       time,
       lyrics,
       word,
-      ...(mapData[selectedLineCount].options && {
-        options: mapData[selectedLineCount].options,
+      ...(oldLine.options && {
+        options: oldLine.options,
       }),
     };
 
@@ -157,6 +162,9 @@ export const useLineUpdateButtonEvent = () => {
     ].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
     setCanUpload(true);
+    if (oldLine.word !== word || oldLine.time !== time) {
+      setIsMapDataEdited(true);
+    }
     dispatch(
       addHistory({
         type: "update",
@@ -201,6 +209,7 @@ export const useLineDelete = () => {
   const setCanUpload = useSetCanUploadAtom();
   const dispatch = useDispatch();
   const lineInputReducer = useLineInputReducer();
+  const setIsMapDataEdited = useSetIsMapDataEditedAtom();
 
   const searchParams = useSearchParams();
   const newVideoId = searchParams.get("new") || "";
@@ -216,6 +225,7 @@ export const useLineDelete = () => {
 
       dispatch(setMapData(newValue));
       setCanUpload(true);
+      setIsMapDataEdited(true);
       dispatch(
         addHistory({
           type: "delete",

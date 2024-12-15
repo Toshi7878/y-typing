@@ -420,14 +420,6 @@ export const useIsUpdateButtonDisabledAtom = () => {
   return useAtomValue(isUpdateButtonDisabledAtom, { store: editAtomStore });
 };
 
-// export const useEditIsTimeInputValidAtom = () => {
-//   return useAtomValue(editIsTimeInputValidAtom, { store: editAtomStore });
-// };
-
-// export const useSetEditIsTimeInputValidAtom = () => {
-//   return useSetAtom(editIsTimeInputValidAtom, { store: editAtomStore });
-// };
-
 export const editPreviewTimeInputAtom = atom<string>("");
 
 export const useEditPreviewTimeInputAtom = () => {
@@ -460,3 +452,9 @@ export const useSetEditDirectEditCountAtom = () => {
 
 // Reduxストアを管理するための新しいatomを作成
 const editReduxStoreAtom = atom(() => useReduxStore<RootState>());
+
+export const isMapDataEditedAtom = atom<boolean>(false);
+
+export const useSetIsMapDataEditedAtom = () => {
+  return useSetAtom(isMapDataEditedAtom, { store: editAtomStore });
+};

@@ -11,6 +11,7 @@ import {
   editMusicSourceAtom,
   editPreviewTimeInputAtom,
   editTagsAtom,
+  isMapDataEditedAtom,
 } from "../edit-atom/editAtom";
 import { useRefs } from "../edit-contexts/refsProvider";
 import { RootState } from "../redux/store";
@@ -31,6 +32,7 @@ export function useUploadMap() {
     const musicSource = editAtomStore.get(editMusicSourceAtom);
     const tags = editAtomStore.get(editTagsAtom);
     const previewTime = editAtomStore.get(editPreviewTimeInputAtom);
+    const isMapDataEdited = editAtomStore.get(isMapDataEditedAtom);
 
     const map = new CreateMap(mapData);
     const mapVideoId = playerRef.current.getVideoData().video_id;
@@ -57,6 +59,7 @@ export function useUploadMap() {
     const result: UploadResult = await actions(
       sendData,
       mapData,
+      isMapDataEdited,
       Array.isArray(mapId) ? mapId[0] : mapId || "new",
     );
 

@@ -21,13 +21,14 @@ const createMap = async (map: EditorSendData, userId: number) => {
   return newMap.id; // 新しく作成されたマップのIDを返す
 };
 
-const updateMap = async (data: EditorSendData, mapId: number) => {
+const updateMap = async (data: EditorSendData, mapId: number, isMapDataEdited: boolean) => {
   const updatedMap = await prisma.map.update({
     where: {
       id: mapId,
     },
     data: {
       ...data,
+      ...(isMapDataEdited && { updatedAt: new Date() }),
     },
   });
   return updatedMap.id; // 更新されたマップのIDを返す
@@ -36,6 +37,7 @@ const updateMap = async (data: EditorSendData, mapId: number) => {
 export async function actions(
   data: EditorSendData,
   mapData: MapData[],
+  isMapDataEdited: boolean,
   mapId: string,
 ): Promise<UploadResult> {
   const session = await auth();
@@ -75,7 +77,7 @@ export async function actions(
       const userRole = session?.user.role;
 
       if (mapCreatorId?.creatorId === userId || userRole === "admin") {
-        newMapId = await updateMap(data, Number(mapId));
+        newMapId = await updateMap(data, Number(mapId), isMapDataEdited);
       } else {
         return {
           id: null,

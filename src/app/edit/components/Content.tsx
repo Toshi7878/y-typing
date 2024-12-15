@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import TimeRange from "./editor-time-range-content/EditTimeRange";
-import { useParams, useSearchParams } from "next/navigation";
-import LoadingOverlayWrapper from "react-loading-overlay-ts";
-import { resetMapData, setMapData } from "../redux/mapDataSlice";
-import { resetUndoRedoData } from "../redux/undoredoSlice";
-import { Box } from "@chakra-ui/react";
+import { QUERY_KEYS } from "@/config/consts";
+import { db } from "@/lib/db";
 import { IndexDBOption } from "@/types";
-import EditTable from "./editor-table-content/EditTable";
-import EditorTabContent from "./editor-tab-content/EditTabList";
+import { Box } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import LoadingOverlayWrapper from "react-loading-overlay-ts";
+import { useDispatch } from "react-redux";
 import {
   useIsLrcConvertingAtom,
   useSetCanUploadAtom,
@@ -21,13 +19,16 @@ import {
   useSetIsEditYTPlayingAtom,
   useSetIsEditYTReadyAtom,
   useSetIsEditYTStartedAtom,
+  useSetIsMapDataEditedAtom,
 } from "../edit-atom/editAtom";
-import ColorStyle from "./ColorStyle";
-import EditYouTube from "./editor-youtube-content/EditYoutube";
-import { db } from "@/lib/db";
 import { useDownloadMapDataQuery } from "../hooks/query/useDownloadMapDataQuery";
-import { QUERY_KEYS } from "@/config/consts";
-import { useQueryClient } from "@tanstack/react-query";
+import { resetMapData, setMapData } from "../redux/mapDataSlice";
+import { resetUndoRedoData } from "../redux/undoredoSlice";
+import ColorStyle from "./ColorStyle";
+import EditorTabContent from "./editor-tab-content/EditTabList";
+import EditTable from "./editor-table-content/EditTable";
+import TimeRange from "./editor-time-range-content/EditTimeRange";
+import EditYouTube from "./editor-youtube-content/EditYoutube";
 
 function Content() {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ function Content() {
   const setCanUpload = useSetCanUploadAtom();
   const setWord = useSetEditLineWordAtom();
   const setDirectEditCountAtom = useSetDirectEditCountAtom();
+  const setIsMapDataEdited = useSetIsMapDataEditedAtom();
   const queryClient = useQueryClient();
   const { id: mapId } = useParams();
 
@@ -62,6 +64,7 @@ function Content() {
     setIsYTPlaying(false);
     setSelectedCount(null);
     setTimeCount(0);
+    setIsMapDataEdited(false);
 
     if (!mapId) {
       //新規作成譜面に移動したら初期化
