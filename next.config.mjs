@@ -12,10 +12,6 @@ const nextConfig = {
         },
       },
     });
-    config.externals = {
-      "@trpc/client": "@trpc/client",
-      "@trpc/server": "@trpc/server",
-    };
 
     return config;
   },
