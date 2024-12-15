@@ -11,9 +11,6 @@ const nextConfig = {
           publicPath: "/_next/static/sounds/",
         },
       },
-      experimental: {
-        serverComponentsExternalPackages: ["@trpc/server"],
-      },
     });
 
     return config;
