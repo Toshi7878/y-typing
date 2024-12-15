@@ -1,7 +1,9 @@
+import { RouterOutPuts } from "@/server/api/trpc";
 import axios from "axios";
-import { UserTypingOptions } from "../ts/type";
 
-export async function sendUpdateData(updateData: UserTypingOptions) {
+export async function sendUpdateData(
+  updateData: RouterOutPuts["userOption"]["getUserTypingOptions"],
+) {
   try {
     const response = await axios.post("/api/update-typing-option", updateData);
   } catch (error) {

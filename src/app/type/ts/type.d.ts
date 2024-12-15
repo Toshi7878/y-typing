@@ -179,16 +179,6 @@ export interface LineResultData {
   typeResult: TypeResult[];
 }
 
-export interface UserTypingOptions {
-  timeOffset: number;
-  typeSound: boolean;
-  missSound: boolean;
-  lineClearSound: boolean;
-  nextDisplay: "lyrics" | "word";
-  timeOffsetKey: "ctrl-left-right" | "ctrl-alt-left-right" | "none";
-  toggleInputModeKey: "alt-kana" | "tab" | "none";
-}
-
 export interface Speed {
   defaultSpeed: number;
   playSpeed: number;
