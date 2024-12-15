@@ -33,22 +33,12 @@ async function updateLike(mapId: number, userId: number, optimisticState: boolea
       },
     });
 
-    const updatedAt = await prisma.map.findUnique({
-      where: {
-        id: mapId,
-      },
-      select: {
-        updatedAt: true,
-      },
-    });
-
     await prisma.map.update({
       where: {
         id: mapId,
       },
       data: {
         likeCount: newLikeCount,
-        updatedAt: updatedAt?.updatedAt,
       },
     });
   });

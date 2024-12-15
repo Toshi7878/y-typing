@@ -32,22 +32,12 @@ async function updateClap(resultId: number, userId: number, optimisticState: boo
       },
     });
 
-    const updatedAt = await prisma.result.findUnique({
-      where: {
-        id: resultId,
-      },
-      select: {
-        updatedAt: true,
-      },
-    });
-
     await prisma.result.update({
       where: {
         id: resultId,
       },
       data: {
         clapCount: newClapCount,
-        updatedAt: updatedAt?.updatedAt,
       },
     });
 
