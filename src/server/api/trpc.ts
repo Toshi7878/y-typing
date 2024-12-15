@@ -1,7 +1,10 @@
 import { inferRouterInputs, inferRouterOutputs, initTRPC } from "@trpc/server";
+import superjson from "superjson";
 import { AppRouter } from "./root";
 
-const t = initTRPC.create();
+const t = initTRPC.create({
+  transformer: superjson,
+});
 
 export const router = t.router;
 export const publicProcedure = t.procedure;

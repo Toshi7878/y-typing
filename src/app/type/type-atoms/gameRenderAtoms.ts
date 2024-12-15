@@ -259,6 +259,8 @@ export const useSetIsOptionEdited = () => {
   return useSetAtom(isOptionEditedAtom, { store: typeAtomStore });
 };
 
+export const mapUpdatedAtAtom = atom<Date>(new Date());
+
 // Status Atoms
 
 const scoreAtom = atomWithReset(0);

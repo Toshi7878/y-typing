@@ -1,7 +1,8 @@
-import { useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
+import { mapUpdatedAtAtom, useSceneAtom } from "@/app/type/type-atoms/gameRenderAtoms";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
 import { LocalClapState, ThemeColors, UploadResult } from "@/types";
 import { Button, Stack, useTheme } from "@chakra-ui/react";
+import { useStore } from "jotai";
 import { useSession } from "next-auth/react";
 import { Dispatch } from "react";
 import MenuClapButton from "./child/MenuClapButton";
@@ -9,6 +10,7 @@ import MenuClapButton from "./child/MenuClapButton";
 interface RankingMenuProps {
   resultId: number;
   userId: number;
+  resultUpdatedAt: Date;
   name: string;
   setShowMenu: Dispatch<number | null>;
   setHoveredIndex: Dispatch<number | null>;
@@ -19,6 +21,7 @@ interface RankingMenuProps {
 const RankingMenu = ({
   resultId,
   userId,
+  resultUpdatedAt,
   name,
   setShowMenu,
   setHoveredIndex,
@@ -30,8 +33,17 @@ const RankingMenu = ({
   const { data: session } = useSession();
   const theme: ThemeColors = useTheme();
   const scene = useSceneAtom();
+  const typeAtomStore = useStore();
 
   const handleReplayClick = (name: string, resultId: number) => {
+    const mapUpdatedAt = typeAtomStore.get(mapUpdatedAtAtom);
+    const resultUpdatedAtDate = new Date(resultUpdatedAt); // 文字列をDate型に変換
+
+    if (mapUpdatedAt > resultUpdatedAtDate) {
+      alert(
+        "ランキング登録日時より後に譜面データが更新されているので、正常にリプレイできない可能性があります。",
+      );
+    }
     setShowMenu(null);
     setHoveredIndex(null);
     gameStateRef.current!.replay.userName = name;

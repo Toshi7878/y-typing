@@ -21,6 +21,7 @@ export const mapRouter = {
         tags: true,
         videoId: true,
         previewTime: true,
+        updatedAt: true,
         mapLike: {
           where: { userId },
           select: { isLiked: true },
@@ -28,6 +29,6 @@ export const mapRouter = {
       },
     });
 
-    return mapInfo || undefined;
+    return mapInfo;
   }),
 };

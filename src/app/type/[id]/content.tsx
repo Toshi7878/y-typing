@@ -1,6 +1,6 @@
 "use client";
 import { QUERY_KEYS } from "@/config/consts";
-import { GetInfoData } from "@/types/api";
+import { RouterOutPuts } from "@/server/api/trpc";
 import { Box, Flex } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { RESET } from "jotai/utils";
@@ -30,9 +30,13 @@ import {
 } from "../type-atoms/gameRenderAtoms";
 import useWindowScale, { CONTENT_HEIGHT, CONTENT_WIDTH } from "./windowScale";
 
-function Content({ mapInfo }: { mapInfo: GetInfoData }) {
+interface ContentProps {
+  mapInfo: RouterOutPuts["map"]["getMapInfo"];
+}
+
+function Content({ mapInfo }: ContentProps) {
   const { scale } = useWindowScale();
-  const { videoId, title, creatorComment, tags } = mapInfo;
+  const { videoId, title, creatorComment, tags, updatedAt } = mapInfo!;
   const { id: mapId } = useParams();
   const setMap = useSetMapAtom();
   const setScene = useSetSceneAtom();

@@ -1,23 +1,22 @@
 "use client";
 
+import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDownloadResultJsonQuery";
+import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
+import { RankingListType } from "@/app/type/ts/type";
 import { useRefs } from "@/app/type/type-contexts/refsProvider";
-import ClearRateText from "@/components/user-result-text/ClearRateText";
 import CustomToolTip from "@/components/custom-ui/CustomToolTip";
-import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
-import { ThemeColors } from "@/types";
-import { Td, Tr, useTheme } from "@chakra-ui/react";
-import React, { Dispatch, useState } from "react";
-import { useEffect } from "react";
-import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
 import UpdateAtText from "@/components/custom-ui/UpdateAtText";
 import ClapedText from "@/components/user-result-text/ClapedText";
+import ClearRateText from "@/components/user-result-text/ClearRateText";
 import RankText from "@/components/user-result-text/RankText";
-import RankingMenu from "./RankingMenu";
-import { RankingListType } from "@/app/type/ts/type";
-import { useSession } from "next-auth/react";
+import ResultToolTipText from "@/components/user-result-text/ResultToolTipText";
+import { UserInputModeText } from "@/components/user-result-text/UserInputModeText";
 import { useLocalClapServerActions } from "@/lib/hooks/useLocalClapServerActions";
-import { RANKING_COLUMN_WIDTH } from "@/app/type/ts/const/consts";
-import { useDownloadPlayDataJsonQuery } from "@/app/type/hooks/data-query/useDownloadResultJsonQuery";
+import { ThemeColors } from "@/types";
+import { Td, Tr, useTheme } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { Dispatch, useEffect, useState } from "react";
+import RankingMenu from "./RankingMenu";
 
 interface RankingTrProps {
   result: RankingListType;
@@ -134,6 +133,7 @@ const RankingTr = (props: RankingTrProps) => {
         <RankingMenu
           resultId={props.result.id}
           userId={props.result.userId}
+          resultUpdatedAt={props.result.updatedAt}
           name={props.result.user.name}
           setShowMenu={props.setShowMenu}
           setHoveredIndex={props.setHoveredIndex}
