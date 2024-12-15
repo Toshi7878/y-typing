@@ -1,18 +1,9 @@
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { serverApi } from "@/server/server-api";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
 import Google from "next-auth/providers/google";
-import { appRouter } from "../server/root";
 
 // export const runtime = "edge";
-
-const trpc = createTRPCClient<typeof appRouter>({
-  links: [
-    httpBatchLink({
-      url: "/trpc",
-    }),
-  ],
-});
 
 export const config: NextAuthConfig = {
   providers: [Discord, Google],
@@ -20,7 +11,7 @@ export const config: NextAuthConfig = {
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        await trpc.user.createUser.mutate({ email: user.email! });
+        await serverApi.user.createUser({ email: user.email! });
         return true;
       } catch (err) {
         console.error("Error during user registration:", err);
@@ -47,7 +38,7 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
-        const dbUser = await trpc.user.getUser.query({ email: user.email! });
+        const dbUser = await serverApi.user.getUser({ email: user.email! });
         if (dbUser) {
           token.uid = dbUser.id.toString();
           token.email_hash = dbUser.email_hash;
