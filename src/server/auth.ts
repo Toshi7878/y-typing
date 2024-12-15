@@ -1,4 +1,3 @@
-import { serverApi } from "@/trpc/server";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
 import Google from "next-auth/providers/google";
@@ -39,13 +38,13 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
-        const dbUser = await serverApi.auth.findUser({ email: user.email! });
-        if (dbUser) {
-          token.uid = dbUser.id.toString();
-          token.email_hash = dbUser.email_hash;
-        }
-        token.name = dbUser?.name ?? null;
-        token.role = dbUser?.role ?? "user";
+        // const dbUser = await serverApi.auth.findUser({ email: user.email! });
+        //   if (dbUser) {
+        //     token.uid = dbUser.id.toString();
+        //     token.email_hash = dbUser.email_hash;
+        //   }
+        //   token.name = dbUser?.name ?? null;
+        //   token.role = dbUser?.role ?? "user";
       }
 
       return token;

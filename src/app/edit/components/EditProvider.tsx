@@ -2,8 +2,8 @@
 import { getGlobalAtomStore, previewVideoIdAtom } from "@/components/atom/globalAtoms";
 import { QUERY_KEYS } from "@/config/consts";
 import { db } from "@/lib/db";
+import { RouterOutPuts } from "@/server/api/trpc";
 import { IndexDBOption } from "@/types";
-import { GetInfoData } from "@/types/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
 import { useSearchParams } from "next/navigation";
@@ -28,7 +28,7 @@ import { EditorNewMapBackUpInfoData, GeminiMapInfo } from "../ts/type";
 const queryClient = new QueryClient();
 
 interface EditProviderProps {
-  mapInfo?: GetInfoData;
+  mapInfo: RouterOutPuts["map"]["getMapInfo"];
   children: React.ReactNode;
 }
 
@@ -48,11 +48,11 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
 
   if (mapInfo) {
     editAtomStore.set(editMapTitleAtom, mapInfo.title);
-    editAtomStore.set(editMapArtistNameAtom, mapInfo.artistName);
+    editAtomStore.set(editMapArtistNameAtom, mapInfo.artistName!);
     editAtomStore.set(editVideoIdAtom, mapInfo.videoId);
     editAtomStore.set(editCreatorIdAtom, mapInfo.creatorId);
     editAtomStore.set(editCreatorCommentAtom, mapInfo.creatorComment);
-    editAtomStore.set(editMusicSourceAtom, mapInfo.musicSource);
+    editAtomStore.set(editMusicSourceAtom, mapInfo.musicSource!);
     editAtomStore.set(editPreviewTimeInputAtom, mapInfo.previewTime);
     editAtomStore.set(editTagsAtom, {
       type: "set",
@@ -94,7 +94,6 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
   }
 
   return (
-    // <InfoTabProvider>
     <RefsProvider>
       <QueryClientProvider client={queryClient}>
         <ReduxProvider store={editStore}>
@@ -102,7 +101,6 @@ const EditProvider = ({ mapInfo, children }: EditProviderProps) => {
         </ReduxProvider>
       </QueryClientProvider>
     </RefsProvider>
-    // </InfoTabProvider>
   );
 };
 
