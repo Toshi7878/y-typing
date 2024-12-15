@@ -144,7 +144,6 @@ model User {
   id            Int             @id @default(autoincrement())
   name          String?         @unique
   email_hash    String          @unique
-  image         String?
   role          String          @default("user")
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt

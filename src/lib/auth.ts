@@ -1,43 +1,34 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import Google from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
-import generateIdenticon from "./generateIdenticon";
-import CryptoJS from "crypto-js";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
+import Google from "next-auth/providers/google";
+import { appRouter } from "../server/root";
 
 // export const runtime = "edge";
 
 const prisma = new PrismaClient();
+
+const trpc = createTRPCClient<typeof appRouter>({
+  links: [
+    httpBatchLink({
+      url: "/trpc",
+    }),
+  ],
+});
 
 export const config: NextAuthConfig = {
   providers: [Discord, Google],
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
-      const hash = CryptoJS.MD5(user.email!).toString();
-      const UserData = await prisma.user.findUnique({
-        where: { email_hash: hash },
-      });
-
-      if (!UserData) {
-        try {
-          const identicon = generateIdenticon(user.email);
-
-          await prisma.user.create({
-            data: {
-              email_hash: hash!,
-              name: null,
-              image: identicon,
-              role: "user",
-            },
-          });
-        } catch (err) {
-          console.error("Error generating identicon:", err);
-          return false;
-        }
+      try {
+        await trpc.user.createUser.mutate({ email: user.email! });
+        return true;
+      } catch (err) {
+        console.error("Error during user registration:", err);
+        return false;
       }
-
-      return true;
     },
     authorized({ request, auth }) {
       try {
@@ -59,10 +50,7 @@ export const config: NextAuthConfig = {
         token.name = session.name;
       }
       if (user) {
-        const hash = CryptoJS.MD5(user.email!).toString();
-        const dbUser = await prisma.user.findUnique({
-          where: { email_hash: hash },
-        });
+        const dbUser = await trpc.user.getUser.query({ email: user.email! });
         if (dbUser) {
           token.uid = dbUser.id.toString();
           token.email_hash = dbUser.email_hash;
@@ -70,7 +58,6 @@ export const config: NextAuthConfig = {
 
         token.name = dbUser?.name ?? null;
         token.role = dbUser?.role ?? "user";
-        token.picture = dbUser?.image ?? generateIdenticon(user.email);
       }
 
       return token;
