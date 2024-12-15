@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Discord from "next-auth/providers/discord";
@@ -6,8 +5,6 @@ import Google from "next-auth/providers/google";
 import { appRouter } from "../server/root";
 
 // export const runtime = "edge";
-
-const prisma = new PrismaClient();
 
 const trpc = createTRPCClient<typeof appRouter>({
   links: [

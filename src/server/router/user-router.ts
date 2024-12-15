@@ -23,7 +23,7 @@ export const userRouter = router({
       if (!existingUser) {
         return await db.user.create({
           data: {
-            email_hash: email_hash,
+            email_hash,
             name: null,
             role: "user",
           },
