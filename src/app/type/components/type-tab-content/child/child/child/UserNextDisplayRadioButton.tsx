@@ -1,9 +1,9 @@
-import { UserTypingOptions } from "@/app/type/ts/type";
 import {
   useSetIsOptionEdited,
   useSetUserOptionsAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
+import { RouterOutPuts } from "@/server/api/trpc";
 import { Box, Radio, RadioGroup, Stack, Text } from "@chakra-ui/react";
 
 const UserNextDisplayRadioButton = () => {
@@ -13,9 +13,9 @@ const UserNextDisplayRadioButton = () => {
 
   const changeRadio = (value: string) => {
     // 引数を追加
-    const newUserOptions: UserTypingOptions = {
+    const newUserOptions: RouterOutPuts["userOption"]["getUserTypingOptions"] = {
       ...userOptionsAtom,
-      nextDisplay: value as UserTypingOptions["nextDisplay"], // 選択された値を設定
+      nextDisplay: value, // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
     setIsOptionEdited(true);

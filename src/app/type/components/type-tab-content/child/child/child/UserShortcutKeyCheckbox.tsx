@@ -1,9 +1,9 @@
-import { UserTypingOptions } from "@/app/type/ts/type";
 import {
   useSetIsOptionEdited,
   useSetUserOptionsAtom,
   useUserOptionsAtom,
 } from "@/app/type/type-atoms/gameRenderAtoms";
+import { RouterOutPuts } from "@/server/api/trpc";
 import { Box, Flex, Select, Text } from "@chakra-ui/react";
 import React from "react";
 
@@ -14,9 +14,9 @@ const UserShortcutKeyCheckbox = () => {
 
   const changeTimeOffsetKey = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value; // 選択された値を取得
-    const newUserOptions: UserTypingOptions = {
+    const newUserOptions: RouterOutPuts["userOption"]["getUserTypingOptions"] = {
       ...userOptionsAtom,
-      timeOffsetKey: value as UserTypingOptions["timeOffsetKey"], // 選択された値を設定
+      timeOffsetKey: value, // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
     setIsOptionEdited(true);
@@ -24,9 +24,9 @@ const UserShortcutKeyCheckbox = () => {
 
   const changeInputModeKey = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value; // 選択された値を取得
-    const newUserOptions: UserTypingOptions = {
+    const newUserOptions: RouterOutPuts["userOption"]["getUserTypingOptions"] = {
       ...userOptionsAtom,
-      toggleInputModeKey: value as UserTypingOptions["toggleInputModeKey"], // 選択された値を設定
+      toggleInputModeKey: value, // 選択された値を設定
     };
     setUserOptionsAtom(newUserOptions);
   };
