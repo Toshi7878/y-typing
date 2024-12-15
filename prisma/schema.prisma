@@ -27,7 +27,7 @@ model Result {
   maxCombo       Int @default(0)
   clearRate      Float @default(0)
   rank           Int @default(1)
-  updatedAt      DateTime @default(now()) @updatedAt
+  updatedAt      DateTime @default(now())
   clapCount      Int @default(0)
   user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   map            Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
@@ -114,9 +114,9 @@ model Map {
   videoId          String @default("")
   title            String @default("")
   artistName       String @default("")
-  musicSource      String? @default("")
+  musicSource      String @default("")
   creatorComment   String @default("")
-  tags             String[] //分ける
+  tags             String[] @default([])//分ける
   creatorId        Int
   previewTime      String @default("0")
   romaKpmMedian    Int @default(0)
@@ -129,7 +129,7 @@ model Map {
   playCount        Int @default(0)
   likeCount        Int @default(0)
   rankingCount     Int @default(0)
-  category         String[] // "css", speedShift
+  category         String[] @default([])// "css", speedShift
   thumbnailQuality String @default("mqdefault")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now())

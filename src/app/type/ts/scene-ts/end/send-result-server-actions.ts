@@ -18,7 +18,6 @@ const calcRank = async (mapId: number, userId: number) => {
       userId: true,
       score: true,
       rank: true,
-      updatedAt: true,
     },
     orderBy: { score: "desc" },
   });
@@ -71,7 +70,6 @@ const calcRank = async (mapId: number, userId: number) => {
       },
       data: {
         rank: newRank,
-        updatedAt: rankingList[i].updatedAt, // 現在のupdatedAtの値を再設定
       },
     });
 
@@ -102,22 +100,12 @@ const calcRank = async (mapId: number, userId: number) => {
     }
   }
 
-  const mapData = await prisma.map.findUnique({
-    where: {
-      id: mapId,
-    },
-    select: {
-      updatedAt: true,
-    },
-  });
-
   await prisma.map.update({
     where: {
       id: mapId,
     },
     data: {
       rankingCount: rankingList.length,
-      updatedAt: mapData?.updatedAt,
     },
   });
 };
@@ -148,6 +136,7 @@ const sendNewResult = async (data: SendResultData, userId: number) => {
     },
     update: {
       ...data.status,
+      updatedAt: new Date(),
     },
     create: {
       mapId: data.mapId,
