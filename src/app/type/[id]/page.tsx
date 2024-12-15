@@ -1,5 +1,3 @@
-import { getUserTypingOptions } from "@/lib/server-fetcher/getUserTypingOptions";
-import { auth } from "@/server/auth";
 import { serverApi } from "@/trpc/server";
 import { Metadata } from "next";
 import Content from "./content";
@@ -14,9 +12,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const session = await auth();
   const mapInfo = await serverApi.map.getMapInfo({ mapId: Number(params.id) });
-  const userTypingOptions = session?.user.id ? await getUserTypingOptions() : undefined;
+  const userTypingOptions = await serverApi.userOption.getUserTypingOptions();
 
   return (
     <TypeProvider mapInfo={mapInfo!} userTypingOptions={userTypingOptions}>

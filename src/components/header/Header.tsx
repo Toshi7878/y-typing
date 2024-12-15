@@ -1,7 +1,7 @@
-import HeaderContent from "./HeaderContent";
-import HeaderClientProvider from "./HeaderClientProvider";
-import { getNewNotificationCheck } from "@/lib/server-fetcher/getNewNotificationCheck";
+import { serverApi } from "@/trpc/server";
 import { Session } from "next-auth";
+import HeaderClientProvider from "./HeaderClientProvider";
+import HeaderContent from "./HeaderContent";
 
 // export const runtime = "edge";
 
@@ -10,7 +10,9 @@ interface HeaderProps {
 }
 
 const Header = async ({ session }: HeaderProps) => {
-  const isNewNotification = session?.user.name ? await getNewNotificationCheck() : false;
+  const isNewNotification = session?.user.name
+    ? await serverApi.notification.newNotificationCheck()
+    : false;
   return (
     <HeaderClientProvider>
       <HeaderContent isNewNotification={isNewNotification} />

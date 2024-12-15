@@ -1,4 +1,4 @@
-import { GameStateRef, PlayMode, StatusRef, UserTypingOptions, YTStateRef } from "../type";
+import { GameStateRef, PlayMode, StatusRef, YTStateRef } from "../type";
 
 export const DEFAULT_STATUS_REF: StatusRef = {
   status: {
@@ -51,7 +51,7 @@ export const DEFAULT_SPEED = {
   playSpeed: 1,
 };
 
-export const DEFAULT_USER_OPTIONS: UserTypingOptions = {
+export const DEFAULT_USER_OPTIONS = {
   timeOffset: 0,
   typeSound: false,
   missSound: false,

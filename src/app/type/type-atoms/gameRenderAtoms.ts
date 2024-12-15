@@ -11,7 +11,6 @@ import {
   NextLyricsType,
   SceneType,
   Speed,
-  UserTypingOptions,
   useSetStatusValueProps,
 } from "../ts/type";
 const typeAtomStore = getTypeAtomStore();
@@ -143,7 +142,7 @@ export const useSetTypePageSpeedAtom = () => {
   return useSetAtom(speedAtom, { store: typeAtomStore });
 };
 
-export const userOptionsAtom = atom<UserTypingOptions>(DEFAULT_USER_OPTIONS);
+export const userOptionsAtom = atom(DEFAULT_USER_OPTIONS);
 
 export const useUserOptionsAtom = () => {
   return useAtomValue(userOptionsAtom, { store: typeAtomStore });
